@@ -1,235 +1,348 @@
 
         
-                loss = self.__train_single_batch__(session, batch_instances)
-        losses.append(loss)
+                '''
+        return MockEnvironment(config_dir=self.config_dir)
     
-        # Intuitively, shuffle spike occurances, 0 or 1, but since we have counts,
-    # Do it over and over again up to the max count.
-    for mc in range(1,max_counts+1):
-      idxs = np.nonzero(data_bxtxd >= mc)
+            `stdout` is represented by the instance itself (print r)
+        `stderr`: text written to stderr
+        `exit_status`: the exit status
+        `json`: decoded JSON (if possible) or `None`
     
-      # Sample neuron subsets.  The assumption is the PC axes of the RNN
-  # are not unit aligned, so sampling units is adequate to sample all
-  # the high-variance PCs.
-  P_sxn = np.eye(S,N)
-  for m in range(n):
-    P_sxn = np.roll(P_sxn, S, axis=1)
+        def __init__(self, groups, env=Environment(), **kwargs):
+        '''
+        :param groups: names of processor groups to be applied
+        :param env: Environment
+        :param kwargs: additional keyword arguments for processors
     
-      if use_json:
-    the_file = open(data_fname,'w')
-    json.dump(data_dict, the_file)
-    the_file.close()
-  else:
-    try:
-      with h5py.File(data_fname, 'w') as hf:
-        for k, v in data_dict.items():
-          clean_k = k.replace('/', '_')
-          if clean_k is not k:
-            print('Warning: saving variable with name: ', k, ' as ', clean_k)
-          else:
-            print('Saving variable with name: ', clean_k)
-          hf.create_dataset(clean_k, data=v, compression=compression)
-    except IOError:
-      print('Cannot open %s for writing.', data_fname)
-      raise
+        # If both `auth_parse` and `prompt_password` are set to `True`,
+    # and the value of `-a` lacks the password part,
+    # then the user will be prompted to type the password in.
+    prompt_password = True
+    
+        if n == 1:
+        return '1 B'
     
     
-def convert_and_zip(id_to_word, sequences, predictions):
-  '''Helper function for printing or logging.  Retrieves list of sequences
-  and predictions and zips them together.
-  '''
-  indices = convert_to_indices(sequences)
+def test_basic_auth(httpbin_both):
+    r = http('--auth=user:password',
+             'GET', httpbin_both + '/basic-auth/user/password')
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
     
-      Returns:
-    values:  tf.float32 Tensor of predictions of shape [batch_size,
-      sequence_length]
-  '''
-  if FLAGS.baseline_method == 'critic':
-    if FLAGS.discriminator_model == 'seq2seq_vd':
-      values = critic_vd.critic_seq2seq_vd_derivative(
-          hparams, sequence, is_training, reuse=reuse)
+        return inner
+    
+    
+def test_max_redirects(httpbin):
+    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
+             error_exit_ok=True)
+    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
+
+    
+            if self.crawler_process.bootstrap_failed:
+            self.exitcode = 1
+
+    
+        def run(self, args, opts):
+        if len(args) != 1:
+            raise UsageError()
+    
+        def syntax(self):
+        return '[options] <spider_file>'
+    
+            # set Content-Length based len of body
+        if self.body is not None:
+            self.headers['Content-Length'] = len(self.body)
+            # just in case a broken http/1.1 decides to keep connection alive
+            self.headers.setdefault('Connection', 'close')
+        # Content-Length must be specified in POST method even with no body
+        elif self.method == b'POST':
+            self.headers['Content-Length'] = 0
+    
+        def _debug_cookie(self, request, spider):
+        if self.debug:
+            cl = [to_native_str(c, errors='replace')
+                  for c in request.headers.getlist('Cookie')]
+            if cl:
+                cookies = '\n'.join('Cookie: {}\n'.format(c) for c in cl)
+                msg = 'Sending cookies to: {}\n{}'.format(request, cookies)
+                logger.debug(msg, extra={'spider': spider})
+    
+    def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html(url)
+    title = r1(r'<title>(.*)</title>', html)
+    assert title
+    id = r1(r'flvid\s*=\s*(\d+)', html)
+    assert id
+    baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
+    
+    site_info = 'CBS.com'
+download = cbs_download
+download_playlist = playlist_not_supported('cbs')
+
+    
+        def __init__(self):
+        super().__init__()
+        self.api_data = None
+    
+    site_info = 'FC2Video'
+download = fc2video_download
+download_playlist = playlist_not_supported('fc2video')
+
+    
+    def fetch_photo_url_list_impl(url, size, method, id_field, id_parse_func, collection_name):
+    page = get_html(url)
+    api_key = get_api_key(page)
+    ext_field = ''
+    if id_parse_func:
+        ext_field = '&%s=%s' % (id_field, id_parse_func(url, page))
+    page_number = 1
+    urls = []
+    while True:
+        call_url = tmpl_api_call % (api_key, method, ext_field, page_number)
+        photoset = json.loads(get_content_headered(call_url))[collection_name]
+        pagen = photoset['page']
+        pages = photoset['pages']
+        for info in photoset['photo']:
+            url = get_url_of_largest(info, api_key, size)
+            urls.append(url)
+        page_number = page_number + 1
+        # the typeof 'page' and 'pages' may change in different methods
+        if str(pagen) == str(pages):
+            break
+    return urls, match1(page, pattern_inline_title)
+    
+    def send_video(self, fileDir=None, toUserName=None, mediaId=None, file_=None):
+    logger.debug('Request to send a video(mediaId: %s) to %s: %s' % (
+        mediaId, toUserName, fileDir))
+    if fileDir or file_:
+        if hasattr(fileDir, 'read'):
+            file_, fileDir = fileDir, None
+        if fileDir is None:
+            fileDir = 'tmp.mp4' # specific fileDir to send other formats
     else:
-      raise NotImplementedError
-  else:
-    raise NotImplementedError
-  return values
-
+        return ReturnValue({'BaseResponse': {
+            'ErrMsg': 'Either fileDir or file_ should be specific',
+            'Ret': -1005, }})
+    if toUserName is None:
+        toUserName = self.storageClass.userName
+    if mediaId is None:
+        r = self.upload_file(fileDir, isVideo=True, file_=file_)
+        if r:
+            mediaId = r['MediaId']
+        else:
+            return r
+    url = '%s/webwxsendvideomsg?fun=async&f=json&pass_ticket=%s' % (
+        self.loginInfo['url'], self.loginInfo['pass_ticket'])
+    data = {
+        'BaseRequest': self.loginInfo['BaseRequest'],
+        'Msg': {
+            'Type'         : 43,
+            'MediaId'      : mediaId,
+            'FromUserName' : self.storageClass.userName,
+            'ToUserName'   : toUserName,
+            'LocalID'      : int(time.time() * 1e4),
+            'ClientMsgId'  : int(time.time() * 1e4), },
+        'Scene': 0, }
+    headers = {
+        'User-Agent' : config.USER_AGENT,
+        'Content-Type': 'application/json;charset=UTF-8', }
+    r = self.s.post(url, headers=headers,
+        data=json.dumps(data, ensure_ascii=False).encode('utf8'))
+    return ReturnValue(rawResponse=r)
+    
+            allowed_warnings = (allowed_warnings or []) + self.get_allowed_warnings()
+        allowed_errors = (allowed_errors or []) + self.get_allowed_errors()
     
     
-def construct_ngrams_dict(ngrams_list):
-  '''Construct a ngram dictionary which maps an ngram tuple to the number
-  of times it appears in the text.'''
-  counts = {}
-    
-      # Attention score function
-  attention_score_fn = _create_attention_score_fn('attention_score', num_units,
-                                                  attention_option, reuse)
-  # Attention construction function
-  attention_construct_fn = _create_attention_construct_fn(
-      'attention_construct', num_units, attention_score_fn, reuse)
-    
-          predictions = tf.transpose(predictions, [1, 0, 2])
-      return tf.squeeze(predictions, axis=2)
-
-    
-    password = key
-new_key = aes_encrypt(password, key_expansion(password))
-r = openssl_encode('aes-128-ctr', new_key, iv)
-print('aes_decrypt_text 16')
-print(repr(r))
-    
-        bug_text = re.search(
-        r'(?s)#\s*BUGS\s*[^\n]*\s*(.*?)#\s*COPYRIGHT', readme).group(1)
-    dev_text = re.search(
-        r'(?s)(#\s*DEVELOPER INSTRUCTIONS.*?)#\s*EMBEDDING YOUTUBE-DL',
-        readme).group(1)
+@gen.engine
+def e1():
+    for i in range(10):
+        yield gen.Task(e2)
     
     
 def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
+    parse_command_line()
+    if options.dump:
+        print(tmpl.code)
+        sys.exit(0)
+    t = Timer(render)
+    results = t.timeit(options.num) / options.num
+    print('%0.3f ms per iteration' % (results * 1000))
     
-    with io.open(lazy_extractors_filename, 'wt', encoding='utf-8') as f:
-    f.write(module_src)
+        # HACK:  unittest.main will make its own changes to the warning
+    # configuration, which may conflict with the settings above
+    # or command-line flags like -bb.  Passing warnings=False
+    # suppresses this behavior, although this looks like an implementation
+    # detail.  http://bugs.python.org/issue15626
+    kwargs['warnings'] = False
+    
+    
+class LeakTest(unittest.TestCase):
+    def setUp(self):
+        # Trigger a cleanup of the mapping so we start with a clean slate.
+        AsyncIOLoop().close()
+        # If we don't clean up after ourselves other tests may fail on
+        # py34.
+        self.orig_policy = asyncio.get_event_loop_policy()
+        asyncio.set_event_loop_policy(asyncio.DefaultEventLoopPolicy())
+    
+        def tearDown(self):
+        self.server.stop()
+        super(ClientTestMixin, self).tearDown()  # type: ignore
+    
+            self.assertFalse(sns_listener.get_topic_by_arn(topic_arn))
+        sns_listener.do_create_topic(topic_arn)
+        self.assertTrue(sns_listener.get_topic_by_arn(topic_arn) is not None)
+        sns_listener.do_subscribe(
+            topic_arn,
+            'http://localhost:1234/listen',
+            'http',
+            sub_arn,
+            {}
+        )
+        self.assertTrue(sns_listener.get_subscription_by_arn(sub_arn))
+        sns_listener.do_unsubscribe(sub_arn)
+        self.assertFalse(sns_listener.get_subscription_by_arn(sub_arn))
+    
+            alias_arn = lambda_api.func_arn(self.FUNCTION_NAME) + ':' + self.ALIAS_NAME
+        self.assertEqual(self.ALIASEXISTS_EXCEPTION, result['__type'])
+        self.assertEqual(self.ALIASEXISTS_MESSAGE % alias_arn,
+                         result['message'])
+    
+    
+package_data = {
+    '': ['Makefile', '*.md'],
+    'localstack': [
+        'package.json',
+        'dashboard/web/*.*',
+        'dashboard/web/css/*',
+        'dashboard/web/img/*',
+        'dashboard/web/js/*',
+        'dashboard/web/views/*',
+        'ext/java/*.*',
+        'ext/java/src/main/java/com/atlassian/localstack/*.*',
+        'utils/kinesis/java/com/atlassian/*.*'
+    ]}
+    
+    
+def get_result(vec):
+    max_value_index = 0
+    max_value = 0
+    for i in range(len(vec)):
+        if vec[i] > max_value:
+            max_value = vec[i]
+            max_value_index = i
+    return max_value_index
+    
+    
+def train_and_perceptron():
+    '''
+    Desc:
+        使用 and 真值表来训练我们的感知器
+    Args:
+        None
+    Returns:
+        p —— 返回训练好的感知器
+    '''
+    # 创建感知器，输入参数的个数是 2 个（因为 and 是个二元函数），激活函数为 f
+    p = Perceptron(2, f)
+    # 进行训练，迭代 10 轮，学习速率是我们设定的 rate ，为 0.1
+    input_vecs, labels = get_training_dataset()
+    p.train(input_vecs, labels, 10, 0.1)
+    # 返回训练好的感知器
+    return p
+    
+        # cov协方差=[(x1-x均值)*(y1-y均值)+(x2-x均值)*(y2-y均值)+...+(xn-x均值)*(yn-y均值)+]/(n-1)
+    '''
+    方差：（一维）度量两个随机变量关系的统计量
+    协方差： （二维）度量各个维度偏离其均值的程度
+    协方差矩阵：（多维）度量各个维度偏离其均值的程度
+    
+            self._colors = {
+            'A': '#00cc00',
+            'B': '#00cc00',
+            'C': '#00aacc',
+            'D': '#888888',
+            'E': '#cccc00',
+            'F': '#ff0000',
+            'H': '#22aa22',
+            'I': '#cc0000',
+            'J': '#000000',
+        }
+    
+    def _colorize(text):
+    return \
+        re.sub(
+            r'`(.*?)`',
+            colored.bg('dark_gray') \
+                + colored.fg('white') \
+                + ' ' + r'\1' + ' ' \
+                + colored.attr('reset'),
+            re.sub(
+                r'\*\*(.*?)\*\*',
+                colored.attr('bold') \
+                    + colored.fg('white') \
+                    + r'\1' \
+                    + colored.attr('reset'),
+                text))
+    
+            local_repository_dir = cls.local_repository_location()
+        if not local_repository_dir:
+            return None
+    
+            answer = sorted([
+            os.path.basename(f_name) for f_name in glob.glob(template)])
+        return '\n'.join(answer) + '\n'
+    
+        def _get_page(self, topic, request_options=None):
+        from_, topic = topic.split('/', 1)
+        to_ = request_options.get('lang', 'en')
+        if '-' in from_:
+            from_, to_ = from_.split('-', 1)
+    
+        def _get_page(self, topic, request_options=None):
+        sys.path.append(os.path.join(self.local_repository_location(), 'bin'))
+        import latencies
+        return latencies.render()
+    
+                answer.append(line)
+    
+    def _limited_answer(answer):
+    return colored.bg('dark_goldenrod') + colored.fg('yellow_1') \
+        + ' ' +  answer + ' ' \
+        + colored.attr('reset') + '\n'
+    
+        edit_button = ''
+    if editable:
+        # It's possible that topic directory starts with omitted underscore
+        if '/' in query:
+            query = '_' + query
+        edit_page_link = 'https://github.com/chubin/cheat.sheets/edit/master/sheets/' + query
+        edit_button = (
+            '<pre style='position:absolute;padding-left:40em;overflow:visible;height:0;'>'
+            '[<a href='%s' style='color:cyan'>edit</a>]'
+            '</pre>') % edit_page_link
+    result = re.sub('<pre>', edit_button + form_html + '<pre>', result)
+    result = re.sub('<head>', '<head>' + title, result)
+    if not request_options.get('quiet'):
+        result = result.replace('</body>',
+                                TWITTER_BUTTON \
+                                + GITHUB_BUTTON \
+                                + repository_button \
+                                + GITHUB_BUTTON_FOOTER \
+                                + '</body>')
+    return result
 
     
+            def __get_topic_type(topic):
+            for regexp, route in self.routing_table:
+                if re.search(regexp, topic):
+                    if route in self._adapter:
+                        if self._adapter[route].is_found(topic):
+                            return route
+                    else:
+                        return route
+            return CONFIG['routing.default']
     
-def build_completion(opt_parser):
-    opts = [opt for group in opt_parser.option_groups
-            for opt in group.option_list]
-    opts_file = [opt for opt in opts if opt.metavar == 'FILE']
-    opts_dir = [opt for opt in opts if opt.metavar == 'DIR']
-    
-    # The version info for the project you're documenting, acts as replacement for
-# |version| and |release|, also used in various other places throughout the
-# built documents.
-#
-# The short X.Y version.
-from youtube_dl.version import __version__
-version = __version__
-# The full version, including alpha/beta/rc tags.
-release = version
-    
-    
-class TestCache(unittest.TestCase):
-    def setUp(self):
-        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
-        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
-        _mkdir(TESTDATA_DIR)
-        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
-        self.tearDown()
-    
-    from __future__ import unicode_literals
-    
-    
-if __name__ == '__main__':
-    main()
-    
-    
-        for prime in lowPrimes:
-        if (num % prime) == 0:
-            return False
-    
-    	TEMPORARY_ARRAY = [ element for element in ARRAY[1:] if element >= PIVOT ]
-	TEMPORARY_ARRAY = [PIVOT] + longestSub(TEMPORARY_ARRAY)
-	if ( len(TEMPORARY_ARRAY) > len(LONGEST_SUB) ):
-		return TEMPORARY_ARRAY
-	else:
-		return LONGEST_SUB
-    
-            '''
-        this section is to check that the inputs conform to our dimensionality constraints
-        '''
-        if X.ndim != 1:
-            print('Error: Input data set must be one dimensional')
-            return
-        if len(X) != len(y):
-            print('Error: X and y have different lengths')
-            return
-        if y.ndim != 1:
-            print('Error: Data set labels must be one dimensional')
-            return
-    
-        def delete(self, session_key=None):
-        if session_key is None:
-            if self.session_key is None:
-                return
-            session_key = self.session_key
-        self._cache.delete(self.cache_key_prefix + session_key)
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('--spider', dest='spider',
-            help='use this spider')
-        parser.add_option('--headers', dest='headers', action='store_true', \
-            help='print response HTTP headers instead of body')
-        parser.add_option('--no-redirect', dest='no_redirect', action='store_true', \
-            default=False, help='do not handle HTTP 3xx status codes and print response as-is')
-    
-        def _find_template(self, template):
-        template_file = join(self.templates_dir, '%s.tmpl' % template)
-        if exists(template_file):
-            return template_file
-        print('Unable to find template: %s\n' % template)
-        print('Use 'scrapy genspider --list' to see all available templates.')
-    
-            creatorForNetloc() is the same as BrowserLikePolicyForHTTPS
-        except this context factory allows setting the TLS/SSL method to use.
-    
-        # TODO: It would be better if we had unit tests for each
-    # method in addition to the following end-to-end test
-    def test_end_to_end(self):
-        print('Test: Empty stack')
-        stack = Stack()
-        assert_equal(stack.peek(), None)
-        assert_equal(stack.pop(), None)
-    
-            # 检查梯度
-        epsilon = 10e-4
-        for fc in self.layers:
-            for i in range(fc.W.shape[0]):
-                for j in range(fc.W.shape[1]):
-                    fc.W[i,j] += epsilon
-                    output = self.predict(sample_feature)
-                    err1 = self.loss(sample_label, output)
-                    fc.W[i,j] -= 2*epsilon
-                    output = self.predict(sample_feature)
-                    err2 = self.loss(sample_label, output)
-                    expect_grad = (err1 - err2) / (2 * epsilon)
-                    fc.W[i,j] += epsilon
-                    print('weights(%d,%d): expected - actural %.4e - %.4e' % (
-                        i, j, expect_grad, fc.W_grad[i,j]))
-    
-            # 保存全部delta值
-        self.delta_h_list[k-1] = delta_h_prev
-        self.delta_f_list[k] = delta_f
-        self.delta_i_list[k] = delta_i
-        self.delta_o_list[k] = delta_o
-        self.delta_ct_list[k] = delta_ct
-    
-    
-# 从文本中构建矩阵，加载文本文件，然后处理
-def loadDataSet(fileName):  # 通用函数，用来解析以 tab 键分隔的 floats（浮点数）
-    dataSet = []
-    fr = open(fileName)
-    for line in fr.readlines():
-        curLine = line.strip().split('\t')
-        fltLine = map(float, curLine)  # 映射所有的元素为 float（浮点数）类型
-        dataSet.append(fltLine)
-    return dataSet
-    
-        Args:
-        dataMat   原数据集矩阵
-        topNfeat  应用的N个特征
-    Returns:
-        lowDDataMat  降维后数据集
-        reconMat     新的数据集空间
-    '''
-    
-    
-# recommend()函数，就是推荐引擎，它默认调用standEst()函数，产生了最高的N个推荐结果。
-# 如果不指定N的大小，则默认值为3。该函数另外的参数还包括相似度计算方法和估计方法
-def recommend(dataMat, user, N=3, simMeas=cosSim, estMethod=standEst):
-    '''svdEst( )
+        answers_found = []
+    for topic in get_topics_list(skip_internal=True, skip_dirs=True):
