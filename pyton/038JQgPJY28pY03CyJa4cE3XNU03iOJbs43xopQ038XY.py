@@ -1,65 +1,127 @@
 
         
-                def get_auth(self, username=None, password=None):
-            assert self.raw_auth is None
-            assert username is None
-            assert password is None
-            return basic_auth()
-    
-        config['implicit_content_type'] = 'form'
-    config.save()
-    config.load()
-    assert 'implicit_content_type' not in config
-    assert config['default_options'] == ['--form']
-    
-    
-@pytest.mark.parametrize('follow_flag', ['--follow', '-F'])
-def test_follow_without_all_redirects_hidden(httpbin, follow_flag):
-    r = http(follow_flag, httpbin.url + '/redirect/2')
-    assert r.count('HTTP/1.1') == 1
-    assert HTTP_OK in r
-    
-        def _get_path(self):
-        '''Return the config file path without side-effects.'''
-        raise NotImplementedError()
-    
-            # put all lines in the file into a Python list
-        strings = f.readlines()
         
-        # above line leaves trailing newline characters; strip them out
-        strings = [x.strip(u'\n') for x in strings]
-        
-        # remove empty-lines and comments
-        strings = [x for x in strings if x and not x.startswith(u'#')]
-        
-        # insert empty string since all are being removed
-        strings.insert(0, u'')
+def findProject(gitlab_instance, identifier):
+    try:
+        project = gitlab_instance.projects.get(identifier)
+    except Exception as e:
+        current_user = gitlab_instance.user
+        try:
+            project = gitlab_instance.projects.get(current_user.username + '/' + identifier)
+        except Exception as e:
+            return None
     
-    # Load a sample picture and learn how to recognize it.
-print('Loading known face image(s)')
-obama_image = face_recognition.load_image_file('obama_small.jpg')
-obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
+            if api_url:
+            self.clc.defaults.ENDPOINT_URL_V2 = api_url
     
-        # macOS will crash due to a bug in libdispatch if you don't use 'forkserver'
-    context = multiprocessing
-    if 'forkserver' in multiprocessing.get_all_start_methods():
-        context = multiprocessing.get_context('forkserver')
+            self._set_clc_credentials_from_env()
+        self.policy_dict = self._get_alert_policies(p['alias'])
     
-        def test_fd_command_line_interface(self):
-        runner = CliRunner()
-        image_file = os.path.join(os.path.dirname(__file__), 'test_images', 'obama.jpg')
     
-    # Show the picture
-pil_image.show()
+if __name__ == '__main__':
+    main()
 
     
-        # 将每一个人脸与已知样本图片比对
-    for face_encoding in face_encodings:
-        # 看是否属于奥巴马或者拜登
-        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
-        name = '<Unknown Person>'
+    
+def main():
+    argument_spec = infinibox_argument_spec()
+    argument_spec.update(
+        dict(
+            name=dict(required=True),
+            state=dict(default='present', choices=['present', 'absent']),
+            size=dict(),
+            vsize=dict(),
+            ssd_cache=dict(type='bool', default=True)
+        )
+    )
+    
+        file_args = module.load_file_common_arguments(module.params)
+    if module.set_fs_attributes_if_different(file_args, False):
+    
+            # reload config
+        layman = init_layman()
+    
+    import traceback
+    
+    DOCUMENTATION = r'''
+---
+module: ucs_managed_objects
+short_description: Configures Managed Objects on Cisco UCS Manager
+description:
+- Configures Managed Objects on Cisco UCS Manager.
+- The Python SDK module, Python class within the module (UCSM Class), and all properties must be directly specified.
+- More information on the UCSM Python SDK and how to directly configure Managed Objects is available at L(UCSM Python SDK,http://ucsmsdk.readthedocs.io/).
+- Examples can be used with the UCS Platform Emulator U(https://communities.cisco.com/ucspe).
+extends_documentation_fragment: ucs
+options:
+  state:
+    description:
+    - If C(present), will verify that the Managed Objects are present and will create if needed.
+    - If C(absent), will verify that the Managed Objects are absent and will delete if needed.
+    choices: [ absent, present ]
+    default: present
+  objects:
+    description:
+    - List of managed objects to configure.  Each managed object has suboptions the specify the Python SDK module, class, and properties to configure.
+    suboptions:
+      module:
+        description:
+        - Name of the Python SDK module implementing the required class.
+        required: yes
+      class_name:
+        description:
+        - Name of the Python class that will be used to configure the Managed Object.
+        required: yes
+      properties:
+        description:
+        - List of properties to configure on the Managed Object.  See the UCSM Python SDK for information on properties for each class.
+        required: yes
+      children:
+        description:
+        - Optional list of child objects.  Each child has its own module, class, and properties suboptions.
+        - The parent_mo_or_dn property for child objects is automatically set as the list of children is configured.
+    required: yes
+requirements:
+- ucsmsdk
+author:
+- David Soper (@dsoper2)
+- CiscoUcs (@CiscoUcs)
+version_added: '2.8'
+'''
+    
+            assert len(identity) == 1
+        assert identity[0].idp == self.idp
+        assert identity[0].status == IdentityStatus.VALID
+        assert len(responses.calls) == 1
+    
+        def __init__(self, message, severity=SEVERITY_CRITICAL, url=None):
+        assert severity in self.SEVERITY_LEVELS
+        self.message = six.text_type(message)
+        self.severity = severity
+        self.url = url
+    
+            backlogged, size = None, 0
+        from sentry.monitoring.queues import backend
+        if backend is not None:
+            size = backend.get_size('default')
+            backlogged = size > 0
+    
+            # Adding index on 'GroupTagValue', fields ['project_id', '_key', '_value', 'last_seen']
+        db.create_index(
+            u'tagstore_grouptagvalue', [
+                'project_id', 'key_id', 'value_id', 'last_seen'])
+    
+            for job in job_list:
+            logger.debug('Sending scheduled job %s with payload %r', job.name, job.payload)
+            app.send_task(job.name, kwargs=job.payload)
+            job.delete()
+
     
     
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+@register.tag
+def feature(parser, token):
+    bits = token.split_contents()
+    if len(bits) < 2:
+        raise template.TemplateSyntaxError(
+            '%r tag requires an argument' % token.contents.split()[0]
+        )
