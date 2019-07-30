@@ -1,181 +1,77 @@
 
         
-                def sidekiq_worker_class
-          ImportNoteWorker
-        end
-    
-          # Associates the given database ID with the current object.
-      #
-      # database_id - The ID of the corresponding database row.
-      def cache_database_id(database_id)
-        Caching.write(cache_key, database_id)
+                @current_document.related_posts
       end
+      attr_writer :current_document
     
-            # attributes - A Hash containing the user details. The keys of this
-        #              Hash (and any nested hashes) must be symbols.
-        def initialize(attributes)
-          @attributes = attributes
-        end
-      end
+    def graceful_require
+  Jekyll::External.require_with_graceful_fail('json')
+  JSON.pretty_generate(DATA)
+end
+    
+    CONTENT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+    
+        it 'shows reblogs by default' do
+      recipient.follow!(sender)
+      is_expected.to change(Notification, :count)
     end
+    
+    class ActivityPub::DistributionWorker
+  include Sidekiq::Worker
+  include Payloadable
+    
+      def signed_payload
+    @signed_payload ||= Oj.dump(serialize_payload(@account, ActivityPub::UpdateSerializer, signer: @account, sign_with: @options[:sign_with]))
   end
 end
 
     
-    $preload = %w[digest]
+    describe Settings::Preferences::NotificationsController do
+  render_views
     
-    # SUSv4
-_PC_FILESIZEBITS
-_PC_LINK_MAX
-_PC_MAX_CANON
-_PC_MAX_INPUT
-_PC_NAME_MAX
-_PC_PATH_MAX
-_PC_PIPE_BUF
-_PC_2_SYMLINKS
-_PC_ALLOC_SIZE_MIN
-_PC_REC_INCR_XFER_SIZE
-_PC_REC_MAX_XFER_SIZE
-_PC_REC_MIN_XFER_SIZE
-_PC_REC_XFER_ALIGN
-_PC_SYMLINK_MAX
-_PC_CHOWN_RESTRICTED
-_PC_NO_TRUNC
-_PC_VDISABLE
-_PC_ASYNC_IO
-_PC_PRIO_IO
-_PC_SYNC_IO
-_PC_TIMESTAMP_RESOLUTION
+      class_methods do
+    def ldap_get_user(attributes = {})
+      resource = joins(:account).find_by(accounts: { username: attributes[Devise.ldap_uid.to_sym].first })
     
-          return [parent, message]
-    end
-    args = $mflags
-    unless $destdir.to_s.empty? or $mflags.defined?('DESTDIR')
-      args += ['DESTDIR=' + relative_from($destdir, '../'+prefix)]
-    end
-    if $static and ok and !$objs.empty? and !noinstall
-      args += ['static']
-      $extlist.push [(maybestatic ? $static : false), target, $target, $preload]
-    end
-    FileUtils.rm_f(old_cleanfiles - $distcleanfiles - $cleanfiles)
-    FileUtils.rm_f(old_objs - $objs)
-    if $static
-      $extflags ||= ''
-      $extlibs ||= []
-      $extpath ||= []
-      unless $mswin
-        $extflags = split_libs($extflags, $DLDFLAGS, $LDFLAGS).uniq.join(' ')
-      end
-      $extlibs = merge_libs($extlibs, split_libs($libs, $LOCAL_LIBS).map {|lib| lib.sub(/\A\.\//, 'ext/#{target}/')})
-      $extpath |= $LIBPATH
-    end
-  ensure
-    Logging::log_close
-    if rbconfig0
-      RbConfig.module_eval {
-	remove_const(:CONFIG)
-	const_set(:CONFIG, rbconfig0)
-	remove_const(:MAKEFILE_CONFIG)
-	const_set(:MAKEFILE_CONFIG, mkconfig0)
-      }
-    end
-    if mkconfig0
-      MakeMakefile.class_eval {
-	remove_const(:CONFIG)
-	const_set(:CONFIG, mkconfig0)
-      }
-    end
-    $top_srcdir = top_srcdir
-    $topdir = topdir
-    $hdrdir = hdrdir
-    $static = static
-    Dir.chdir dir
-  end
-  begin
-    Dir.rmdir target
-    target = File.dirname(target)
-  rescue SystemCallError
-    break
-  end while true
-  true
-end
-    
-          @size = PackInfo.align(offset, max_align)
+        it 'makes followers unfollow old account' do
+      expect(follower.following?(old_account)).to be false
     end
     
-          it 'it doesn't call toggle_hidden_shareable' do
-        expect(@controller.current_user).not_to receive(:toggle_hidden_shareable).with(an_instance_of(StatusMessage))
-        begin
-          put :update, params: {id: 42, post_id: @status.id}, format: :js
-        rescue ActiveRecord::RecordNotFound
-        end
-      end
+      context 'when a matching undo has been received first' do
+    let(:undo_json) do
+      {
+        '@context': 'https://www.w3.org/ns/activitystreams',
+        id: 'bar',
+        type: 'Undo',
+        actor: ActivityPub::TagManager.instance.uri_for(sender),
+        object: json,
+      }.with_indifferent_access
     end
-  end
-end
-
     
-            # Prints the list of specs & pod cache dirs for a single pod name.
-        #
-        # This output is valid YAML so it can be parsed with 3rd party tools
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        The various infos about a pod cache. Keys are
-        #        :spec_file, :version, :release and :slug
-        #
-        def print_pod_cache_infos(pod_name, cache_descriptors)
-          UI.puts '#{pod_name}:'
-          cache_descriptors.each do |desc|
-            if @short_output
-              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
-            end
-            UI.puts('  - Version: #{desc[:version]}')
-            UI.puts('    Type:    #{pod_type(desc)}')
-            UI.puts('    Spec:    #{desc[:spec_file]}')
-            UI.puts('    Pod:     #{desc[:slug]}')
+          explicit_path = ::File.join(temp_path, LOGSTASH_DIR)
+      dependencies_path = ::File.join(temp_path, DEPENDENCIES_DIR)
+    
+          PluginManager.ui.info('Install successful')
+    rescue ::Bundler::BundlerError => e
+      raise PluginManager::InstallError.new(e), 'An error occurred went installing plugins'
+    ensure
+      FileUtils.rm_rf(uncompressed_path) if uncompressed_path && Dir.exist?(uncompressed_path)
+    end
+    
+              it 'successfully install the plugin' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install #{gem_path_on_vagrant}')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-dns')
           end
-        end
-      end
-    end
-  end
-end
-
-    
-            def execute_repl_command(repl_command)
-          unless repl_command == '\n'
-            repl_commands = repl_command.split
-            subcommand = repl_commands.shift.capitalize
-            arguments = repl_commands
-            subcommand_class = Pod::Command::IPC.const_get(subcommand)
-            subcommand_class.new(CLAide::ARGV.new(arguments)).run
-            signal_end_of_output
-          end
-        end
-      end
-    end
-  end
-end
-
-    
-      gem.licenses      = ['MIT']
-    
-      def test_file_exists(path)
-    exists?('f', path)
-  end
-    
-          # Given a callable that provides a value, wrap the callable with another
-      # object that responds to `call`. This new object will perform validation
-      # and then return the original callable's value.
-      #
-      # If the callable is a `Question`, the object returned by this method will
-      # also be a `Question` (a `ValidatedQuestion`, to be precise). This
-      # ensures that `is_a?(Question)` remains true even after the validation
-      # wrapper is applied. This is needed so that `Configuration#is_question?`
-      # works as expected.
-      #
-      def assert_valid_later(key, callable)
-        validation_callback = lambda do
-          value = callable.call
-          assert_valid_now(key, value)
-          value
         end
