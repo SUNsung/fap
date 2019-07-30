@@ -1,112 +1,130 @@
 
         
-            # NOTE: `relative-dir` is not actually a 'relative dir' in this data structure
-    # due to the fact that when vagrant stores synced folders, it path expands
-    # them with root_dir, and when you grab those synced_folders options from
-    # the machines config file, they end up being a full path rather than a
-    # relative path, and so these tests reflect that.
-    # For reference:
-    # https://github.com/hashicorp/vagrant/blob/9c1b014536e61b332cfaa00774a87a240cce8ed9/lib/vagrant/action/builtin/synced_folders.rb#L45-L46
-    let(:config_synced_folders)  { {'/vagrant':
-      {type: 'rsync',
-        hostpath: '/Users/brian/code/vagrant-sandbox'},
-      '/vagrant/other-dir':
-      {type: 'rsync',
-        hostpath: '/Users/brian/code/vagrant-sandbox/other-dir'},
-      '/vagrant/relative-dir':
-      {type: 'rsync',
-        hostpath: '/Users/brian/code/relative-dir'}}}
+        class Devise::SessionsController < DeviseController
+  prepend_before_action :require_no_authentication, only: [:new, :create]
+  prepend_before_action :allow_params_authentication!, only: :create
+  prepend_before_action :verify_signed_out_user, only: :destroy
+  prepend_before_action(only: [:create, :destroy]) { request.env['devise.skip_timeout'] = true }
     
-        it 'returns not_created if no ID' do
-      allow(machine).to receive(:id).and_return(nil)
-      expect(subject.state.id).to eq(:not_created)
-    end
+    class Devise::UnlocksController < DeviseController
+  prepend_before_action :require_no_authentication
     
-      subject { described_class }
-    
-    require Vagrant.source_root.join('plugins/provisioners/chef/cap/linux/chef_installed')
-    
-            iso_env.box3('base', '1.0', :custom, vagrantfile: <<-VF)
-        Vagrant.configure('2') do |config|
-          config.vagrant.plugins = 'vagrant-custom'
-        end
-        VF
+          def remember_cookie_values(resource)
+        options = { httponly: true }
+        options.merge!(forget_cookie_values(resource))
+        options.merge!(
+          value: resource.class.serialize_into_cookie(resource),
+          expires: resource.remember_expires_at
+        )
       end
     
-          begin
-        @logger.debug('Creating: #{@local_data_path}')
-        FileUtils.mkdir_p(@local_data_path)
-        # Create the rgloader/loader file so we can use encoded files.
-        loader_file = @local_data_path.join('rgloader', 'loader.rb')
-        if !loader_file.file?
-          source_loader = Vagrant.source_root.join('templates/rgloader.rb')
-          FileUtils.mkdir_p(@local_data_path.join('rgloader').to_s)
-          FileUtils.cp(source_loader.to_s, loader_file.to_s)
-        end
-      rescue Errno::EACCES
-        raise Errors::LocalDataDirectoryNotAccessible,
-          local_data_path: @local_data_path.to_s
+          def parse_uri(location)
+        location && URI.parse(location)
+      rescue URI::InvalidURIError
+        nil
       end
-    end
     
-        it 'should not include any update plugins' do
-      expect(subject).to receive(:internal_install).with(anything, nil, any_args)
-      subject.install(plugins)
-    end
+        def default_used_helpers(options)
+      singularizer = lambda { |s| s.to_s.singularize.to_sym }
     
-                if !machine.box
-              collection = Vagrant::BoxCollection.new(@env.boxes_path)
-              machine.box = collection.find(machine.config.vm.box, provider || machine.provider_name || @env.default_provider, '> 0')
-              if !machine.box
-                machine.ui.output(I18n.t(
-                  'vagrant.errors.box_update_no_box',
-                  name: machine.config.vm.box))
-                next
-              end
-            end
-    
-      def exists?(type, path)
-    %Q{[ -#{type} '#{path}' ]}
+      def formulae
+    require 'formula'
+    # TODO: use @instance variable to ||= cache when moving to CLI::Parser
+    (downcased_unique_named - casks).map do |name|
+      if name.include?('/') || File.exist?(name)
+        Formulary.factory(name, spec)
+      else
+        Formulary.find_with_priority(name, spec)
+      end
+    end.uniq(&:name)
   end
     
-            @response = (gets || '').chomp
+        it 'When plist_options are not defined when using a formula-defined plist', :ruby23 do
+      expect_offense(<<~RUBY)
+        class Foo < Formula
+          url 'https://brew.sh/foo-1.0.tgz'
+          homepage 'https://brew.sh'
+    
+          its(:suggestion) { is_expected.to match(%r{brew cask install homebrew/cask-versions/adoptopenjdk8}) }
+      its(:cask) { is_expected.to eq('homebrew/cask-versions/adoptopenjdk8') }
+    end
+    
+        args.present?
+  end
+end
+
+    
+            uses_from_macos('foo', after: :mojave)
       end
     
-            if callable_without_parameters?(value_to_evaluate)
-          super(key, assert_valid_later(key, value_to_evaluate), &nil)
+      describe '#uses_from_macos' do
+    before do
+      sierra_os_version = OS::Mac::Version.from_symbol(:sierra)
+    
+        def compilers_standard?
+      STANDARD_COMPILERS.fetch(Xcode.version.to_s).all? do |method, build|
+        send(:'#{method}_version') == build
+      end
+    rescue IndexError
+      onoe <<~EOS
+        Homebrew doesn't know what compiler versions ship with your version
+        of Xcode (#{Xcode.version}). Please `brew update` and if that doesn't
+        help, file an issue with the output of `brew --config`:
+          #{Formatter.url('https://github.com/Homebrew/brew/issues')}
+    
+        attr_reader :force
+    attr_accessor :downloaded_path
+    
+        def tmux_window_and_pane_target
+      '#{project.name}:#{window_index}.#{pane_index}'
+    end
+    
+    shared_examples_for 'a project hook' do
+  let(:project) { FactoryBot.build(:project) }
+    
+        # This method was defined as something of a workaround...  Previously
+    # the conditional contained within was in the executable (i.e.
+    # bin/tmuxinator).  It has been moved here so as to be testable. A couple
+    # of notes:
+    # - ::start (defined in Thor::Base) expects the first argument to be an
+    # array or ARGV, not a varargs.  Perhaps ::bootstrap should as well?
+    # - ::start has a different purpose from #start and hence a different
+    # signature
+    def self.bootstrap(args = [])
+      name = args[0] || nil
+      if args.empty? && Tmuxinator::Config.local?
+        Tmuxinator::Cli.new.local
+      elsif name && !Tmuxinator::Cli::RESERVED_COMMANDS.include?(name) &&
+            Tmuxinator::Config.exists?(name: name)
+        Tmuxinator::Cli.new.start(name, *args.drop(1))
+      else
+        Tmuxinator::Cli.start(args)
+      end
+    end
+  end
+end
+
+    
+      describe '#start(with project config file)' do
+    before do
+      allow(Tmuxinator::Config).to receive(:validate).and_call_original
+      allow(Tmuxinator::Config).to receive_messages(version: 1.9)
+      allow(Kernel).to receive(:exec)
+    end
+    
+          # Existant directories which may contain project files
+      # Listed in search order
+      # Used by `implode` and `list` commands
+      def directories
+        if environment?
+          [environment]
         else
-          assert_valid_now(key, value_to_evaluate)
-          super
+          [xdg, home].select { |d| File.directory? d }
         end
       end
     
-          def initialize(values={})
-        @trusted_keys = []
-        @fetched_keys = []
-        @locations = {}
-        @values = values
-        @trusted = true
-      end
+        it 'gets a sorted list of all projects' do
+      allow(described_class).to receive(:environment?).and_return false
     
-          # sidebar HTML variant
-      it 'renders html variant' do
-        html_variant = create(:html_variant, published: true, approved: true)
-        get article.path + '?variant_version=1'
-        expect(response.body).to include html_variant.html
-      end
-    
-        context 'when amount is 1 dollar' do
-      it 'adds level_1_member role' do
-        valid_instance(user_one, 100).subscribe_customer
-        expect(user_one.has_role?(:level_1_member)).to eq(true)
-      end
+          it { is_expected.to be false }
     end
-  end
-    
-        def handle_gist_redirecting(data)
-      redirected_url = data.header['Location']
-      if redirected_url.nil? || redirected_url.empty?
-        raise ArgumentError, 'GitHub replied with a 302 but didn't provide a location in the response headers.'
-      end
-    
-    module Jekyll
