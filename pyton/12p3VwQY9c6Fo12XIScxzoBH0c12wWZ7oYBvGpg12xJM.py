@@ -1,125 +1,102 @@
 
         
-        # Check imported dependencies for compatibility.
-try:
-    check_compatibility(urllib3.__version__, chardet.__version__)
-except (AssertionError, ValueError):
-    warnings.warn('urllib3 ({}) or chardet ({}) doesn't match a supported '
-                  'version!'.format(urllib3.__version__, chardet.__version__),
-                  RequestsDependencyWarning)
+        
+# context locals
+_request_ctx_stack = LocalStack()
+_app_ctx_stack = LocalStack()
+current_app = LocalProxy(_find_app)
+request = LocalProxy(partial(_lookup_req_object, 'request'))
+session = LocalProxy(partial(_lookup_req_object, 'session'))
+g = LocalProxy(partial(_lookup_app_object, 'g'))
+
     
-    class PyTest(TestCommand):
-    user_options = [('pytest-args=', 'a', 'Arguments to pass into py.test')]
-    
-    
-def to_native_string(string, encoding='ascii'):
-    '''Given a string object, regardless of type, returns a representation of
-    that string in the native string type, encoding and decoding where
-    necessary. This assumes ASCII unless told otherwise.
-    '''
-    if isinstance(string, builtin_str):
-        out = string
-    else:
-        if is_py2:
-            out = string.encode(encoding)
-        else:
-            out = string.decode(encoding)
-    
-        @property
-    def unverifiable(self):
-        return self.is_unverifiable()
-    
-        if implementation == 'CPython':
-        implementation_version = platform.python_version()
-    elif implementation == 'PyPy':
-        implementation_version = '%s.%s.%s' % (sys.pypy_version_info.major,
-                                               sys.pypy_version_info.minor,
-                                               sys.pypy_version_info.micro)
-        if sys.pypy_version_info.releaselevel != 'final':
-            implementation_version = ''.join([
-                implementation_version, sys.pypy_version_info.releaselevel
-            ])
-    elif implementation == 'Jython':
-        implementation_version = platform.python_version()  # Complete Guess
-    elif implementation == 'IronPython':
-        implementation_version = platform.python_version()  # Complete Guess
-    else:
-        implementation_version = 'Unknown'
-    
-    from requests.help import info
-    
-            assert len(server.handler_results) == 0
-    
-                if parents:
-                config = get_sublevel_config(config, module)
-            configobjs = candidate.difference(config, match=match, replace=replace)
-        else:
-            configobjs = candidate.items
-    
-        def test_find_bind_mounts_no_findmnts(self):
-        module = Mock()
-        module.get_bin_path = Mock(return_value=None)
-        lh = linux.LinuxHardware(module=module, load_on_init=False)
-        bind_mounts = lh._find_bind_mounts()
-    
-        def test_module_fail_when_required_args_missing(self):
-        ''' required arguments are reported as errors '''
-        with pytest.raises(AnsibleFailJson) as exc:
-            set_module_args({})
-            asup_module()
-        print('Info: %s' % exc.value.args[0]['msg'])
-    
-    RETURN = '''
-diff:
-  description: Configuration difference before and after applying change.
-  returned: when configuration is changed and diff option is enabled.
-  type: str
-  sample: >
-        [edit interfaces]
-        +   ge-0/0/1 {
-        +       description 'l2 interface configured by Ansible';
-        +       unit 0 {
-        +           family ethernet-switching {
-        +               interface-mode access;
-        +               vlan {
-        +                   members red;
-        +               }
-        +           }
-        +       }
-        +   }
-'''
-import collections
-    
-            validate_param_values(module, param_to_xpath_map, param=item)
-    
-            # Audio languages
-        if 'dvd' in self.api_data:
-            al = self.api_data['dvd'].get('audiolang')
-            if al:
-                self.audiolang = al
-                for i in self.audiolang:
-                    i['url'] = 'http://v.youku.com/v_show/id_{}'.format(i['vid'])
-    
-    
-class Funshion(VideoExtractor):
-    name = 'funshion'
-    stream_types = [
-        {'id': 'sdvd'},
-        {'id': 'sdvd_h265'},
-        {'id': 'hd'},
-        {'id': 'hd_h265'},
-        {'id': 'dvd'},
-        {'id': 'dvd_h265'},
-        {'id': 'tv'},
-        {'id': 'tv_h265'}
+        #: Tag classes to bind when creating the serializer. Other tags can be
+    #: added later using :meth:`~register`.
+    default_tags = [
+        TagDict,
+        PassDict,
+        TagTuple,
+        PassList,
+        TagBytes,
+        TagMarkup,
+        TagUUID,
+        TagDateTime,
     ]
-    a_mobile_url = 'http://m.fun.tv/implay/?mid=302555'
-    video_ep = 'http://pv.funshion.com/v7/video/play/?id={}&cl=mweb&uc=111'
-    media_ep = 'http://pm.funshion.com/v7/media/play/?id={}&cl=mweb&uc=111'
-    coeff = None
     
-        if not info_only:
-        download_url_ffmpeg(m3u8_url, title, 'm3u8', None, output_dir=output_dir, merge=merge)
+        preserve_context = False
     
-        def time_dtindex_from_index_with_series(self):
-        Index(self.s)
+        @bp.route('/bar', endpoint='bar')
+    def foo_bar():
+        return flask.request.endpoint
+    
+    
+async def test_duplicate_error(hass):
+    '''Test that errors are shown when duplicates are added.'''
+    conf = {
+        CONF_IP_ADDRESS: '192.168.1.100',
+        CONF_PASSWORD: 'password',
+        CONF_PORT: 8080,
+        CONF_SSL: True,
+    }
+    
+        try:
+        await hass.async_add_job(auth.login)
+        return await result
+    except AuthorizationError as err:
+        if err.response.status_code == 401:
+            raise config_flow.CodeInvalid()
+        raise config_flow.NestAuthError('Unknown error: {} ({})'.format(
+            err, err.response.status_code))
+
+    
+    
+async def test_if_fires_on_event_with_data(hass, calls):
+    '''Test the firing of events with data.'''
+    assert await async_setup_component(hass, automation.DOMAIN, {
+        automation.DOMAIN: {
+            'trigger': {
+                'platform': 'event',
+                'event_type': 'test_event',
+                'event_data': {'some_attr': 'some_value'}
+            },
+            'action': {
+                'service': 'test.automation',
+            }
+        }
+    })
+    
+            self.hass.states.set('test.indoorhumidity', 'A',
+                             {ATTR_UNIT_OF_MEASUREMENT: '%'})
+        self.hass.block_till_done()
+        moldind = self.hass.states.get('sensor.mold_indicator')
+        assert moldind
+        assert moldind.state == 'unavailable'
+        assert moldind.attributes.get(ATTR_DEWPOINT) is None
+        assert moldind.attributes.get(ATTR_CRITICAL_TEMP) is None
+    
+        with patch.dict(discovery.CONFIG_ENTRY_HANDLERS, {
+        'mock-service': 'mock-component'}), patch(
+            'homeassistant.data_entry_flow.FlowManager.async_init') as m_init:
+        await mock_discovery(hass, discover)
+    
+            # 更新聚类中心
+        log.info(centers)
+        for i in range(k):
+            data_i = data[ret[:, 0] == i]  # 标签为 i 的样本
+            centers[i, :] = np.mean(data_i, axis=0)  # 按类别过滤样本
+    
+    
+    
+    
+def print_params_dict():
+    ''''''
+    print(SPLIT_LINE)
+    print('params_dict')
+    param_dict = get_params_dict()
+    # pprint(param_dict, indent=2)
+    for k, v in param_dict.items():
+        print('   ', k, '\t', end='')
+        pprint(v, indent=2)
+        # for vk, vv in v.items():
+        #     print(vk, '-', vv, '\t', end='')
+        # print()
