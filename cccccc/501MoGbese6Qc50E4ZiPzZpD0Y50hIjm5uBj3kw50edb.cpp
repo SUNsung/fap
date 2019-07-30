@@ -1,339 +1,161 @@
 
         
-          uint8_t* result = allocator.AllocateMemory(768, 1);
-  TF_LITE_MICRO_EXPECT_NE(nullptr, result);
+        #include 'native_mate/promise.h'
     
-    TfLiteRegistration* Register_RFFT2D();
     
-    bool TfLiteDriver::Expectation::TypedCheckString(bool verbose,
-                                                 const TfLiteTensor& tensor) {
-  if (tensor.data.raw == nullptr) {
-    if (verbose) {
-      std::cerr << '  got empty string' << std::endl;
-    }
-    return false;
-  }
-  int expected_num_strings = GetStringCount(data_.raw);
-  int returned_num_strings = GetStringCount(tensor.data.raw);
-  if (expected_num_strings != returned_num_strings) {
-    if (verbose) {
-      std::cerr << '  string count differ: got ' << returned_num_strings
-                << ', but expected ' << expected_num_strings << std::endl;
-    }
-    return false;
-  }
-  for (int i = 0; i < returned_num_strings; ++i) {
-    auto expected_ref = GetString(data_.raw, i);
-    auto returned_ref = GetString(tensor.data.raw, i);
-    if (expected_ref.len != returned_ref.len) {
-      if (verbose) {
-        std::cerr << '  index ' << i << ': got string of size '
-                  << returned_ref.len << ', but expected size '
-                  << expected_ref.len << std::endl;
-      }
-      return false;
-    }
-    if (strncmp(expected_ref.str, returned_ref.str, returned_ref.len) != 0) {
-      if (verbose) {
-        std::cerr << '  index ' << i << ': strings are different' << std::endl;
-      }
-      return false;
-    }
-  }
-    }
-    
-    template <typename Scalar>
-__global__ void MatrixBandPartKernel(const int num_threads,
-                                     const int batch_size, const int m,
-                                     const int n, const int num_lower_diags,
-                                     const int num_upper_diags,
-                                     const Scalar* input_ptr,
-                                     Scalar* output_ptr) {
-  GPU_1D_KERNEL_LOOP(index, num_threads) {
-    const int col = index % n;
-    const int row = (index / n) % m;
-    const int band_start = (num_lower_diags < 0 ? 0 : row - num_lower_diags);
-    const int band_end = (num_upper_diags < 0 ? n : row + num_upper_diags + 1);
-    if (col < band_start || col >= band_end) {
-      output_ptr[index] = Scalar(0);
-    } else {
-      output_ptr[index] = input_ptr[index];
-    }
-  }
+    {  return v8::FunctionTemplate::New(
+      isolate, &internal::Dispatcher<Sig>::DispatchToCallback,
+      ConvertToV8<v8::Local<v8::External>>(isolate,
+                                           holder->GetHandle(isolate)));
 }
     
-    template struct EyeFunctor<GPUDevice, float>;
-template struct EyeFunctor<GPUDevice, double>;
-template struct EyeFunctor<GPUDevice, complex64>;
-template struct EyeFunctor<GPUDevice, complex128>;
+    // static
+template <typename T>
+gin::WrapperInfo Wrappable<T>::kWrapperInfo = {gin::kEmbedderNativeGin};
     
-    TEST(TfliteInferenceStage, CustomDelegate) {
-  // Create stage.
-  EvaluationStageConfig config = GetTfliteInferenceStageConfig();
-  TfliteInferenceStage stage(config);
-    }
+      // Default function to kill a process, overridable by tests.
+  void KillProcess(int pid);
     
-    
-    {    error_stats_.emplace_back();
-  }
-    
-    #undef DECLARE_GPU_SPECS
-#undef DECLARE_GPU_SPECS_INDEX
-    
-    // Gets a DebugOptions proto that reflects the defaults as if no flags were set.
-DebugOptions DefaultDebugOptionsIgnoringFlags();
-    
-          const T plusFactor = (normMin < T(0)) ? T(0) : T(normMin * normMin);
+      status = napi_define_properties(
+      env, exports, sizeof(descriptors) / sizeof(*descriptors), descriptors);
+  if (status != napi_ok)
+    return NULL;
     
     
-    {    void KeyChord::Vkey(int32_t value)
-    {
-        _vkey = value;
-    }
+    {  ANNOTATE_SCOPED_MEMORY_LEAK;  // http://crbug.com/314087
+  // TODO(erg): The mozilla implementation goes to a lot of callback trouble
+  // just to make sure that they react to make sure there's some sort of
+  // cancelable object; including making a whole callback just to handle the
+  // cancelable.
+  //
+  // I don't see any reason why we should care if 'RegisterWindow' completes or
+  // not.
+  g_dbus_proxy_call(registrar_proxy_, 'RegisterWindow',
+                    g_variant_new('(uo)', xid, path.c_str()),
+                    G_DBUS_CALL_FLAGS_NONE, -1, nullptr, nullptr, nullptr);
 }
-
-    
-      //   The text of a paragraph typically starts with the start of an idea and
-  // ends with the end of an idea.  Here we define paragraph as something that
-  // may have a first line indent and a body indent which may be different.
-  // Typical words that start an idea are:
-  //   1. Words in western scripts that start with
-  //      a capital letter, for example 'The'
-  //   2. Bulleted or numbered list items, for
-  //      example '2.'
-  // Typical words which end an idea are words ending in punctuation marks. In
-  // this vocabulary, each list item is represented as a paragraph.
-  bool lword_indicates_list_item;
-  bool lword_likely_starts_idea;
-  bool lword_likely_ends_idea;
-    
-      // Sets the destination filename and enables images to be written to a PDF
-  // on destruction.
-  void WritePDF(const char* filename) {
-    if (pixaGetCount(pixa_) > 0) {
-      pixaConvertToPdf(pixa_, 300, 1.0f, 0, 0, 'AllDebugImages', filename);
-      pixaClear(pixa_);
-    }
-  }
     
     
-#endif  // TESSERACT_CCSTRUCT_LINLSQ_H_
-
+    {}  // namespace electron
     
-    class UnicharAmbigs {
+      // Adds a new point. Takes a copy - the pt doesn't need to stay in scope.
+  // Add must be called on points in sequence along the line.
+  void Add(const ICOORD& pt);
+  // Associates a half-width with the given point if a point overlaps the
+  // previous point by more than half the width, and its distance is further
+  // than the previous point, then the more distant point is ignored in the
+  // distance calculation. Useful for ignoring i dots and other diacritics.
+  void Add(const ICOORD& pt, int halfwidth);
+    
+    // Computes the Otsu threshold(s) for the given image rectangle, making one
+// for each channel. Each channel is always one byte per pixel.
+// Returns an array of threshold values and an array of hi_values, such
+// that a pixel value >threshold[channel] is considered foreground if
+// hi_values[channel] is 0 or background if 1. A hi_value of -1 indicates
+// that there is no apparent foreground. At least one hi_value will not be -1.
+// Delete thresholds and hi_values with delete [] after use.
+// The return value is the number of channels in the input image, being
+// the size of the output thresholds and hi_values arrays.
+int OtsuThreshold(Pix* src_pix, int left, int top, int width, int height,
+                  int** thresholds, int** hi_values);
+    
+    static const int kUnigramAmbigsBufferSize = 1000;
+static const char kAmbigNgramSeparator[] = { ' ', '\0' };
+static const char kAmbigDelimiters[] = '\t ';
+static const char kIllegalMsg[] =
+  'Illegal ambiguity specification on line %d\n';
+static const char kIllegalUnicharMsg[] =
+  'Illegal unichar %s in ambiguity specification\n';
+    
+    
+    {}  // namespace tesseract.
+    
+    private:
+    /* The write_semaphore_acq_ is empty for reads.
+    For writes it locks the write superblock acquisition semaphore until the
+    sb_buf_ is released.
+    Note that this is used to throttle writes compared to reads, but not required
+    for correctness. */
+    new_semaphore_in_line_t write_semaphore_acq_;
+    
+                auto it = sindexes.begin();
+            auto jt = mirror.begin();
+    
+    #if GTEST_HAS_GLOBAL_WSTRING
+  // Converts the given wide string to a narrow string using the UTF-8
+  // encoding, and streams the result to this Message object.
+  Message& operator <<(const ::wstring& wstr);
+#endif  // GTEST_HAS_GLOBAL_WSTRING
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32, typename T33, typename T34, typename T35,
+    typename T36, typename T37, typename T38, typename T39, typename T40,
+    typename T41, typename T42, typename T43, typename T44, typename T45,
+    typename T46>
+internal::ValueArray46<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
+    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
+    T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43,
+    T44, T45, T46> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7,
+    T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15,
+    T16 v16, T17 v17, T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23,
+    T24 v24, T25 v25, T26 v26, T27 v27, T28 v28, T29 v29, T30 v30, T31 v31,
+    T32 v32, T33 v33, T34 v34, T35 v35, T36 v36, T37 v37, T38 v38, T39 v39,
+    T40 v40, T41 v41, T42 v42, T43 v43, T44 v44, T45 v45, T46 v46) {
+  return internal::ValueArray46<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
+      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
+      T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39,
+      T40, T41, T42, T43, T44, T45, T46>(v1, v2, v3, v4, v5, v6, v7, v8, v9,
+      v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23,
+      v24, v25, v26, v27, v28, v29, v30, v31, v32, v33, v34, v35, v36, v37,
+      v38, v39, v40, v41, v42, v43, v44, v45, v46);
+}
+    
+      // Stores result of the assertion predicate.
+  bool success_;
+  // Stores the message describing the condition in case the expectation
+  // construct is not satisfied with the predicate's outcome.
+  // Referenced via a pointer to avoid taking too much stack frame space
+  // with test assertions.
+  internal::scoped_ptr< ::std::string> message_;
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26>
+class ValueArray26 {
  public:
-  UnicharAmbigs() = default;
-  ~UnicharAmbigs() {
-    replace_ambigs_.delete_data_pointers();
-    dang_ambigs_.delete_data_pointers();
-    one_to_one_definite_ambigs_.delete_data_pointers();
-  }
+  ValueArray26(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
+      T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17,
+      T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23, T24 v24, T25 v25,
+      T26 v26) : v1_(v1), v2_(v2), v3_(v3), v4_(v4), v5_(v5), v6_(v6), v7_(v7),
+      v8_(v8), v9_(v9), v10_(v10), v11_(v11), v12_(v12), v13_(v13), v14_(v14),
+      v15_(v15), v16_(v16), v17_(v17), v18_(v18), v19_(v19), v20_(v20),
+      v21_(v21), v22_(v22), v23_(v23), v24_(v24), v25_(v25), v26_(v26) {}
     }
     
-      // Get the value of the top (smallest, defined by operator< ) element.
-  const Pair& PeekTop() const {
-    return heap_[0];
-  }
-  // Get the value of the worst (largest, defined by operator< ) element.
-  const Pair& PeekWorst() const { return heap_[IndexOfWorst()]; }
-    
-      // Accumulates the errors from the classifier results on a single sample.
-  // Returns true if debug is true and a CT_UNICHAR_TOPN_ERR error occurred.
-  // boosting_mode selects the type of error to be used for boosting and the
-  // is_error_ member of sample is set according to whether the required type
-  // of error occurred. The font_table provides access to font properties
-  // for error counting and shape_table is used to understand the relationship
-  // between unichar_ids and shape_ids in the results
-  bool AccumulateErrors(bool debug, CountTypes boosting_mode,
-                        const FontInfoTable& font_table,
-                        const GenericVector<UnicharRating>& results,
-                        TrainingSample* sample);
-    
-    // Compute the distance between the given feature vector and the last
-// Set feature vector.
-double IntFeatureDist::FeatureDistance(
-    const GenericVector<int>& features) const {
-  const int num_test_features = features.size();
-  const double denominator = total_feature_weight_ + num_test_features;
-  double misses = denominator;
-  for (int i = 0; i < num_test_features; ++i) {
-    const int index = features[i];
-    const double weight = 1.0;
-    if (features_[index]) {
-      // A perfect match.
-      misses -= 2.0 * weight;
-    } else if (features_delta_one_[index]) {
-      misses -= 1.5 * weight;
-    } else if (features_delta_two_[index]) {
-      // A near miss.
-      misses -= 1.0 * weight;
-    }
-  }
-  return misses / denominator;
-}
-    
-    DEFINE_ALIGN_TABLE(AlignImpl::s_table);
-    
-      ALWAYS_INLINE
-  void xedInstrRR(xed_iclass_enum_t instr, const RegXMM& r1, const RegXMM& r2) {
-    xedEmit(instr, toXedOperand(r1), toXedOperand(r2));
-  }
-    
-      constexpr bool operator==(Reg64 o) const { return rn == o.rn; }
-  constexpr bool operator!=(Reg64 o) const { return rn != o.rn; }
-    
-    int64_t MemFile::tell() {
-  assertx(m_len != -1);
-  return getPosition();
-}
-    
-    
-    {  return m_innerFile->open(filename, mode) &&
-    (m_bzFile = BZ2_bzdopen(dup(m_innerFile->fd()), mode.data()));
-}
-    
-    
-    {  m_innerFile = File::Open(filename, mode);
-  if (isa<MemFile>(m_innerFile)) {
-    // We need an FD for the correct zlib APIs; MemFiles don't have an FD
-    if (strchr(mode.c_str(), 'w')) {
-      raise_warning('Cannot write to this stream type');
-      return false;
-    }
-    auto file = req::make<TempFile>();
-    while (!m_innerFile->eof()) {
-      file->write(m_innerFile->read(file->getChunkSize()));
-    }
-    file->rewind();
-    m_tempFile = file;
-    return (m_gzFile = gzdopen(dup(file->fd()), mode.data()));
-  }
-  if(m_innerFile) {
-    m_tempFile.reset();
-    return (m_gzFile = gzdopen(dup(m_innerFile->fd()), mode.data()));
-  }
-  return false;
-}
-    
-    
-    {  EXPECT_FALSE(sval(s_test.get()).couldBe(sval(s_A.get())));
-  EXPECT_TRUE(sval(s_test.get()).couldBe(sval(s_test.get())));
-  EXPECT_FALSE(
-    sval_nonstatic(s_test.get()).couldBe(sval_nonstatic(s_A.get()))
-  );
-  EXPECT_TRUE(
-    sval_nonstatic(s_test.get()).couldBe(sval_nonstatic(s_test.get()))
-  );
-  EXPECT_TRUE(sval(s_test.get()).couldBe(sval_nonstatic(s_test.get())));
-  EXPECT_TRUE(sval_nonstatic(s_test.get()).couldBe(sval(s_test.get())));
-  EXPECT_FALSE(sval(s_test.get()).couldBe(sval_nonstatic(s_A.get())));
-  EXPECT_FALSE(sval_nonstatic(s_test.get()).couldBe(sval(s_A.get())));
-}
-    
-    bool Scanner::tryParseTypeList(TokenStore::iterator& pos) {
-  for (int parsed = 0;; parsed++) {
-    if (pos->t == '+' || pos->t == '-') {
-      nextLookahead(pos);
-    }
-    auto cpPos = pos;
-    if (!tryParseNSType(cpPos)) {
-      if (parsed > 0) {
-        pos = cpPos;
-        return true;
-      } else {
-        return false;
-      }
-    }
-    pos = cpPos;
-    }
-    }
-    
-    #include 'DHTNode.h'
-#include 'DHTConstants.h'
-#include 'bittorrent_helper.h'
-#include 'DlAbortEx.h'
-#include 'Logger.h'
-#include 'a2netcompat.h'
-#include 'fmt.h'
-#include 'util.h'
-#include 'array_fun.h'
-#include 'LogFactory.h'
-#include 'BufferedFile.h'
-    
-    
-    {  void serialize(const std::string& filename);
-};
-    
-    #endif // D_DHT_TASK_FACTORY_IMPL_H
-
-    
-    void DHTTaskQueueImpl::executeTask()
-{
-  A2_LOG_DEBUG('Updating periodicTaskQueue1');
-  periodicTaskQueue1_.update();
-  A2_LOG_DEBUG('Updating periodicTaskQueue2');
-  periodicTaskQueue2_.update();
-  A2_LOG_DEBUG('Updating immediateTaskQueue');
-  immediateTaskQueue_.update();
-}
-    
-    class DHTTaskQueueImpl : public DHTTaskQueue {
-private:
-  DHTTaskExecutor periodicTaskQueue1_;
-    }
-    
-    namespace aria2 {
-    }
-    
-    #endif // D_DHT_TOKEN_UPDATE_COMMAND_H
-
-    
-    JSON getExamplePacksConfig() {
-  std::string content;
-  auto const filepath = getTestConfigDirectory() / 'test_inline_pack.conf';
-  auto status = readFile(filepath, content);
-  EXPECT_TRUE(status.ok())
-      << 'Could not read file: ' << boost::io::quoted(filepath.string())
-      << ', because: ' << status.what();
-  JSON doc = JSON::newObject();
-  doc.fromString(content);
-  return doc;
-}
-    
-    
-    { private:
-  std::unordered_map<std::string, StorageType> storage_;
-  std::mutex mutex_;
-};
-    
-      // This function should be used only as optimization
-  // This write operation will not use neither sync or WAL, so date lose
-  // may happen in case of failure, but opertaion itself is still atomic
-  ExpectedSuccess<DatabaseError> putStringsUnsafe(
-      const std::string& domain,
-      const std::vector<std::pair<std::string, std::string>>& data) override;
-    
-    namespace {
-    }
-    
-    GTEST_TEST(InMemoryDatabaseTest, test_keys_search) {
-  auto db = std::make_unique<InMemoryDatabase>('test');
-  ASSERT_FALSE(db->open().isError());
-  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'key_1', 1).isError());
-  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'key_2', 2).isError());
-  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'key_3', 3).isError());
-  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'kEy_1', 4).isError());
-  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'kEy_2', 5).isError());
-  auto result_all = db->getKeys(kPersistentSettings);
-  EXPECT_TRUE(result_all);
-  EXPECT_EQ((*result_all).size(), 5);
-  auto result_some = db->getKeys(kPersistentSettings, 'key');
-  EXPECT_TRUE(result_some);
-  EXPECT_EQ((*result_some).size(), 3);
-}
-    
-    
-    {  virtual void TearDown() {
-    boost::filesystem::remove_all(path_);
-  }
+    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
+    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
+    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
+    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
+    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
+    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
+    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
+    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
+    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27,
+    GTEST_TEMPLATE_ T28, GTEST_TEMPLATE_ T29, GTEST_TEMPLATE_ T30,
+    GTEST_TEMPLATE_ T31, GTEST_TEMPLATE_ T32, GTEST_TEMPLATE_ T33,
+    GTEST_TEMPLATE_ T34, GTEST_TEMPLATE_ T35, GTEST_TEMPLATE_ T36,
+    GTEST_TEMPLATE_ T37, GTEST_TEMPLATE_ T38>
+struct Templates38 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates37<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
+      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
+      T29, T30, T31, T32, T33, T34, T35, T36, T37, T38> Tail;
 };
