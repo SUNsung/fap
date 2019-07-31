@@ -1,108 +1,153 @@
 
         
-            def url
-      @url ||= URL.parse request.base_url
+            def scale_padding(padding)
+      if padding.kind_of?(String) && padding.end_with?('%')
+        padding = ([image.width, image.height].min * padding.to_f * 0.01).ceil
+      end
+      multi = 1.0
+      multi = 1.7 if self.screenshot.triple_density?
+      return padding * multi
     end
     
-            css('label', 'h2 > em', 'h3 > em').each do |node|
-          node.name = 'code'
+          def self.details
+        [
+          'The options are the same as `:enable_services` in the [produce action](https://docs.fastlane.tools/actions/produce/#parameters_1)'
+        ].join('\n')
+      end
+    
+        # Returns preferred path for storing cookie
+    # for two step verification.
+    def persistent_cookie_path
+      if ENV['SPACESHIP_COOKIE_PATH']
+        path = File.expand_path(File.join(ENV['SPACESHIP_COOKIE_PATH'], 'spaceship', self.user, 'cookie'))
+      else
+        [File.join(self.fastlane_user_dir, 'spaceship'), '~/.spaceship', '/var/tmp/spaceship', '#{Dir.tmpdir}/spaceship'].each do |dir|
+          dir_parts = File.split(dir)
+          if directory_accessible?(File.expand_path(dir_parts.first))
+            path = File.expand_path(File.join(dir, self.user, 'cookie'))
+            break
+          end
+        end
+      end
+    
+        def detect_configuration_for_archive
+      extract_from_scheme = lambda do
+        if self.project.workspace?
+          available_schemes = self.project.workspace.schemes.reject { |k, v| v.include?('Pods/Pods.xcodeproj') }
+          project_path = available_schemes[Gym.config[:scheme]]
+        else
+          project_path = self.project.path
         end
     
-        if authenticated && resource = warden.user(resource_name)
-      flash[:alert] = I18n.t('devise.failure.already_authenticated')
-      redirect_to after_sign_in_path_for(resource)
-    end
-  end
+          it 'Both primary and secondary are available, and the secondary is the only one that matches the export type' do
+        result = csm.merge_profile_mapping(primary_mapping: { 'identifier.1' => 'Ap-p StoreValue1' },
+                                       secondary_mapping: { 'identifier.1' => 'Ad-HocValue' },
+                                           export_method: 'app-store')
     
-        def password_change(record, opts={})
-      devise_mail(record, :password_change, opts)
-    end
-  end
-end
-
-    
-    # Each time a record is set we check whether its session has already timed out
-# or not, based on last request time. If so, the record is logged out and
-# redirected to the sign in page. Also, each time the request comes and the
-# record is set, we set the last request time inside its scoped session to
-# verify timeout in the following request.
-Warden::Manager.after_set_user do |record, warden, options|
-  scope = options[:scope]
-  env   = warden.request.env
-    
-        pod 'ObjCPod', path: 'ObjCPod'
-    pod 'SwiftPod', path: 'SwiftPod'
-    pod 'MixedPod', path: 'MixedPod'
-    pod 'CustomModuleMapPod', path: 'CustomModuleMapPod'
-    
-    class Rack::Builder
-  include Sinatra::Delegator
-end
-
-    
-          def origin(env)
-        env['HTTP_ORIGIN'] || env['HTTP_X_ORIGIN']
-      end
-    
-          def redirect(env)
-        request = Request.new(env)
-        warn env, 'attack prevented by #{self.class}'
-        [302, {'Content-Type' => 'text/html', 'Location' => request.path}, []]
-      end
-    
-        it 'Reads referrer from Host header when Referer header is relative' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => '/valid'}
-      expect(subject.referrer(env)).to eq('foo.com')
-    end
-    
-      it 'should not override the header if already set' do
-    mock_app with_headers('Content-Security-Policy' => 'default-src: none')
-    expect(get('/', {}, 'wants' => 'text/html').headers['Content-Security-Policy']).to eq('default-src: none')
-  end
-end
-
-    
-    Liquid::Template.register_tag('blockquote', Jekyll::Blockquote)
-
-    
-        def get_web_content(url)
-      raw_uri           = URI.parse url
-      proxy             = ENV['http_proxy']
-      if proxy
-        proxy_uri       = URI.parse(proxy)
-        https           = Net::HTTP::Proxy(proxy_uri.host, proxy_uri.port).new raw_uri.host, raw_uri.port
-      else
-        https           = Net::HTTP.new raw_uri.host, raw_uri.port
-      end
-      https.use_ssl     = true
-      https.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      request           = Net::HTTP::Get.new raw_uri.request_uri
-      data              = https.request request
-    end
-  end
-    
-        def initialize(tag_name, markup, tokens)
-      attributes = ['class', 'src', 'width', 'height', 'title']
-    
-        def tmux_split_command
-      path = if tab.root?
-               '#{Tmuxinator::Config.default_path_option} #{tab.root}'
-             end
-      '#{project.tmux} splitw #{path} -t #{tab.tmux_window_target}'
-    end
-    
-          # Sorted list of all .yml files, including duplicates
-      def configs
-        directories.map do |directory|
-          Dir['#{directory}/**/*.yml'].map do |path|
-            path.gsub('#{directory}/', '').gsub('.yml', '')
+            destinations = devices.map do |d|
+          device = find_device(d, os_version)
+          if device.nil?
+            UI.user_error!('No device found named '#{d}' for version '#{os_version}'') if device.nil?
+          elsif device.os_version != os_version
+            UI.important('Using device named '#{device.name}' with version '#{device.os_version}' because no match was found for version '#{os_version}'')
           end
-        end.flatten.sort
+          '-destination 'platform=#{os} Simulator,name=#{device.name},OS=#{device.os_version}''
+        end
+    
+          def find_device(device_name, os_version = Snapshot.config[:ios_version])
+        # We might get this error message
+        # > The requested device could not be found because multiple devices matched the request.
+        #
+        # This happens when you have multiple simulators for a given device type / iOS combination
+        #   { platform:iOS Simulator, id:1685B071-AFB2-4DC1-BE29-8370BA4A6EBD, OS:9.0, name:iPhone 5 }
+        #   { platform:iOS Simulator, id:A141F23B-96B3-491A-8949-813B376C28A7, OS:9.0, name:iPhone 5 }
+        #
+        simulators = FastlaneCore::DeviceManager.simulators
+        # Sort devices with matching names by OS version, largest first, so that we can
+        # pick the device with the newest OS in case an exact OS match is not available
+        name_matches = simulators.find_all { |sim| sim.name.strip == device_name.strip }
+                                 .sort_by { |sim| Gem::Version.new(sim.os_version) }
+                                 .reverse
+        return name_matches.find { |sim| sim.os_version == os_version } || name_matches.first
       end
     
-              after(:all) do
-            puts @session
-            Kernel.system 'tmux kill-session -t #{@session}'
-          end
+            # if device_name is nil, use the config and get all devices
+        os = device_name =~ /^Apple TV/ ? 'tvOS' : 'iOS'
+        os_version = Snapshot.config[:ios_version] || Snapshot::LatestOsVersion.version(os)
     
-        Thank you for installing tmuxinator.
+        def upload_mapping(path_to_mapping, apk_version_code)
+      ensure_active_edit!
+    
+        def test_results
+      temp_junit_report = Scan.cache[:temp_junit_report]
+      return File.read(temp_junit_report) if temp_junit_report && File.file?(temp_junit_report)
+    
+            # Get App
+        app = Spaceship::Application.find(params[:app_identifier])
+        unless app
+          UI.user_error!('Could not find app with bundle identifier '#{params[:app_identifier]}' on account #{params[:username]}')
+        end
+    
+        class GetVersionNumberAction < Action
+      require 'shellwords'
+    
+        def entries_as_json
+      @entries.sort! { |a, b| sort_fn(a.name, b.name) }.map(&:as_json)
+    end
+    
+          def process_response(response)
+        super.merge! response_url: response.url
+      end
+    end
+  end
+end
+
+    
+            doc
+      end
+    end
+  end
+end
+
+    
+            css('.example-title + pre').each do |node|
+          node['name'] = node.previous_element.content.strip
+          node.previous_element.remove
+        end
+    
+          def root
+        css('.nav-index-group').each do |node|
+          if heading = node.at_css('.nav-index-group-heading')
+            heading.name = 'h2'
+          end
+          node.parent.before(node.children)
+        end
+    
+        shared_context 'when user/organization articles exist' do
+      let(:organization) { create(:organization) }
+      let!(:user_article) { create(:article, user_id: user.id) }
+      let!(:organization_article) { create(:article, organization_id: organization.id) }
+    end
+    
+      def define_categories
+    cat_info = {
+      'collabs': ['Collaborators Wanted', '#5AE8D9'],
+      'cfp': ['Call For Proposal', '#f58f8d'],
+      'forhire': ['Available For Hire', '#b78cf4'],
+      'education': ['Education', '#5AABE8'],
+      'jobs': ['Now Hiring', '#53c3ad'],
+      'mentors': ['Offering Mentorship', '#A69EE8'],
+      'mentees': ['Looking For Mentorship', '#88aedb'],
+      'forsale': ['Stuff For Sale', '#d0adfb'],
+      'events': ['Upcoming Event', '#f8b3d0'],
+      'misc': ['Miscellaneous', '#6393FF'],
+      'products': ['Products & Tools', '#5AE8D9']
+    }
+    @category = cat_info[@listing.category.to_sym][0]
+    @cat_color = cat_info[@listing.category.to_sym][1]
+  end
+end
+
+    
+      def legacy_article_social_image(article)
+    cache_key = 'article-social-img-#{article}-#{article.updated_at}-#{article.comments_count}'
