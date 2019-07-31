@@ -1,98 +1,280 @@
 
         
-                  def render_component(builder)
-            builder.radio_button + builder.label
+          def test_pretty_print_overridden_by_inspect
+    subtopic = Class.new(Topic) do
+      def inspect
+        'inspecting topic'
+      end
+    end
+    actual = +''
+    PP.pp(subtopic.new, StringIO.new(actual))
+    assert_equal 'inspecting topic\n', actual
+  end
+    
+          def test_invert_create_join_table
+        drop_join_table = @recorder.inverse_of :create_join_table, [:musics, :artists]
+        assert_equal [:drop_join_table, [:musics, :artists], nil], drop_join_table
+      end
+    
+          private
+        def run_rake_routes
+          Dir.chdir(app_path) { `bin/rake routes` }
+        end
+    end
+  end
+end
+
+    
+    require 'active_support/core_ext/module/attribute_accessors'
+    
+        # Get the implementation class for the given Converter.
+    # Returns the Converter instance implementing the given Converter.
+    # klass - The Class of the Converter to fetch.
+    def find_converter_instance(klass)
+      @find_converter_instance ||= {}
+      @find_converter_instance[klass] ||= begin
+        converters.find { |converter| converter.instance_of?(klass) } || \
+          raise('No Converters found for #{klass}')
+      end
+    end
+    
+    # Test if processing content string without any Liquid constructs, via Liquid,
+# is slower than checking whether constructs exist ( using `String#include?` )
+# and return-ing the 'plaintext' content string as is..
+#
+# Ref: https://github.com/jekyll/jekyll/pull/6735
+    
+    def pre_pr(url)
+  url[-1, 1] == FORWARD_SLASH ? url : File.dirname(url)
+end
+    
+    def graceful_require
+  Jekyll::External.require_with_graceful_fail('json')
+  JSON.pretty_generate(DATA)
+end
+    
+      </body>
+</html>
+HTML
+CONTENT_NOT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+    
+            def connect(websocket, handshake)
+          @connections_count += 1
+          if @connections_count == 1
+            message = 'Browser connected'
+            message += ' over SSL/TLS' if handshake.secure?
+            Jekyll.logger.info 'LiveReload:', message
           end
+          websocket.send(
+            JSON.dump(
+              :command    => 'hello',
+              :protocols  => ['http://livereload.com/protocols/official-7'],
+              :serverName => 'jekyll'
+            )
+          )
+    
+      def all_signed_out?
+    users = Devise.mappings.keys.map { |s| warden.user(scope: s, run_callbacks: false) }
+    
+      # Returns real navigational formats which are supported by Rails
+  def navigational_formats
+    @navigational_formats ||= Devise.navigational_formats.select { |format| Mime::EXTENSION_LOOKUP[format.to_s] }
+  end
+    
+    module Devise
+  module Controllers
+    # Provide sign in and sign out functionality.
+    # Included by default in all controllers.
+    module SignInOut
+      # Return true if the given scope is signed in session. If no scope given, return
+      # true if any scope is signed in. This will run authentication hooks, which may
+      # cause exceptions to be thrown from this method; if you simply want to check
+      # if a scope has already previously been authenticated without running
+      # authentication hooks, you can directly call `warden.authenticated?(scope: scope)`
+      def signed_in?(scope=nil)
+        [scope || Devise.mappings.keys].flatten.any? do |_scope|
+          warden.authenticate?(scope: _scope)
+        end
       end
-    end
+    
+          def self.required_fields(klass)
+        []
+      end
+    
+          def rsync_post(machine, opts)
+        if opts.key?(:chown) && !opts[:chown]
+          return
+        end
+    
+    # Unset all host plugins so that we aren't executing subprocess things
+# to detect a host for every test.
+Vagrant.plugin('2').manager.registered.dup.each do |plugin|
+  if plugin.components.hosts.to_hash.length > 0
+    Vagrant.plugin('2').manager.unregister(plugin)
   end
 end
-
     
-          id = req_id(date, req_type)
-      where(id: id).update_all(['count = count + ?', val])
+    describe VagrantPlugins::DockerProvider::Provider do
+  let(:driver_obj){ double('driver') }
+  let(:provider){ double('provider', driver: driver_obj) }
+  let(:provider_config){ double('provider_config', force_host_vm: false) }
+  let(:ssh) { double('ssh', guest_port: 22) }
+  let(:config) { double('config', ssh: ssh) }
+  let(:machine){ double('machine', provider: provider, provider_config: provider_config, config: config) }
+    
+            expect(app).to receive(:call).with(env)
+    
+        it 'returns true if installed' do
+      expect(machine.communicate).to receive(:test).
+        with(command, sudo: true).and_return(true)
+      subject.chef_installed(machine, 'chef_solo', version)
     end
-  rescue Redis::CommandError => e
-    raise unless e.message =~ /READONLY/
-    nil
+    
+        # Returns the configuration for a single machine.
+    #
+    # When loading a box Vagrantfile, it will be prepended to the
+    # key order specified when initializing this class. Sub-machine
+    # and provider-specific overrides are appended at the end. The
+    # actual order is:
+    #
+    # - box
+    # - keys specified for #initialize
+    # - sub-machine
+    # - provider
+    #
+    # The return value is a hash with the following keys (symbols)
+    # and values:
+    #
+    #   - box: the {Box} backing the machine
+    #   - config: the actual configuration
+    #   - config_errors: list of errors, if any
+    #   - config_warnings: list of warnings, if any
+    #   - provider_cls: class of the provider backing the machine
+    #   - provider_options: options for the provider
+    #
+    # @param [Symbol] name Name of the machine.
+    # @param [Symbol] provider The provider the machine should
+    #   be backed by (required for provider overrides).
+    # @param [BoxCollection] boxes BoxCollection to look up the
+    #   box Vagrantfile.
+    # @param [Pathname] data_path Machine data path
+    # @return [Hash<Symbol, Object>] Various configuration parameters for a
+    #   machine. See the main documentation body for more info.
+    def machine_config(name, provider, boxes, data_path=nil, validate_provider=true)
+      keys = @keys.dup
+    
+        before do
+      allow(Gem::Source::SpecificFile).to receive(:new).and_return(plugin_source)
+      allow(subject).to receive(:internal_install)
+    end
+    
+      def authenticate_with_two_factor_via_otp(user)
+    if valid_otp_attempt?(user)
+      session.delete(:otp_user_id)
+      sign_in(user)
+    else
+      flash.now[:alert] = 'Invalid token'
+      prompt_for_two_factor(user)
+    end
   end
     
-        def script_assets(base = base_url, s3_cdn = GlobalSetting.s3_cdn_url, cdn = GlobalSetting.cdn_url)
-      SCRIPT_ASSET_DIRECTORIES.map do |dir, can_use_s3_cdn, can_use_cdn|
-        if can_use_s3_cdn && s3_cdn
-          s3_cdn + dir
-        elsif can_use_cdn && cdn
-          cdn + dir
+          def auth_user_unless_prompt_none!
+        prompt = params[:prompt]
+        if prompt && prompt.include?('none')
+          handle_prompt_none
+        elsif prompt && prompt.include?('login')
+          new_params = params.except('controller', 'action').permit!.to_h.merge(prompt: prompt.remove('login'))
+          reauthenticate(new_params)
         else
-          base + dir
+          authenticate_user!
+        end
+      end
+    
+        if @contact.present?
+      respond_to do |format|
+        format.json do
+          render json: AspectMembershipPresenter.new(
+            AspectMembership.where(contact_id: @contact.id, aspect_id: @aspect.id).first)
+          .base_hash
+        end
+      end
+    else
+      respond_to do |format|
+        format.json do
+          render plain: I18n.t('aspects.add_to_aspect.failure'), status: 409
         end
       end
     end
-    
-      def build(theme_ids)
-    builder = Builder.new
-    
-        it 'whitelists CDN assets when integrated' do
-      set_cdn_url('https://cdn.com')
-    
-        result
-  ensure
-    if (limiters = env['DISCOURSE_RATE_LIMITERS']) && env['DISCOURSE_IS_ASSET_PATH']
-      limiters.each(&:rollback!)
-      env['DISCOURSE_ASSET_RATE_LIMITERS'].each do |limiter|
-        begin
-          limiter.performed!
-        rescue RateLimiter::LimitExceeded
-          # skip
-        end
-      end
-    end
-    log_request_info(env, result, info) unless !log_request || env['discourse.request_tracker.skip']
   end
     
-            self.description = <<-DESC
-          Shows the content of the pods cache as a YAML tree output, organized by pod.
-          If `NAME` is given, only the caches for that pod will be included in the output.
-        DESC
+        if comment
+      respond_create_success(comment)
+    else
+      render plain: I18n.t('comments.create.error'), status: 422
+    end
+  end
     
-    Rake::TestTask.new(:'test:core') do |t|
-  core_tests = %w[base delegator encoding extensions filter
-     helpers mapped_error middleware radius rdoc
-     readme request response result route_added_hook
-     routing server settings sinatra static templates]
-  t.test_files = core_tests.map {|n| 'test/#{n}_test.rb'}
-  t.ruby_opts = ['-r rubygems'] if defined? Gem
-  t.ruby_opts << '-I.'
-  t.warning = true
-end
-    
-    class Rack::Builder
-  include Sinatra::Delegator
+      def like_service
+    @like_service ||= LikeService.new(current_user)
+  end
 end
 
     
-          def self.default_options(options)
-        define_method(:default_options) { super().merge(options) }
-      end
+        class SetWorker
+      include Sidekiq::Worker
+      sidekiq_options :queue => :foo, 'retry' => 12
+    end
     
-          def cookie_paths(path)
-        path = '/' if path.to_s.empty?
-        paths = []
-        Pathname.new(path).descend { |p| paths << p.to_s }
-        paths
-      end
+        it 'has no enqueued_at time for jobs enqueued in the future' do
+      job_id = ApiWorker.perform_in(100, 1, 'foo')
+      job = Sidekiq::ScheduledSet.new.find_job(job_id)
+      assert_nil job.enqueued_at
+    end
     
-        it 'sets a session authenticity token if one does not exist' do
-      session = {}
-      allow(Rack::Protection::AuthenticityToken).to receive(:random_token).and_return(token)
-      allow_any_instance_of(Rack::Protection::AuthenticityToken).to receive(:mask_token).and_return(masked_token)
-      Rack::Protection::AuthenticityToken.token(session)
-      expect(session[:csrf]).to eq(token)
+      describe 'redis connection' do
+    it 'does not continually retry' do
+      assert_raises Redis::CommandError do
+        Sidekiq.redis do |c|
+          raise Redis::CommandError, 'READONLY You can't write against a replica.'
+        end
+      end
+    end
+    
+        it 'stubs the delay call on classes' do
+      assert_equal 0, Sidekiq::Extensions::DelayedClass.jobs.size
+      Something.delay.foo(Date.today)
+      assert_equal 1, Sidekiq::Extensions::DelayedClass.jobs.size
     end
   end
     
-      it 'should set the Content Security Policy' do
-    expect(
-      get('/', {}, 'wants' => 'text/html').headers['Content-Security-Policy']
-    ).to eq('connect-src 'self'; default-src none; img-src 'self'; script-src 'self'; style-src 'self'')
+    Monitoring = Thread.new do
+  watchdog('monitor thread') do
+    while true
+      sleep 1
+      qsize, retries = Sidekiq.redis do |conn|
+        conn.pipelined do
+          conn.llen 'queue:default'
+          conn.zcard 'retry'
+        end
+      end.map(&:to_i)
+      total = qsize + retries
+      #GC.start
+      Sidekiq.logger.error('RSS: #{Process.rss} Pending: #{total}')
+      if total == 0
+        Sidekiq.logger.error('Done')
+        exit(0)
+      end
+    end
   end
+end
