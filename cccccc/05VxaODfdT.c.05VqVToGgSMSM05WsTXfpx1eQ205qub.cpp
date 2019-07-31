@@ -1,182 +1,232 @@
 
         
-          for (const auto& node : item_.MainOpsFanin()) {
-    PrintNodeInfo(node, properties, debug, os);
-  }
-  for (const auto& node : item_.EnqueueOpsFanin()) {
-    PrintNodeInfo(node, properties, debug, os);
-  }
-    
-    // Safe containers for an owned TF_Status. On destruction, the handle
-// will be deleted by TF_DeleteStatus.
-using Safe_TF_StatusPtr = std::unique_ptr<TF_Status, detail::TFStatusDeleter>;
-Safe_TF_StatusPtr make_safe(TF_Status* status);
-    
-    namespace stream_executor {
-namespace cuda {
-    }
-    }
-    
-      static const unsigned kMask = 0xf;  // Mask of all available flags.
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    namespace CalcEngine::RationalMath
-{
-    Rational Frac(Rational const& rat);
-    Rational Integer(Rational const& rat);
-    }
-    
-        auto result = resStream.str();
-    
-                    if (fMsb)
-                {
-                    temp = (temp ^ m_chopNumbers[m_numwidth]) + 1;
-    }
-    
-    namespace CurrencyConversionManager
-{
-    enum class Command
+        
     {
-        Zero,
-        One,
-        Two,
-        Three,
-        Four,
-        Five,
-        Six,
-        Seven,
-        Eight,
-        Nine,
-        Decimal,
-        Negate,
-        Backspace,
-        Clear,
-        None
-    };
+    {
+    {
+    {      // Add the completed element to the tuple.
+      tupleNode->addChild(elt, Dem);
+    }
+    return tupleNode;
+  }
+  case MetadataKind::HeapLocalVariable:
+  case MetadataKind::HeapGenericLocalVariable:
+  case MetadataKind::ErrorObject:
+    break;
+  case MetadataKind::Opaque:
+  default: {
+    if (auto builtinType = _buildDemanglerForBuiltinType(type, Dem))
+      return builtinType;
+    
+    // FIXME: Some opaque types do have manglings, but we don't have enough info
+    // to figure them out.
+    break;
+  }
+  }
+  // Not a type.
+  return nullptr;
 }
     
-    class CUnaryCommand final : public IUnaryCommand
-{
-public:
-    CUnaryCommand(int command);
-    CUnaryCommand(int command1, int command2);
-    const std::shared_ptr<CalculatorVector<int>>& GetCommands() const override;
-    CalculationManager::CommandType GetCommandType() const override;
-    void SetCommand(int command) override;
-    void SetCommands(int command1, int command2) override;
-    void Accept(_In_ ISerializeCommandVisitor& commandVisitor) override;
+      SILFunction *getDynamicallyReplacedFunction() const {
+    return ReplacedFunction;
+  }
+  void setDynamicallyReplacedFunction(SILFunction *f) {
+    assert(ReplacedFunction == nullptr && 'already set');
+    assert(!hasObjCReplacement());
     }
     
-        // Calculate the following use the Powers of Powers rule:
-    // px ^ (yNum/yDenom) == px ^ yNum ^ (1/yDenom)
-    // 1. For px ^ yNum, we call powratcomp directly which will call ratpowi32
-    //    and store the result in pxPowNum
-    // 2. For pxPowNum ^ (1/yDenom), we call powratcomp
-    // 3. Validate the result of 2 by adding/subtracting 0.5, flooring and call powratcomp with yDenom
-    //    on the floored result.
-    
-    //-----------------------------------------------------------------------------
-//
-//    FUNCTION: divrat
-//
-//    ARGUMENTS: pointer to a rational a second rational.
-//
-//    RETURN: None, changes first pointer.
-//
-//    DESCRIPTION: Does the rational equivalent of *pa /= b.
-//    Assumes radix is the radix of both numbers.
-//
-//-----------------------------------------------------------------------------
-    
-    //--------------------------------------------------------------------------------
-//
-//  inputText()
-//
-//--------------------------------------------------------------------------------
-UText *RegexMatcher::inputText() const {
-    return fInputText;
-}
-    
-        /**
-     * System registration hook.
-     */
-    static void registerIDs();
-    
-    UBool
-SelectFormat::operator!=(const Format& other) const {
-    return  !operator==(other);
-}
-    
-    #include 'unicode/utypes.h'
-#include 'sharedobject.h'
+    #endif
+
     
     
-    {    UDate firstTransitionTime = firstTransition->getTime();
-    if (base < firstTransitionTime || (inclusive && base == firstTransitionTime)) {
-        result = *firstTransition;
-    }
-    UDate stdDate, dstDate;
-    UBool stdAvail = stdRule->getNextStart(base, dstRule->getRawOffset(), dstRule->getDSTSavings(), inclusive, stdDate);
-    UBool dstAvail = dstRule->getNextStart(base, stdRule->getRawOffset(), stdRule->getDSTSavings(), inclusive, dstDate);
-    if (stdAvail && (!dstAvail || stdDate < dstDate)) {
-        result.setTime(stdDate);
-        result.setFrom((const TimeZoneRule&)*dstRule);
-        result.setTo((const TimeZoneRule&)*stdRule);
-        return TRUE;
-    }
-    if (dstAvail && (!stdAvail || dstDate < stdDate)) {
-        result.setTime(dstDate);
-        result.setFrom((const TimeZoneRule&)*stdRule);
-        result.setTo((const TimeZoneRule&)*dstRule);
-        return TRUE;
-    }
-    return FALSE;
-}
-    
-    /**
- * Implement UnicodeFunctor
- */
-void StringMatcher::setData(const TransliterationRuleData* d) {
-    data = d;
-    int32_t i = 0;
-    while (i<pattern.length()) {
-        UChar32 c = pattern.char32At(i);
-        UnicodeFunctor* f = data->lookup(c);
-        if (f != NULL) {
-            f->setData(data);
-        }
-        i += U16_LENGTH(c);
-    }
-}
-    
-    
-    {  pack_count = 0;
-  get().removePack('unrestricted_pack');
-  get().packs(([&pack_count](const Pack& pack) { pack_count++; }));
-  EXPECT_EQ(pack_count, 0U);
-}
-    
-    
-    {  fpack.platform_ = 'windows';
-  if (isPlatform(PlatformType::TYPE_WINDOWS)) {
-    EXPECT_TRUE(fpack.checkPlatform());
+    {  // We do not use %p here for our pointers since the format is implementation
+  // defined. This makes it logically impossible to check the output. Forcing
+  // hexadecimal solves this issue.
+  // If the symbol is not available, we print out <unavailable> + offset
+  // from the base address of where the image containing framePC is mapped.
+  // This gives enough info to reconstruct identical debugging target after
+  // this process terminates.
+  if (shortOutput) {
+    fprintf(stderr, '%s`%s + %td', libraryName.data(), symbolName.c_str(),
+            offset);
   } else {
-    EXPECT_FALSE(fpack.checkPlatform());
+    constexpr const char *format = '%-4u %-34s 0x%0.16' PRIxPTR ' %s + %td\n';
+    fprintf(stderr, format, index, libraryName.data(), symbolAddr,
+            symbolName.c_str(), offset);
   }
+#else
+  if (shortOutput) {
+    fprintf(stderr, '<unavailable>');
+  } else {
+    constexpr const char *format = '%-4u 0x%0.16tx\n';
+    fprintf(stderr, format, index, reinterpret_cast<uintptr_t>(framePC));
+  }
+#endif
 }
     
-    ExpectedSuccess<DatabaseError> RocksdbDatabase::putStringsUnsafe(
-    const std::string& domain,
-    const std::vector<std::pair<std::string, std::string>>& data) {
-  auto handle = getHandle(domain);
-  if (handle) {
-    std::shared_ptr<Handle> handle_ptr = handle.take();
-    rocksdb::WriteBatch batch;
-    }
+    
+    {  const SelfWitnessTableMetadataSource *
+  createSelfWitnessTable() {
+    return SelfWitnessTableMetadataSource::create(*this);
+  }
+};
+    
+    
+OPENEXR_IMF_INTERNAL_NAMESPACE_SOURCE_ENTER
+    
+    
+OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_EXIT
+    
+    
+    
+    Slice::Slice (PixelType t,
+              char *b,
+              size_t xst,
+              size_t yst,
+              int xsm,
+              int ysm,
+              double fv,
+              bool xtc,
+              bool ytc)
+:
+    type (t),
+    base (b),
+    xStride (xst),
+    yStride (yst),
+    xSampling (xsm),
+    ySampling (ysm),
+    fillValue (fv),
+    xTileCoords (xtc),
+    yTileCoords (ytc)
+{
+    // empty
+}
+    
+        IMF_EXPORT
+    Iterator                    find (const char name[]);
+    IMF_EXPORT
+    ConstIterator               find (const char name[]) const;
+    
+    OPENEXR_IMF_INTERNAL_NAMESPACE_SOURCE_ENTER
+    
+        typedef std::map <Name, Attribute *> AttributeMap;
+    
+    OPENEXR_IMF_INTERNAL_NAMESPACE_SOURCE_EXIT
+
+    
+    class InputPart
+{
+    public:
+        IMF_EXPORT
+        InputPart(MultiPartInputFile& multiPartFile, int partNumber);
     }
     
-      rj::Document doc;
-  if (doc.Parse(request.at('log').c_str()).HasParseError()) {
-    return;
+    #endif /* ERRORS_HPP_ */
+
+    
+    
+    {        sindex_sbs_out->push_back(
+                make_scoped<sindex_access_t>(
+                        get_sindex_slice(it->second.id),
+                        it->first,
+                        it->second,
+                        make_scoped<sindex_superblock_t>(std::move(superblock_lock))));
+    }
+    
+    // Next, associate a list of types with the test case, which will be
+// repeated for each type in the list.  The typedef is necessary for
+// the macro to parse correctly.
+typedef testing::Types<char, int, unsigned int> MyTypes;
+TYPED_TEST_CASE(FooTest, MyTypes);
+    
+      // RemoveFileName returns the directory path with the filename removed.
+  // Example: FilePath('path/to/file').RemoveFileName() returns 'path/to/'.
+  // If the FilePath is 'a_file' or '/a_file', RemoveFileName returns
+  // FilePath('./') or, on Windows, FilePath('.\\'). If the filepath does
+  // not have a file, like 'just/a/dir/', it returns the FilePath unmodified.
+  // On Windows platform, '\' is the path separator, otherwise it is '/'.
+  FilePath RemoveFileName() const;
+    
+    
+    {    const ParamGeneratorInterface<ParamType>* const base_;
+    // begin[i]_ and end[i]_ define the i-th range that Iterator traverses.
+    // current[i]_ is the actual traversing iterator.
+    const typename ParamGenerator<T1>::iterator begin1_;
+    const typename ParamGenerator<T1>::iterator end1_;
+    typename ParamGenerator<T1>::iterator current1_;
+    const typename ParamGenerator<T2>::iterator begin2_;
+    const typename ParamGenerator<T2>::iterator end2_;
+    typename ParamGenerator<T2>::iterator current2_;
+    const typename ParamGenerator<T3>::iterator begin3_;
+    const typename ParamGenerator<T3>::iterator end3_;
+    typename ParamGenerator<T3>::iterator current3_;
+    const typename ParamGenerator<T4>::iterator begin4_;
+    const typename ParamGenerator<T4>::iterator end4_;
+    typename ParamGenerator<T4>::iterator current4_;
+    ParamType current_value_;
+  };  // class CartesianProductGenerator4::Iterator
+    
+      std::unique_ptr<ChannelInterface> GetInterceptedChannel() override {
+    auto* info = call_->client_rpc_info();
+    if (info == nullptr) {
+      return std::unique_ptr<ChannelInterface>(nullptr);
+    }
+    // The intercepted channel starts from the interceptor just after the
+    // current interceptor
+    return std::unique_ptr<ChannelInterface>(new InterceptedChannel(
+        info->channel(), current_interceptor_index_ + 1));
   }
+    
+    extern grpc_tcp_server_vtable grpc_windows_tcp_server_vtable;
+extern grpc_tcp_client_vtable grpc_windows_tcp_client_vtable;
+extern grpc_timer_vtable grpc_generic_timer_vtable;
+extern grpc_pollset_vtable grpc_windows_pollset_vtable;
+extern grpc_pollset_set_vtable grpc_windows_pollset_set_vtable;
+extern grpc_address_resolver_vtable grpc_windows_resolver_vtable;
+    
+    void grpc_socket_notify_on_read(grpc_winsocket* socket, grpc_closure* closure) {
+  socket_notify_on_iocp(socket, closure, &socket->read_info);
+}
+    
+    #include <grpc/support/port_platform.h>
+    
+    GPR_GLOBAL_CONFIG_DECLARE_BOOL(bool_var);
+    
+    #ifndef NDEBUG
+#define GRPC_COMBINER_DEBUG_ARGS \
+  , const char *file, int line, const char *reason
+#define GRPC_COMBINER_REF(combiner, reason) \
+  grpc_combiner_ref((combiner), __FILE__, __LINE__, (reason))
+#define GRPC_COMBINER_UNREF(combiner, reason) \
+  grpc_combiner_unref((combiner), __FILE__, __LINE__, (reason))
+#else
+#define GRPC_COMBINER_DEBUG_ARGS
+#define GRPC_COMBINER_REF(combiner, reason) grpc_combiner_ref((combiner))
+#define GRPC_COMBINER_UNREF(combiner, reason) grpc_combiner_unref((combiner))
+#endif
+    
+    
+    {
+    { private:
+  std::shared_ptr<grpc::Channel> CreateChannelWithInterceptors(
+      const string& target, const grpc::ChannelArguments& args,
+      std::vector<
+          std::unique_ptr<experimental::ClientInterceptorFactoryInterface>>
+          interceptor_creators) override {
+    grpc_channel_args channel_args;
+    args.SetChannelArgs(&channel_args);
+    return CreateChannelInternal(
+        '',
+        grpc_cronet_secure_channel_create(engine_, target.c_str(),
+                                          &channel_args, nullptr),
+        std::move(interceptor_creators));
+  }
+  void* engine_;
+};
+}  // namespace grpc
+namespace grpc_impl {
+std::shared_ptr<ChannelCredentials> CronetChannelCredentials(void* engine) {
+  return std::shared_ptr<ChannelCredentials>(
+      new grpc::CronetChannelCredentialsImpl(engine));
+}
+}  // namespace grpc_impl
