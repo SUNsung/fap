@@ -1,322 +1,417 @@
 
         
-        namespace tensorflow {
+        // Thread dimensionality for use in a kernel launch. See file comment for
+// details.
+struct ThreadDim : public Dim3D {
+  explicit ThreadDim(uint64 x = 1, uint64 y = 1, uint64 z = 1)
+      : Dim3D(x, y, z) {}
     }
     
-    #include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/op_kernel.h'
-    
-    #include 'tensorflow/python/lib/core/py_exception_registry.h'
-    
-    string TryFindKernelClass(const string& serialized_node_def) {
-  tensorflow::NodeDef node_def;
-  if (!node_def.ParseFromString(serialized_node_def)) {
-    LOG(WARNING) << 'Error parsing node_def';
-    return '';
+    void ModelAnalyzer::PrintNodeInfo(const NodeDef* node,
+                                  const GraphProperties& properties, bool debug,
+                                  std::ostream& os) const {
+  os << node->name() << ' [' << node->op() << ']' << std::endl;
+  if (properties.HasOutputProperties(node->name())) {
+    const std::vector<OpInfo::TensorProperties>& props =
+        properties.GetOutputProperties(node->name());
+    for (int i = 0; i < props.size(); ++i) {
+      const OpInfo::TensorProperties& prop = props[i];
+      os << '\t'
+         << 'output ' << i << ' (' << DataTypeString(prop.dtype())
+         << ') has shape ';
+      if (prop.shape().unknown_rank()) {
+        os << '?';
+      } else {
+        os << '[';
+        for (int i = 0; i < prop.shape().dim_size(); ++i) {
+          if (i > 0) {
+            os << ', ';
+          }
+          if (prop.shape().dim(i).size() >= 0) {
+            // Print the actual dimension.
+            os << prop.shape().dim(i).size();
+          } else if (prop.shape().dim(i).size() == -1) {
+            // We don't know anything about the dimension.
+            os << '?';
+          } else {
+            // Symbolic dimension.
+            os << 'x' << -prop.shape().dim(i).size();
+          }
+        }
+        os << ']';
+      }
+      os << std::endl;
+    }
   }
     }
     
         http://www.apache.org/licenses/LICENSE-2.0
     
-    // This enum represents potential configurations of L1/shared memory when
-// running a particular kernel. These values represent user preference, and
-// the runtime is not required to respect these choices.
-enum class KernelCacheConfig {
-  // Indicates no preference for device L1/shared memory configuration.
-  kNoPreference,
-    }
-    
-    #define TegraGenOp_Invoker(name, func, src_cnt, dst_cnt, scale_cnt, ...) \
-template <typename ST, typename DT> \
-class TegraGenOp_##name##_Invoker : public cv::ParallelLoopBody \
-{ \
-public: \
-    TegraGenOp_##name##_Invoker(SRC_ARG##src_cnt \
-                                DST_ARG##dst_cnt \
-                                int width_, int height_ \
-                                SCALE_ARG##scale_cnt) : \
-        cv::ParallelLoopBody(), SRC_STORE##src_cnt \
-                                DST_STORE##dst_cnt \
-                                width(width_), height(height_) \
-                                SCALE_STORE##scale_cnt {} \
-    virtual void operator()(const cv::Range& range) const \
-    { \
-        CAROTENE_NS::func(CAROTENE_NS::Size2D(width, range.end-range.start), __VA_ARGS__); \
-    } \
-private: \
-    SRC_VAR##src_cnt \
-    DST_VAR##dst_cnt \
-    int width, height; \
-    SCALE_VAR##scale_cnt \
-    const TegraGenOp_##name##_Invoker& operator= (const TegraGenOp_##name##_Invoker&); \
-};
-    
-        /*
-        For each point `p` within `size`, do:
-        dst[p] = src0[p] & src1[p]
-    */
-    void bitwiseAnd(const Size2D &size,
-                    const u8 *src0Base, ptrdiff_t src0Stride,
-                    const u8 *src1Base, ptrdiff_t src1Stride,
-                    u8 *dstBase, ptrdiff_t dstStride);
-    
-        struct Margin {
-        Margin() : left(0), right(0), top(0), bottom(0) {}
-        Margin(size_t left_, size_t right_, size_t top_, size_t bottom_)
-            : left(left_), right(right_), top(top_), bottom(bottom_) {}
-    }
-    
-                int16x4_t v_srclo = vget_low_s16(v_src0), v_srchi = vget_high_s16(v_src0);
-            v_dst0 = vcombine_s16(vqmovn_s32(vaddw_s16(vmull_s16(v_srclo, v_srclo), vget_low_s16(v_dst0))),
-                                  vqmovn_s32(vaddw_s16(vmull_s16(v_srchi, v_srchi), vget_high_s16(v_dst0))));
-    
-                int32x4_t va = vaddq_s32(lane0a, lane2a);
-            int32x4_t vb = vaddq_s32(lane0b, lane2b);
-            int32x4_t vc = vaddq_s32(lane0c, lane2c);
-            int32x4_t wa = vaddq_s32(va, lane1a);
-            int32x4_t wb = vaddq_s32(vb, lane1b);
-            int32x4_t wc = vaddq_s32(vc, lane1c);
-    
-        // this ugly contruction is needed to avoid:
-    // /usr/lib/gcc/arm-linux-gnueabihf/4.8/include/arm_neon.h:3581:59: error: argument must be a constant
-    // return (int16x8_t)__builtin_neon_vshl_nv8hi (__a, __b, 1);
-    
-            if (val == maxVal)
-        {
-            if (maxLocCount < maxLocCapacity)
-            {
-                maxLocPtr[maxLocCount] = j;
-                maxLocPtr[maxLocCount + 1] = i;
-            }
-            maxLocCount += 2;
-        }
-    
-    void read_image(std::ifstream* image_file, std::ifstream* label_file,
-        uint32_t index, uint32_t rows, uint32_t cols,
-        char* pixels, char* label) {
-  image_file->seekg(index * rows * cols + 16);
-  image_file->read(pixels, rows * cols);
-  label_file->seekg(index + 8);
-  label_file->read(label, 1);
-}
+    #include <Python.h>
     
      private:
-  // The private constructor to avoid duplicate instantiation.
-  Caffe();
+  PyRecordReader();
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+      static const unsigned kMask = 0xf;  // Mask of all available flags.
+    
+    #include 'tensorflow/stream_executor/host/host_platform_id.h'
     
     
-    {  shared_ptr<boost::thread> thread_;
-};
+    {
+    {}  // namespace host
+}  // namespace stream_executor
     
-    /**
- * @brief Computes a sum of two input Blobs, with the shape of the latter Blob
- *        'broadcast' to match the shape of the former. Equivalent to tiling
- *        the latter Blob, then computing the elementwise sum.
- *
- * The second input may be omitted, in which case it's learned as a parameter
- * of the layer. Note: in case bias and scaling are desired, both operations can
- * be handled by `ScaleLayer` configured with `bias_term: true`.
- */
-template <typename Dtype>
-class BiasLayer : public Layer<Dtype> {
- public:
-  explicit BiasLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
+      // Transforms the given coords one step forward to normalized space, without
+  // using any block rotation or predecessor.
+  void LocalNormTransform(const TPOINT& pt, TPOINT* transformed) const;
+  void LocalNormTransform(const FCOORD& pt, FCOORD* transformed) const;
+  // Transforms the given coords forward to normalized space using the
+  // full transformation sequence defined by the block rotation, the
+  // predecessors, deepest first, and finally this. If first_norm is not nullptr,
+  // then the first and deepest transformation used is first_norm, ending
+  // with this, and the block rotation will not be applied.
+  void NormTransform(const DENORM* first_norm, const TPOINT& pt,
+                     TPOINT* transformed) const;
+  void NormTransform(const DENORM* first_norm, const FCOORD& pt,
+                     FCOORD* transformed) const;
+  // Transforms the given coords one step back to source space, without
+  // using to any block rotation or predecessor.
+  void LocalDenormTransform(const TPOINT& pt, TPOINT* original) const;
+  void LocalDenormTransform(const FCOORD& pt, FCOORD* original) const;
+  // Transforms the given coords all the way back to source image space using
+  // the full transformation sequence defined by this and its predecessors
+  // recursively, shallowest first, and finally any block re_rotation.
+  // If last_denorm is not nullptr, then the last transformation used will
+  // be last_denorm, and the block re_rotation will never be executed.
+  void DenormTransform(const DENORM* last_denorm, const TPOINT& pt,
+                       TPOINT* original) const;
+  void DenormTransform(const DENORM* last_denorm, const FCOORD& pt,
+                       FCOORD* original) const;
     
-    /**
- * @brief Takes a Blob and crop it, to the shape specified by the second input
- *  Blob, across all dimensions after the specified axis.
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
-    
-    #include 'caffe/layers/conv_layer.hpp'
-    
-    
-    {}  // namespace caffe
-    
-    // ReadNextBox factors out the code to interpret a line of a box
-// file so that applybox and unicharset_extractor interpret the same way.
-// This function returns the next valid box file utf8 string and coords
-// and returns true, or false on eof (and closes the file).
-// It ignores the utf8 file signature ByteOrderMark (U+FEFF=EF BB BF), checks
-// for valid utf-8 and allows space or tab between fields.
-// utf8_str is set with the unichar string, and bounding box with the box.
-// If there are page numbers in the file, it reads them all.
-bool ReadNextBox(int *line_number, FILE* box_file,
-                 STRING* utf8_str, TBOX* bounding_box);
-// As ReadNextBox above, but get a specific page number. (0-based)
-// Use -1 to read any page number. Files without page number all
-// read as if they are page 0.
-bool ReadNextBox(int target_page, int *line_number, FILE* box_file,
-                 STRING* utf8_str, TBOX* bounding_box);
-    
-      // Return whether a given text line could be a first paragraph line according
-  // to this paragraph model.
-  bool ValidFirstLine(int lmargin, int lindent, int rindent, int rmargin) const;
-    
-    const int kHistogramSize = 256;  // The size of a histogram of pixel values.
-    
-    // A smart pointer class that implements a double-ended pointer. Each end
-// points to the other end. The copy constructor and operator= have MOVE
-// semantics, meaning that the relationship with the other end moves to the
-// destination of the copy, leaving the source unattached.
-// For this reason both the copy constructor and the operator= take a non-const
-// reference argument, and the const reference versions cannot be used.
-// DoublePtr is useful to incorporate into structures that are part of a
-// collection such as GenericVector or STL containers, where reallocs can
-// relocate the members. DoublePtr is also useful in a GenericHeap, where it
-// can correctly maintain the pointer to an element of the heap despite it
-// getting moved around on the heap.
-class DoublePtr {
- public:
-  DoublePtr() : other_end_(nullptr) {}
-  // Copy constructor steals the partner off src and is therefore a non
-  // const reference arg.
-  // Copying a const DoublePtr generates a compiler error.
-  DoublePtr(DoublePtr& src) {
-    other_end_ = src.other_end_;
-    if (other_end_ != nullptr) {
-      other_end_->other_end_ = this;
-      src.other_end_ = nullptr;
-    }
+      // Accessors.
+  const Key& key() const {
+    return key_;
   }
-  // Operator= steals the partner off src, and therefore needs src to be a non-
-  // const reference.
-  // Assigning from a const DoublePtr generates a compiler error.
-  void operator=(DoublePtr& src) {
-    Disconnect();
-    other_end_ = src.other_end_;
-    if (other_end_ != nullptr) {
-      other_end_->other_end_ = this;
-      src.other_end_ = nullptr;
-    }
+  void set_key(const Key& new_key) {
+    key_ = new_key;
   }
+  const Data* data() const {
+    return data_;
+  }
+  // Sets the data pointer, taking ownership of the data.
+  void set_data(Data* new_data) {
+    delete data_;
+    data_ = new_data;
+  }
+  // Relinquishes ownership of the data pointer (setting it to nullptr).
+  Data* extract_data() {
+    Data* result = data_;
+    data_ = nullptr;
+    return result;
+  }
+    
+    // Enumeration of the different types of error count.
+// Error counts work as follows:
+//
+// Ground truth is a valid unichar-id / font-id pair:
+//        Number of classifier answers?
+//          0                       >0
+//     CT_REJECT          unichar-id matches top shape?
+//     __________             yes!                      no
+//                   CT_UNICHAR_TOP_OK           CT_UNICHAR_TOP1_ERR
+//      Top shape-id has multiple unichars?   2nd shape unichar id matches?
+//            yes!              no              yes!              no
+//      CT_OK_MULTI_UNICHAR     |              _____    CT_UNICHAR_TOP2_ERR
+//             Font attributes match?                 Any unichar-id matches?
+//              yes!              no                  yes!        no
+//      CT_FONT_ATTR_OK   CT_FONT_ATTR_ERR          ______  CT_UNICHAR_TOPN_ERR
+//                |       __________________                 _________________
+//      Top shape-id has multiple font attrs?
+//            yes!              no
+//      CT_OK_MULTI_FONT
+//      _____________________________
+//
+// Note that multiple counts may be activated for a single sample!
+//
+// Ground truth is for a fragment/n-gram that is NOT in the unicharset.
+// This is called junk and is expected to be rejected:
+//        Number of classifier answers?
+//          0                       >0
+//     CT_REJECTED_JUNK     CT_ACCEPTED_JUNK
+//
+// Also, CT_NUM_RESULTS stores the mean number of results, and CT_RANK stores
+// the mean rank of the correct result, counting from 0, and with an error
+// receiving the number of answers as the correct rank.
+//
+// Keep in sync with the ReportString function.
+enum CountTypes {
+  CT_UNICHAR_TOP_OK,     // Top shape contains correct unichar id.
+  // The rank of the results in TOP1, TOP2, TOPN is determined by a gap of
+  // kRatingEpsilon from the first result in each group. The real top choice
+  // is measured using TOPTOP.
+  CT_UNICHAR_TOP1_ERR,   // Top shape does not contain correct unichar id.
+  CT_UNICHAR_TOP2_ERR,   // Top 2 shapes don't contain correct unichar id.
+  CT_UNICHAR_TOPN_ERR,   // No output shape contains correct unichar id.
+  CT_UNICHAR_TOPTOP_ERR,   // Very top choice not correct.
+  CT_OK_MULTI_UNICHAR,   // Top shape id has correct unichar id, and others.
+  CT_OK_JOINED,          // Top shape id is correct but marked joined.
+  CT_OK_BROKEN,          // Top shape id is correct but marked broken.
+  CT_REJECT,             // Classifier hates this.
+  CT_FONT_ATTR_ERR,      // Top unichar OK, but font attributes incorrect.
+  CT_OK_MULTI_FONT,      // CT_FONT_ATTR_OK but there are multiple font attrs.
+  CT_NUM_RESULTS,        // Number of answers produced.
+  CT_RANK,               // Rank of correct answer.
+  CT_REJECTED_JUNK,      // Junk that was correctly rejected.
+  CT_ACCEPTED_JUNK,      // Junk that was incorrectly classified otherwise.
     }
     
-      // Decrement the count for t.
-  // Return whether we knew about the given pointer.
-  bool Free(T *t) {
-    if (t == nullptr) return false;
-    mu_.Lock();
-    for (int i = 0; i < cache_.size(); i++) {
-      if (cache_[i].object == t) {
-        --cache_[i].count;
-        mu_.Unlock();
-        return true;
+    // Setup the map for the given indexed_features that have been indexed by
+// feature_map.
+void IntFeatureDist::Set(const GenericVector<int>& indexed_features,
+                          int canonical_count, bool value) {
+  total_feature_weight_ = canonical_count;
+  for (int i = 0; i < indexed_features.size(); ++i) {
+    const int f = indexed_features[i];
+    features_[f] = value;
+    for (int dir = -kNumOffsetMaps; dir <= kNumOffsetMaps; ++dir) {
+      if (dir == 0) continue;
+      const int mapped_f = feature_map_->OffsetFeature(f, dir);
+      if (mapped_f >= 0) {
+        features_delta_one_[mapped_f] = value;
+        for (int dir2 = -kNumOffsetMaps; dir2 <= kNumOffsetMaps; ++dir2) {
+          if (dir2 == 0) continue;
+          const int mapped_f2 = feature_map_->OffsetFeature(mapped_f, dir2);
+          if (mapped_f2 >= 0)
+            features_delta_two_[mapped_f2] = value;
+        }
       }
     }
-    mu_.Unlock();
-    return false;
-  }
-    
-    namespace HPHP { namespace HHBBC {
-    }
-    }
-    
-    #include <cstdint>
-#include <tuple>
-    
-    namespace php {
-struct Program;
-}
-struct Index;
-    
-    int64_t VMTOC::getValue(int64_t index, bool qword) {
-  HPHP::Address addr = reinterpret_cast<HPHP::Address>(
-      static_cast<intptr_t>(index) + getPtrVector());
-  int64_t ret_val = 0;
-  int max_elem = qword ? 8 : 4;
-  for (int i = max_elem-1; i >= 0; i--) {
-    ret_val = addr[i] + (ret_val << 8);
-  }
-  return ret_val;
-}
-    
-    
-    {      dword(dq_formater.instruction);
-   }
-    
-    void Config::ParseConfigFile(const std::string &filename, IniSettingMap &ini,
-                             Hdf &hdf, const bool is_system /* = true */) {
-  // We don't allow a filename of just '.ini'
-  if (boost::ends_with(filename, '.ini') && filename.length() > 4) {
-    Config::ParseIniFile(filename, ini, false, is_system);
-  } else {
-    // For now, assume anything else is an hdf file
-    // TODO(#5151773): Have a non-invasive warning if HDF file does not end
-    // .hdf
-    Config::ParseHdfFile(filename, hdf);
   }
 }
     
+    /**
+ * Hashing functions
+ */
     
-    {///////////////////////////////////////////////////////////////////////////////
-}
+    #include 'core/os/file_access.h'
+#include 'core/pool_vector.h'
+#include 'core/ustring.h'
     
-    #endif // HPHP_GLOB_STREAM_WRAPPER_H
+    
+    {	MIDIDriverALSAMidi();
+	virtual ~MIDIDriverALSAMidi();
+};
+    
+    	result = MIDIInputPortCreate(client, CFSTR('Godot Input'), MIDIDriverCoreMidi::read, (void *)this, &port_in);
+	if (result != noErr) {
+		ERR_PRINTS('MIDIInputPortCreate failed, code: ' + itos(result));
+		return ERR_CANT_OPEN;
+	}
+    
+    #endif // MIDI_DRIVER_COREMIDI_H
+#endif // COREMIDI_ENABLED
 
     
-    #ifndef incl_HPHP_URL_FILE_H_
-#define incl_HPHP_URL_FILE_H_
     
-        ALLEGRO_LOCKED_REGION *locked_img = al_lock_bitmap(img, al_get_bitmap_format(img), ALLEGRO_LOCK_WRITEONLY);
-    if (!locked_img)
     {
-        al_destroy_bitmap(img);
-        return false;
-    }
-    memcpy(locked_img->data, pixels, sizeof(int)*width*height);
-    al_unlock_bitmap(img);
+    {			MIDIINCAPS caps;
+			res = midiInGetDevCaps(i, &caps, sizeof(MIDIINCAPS));
+			if (res == MMSYSERR_NOERROR) {
+				ERR_PRINTS('Can't open MIDI device \'' + String(caps.szPname) + '\', is it being used by another application?');
+			}
+		}
+	}
     
-    #ifdef __FREEGLUT_EXT_H__
-void ImGui_ImplGLUT_MouseWheelFunc(int button, int dir, int x, int y)
-{
-    ImGuiIO& io = ImGui::GetIO();
-    io.MousePos = ImVec2((float)x, (float)y);
-    if (dir > 0)
-        io.MouseWheel += 1.0;
-    else if (dir < 0)
-        io.MouseWheel -= 1.0;
-    (void)button; // Unused
+    #ifndef AUDIO_STREAM_EDITOR_PLUGIN_H
+#define AUDIO_STREAM_EDITOR_PLUGIN_H
+    
+    
+    {    for (superblock_metainfo_iterator_t kv_iter(metainfo.data(), metainfo.data() + metainfo.size()); !kv_iter.is_end(); ++kv_iter) {
+        superblock_metainfo_iterator_t::key_t key = kv_iter.key();
+        superblock_metainfo_iterator_t::value_t value = kv_iter.value();
+        kv_pairs_out->push_back(std::make_pair(std::vector<char>(key.second, key.second + key.first), std::vector<char>(value.second, value.second + value.first)));
+    }
 }
+    
+    class sindex_not_ready_exc_t : public std::exception {
+public:
+    explicit sindex_not_ready_exc_t(std::string sindex_name,
+                                    const secondary_index_t &sindex,
+                                    const std::string &table_name);
+    const char* what() const throw();
+    ~sindex_not_ready_exc_t() throw();
+protected:
+    std::string info;
+};
+    
+    # if !GTEST_OS_WINDOWS
+// Tests that an exit code describes an exit due to termination by a
+// given signal.
+class GTEST_API_ KilledBySignal {
+ public:
+  explicit KilledBySignal(int signum);
+  bool operator()(int exit_status) const;
+ private:
+  const int signum_;
+};
+# endif  // !GTEST_OS_WINDOWS
+    
+    // We print a protobuf using its ShortDebugString() when the string
+// doesn't exceed this many characters; otherwise we print it using
+// DebugString() for better readability.
+const size_t kProtobufOneLinerMaxLength = 50;
+    
+    
+    {  GTEST_DISALLOW_COPY_AND_ASSIGN_(DeathTest);
+};
+    
+    #endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_FILEPATH_H_
+
+    
+      // Given two numbers in the sign-and-magnitude representation,
+  // returns the distance between them as an unsigned number.
+  static Bits DistanceBetweenSignAndMagnitudeNumbers(const Bits &sam1,
+                                                     const Bits &sam2) {
+    const Bits biased1 = SignAndMagnitudeToBiased(sam1);
+    const Bits biased2 = SignAndMagnitudeToBiased(sam2);
+    return (biased1 >= biased2) ? (biased1 - biased2) : (biased2 - biased1);
+  }
+    
+      // Creates an ANSI string from the given wide string, allocating
+  // memory using new. The caller is responsible for deleting the return
+  // value using delete[]. Returns the ANSI string, or NULL if the
+  // input is NULL.
+  //
+  // The returned string is created using the ANSI codepage (CP_ACP) to
+  // match the behaviour of the ANSI versions of Win32 calls and the
+  // C runtime.
+  static const char* Utf16ToAnsi(LPCWSTR utf16_str);
 #endif
     
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_IMPL_API void     ImGui_Marmalade_InvalidateDeviceObjects();
-IMGUI_IMPL_API bool     ImGui_Marmalade_CreateDeviceObjects();
+      tuple() : f0_(), f1_(), f2_() {}
     
-    // InitXXX function with 'install_callbacks=true': install GLFW callbacks. They will call user's previously installed callbacks, if any.
-// InitXXX function with 'install_callbacks=false': do not install GLFW callbacks. You will need to call them yourself from your own GLFW callbacks.
-IMGUI_IMPL_API void     ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
+      const char* const name = typeid(T).name();
+#  if GTEST_HAS_CXXABI_H_ || defined(__HP_aCC)
+  int status = 0;
+  // gcc's implementation of typeid(T).name() mangles the type name,
+  // so we have to demangle it.
+#   if GTEST_HAS_CXXABI_H_
+  using abi::__cxa_demangle;
+#   endif  // GTEST_HAS_CXXABI_H_
+  char* const readable_name = __cxa_demangle(name, 0, 0, &status);
+  const std::string name_str(status == 0 ? readable_name : name);
+  free(readable_name);
+  return name_str;
+#  else
+  return name;
+#  endif  // GTEST_HAS_CXXABI_H_ || __HP_aCC
+    
+      ByteBuffer* GetSerializedSendMessage() override {
+    GPR_CODEGEN_ASSERT(orig_send_message_ != nullptr);
+    if (*orig_send_message_ != nullptr) {
+      GPR_CODEGEN_ASSERT(serializer_(*orig_send_message_).ok());
+      *orig_send_message_ = nullptr;
+    }
+    return send_message_;
+  }
+    
+      ac = (async_connect*)gpr_malloc(sizeof(async_connect));
+  ac->on_done = on_done;
+  ac->socket = socket;
+  gpr_mu_init(&ac->mu);
+  ac->refs = 2;
+  ac->addr_name = grpc_sockaddr_to_uri(addr);
+  ac->endpoint = endpoint;
+  ac->channel_args = grpc_channel_args_copy(channel_args);
+  GRPC_CLOSURE_INIT(&ac->on_connect, on_connect, ac, grpc_schedule_on_exec_ctx);
+    
+    CallCredentials::CallCredentials() { g_gli_initializer.summon(); }
+    
+    
+    {
+    {}  // namespace testing
+}  // namespace grpc
+    
+    int main(int argc, char** argv) {
+  // Change the backup poll interval from 5s to 100ms to speed up the
+  // ReconnectChannel test
+  grpc::testing::TestEnvironment env(argc, argv);
+  ::testing::InitGoogleTest(&argc, argv);
+  int ret = RUN_ALL_TESTS();
+  return ret;
+}
 
     
-    // Called by Init/NewFrame/Shutdown
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateFontsTexture();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyFontsTexture();
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateDeviceObjects();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyDeviceObjects();
-
     
-        IMGUI_API void          SetCurrentFont(ImFont* font);
-    inline ImFont*          GetDefaultFont() { ImGuiContext& g = *GImGui; return g.IO.FontDefault ? g.IO.FontDefault : g.IO.Fonts->Fonts[0]; }
+    // =============
+    // boolean types
+    // =============
     
-            // We don't care for comparison result here; the previous value will be stored into value anyway.
-        // Also we don't care for rbx and rcx values, they just have to be equal to rax and rdx before cmpxchg16b.
-        __asm__ __volatile__
-        (
-            'movq %%rbx, %%rax\n\t'
-            'movq %%rcx, %%rdx\n\t'
-            'lock; cmpxchg16b %[storage]\n\t'
-            : '=&A' (value)
-            : [storage] 'm' (storage)
-            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'memory'
-        );
+      Status NewWritableFile(const std::string& fname,
+                         std::unique_ptr<WritableFile>* result,
+                         const EnvOptions& options) override {
+    PERF_TIMER_GUARD(env_new_writable_file_nanos);
+    return EnvWrapper::NewWritableFile(fname, result, options);
+  }
+    
+    // Merge operator that picks the maximum operand, Comparison is based on
+// Slice::compare
+class MaxOperator : public MergeOperator {
+ public:
+  bool FullMergeV2(const MergeOperationInput& merge_in,
+                   MergeOperationOutput* merge_out) const override {
+    Slice& max = merge_out->existing_operand;
+    if (merge_in.existing_value) {
+      max = Slice(merge_in.existing_value->data(),
+                  merge_in.existing_value->size());
+    } else if (max.data() == nullptr) {
+      max = Slice();
+    }
+    }
+    }
+    
+      // put and get from non-default column family
+  s = db->Put(WriteOptions(), handles[1], Slice('key'), Slice('value'));
+  assert(s.ok());
+  std::string value;
+  s = db->Get(ReadOptions(), handles[1], Slice('key'), &value);
+  assert(s.ok());
+    
+      PinnableSlice pinnable_val;
+  db->Get(ReadOptions(), db->DefaultColumnFamily(), 'key1', &pinnable_val);
+  assert(s.IsNotFound());
+  // Reset PinnableSlice after each use and before each reuse
+  pinnable_val.Reset();
+  db->Get(ReadOptions(), db->DefaultColumnFamily(), 'key2', &pinnable_val);
+  assert(pinnable_val == 'value');
+  pinnable_val.Reset();
+  // The Slice pointed by pinnable_val is not valid after this point
+    
+    // Move all L0 files to target_level skipping compaction.
+// This operation succeeds only if the files in L0 have disjoint ranges; this
+// is guaranteed to happen, for instance, if keys are inserted in sorted
+// order. Furthermore, all levels between 1 and target_level must be empty.
+// If any of the above condition is violated, InvalidArgument will be
+// returned.
+Status PromoteL0(DB* db, ColumnFamilyHandle* column_family,
+                 int target_level = 1);
+    
+      // Lookup page cache by page identifier
+  //
+  // page_key   Page identifier
+  // buf        Buffer where the data should be copied
+  // size       Size of the page
+  virtual Status Lookup(const Slice& key, std::unique_ptr<char[]>* data,
+                        size_t* size) = 0;
+    
+    // Simple RAII wrapper class for Snapshot.
+// Constructing this object will create a snapshot.  Destructing will
+// release the snapshot.
+class ManagedSnapshot {
+ public:
+  explicit ManagedSnapshot(DB* db);
+    }
