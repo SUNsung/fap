@@ -1,143 +1,209 @@
 
         
-                if module.params.get('next_marker'):
-            params['Marker'] = module.params.get('next_marker')
-        try:
-            lambda_facts.update(aliases=client.list_aliases(FunctionName=function_name, **params)['Aliases'])
-        except ClientError as e:
-            if e.response['Error']['Code'] == 'ResourceNotFoundException':
-                lambda_facts.update(aliases=[])
-            else:
-                module.fail_json_aws(e, msg='Trying to get aliases')
-    else:
-        module.fail_json(msg='Parameter function_name required for query=aliases.')
-    
-            firewall_policy = oneandone_conn.attach_server_firewall_policy(
-            firewall_id=firewall_id,
-            server_ips=attach_servers)
-        return firewall_policy
-    except Exception as e:
-        module.fail_json(msg=str(e))
-    
-        module_hbacrule = get_hbacrule_dict(description=module.params['description'],
-                                        hostcategory=hostcategory,
-                                        ipaenabledflag=ipaenabledflag,
-                                        servicecategory=servicecategory,
-                                        sourcehostcategory=sourcehostcategory,
-                                        usercategory=usercategory)
-    ipa_hbacrule = client.hbacrule_find(name=name)
-    
-        module.exit_json(changed=True)
+        Some codes have multiple names, and both upper- and lower-case versions of
+the names are allowed. For example, ``codes.ok``, ``codes.OK``, and
+``codes.okay`` all correspond to the HTTP status code 200.
+'''
     
     
-class CellTest(unittest.TestCase):
-    def test_comparison(self):
-        # These tests are here simply to exercise the comparison code;
-        # their presence should not be interpreted as providing any
-        # guarantees about the semantics (or even existence) of cell
-        # comparisons in future versions of CPython.
-        self.assertTrue(cell(2) < cell(3))
-        self.assertTrue(empty_cell() < cell('saturday'))
-        self.assertTrue(empty_cell() == empty_cell())
-        self.assertTrue(cell(-36) == cell(-36.0))
-        self.assertTrue(cell(True) > empty_cell())
+@pytest.fixture
+def httpbin(httpbin):
+    return prepare_url(httpbin)
     
-        def log_request(self, code='-', size='-'):
-        '''Log an accepted request.
-    
-        print('Unpickled records:')
-    pprint.pprint(memos)
-    
-    # Create the base text message.
-msg = EmailMessage()
-msg['Subject'] = 'Ayons asperges pour le déjeuner'
-msg['From'] = Address('Pepé Le Pew', 'pepe', 'example.com')
-msg['To'] = (Address('Penelope Pussycat', 'penelope', 'example.com'),
-             Address('Fabrette Pussycat', 'fabrette', 'example.com'))
-msg.set_content('''\
-Salut!
-    
-    import sqlite3
-import os
-    
-    
-def test_array32():
-    check_array(5, (1 << 16))
-    
-    from matplotlib import pyplot as plt
-from matplotlib import rcParams
-import numpy as np
-    
-    from pandas import DataFrame, MultiIndex
-from pandas.util import testing as tm
-    
-        for isort, normalize, sort, ascending, dropna \
-            in product((False, True), repeat=5):
-    
-    
-@pytest.mark.parametrize('style,equiv', [
-    ('margin: 1px; margin-top: inherit',
-     'margin-bottom: 1px; margin-right: 1px; margin-left: 1px'),
-    ('margin-top: inherit', ''),
-    ('margin-top: initial', ''),
-])
-def test_css_none_absent(style, equiv):
-    assert_same_resolution(style, equiv)
-    
-        with tm.ensure_clean() as path:
-        df.to_json(path, compression=compression)
-        with open(path, 'rb') as f:
-            s3_resource.Bucket('pandas-test').put_object(Key='test-1', Body=f)
-    
-    
-def test_read_map_header():
-    unpacker = Unpacker()
-    unpacker.feed(packb({'a': 'A'}))
-    assert unpacker.read_map_header() == 1
-    assert unpacker.unpack() == B'a'
-    assert unpacker.unpack() == B'A'
-    try:
-        unpacker.unpack()
-        assert 0, 'should raise exception'
-    except OutOfData:
-        assert 1, 'okay'
-    
-            filtered = []
-        ignore_params = ctx.options.server_replay_ignore_params or []
-        for p in queriesArray:
-            if p[0] not in ignore_params:
-                filtered.append(p)
-        for p in filtered:
-            key.append(p[0])
-            key.append(p[1])
-    
-        def requestheaders(self, f):
-        self.run(f, True)
-    
-        def load(self, loader):
-        loader.add_option(
-            'termlog_verbosity', str, 'info',
-            'Log verbosity.',
-            choices=log.LogTierOrder
+        @pytest.mark.parametrize(
+        'other, result', (
+            ({'AccePT': 'application/json'}, True),
+            ({}, False),
+            (None, False)
         )
+    )
+    def test_instance_equality(self, other, result):
+        assert (self.case_insensitive_dict == other) is result
+    
+        def run(self):
+        try:
+            self.server_sock = self._create_socket_and_bind()
+            # in case self.port = 0
+            self.port = self.server_sock.getsockname()[1]
+            self.ready_event.set()
+            self._handle_requests()
+    
+            Number:                    '#990000',        # class: 'm'
     
     
-class ServerConnection(tcp.TCPClient, stateobject.StateObject):
+def dispatch_hook(key, hooks, hook_data, **kwargs):
+    '''Dispatches a hook dictionary on a given piece of data.'''
+    hooks = hooks or {}
+    hooks = hooks.get(key)
+    if hooks:
+        if hasattr(hooks, '__call__'):
+            hooks = [hooks]
+        for hook in hooks:
+            _hook_data = hook(hook_data, **kwargs)
+            if _hook_data is not None:
+                hook_data = _hook_data
+    return hook_data
+
+    
+    
+def test_idna_with_version_attribute(mocker):
+    '''Verify we're actually setting idna version when it should be available.'''
+    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
+    assert info()['idna'] == {'version': '2.6'}
+
+    
+        See https://github.com/requests/requests/issues/3772.
     '''
-    A server connection
+    text_200_chal = (b'HTTP/1.1 200 OK\r\n'
+                     b'Content-Length: 0\r\n'
+                     b'WWW-Authenticate: Digest nonce='6bf5d6e4da1ce66918800195d6b9130d''
+                     b', opaque='372825293d1c26955496c80ed6426e9e', '
+                     b'realm='me@kennethreitz.com', qop=auth\r\n\r\n')
+    
+        # Issue 6083: Reference counting bug
+    @unittest.skipIf(sys.platform == 'vxworks',
+                     'setting RLIMIT_CPU is not supported on VxWorks')
+    def test_setrusage_refcount(self):
+        try:
+            limits = resource.getrlimit(resource.RLIMIT_CPU)
+        except AttributeError:
+            pass
+        else:
+            class BadSequence:
+                def __len__(self):
+                    return 2
+                def __getitem__(self, key):
+                    if key in (0, 1):
+                        return len(tuple(range(1000000)))
+                    raise IndexError
+    
+    def nsstr(value):
+    return NSString.alloc().initWithString_(value)
+    
+            self.loop.run_until_complete(cond.acquire())
+        cond.notify(1)
+        cond.release()
+        test_utils.run_briefly(self.loop)
+        self.assertEqual([1], result)
+    
+            self.assertEqual(u[0:0], self.type2test())
+        self.assertEqual(u[1:2], self.type2test([1]))
+        self.assertEqual(u[-2:-1], self.type2test([3]))
+        self.assertEqual(u[-1000:1000], u)
+        self.assertEqual(u[1000:-1000], self.type2test([]))
+        self.assertEqual(u[:], u)
+        self.assertEqual(u[1:None], self.type2test([1, 2, 3, 4]))
+        self.assertEqual(u[None:3], self.type2test([0, 1, 2]))
+    
+        def test_deepcopy(self):
+        import copy
+        a = array.array(self.typecode, self.example)
+        b = copy.deepcopy(a)
+        self.assertNotEqual(id(a), id(b))
+        self.assertEqual(a, b)
+    
+    manpages_url = 'https://manpages.debian.org/{path}'
+    
+            # re-send entire set of collected data
+        try:
+            # this may fail on some tests, such as test_close_when_done,
+            # since the client closes the channel when it's done sending
+            while self.buffer:
+                n = conn.send(self.buffer[:self.chunk_size])
+                time.sleep(0.001)
+                self.buffer = self.buffer[n:]
+        except:
+            pass
+    
+        def __await__(self):
+        yield
+    
+                main_task = self.loop.create_task(main(srv))
+    
+                res = self.loop.run_until_complete(client(srv.addr))
+    
+    import configobj
+import josepy as jose
+import mock
+import six
+    
+            If an error occurs while requesting the record set, it is suppressed
+        and None is returned.
+    
+            if hasattr(request.config, 'slaveinput'):  # Worker node
+            self.worker_id = request.config.slaveinput['slaveid']
+            acme_xdist = request.config.slaveinput['acme_xdist']
+        else:  # Primary node
+            self.worker_id = 'primary'
+            acme_xdist = request.config.acme_xdist
+    
+    from time import time
     
     
-    class CompressedTextChunk(KaitaiStruct):
-        def __init__(self, _io, _parent=None, _root=None):
-            self._io = _io
-            self._parent = _parent
-            self._root = _root if _root else self
-            self.keyword = (self._io.read_bytes_term(0, False, True, True)).decode(u'UTF-8')
-            self.compression_method = self._io.read_u1()
-            self._raw_text_datastream = self._io.read_bytes_full()
-            self.text_datastream = zlib.decompress(self._raw_text_datastream)
+@instrumented_task(name='sentry.tasks.clear_expired_resolutions',
+                   time_limit=15, soft_time_limit=10)
+def clear_expired_resolutions(release_id):
+    '''
+    This should be fired when ``release_id`` is created, and will indicate to
+    the system that any pending resolutions older than the given release can now
+    be safely transitioned to resolved.
     
-            This attribute is read-only and can only be modified by calling one of
-        state transition functions.
-        '''
-        return self._state
+        with locks.get('scheduler.process', duration=60).acquire():
+        job_list = list(ScheduledJob.objects.filter(
+            date_scheduled__lte=timezone.now(),
+        )[:101])
+    
+        logging.warning('Starting fetch with curl client')
+    curl_client = CurlAsyncHTTPClient()
+    curl_client.fetch('http://localhost:%d/' % options.port,
+                      callback=callback)
+    IOLoop.current().start()
+    
+    import sys
+from timeit import Timer
+    
+        def new_future_import(self, old):
+        new = FromImport('__future__',
+                         [Name('absolute_import', prefix=' '), Comma(),
+                          Name('division', prefix=' '), Comma(),
+                          Name('print_function', prefix=' ')])
+        if old is not None:
+            new.prefix = old.prefix
+        return new
+    
+    
+if __name__ == '__main__':
+    main()
+
+    
+        from tornado.platform.auto import set_close_exec
+'''
+    
+            # Make sure the tornado module under test is available to the test
+        # application
+        pythonpath = os.getcwd()
+        if 'PYTHONPATH' in os.environ:
+            pythonpath += os.pathsep + os.environ['PYTHONPATH']
+    
+    
+class GeneratorClientTest(ClientTestMixin, AsyncTestCase):
+    client_class = GeneratorCapClient
+    
+    
+def deserialize_event(event):
+    # Deserialize into Python dictionary and extract the 'NewImage' (the new version of the full ddb document)
+    ddb = event.get('dynamodb')
+    if ddb:
+        result = {
+            '__action_type': event.get('eventName'),
+        }
+    
+        def test_create_disabled_event_source_mapping(self):
+        createResponse = self.client.post('{0}/event-source-mappings/'.format(lambda_api.PATH_ROOT),
+                            data=json.dumps({'FunctionName': 'test-lambda-function',
+                                             'EventSourceArn': 'fake-arn',
+                                             'Enabled': 'false'}))
+        createResult = json.loads(createResponse.get_data())
+    
+    '''
+Command line interface (CLI) for LocalStack.
