@@ -1,72 +1,102 @@
 
         
-        class Api::Web::SettingsController < Api::Web::BaseController
-  respond_to :json
+          attr_reader :topic, :options
     
-      def export_filename
-    '#{controller_name}.csv'
+        it 'supports one and other' do
+      override_translation('en', 'items.one', 'one fish')
+      override_translation('en', 'items.other', '%{count} fishies')
+      expect(I18n.t('items', count: 13)).to eq('13 fishies')
+      expect(I18n.t('items', count: 1)).to eq('one fish')
+    end
+    
+        stats = {}
+    unique_users = {}
+    
+                problem 'Use \'if build.#{match[1].downcase}?\' instead'
+          end
+    
+      def flags_only
+    select { |arg| arg.start_with?('--') }
+  end
+    
+        it 'uses older tags when needed', :needs_macos do
+      subject[:mavericks] = 'foo'
+      expect(subject.send(:find_matching_tag, :mavericks)).to eq(:mavericks)
+      expect(subject.send(:find_matching_tag, :yosemite)).to eq(:mavericks)
+    end
+    
+        args.present?
   end
 end
 
     
-      def set_locale
-    I18n.locale = default_locale
-    I18n.locale = current_user.locale if user_signed_in?
-  rescue I18n::InvalidLocale
-    I18n.locale = default_locale
-  end
-    
-      def rate_limited_request?
-    !request.env['rack.attack.throttle_data'].nil?
-  end
-    
-    module SessionTrackingConcern
-  extend ActiveSupport::Concern
-    
-      included do
-    before_action :set_user_activity
-  end
-    
-      # Raise exceptions instead of rendering exception templates.
-  config.action_dispatch.show_exceptions = false
-    
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have value #{expected.inspect} but was #{actual.value.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have value #{expected.inspect} but it had'
+      def checksums
+    tags = collector.keys.sort_by do |tag|
+      # Sort non-MacOS tags below MacOS tags.
+      begin
+        OS::Mac::Version.from_symbol tag
+      rescue ArgumentError
+        '0.#{tag}'
+      end
+    end
+    checksums = {}
+    tags.reverse_each do |tag|
+      checksum = collector[tag]
+      checksums[checksum.hash_type] ||= []
+      checksums[checksum.hash_type] << { checksum => tag }
+    end
+    checksums
   end
 end
     
-          get :index, params: {a_id: @aspect.id, page: '1'}, format: :json
-      save_fixture(response.body, 'aspects_manage_contacts_json')
+          expect(f.class.stable.deps.first.name).to eq('foo')
+      expect(f.class.devel.deps.first.name).to eq('foo')
+      expect(f.class.head.deps.first.name).to eq('foo')
     end
-    
-          it 'should remove participation' do
-        delete :destroy, params: {post_id: post.id}
-        expect(alice.participations.where(:target_id => post.id)).not_to exist
-        expect(response.code).to eq('200')
-      end
-    end
-    
-    def ask(message, valid_options)
-  if valid_options
-    answer = get_stdin('#{message} #{valid_options.to_s.gsub(/'/, '').gsub(/, /,'/')} ') while !valid_options.include?(answer)
-  else
-    answer = get_stdin(message)
   end
-  answer
 end
+
     
+          expect(spec.deps.first.name).to eq('foo')
+    end
     
-  # Adds some extra filters used during the category creation process.
-  module Filters
+    require 'cask/cmd/abstract_internal_command'
+require 'cask/cmd/internal_help'
+require 'cask/cmd/internal_stanza'
     
-      class IncludeArrayTag < Liquid::Tag
-    Syntax = /(#{Liquid::QuotedFragment}+)/
-    def initialize(tag_name, markup, tokens)
-      if markup =~ Syntax
-        @array_name = $1
-      else
-        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
+          # For OS::Mac::Version compatability
+      def requires_nehalem_cpu?
+        Hardware.oldest_cpu(self) == :nehalem
       end
+      # https://en.wikipedia.org/wiki/Nehalem_(microarchitecture)
+      # Ensure any extra methods are also added to version/null.rb
+      alias requires_sse4? requires_nehalem_cpu?
+      alias requires_sse41? requires_nehalem_cpu?
+      alias requires_sse42? requires_nehalem_cpu?
+      alias requires_popcnt? requires_nehalem_cpu?
+    end
+  end
+end
+
+    
+          subdir
+    end
+    
+          Pathname('#{@cask.metadata_versioned_path}.upgrading')
+    end
+    
+        def get_pane_base_index
+      tmux_config['pane-base-index']
+    end
+    
+      match do
+    result = is_pane
+    
+    require 'tmuxinator'
+require 'factory_bot'
+    
+            get '/bool', bool: 1
+        expect(last_response.status).to eq(200)
+        expect(last_response.body).to eq('TrueClass')
+    
+          private
