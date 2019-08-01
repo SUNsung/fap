@@ -1,244 +1,396 @@
 
         
-          // Get the name to rename the parameter to. Note that AvoidPythonReserved
-  // has already been applied.
-  string GetRenameTo() const { return rename_to_; }
+        // If the keys are not available from the header, define them ourselves. The values match
+// what tsd_private.h provides.
+# ifndef __PTK_FRAMEWORK_SWIFT_KEY0
+#  define __PTK_FRAMEWORK_SWIFT_KEY0 100
+# endif
+# ifndef __PTK_FRAMEWORK_SWIFT_KEY1
+#  define __PTK_FRAMEWORK_SWIFT_KEY1 101
+# endif
+# ifndef __PTK_FRAMEWORK_SWIFT_KEY2
+#  define __PTK_FRAMEWORK_SWIFT_KEY2 102
+# endif
+    
+            AbstractionPattern origEltTy =
+            (eltDecl == SGF.getASTContext().getOptionalSomeDecl()
+                 ? AbstractionPattern(substEltTy)
+                 : SGF.SGM.M.Types.getAbstractionPattern(eltDecl));
+    
+    // Metadata *swift_getFunctionTypeMetadata3(unsigned long flags,
+//                                          const Metadata *arg0,
+//                                          const Metadata *arg1,
+//                                          const Metadata *arg2,
+//                                          const Metadata *resultMetadata);
+FUNCTION(GetFunctionMetadata3, swift_getFunctionTypeMetadata3,
+        C_CC, AlwaysAvailable,
+        RETURNS(TypeMetadataPtrTy),
+        ARGS(SizeTy, TypeMetadataPtrTy, TypeMetadataPtrTy, TypeMetadataPtrTy,
+             TypeMetadataPtrTy),
+        ATTRS(NoUnwind, ReadNone))
+    
+      /// Verify the integrity of each map and the cross-map consistency.
+  /// Then call \p verifyFn for each entry found in each of the two maps,
+  /// passing an index so that the verifyFn knows which map is being tested.
+  void verify(function_ref<void(const Key1 &k1, const Key2 &k2, Value v,
+                                unsigned index)>
+                  verifyFn) const {
+    map1.verify([&](const Key1 &k1, const Key2 &k2, Value v) {
+      assertConsistent(map2.find(k2, k1).getValue(), v);
+    });
+    map2.verify([&](const Key2 &k2, const Key1 &k1, Value v) {
+      assertConsistent(map1.find(k1, k2).getValue(), v);
+    });
+    map1.verify([&](const Key1 &k1, const Key2 &k2, Value v) {
+      verifyFn(k1, k2, v, 0);
+    });
+    map2.verify([&](const Key2 &k2, const Key1 &k1, Value v) {
+      verifyFn(k1, k2, v, 1);
+    });
+  }
+    
+      /// The name of the 'main' input file, used by the debug info.
+  std::string MainInputFilenameForDebugInfo;
+    
+    private:
+    NetworkStyle(const QString &appName, const int iconColorHueShift, const int iconColorSaturationReduction, const char *titleAddText);
+    
+        void setModel(WalletModel *model);
+    void setAddress_SM(const QString &address);
+    void setAddress_VM(const QString &address);
+    
+        if (secp256k1_scalar_is_zero(sigr) || secp256k1_scalar_is_zero(sigs)) {
+        return 0;
+    }
+    
+    const UniValue& UniValue::get_array() const
+{
+    if (typ != VARR)
+        throw std::runtime_error('JSON value is not an array as expected');
+    return *this;
+}
+    
+    
+    {    CRIPEMD160();
+    CRIPEMD160& Write(const unsigned char* data, size_t len);
+    void Finalize(unsigned char hash[OUTPUT_SIZE]);
+    CRIPEMD160& Reset();
+};
+    
+    Status FaultInjectionTestEnv::NewAppendableFile(const std::string& fname,
+                                                WritableFile** result) {
+  WritableFile* actual_writable_file;
+  Status s = target()->NewAppendableFile(fname, &actual_writable_file);
+  if (s.ok()) {
+    FileState state(fname);
+    state.pos_ = 0;
+    {
+      MutexLock l(&mutex_);
+      if (db_file_state_.count(fname) == 0) {
+        new_files_since_last_dir_sync_.insert(fname);
+      } else {
+        state = db_file_state_[fname];
+      }
+    }
+    *result = new TestWritableFile(state, actual_writable_file, this);
+  }
+  return s;
+}
+    
+    Status SetCurrentFile(Env* env, const std::string& dbname,
+                      uint64_t descriptor_number) {
+  // Remove leading 'dbname/' and add newline to manifest file name
+  std::string manifest = DescriptorFileName(dbname, descriptor_number);
+  Slice contents = manifest;
+  assert(contents.starts_with(dbname + '/'));
+  contents.remove_prefix(dbname.size() + 1);
+  std::string tmp = TempFileName(dbname, descriptor_number);
+  Status s = WriteStringToFileSync(env, contents.ToString() + '\n', tmp);
+  if (s.ok()) {
+    s = env->RenameFile(tmp, CurrentFileName(dbname));
+  }
+  if (!s.ok()) {
+    env->DeleteFile(tmp);
+  }
+  return s;
+}
+    
+      // read a token
+  i = 0;
+  buf[i++] = c;
+  if (c == '(') {
+    backslash = gFalse;
+    while ((c = lookChar()) != EOF) {
+      consumeChar();
+      if (i < size) {
+	buf[i++] = c;
+      }
+      if (c == '\\') {
+	backslash = gTrue;
+      } else if (!backslash && c == ')') {
+	break;
+      } else {
+	backslash = gFalse;
+      }
+    }
+  } else if (c == '<') {
+    while ((c = lookChar()) != EOF) {
+      consumeChar();
+      if (i < size && specialChars[c] != 1) {
+	buf[i++] = c;
+      }
+      if (c == '>') {
+	break;
+      }
+    }
+  } else if (c != '[' && c != ']') {
+    while ((c = lookChar()) != EOF && !specialChars[c]) {
+      consumeChar();
+      if (i < size) {
+	buf[i++] = c;
+      }
+    }
+  }
+  // Zero terminate token string
+  buf[i] = '\0';
+  // Return length of token
+  *length = i;
+    
+    GBool Page::loadThumb(unsigned char **data_out,
+		      int *width_out, int *height_out,
+		      int *rowstride_out)
+{
+  unsigned int pixbufdatasize;
+  int width, height, bits;
+  Object obj1, fetched_thumb;
+  Dict *dict;
+  GfxColorSpace *colorSpace;
+  GBool success = gFalse;
+  Stream *str;
+  GfxImageColorMap *colorMap;
+    }
+    
+    
+    {  return value;
+}
+    
+    private:
+  struct Interval {
+    Interval(Object *dict, int baseA);
+    ~Interval();
+    GooString *prefix;
+    enum NumberStyle {
+      None,
+      Arabic,
+      LowercaseRoman,
+      UppercaseRoman,
+      UppercaseLatin,
+      LowercaseLatin
+    } style;
+    int first, base, length;
+  };
+    
+    #ifdef USE_GCC_PRAGMAS
+#pragma interface
+#endif
+    
+        bool operator==(const PopplerCacheKey &key) const
+    {
+      const ObjectKey *k = static_cast<const ObjectKey*>(&key);
+      return k->num == num && k->gen == gen;
+    }
+    
+      colorSpace = colorMap->getColorSpace();
+  if (colorSpace->getMode() == csIndexed) {
+    colorSpace = ((GfxIndexedColorSpace *)colorSpace)->getBase();
+  }
+  if (colorSpace->getMode() != csDeviceGray &&
+      colorSpace->getMode() != csCalGray) {
+    gray = gFalse;
+  }
+  mono = gFalse;
+  if (state->getBlendMode() != gfxBlendNormal) {
+    transparency = gTrue;
+  }
+  gdi = gFalse;
+    
+    
+    {  void addElement (double elapsed);
+  int getCount () { return count; }
+  double getTotal () { return total; }
+  double getMin () { return max; }
+  double getMax () { return max; }
+private:
+  int count;			// size of <elems> array
+  double total;			// number of elements in array
+  double min;			// reference count
+  double max;			// reference count
+};
+    
+    Sound::Sound(Object *obj, bool readAttrs)
+{
+  streamObj = new Object();
+  streamObj->initNull();
+  obj->copy(streamObj);
+    }
+    
+      xref = NULL;
+    
+    
+    {  TimePointT start;
+  DurationT elapsed;
+  Timer() { Reset(); }
+  void Reset() {
+    elapsed = DurationT::zero();
+    Start();
+  }
+  void Start() { start = ClockT::now(); }
+  void Stop() { elapsed += ClockT::now() - start; }
+  double ElapsedSeconds() const { return SecondsT(elapsed).count(); }
+  void PrintElapsed(std::string label) {
+    char buffer[255];
+    snprintf(buffer, sizeof(buffer), '%s:\t %fs', label.c_str(),
+             SecondsT(elapsed).count());
+    LOG(CONSOLE) << buffer;
+    Reset();
+  }
+};
+    
+    // try to load weight information from file, if exists
+inline bool MetaTryLoadFloatInfo(const std::string& fname,
+                                 std::vector<bst_float>* data) {
+  std::unique_ptr<dmlc::Stream> fi(dmlc::Stream::Create(fname.c_str(), 'r', true));
+  if (fi == nullptr) return false;
+  dmlc::istream is(fi.get());
+  data->clear();
+  bst_float value;
+  while (is >> value) {
+    data->push_back(value);
+  }
+  return true;
+}
+    
+      BatchSet GetRowBatches() override;
+    
+      const MetaInfo& Info() const override;
+    
+    SparsePageSource::SparsePageSource(const std::string& cache_info,
+                                   const std::string& page_type)
+    : base_rowid_(0), page_(nullptr), clock_ptr_(0) {
+  // read in the info files
+  std::vector<std::string> cache_shards = GetCacheShards(cache_info);
+  CHECK_NE(cache_shards.size(), 0U);
+  {
+    std::string name_info = cache_shards[0];
+    std::unique_ptr<dmlc::Stream> finfo(dmlc::Stream::Create(name_info.c_str(), 'r'));
+    int tmagic;
+    CHECK_EQ(finfo->Read(&tmagic, sizeof(tmagic)), sizeof(tmagic));
+    this->info.LoadBinary(finfo.get());
+  }
+  files_.resize(cache_shards.size());
+  formats_.resize(cache_shards.size());
+  prefetchers_.resize(cache_shards.size());
+    }
+    
+    #endif
+    
+    TEST(Metric, DeclareUnifiedTest(MAE)) {
+  auto lparam = xgboost::CreateEmptyGenericParam(0, NGPUS);
+  xgboost::Metric * metric = xgboost::Metric::Create('mae', &lparam);
+  metric->Configure({});
+  ASSERT_STREQ(metric->Name(), 'mae');
+  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-10);
+  EXPECT_NEAR(GetMetricEval(metric,
+                            {0.1f, 0.9f, 0.1f, 0.9f},
+                            {  0,   0,   1,   1}),
+              0.5f, 0.001f);
+  delete metric;
+}
+    
+    /**
+ * This structure contains per-service-context state related to the oplog.
+ */
+class LocalOplogInfo {
+public:
+    static LocalOplogInfo* get(ServiceContext& service);
+    static LocalOplogInfo* get(ServiceContext* service);
+    static LocalOplogInfo* get(OperationContext* opCtx);
+    }
+    
+        /**
+     * Used when there is a canonical query but no query solution (e.g. idhack queries, queries
+     * against a NULL collection, queries using the subplan stage).
+     */
+    static StatusWith<std::unique_ptr<PlanExecutor, PlanExecutor::Deleter>> make(
+        OperationContext* opCtx,
+        std::unique_ptr<WorkingSet> ws,
+        std::unique_ptr<PlanStage> rt,
+        std::unique_ptr<CanonicalQuery> cq,
+        const Collection* collection,
+        YieldPolicy yieldPolicy);
     
     
     {
-}
-
-    
-    
-    {};
-    
-    	void EncodeMipmaps(float *a_pafSourceRGBA,
-		unsigned int a_uiSourceWidth,
-		unsigned int a_uiSourceHeight,
-		Image::Format a_format,
-		ErrorMetric a_eErrMetric,
-		float a_fEffort,
-		unsigned int a_uiJobs,
-		unsigned int a_uiMaxJobs,
-		unsigned int a_uiMaxMipmaps,
-		unsigned int a_uiMipFilterFlags,
-		RawImage* a_pMipmapImages,
-		int *a_piEncodingTime_ms, 
-		bool a_bVerboseOutput)
-	{
-		auto mipWidth = a_uiSourceWidth;
-		auto mipHeight = a_uiSourceHeight;
-		int totalEncodingTime = 0;
-		for(unsigned int mip = 0; mip < a_uiMaxMipmaps && mipWidth >= 1 && mipHeight >= 1; mip++)
-		{
-			float* pImageData = nullptr;
-			float* pMipImage = nullptr;
+    {        int numCounted = runCount(&count);
+        ASSERT_EQUALS(0, numCounted);
     }
-    }
-    
-    namespace Etc
-{
-	// ETC pixels are scanned vertically.  
-	// this mapping is for when someone wants to scan the ETC pixels horizontally
-	const unsigned int Block4x4::s_auiPixelOrderHScan[PIXELS] = { 0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15 };
-    }
-    
-    		// the alpha mix for a 4x4 block of pixels
-		enum class SourceAlphaMix
-		{
-			UNKNOWN,
-			//
-			OPAQUE,			// all 1.0
-			TRANSPARENT,	// all 0.0 or NAN
-			TRANSLUCENT		// not all opaque or transparent
-		};
-    
-    #include 'EtcErrorMetric.h'
-    
-    #define MULT16_16_Q11_32(a,b)     ((a)*(b))
-#define MULT16_16_Q11(a,b)     ((a)*(b))
-#define MULT16_16_Q13(a,b)     ((a)*(b))
-#define MULT16_16_Q14(a,b)     ((a)*(b))
-#define MULT16_16_Q15(a,b)     ((a)*(b))
-#define MULT16_16_P15(a,b)     ((a)*(b))
-#define MULT16_16_P13(a,b)     ((a)*(b))
-#define MULT16_16_P14(a,b)     ((a)*(b))
-#define MULT16_32_P16(a,b)     ((a)*(b))
-    
-    /** Shift by a and round-to-neareast 32-bit value. Result is a 16-bit value */
-#define ROUND16(x,a) (EXTRACT16(PSHR32((x),(a))))
-/** Divide by two */
-#define HALF16(x)  (SHR16(x,1))
-#define HALF32(x)  (SHR32(x,1))
-    
-    void silk_insertion_sort_increasing_all_values_int16(
-     opus_int16                 *a,                 /* I/O   Unsorted / Sorted vector                                   */
-     const opus_int             L                   /* I     Vector length                                              */
-);
-    
-    #if GTEST_OS_SYMBIAN
-  // Streams a value (either a pointer or not) to this object.
-  template <typename T>
-  inline Message& operator <<(const T& value) {
-    StreamHelper(typename internal::is_pointer<T>::type(), value);
-    return *this;
-  }
-#else
-  // Streams a non-pointer value to this object.
-  template <typename T>
-  inline Message& operator <<(const T& val) {
-    // Some libraries overload << for STL containers.  These
-    // overloads are defined in the global namespace instead of ::std.
-    //
-    // C++'s symbol lookup rule (i.e. Koenig lookup) says that these
-    // overloads are visible in either the std namespace or the global
-    // namespace, but not other namespaces, including the testing
-    // namespace which Google Test's Message class is in.
-    //
-    // To allow STL containers (and other types that has a << operator
-    // defined in the global namespace) to be used in Google Test
-    // assertions, testing::Message must access the custom << operator
-    // from the global namespace.  With this using declaration,
-    // overloads of << defined in the global namespace and those
-    // visible via Koenig lookup are both exposed in this function.
-    using ::operator <<;
-    *ss_ << val;
-    return *this;
-  }
-    
-      // Take over ownership of a raw pointer.  This should happen as soon as
-  // possible after the object is created.
-  explicit linked_ptr(T* ptr = NULL) { capture(ptr); }
-  ~linked_ptr() { depart(); }
-    
-    // Gets the content of the stringstream's buffer as an std::string.  Each '\0'
-// character in the buffer is replaced with '\\0'.
-GTEST_API_ std::string StringStreamToString(::std::stringstream* stream);
-    
-    
-    {  template <class Tuple>
-  static GTEST_BY_REF_(GTEST_TUPLE_ELEMENT_(1, Tuple))
-  ConstField(const Tuple& t) { return t.f1_; }
 };
     
-      const char* const name = typeid(T).name();
-#  if GTEST_HAS_CXXABI_H_ || defined(__HP_aCC)
-  int status = 0;
-  // gcc's implementation of typeid(T).name() mangles the type name,
-  // so we have to demangle it.
-#   if GTEST_HAS_CXXABI_H_
-  using abi::__cxa_demangle;
-#   endif  // GTEST_HAS_CXXABI_H_
-  char* const readable_name = __cxa_demangle(name, 0, 0, &status);
-  const std::string name_str(status == 0 ? readable_name : name);
-  free(readable_name);
-  return name_str;
-#  else
-  return name;
-#  endif  // GTEST_HAS_CXXABI_H_ || __HP_aCC
+                    //   Note: if the capture group match was of an empty string the backref
+                //         match succeeds.  Verified by testing:  Perl matches succeed
+                //         in this case, so we do too.
     
-    
-// Tests IsPrime()
-    
-      size_t Length() const {
-    return c_string_ == NULL ? 0 : strlen(c_string_);
-  }
-    
-    // A CallData class will be created for every grpc call within a channel. It is
-// used to store data and methods specific to that call. CensusClientCallData is
-// thread-compatible, however typically only 1 thread should be interacting with
-// a call at a time.
-class CensusClientCallData : public CallData {
- public:
-  // Maximum size of trace context is sent on the wire.
-  static constexpr uint32_t kMaxTraceContextLen = 64;
-  // Maximum size of tags that are sent on the wire.
-  static constexpr uint32_t kMaxTagsLen = 2048;
+    RuleBasedCollator::RuleBasedCollator(const uint8_t *bin, int32_t length,
+                                     const RuleBasedCollator *base, UErrorCode &errorCode)
+        : data(NULL),
+          settings(NULL),
+          tailoring(NULL),
+          cacheEntry(NULL),
+          validLocale(''),
+          explicitlySetAttributes(0),
+          actualLocaleIsSameAsValid(FALSE) {
+    if(U_FAILURE(errorCode)) { return; }
+    if(bin == NULL || length == 0 || base == NULL) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
     }
-    
-    // This is needed because grpc has hardcoded CensusContext with a
-// forward declaration of 'struct census_context;'
-struct census_context;
-    
-    ::opencensus::stats::MeasureInt64 RpcClientSentMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientSentBytesPerRpc();
-::opencensus::stats::MeasureInt64 RpcClientReceivedMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientReceivedBytesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientRoundtripLatency();
-::opencensus::stats::MeasureDouble RpcClientServerLatency();
-::opencensus::stats::MeasureInt64 RpcClientCompletedRpcs();
-    
-    #endif  // GRPC_SRC_CPP_SERVER_LOAD_REPORTER_GET_CPU_STATS_H
-
-    
-    		/*
-		Convert legacy user-profile.cmd to new name user_profile.cmd
-		*/
-		PathCombine(legacyUserProfilePath, userConfigDirPath, L'user-profile.cmd');
-		if (PathFileExists(legacyUserProfilePath))
-		{
-			PathCombine(userProfilePath, userConfigDirPath, L'user_profile.cmd');
+    const CollationTailoring *root = CollationRoot::getRoot(errorCode);
+    if(U_FAILURE(errorCode)) { return; }
+    if(base->tailoring != root) {
+        errorCode = U_UNSUPPORTED_ERROR;
+        return;
     }
-    
-    struct SrcLoc {
-  SrcLoc()
-    : start{0,0}
-    , past{0,0}
-  {}
+    LocalPointer<CollationTailoring> t(new CollationTailoring(base->tailoring->settings));
+    if(t.isNull() || t->isBogus()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return;
     }
-    
-    void APCCollection::Delete(APCHandle* h) {
-  assertx(offsetof(APCCollection, m_handle) == 0);
-  delete reinterpret_cast<APCCollection*>(h);
+    CollationDataReader::read(base->tailoring, bin, length, *t, errorCode);
+    if(U_FAILURE(errorCode)) { return; }
+    t->actualLocale.setToBogus();
+    adoptTailoring(t.orphan(), errorCode);
 }
     
-    void Config::ParseConfigFile(const std::string &filename, IniSettingMap &ini,
-                             Hdf &hdf, const bool is_system /* = true */) {
-  // We don't allow a filename of just '.ini'
-  if (boost::ends_with(filename, '.ini') && filename.length() > 4) {
-    Config::ParseIniFile(filename, ini, false, is_system);
-  } else {
-    // For now, assume anything else is an hdf file
-    // TODO(#5151773): Have a non-invasive warning if HDF file does not end
-    // .hdf
-    Config::ParseHdfFile(filename, hdf);
-  }
+    
+    {    return USEARCH_DONE;
 }
     
-    #endif // HPHP_DATA_STREAM_WRAPPER_H
-
+    #include 'unicode/format.h'
+#include 'unicode/locid.h'
+#include 'unicode/parseerr.h'
+#include 'unicode/utypes.h'
+#include 'uvector.h'
+#include 'hash.h'
     
-    struct FileStreamWrapper final : Stream::Wrapper {
-  static req::ptr<MemFile> openFromCache(const String& filename,
-                                         const String& mode);
-  req::ptr<File> open(const String& filename, const String& mode, int options,
-                      const req::ptr<StreamContext>& context) override;
-  int access(const String& path, int mode) override {
-    return ::access(File::TranslatePath(path).data(), mode);
-  }
-  int stat(const String& path, struct stat* buf) override {
-    return ::stat(File::TranslatePath(path).data(), buf);
-  }
-  int lstat(const String& path, struct stat* buf) override {
-    return ::lstat(File::TranslatePath(path).data(), buf);
-  }
-  int unlink(const String& path) override;
-  int rename(const String& oldname, const String& newname) override;
-  int mkdir(const String& path, int mode, int options) override;
-  int rmdir(const String& path, int /*options*/) override {
-    ERROR_RAISE_WARNING(::rmdir(File::TranslatePath(path).data()));
-    return ret;
-  }
-  bool isNormalFileStream() const override { return true; }
-    }
-    
-    
-    {}
-
-    
-      // overriding ResourceData
-  const String& o_getClassNameHook() const override { return classnameof(); }
-    
-    #include 'hphp/runtime/base/http-client.h'
-#include 'hphp/runtime/base/mem-file.h'
-#include 'hphp/runtime/base/string-buffer.h'
+    class U_I18N_API SharedCalendar : public SharedObject {
+public:
+    SharedCalendar(Calendar *calToAdopt) : ptr(calToAdopt) { }
+    virtual ~SharedCalendar();
+    const Calendar *get() const { return ptr; }
+    const Calendar *operator->() const { return ptr; }
+    const Calendar &operator*() const { return *ptr; }
+private:
+    Calendar *ptr;
+    SharedCalendar(const SharedCalendar &);
+    SharedCalendar &operator=(const SharedCalendar &);
+};
