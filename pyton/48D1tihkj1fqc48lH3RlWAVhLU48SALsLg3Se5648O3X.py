@@ -1,348 +1,240 @@
 
         
-                '''
-        return MockEnvironment(config_dir=self.config_dir)
+        
+class LookupService(object):
     
-            `stdout` is represented by the instance itself (print r)
-        `stderr`: text written to stderr
-        `exit_status`: the exit status
-        `json`: decoded JSON (if possible) or `None`
-    
-        def __init__(self, groups, env=Environment(), **kwargs):
-        '''
-        :param groups: names of processor groups to be applied
-        :param env: Environment
-        :param kwargs: additional keyword arguments for processors
-    
-        # If both `auth_parse` and `prompt_password` are set to `True`,
-    # and the value of `-a` lacks the password part,
-    # then the user will be prompted to type the password in.
-    prompt_password = True
-    
-        if n == 1:
-        return '1 B'
+        def add_link_to_crawl(self, url):
+        '''Add the given link to `links_to_crawl`.'''
+        pass
     
     
-def test_basic_auth(httpbin_both):
-    r = http('--auth=user:password',
-             'GET', httpbin_both + '/basic-auth/user/password')
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
+def template_function(getter, converter=False, to_save=False):
+    data = getter()
+    print('Got `{}`'.format(data))
     
-        return inner
+        # A Shop that sells only cats
+    cat_shop = PetShop(Cat)
+    cat_shop.show_pet()
+    print('')
     
     
-def test_max_redirects(httpbin):
-    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
-             error_exit_ok=True)
-    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
+class Delegate(object):
+    def __init__(self):
+        self.p1 = 123
+    
+    *What does this example do?
+    
+    
+# ConcreteImplementor 1/2
+class DrawingAPI1(object):
+    def draw_circle(self, x, y, radius):
+        print('API1.circle at {}:{} radius {}'.format(x, y, radius))
+    
+        @staticmethod
+    def ask_load(filepath, filetypes):
+        ''' Pop-up to get path to a file '''
+        filename = FileHandler('filename', filetypes).retfile
+        if filename:
+            logger.debug(filename)
+            filepath.set(filename)
+    
+        def add_info(self):
+        ''' Plugin information '''
+        info_frame = ttk.Frame(self.optsframe)
+        info_frame.pack(fill=tk.X, expand=True)
+        lbl = ttk.Label(info_frame, text='About:', width=20, anchor=tk.W)
+        lbl.pack(padx=5, pady=5, side=tk.LEFT, anchor=tk.N)
+        info = ttk.Label(info_frame, text=self.plugin_info)
+        info.pack(padx=5, pady=5, fill=tk.X, expand=True)
+        info.bind('<Configure>', adjust_wraplength)
 
     
-            if self.crawler_process.bootstrap_failed:
-            self.exitcode = 1
-
+    from queue import Queue, Empty as QueueEmpty  # pylint: disable=unused-import; # noqa
+from time import sleep
     
-        def run(self, args, opts):
-        if len(args) != 1:
-            raise UsageError()
-    
-        def syntax(self):
-        return '[options] <spider_file>'
-    
-            # set Content-Length based len of body
-        if self.body is not None:
-            self.headers['Content-Length'] = len(self.body)
-            # just in case a broken http/1.1 decides to keep connection alive
-            self.headers.setdefault('Connection', 'close')
-        # Content-Length must be specified in POST method even with no body
-        elif self.method == b'POST':
-            self.headers['Content-Length'] = 0
-    
-        def _debug_cookie(self, request, spider):
-        if self.debug:
-            cl = [to_native_str(c, errors='replace')
-                  for c in request.headers.getlist('Cookie')]
-            if cl:
-                cookies = '\n'.join('Cookie: {}\n'.format(c) for c in cl)
-                msg = 'Sending cookies to: {}\n{}'.format(request, cookies)
-                logger.debug(msg, extra={'spider': spider})
-    
-    def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url)
-    title = r1(r'<title>(.*)</title>', html)
-    assert title
-    id = r1(r'flvid\s*=\s*(\d+)', html)
-    assert id
-    baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
-    
-    site_info = 'CBS.com'
-download = cbs_download
-download_playlist = playlist_not_supported('cbs')
-
-    
-        def __init__(self):
-        super().__init__()
-        self.api_data = None
-    
-    site_info = 'FC2Video'
-download = fc2video_download
-download_playlist = playlist_not_supported('fc2video')
-
-    
-    def fetch_photo_url_list_impl(url, size, method, id_field, id_parse_func, collection_name):
-    page = get_html(url)
-    api_key = get_api_key(page)
-    ext_field = ''
-    if id_parse_func:
-        ext_field = '&%s=%s' % (id_field, id_parse_func(url, page))
-    page_number = 1
-    urls = []
-    while True:
-        call_url = tmpl_api_call % (api_key, method, ext_field, page_number)
-        photoset = json.loads(get_content_headered(call_url))[collection_name]
-        pagen = photoset['page']
-        pages = photoset['pages']
-        for info in photoset['photo']:
-            url = get_url_of_largest(info, api_key, size)
-            urls.append(url)
-        page_number = page_number + 1
-        # the typeof 'page' and 'pages' may change in different methods
-        if str(pagen) == str(pages):
-            break
-    return urls, match1(page, pattern_inline_title)
-    
-    def send_video(self, fileDir=None, toUserName=None, mediaId=None, file_=None):
-    logger.debug('Request to send a video(mediaId: %s) to %s: %s' % (
-        mediaId, toUserName, fileDir))
-    if fileDir or file_:
-        if hasattr(fileDir, 'read'):
-            file_, fileDir = fileDir, None
-        if fileDir is None:
-            fileDir = 'tmp.mp4' # specific fileDir to send other formats
-    else:
-        return ReturnValue({'BaseResponse': {
-            'ErrMsg': 'Either fileDir or file_ should be specific',
-            'Ret': -1005, }})
-    if toUserName is None:
-        toUserName = self.storageClass.userName
-    if mediaId is None:
-        r = self.upload_file(fileDir, isVideo=True, file_=file_)
-        if r:
-            mediaId = r['MediaId']
+        # disconnect dependencies between checkpointed tensors
+    checkpoints_disconnected = {}
+    for x in checkpoints:
+        if x.op and x.op.name is not None:
+            grad_node = tf.stop_gradient(x, name=x.op.name+'_sg')
         else:
-            return r
-    url = '%s/webwxsendvideomsg?fun=async&f=json&pass_ticket=%s' % (
-        self.loginInfo['url'], self.loginInfo['pass_ticket'])
-    data = {
-        'BaseRequest': self.loginInfo['BaseRequest'],
-        'Msg': {
-            'Type'         : 43,
-            'MediaId'      : mediaId,
-            'FromUserName' : self.storageClass.userName,
-            'ToUserName'   : toUserName,
-            'LocalID'      : int(time.time() * 1e4),
-            'ClientMsgId'  : int(time.time() * 1e4), },
-        'Scene': 0, }
-    headers = {
-        'User-Agent' : config.USER_AGENT,
-        'Content-Type': 'application/json;charset=UTF-8', }
-    r = self.s.post(url, headers=headers,
-        data=json.dumps(data, ensure_ascii=False).encode('utf8'))
-    return ReturnValue(rawResponse=r)
+            grad_node = tf.stop_gradient(x)
+        checkpoints_disconnected[x] = grad_node
     
-            allowed_warnings = (allowed_warnings or []) + self.get_allowed_warnings()
-        allowed_errors = (allowed_errors or []) + self.get_allowed_errors()
+        What is displayed in the Display Frame varies
+    depending on what tasked is being run '''
     
     
-@gen.engine
-def e1():
-    for i in range(10):
-        yield gen.Task(e2)
+class Adjustment():
+    ''' Parent class for adjustments '''
+    def __init__(self, configfile=None, config=None):
+        logger.debug('Initializing %s: (configfile: %s, config: %s)',
+                     self.__class__.__name__, configfile, config)
+        self.config = self.set_config(configfile, config)
+        logger.debug('config: %s', self.config)
+        logger.debug('Initialized %s', self.__class__.__name__)
     
     
-def main():
-    parse_command_line()
-    if options.dump:
-        print(tmpl.code)
-        sys.exit(0)
-    t = Timer(render)
-    results = t.timeit(options.num) / options.num
-    print('%0.3f ms per iteration' % (results * 1000))
+def get_config(plugin_name, configfile=None):
+    ''' Return the config for the requested model '''
+    return Config(plugin_name, configfile=configfile).config_dict
     
-        # HACK:  unittest.main will make its own changes to the warning
-    # configuration, which may conflict with the settings above
-    # or command-line flags like -bb.  Passing warnings=False
-    # suppresses this behavior, although this looks like an implementation
-    # detail.  http://bugs.python.org/issue15626
-    kwargs['warnings'] = False
-    
-    
-class LeakTest(unittest.TestCase):
-    def setUp(self):
-        # Trigger a cleanup of the mapping so we start with a clean slate.
-        AsyncIOLoop().close()
-        # If we don't clean up after ourselves other tests may fail on
-        # py34.
-        self.orig_policy = asyncio.get_event_loop_policy()
-        asyncio.set_event_loop_policy(asyncio.DefaultEventLoopPolicy())
-    
-        def tearDown(self):
-        self.server.stop()
-        super(ClientTestMixin, self).tearDown()  # type: ignore
-    
-            self.assertFalse(sns_listener.get_topic_by_arn(topic_arn))
-        sns_listener.do_create_topic(topic_arn)
-        self.assertTrue(sns_listener.get_topic_by_arn(topic_arn) is not None)
-        sns_listener.do_subscribe(
-            topic_arn,
-            'http://localhost:1234/listen',
-            'http',
-            sub_arn,
-            {}
-        )
-        self.assertTrue(sns_listener.get_subscription_by_arn(sub_arn))
-        sns_listener.do_unsubscribe(sub_arn)
-        self.assertFalse(sns_listener.get_subscription_by_arn(sub_arn))
-    
-            alias_arn = lambda_api.func_arn(self.FUNCTION_NAME) + ':' + self.ALIAS_NAME
-        self.assertEqual(self.ALIASEXISTS_EXCEPTION, result['__type'])
-        self.assertEqual(self.ALIASEXISTS_MESSAGE % alias_arn,
-                         result['message'])
-    
-    
-package_data = {
-    '': ['Makefile', '*.md'],
-    'localstack': [
-        'package.json',
-        'dashboard/web/*.*',
-        'dashboard/web/css/*',
-        'dashboard/web/img/*',
-        'dashboard/web/js/*',
-        'dashboard/web/views/*',
-        'ext/java/*.*',
-        'ext/java/src/main/java/com/atlassian/localstack/*.*',
-        'utils/kinesis/java/com/atlassian/*.*'
-    ]}
-    
-    
-def get_result(vec):
-    max_value_index = 0
-    max_value = 0
-    for i in range(len(vec)):
-        if vec[i] > max_value:
-            max_value = vec[i]
-            max_value_index = i
-    return max_value_index
-    
-    
-def train_and_perceptron():
-    '''
-    Desc:
-        使用 and 真值表来训练我们的感知器
-    Args:
-        None
-    Returns:
-        p —— 返回训练好的感知器
-    '''
-    # 创建感知器，输入参数的个数是 2 个（因为 and 是个二元函数），激活函数为 f
-    p = Perceptron(2, f)
-    # 进行训练，迭代 10 轮，学习速率是我们设定的 rate ，为 0.1
-    input_vecs, labels = get_training_dataset()
-    p.train(input_vecs, labels, 10, 0.1)
-    # 返回训练好的感知器
-    return p
-    
-        # cov协方差=[(x1-x均值)*(y1-y均值)+(x2-x均值)*(y2-y均值)+...+(xn-x均值)*(yn-y均值)+]/(n-1)
-    '''
-    方差：（一维）度量两个随机变量关系的统计量
-    协方差： （二维）度量各个维度偏离其均值的程度
-    协方差矩阵：（多维）度量各个维度偏离其均值的程度
-    
-            self._colors = {
-            'A': '#00cc00',
-            'B': '#00cc00',
-            'C': '#00aacc',
-            'D': '#888888',
-            'E': '#cccc00',
-            'F': '#ff0000',
-            'H': '#22aa22',
-            'I': '#cc0000',
-            'J': '#000000',
-        }
-    
-    def _colorize(text):
-    return \
-        re.sub(
-            r'`(.*?)`',
-            colored.bg('dark_gray') \
-                + colored.fg('white') \
-                + ' ' + r'\1' + ' ' \
-                + colored.attr('reset'),
-            re.sub(
-                r'\*\*(.*?)\*\*',
-                colored.attr('bold') \
-                    + colored.fg('white') \
-                    + r'\1' \
-                    + colored.attr('reset'),
-                text))
-    
-            local_repository_dir = cls.local_repository_location()
-        if not local_repository_dir:
-            return None
-    
-            answer = sorted([
-            os.path.basename(f_name) for f_name in glob.glob(template)])
-        return '\n'.join(answer) + '\n'
-    
-        def _get_page(self, topic, request_options=None):
-        from_, topic = topic.split('/', 1)
-        to_ = request_options.get('lang', 'en')
-        if '-' in from_:
-            from_, to_ = from_.split('-', 1)
-    
-        def _get_page(self, topic, request_options=None):
-        sys.path.append(os.path.join(self.local_repository_location(), 'bin'))
-        import latencies
-        return latencies.render()
-    
-                answer.append(line)
-    
-    def _limited_answer(answer):
-    return colored.bg('dark_goldenrod') + colored.fg('yellow_1') \
-        + ' ' +  answer + ' ' \
-        + colored.attr('reset') + '\n'
-    
-        edit_button = ''
-    if editable:
-        # It's possible that topic directory starts with omitted underscore
-        if '/' in query:
-            query = '_' + query
-        edit_page_link = 'https://github.com/chubin/cheat.sheets/edit/master/sheets/' + query
-        edit_button = (
-            '<pre style='position:absolute;padding-left:40em;overflow:visible;height:0;'>'
-            '[<a href='%s' style='color:cyan'>edit</a>]'
-            '</pre>') % edit_page_link
-    result = re.sub('<pre>', edit_button + form_html + '<pre>', result)
-    result = re.sub('<head>', '<head>' + title, result)
-    if not request_options.get('quiet'):
-        result = result.replace('</body>',
-                                TWITTER_BUTTON \
-                                + GITHUB_BUTTON \
-                                + repository_button \
-                                + GITHUB_BUTTON_FOOTER \
-                                + '</body>')
-    return result
+        def blend(self, mask):
+        ''' Blur mask if requested '''
+        logger.trace('Blending mask')
+        mask = BlurMask(self.config['type'],
+                        mask,
+                        self.config['radius'],
+                        self.config['passes']).blurred
+        return mask
 
     
-            def __get_topic_type(topic):
-            for regexp, route in self.routing_table:
-                if re.search(regexp, topic):
-                    if route in self._adapter:
-                        if self._adapter[route].is_found(topic):
-                            return route
-                    else:
-                        return route
-            return CONFIG['routing.default']
     
-        answers_found = []
-    for topic in get_topics_list(skip_internal=True, skip_dirs=True):
+_HELPTEXT = 'Options for blending the edges between the mask and the background image'
+    
+        # list of integers
+    result = s.iloc[[0, 2, 3, 4, 5]]
+    expected = s.reindex(s.index[[0, 2, 3, 4, 5]])
+    assert_series_equal(result, expected)
+    
+    
+class TestReductions:
+    def test_min_max(self):
+        arr = period_array(
+            [
+                '2000-01-03',
+                '2000-01-03',
+                'NaT',
+                '2000-01-02',
+                '2000-01-05',
+                '2000-01-04',
+            ],
+            freq='D',
+        )
+    
+        @pytest.mark.xfail(
+        reason='casts to object-dtype and then tries to add timestamps',
+        raises=TypeError,
+        strict=True,
+    )
+    def test_mean_datetimelike_numeric_only_false(self):
+        df = pd.DataFrame(
+            {
+                'A': np.arange(3),
+                'B': pd.date_range('2016-01-01', periods=3),
+                'C': pd.timedelta_range('1D', periods=3),
+                'D': pd.period_range('2016', periods=3, freq='A'),
+            }
+        )
+    
+        @pytest.mark.parametrize(
+        'input_vals',
+        [
+            ([1, 2]),
+            (['1', '2']),
+            (list(pd.date_range('1/1/2011', periods=2, freq='H'))),
+            (list(pd.date_range('1/1/2011', periods=2, freq='H', tz='US/Eastern'))),
+            ([pd.Interval(left=0, right=5)]),
+        ],
+    )
+    def test_constructor_list_str(self, input_vals, string_dtype):
+        # GH 16605
+        # Ensure that data elements are converted to strings when
+        # dtype is str, 'str', or 'U'
+    
+        expected = DataFrame(
+        [a_expected, b_expected], columns=['val'], index=Index(['a', 'b'], name='key')
+    )
+    result = df.groupby('key').quantile(q, interpolation=interpolation)
+    
+    
+class TestDatetimeIndexRendering:
+    def test_dti_repr_short(self):
+        dr = pd.date_range(start='1/1/2012', periods=1)
+        repr(dr)
+    
+    
+def test_from_product_datetimeindex():
+    dt_index = date_range('2000-01-01', periods=2)
+    mi = pd.MultiIndex.from_product([[1, 2], dt_index])
+    etalon = construct_1d_object_array_from_listlike(
+        [
+            (1, pd.Timestamp('2000-01-01')),
+            (1, pd.Timestamp('2000-01-02')),
+            (2, pd.Timestamp('2000-01-01')),
+            (2, pd.Timestamp('2000-01-02')),
+        ]
+    )
+    tm.assert_numpy_array_equal(mi.values, etalon)
+    
+            print('Test: Two or more element stack (general case)')
+        num_items = 10
+        numbers = [randint(0, 10) for x in range(num_items)]
+        sorted_stack = self.get_sorted_stack(stack, numbers)
+        sorted_numbers = []
+        for _ in range(num_items):
+            sorted_numbers.append(sorted_stack.pop())
+        assert_equal(sorted_numbers, sorted(numbers, reverse=True))
+    
+    			while successor.leftChild is not None:
+				successorParent = successor
+				successor = successor.leftChild
+    
+    def main():
+    testing = TestBinaryTree()
+    testing.test_insert_traversals()
+    testing.test_max_min_nodes()
+    testing.test_delete()
+    
+if __name__=='__main__':
+    main()
+    
+        # if everything correct
+    return True
+    
+        def remove_key(self, key):
+        self._remove_key(self.root, key)
+    
+            with open(self.file_in_name, 'rb') as file_1, open(self.file_out_name, 'rb') as file_2:
+            content_1 = file_1.read()
+            content_2 = file_2.read()
+    
+            for num in arr:
+            digit_number = num // position % 10
+            queue_list[digit_number].append(num)
+    
+    def remove_dups_wothout_set(head):
+    '''
+    Time Complexity: O(N^2)
+    Space Complexity: O(1)
+    '''
+    current = head
+    while current:
+        runner = current
+        while runner.next:
+            if runner.next.val == current.val:
+                runner.next = runner.next.next
+            else:
+                runner = runner.next
+        current = current.next
+    
+      def testFnScript(self):
+    script = completion.Script('identity', tc.identity)
+    self.assertIn('--arg1', script)
+    self.assertIn('--arg2', script)
+    self.assertIn('--arg3', script)
+    self.assertIn('--arg4', script)
+    
+      def collect_widgets(self):
+    '''Returns all the widgets the Collector wants.'''
+    return [widget.Widget() for _ in range(self.desired_widget_count)]
+    
+    
+if __name__ == '__main__':
+  testutils.main()
+
+    
+    '''Test the test utilities for Fire's tests.'''
+    
+    This file is useful for replicating test results manually.
+'''
