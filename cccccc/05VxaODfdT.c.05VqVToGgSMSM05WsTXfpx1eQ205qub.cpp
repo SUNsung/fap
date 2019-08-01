@@ -1,232 +1,275 @@
 
         
         
-    {
-    {
-    {
-    {      // Add the completed element to the tuple.
-      tupleNode->addChild(elt, Dem);
-    }
-    return tupleNode;
-  }
-  case MetadataKind::HeapLocalVariable:
-  case MetadataKind::HeapGenericLocalVariable:
-  case MetadataKind::ErrorObject:
-    break;
-  case MetadataKind::Opaque:
-  default: {
-    if (auto builtinType = _buildDemanglerForBuiltinType(type, Dem))
-      return builtinType;
+OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_ENTER
     
-    // FIXME: Some opaque types do have manglings, but we don't have enough info
-    // to figure them out.
-    break;
-  }
-  }
-  // Not a type.
-  return nullptr;
+    
+template <>
+const char *
+FloatVectorAttribute::staticTypeName ()
+{
+    return 'floatvector';
 }
     
-      SILFunction *getDynamicallyReplacedFunction() const {
-    return ReplacedFunction;
-  }
-  void setDynamicallyReplacedFunction(SILFunction *f) {
-    assert(ReplacedFunction == nullptr && 'already set');
-    assert(!hasObjCReplacement());
+    class  FrameBuffer;
+class  DeepFrameBuffer;
+struct DeepSlice;
+    
+    //-----------------------------------------------------------------------------
+//
+//      class Slice
+//      class FrameBuffer
+//
+//-----------------------------------------------------------------------------
+    
+    //-----------------------------------------------------------------------------
+//
+//      class Slice
+//      class FrameBuffer
+//
+//-----------------------------------------------------------------------------
+    
+        if (getVersion (version) != EXR_VERSION)
+    {
+        THROW (IEX_NAMESPACE::InputExc, 'Cannot read '
+                              'version ' << getVersion (version) << ' '
+                              'image files.  Current file format version '
+                              'is ' << EXR_VERSION << '.');
     }
     
-    #endif
+    
+//-----------------------------------------------------------------------------
+//
+//	Low-level file input and output for OpenEXR.
+//
+//-----------------------------------------------------------------------------
+    
+    OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_EXIT
+    
+    
+void
+InputFile::compatibilityInitialize (OPENEXR_IMF_INTERNAL_NAMESPACE::IStream& is)
+{
+    is.seekg(0);
+    }
+    
+            IMF_EXPORT
+        const char *        fileName () const;
+        IMF_EXPORT
+        const Header &      header () const;
+        IMF_EXPORT
+        int                 version () const;
+        IMF_EXPORT
+        void                setFrameBuffer (const FrameBuffer &frameBuffer);
+        IMF_EXPORT
+        const FrameBuffer & frameBuffer () const;
+        IMF_EXPORT
+        bool                isComplete () const;
+        IMF_EXPORT
+        bool                isOptimizationEnabled () const;
+        IMF_EXPORT
+        void                readPixels (int scanLine1, int scanLine2);
+        IMF_EXPORT
+        void                readPixels (int scanLine);
+        IMF_EXPORT
+        void                rawPixelData (int firstScanLine,
+                                          const char *&pixelData,
+                                          int &pixelDataSize);
+    
+    
+    {}  // namespace tesseract.
 
     
+      // Adds a new point. Takes a copy - the pt doesn't need to stay in scope.
+  // Add must be called on points in sequence along the line.
+  void Add(const ICOORD& pt);
+  // Associates a half-width with the given point if a point overlaps the
+  // previous point by more than half the width, and its distance is further
+  // than the previous point, then the more distant point is ignored in the
+  // distance calculation. Useful for ignoring i dots and other diacritics.
+  void Add(const ICOORD& pt, int halfwidth);
     
-    {  // We do not use %p here for our pointers since the format is implementation
-  // defined. This makes it logically impossible to check the output. Forcing
-  // hexadecimal solves this issue.
-  // If the symbol is not available, we print out <unavailable> + offset
-  // from the base address of where the image containing framePC is mapped.
-  // This gives enough info to reconstruct identical debugging target after
-  // this process terminates.
-  if (shortOutput) {
-    fprintf(stderr, '%s`%s + %td', libraryName.data(), symbolName.c_str(),
-            offset);
-  } else {
-    constexpr const char *format = '%-4u %-34s 0x%0.16' PRIxPTR ' %s + %td\n';
-    fprintf(stderr, format, index, libraryName.data(), symbolAddr,
-            symbolName.c_str(), offset);
+    class QRSequenceGenerator {
+ public:
+  // Object is initialized with the size of the output range.
+  explicit QRSequenceGenerator(int N) : N_(N), next_num_(0) {
+    num_bits_ = static_cast<int>(ceil(log(static_cast<double>(N)) / log(2.0)));
   }
-#else
-  if (shortOutput) {
-    fprintf(stderr, '<unavailable>');
-  } else {
-    constexpr const char *format = '%-4u 0x%0.16tx\n';
-    fprintf(stderr, format, index, reinterpret_cast<uintptr_t>(framePC));
-  }
-#endif
-}
+    }
     
     
-    {  const SelfWitnessTableMetadataSource *
-  createSelfWitnessTable() {
-    return SelfWitnessTableMetadataSource::create(*this);
-  }
+    {  UNICHARMAP_NODE* nodes;
 };
     
     
-OPENEXR_IMF_INTERNAL_NAMESPACE_SOURCE_ENTER
-    
-    
-OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_EXIT
-    
-    
-    
-    Slice::Slice (PixelType t,
-              char *b,
-              size_t xst,
-              size_t yst,
-              int xsm,
-              int ysm,
-              double fv,
-              bool xtc,
-              bool ytc)
-:
-    type (t),
-    base (b),
-    xStride (xst),
-    yStride (yst),
-    xSampling (xsm),
-    ySampling (ysm),
-    fillValue (fv),
-    xTileCoords (xtc),
-    yTileCoords (ytc)
-{
-    // empty
-}
-    
-        IMF_EXPORT
-    Iterator                    find (const char name[]);
-    IMF_EXPORT
-    ConstIterator               find (const char name[]) const;
-    
-    OPENEXR_IMF_INTERNAL_NAMESPACE_SOURCE_ENTER
-    
-        typedef std::map <Name, Attribute *> AttributeMap;
-    
-    OPENEXR_IMF_INTERNAL_NAMESPACE_SOURCE_EXIT
-
-    
-    class InputPart
-{
-    public:
-        IMF_EXPORT
-        InputPart(MultiPartInputFile& multiPartFile, int partNumber);
-    }
-    
-    #endif /* ERRORS_HPP_ */
-
-    
-    
-    {        sindex_sbs_out->push_back(
-                make_scoped<sindex_access_t>(
-                        get_sindex_slice(it->second.id),
-                        it->first,
-                        it->second,
-                        make_scoped<sindex_superblock_t>(std::move(superblock_lock))));
-    }
-    
-    // Next, associate a list of types with the test case, which will be
-// repeated for each type in the list.  The typedef is necessary for
-// the macro to parse correctly.
-typedef testing::Types<char, int, unsigned int> MyTypes;
-TYPED_TEST_CASE(FooTest, MyTypes);
-    
-      // RemoveFileName returns the directory path with the filename removed.
-  // Example: FilePath('path/to/file').RemoveFileName() returns 'path/to/'.
-  // If the FilePath is 'a_file' or '/a_file', RemoveFileName returns
-  // FilePath('./') or, on Windows, FilePath('.\\'). If the filepath does
-  // not have a file, like 'just/a/dir/', it returns the FilePath unmodified.
-  // On Windows platform, '\' is the path separator, otherwise it is '/'.
-  FilePath RemoveFileName() const;
-    
-    
-    {    const ParamGeneratorInterface<ParamType>* const base_;
-    // begin[i]_ and end[i]_ define the i-th range that Iterator traverses.
-    // current[i]_ is the actual traversing iterator.
-    const typename ParamGenerator<T1>::iterator begin1_;
-    const typename ParamGenerator<T1>::iterator end1_;
-    typename ParamGenerator<T1>::iterator current1_;
-    const typename ParamGenerator<T2>::iterator begin2_;
-    const typename ParamGenerator<T2>::iterator end2_;
-    typename ParamGenerator<T2>::iterator current2_;
-    const typename ParamGenerator<T3>::iterator begin3_;
-    const typename ParamGenerator<T3>::iterator end3_;
-    typename ParamGenerator<T3>::iterator current3_;
-    const typename ParamGenerator<T4>::iterator begin4_;
-    const typename ParamGenerator<T4>::iterator end4_;
-    typename ParamGenerator<T4>::iterator current4_;
-    ParamType current_value_;
-  };  // class CartesianProductGenerator4::Iterator
-    
-      std::unique_ptr<ChannelInterface> GetInterceptedChannel() override {
-    auto* info = call_->client_rpc_info();
-    if (info == nullptr) {
-      return std::unique_ptr<ChannelInterface>(nullptr);
-    }
-    // The intercepted channel starts from the interceptor just after the
-    // current interceptor
-    return std::unique_ptr<ChannelInterface>(new InterceptedChannel(
-        info->channel(), current_interceptor_index_ + 1));
-  }
-    
-    extern grpc_tcp_server_vtable grpc_windows_tcp_server_vtable;
-extern grpc_tcp_client_vtable grpc_windows_tcp_client_vtable;
-extern grpc_timer_vtable grpc_generic_timer_vtable;
-extern grpc_pollset_vtable grpc_windows_pollset_vtable;
-extern grpc_pollset_set_vtable grpc_windows_pollset_set_vtable;
-extern grpc_address_resolver_vtable grpc_windows_resolver_vtable;
-    
-    void grpc_socket_notify_on_read(grpc_winsocket* socket, grpc_closure* closure) {
-  socket_notify_on_iocp(socket, closure, &socket->read_info);
-}
-    
-    #include <grpc/support/port_platform.h>
-    
-    GPR_GLOBAL_CONFIG_DECLARE_BOOL(bool_var);
-    
-    #ifndef NDEBUG
-#define GRPC_COMBINER_DEBUG_ARGS \
-  , const char *file, int line, const char *reason
-#define GRPC_COMBINER_REF(combiner, reason) \
-  grpc_combiner_ref((combiner), __FILE__, __LINE__, (reason))
-#define GRPC_COMBINER_UNREF(combiner, reason) \
-  grpc_combiner_unref((combiner), __FILE__, __LINE__, (reason))
-#else
-#define GRPC_COMBINER_DEBUG_ARGS
-#define GRPC_COMBINER_REF(combiner, reason) grpc_combiner_ref((combiner))
-#define GRPC_COMBINER_UNREF(combiner, reason) grpc_combiner_unref((combiner))
-#endif
-    
-    
     {
-    { private:
-  std::shared_ptr<grpc::Channel> CreateChannelWithInterceptors(
-      const string& target, const grpc::ChannelArguments& args,
-      std::vector<
-          std::unique_ptr<experimental::ClientInterceptorFactoryInterface>>
-          interceptor_creators) override {
-    grpc_channel_args channel_args;
-    args.SetChannelArgs(&channel_args);
-    return CreateChannelInternal(
-        '',
-        grpc_cronet_secure_channel_create(engine_, target.c_str(),
-                                          &channel_args, nullptr),
-        std::move(interceptor_creators));
-  }
-  void* engine_;
+  // Total scaled error used by boosting algorithms.
+  double scaled_error_;
+  // Difference in result rating to be thought of as an 'equal' choice.
+  double rating_epsilon_;
+  // Vector indexed by font_id from the samples of error accumulators.
+  GenericVector<Counts> font_counts_;
+  // Counts of the results that map each unichar_id (from samples) to an
+  // incorrect shape_id.
+  GENERIC_2D_ARRAY<int> unichar_counts_;
+  // Count of the number of times each shape_id occurs, is correct, and multi-
+  // unichar.
+  GenericVector<int> multi_unichar_counts_;
+  // Histogram of scores (as percent) for correct answers.
+  STATS ok_score_hist_;
+  // Histogram of scores (as percent) for incorrect answers.
+  STATS bad_score_hist_;
+  // Unicharset for printing character ids in results.
+  const UNICHARSET& unicharset_;
 };
-}  // namespace grpc
-namespace grpc_impl {
-std::shared_ptr<ChannelCredentials> CronetChannelCredentials(void* engine) {
-  return std::shared_ptr<ChannelCredentials>(
-      new grpc::CronetChannelCredentialsImpl(engine));
+    
+      void DirectFreeNoLock(Storage::Handle handle) {
+    mxnet::common::cuda::DeviceStore device_store(handle.ctx.real_dev_id(), true);
+    cudaError_t err = cudaFree(handle.dptr);
+    size_t size = get_size(get_bucket(handle.size));
+    // ignore unloading error, as memory has already been recycled
+    if (err != cudaSuccess && err != cudaErrorCudartUnloading) {
+      LOG(FATAL) << 'CUDA: ' << cudaGetErrorString(err);
+    }
+    used_memory_ -= size;
+  }
+    
+                const char *type = getenv('MXNET_GPU_MEM_POOL_TYPE');
+            const bool default_pool = (type == nullptr);
+            if (default_pool) type = 'Naive';
+            std::string strategy = type;
+    
+          // [start, end) interval for spatial sampling
+      const DType* offset_bottom_rois = bottom_rois + n * 5;
+      index_t roi_batch_ind = offset_bottom_rois[0];
+      DType roi_start_w = static_cast<DType>(round(offset_bottom_rois[1])) * spatial_scale - 0.5;
+      DType roi_start_h = static_cast<DType>(round(offset_bottom_rois[2])) * spatial_scale - 0.5;
+      DType roi_end_w = static_cast<DType>(round(offset_bottom_rois[3]) + 1.) * spatial_scale - 0.5;
+      DType roi_end_h = static_cast<DType>(round(offset_bottom_rois[4]) + 1.) * spatial_scale - 0.5;
+    
+      // create shape map for in_args and aux_states
+  std::unordered_map<std::string, mxnet::TShape> arg_shape_map(num_provided_arg_shapes);
+  for (mx_uint i = 0; i < num_provided_arg_shapes; ++i) {
+    auto p = arg_shape_map.emplace(provided_arg_shape_names[i],
+        mxnet::TShape(provided_arg_shape_data+provided_arg_shape_idx[i],
+          provided_arg_shape_data+provided_arg_shape_idx[i+1]));
+    CHECK(p.second) << 'Duplicate shapes are provided for argument '
+      << provided_arg_shape_names[i] << ' in simple_bind';
+  }
+  if (!Imperative::Get()->is_np_shape()) {
+    for (auto &kv : arg_shape_map) {
+      common::ConvertToNumpyShape(&kv.second);
+    }
+  }
+    
+      for (int i = ndim - 1; i >= 0; i--) {
+    index_products[i] = index_products[i + 1] * inshape[i];
+  }
+    
+    /*! \brief Cuda runtime compile module. */
+class CudaModule {
+ private:
+  /*! \brief Structure for holding internal info. */
+  struct Chunk {
+    /*!
+     * \brief Constructs cuda module.
+     * \param source cuda source code.
+     * \param exports export symbols before mangling.
+     */
+    Chunk(const char* source,
+          const std::vector<std::string>& options,
+          const std::vector<std::string>& exports);
+    /*! \brief deconstrutor */
+    ~Chunk();
+    /*!
+     * \brief Get handle to cuda kernel from loaded module
+     * \param mangled_name mangled kernel name
+     * \param ctx context to run kernel on
+     * \return loaded function handle
+     */
+    CUfunction GetFunction(const std::string& mangled_name, const Context& ctx);
+    /*! \brief nvrtc program handle. */
+    nvrtcProgram prog_;
+    /*! \brief compiled cuda PTX */
+    char* ptx_;
+    /*! \brief lazily loaded cuda module */
+    std::unordered_map<int, CUmodule> mod_;
+    /*! \brief exported names */
+    std::unordered_set<std::string> exports_;
+  };
+  /*! \brief pointer to Chunk */
+  std::shared_ptr<Chunk> ptr_;
+    }
+    
+      Location m_loc;
+  std::vector<Location::Range> m_funcLocs;
+  std::vector<bool> m_classes; // used to determine if we are currently
+                               // inside a regular class or an XHP class
+    
+    #include <boost/ptr_container/ptr_vector.hpp>
+    
+    TEST_F(ProxygenTransportBasicTest, no_length) {
+  auto req = getRequest(HTTPMethod::POST);
+  m_transport->onHeadersComplete(std::move(req));
 }
-}  // namespace grpc_impl
+    
+    // Relational comparisons of vecs with non-vecs isn't allowed and will always
+// throw. Equality comparisons always act as if they are not equal.
+SSATmp* emitMixedVecCmp(IRGS& env, Op op) {
+  switch (op) {
+    case Op::Gt:
+    case Op::Gte:
+    case Op::Lt:
+    case Op::Lte:
+    case Op::Cmp:
+      gen(
+        env,
+        ThrowInvalidOperation,
+        cns(env, s_cmpWithVec.get())
+      );
+      return cns(env, false);
+    case Op::Same:
+    case Op::Eq: return cns(env, false);
+    case Op::NSame:
+    case Op::Neq: return cns(env, true);
+    default: always_assert(false);
+  }
+}
+    
+      req::vector<StringData*> pathListStringData;
+  IterateVNoInc(
+    pathList.get(),
+    [&] (TypedValue tv) {
+      if (UNLIKELY(!isStringType(tv.m_type))) {
+        SystemLib::throwInvalidOperationExceptionObject(
+          'HH\\facts_parse expects a varray<string> but was given an array '
+          'with a non-string value.'
+        );
+      }
+      pathListStringData.push_back(tv.m_data.pstr);
+    }
+  );
+    
+    int main()
+{
+    // create a JSON value
+    json j =
+    {
+        {'number', 1}, {'string', 'foo'}, {'array', {1, 2}}
+    };
+    }
+    
+        // out_of_range.401
+    try
+    {
+        // try to use a an invalid array index
+        json::const_reference ref = j.at('/array/4'_json_pointer);
+    }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+    
+        // create an array from std::list
+    std::list<bool> c_list {true, true, false, true};
+    json j_list(c_list);
