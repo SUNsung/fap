@@ -1,241 +1,275 @@
 
         
-          EXPECT_EXIT(decode_data.AddString(1, '', ''),
-              ::testing::KilledBySignal(SIGABRT),
-              'error: got empty string for making TextFormat data, input:');
-  EXPECT_EXIT(decode_data.AddString(1, 'a', ''),
-              ::testing::KilledBySignal(SIGABRT),
-              'error: got empty string for making TextFormat data, input:');
-  EXPECT_EXIT(decode_data.AddString(1, '', 'a'),
-              ::testing::KilledBySignal(SIGABRT),
-              'error: got empty string for making TextFormat data, input:');
-    
-    #include <google/protobuf/stubs/logging.h>
-#include <google/protobuf/stubs/common.h>
-    
-    #ifdef _WIN32
-#ifndef STDIN_FILENO
-#define STDIN_FILENO 0
-#endif
-#ifndef STDOUT_FILENO
-#define STDOUT_FILENO 1
-#endif
-#endif
-    
-     public:
-  static void StripFile(const FileDescriptor* old_file,
-                        FileDescriptorProto *file) {
-    for (int i = file->mutable_message_type()->size() - 1; i >= 0; i--) {
-      if (IsMessageSet(old_file->message_type(i))) {
-        file->mutable_message_type()->DeleteSubrange(i, 1);
-        continue;
-      }
-      StripMessage(old_file->message_type(i), file->mutable_message_type(i));
+            guarantee(start <= finish);
+    for (int i = start; i < finish; ++i) {
+        cond_t dummy_interruptor;
+        scoped_ptr_t<txn_t> txn;
+        {
+            scoped_ptr_t<real_superblock_t> superblock;
+            write_token_t token;
+            store->new_write_token(&token);
+            store->acquire_superblock_for_write(
+                1, write_durability_t::SOFT,
+                &token, &txn, &superblock, &dummy_interruptor);
+            buf_lock_t sindex_block(
+                superblock->expose_buf(),
+                superblock->get_sindex_block_id(),
+                access_t::write);
     }
-    for (int i = file->mutable_extension()->size() - 1; i >= 0; i--) {
-      auto field = old_file->extension(i);
-      if (field->type() == FieldDescriptor::TYPE_GROUP ||
-          IsMessageSet(field->message_type()) ||
-          IsMessageSet(field->containing_type())) {
-        file->mutable_extension()->DeleteSubrange(i, 1);
-      }
     }
+    
+    #define EXPECT_FATAL_FAILURE_ON_ALL_THREADS(statement, substr) \
+  do { \
+    class GTestExpectFatalFailureHelper {\
+     public:\
+      static void Execute() { statement; }\
+    };\
+    ::testing::TestPartResultArray gtest_failures;\
+    ::testing::internal::SingleFailureChecker gtest_checker(\
+        &gtest_failures, ::testing::TestPartResult::kFatalFailure, (substr));\
+    {\
+      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
+          ::testing::ScopedFakeTestPartResultReporter:: \
+          INTERCEPT_ALL_THREADS, &gtest_failures);\
+      GTestExpectFatalFailureHelper::Execute();\
+    }\
+  } while (::testing::internal::AlwaysFalse())
+    
+    // The 'Types' template argument below must have spaces around it
+// since some compilers may choke on '>>' when passing a template
+// instance (e.g. Types<int>)
+# define TYPED_TEST_CASE(CaseName, Types) \
+  typedef ::testing::internal::TypeList< Types >::type \
+      GTEST_TYPE_PARAMS_(CaseName)
+    
+    template <int k>
+struct SameSizeTuplePrefixComparator<k, k> {
+  template <class Tuple1, class Tuple2>
+  static bool Eq(const Tuple1& t1, const Tuple2& t2) {
+    return SameSizeTuplePrefixComparator<k - 1, k - 1>::Eq(t1, t2) &&
+        ::std::tr1::get<k - 1>(t1) == ::std::tr1::get<k - 1>(t2);
   }
+};
     
-    #include 'addressbook.pb.h'
+        void Shutdown() {
+      gpr_log(GPR_INFO, '%s about to shutdown', type_.c_str());
+      server_->Shutdown(grpc_timeout_milliseconds_to_deadline(0));
+      thread_->join();
+      gpr_log(GPR_INFO, '%s shutdown completed', type_.c_str());
+    }
     
-    TEST_P(FooTest, DoesBlah) {
-  // Inside a test, access the test parameter with the GetParam() method
-  // of the TestWithParam<T> class:
-  EXPECT_TRUE(foo.Blah(GetParam()));
-  ...
+    
+    {  thr.join();
 }
     
-    // A copyable object representing the result of a test part (i.e. an
-// assertion or an explicit FAIL(), ADD_FAILURE(), or SUCCESS()).
-//
-// Don't inherit from TestPartResult as its destructor is not virtual.
-class GTEST_API_ TestPartResult {
+    /* Tries to issue one async connection, then schedules both an IOCP
+   notification request for the connection, and one timeout alert. */
+static void tcp_connect(grpc_closure* on_done, grpc_endpoint** endpoint,
+                        grpc_pollset_set* interested_parties,
+                        const grpc_channel_args* channel_args,
+                        const grpc_resolved_address* addr,
+                        grpc_millis deadline) {
+  SOCKET sock = INVALID_SOCKET;
+  BOOL success;
+  int status;
+  grpc_resolved_address addr6_v4mapped;
+  grpc_resolved_address local_address;
+  async_connect* ac;
+  grpc_winsocket* socket = NULL;
+  LPFN_CONNECTEX ConnectEx;
+  GUID guid = WSAID_CONNECTEX;
+  DWORD ioctl_num_bytes;
+  grpc_winsocket_callback_info* info;
+  grpc_error* error = GRPC_ERROR_NONE;
+    }
+    
+    static inline std::shared_ptr<::grpc::Channel> CreateChannel(
+    const grpc::string& target,
+    const std::shared_ptr<ChannelCredentials>& creds) {
+  return ::grpc_impl::CreateChannelImpl(target, creds);
+}
+    
+    #endif  // GRPCPP_SUPPORT_CHANNEL_ARGUMENTS_H
+
+    
+      request.set_message('Hello');
+  EXPECT_TRUE(stream->Write(request));
+  EXPECT_TRUE(stream->Read(&response));
+  EXPECT_EQ(response.message(), request.message());
+    
+    
+    { protected:
+  std::unique_ptr<Server> server_;
+  std::unique_ptr<grpc::testing::EchoTestService::Stub> stub_;
+  std::unique_ptr<ProtoReflectionDescriptorDatabase> desc_db_;
+  std::unique_ptr<protobuf::DescriptorPool> desc_pool_;
+  std::unordered_set<string> known_files_;
+  std::unordered_set<string> known_types_;
+  const protobuf::DescriptorPool* ref_desc_pool_;
+  int port_;
+  reflection::ProtoServerReflectionPlugin plugin_;
+};
+    
+    
+    { private:
+  std::string dbname_;
+  Cache* tiny_cache_;
+  Options options_;
+  DB* db_;
+};
+    
+      // Return the ith key
+  Slice Key(int i, std::string* storage) {
+    char buf[100];
+    snprintf(buf, sizeof(buf), '%016d', i);
+    storage->assign(buf, strlen(buf));
+    return Slice(*storage);
+  }
+    
+      void GetRange2(const std::vector<FileMetaData*>& inputs1,
+                 const std::vector<FileMetaData*>& inputs2,
+                 InternalKey* smallest, InternalKey* largest);
+    
+      // Given a key, return an approximate byte offset in the file where
+  // the data for that key begins (or would begin if the key were
+  // present in the file).  The returned value is in terms of file
+  // bytes, and so includes effects like compression of the underlying data.
+  // E.g., the approximate offset of the last key in the table will
+  // be close to the file length.
+  uint64_t ApproximateOffsetOf(const Slice& key) const;
+    
+    class FilterBlockReader {
  public:
-  // The possible outcomes of a test part (i.e. an assertion or an
-  // explicit SUCCEED(), FAIL(), or ADD_FAILURE()).
-  enum Type {
-    kSuccess,          // Succeeded.
-    kNonFatalFailure,  // Failed but the test can continue.
-    kFatalFailure      // Failed and the test should be terminated.
+  // REQUIRES: 'contents' and *policy must stay live while *this is live.
+  FilterBlockReader(const FilterPolicy* policy, const Slice& contents);
+  bool KeyMayMatch(uint64_t block_offset, const Slice& key);
+    }
+    
+    Arena::Arena()
+    : alloc_ptr_(nullptr), alloc_bytes_remaining_(0), memory_usage_(0) {}
+    
+    
+    {    static void Run(void* arg) {
+      Callback* callback = reinterpret_cast<Callback*>(arg);
+      int current_id = callback->last_id_ptr_->load(std::memory_order_relaxed);
+      ASSERT_EQ(callback->id_ - 1, current_id);
+      callback->last_id_ptr_->store(callback->id_, std::memory_order_relaxed);
+    }
   };
+    
+    class BSONObj;
+class CappedInsertNotifier;
+struct CappedInsertNotifierData;
+class Collection;
+class PlanExecutor;
+class PlanStage;
+class PlanYieldPolicy;
+class RecordId;
+struct PlanStageStats;
+class WorkingSet;
+    
+            // Begin running the count
+        while (numCounted < 2) {
+            countState = count.work(&wsid);
+            if (PlanStage::ADVANCED == countState)
+                numCounted++;
+        }
+    
+        pat     = RegexPattern::compile(regex, 0, pe, status);
+    matcher = pat->matcher(status);
+    if (U_SUCCESS(status)) {
+        matcher->reset(input);
+        retVal  = matcher->matches(status);
     }
     
-    #if GTEST_HAS_TYPED_TEST || GTEST_HAS_TYPED_TEST_P
+    void
+RuleBasedCollator::setReorderCodes(const int32_t *reorderCodes, int32_t length,
+                                   UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return; }
+    if(length < 0 || (reorderCodes == NULL && length > 0)) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    if(length == 1 && reorderCodes[0] == UCOL_REORDER_CODE_NONE) {
+        length = 0;
+    }
+    if(length == settings->reorderCodesLength &&
+            uprv_memcmp(reorderCodes, settings->reorderCodes, length * 4) == 0) {
+        return;
+    }
+    const CollationSettings &defaultSettings = getDefaultSettings();
+    if(length == 1 && reorderCodes[0] == UCOL_REORDER_CODE_DEFAULT) {
+        if(settings != &defaultSettings) {
+            CollationSettings *ownedSettings = SharedObject::copyOnWrite(settings);
+            if(ownedSettings == NULL) {
+                errorCode = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
+            ownedSettings->copyReorderingFrom(defaultSettings, errorCode);
+            setFastLatinOptions(*ownedSettings);
+        }
+        return;
+    }
+    CollationSettings *ownedSettings = SharedObject::copyOnWrite(settings);
+    if(ownedSettings == NULL) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    ownedSettings->setReordering(*data, reorderCodes, length, errorCode);
+    setFastLatinOptions(*ownedSettings);
+}
     
-      template <typename T>
-  operator ParamGenerator<T>() const {
-    const T array[] = {static_cast<T>(v1_), static_cast<T>(v2_),
-        static_cast<T>(v3_), static_cast<T>(v4_), static_cast<T>(v5_),
-        static_cast<T>(v6_), static_cast<T>(v7_), static_cast<T>(v8_),
-        static_cast<T>(v9_), static_cast<T>(v10_), static_cast<T>(v11_),
-        static_cast<T>(v12_), static_cast<T>(v13_), static_cast<T>(v14_),
-        static_cast<T>(v15_), static_cast<T>(v16_), static_cast<T>(v17_),
-        static_cast<T>(v18_), static_cast<T>(v19_), static_cast<T>(v20_),
-        static_cast<T>(v21_), static_cast<T>(v22_)};
-    return ValuesIn(array);
-  }
+    SelectFormat::SelectFormat(const UnicodeString& pat,
+                           UErrorCode& status) : msgPattern(status) {
+   applyPattern(pat, status);
+}
     
+    #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
+
     
-    {
-    {}  // namespace internal
-}  // namespace testing
+    #include 'unicode/utypes.h'
+#include 'sharedobject.h'
     
-      s.Set(kHelloString);
-  EXPECT_EQ(0, strcmp(s.c_string(), kHelloString));
+      bool needs_reconfigure = false;
+  for (const auto& source : config) {
+    auto status = updateSource(source.first, source.second);
+    if (status.getCode() == 2) {
+      // The source content did not change.
+      continue;
+    }
+    }
     
-    /*!
- * \brief The result holder of storage type of each NodeEntry in the graph.
- * \note Stored under graph.attrs['storage_type'], provided by Pass 'InferStorageType'
- *
- * \code
- *  Graph g = ApplyPass(src_graph, 'InferStorageType');
- *  const StorageVector& stypes = g.GetAttr<StorageTypeVector>('storage_type');
- *  // get storage type by entry id
- *  int entry_type = stypes[g.indexed_graph().entry_id(my_entry)];
- * \endcode
- *
- * \sa FInferStorageType
- */
-using StorageTypeVector = std::vector<int>;
-    
-    namespace mxnet {
-namespace io {
-// iterator on image recordio
-class PrefetcherIter : public IIterator<DataBatch> {
+    class PlaceboConfigParserPlugin : public ConfigParserPlugin {
  public:
-  explicit PrefetcherIter(IIterator<TBlobBatch>* base)
-      : loader_(base), out_(nullptr) {}
-    }
-    }
-    }
-    
-    KVStore* KVStore::Create(const char *type_name) {
-  std::string tname = type_name;
-  std::transform(tname.begin(), tname.end(), tname.begin(), ::tolower);
-  KVStore* kv = nullptr;
-  bool use_device_comm = false;
-  auto has = [tname](const std::string& pattern) {
-    return tname.find(pattern) != std::string::npos;
-  };
-  if (has('device')) {
-    use_device_comm = true;
+  std::vector<std::string> keys() const override {
+    return {};
+  }
+  Status update(const std::string&, const ParserConfig&) override {
+    return Status::success();
   }
     }
     
-    /*!
- * Copyright (c) 2016 by Contributors
- * \file cudnn_bilinear_sampler-inl.h
- * \brief
- * \author Xu Dong
-*/
-#ifndef MXNET_OPERATOR_CUDNN_BILINEAR_SAMPLER_INL_H_
-#define MXNET_OPERATOR_CUDNN_BILINEAR_SAMPLER_INL_H_
     
-      /**
-   * \brief Updates linear model given gradients.
-   *
-   * \param in_gpair            The gradient pair statistics of the data.
-   * \param data                Input data matrix.
-   * \param model               Model to be updated.
-   * \param sum_instance_weight The sum instance weights, used to normalise l1/l2 penalty.
-   */
+    {} // namespace osquery
+
     
-    namespace xgboost {
-/*!
- * \brief interface of tree update module, that performs update of a tree.
- */
-class TreeUpdater {
- public:
-  /*! \brief virtual destructor */
-  virtual ~TreeUpdater() = default;
-  /*!
-   * \brief Initialize the updater with given arguments.
-   * \param args arguments to the objective function.
-   */
-  virtual void Init(const std::vector<std::pair<std::string, std::string> >& args) = 0;
-  /*!
-   * \brief perform update to the tree models
-   * \param gpair the gradient pair statistics of the data
-   * \param data The data matrix passed to the updater.
-   * \param trees references the trees to be updated, updater will change the content of trees
-   *   note: all the trees in the vector are updated, with the same statistics,
-   *         but maybe different random seeds, usually one tree is passed in at a time,
-   *         there can be multiple trees when we train random forest style model
-   */
-  virtual void Update(HostDeviceVector<GradientPair>* gpair,
-                      DMatrix* data,
-                      const std::vector<RegTree*>& trees) = 0;
-    }
-    }
+    #include <osquery/utils/json/json.h>
     
-    namespace xgboost {
-namespace common {
-/*! \brief buffer reader of the stream that allows you to get */
-class StreamBufferReader {
- public:
-  explicit StreamBufferReader(size_t buffer_size)
-      :stream_(NULL),
-       read_len_(1), read_ptr_(1) {
-    buffer_.resize(buffer_size);
-  }
-  /*!
-   * \brief set input stream
-   */
-  inline void set_stream(dmlc::Stream *stream) {
-    stream_ = stream;
-    read_len_ = read_ptr_ = 1;
-  }
-  /*!
-   * \brief allows quick read using get char
-   */
-  inline char GetChar(void) {
-    while (true) {
-      if (read_ptr_ < read_len_) {
-        return buffer_[read_ptr_++];
-      } else {
-        read_len_ = stream_->Read(&buffer_[0], buffer_.length());
-        if (read_len_ == 0) return EOF;
-        read_ptr_ = 0;
-      }
-    }
-  }
-  /*! \brief whether we are reaching the end of file */
-  inline bool AtEnd(void) const {
-    return read_len_ == 0;
-  }
-    }
-    }
-    }
+      Expected<int32_t, DatabaseError> getInt32(const std::string& domain,
+                                            const std::string& key) override;
+  Expected<std::string, DatabaseError> getString(
+      const std::string& domain, const std::string& key) override;
     
-    
-    {
-    {}  // namespace obj
-}  // namespace xgboost
-    
-      void Write(const SparsePage& page, dmlc::Stream* fo) override {
-    const auto& offset_vec = page.offset.HostVector();
-    const auto& data_vec = page.data.HostVector();
-    CHECK(page.offset.Size() != 0 && offset_vec[0] == 0);
-    CHECK_EQ(offset_vec.back(), page.data.Size());
-    fo->Write(offset_vec);
-    if (page.data.Size() != 0) {
-      fo->Write(dmlc::BeginPtr(data_vec), page.data.Size() * sizeof(Entry));
-    }
-  }
-    
-        // out_of_range.402
-    try
-    {
-        // try to use the array index '-'
-        json::const_reference ref = j.at('/array/-'_json_pointer);
-    }
-    catch (json::out_of_range& e)
-    {
-        std::cout << e.what() << '\n';
+    GTEST_TEST(InMemoryDatabaseTest, test_put) {
+  auto db = std::make_unique<InMemoryDatabase>('test');
+#ifdef NDEBUG
+  auto result = db->putInt32('test', 'test', 23);
+  EXPECT_FALSE(result);
+  EXPECT_EQ(result.getError(), DatabaseError::DbIsNotOpen);
+#endif
+  EXPECT_TRUE(db->open());
+  EXPECT_TRUE(db->putInt32(kPersistentSettings, 'test_key_int', 12));
+  auto int_value = db->getInt32(kPersistentSettings, 'test_key_int');
+  EXPECT_TRUE(int_value);
+  EXPECT_EQ(int_value.take(), 12);
     }
