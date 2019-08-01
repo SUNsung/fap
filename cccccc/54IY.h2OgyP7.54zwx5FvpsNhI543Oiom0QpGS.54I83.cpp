@@ -1,474 +1,423 @@
 
         
-          // Check if any casting is required for the partially-applied function.
-  SILValue ResultValue = castValueToABICompatibleType(
-      &B, Loc, NewPAI, NewPAI->getType(), OldPAI->getType());
-  OldPAI->replaceAllUsesWith(ResultValue);
+          bool DoPoolBackward(Stream* stream,
+                      const dnn::PoolingDescriptor& pooling_dimensions,
+                      const dnn::BatchDescriptor& input_dimensions,
+                      const DeviceMemory<Eigen::half>& input_data,
+                      const dnn::BatchDescriptor& output_dimensions,
+                      const DeviceMemory<Eigen::half>& output_data,
+                      const DeviceMemory<Eigen::half>& input_diff_data,
+                      DeviceMemory<Eigen::half>* output_diff_data,
+                      ScratchAllocator* workspace_allocator = nullptr) override;
     
-            // ObjC protocol names aren't mangled.
-        if (!protocolNode) {
-          auto module = Dem.createNode(Node::Kind::Module,
-                                            MANGLING_MODULE_OBJC);
-          auto node = Dem.createNode(Node::Kind::Protocol);
-          node->addChild(module, Dem);
-          node->addChild(Dem.createNode(Node::Kind::Identifier, ProtoName),
-                         Dem);
-          auto typeNode = Dem.createNode(Node::Kind::Type);
-          typeNode->addChild(node, Dem);
-          type_list->addChild(typeNode, Dem);
-          continue;
-        }
+    #if GOOGLE_CUDA || TENSORFLOW_USE_ROCM
     
-      const Lowering::TypeLowering &
-  getTypeLowering(Lowering::AbstractionPattern orig, Type subst);
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    TEST(ClusteredBitVector, FlipAllSmall) {
-  ClusteredBitVector vec;
-  vec.appendClearBits(48);
-  EXPECT_EQ(false, vec[12]);
-  EXPECT_EQ(0u, vec.count());
-  vec.flipAll();
-  EXPECT_EQ(true, vec[12]);
-  EXPECT_EQ(48u, vec.count());
-  vec.clearBit(7);
-  EXPECT_EQ(true, vec[12]);
-  EXPECT_EQ(false, vec[7]);
-  EXPECT_EQ(47u, vec.count());
-  vec.flipAll();
-  EXPECT_EQ(false, vec[12]);
-  EXPECT_EQ(true, vec[7]);
-  EXPECT_EQ(1u, vec.count());
-}
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
+      // Applies provided delegate to the underlying TFLite Interpreter.
+  TfLiteStatus ApplyCustomDelegate(Interpreter::TfLiteDelegatePtr delegate);
     
-    {
-    {
-    {
-    {          // Get the file-name to group map if parsing correctly.
-          pMap = Parser.getParsedMap();
-        }
-      }
-      if (!pMap)
-        return NullGroupName;
-      StringRef FileName = llvm::sys::path::filename(FullPath);
-      auto Found = pMap->find(FileName);
-      if (Found == pMap->end()) {
-        Ctx.Diags.diagnose(SourceLoc(), diag::error_no_group_info, FileName);
-        return NullGroupName;
-      }
-      return Found->second;
-    }
-  };
+      // Set input data.
+  uint8_t input_tensor[kTotalElements];
+  SetValues(input_tensor, static_cast<uint8_t>(2));
+  std::vector<void*> inputs;
+  inputs.push_back(input_tensor);
+  stage.SetInputs(inputs);
     
-        case ConstraintKind::ApplicableFunction:
-    case ConstraintKind::DynamicCallableApplicableFunction:
-    case ConstraintKind::BindOverload: {
-      if (result.FullyBound && result.InvolvesTypeVariables)
-        continue;
-    }
+    #include 'tensorflow/core/framework/op_kernel.h'
+#include 'tensorflow/core/framework/tensor_types.h'
+#include 'tensorflow/core/platform/types.h'
     
+    #define DECLARE_GPU_SPECS_INDEX(T, Index)    \
+  DECLARE_GPU_SPECS_INDEX_NDIM(T, Index, 0); \
+  DECLARE_GPU_SPECS_INDEX_NDIM(T, Index, 1); \
+  DECLARE_GPU_SPECS_INDEX_NDIM(T, Index, 2); \
+  DECLARE_GPU_SPECS_INDEX_NDIM(T, Index, 3); \
+  DECLARE_GPU_SPECS_INDEX_NDIM(T, Index, 4); \
+  DECLARE_GPU_SPECS_INDEX_NDIM(T, Index, 5); \
+  DECLARE_GPU_SPECS_INDEX_NDIM(T, Index, 6); \
+  DECLARE_GPU_SPECS_INDEX_NDIM(T, Index, 7);
     
-    {  if (Negative)
-    *P++ = '-';
-  std::reverse(Buffer, P);
-  return size_t(P - Buffer);
-}
+    #define DEFINE_GPU_SPECS_INDEX(T, Index)    \
+  DEFINE_GPU_SPECS_INDEX_NDIM(T, Index, 0); \
+  DEFINE_GPU_SPECS_INDEX_NDIM(T, Index, 1); \
+  DEFINE_GPU_SPECS_INDEX_NDIM(T, Index, 2); \
+  DEFINE_GPU_SPECS_INDEX_NDIM(T, Index, 3); \
+  DEFINE_GPU_SPECS_INDEX_NDIM(T, Index, 4); \
+  DEFINE_GPU_SPECS_INDEX_NDIM(T, Index, 5); \
+  DEFINE_GPU_SPECS_INDEX_NDIM(T, Index, 6); \
+  DEFINE_GPU_SPECS_INDEX_NDIM(T, Index, 7);
     
+    #endif  // TENSORFLOW_COMPILER_XLA_DEBUG_OPTIONS_FLAGS_H_
+
     
-template <>
-const char *
-FloatAttribute::staticTypeName ()
-{
-    return 'float';
-}
-    
-    // streams
-class OStream;
-class IStream;
-    
-    
-Slice *
-FrameBuffer::findSlice (const char name[])
-{
-    SliceMap::iterator i = _map.find (name);
-    return (i == _map.end())? 0: &i->second;
-}
-    
-    
-void
-IStream::clear ()
-{
-    // empty
-}
-    
-    
-bool
-InputFile::isComplete () const
-{
-    if (_data->dsFile)
-        return _data->dsFile->isComplete();
-    else if (_data->isTiled)
-	return _data->tFile->isComplete();
-    else
-	return _data->sFile->isComplete();
-}
-    
-        //---------------------------------------------------------------
-    // Read pixel data:
-    //
-    // readPixels(s1,s2) reads all scan lines with y coordinates
-    // in the interval [min (s1, s2), max (s1, s2)] from the file,
-    // and stores them in the current frame buffer.
-    //
-    // Both s1 and s2 must be within the interval
-    // [header().dataWindow().min.y, header().dataWindow().max.y]
-    //
-    // The scan lines can be read from the file in random order, and
-    // individual scan lines may be skipped or read multiple times.
-    // For maximum efficiency, the scan lines should be read in the
-    // order in which they were written to the file.
-    //
-    // readPixels(s) calls readPixels(s,s).
-    //
-    //---------------------------------------------------------------
-    
-    /// Applies [Batch Normalization](https://arxiv.org/abs/1502.03167) to an input.
-///
-/// Refer to the documentation for
-/// [`BatchNorm1d`](https://pytorch.org/docs/stable/nn.html#torch.nn.BatchNorm1d)
-/// in PyTorch to learn more about the exact semantics of this module, __but see
-/// the note below regarding differences between the Python and C++ API__.
-///
-/// \rst
-/// .. attention::
-///   In the Python API, there are separate implementations for 1-D, 2-D and 3-D
-///   BatchNorm. In C++, there is only one `BatchNorm` module, which works for
-///   any of these dimensions.
-/// \endrst
-class TORCH_API BatchNormImpl : public torch::nn::Cloneable<BatchNormImpl> {
- public:
-  explicit BatchNormImpl(int64_t features)
-      : BatchNormImpl(BatchNormOptions(features)) {}
-  explicit BatchNormImpl(BatchNormOptions options);
-    }
-    
-    REGISTER_GRADIENT(Sub, GetSubGradient);
-    
-    
-    {
-    {    return SingleGradientDef(
-        'MergeSingleScalarFeatureTensorsGradient',
-        '', /* name */
-        input_blob_names,
-        output_blob_names);
+    void ConvertSparseToDenseOperator(const Model& model,
+                                  const SparseToDenseOperator& src_op,
+                                  const char* op_name,
+                                  GraphDef* tensorflow_graph) {
+  tensorflow::NodeDef* sparse_to_dense_op = tensorflow_graph->add_node();
+  sparse_to_dense_op->set_op(op_name);
+  sparse_to_dense_op->set_name(src_op.outputs[0]);
+  CHECK_EQ(src_op.inputs.size(), 4);
+  for (int i = 0; i < 4; ++i) {
+    *sparse_to_dense_op->add_input() = src_op.inputs[i];
   }
+  const tensorflow::DataType data_type =
+      GetTensorFlowDataType(model, src_op.inputs[3]);
+  (*sparse_to_dense_op->mutable_attr())['T'].set_type(data_type);
+  const tensorflow::DataType index_type =
+      GetTensorFlowDataType(model, src_op.inputs[0]);
+  (*sparse_to_dense_op->mutable_attr())['Tindices'].set_type(index_type);
+  (*sparse_to_dense_op->mutable_attr())['Tindices'].set_b(
+      src_op.validate_indices);
+}
+    
+    bool Converter<Dictionary>::FromV8(v8::Isolate* isolate,
+                                   v8::Local<v8::Value> val,
+                                   Dictionary* out) {
+  if (!val->IsObject() || val->IsFunction())
+    return false;
+  *out = Dictionary(isolate, v8::Local<v8::Object>::Cast(val));
+  return true;
+}
+    
+    Arguments::~Arguments() {}
+    
+      int Length() const { return info_->Length(); }
+    
+      WrappableBase* object;
+  {
+    // Don't continue if the constructor throws an exception.
+    v8::TryCatch try_catch(isolate);
+    object = internal::InvokeFactory(args, factory);
+    if (try_catch.HasCaught()) {
+      try_catch.ReThrow();
+      return;
+    }
+  }
+    
+    template <>
+struct Converter<Promise> {
+  static v8::Local<v8::Value> ToV8(v8::Isolate* isolate, Promise val);
+  // TODO(MarshallOfSound): Implement FromV8 to allow promise chaining
+  //                        in native land
+  // static bool FromV8(v8::Isolate* isolate,
+  //                    v8::Local<v8::Value> val,
+  //                    Promise* out);
 };
     
-              vector<TensorShape> out(1);
-          switch (order) {
-            case StorageOrder::NCHW:
-              out[0] = CreateTensorShape(
-                  vector<int>{N, C * kernel_h * kernel_w, out_h, out_w},
-                  TensorProto::FLOAT);
-              break;
-            case StorageOrder::NHWC:
-              out[0] = CreateTensorShape(
-                  vector<int>{N, out_h, out_w, kernel_h * kernel_w * C},
-                  TensorProto::FLOAT);
-              break;
-            default:
-              CAFFE_THROW('Unknown storage order: ', order);
-          }
-    
-        // cut off inline image streams at appropriate length
-    if (inlineImg) {
-      str = new FixedLengthEncoder(str, len);
-    } else if (useCompressed) {
-      str = str->getUndecodedStream();
-    }
-    
-    //------------------------------------------------------------------------
+      found = dict->FindKey('width');
+  int width = found ? found->GetInt() : 800;
     
     
-    {    annotsRef = xref->addIndirectObject (&obj1);
-    annots.initRef(annotsRef.num, annotsRef.gen);
-    pageObj.dictSet ('Annots', &annots);
-    xref->setModifiedObject (&pageObj, pageRef);
-  } else {
-    getAnnots(&obj1);
-    if (obj1.isArray()) {
-      obj1.arrayAdd (tmp.initRef (annotRef.num, annotRef.gen));
-      if (annots.isRef())
-        xref->setModifiedObject (&obj1, annots.getRef());
-      else
-        xref->setModifiedObject (&pageObj, pageRef);
-    }
-    obj1.free();
+    {  return args[0];
+}
+    
+      if (IsSameChromeInstance(pid))
+    return true;
+    
+    
+    {  TBLOB* blob;
+  Tesseract* tesseract;
+  BLOB_CHOICE_LIST** choices;
+};
+    
+    // Update the other members if the cost is lower.
+void DPPoint::UpdateIfBetter(int64_t cost, int32_t steps, const DPPoint* prev,
+                             int32_t n, int32_t sig_x, int64_t sig_xsq) {
+  if (cost < total_cost_) {
+    total_cost_ = cost;
+    total_steps_ = steps;
+    best_prev_ = prev;
+    n_ = n;
+    sig_x_ = sig_x;
+    sig_xsq_ = sig_xsq;
+  }
+}
+    
+      Pix* pix() const {
+    return pix_;
+  }
+  void set_pix(Pix* pix) {
+    pix_ = pix;
+  }
+  bool inverse() const {
+    return inverse_;
+  }
+  void set_inverse(bool value) {
+    inverse_ = value;
+  }
+  const DENORM* RootDenorm() const {
+    if (predecessor_ != nullptr)
+      return predecessor_->RootDenorm();
+    return this;
+  }
+  const DENORM* predecessor() const {
+    return predecessor_;
+  }
+  // Accessors - perhaps should not be needed.
+  float x_scale() const {
+    return x_scale_;
+  }
+  float y_scale() const {
+    return y_scale_;
+  }
+  const BLOCK* block() const {
+    return block_;
+  }
+  void set_block(const BLOCK* block) {
+    block_ = block;
   }
     
-    //========================================================================
-//
-// Modified under the Poppler project - http://poppler.freedesktop.org
-//
-// All changes made under the Poppler project to this file are licensed
-// under GPL version 2 or later
-//
-// Copyright (C) 2005 Kristian Høgsberg <krh@redhat.com>
-// Copyright (C) 2005 Jeff Muizelaar <jeff@infidigm.net>
-// Copyright (C) 2006 Pino Toscano <pino@kde.org>
-// Copyright (C) 2006 Carlos Garcia Campos <carlosgc@gnome.org>
-// Copyright (C) 2007 Julien Rebetez <julienr@svn.gnome.org>
-// Copyright (C) 2008 Iñigo Martínez <inigomartinez@gmail.com>
-//
-// To see a description of the changes please see the Changelog file that
-// came with your tarball or type make ChangeLog if you are building from git
-//
-//========================================================================
+      for (int i = 0; i < top_size; ++i) {
+    hdf_blobs_[i] = shared_ptr<Blob<Dtype> >(new Blob<Dtype>());
+    // Allow reshape here, as we are loading data not params
+    hdf5_load_nd_dataset(file_id, this->layer_param_.top(i).c_str(),
+        MIN_DATA_DIM, MAX_DATA_DIM, hdf_blobs_[i].get(), true);
+  }
     
-    #ifndef PRESCANOUTPUTDEV_H
-#define PRESCANOUTPUTDEV_H
+    // Get LRN layer according to engine
+template <typename Dtype>
+shared_ptr<Layer<Dtype> > GetLRNLayer(const LayerParameter& param) {
+  LRNParameter_Engine engine = param.lrn_param().engine();
+    }
     
-    #ifdef USE_GCC_PRAGMAS
-#pragma interface
+    #include 'caffe/layers/clip_layer.hpp'
+    
+    TYPED_TEST(NeuronLayerTest, TestReLUWithNegativeSlope) {
+  typedef typename TypeParam::Dtype Dtype;
+  LayerParameter layer_param;
+  CHECK(google::protobuf::TextFormat::ParseFromString(
+      'relu_param { negative_slope: 0.01 }', &layer_param));
+  ReLULayer<Dtype> layer(layer_param);
+  layer.SetUp(this->blob_bottom_vec_, this->blob_top_vec_);
+  layer.Forward(this->blob_bottom_vec_, this->blob_top_vec_);
+  // Now, check values
+  const Dtype* bottom_data = this->blob_bottom_->cpu_data();
+  const Dtype* top_data = this->blob_top_->cpu_data();
+  for (int i = 0; i < this->blob_bottom_->count(); ++i) {
+    if (top_data[i] >= 0) {
+      EXPECT_FLOAT_EQ(top_data[i], bottom_data[i]);
+    } else {
+      EXPECT_FLOAT_EQ(top_data[i], bottom_data[i] * 0.01);
+    }
+  }
+}
+    
+    
+    {  /* Compute the global mean pixel value and create a mean image
+   * filled with this value. */
+  cv::Scalar channel_mean = cv::mean(mean);
+  mean_ = cv::Mat(input_geometry_, mean.type(), channel_mean);
+}
+    
+      FLAGS_alsologtostderr = 1;
+    
+    
+    {  int kernel_h_, kernel_w_;
+  int stride_h_, stride_w_;
+  int pad_h_, pad_w_;
+  int channels_;
+  int height_, width_;
+  int pooled_height_, pooled_width_;
+  bool global_pooling_;
+  PoolingParameter_RoundMode round_mode_;
+  Blob<Dtype> rand_idx_;
+  Blob<int> max_idx_;
+};
+    
+      // Getters for boost rng, curand, and cublas handles
+  inline static RNG& rng_stream() {
+    if (!Get().random_generator_) {
+      Get().random_generator_.reset(new RNG());
+    }
+    return *(Get().random_generator_);
+  }
+#ifndef CPU_ONLY
+  inline static cublasHandle_t cublas_handle() { return Get().cublas_handle_; }
+  inline static curandGenerator_t curand_generator() {
+    return Get().curand_generator_;
+  }
 #endif
     
-    
-    {  //
-  // parse Media Screen Parameters
-  if (obj->dictLookup('SP', &tmp2)->isDict()) { // media screen parameters
-    Object params;
-    if (tmp2.dictLookup('MH', &params)->isDict()) {
-      MH.parseMediaScreenParameters(&params);
-    }
-    params.free();
-    if (tmp2.dictLookup('BE', &params)->isDict()) {
-      BE.parseMediaScreenParameters(&params);
-    }
-    params.free();
-  }
-  tmp2.free();
-}
-    
-      enum MediaWindowRelativeTo {
-    windowRelativeToDocument = 0,
-    windowRelativeToApplication,
-    windowRelativeToDesktop
-  };
-    
-    
-    {  if (readAttrs)
-  {
-    Object tmp;
-    Dict *dict = streamObj->getStream()->getDict();
-    dict->lookup('F', &tmp);
-    if (!tmp.isNull()) {
-      Object obj1;
-      // valid 'F' key -> external file
-      kind = soundExternal;
-      if (getFileSpecNameForPlatform (&tmp, &obj1)) {
-        fileName = obj1.getString()->copy();
-        obj1.free();
-      }
-    } else {
-      // no file specification, then the sound data have to be
-      // extracted from the stream
-      kind = soundEmbedded;
-    }
-    tmp.free();
-    // sampling rate
-    dict->lookup('R', &tmp);
-    if (tmp.isNum()) {
-      samplingRate = tmp.getNum();
-    }
-    tmp.free();
-    // sound channels
-    dict->lookup('C', &tmp);
-    if (tmp.isInt()) {
-      channels = tmp.getInt();
-    }
-    tmp.free();
-    // bits per sample
-    dict->lookup('B', &tmp);
-    if (tmp.isInt()) {
-      bitsPerSample = tmp.getInt();
-    }
-    tmp.free();
-    // encoding format
-    dict->lookup('E', &tmp);
-    if (tmp.isName())
-    {
-      const char *enc = tmp.getName();
-      if (strcmp('Raw', enc) == 0) {
-        encoding = soundRaw;
-      } else if (strcmp('Signed', enc) == 0) {
-        encoding = soundSigned;
-      } else if (strcmp('muLaw', enc) == 0) {
-        encoding = soundMuLaw;
-      } else if (strcmp('ALaw', enc) == 0) {
-        encoding = soundALaw;
-      }
-    }
-    tmp.free();
-  }
-}
-    
-      const MetaInfo& Info() const override;
-    
-    
-    {
-    {void SparsePageWriter::Alloc(std::shared_ptr<SparsePage>* out_page) {
-  CHECK(*out_page == nullptr);
-  if (num_free_buffer_ != 0) {
-    out_page->reset(new SparsePage());
-    --num_free_buffer_;
-  } else {
-    CHECK(qrecycle_.Pop(out_page));
-  }
-}
-}  // namespace data
-}  // namespace xgboost
-    
-    namespace xgboost {
-namespace common {
-struct Timer {
-  using ClockT = std::chrono::high_resolution_clock;
-  using TimePointT = std::chrono::high_resolution_clock::time_point;
-  using DurationT = std::chrono::high_resolution_clock::duration;
-  using SecondsT = std::chrono::duration<double>;
-    }
-    }
-    }
-    
-    RegTree ConstructTree() {
-  RegTree tree;
-  tree.ExpandNode(
-      /*nid=*/0, /*split_index=*/0, /*split_value=*/0.0f,
-      /*default_left=*/true,
-      0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-  auto left = tree[0].LeftChild();
-  auto right = tree[0].RightChild();
-  tree.ExpandNode(
-      /*nid=*/left, /*split_index=*/1, /*split_value=*/1.0f,
-      /*default_left=*/false,
-      0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-  tree.ExpandNode(
-      /*nid=*/right, /*split_index=*/2, /*split_value=*/2.0f,
-      /*default_left=*/false,
-      0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-  return tree;
-}
-    
-     private:
-  class Builder : public ColMaker::Builder {
-   public:
-    explicit Builder(const TrainParam &param,
-                     std::unique_ptr<SplitEvaluator> spliteval)
-        : ColMaker::Builder(param, std::move(spliteval)) {}
-    inline void UpdatePosition(DMatrix* p_fmat, const RegTree &tree) {
-      const auto ndata = static_cast<bst_omp_uint>(p_fmat->Info().num_row_);
-      #pragma omp parallel for schedule(static)
-      for (bst_omp_uint ridx = 0; ridx < ndata; ++ridx) {
-        int nid = this->DecodePosition(ridx);
-        while (tree[nid].IsDeleted()) {
-          nid = tree[nid].Parent();
-          CHECK_GE(nid, 0);
-        }
-        this->position_[ridx] = nid;
-      }
-    }
-    inline const int* GetLeafPosition() const {
-      return dmlc::BeginPtr(this->position_);
-    }
-    }
-    
-      /*!
-   * \brief Get configuration arguments currently stored by the learner
-   * \return Key-value pairs representing configuration arguments
+      /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *
+   * @param datum
+   *    Datum containing the data to be transformed.
    */
-  virtual const std::map<std::string, std::string>& GetConfigurationArguments() const = 0;
+  vector<int> InferBlobShape(const Datum& datum);
+  /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *    It uses the first element to infer the shape of the blob.
+   *
+   * @param datum_vector
+   *    A vector of Datum containing the data to be transformed.
+   */
+  vector<int> InferBlobShape(const vector<Datum> & datum_vector);
+  /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *    It uses the first element to infer the shape of the blob.
+   *
+   * @param mat_vector
+   *    A vector of Mat containing the data to be transformed.
+   */
+#ifdef USE_OPENCV
+  vector<int> InferBlobShape(const vector<cv::Mat> & mat_vector);
+  /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *
+   * @param cv_img
+   *    cv::Mat containing the data to be transformed.
+   */
+  vector<int> InferBlobShape(const cv::Mat& cv_img);
+#endif  // USE_OPENCV
     
-      // predict the leaf scores without dropped trees
-  inline bst_float PredValue(const SparsePage::Inst &inst,
-                             int bst_group,
-                             unsigned root_index,
-                             RegTree::FVec *p_feats,
-                             unsigned tree_begin,
-                             unsigned tree_end) {
-    bst_float psum = 0.0f;
-    p_feats->Fill(inst);
-    for (size_t i = tree_begin; i < tree_end; ++i) {
-      if (model_.tree_info[i] == bst_group) {
-        bool drop = (std::binary_search(idx_drop_.begin(), idx_drop_.end(), i));
-        if (!drop) {
-          int tid = model_.trees[i]->GetLeafIndex(*p_feats, root_index);
-          psum += weight_drop_[i] * (*model_.trees[i])[tid].LeafValue();
-        }
-      }
-    }
-    p_feats->Drop(inst);
-    return psum;
-  }
+    /// <summary>
+/// Invoked when Navigation to a certain page fails
+/// </summary>
+/// <param name='sender'>The Frame which failed navigation</param>
+/// <param name='e'>Details about the navigation failure</param>
+void App::OnNavigationFailed(Platform::Object ^ sender, Windows::UI::Xaml::Navigation::NavigationFailedEventArgs ^ e)
+{
+    throw ref new FailureException('Failed to load Page ' + e->SourcePageType.Name);
+}
+
     
-    
-    {    // Setup orthographic projection matrix
-    // Our visible imgui space lies from draw_data->DisplayPos (top left) to draw_data->DisplayPos+data_data->DisplaySize (bottom right).
+        /// <summary>
+    /// Calculate the remainder after division, the sign of a result will match the sign of lhs.
+    /// </summary>
+    /// <remarks>
+    /// This function has the same behavior as the standard C/C++ operator '%', to calculate the modulus after division instead, use <see
+    /// cref='Rational::operator%'/> instead.
+    /// </remarks>
+    Rational operator%(Rational lhs, Rational const& rhs)
     {
-        float L = draw_data->DisplayPos.x;
-        float R = draw_data->DisplayPos.x + draw_data->DisplaySize.x;
-        float T = draw_data->DisplayPos.y;
-        float B = draw_data->DisplayPos.y + draw_data->DisplaySize.y;
-        ALLEGRO_TRANSFORM transform;
-        al_identity_transform(&transform);
-        al_use_transform(&transform);
-        al_orthographic_transform(&transform, L, T, 1.0f, R, B, -1.0f);
-        al_use_projection_transform(&transform);
+        lhs %= rhs;
+        return lhs;
+    }
+    
+    // returns a new rat structure with the natural log of x->p/x->q
+extern void lograt(_Inout_ PRAT* px, int32_t precision);
+    
+    
+    {
+    {
+    {            CalculatorApp::NetworkManager ^ m_networkManager;
+            CalculatorApp::NetworkAccessBehavior m_networkAccessBehavior;
+            Windows::Foundation::EventRegistrationToken m_networkBehaviorToken;
+            bool m_meteredOverrideSet;
+        };
+    }
+}
+
+    
+    void CCalcEngine::InitChopNumbers()
+{
+    // these rat numbers are set only once and then never change regardless of
+    // base or precision changes
+    assert(m_chopNumbers.size() >= 4);
+    m_chopNumbers[0] = Rational{ rat_qword };
+    m_chopNumbers[1] = Rational{ rat_dword };
+    m_chopNumbers[2] = Rational{ rat_word };
+    m_chopNumbers[3] = Rational{ rat_byte };
+    }
+    
+    
+    {    switch (msg)
+    {
+    case WM_SIZE:
+        if (g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
+        {
+            ImGui_ImplDX12_InvalidateDeviceObjects();
+            CleanupRenderTarget();
+            ResizeSwapChain(hWnd, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
+            CreateRenderTarget();
+            ImGui_ImplDX12_CreateDeviceObjects();
+        }
+        return 0;
+    case WM_SYSCOMMAND:
+        if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
+            return 0;
+        break;
+    case WM_DESTROY:
+        ::PostQuitMessage(0);
+        return 0;
+    }
+    return ::DefWindowProc(hWnd, msg, wParam, lParam);
+}
+
+    
+    
+    {    // Render command lists
+    // (Because we merged all buffers into a single one, we maintain our own offset into them)
+    int global_vtx_offset = 0;
+    int global_idx_offset = 0;
+    ImVec2 clip_off = draw_data->DisplayPos;
+    for (int n = 0; n < draw_data->CmdListsCount; n++)
+    {
+        const ImDrawList* cmd_list = draw_data->CmdLists[n];
+        for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
+        {
+            const ImDrawCmd* pcmd = &cmd_list->CmdBuffer[cmd_i];
+            if (pcmd->UserCallback != NULL)
+            {
+                // User callback, registered via ImDrawList::AddCallback()
+                // (ImDrawCallback_ResetRenderState is a special callback value used by the user to request the renderer to reset render state.)
+                if (pcmd->UserCallback == ImDrawCallback_ResetRenderState)
+                    ImGui_ImplDX12_SetupRenderState(draw_data, ctx, fr);
+                else
+                    pcmd->UserCallback(cmd_list, pcmd);
+            }
+            else
+            {
+                // Apply Scissor, Bind texture, Draw
+                const D3D12_RECT r = { (LONG)(pcmd->ClipRect.x - clip_off.x), (LONG)(pcmd->ClipRect.y - clip_off.y), (LONG)(pcmd->ClipRect.z - clip_off.x), (LONG)(pcmd->ClipRect.w - clip_off.y) };
+                ctx->SetGraphicsRootDescriptorTable(1, *(D3D12_GPU_DESCRIPTOR_HANDLE*)&pcmd->TextureId);
+                ctx->RSSetScissorRects(1, &r);
+                ctx->DrawIndexedInstanced(pcmd->ElemCount, 1, pcmd->IdxOffset + global_idx_offset, pcmd->VtxOffset + global_vtx_offset, 0);
+            }
+        }
+        global_idx_offset += cmd_list->IdxBuffer.Size;
+        global_vtx_offset += cmd_list->VtxBuffer.Size;
+    }
+}
+    
+        // Backup the DX9 transform (DX9 documentation suggests that it is included in the StateBlock but it doesn't appear to)
+    D3DMATRIX last_world, last_view, last_projection;
+    g_pd3dDevice->GetTransform(D3DTS_WORLD, &last_world);
+    g_pd3dDevice->GetTransform(D3DTS_VIEW, &last_view);
+    g_pd3dDevice->GetTransform(D3DTS_PROJECTION, &last_projection);
+    
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_IMPL_API bool     ImGui_ImplDX9_CreateDeviceObjects();
+IMGUI_IMPL_API void     ImGui_ImplDX9_InvalidateDeviceObjects();
+
+    
+    
+    {
+    {        // If none of the requested image formats could be found, use the first available
+        return avail_format[0];
     }
 }
     
     // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
 // If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
 // https://github.com/ocornut/imgui
-    
-    static void ImGui_ImplDX10_CreateFontsTexture()
-{
-    // Build texture atlas
-    ImGuiIO& io = ImGui::GetIO();
-    unsigned char* pixels;
-    int width, height;
-    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
-    }
-    
-    static void ImGui_ImplDX12_CreateFontsTexture()
-{
-    // Build texture atlas
-    ImGuiIO& io = ImGui::GetIO();
-    unsigned char* pixels;
-    int width, height;
-    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
-    }
-    
-        for (uint32_t i = 0; i < wd->ImageCount; i++)
-    {
-        ImGui_ImplVulkanH_DestroyFrame(device, &wd->Frames[i], allocator);
-        ImGui_ImplVulkanH_DestroyFrameSemaphores(device, &wd->FrameSemaphores[i], allocator);
-    }
-    IM_FREE(wd->Frames);
-    IM_FREE(wd->FrameSemaphores);
-    wd->Frames = NULL;
-    wd->FrameSemaphores = NULL;
-    vkDestroyRenderPass(device, wd->RenderPass, allocator);
-    vkDestroySwapchainKHR(device, wd->Swapchain, allocator);
-    vkDestroySurfaceKHR(instance, wd->Surface, allocator);
-    
-    #ifdef __FREEGLUT_EXT_H__
-void ImGui_ImplGLUT_MouseWheelFunc(int button, int dir, int x, int y)
-{
-    ImGuiIO& io = ImGui::GetIO();
-    io.MousePos = ImVec2((float)x, (float)y);
-    if (dir > 0)
-        io.MouseWheel += 1.0;
-    else if (dir < 0)
-        io.MouseWheel -= 1.0;
-    (void)button; // Unused
-}
-#endif
