@@ -1,108 +1,73 @@
 
         
-        
-def naughty_strings(filepath=FILEPATH):
-    '''Get the list of naughty_strings.
-    
-    from .theplatform import theplatform_download_by_pid
-    
-        print_info(site_info, title, 'm3u8', float('inf'))
-    
-    def ifeng_download_by_id(id, title = None, output_dir = '.', merge = True, info_only = False):
-    assert r1(r'([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', id), id
-    url = 'http://vxml.ifengimg.com/video_info_new/%s/%s/%s.xml' % (id[-2], id[-2:], id)
-    xml = get_html(url, 'utf-8')
-    title = r1(r'Name='([^']+)'', xml)
-    title = unescape_html(title)
-    url = r1(r'VideoPlayUrl='([^']+)'', xml)
-    from random import randint
-    r = randint(10, 19)
-    url = url.replace('http://wideo.ifeng.com/', 'http://ips.ifeng.com/wideo.ifeng.com/')
-    type, ext, size = url_info(url)
-    
-        stream_types = [
-        {'id': 'video'},
-        {'id': 'audio'},
-        {'id': 'slides'}
-    ]
+                self._built = False
     
     
-class Fixed(jose.Field):
-    '''Fixed field.'''
+def multi_highway_dense(x, n_layer, act_fn=relu, carry_bias=-1.0, name=None):
+    '''多层 highway_dense
+    Input shape:  [batch_size, n_input]
+    Output shape: [batch_size, n_input]
+    '''
+    name = name or 'highway_dense'
+    for i in range(n_layer):
+        x = highway_dense(x, act_fn=act_fn, carry_bias=carry_bias, name='{}-{}'.format(name, i))
     
-        @classmethod
-    # pylint: disable=arguments-differ,too-many-arguments
-    def sign(cls, payload, key, alg, nonce, url=None, kid=None):
-        # Per ACME spec, jwk and kid are mutually exclusive, so only include a
-        # jwk field if kid is not provided.
-        include_jwk = kid is None
-        return super(JWS, cls).sign(payload, key=key, alg=alg,
-                                    protect=frozenset(['nonce', 'url', 'kid', 'jwk', 'alg']),
-                                    nonce=nonce, url=url, kid=kid,
-                                    include_jwk=include_jwk)
+        def __init__(self, l1=0., l2=0.):
+        '''
+        Args:
+            l1(float): L1 正则化的系数
+            l2(float): L2 正则化的系数
+        '''
+        self.l1 = np.asarray(l1, dtype=np.float32)
+        self.l2 = np.asarray(l2, dtype=np.float32)
+    
+            Creates an attribute for each grammar symbol (nonterminal),
+        whose value is the symbol's type (an int >= 256).
+        '''
+        for name, symbol in grammar.symbol2number.items():
+            setattr(self, name, symbol)
+    
+    
+def spaces(a=1, b=(), c=[], d={}, e=True, f=-1, g=1 if False else 2, h='', i=r''):
+    offset = attr.ib(default=attr.Factory(lambda: _r.uniform(10000, 200000)))
+    assert task._cancel_stack[: len(old_stack)] == old_stack
+    
+    # flake8: noqa
+    
+    
+from .config import (
+    Any,
+    Bool,
+    ConfigType,
+    ConfigTypeAttributes,
+    Int,
+    no_comma_here_yet,
+    #  and some comments,
+    #  resolve_to_config_type,
+    #  DEFAULT_TYPE_ATTRIBUTES,
+)
+    
+            assert expectedexpectedexpectedexpectedexpectedexpectedexpectedexpectedexpect == {
+            key1: value1,
+            key2: value2,
+            key3: value3,
+            key4: value4,
+            key5: value5,
+            key6: value6,
+            key7: value7,
+            key8: value8,
+            key9: value9,
+        }
 
     
-    # http://docs.readthedocs.org/en/latest/theme.html#how-do-i-use-this-locally-and-on-read-the-docs
-# on_rtd is whether we are on readthedocs.org
-on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
-if not on_rtd:  # only import and set the theme if we're building docs locally
-    import sphinx_rtd_theme
-    html_theme = 'sphinx_rtd_theme'
-    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
-# otherwise, readthedocs.org uses their theme by default, so no need to specify it
-    
-    
-UPDATED_MOD_SSL_CONF_DIGEST = '.updated-options-ssl-apache-conf-digest.txt'
-'''Name of the hash of the updated or informed mod_ssl_conf as saved in `IConfig.config_dir`.'''
-    
-    
-Examples
---------
-    
-    
-# -- Options for HTML output ----------------------------------------------
-    
-    
-def setup(app):
-    app.add_config_value('edit_on_github_project', '', True)
-    app.add_config_value('edit_on_github_branch', 'master', True)
-    app.add_config_value('edit_on_github_src_path', '', True)  # 'eg' 'docs/'
-    app.connect('html-page-context', html_page_context)
-
-    
-    # If false, no index is generated.
-#
-# html_use_index = True
-    
-    from packaging.version import Version
-    
-    
-class PackValueError(PackException, ValueError):
-    pass
-
-    
-    
-def test_exceeding_unpacker_read_size():
-    dumpf = io.BytesIO()
-    
-    define('port', default=8888)
-define('num_chunks', default=1000)
-define('chunk_size', default=2048)
-    
-    if os.name == 'nt':
-    from tornado.platform.windows import set_close_exec
-else:
-    from tornado.platform.posix import set_close_exec
-    
-        c-ares fails to resolve some names when ``family`` is ``AF_UNSPEC``,
-    so it is only recommended for use in ``AF_INET`` (i.e. IPv4).  This is
-    the default for ``tornado.simple_httpclient``, but other libraries
-    may default to ``AF_UNSPEC``.
-    
-    
-class GoogleLoginHandler(RequestHandler, GoogleOAuth2Mixin):
-    def initialize(self, test):
-        self.test = test
-        self._OAUTH_REDIRECT_URI = test.get_url('/client/login')
-        self._OAUTH_AUTHORIZE_URL = test.get_url('/google/oauth2/authorize')
-        self._OAUTH_ACCESS_TOKEN_URL = test.get_url('/google/oauth2/token')
+        def mixed_use_of_local_and_run(self):
+        '''
+        Run command truly locally, and over SSH via localhost
+        '''
+        cxn = Connection('localhost')
+        result = cxn.local('echo foo', hide=True)
+        assert result.stdout == 'foo\n'
+        assert not cxn.is_connected  # meh way of proving it didn't use SSH yet
+        result = cxn.run('echo foo', hide=True)
+        assert cxn.is_connected  # NOW it's using SSH
+        assert result.stdout == 'foo\n'
