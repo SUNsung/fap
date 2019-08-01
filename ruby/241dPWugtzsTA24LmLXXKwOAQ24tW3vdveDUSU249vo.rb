@@ -1,42 +1,38 @@
 
         
-              def test_helpers_with_module_through_block
-        @controller = AbstractHelpersBlock.new
-        @controller.process(:with_module)
-        assert_equal 'Module Included', @controller.response_body
+          def test_marshal_load_version_1
+    tl = @store.add_file 'file.rb'
+    cm = tl.add_class RDoc::NormalClass, 'Klass'
+    section = cm.sections.first
+    
+      def test_flags_normal
+    options = {:flags => ['fuzzy']}
+    assert_equal <<-'ENTRY', entry('Hello', options).to_s
+#, fuzzy
+msgid 'Hello'
+msgstr ''
+    ENTRY
+  end
+    
+        expected =
+      doc(
+        para('{rdoc-image:path/to/image.jpg}[http://example.com]'))
+    
+        assert_equal %w[],          @as.each_name_of(0).to_a
+    assert_equal %w[],          @as.each_name_of(1).to_a
+    assert_equal %w[two],       @as.each_name_of(2).to_a
+    assert_equal %w[three],     @as.each_name_of(4).to_a
+    assert_equal %w[two three], @as.each_name_of(6).to_a
+  end
+    
+          def redirect(env)
+        request = Request.new(env)
+        warn env, 'attack prevented by #{self.class}'
+        [302, {'Content-Type' => 'text/html', 'Location' => request.path}, []]
       end
-    end
     
-      def maxheight_or_default
-    params[:maxheight].present? ? params[:maxheight].to_i : nil
-  end
-end
-
-    
-      def verified_domain
-    return signed_request_account.domain if signed_request_account
-  end
-    
-      def process_salmon
-    SalmonWorker.perform_async(@account.id, payload.force_encoding('UTF-8'))
-  end
-end
-
-    
-        render_empty
-  end
-    
-          if @user.persisted?
-        sign_in_and_redirect @user, event: :authentication
-        set_flash_message(:notice, :success, kind: provider_id.capitalize) if is_navigational_format?
-      else
-        session['devise.#{provider}_data'] = request.env['omniauth.auth']
-        redirect_to new_user_registration_url
-      end
-    end
-  end
-    
-      def export_filename
-    '#{controller_name}.csv'
-  end
-end
+            modes       = Array options[:escape]
+        @escaper    = options[:escaper]
+        @html       = modes.include? :html
+        @javascript = modes.include? :javascript
+        @url        = modes.include? :url
