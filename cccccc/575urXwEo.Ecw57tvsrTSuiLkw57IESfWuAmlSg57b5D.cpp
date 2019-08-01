@@ -1,248 +1,252 @@
 
         
-          for (const auto& node : item_.MainOpsFanin()) {
-    PrintNodeInfo(node, properties, debug, os);
+        int UniValue::get_int() const
+{
+    if (typ != VNUM)
+        throw std::runtime_error('JSON value is not an integer as expected');
+    int32_t retval;
+    if (!ParseInt32(getValStr(), &retval))
+        throw std::runtime_error('JSON integer out of range');
+    return retval;
+}
+    
+        BOOST_CHECK_EQUAL(obj.empty(), false);
+    BOOST_CHECK_EQUAL(obj.size(), 11);
+    
+    section .data
+align 64
+K256:
+    dd	0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5
+    dd	0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5
+    dd	0xd807aa98,0x12835b01,0x243185be,0x550c7dc3
+    dd	0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174
+    dd	0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc
+    dd	0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da
+    dd	0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7
+    dd	0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967
+    dd	0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13
+    dd	0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85
+    dd	0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3
+    dd	0xd192e819,0xd6990624,0xf40e3585,0x106aa070
+    dd	0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5
+    dd	0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3
+    dd	0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208
+    dd	0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2
+    
+    void InternalFilterPolicy::CreateFilter(const Slice* keys, int n,
+                                        std::string* dst) const {
+  // We rely on the fact that the code in table.cc does not mind us
+  // adjusting keys[].
+  Slice* mkey = const_cast<Slice*>(keys);
+  for (int i = 0; i < n; i++) {
+    mkey[i] = ExtractUserKey(keys[i]);
+    // TODO(sanjay): Suppress dups?
   }
-  for (const auto& node : item_.EnqueueOpsFanin()) {
-    PrintNodeInfo(node, properties, debug, os);
-  }
-    
-        nullptr,  // nb_inplace_add
-    nullptr,  // nb_inplace_subtract
-    nullptr,  // nb_inplace_multiply
-#if PY_MAJOR_VERSION < 3
-    nullptr,  // nb_inplace_divide
-#endif
-    nullptr,  // nb_inplace_remainder
-    nullptr,  // nb_inplace_power
-    nullptr,  // nb_inplace_lshift
-    nullptr,  // nb_inplace_rshift
-    nullptr,  // nb_inplace_and
-    nullptr,  // nb_inplace_xor
-    nullptr,  // nb_inplace_or
-    
-    // Creates a tensor in 'ret' from the input Ndarray.
-Status NdarrayToTensor(PyObject* obj, Tensor* ret);
-    
-    struct PyDecrefDeleter {
-  void operator()(PyObject* p) const { Py_DECREF(p); }
-};
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    // Opaque and unique identifier for the host platform.
-// This is needed so that plugins can refer to/identify this platform without
-// instantiating a HostPlatform object.
-// This is broken out here to avoid a circular dependency between HostPlatform
-// and HostStreamExecutor.
-extern const Platform::Id kHostPlatformId;
-    
-    // Allows to represent a value that is either a host scalar or a scalar stored
-// on the GPU device.
-template <typename ElemT>
-class HostOrDeviceScalar {
- public:
-  // Not marked as explicit because when using this constructor, we usually want
-  // to set this to a compile-time constant.
-  HostOrDeviceScalar(ElemT value) : value_(value), is_pointer_(false) {}
-  explicit HostOrDeviceScalar(const DeviceMemory<ElemT>& pointer)
-      : pointer_(pointer), is_pointer_(true) {
-    CHECK_EQ(1, pointer.ElementCount());
-  }
-    }
-    
-    namespace stream_executor {
-namespace port {
-    }
-    }
+  user_policy_->CreateFilter(keys, n, dst);
+}
     
     
-    {}  // namespace mate
+    {}  // namespace leveldb
 
     
-      template <typename T>
-  bool SetMethod(const base::StringPiece& key, const T& callback) {
-    return GetHandle()
-        ->Set(isolate_->GetCurrentContext(), StringToV8(isolate_, key),
-              CallbackTraits<T>::CreateTemplate(isolate_, callback)
-                  ->GetFunction(isolate_->GetCurrentContext())
-                  .ToLocalChecked())
-        .ToChecked();
-  }
+    typedef tuple<String, Size> DISParams;
+typedef TestBaseWithParam<DISParams> DenseOpticalFlow_DIS;
     
-    namespace mate {
-    }
+            //
+        // Enabled for Visual Studio:
+        //        _M_IX86 -> x86
+        //        _M_X64  -> 64bit x86
     
-    template <typename T>
-struct Converter<ScopedPersistent<T>> {
-  static v8::Local<v8::Value> ToV8(v8::Isolate* isolate,
-                                   const ScopedPersistent<T>& val) {
-    return val.NewHandle(isolate);
-  }
-    }
+    //
+// Alternative Canonical Huffman decoder:
+//
+// Canonical Huffman decoder based on 'On the Implementation of Minimum
+// Redundancy Prefix Codes' by Moffat and Turpin - highly recommended
+// reading as a good description of the problem space, as well as 
+// a fast decoding algorithm.
+//
+// The premise is that instead of working directly with the coded 
+// symbols, we create a new ordering based on the frequency of symbols.
+// Less frequent symbols (and thus longer codes) are ordered earler.
+// We're calling the values in this ordering 'Ids', as oppsed to 
+// 'Symbols' - which are the short values we eventually want decoded.
+//
+// With this new ordering, a few small tables can be derived ('base' 
+// and 'offset') which drive the decoding. To cut down on the 
+// linear scanning of these tables, you can add a small table
+// to directly look up short codes (as you might in a traditional
+// lookup-table driven decoder). 
+//
+// The decoder is meant to be compatible with the encoder (and decoder)
+// in ImfHuf.cpp, just faster. For ease of implementation, this decoder
+// should only be used on compressed bitstreams >= 128 bits long.
+//
     
-    
-    {  DISALLOW_COPY_AND_ASSIGN(WrappableBase);
-};
-    
-    int CertificateManagerModel::ImportFromPKCS12(
-    PK11SlotInfo* slot_info,
-    const std::string& data,
-    const base::string16& password,
-    bool is_extractable,
-    net::ScopedCERTCertificateList* imported_certs) {
-  return cert_db_->ImportFromPKCS12(slot_info, data, password, is_extractable,
-                                    imported_certs);
-}
-    
-    ObjectTemplateBuilder& ObjectTemplateBuilder::MakeDestroyable() {
-  SetMethod('destroy', base::Bind(internal::Destroyable::Destroy));
-  SetMethod('isDestroyed', base::Bind(internal::Destroyable::IsDestroyed));
-  return *this;
-}
-    
-      // Notify another process, if available. Otherwise sets ourselves as the
-  // singleton instance. Returns PROCESS_NONE if we became the singleton
-  // instance. Callers are guaranteed to either have notified an existing
-  // process or have grabbed the singleton (unless the profile is locked by an
-  // unreachable process).
-  // TODO(brettw): Make the implementation of this method non-platform-specific
-  // by making Linux re-use the Windows implementation.
-  NotifyResult NotifyOtherProcessOrCreate();
-  void StartListeningOnSocket();
-  void OnBrowserReady();
-    
-    namespace caffe2 {
-namespace {
-REGISTER_CPU_OPERATOR(
-    FindDuplicateElements,
-    FindDuplicateElementsOp<CPUContext>);
-    }
-    }
-    
-              vector<TensorShape> out(1);
-          switch (order) {
-            case StorageOrder::NCHW:
-              out[0] = CreateTensorShape(
-                  vector<int>{N, C * kernel_h * kernel_w, out_h, out_w},
-                  TensorProto::FLOAT);
-              break;
-            case StorageOrder::NHWC:
-              out[0] = CreateTensorShape(
-                  vector<int>{N, out_h, out_w, kernel_h * kernel_w * C},
-                  TensorProto::FLOAT);
-              break;
-            default:
-              CAFFE_THROW('Unknown storage order: ', order);
-          }
-    
-    
-    {	b2PolyNode(b2Vec2& pos);
-	b2PolyNode();
-	void AddConnection(b2PolyNode& toMe);
-	void RemoveConnection(b2PolyNode& fromMe);
-	void RemoveConnectionByIndex(int32 index);
-	bool IsConnectedTo(b2PolyNode& me);
-	b2PolyNode* GetRightestConnection(b2PolyNode* incoming);
-	b2PolyNode* GetRightestConnection(b2Vec2& incomingDir);
-};
-    
-    			image.m_bVerboseOutput = a_bVerboseOutput;
-			image.Encode(a_format, a_eErrMetric, a_fEffort, a_uiJobs, a_uiMaxJobs);
-    
-    #   define C_MULC(m,a,b) \
-      do{ (m).r = ADD32(S_MUL((a).r,(b).r) , S_MUL((a).i,(b).i)); \
-          (m).i = SUB32(S_MUL((a).i,(b).r) , S_MUL((a).r,(b).i)); }while(0)
-    
-    #define MULT32_32_Q31(a,b)     ((a)*(b))
-    
-    #include 'config.h'
-#include 'kiss_fft.h'
+    #include 'ImfAttribute.h'
     
     #endif
 
     
-    /*The number of bits to output at a time.*/
-# define EC_SYM_BITS   (8)
-/*The total number of bits in each of the state registers.*/
-# define EC_CODE_BITS  (32)
-/*The maximum symbol value.*/
-# define EC_SYM_MAX    ((1U<<EC_SYM_BITS)-1)
-/*Bits to shift by to move a symbol into the high-order position.*/
-# define EC_CODE_SHIFT (EC_CODE_BITS-EC_SYM_BITS-1)
-/*Carry bit of the high-order range symbol.*/
-# define EC_CODE_TOP   (((opus_uint32)1U)<<(EC_CODE_BITS-1))
-/*Low-order bit of the high-order range symbol.*/
-# define EC_CODE_BOT   (EC_CODE_TOP>>EC_SYM_BITS)
-/*The number of bits available for the last, partial symbol in the code field.*/
-# define EC_CODE_EXTRA ((EC_CODE_BITS-2)%EC_SYM_BITS+1)
-#endif
+    
+FrameBuffer::Iterator
+FrameBuffer::begin ()
+{
+    return _map.begin();
+}
+    
+    
+    {
+    {
+    {
+    {
+    {}  // namespace
+}  // namespace java
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
 
     
-    #ifndef PSTOKENIZER_H
-#define PSTOKENIZER_H
     
-      Object *getObj(Object *obj, std::set<int> *fetchOriginatorNums);
+bool ZeroCopyOutputStream::WriteAliasedRaw(const void* /* data */,
+                                           int /* size */) {
+  GOOGLE_LOG(FATAL) << 'This ZeroCopyOutputStream doesn't support aliasing. '
+                'Reaching here usually means a ZeroCopyOutputStream '
+                'implementation bug.';
+  return false;
+}
+    
+    void MapLiteTestUtil::ExpectMapFieldsModified(
+    const unittest::TestMapLite& message) {
+  MapTestUtilImpl::ExpectMapFieldsModified<unittest::MapEnumLite,
+                                           unittest::MAP_ENUM_BAR_LITE,
+                                           unittest::MAP_ENUM_FOO_LITE>(
+      message);
+}
     
     
-    {}
-    
-    class GooString;
-class PDFDoc;
-struct XpdfSecurityHandler;
-    
-    void SplashOutputDev::eoClip(GfxState *state) {
-  SplashPath *path;
-    }
-    
-    
-    // exception type_error.304
-    try
     {
-        // use at() on a non-array type
-        json str = 'I am a string';
-        str.at(0) = 'Another string';
-    }
-    catch (json::type_error& e)
-    {
-        std::cout << e.what() << '\n';
+    {  // No default clause, clang will abort if a code is missing from
+  // above switch.
+  return 'UNKNOWN';
+}
+}  // namespace error.
+    
+    template <class T, T v> const T integral_constant<T, v>::value;
+    
+    
+    {  // Yes || Yes == true.
+  value = or_<true_, true_>::value;
+  EXPECT_TRUE(value);
+  // Yes || No == true.
+  value = or_<true_, false_>::value;
+  EXPECT_TRUE(value);
+  // No || Yes == true.
+  value = or_<false_, true_>::value;
+  EXPECT_TRUE(value);
+  // No || No == false.
+  value = or_<false_, false_>::value;
+  EXPECT_FALSE(value);
+}
+    
+    
+bool InitDescriptor() {
+  if (PyType_Ready(&PyMessageDescriptor_Type) < 0)
+    return false;
     }
     
-        // output element with JSON pointer '/number'
-    std::cout << j.at('/number'_json_pointer) << '\n';
-    // output element with JSON pointer '/string'
-    std::cout << j.at('/string'_json_pointer) << '\n';
-    // output element with JSON pointer '/array'
-    std::cout << j.at('/array'_json_pointer) << '\n';
-    // output element with JSON pointer '/array/1'
-    std::cout << j.at('/array/1'_json_pointer) << '\n';
     
-    class WriteCallback {
+    {  UNICHARMAP_NODE* nodes;
+};
+    
+    template <typename TrainingParams,
+          typename StatT, typename T = decltype(StatT().GetHess())>
+XGBOOST_DEVICE inline T CalcGain(const TrainingParams &p, StatT stat) {
+  return CalcGain(p, stat.GetGrad(), stat.GetHess());
+}
+    
+    namespace xgboost {
+namespace data {
+// Used for single batch data.
+class SimpleDMatrix : public DMatrix {
  public:
-  virtual ~WriteCallback() {}
+  explicit SimpleDMatrix(std::unique_ptr<DataSource>&& source)
+      : source_(std::move(source)) {}
+    }
+    }
     }
     
-    // Returns an Env that translates paths such that the root directory appears to
-// be chroot_dir. chroot_dir should refer to an existing directory.
-Env* NewChrootEnv(Env* base_env, const std::string& chroot_dir);
     
-    #ifndef ROCKSDB_LITE
+    {  // Test the data read into the first row
+  auto &batch = *dmat->GetRowBatches().begin();
+  auto first_row = batch[0];
+  ASSERT_EQ(first_row.size(), 3);
+  EXPECT_EQ(first_row[2].index, 2);
+  EXPECT_EQ(first_row[2].fvalue, 20);
+}
     
+    gbm::GBTreeModel CreateTestModel() {
+  std::vector<std::unique_ptr<RegTree>> trees;
+  trees.push_back(std::unique_ptr<RegTree>(new RegTree));
+  (*trees.back())[0].SetLeaf(1.5f);
+  (*trees.back()).Stat(0).sum_hess = 1.0f;
+  gbm::GBTreeModel model(0.5);
+  model.CommitModel(std::move(trees), 0);
+  model.param.num_output_group = 1;
+  model.base_margin = 0;
+  return model;
+}
     
-    {}  // namespace rocksdb
+    SEXP XGDMatrixSliceDMatrix_R(SEXP handle, SEXP idxset) {
+  SEXP ret;
+  R_API_BEGIN();
+  int len = length(idxset);
+  std::vector<int> idxvec(len);
+  for (int i = 0; i < len; ++i) {
+    idxvec[i] = INTEGER(idxset)[i] - 1;
+  }
+  DMatrixHandle res;
+  CHECK_CALL(XGDMatrixSliceDMatrixEx(R_ExternalPtrAddr(handle),
+                                     BeginPtr(idxvec), len,
+                                     &res,
+                                     0));
+  ret = PROTECT(R_MakeExternalPtr(res, R_NilValue, R_NilValue));
+  R_RegisterCFinalizerEx(ret, _DMatrixFinalizer, TRUE);
+  R_API_END();
+  UNPROTECT(1);
+  return ret;
+}
     
-    /*
- * Class:     org_rocksdb_BackupableDBOptions
- * Method:    setShareFilesWithChecksum
- * Signature: (JZ)V
+    /*!
+ * \brief load a data matrix
+ * \param fname the name of the file
+ * \param silent whether print messages during loading
+ * \param out a loaded data matrix
+ * \return 0 when success, -1 when failure happens
  */
-void Java_org_rocksdb_BackupableDBOptions_setShareFilesWithChecksum(
-    JNIEnv* /*env*/, jobject /*jobj*/, jlong jhandle, jboolean flag) {
-  auto* bopt = reinterpret_cast<rocksdb::BackupableDBOptions*>(jhandle);
-  bopt->share_files_with_checksum = flag;
+XGB_DLL int XGDMatrixCreateFromFile(const char *fname,
+                                    int silent,
+                                    DMatrixHandle *out);
+    
+    
+    {  delete dmat;
+}
+    
+    template<typename DType>
+inline void CompressArray<DType>::InitCompressChunks(size_t chunk_size, size_t max_nchunk) {
+  raw_chunks_.clear();
+  raw_chunks_.push_back(0);
+  size_t min_chunk_size = data.size() / max_nchunk;
+  chunk_size = std::max(min_chunk_size, chunk_size);
+  size_t nstep = data.size() / chunk_size;
+  for (size_t i = 0; i < nstep; ++i) {
+    raw_chunks_.push_back(raw_chunks_.back() + chunk_size);
+    CHECK_LE(raw_chunks_.back(), data.size());
+  }
+  if (nstep == 0) raw_chunks_.push_back(0);
+  raw_chunks_.back() = data.size();
+  CHECK_GE(raw_chunks_.size(), 2);
+  out_buffer_.resize(raw_chunks_.size() - 1);
+  for (size_t i = 0; i < out_buffer_.size(); ++i) {
+    out_buffer_[i].resize(raw_chunks_[i + 1] - raw_chunks_[i]);
+  }
 }
