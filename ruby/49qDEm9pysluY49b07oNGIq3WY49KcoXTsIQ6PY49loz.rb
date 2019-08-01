@@ -1,202 +1,140 @@
 
         
-            it 'creates an agent with a source and a receiver' do
-      visit '/'
-      page.find('a', text: 'Agents').trigger(:mouseover)
-      click_on('New Agent')
-    
-      it 'asks to accept conflicts when the scenario was modified' do
-    DefaultScenarioImporter.seed(user)
-    agent = user.agents.where(name: 'Rain Notifier').first
-    agent.options['expected_receive_period_in_days'] = 9001
-    agent.save!
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
-    click_on 'Start Import'
-    expect(page).to have_text('This Scenario already exists in your system.')
-    expect(page).to have_text('9001')
-    check('I confirm that I want to import these Agents.')
-    click_on 'Finish Import'
-    expect(page).to have_text('Import successful!')
+          after do
+    FileUtils.rm_rf(base_dir)
   end
     
-        it 'returns a label 'Missing Gems' if a given agent has dependencies missing' do
-      stub(@agent).dependencies_missing? { true }
-      label = working(@agent)
-      expect(label).to be_html_safe
-      expect(Nokogiri(label).text).to eq 'Missing Gems'
+          respond_to_on_destroy
     end
+  end
     
-          it 'generates a DOT script' do
-        expect(agents_dot(@agents)).to match(%r{
-          \A
-          digraph \x20 'Agent \x20 Event \x20 Flow' \{
-            node \[ [^\]]+ \];
-            edge \[ [^\]]+ \];
-            (?<foo>\w+) \[label=foo\];
-            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
-            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
-            \k<bar1> \[label=bar1\];
-            \k<bar2> \[label=bar2,style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
-            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
-            \k<bar3> \[label=bar3\];
-          \}
-          \z
-        }x)
+        if successfully_sent?(resource)
+      respond_with({}, location: after_sending_unlock_instructions_path_for(resource))
+    else
+      respond_with(resource)
+    end
+  end
+    
+    module Devise
+  module Controllers
+    # A module that may be optionally included in a controller in order
+    # to provide remember me behavior. Useful when signing in is done
+    # through a callback, like in OmniAuth.
+    module Rememberable
+      # Return default cookie values retrieved from session options.
+      def self.cookie_values
+        Rails.configuration.session_options.slice(:path, :domain, :secure)
       end
     
-        it 'should provide the since attribute after the first run' do
-      time = (Time.now-1.minute).iso8601
-      @checker.memory[:last_event] = time
-      @checker.save
-      expect(@checker.reload.send(:query_parameters)).to eq({:query => {:since => time}})
+          # Set up a subject doing an I18n lookup. At first, it attempts to set a subject
+      # based on the current mapping:
+      #
+      #   en:
+      #     devise:
+      #       mailer:
+      #         confirmation_instructions:
+      #           user_subject: '...'
+      #
+      # If one does not exist, it fallbacks to ActionMailer default:
+      #
+      #   en:
+      #     devise:
+      #       mailer:
+      #         confirmation_instructions:
+      #           subject: '...'
+      #
+      def subject_for(key)
+        I18n.t(:'#{devise_mapping.name}_subject', scope: [:devise, :mailer, key],
+          default: [:subject, key.to_s.humanize])
+      end
     end
-  end
-    
-    Rails.application.initialize!
-    
-      private
-    
-      def future_expires
-    Time.now.utc + lease_seconds_or_default
-  end
-    
-      private
-    
-      def user_needs_sign_in_update?
-    user_signed_in? && (current_user.current_sign_in_at.nil? || current_user.current_sign_in_at < UPDATE_SIGN_IN_HOURS.hours.ago)
   end
 end
 
     
-            # Receives a Kerberos Response over a tcp connection
-        #
-        # @return [<Rex::Proto::Kerberos::Model::KrbError, Rex::Proto::Kerberos::Model::KdcResponse>] the kerberos message response
-        # @raise [RuntimeError] if the response can't be processed
-        # @raise [EOFError] if expected data can't be read
-        def recv_response_tcp
-          length_raw = connection.get_once(4, timeout)
-          unless length_raw && length_raw.length == 4
-            raise ::RuntimeError, 'Kerberos Client: failed to read response'
-          end
-          length = length_raw.unpack('N')[0]
+    module Devise
+  module Models
+    # Timeoutable takes care of verifying whether a user session has already
+    # expired or not. When a session expires after the configured time, the user
+    # will be asked for credentials again, it means, they will be redirected
+    # to the sign in page.
+    #
+    # == Options
+    #
+    # Timeoutable adds the following options to devise_for:
+    #
+    #   * +timeout_in+: the interval to timeout the user session without activity.
+    #
+    # == Examples
+    #
+    #   user.timedout?(30.minutes.ago)
+    #
+    module Timeoutable
+      extend ActiveSupport::Concern
     
-              # Encodes the components field
-          #
-          # @return [String]
-          def encode_components
-            encoded = ''
+          it 'does not process payload if no signature exists' do
+        expect_any_instance_of(ActivityPub::LinkedDataSignature).to receive(:verify_account!).and_return(nil)
+        expect(ActivityPub::Activity).not_to receive(:factory)
     
-              # Encodes the Rex::Proto::Kerberos::CredentialCache::Time into an String
-          #
-          # @return [String] encoded time
-          def encode
-            encoded = ''
-            encoded << encode_auth_time
-            encoded << encode_start_time
-            encoded << encode_end_time
-            encoded << encode_renew_time
+    class DisallowedHashtagsValidator < ActiveModel::Validator
+  def validate(status)
+    return unless status.local? && !status.reblog?
     
-              # Encodes the authenticator field
-          #
-          # @return [String]
-          def encode_authenticator
-            authenticator.encode
-          end
+    class Api::V1::PollsController < Api::BaseController
+  include Authorization
+    
+        context 'when parent status is private' do
+      let(:visibility) { 'private' }
+    
+    is_travis = ENV['TRAVIS_OS_NAME'] && !ENV['TRAVIS_OS_NAME'].empty?
+    
+          context 'and :python_package_name_prefix is nil/default' do
+        it 'should prefix the package with 'python-'' do
+          subject.input(example_dir)
+          insist { subject.name } == 'python-example'
         end
       end
-    end
-  end
-end
     
-                seq.to_der
-          end
-    
-              # Decodes the cipher from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Sting]
-          def decode_cipher(input)
-            input.value[0].value
-          end
-    
-              # Decodes the pvno from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_asn1_pvno(input)
-            input.value[0].value.to_i
-          end
-    
-                self
-          end
-    
-    require_relative '../lib/bootstrap/environment'
-    
-      it 'records when the config was read' do
-    expect(subject.read_at).to be <= Time.now
+      config.vm.define 'centos7' do |centos7|
+    centos7.vm.box = 'puppetlabs/centos-7.0-64-puppet'
   end
     
-          options = {:debug => ENV['LS_QA_DEBUG']}
-      puts 'Destroying #{machines}'
-      LogStash::VagrantHelpers.destroy(machines, options)
-      puts 'Bootstrapping #{machines}'
-      LogStash::VagrantHelpers.bootstrap(machines, options)
-    end
     
-        context 'without a specific plugin' do
-      it 'display a list of plugins' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list')
-        expect(result.stdout.split('\n').size).to be > 1
-      end
-    
-        def paragraphize(input)
-      '<p>#{input.lstrip.rstrip.gsub(/\n\n/, '</p><p>').gsub(/\n/, '<br/>')}</p>'
-    end
-  end
-end
-    
-        # Initializes a new CategoryFeed.
+  class << self
+    # This method is invoked when subclass occurs.
     #
-    #  +base+         is the String path to the <source>.
-    #  +category_dir+ is the String path between <source> and the category folder.
-    #  +category+     is the category currently being processed.
-    def initialize(site, base, category_dir, category)
-      @site = site
-      @base = base
-      @dir  = category_dir
-      @name = 'atom.xml'
-      self.process(@name)
-      # Read the YAML data from the layout page.
-      self.read_yaml(File.join(base, '_includes/custom'), 'category_feed.xml')
-      self.data['category']    = category
-      # Set the title for this page.
-      title_prefix             = site.config['category_title_prefix'] || 'Category: '
-      self.data['title']       = '#{title_prefix}#{category}'
-      # Set the meta-description for this page.
-      meta_description_prefix  = site.config['category_meta_description_prefix'] || 'Category: '
-      self.data['description'] = '#{meta_description_prefix}#{category}'
+    # Lets us track all known FPM::Package subclasses
+    def inherited(klass)
+      @subclasses ||= {}
+      @subclasses[klass.name.gsub(/.*:/, '').downcase] = klass
+    end # def self.inherited
     
-        def render(context)
-      if parts = @text.match(/([a-zA-Z\d]*) (.*)/)
-        gist, file = parts[1].strip, parts[2].strip
-      else
-        gist, file = @text.strip, ''
-      end
-      if gist.empty?
-        ''
-      else
-        script_url = script_url_for gist, file
-        code       = get_cached_gist(gist, file) || get_gist_from_web(gist, file)
-        html_output_for script_url, code
-      end
+        # pad out the result
+    ret = pad_string_to(ret, TAR_CHUNK_SIZE)
+    return ret
+  end
+    
+      def self.default_prefix
+    npm_prefix = safesystemout('npm', 'prefix', '-g').chomp
+    if npm_prefix.count('\n') > 0
+      raise FPM::InvalidPackageConfiguration, '`npm prefix -g` returned unexpected output.'
+    elsif !File.directory?(npm_prefix)
+      raise FPM::InvalidPackageConfiguration, '`npm prefix -g` returned a non-existent directory'
     end
+    logger.info('Setting default npm install prefix', :prefix => npm_prefix)
+    npm_prefix
+  end
     
-    module Jekyll
+        # Final edit for lint check and packaging
+    edit_file(manifest_fn) if attributes[:edit?]
     
-    Liquid::Template.register_tag('include_code', Jekyll::IncludeCodeTag)
-
+        pear_cmd = 'pear -c #{config} remote-info #{input_package}'
+    logger.info('Fetching package information', :package => input_package, :command => pear_cmd)
+    name = %x{#{pear_cmd} | sed -ne '/^Package\s*/s/^Package\s*//p'}.chomp
+    self.name = '#{attributes[:pear_package_name_prefix]}-#{name}'
+    self.version = %x{#{pear_cmd} | sed -ne '/^Installed\s*/s/^Installed\s*//p'}.chomp
+    self.description  = %x{#{pear_cmd} | sed -ne '/^Summary\s*/s/^Summary\s*//p'}.chomp
+    logger.debug('Package info', :name => self.name, :version => self.version,
+                  :description => self.description)
     
-          unless file.file?
-        return 'File #{file} could not be found'
-      end
+    require 'pleaserun/cli'
