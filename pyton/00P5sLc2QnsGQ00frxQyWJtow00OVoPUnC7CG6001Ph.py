@@ -1,199 +1,226 @@
 
         
-        
-class AddRequest(object):
+        import re
     
-        def park_vehicle(self, vehicle):
-        for level in self.levels:
-            if level.park_vehicle(vehicle):
-                return True
-        return False
     
-            (2016-01, url0), 1
-        (2016-01, url0), 1
-        (2016-01, url1), 1
-        '''
-        url = self.extract_url(line)
-        period = self.extract_year_month(line)
-        yield (period, url), 1
+class RedBullTVRrnContentIE(InfoExtractor):
+    _VALID_URL = r'https?://(?:www\.)?redbull(?:\.tv|\.com(?:/[^/]+)?(?:/tv)?)/(?:video|live)/rrn:content:[^:]+:(?P<id>[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12})'
+    _TESTS = [{
+        'url': 'https://www.redbull.com/int-en/tv/video/rrn:content:live-videos:e3e6feb4-e95f-50b7-962a-c70f8fd13c73/mens-dh-finals-fort-william',
+        'only_matching': True,
+    }, {
+        'url': 'https://www.redbull.com/int-en/tv/video/rrn:content:videos:a36a0f36-ff1b-5db8-a69d-ee11a14bf48b/tn-ts-style?playlist=rrn:content:event-profiles:83f05926-5de8-5389-b5e4-9bb312d715e8:extras',
+        'only_matching': True,
+    }]
     
-        def set(self, key, value):
-        hash_index = self._hash_function(key)
-        for item in self.table[hash_index]:
-            if item.key == key:
-                item.value = value
-                return
-        self.table[hash_index].append(Item(key, value))
     
-        def crawl(self):
-        while True:
-            page = self.data_store.extract_max_priority_page()
-            if page is None:
-                break
-            if self.data_store.crawled_similar(page.signature):
-                self.data_store.reduce_priority_link_to_crawl(page.url)
-            else:
-                self.crawl_page(page)
-            page = self.data_store.extract_max_priority_page()
+class SouthParkEsIE(SouthParkIE):
+    IE_NAME = 'southpark.cc.com:español'
+    _VALID_URL = r'https?://(?:www\.)?(?P<url>southpark\.cc\.com/episodios-en-espanol/(?P<id>.+?)(\?|#|$))'
+    _LANG = 'es'
+    
+        def _real_extract(self, url):
+        content_id = self._match_id(url)
+        return self._extract_video_info(content_id)
 
     
-        def test_delete___dict__(self):
+    
+    {    # Options that need a file parameter
+    'download-archive': ['--require-parameter'],
+    'cookies': ['--require-parameter'],
+    'load-info': ['--require-parameter'],
+    'batch-file': ['--require-parameter'],
+}
+    
+    versions_info['versions'][version] = new_version
+versions_info['latest'] = version
+    
+    versions_info = json.load(open('update/versions.json'))
+if 'signature' in versions_info:
+    del versions_info['signature']
+    
+    # We must be able to import youtube_dl
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    
+        out = issue_template_tmpl % {'version': locals()['__version__']}
+    
+    with io.open(README_FILE, 'w', encoding='utf-8') as f:
+    f.write(header)
+    f.write(options)
+    f.write(footer)
+
+    
+    
+    {    # Server Error.
+    500: ('internal_server_error', 'server_error', '/o\\', '✗'),
+    501: ('not_implemented',),
+    502: ('bad_gateway',),
+    503: ('service_unavailable', 'unavailable'),
+    504: ('gateway_timeout',),
+    505: ('http_version_not_supported', 'http_version'),
+    506: ('variant_also_negotiates',),
+    507: ('insufficient_storage',),
+    509: ('bandwidth_limit_exceeded', 'bandwidth'),
+    510: ('not_extended',),
+    511: ('network_authentication_required', 'network_auth', 'network_authentication'),
+}
+    
+    class PyTest(TestCommand):
+    user_options = [('pytest-args=', 'a', 'Arguments to pass into py.test')]
+    
+            jar = requests.cookies.RequestsCookieJar()
+        jar.set(key, value, domain=domain1)
+        jar.set(key, value, domain=domain2)
+        assert key in jar
+        items = jar.items()
+        assert len(items) == 2
+    
+        :param cookiejar: CookieJar object to add the cookies to.
+    :param cookies: Dictionary or CookieJar object to be added.
+    :rtype: CookieJar
+    '''
+    if not isinstance(cookiejar, cookielib.CookieJar):
+        raise ValueError('You can only merge into CookieJar')
+    
+            # Prepare DASH streams
         try:
-            del self.b.__dict__
-        except TypeError:
+            dashmpd = ytplayer_config['args']['dashmpd']
+            dash_xml = parseString(get_content(dashmpd))
+            for aset in dash_xml.getElementsByTagName('AdaptationSet'):
+                mimeType = aset.getAttribute('mimeType')
+                if mimeType == 'audio/mp4':
+                    rep = aset.getElementsByTagName('Representation')[-1]
+                    burls = rep.getElementsByTagName('BaseURL')
+                    dash_mp4_a_url = burls[0].firstChild.nodeValue
+                    dash_mp4_a_size = burls[0].getAttribute('yt:contentLength')
+                    if not dash_mp4_a_size:
+                        try: dash_mp4_a_size = url_size(dash_mp4_a_url)
+                        except: continue
+                elif mimeType == 'audio/webm':
+                    rep = aset.getElementsByTagName('Representation')[-1]
+                    burls = rep.getElementsByTagName('BaseURL')
+                    dash_webm_a_url = burls[0].firstChild.nodeValue
+                    dash_webm_a_size = burls[0].getAttribute('yt:contentLength')
+                    if not dash_webm_a_size:
+                        try: dash_webm_a_size = url_size(dash_webm_a_url)
+                        except: continue
+                elif mimeType == 'video/mp4':
+                    for rep in aset.getElementsByTagName('Representation'):
+                        w = int(rep.getAttribute('width'))
+                        h = int(rep.getAttribute('height'))
+                        itag = rep.getAttribute('id')
+                        burls = rep.getElementsByTagName('BaseURL')
+                        dash_url = burls[0].firstChild.nodeValue
+                        dash_size = burls[0].getAttribute('yt:contentLength')
+                        if not dash_size:
+                            try: dash_size = url_size(dash_url)
+                            except: continue
+                        dash_urls = self.__class__.chunk_by_range(dash_url, int(dash_size))
+                        dash_mp4_a_urls = self.__class__.chunk_by_range(dash_mp4_a_url, int(dash_mp4_a_size))
+                        self.dash_streams[itag] = {
+                            'quality': '%sx%s' % (w, h),
+                            'itag': itag,
+                            'type': mimeType,
+                            'mime': mimeType,
+                            'container': 'mp4',
+                            'src': [dash_urls, dash_mp4_a_urls],
+                            'size': int(dash_size) + int(dash_mp4_a_size)
+                        }
+                elif mimeType == 'video/webm':
+                    for rep in aset.getElementsByTagName('Representation'):
+                        w = int(rep.getAttribute('width'))
+                        h = int(rep.getAttribute('height'))
+                        itag = rep.getAttribute('id')
+                        burls = rep.getElementsByTagName('BaseURL')
+                        dash_url = burls[0].firstChild.nodeValue
+                        dash_size = burls[0].getAttribute('yt:contentLength')
+                        if not dash_size:
+                            try: dash_size = url_size(dash_url)
+                            except: continue
+                        dash_urls = self.__class__.chunk_by_range(dash_url, int(dash_size))
+                        dash_webm_a_urls = self.__class__.chunk_by_range(dash_webm_a_url, int(dash_webm_a_size))
+                        self.dash_streams[itag] = {
+                            'quality': '%sx%s' % (w, h),
+                            'itag': itag,
+                            'type': mimeType,
+                            'mime': mimeType,
+                            'container': 'webm',
+                            'src': [dash_urls, dash_webm_a_urls],
+                            'size': int(dash_size) + int(dash_webm_a_size)
+                        }
+        except:
+            # VEVO
+            if not self.html5player: return
+            self.js = get_content(self.html5player)
+    
+                elif opt in ('-l', '--playlist', '--playlists'):
+                # Download playlist whenever possible.
+                conf['playlist'] = True
+    
+        for quality in ['1080','720','480','380','240','144','auto']:
+        try:
+            real_url = info[quality][1]['url']
+            if real_url:
+                break
+        except KeyError:
             pass
-        else:
-            self.fail('deleting function dictionary should raise TypeError')
     
-            You normally don't need to override this method; see the class
-        __doc__ string for information on how to handle specific HTTP
-        commands such as GET and POST.
+    pattern_url_photoset = r'https?://www\.flickr\.com/photos/.+/(?:(?:sets)|(?:albums))?/([^/]+)'
+pattern_url_photostream = r'https?://www\.flickr\.com/photos/([^/]+)(?:/|(?:/page))?$'
+pattern_url_single_photo = r'https?://www\.flickr\.com/photos/[^/]+/(\d+)'
+pattern_url_gallery = r'https?://www\.flickr\.com/photos/[^/]+/galleries/(\d+)'
+pattern_url_group = r'https?://www\.flickr\.com/groups/([^/]+)'
+pattern_url_favorite = r'https?://www\.flickr\.com/photos/([^/]+)/favorites'
     
-        Note that not all entries are resources.  Specifically, directories are
-    not considered resources.  Use `is_resource()` on each entry returned here
-    to check if it is a resource or not.
-    '''
-    package = _get_package(package)
-    reader = _get_resource_reader(package)
-    if reader is not None:
-        return reader.contents()
-    # Is the package a namespace package?  By definition, namespace packages
-    # cannot have resources.  We could use _check_location() and catch the
-    # exception, but that's extra work, so just inline the check.
-    elif package.__spec__.origin is None or not package.__spec__.has_location:
-        return ()
-    else:
-        package_directory = Path(package.__spec__.origin).parent
-        return os.listdir(package_directory)
+    site_info = 'Giphy.com'
+download = giphy_download
+download_playlist = playlist_not_supported('giphy')
 
     
-        # Submit tasks
-    for task in TASKS1:
-        task_queue.put(task)
+        def contribute(self):
+        self.blackboard.common_state['problems'] += random.randint(1, 2)
+        self.blackboard.common_state['suggestions'] += random.randint(10, 20)
+        self.blackboard.common_state['contributions'] += [self.__class__.__name__]
+        self.blackboard.common_state['progress'] += random.randint(10, 100)
     
-    con.commit()
-    
-        def setUp(self):
-        from acme.errors import MissingNonce
-        self.response = mock.MagicMock(headers={})
-        self.response.request.method = 'FOO'
-        self.error = MissingNonce(self.response)
-    
-    # Theme options are theme-specific and customize the look and feel of a theme
-# further.  For a list of options available for each theme, see the
-# documentation.
-#
-# html_theme_options = {}
-    
-        return getattr(command_class, command)
+    from __future__ import print_function
     
     
-def update_init_py_version(version):
-    path = os.path.join(REPO_ROOT, 'compose', '__init__.py')
-    with open(path, 'r') as f:
-        contents = f.read()
-    contents = re.sub(r'__version__ = '[0-9a-z.-]+'', '__version__ = '{}''.format(version), contents)
-    with open(path, 'w') as f:
-        f.write(contents)
+class Transaction(object):
+    '''A transaction guard.
     
-        @pytest.mark.skipif(not IS_WINDOWS_PLATFORM, reason='Needs pywin32')
-    def test_windows_pipe_error_encoding_issue(self, mock_logging):
-        import pywintypes
-        with pytest.raises(errors.ConnectionError):
-            with handle_connection_errors(mock.Mock(api_version='1.22')):
-                raise pywintypes.error(9999, 'WriteFile', 'I use weird characters \xe9')
+    *TL;DR
+Enables selecting an algorithm at runtime.
+'''
     
-            sorted_services = sort_service_dicts(services)
-        assert len(sorted_services) == 3
-        assert sorted_services[0]['name'] == 'child'
-        assert sorted_services[1]['name'] == 'parent'
-        assert sorted_services[2]['name'] == 'grandparent'
+    *TL;DR
+Defines the skeleton of a base algorithm, deferring definition of exact
+steps to subclasses.
     
-        def open_file(self, path):
-        if path.startswith('+'):
-            path = path[1:]
-            mode = 'ab'
-        else:
-            mode = 'wb'
-        path = os.path.expanduser(path)
-        return open(path, mode)
+        def visit_B(self, node, *args, **kwargs):
+        print('visit_B ' + node.__class__.__name__)
     
-    # These get over-ridden by the save execution context. Keep them around so we
-# can log directly.
-realstdout = sys.stdout
-realstderr = sys.stderr
-    
-        def collect_commands(self, addon):
-        for i in dir(addon):
-            if not i.startswith('__'):
-                o = getattr(addon, i)
-                try:
-                    is_command = hasattr(o, 'command_path')
-                except Exception:
-                    pass  # hasattr may raise if o implements __getattr__.
-                else:
-                    if is_command:
-                        try:
-                            self.add(o.command_path, o)
-                        except exceptions.CommandError as e:
-                            self.master.log.warn(
-                                'Could not load command %s: %s' % (o.command_path, e)
-                            )
-    
-            self.blocks = []
-        while True:
-            _ = self._root.Block(self._io, self, self._root)
-            self.blocks.append(_)
-            if  ((self._io.is_eof()) or (_.block_type == self._root.BlockType.end_of_file)) :
-                break
-    
-        def dequeueString(self, length=None):
-        if ( length != None):
-            currentByte = 0x00
-            strReturn = ''
-            for i in range(0, length):
-                # TODO: Improve this handling. We are technically UTF-8, meaning
-                # that characters could be more than one byte long. This will fail if we have
-                # characters outside of the US-ASCII range
-                if ( self.qsize() == 0 ):
-                    break
-                currentByte = self.dequeueAndLog()
-                strReturn += chr(currentByte)
-    
-        def send(self, msg, force=False):
-        if self.state not in {'start', 'taken'}:
-            raise exceptions.ControlException(
-                'Reply is {}, but expected it to be start or taken.'.format(self.state)
-            )
-        if self.has_message and not force:
-            raise exceptions.ControlException('There is already a reply message.')
-        self.value = msg
-    
-    For x = 11:
-[1, 1, 1, 1, 1]
- 3  5  7  9  11  # 11 is odd, it's included in the list
-    
-    
-# Python solution with only one table for B (~196ms):
-def multiply(self, a, b):
     '''
-    :type A: List[List[int]]
-    :type B: List[List[int]]
-    :rtype: List[List[int]]
+*What is this pattern about?
+The Borg pattern (also known as the Monostate pattern) is a way to
+implement singleton behavior, but instead of having only one instance
+of a class, there are multiple instances that share the same state. In
+other words, the focus is on sharing state instead of sharing instance
+identity.
+    
+    
+# ConcreteImplementor 1/2
+class DrawingAPI1(object):
+    def draw_circle(self, x, y, radius):
+        print('API1.circle at {}:{} radius {}'.format(x, y, radius))
+    
+    
+def main():
     '''
-    if a is None or b is None: return None
-    m, n, l = len(a), len(a[0]), len(b[0])
-    if len(b) != n:
-        raise Exception('A's column number must be equal to B's row number.')
-    c = [[0 for _ in range(l)] for _ in range(m)]
-    table_b = {}
-    for k, row in enumerate(b):
-        table_b[k] = {}
-        for j, eleB in enumerate(row):
-            if eleB: table_b[k][j] = eleB
-    for i, row in enumerate(a):
-        for k, eleA in enumerate(row):
-            if eleA:
-                for j, eleB in table_b[k].iteritems():
-                    c[i][j] += eleA * eleB
-    return c
+    >>> computer_facade = ComputerFacade()
+    >>> computer_facade.start()
+    Freezing processor.
+    Loading from 0x00 data: 'Some data from sector 100 with size 1024'.
+    Jumping to: 0x00
+    Executing.
+    '''
