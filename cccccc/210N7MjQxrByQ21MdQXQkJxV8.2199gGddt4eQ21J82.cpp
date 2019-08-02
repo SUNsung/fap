@@ -1,429 +1,624 @@
 
         
-        template <>
-void GluOp<float, CPUContext>::ComputeGlu(
-    const int M,
-    const int split_dim,
-    const int N,
-    const float* Xdata,
-    float* Ydata) {
-  const int xStride = 2 * split_dim * N;
-  const int yStride = split_dim * N;
-  for (int i = 0; i < M; ++i) {
-    const int idx = i * xStride;
-    const int idy = i * yStride;
-    for (int j = 0; j < split_dim; ++j) {
-      const int jN = j * N;
-      const int jdx1 = idx + jN;
-      const int jdx2 = idx + (j + split_dim) * N;
-      const int jdy = idy + jN;
-      for (int k = 0; k < N; ++k) {
-        const float x1 = Xdata[jdx1 + k];
-        const float x2 = Xdata[jdx2 + k];
-        Ydata[jdy + k] = x1 * sigmoid(x2);
-      }
+                //  Create the Pseudo Console and pipes to it
+        HANDLE hPipeIn{ INVALID_HANDLE_VALUE };
+        HANDLE hPipeOut{ INVALID_HANDLE_VALUE };
+        hr = CreatePseudoConsoleAndPipes(&hPC, &hPipeIn, &hPipeOut);
+        if (S_OK == hr)
+        {
+            // Create & start thread to listen to the incoming pipe
+            // Note: Using CRT-safe _beginthread() rather than CreateThread()
+            HANDLE hPipeListenerThread{ reinterpret_cast<HANDLE>(_beginthread(PipeListener, 0, hPipeIn)) };
     }
+    
+    
+    {  // Compare
+  util::MessageDifferencer differencer;
+  differencer.set_message_field_comparison(
+      util::MessageDifferencer::EQUIVALENT);
+  differencer.set_scope(util::MessageDifferencer::PARTIAL);
+  EXPECT_TRUE(differencer.Compare(msg1, msg2));
+}
+    
+    TEST(JavaDocCommentTest, Escaping) {
+  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
+  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
+  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
+  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
+  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
+  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
+}
+    
+    TEST(StatusOr, TestPointerDefaultCtor) {
+  StatusOr<int*> thing;
+  EXPECT_FALSE(thing.ok());
+  EXPECT_EQ(Status::UNKNOWN, thing.status());
+}
+    
+    TEST(StructurallyValidTest, ValidUTF8String) {
+  // On GCC, this string can be written as:
+  //   'abcd 1234 - \u2014\u2013\u2212'
+  // MSVC seems to interpret \u differently.
+  string valid_str('abcd 1234 - \342\200\224\342\200\223\342\210\222 - xyz789');
+  EXPECT_TRUE(IsStructurallyValidUTF8(valid_str.data(),
+                                      valid_str.size()));
+  // Additional check for pointer alignment
+  for (int i = 1; i < 8; ++i) {
+    EXPECT_TRUE(IsStructurallyValidUTF8(valid_str.data() + i,
+                                        valid_str.size() - i));
   }
 }
     
-    template<typename xpu>
-void Dequantize2BitKernelLaunch(mshadow::Stream<xpu> *s, const std::vector<mxnet::TBlob> &inputs,
-                                const float threshold) {
-  mxnet::op::mxnet_op::Kernel<dequantize_2bit, xpu>
-  ::Launch(s,
-          inputs[1].Size(),         // original size
-          inputs[1].dptr<float>(),  // out array
-          inputs[0].dptr<float>(),  // compressed array
-          -1 *threshold,            // negative threshold
-          threshold);               // positive threshold
+    
+    {  // Yes || Yes == true.
+  value = or_<true_, true_>::value;
+  EXPECT_TRUE(value);
+  // Yes || No == true.
+  value = or_<true_, false_>::value;
+  EXPECT_TRUE(value);
+  // No || Yes == true.
+  value = or_<false_, true_>::value;
+  EXPECT_TRUE(value);
+  // No || No == false.
+  value = or_<false_, false_>::value;
+  EXPECT_FALSE(value);
 }
     
-      /*!
-  * \brief Issues dequantize operation to be scheduled by the engine
-  * Decompresses `from` into `to` using current parameters of `type` and `threshold`
-  * \param from the ndarray containing quantized data
-  * \param to the target ndarray which contains final dequantized data
-  * \param priority Priority of the action.
-  */
-  void Dequantize(const mxnet::NDArray &from, mxnet::NDArray *to, const int priority);
-    
-      void Run(const RunContext& rctx) {
-    // setup DLTensor
-    for (size_t i = 0; i < array_loc_.size(); ++i) {
-      values_[array_loc_[i]].v_handle =
-          const_cast<DLTensor*>(&(array_data_[i].data().dltensor()));
-    }
-    // run the packed function
-    TVMRetValue rv;
-    TVMArgs args(&values_[0], &type_codes_[0], values_.size());
-    if (ctx().dev_type == Context::kGPU) {
-#if MXNET_USE_CUDA
-      // pass stream via last argument.
-      void* strm = static_cast<void*>(rctx.get_stream<gpu>()->stream_);
-      int dev_type = kDLGPU;
-      fset_stream_(dev_type, rctx.ctx.dev_id, strm);
-      func_.CallPacked(args, &rv);
-      fset_stream_(dev_type, rctx.ctx.dev_id, nullptr);
-#else
-      LOG(FATAL) << 'Please compile with CUDA enabled for cuda features';
-#endif
-    } else {
-      func_.CallPacked(args, &rv);
-    }
-  }
-    
-    Crop the 2nd and 3rd dim of input data, with the corresponding size of h_w or
-with width and height of the second input symbol, i.e., with one input, we need h_w to
-specify the crop height and width, otherwise the second input symbol's size will be used
-)code' ADD_FILELINE)
-    
-    
-    {
-    {NNVM_REGISTER_OP(IdentityAttachKLSparseReg)
-.set_attr<nnvm::FSetInputVarAttrOnCompose>('FSetInputVarAttrOnCompose',
-    [](const nnvm::NodeAttrs& attrs, nnvm::NodePtr var, const int index) {
-      if (var->attrs.dict.find('__init__') != var->attrs.dict.end()) return;
-      if (index == 1) {
-        var->attrs.dict['__init__'] = '[\'zero\', {}]';
-      }
-    });
-}  // namespace op
-}  // namespace mxnet
-    
-            int32_t const& Sign() const;
-        int32_t const& Exp() const;
-        std::vector<uint32_t> const& Mantissa() const;
-    
-    void CBinaryCommand::Accept(_In_ ISerializeCommandVisitor& commandVisitor)
-{
-    commandVisitor.Visit(*this);
-}
-    
-        static std::vector<uint32_t> DigitGroupingStringToGroupingVector(std::wstring_view groupingString);
-    std::wstring GroupDigits(std::wstring_view delimiter, std::vector<uint32_t> const& grouping, std::wstring_view displayString, bool isNumNegative = false);
-    
-    #include <algorithm>
-#include <string>
-#include 'CalcErr.h'
-#include <cstring> // for memmove
-#include <sal.h>   // for SAL
-    
-    void LiveRegionHost::Announce(NarratorAnnouncement ^ announcement)
-{
-    if (m_host == nullptr)
-    {
-        m_host = ref new TextBlock();
-        AutomationProperties::SetLiveSetting(m_host, AutomationLiveSetting::Assertive);
-    }
-    }
-    
-    #include <dmlc/registry.h>
-#include <functional>
-#include <vector>
-#include <utility>
-#include <string>
-#include './base.h'
-#include './data.h'
-#include './tree_model.h'
-#include '../../src/common/host_device_vector.h'
-    
-    /*! \brief namespace of base64 decoding and encoding table */
-namespace base64 {
-const char DecodeTable[] = {
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  62,  // '+'
-  0, 0, 0,
-  63,  // '/'
-  52, 53, 54, 55, 56, 57, 58, 59, 60, 61,  // '0'-'9'
-  0, 0, 0, 0, 0, 0, 0,
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  // 'A'-'Z'
-  0, 0, 0, 0, 0, 0,
-  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
-  39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // 'a'-'z'
-};
-static const char EncodeTable[] =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-}  // namespace base64
-/*! \brief the stream that reads from base64, note we take from file pointers */
-class Base64InStream: public dmlc::Stream {
- public:
-  explicit Base64InStream(dmlc::Stream *fs) : reader_(256) {
-    reader_.set_stream(fs);
-    num_prev = 0; tmp_ch = 0;
-  }
-  /*!
-   * \brief initialize the stream position to beginning of next base64 stream
-   * call this function before actually start read
-   */
-  inline void InitPosition(void) {
-    // get a character
-    do {
-      tmp_ch = reader_.GetChar();
-    } while (isspace(tmp_ch));
-  }
-  /*! \brief whether current position is end of a base64 stream */
-  inline bool IsEOF(void) const {
-    return num_prev == 0 && (tmp_ch == EOF || isspace(tmp_ch));
-  }
-  virtual size_t Read(void *ptr, size_t size) {
-    using base64::DecodeTable;
-    if (size == 0) return 0;
-    // use tlen to record left size
-    size_t tlen = size;
-    unsigned char *cptr = static_cast<unsigned char*>(ptr);
-    // if anything left, load from previous buffered result
-    if (num_prev != 0) {
-      if (num_prev == 2) {
-        if (tlen >= 2) {
-          *cptr++ = buf_prev[0];
-          *cptr++ = buf_prev[1];
-          tlen -= 2;
-          num_prev = 0;
-        } else {
-          // assert tlen == 1
-          *cptr++ = buf_prev[0]; --tlen;
-          buf_prev[0] = buf_prev[1];
-          num_prev = 1;
-        }
-      } else {
-        // assert num_prev == 1
-        *cptr++ = buf_prev[0]; --tlen; num_prev = 0;
-      }
-    }
-    if (tlen == 0) return size;
-    int nvalue;
-    // note: everything goes with 4 bytes in Base64
-    // so we process 4 bytes a unit
-    while (tlen && tmp_ch != EOF && !isspace(tmp_ch)) {
-      // first byte
-      nvalue = DecodeTable[tmp_ch] << 18;
-      {
-        // second byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        nvalue |= DecodeTable[tmp_ch] << 12;
-        *cptr++ = (nvalue >> 16) & 0xFF; --tlen;
-        }
-      {
-        // third byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        // handle termination
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == '=') << 'invalid base64 format';
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch] << 6;
-        if (tlen) {
-          *cptr++ = (nvalue >> 8) & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev++] = (nvalue >> 8) & 0xFF;
-        }
-      }
-      {
-        // fourth byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch))
-            << 'invalid base64 format';
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch];
-        if (tlen) {
-          *cptr++ = nvalue & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev ++] = nvalue & 0xFF;
-        }
-      }
-      // get next char
-      tmp_ch = reader_.GetChar();
-    }
-    if (kStrictCheck) {
-      CHECK_EQ(tlen, 0) << 'Base64InStream: read incomplete';
-    }
-    return size - tlen;
-  }
-  virtual void Write(const void *ptr, size_t size) {
-    LOG(FATAL) << 'Base64InStream do not support write';
-  }
-    }
-    
-    namespace xgboost {
-namespace obj {
-    }
-    }
-    
-      inline static void LimitSizeLevel
-    (size_t maxn, double eps, size_t* out_nlevel, size_t* out_limit_size) {
-    size_t& nlevel = *out_nlevel;
-    size_t& limit_size = *out_limit_size;
-    nlevel = 1;
-    while (true) {
-      limit_size = static_cast<size_t>(ceil(nlevel / eps)) + 1;
-      size_t n = (1ULL << nlevel);
-      if (n * limit_size >= maxn) break;
-      ++nlevel;
-    }
-    // check invariant
-    size_t n = (1ULL << nlevel);
-    CHECK(n * limit_size >= maxn) << 'invalid init parameter';
-    CHECK(nlevel <= limit_size * eps) << 'invalid init parameter';
-  }
-    
-    /*!
- * \brief Registry entry for tree updater.
- */
-struct GradientBoosterReg
-    : public dmlc::FunctionRegEntryBase<
-  GradientBoosterReg,
-  std::function<GradientBooster* (const std::vector<std::shared_ptr<DMatrix> > &cached_mats,
-                                  bst_float base_margin)> > {
-};
-    
-    /*!
- * \brief Registry entry for objective factory functions.
- */
-struct ObjFunctionReg
-    : public dmlc::FunctionRegEntryBase<ObjFunctionReg,
-                                        std::function<ObjFunction* ()> > {
-};
-    
-      void PredictInstance(const SparsePage::Inst& inst,
-                       std::vector<bst_float>* out_preds,
-                       const gbm::GBTreeModel& model, unsigned ntree_limit,
-                       unsigned root_index) override {
-    if (thread_temp.size() == 0) {
-      thread_temp.resize(1, RegTree::FVec());
-      thread_temp[0].Init(model.param.num_feature);
-    }
-    ntree_limit *= model.param.num_output_group;
-    if (ntree_limit == 0 || ntree_limit > model.trees.size()) {
-      ntree_limit = static_cast<unsigned>(model.trees.size());
-    }
-    out_preds->resize(model.param.num_output_group *
-                      (model.param.size_leaf_vector + 1));
-    // loop over output groups
-    for (int gid = 0; gid < model.param.num_output_group; ++gid) {
-      (*out_preds)[gid] =
-          PredValue(inst, model.trees, model.tree_info, gid, root_index,
-                    &thread_temp[0], 0, ntree_limit) +
-          model.base_margin;
-    }
-  }
-  void PredictLeaf(DMatrix* p_fmat, std::vector<bst_float>* out_preds,
-                   const gbm::GBTreeModel& model, unsigned ntree_limit) override {
-    const int nthread = omp_get_max_threads();
-    InitThreadTemp(nthread, model.param.num_feature);
-    const MetaInfo& info = p_fmat->Info();
-    // number of valid trees
-    ntree_limit *= model.param.num_output_group;
-    if (ntree_limit == 0 || ntree_limit > model.trees.size()) {
-      ntree_limit = static_cast<unsigned>(model.trees.size());
-    }
-    std::vector<bst_float>& preds = *out_preds;
-    preds.resize(info.num_row_ * ntree_limit);
-    // start collecting the prediction
-    for (const auto &batch : p_fmat->GetRowBatches()) {
-      // parallel over local batch
-      const auto nsize = static_cast<bst_omp_uint>(batch.Size());
-#pragma omp parallel for schedule(static)
-      for (bst_omp_uint i = 0; i < nsize; ++i) {
-        const int tid = omp_get_thread_num();
-        auto ridx = static_cast<size_t>(batch.base_rowid + i);
-        RegTree::FVec& feats = thread_temp[tid];
-        feats.Fill(batch[i]);
-        for (unsigned j = 0; j < ntree_limit; ++j) {
-          int tid = model.trees[j]->GetLeafIndex(feats, info.GetRoot(ridx));
-          preds[ridx * ntree_limit + j] = static_cast<bst_float>(tid);
-        }
-        feats.Drop(batch[i]);
-      }
-    }
-  }
-    
-      int64_t num_record_drop_hidden = 0;
-  int64_t num_record_drop_obsolete = 0;
-  int64_t num_record_drop_range_del = 0;
-  int64_t num_range_del_drop_obsolete = 0;
-  // Deletions obsoleted before bottom level due to file gap optimization.
-  int64_t num_optimized_del_drop_obsolete = 0;
-  uint64_t total_filter_time = 0;
-    
-      // Transaction could not commit since the write outside of the txn conflicted
-  // with the read!
-  assert(s.IsBusy());
-    
-    int main() {
-  DB* db;
-  Options options;
-  // Optimize RocksDB. This is the easiest way to get RocksDB to perform well
-  options.IncreaseParallelism();
-  options.OptimizeLevelStyleCompaction();
-  // create the DB if it's not already present
-  options.create_if_missing = true;
-    }
-    
-      // Do a write outside of the transaction to key 'y'
-  s = txn_db->Put(write_options, 'y', 'y');
-    
-    namespace rocksdb {
-namespace experimental {
-    }
-    }
-    
-      // If non-NULL, use the specified cache for blocks.
-  // If NULL, leveldb will automatically create and use an 8MB internal cache.
-  // Default: NULL
-  Cache* block_cache;
-    
-    namespace rocksdb {
-    }
-    
-    
-    {
-    {
-    {}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
+    // Generate param traits log methods.
+#include 'ipc/param_traits_log_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
 
     
-    
-    {  kernel.AddRegularization(0.3);
-  mat_golden = MatrixXd::Identity(10, 10) * 0.5;
-  EXPECT_EQ(kernel.kernel_matrix(), mat_golden);
-}
-    
-    Spline1dSeg::Spline1dSeg(const std::vector<double>& params) {
-  SetSplineFunc(PolynomialXd(params));
-}
-    
-    // config detail: {'name': 'manual_input', 'offset': 0.0, 'precision': 0.001,
-// 'len': 16, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 7,
-// 'type': 'double', 'order': 'motorola', 'physical_unit': '%'}
-double Accelrpt68::manual_input(const std::uint8_t* bytes,
-                                int32_t length) const {
-  Byte t0(bytes + 0);
-  int32_t x = t0.get_byte(0, 8);
+    namespace nw {
     }
     
-      Byte t3(bytes + 7);
-  t = t3.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
     
-      Brakerpt6c brake;
-  brake.Parse(bytes, length, &chassis_detail);
-    
-    
-    {  bool ret = x;
-  return ret;
+    {  RenderThread::Get()->Send(new ShellViewHostMsg_Allocate_Object(
+      routing_id,
+      object_id,
+      type,
+      *static_cast<base::DictionaryValue*>(value_option.get())));
+  return v8::Undefined(isolate);
 }
+    
+    // Tell browser to delete a object.
+// function DeallocateObject(id);
+v8::Handle<v8::Value> DeallocateObject(int routing_id,
+                                       int object_id);
+    
+    void Clipboard::Clear() {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  clipboard->Clear(ui::CLIPBOARD_TYPE_COPY_PASTE);
+}
+    
+    class Clipboard : public Base {
+ public:
+  Clipboard(int id,
+            const base::WeakPtr<DispatcherHost>& dispatcher_host,
+            const base::DictionaryValue& option);
+  ~Clipboard() override;
+    }
+    
+    MenuItem::MenuItem(int id,
+                   const base::WeakPtr<ObjectManager>& object_manager,
+                   const base::DictionaryValue& option,
+                   const std::string& extension_id)
+  : Base(id, object_manager, option, extension_id) {
+  Create(option);
+}
+    
+    void MenuItem::UpdateKeys(views::FocusManager *focus_manager){
+  if (focus_manager == NULL){
+    return ;
+  } else {
+    focus_manager_ = focus_manager;
+    if (enable_shortcut_){
+      focus_manager->RegisterAccelerator(
+        accelerator_,
+        ui::AcceleratorManager::kHighPriority,
+        this);
+    }
+    if (submenu_ != NULL){
+      submenu_->UpdateKeys(focus_manager);
+    }
+  }
+}
+    
+    
+    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.clearSync', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwClipboardClearSyncFunction);
+};
+    
+    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
+ public:
+  NwMenuGetNSStringFWithFixupFunction() {}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    
+ protected:
+  ~NwMenuGetNSStringFWithFixupFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
+};
+    
+      // implement nw.Screen.startMonitor()
+  class NwScreenStartMonitorFunction : public NWSyncExtensionFunction {
+  public:
+    NwScreenStartMonitorFunction();
+    bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    ELISTIZE(PARA)
+    
+    
+    {    while (next_num_ < kMaxNaturalNumberValue) {
+      n = GetBinaryReversedInteger(next_num_++);
+      if (n < N_) break;
+    }
+    return (next_num_ > kMaxNaturalNumberValue) ? kInvalidVal : n;
+  }
+    
+    template <typename Dtype>
+void HDF5OutputLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top) {
+  CHECK_GE(bottom.size(), 2);
+  CHECK_EQ(bottom[0]->num(), bottom[1]->num());
+  data_blob_.Reshape(bottom[0]->num(), bottom[0]->channels(),
+                     bottom[0]->height(), bottom[0]->width());
+  label_blob_.Reshape(bottom[1]->num(), bottom[1]->channels(),
+                     bottom[1]->height(), bottom[1]->width());
+  const int data_datum_dim = bottom[0]->count() / bottom[0]->num();
+  const int label_datum_dim = bottom[1]->count() / bottom[1]->num();
+    }
+    
+    TYPED_TEST(NeuronLayerTest, TestExpLayerWithShift) {
+  typedef typename TypeParam::Dtype Dtype;
+  // Test default base of '-1' -- should actually set base := e,
+  // with a non-zero shift
+  const Dtype kBase = -1;
+  const Dtype kScale = 1;
+  const Dtype kShift = 1;
+  this->TestExpForward(kBase, kScale, kShift);
+}
+    
+    bp::object Blob_Reshape(bp::tuple args, bp::dict kwargs) {
+  if (bp::len(kwargs) > 0) {
+    throw std::runtime_error('Blob.reshape takes no kwargs');
+  }
+  Blob<Dtype>* self = bp::extract<Blob<Dtype>*>(args[0]);
+  vector<int> shape(bp::len(args) - 1);
+  for (int i = 1; i < bp::len(args); ++i) {
+    shape[i - 1] = bp::extract<int>(args[i]);
+  }
+  self->Reshape(shape);
+  // We need to explicitly return None to use bp::raw_function.
+  return bp::object();
+}
+    
+    
+    {  LOG(INFO) << 'Writing Testing data';
+  scoped_ptr<db::DB> test_db(db::GetDB(db_type));
+  test_db->Open(output_folder + '/cifar10_test_' + db_type, db::NEW);
+  txn.reset(test_db->NewTransaction());
+  // Open files
+  std::ifstream data_file((input_folder + '/test_batch.bin').c_str(),
+      std::ios::in | std::ios::binary);
+  CHECK(data_file) << 'Unable to open test file.';
+  for (int itemid = 0; itemid < kCIFARBatchSize; ++itemid) {
+    read_image(&data_file, &label, str_buffer);
+    datum.set_label(label);
+    datum.set_data(str_buffer, kCIFARImageNBytes);
+    string out;
+    CHECK(datum.SerializeToString(&out));
+    txn->Put(caffe::format_int(itemid, 5), out);
+  }
+  txn->Commit();
+  test_db->Close();
+}
+    
+      FLAGS_alsologtostderr = 1;
+    
+      char label_i;
+  char label_j;
+  char* pixels = new char[2 * rows * cols];
+  std::string value;
+    
+    void store_t::read(
+        DEBUG_ONLY(const metainfo_checker_t& metainfo_checker, )
+        const read_t &_read,
+        read_response_t *response,
+        read_token_t *token,
+        signal_t *interruptor)
+        THROWS_ONLY(interrupted_exc_t) {
+    assert_thread();
+    scoped_ptr_t<txn_t> txn;
+    scoped_ptr_t<real_superblock_t> superblock;
+    }
+    
+        bool acquire_sindex_superblocks_for_write(
+            optional<std::set<uuid_u> > sindexes_to_acquire, //none means acquire all sindexes
+            buf_lock_t *sindex_block,
+            sindex_access_vector_t *sindex_sbs_out)
+    THROWS_ONLY(sindex_not_ready_exc_t);
+    
+    #endif  // GTEST_INCLUDE_GTEST_GTEST_DEATH_TEST_H_
+
+    
+      // Appends the given TestPartResult to the array.
+  void Append(const TestPartResult& result);
+    
+    #if GTEST_HAS_TYPED_TEST_P
+    
+      // Returns a pathname for a file that does not currently exist. The pathname
+  // will be directory/base_name.extension or
+  // directory/base_name_<number>.extension if directory/base_name.extension
+  // already exists. The number will be incremented until a pathname is found
+  // that does not already exist.
+  // Examples: 'dir/foo_test.xml' or 'dir/foo_test_1.xml'.
+  // There could be a race condition if two or more processes are calling this
+  // function at the same time -- they could both pick the same filename.
+  static FilePath GenerateUniqueFileName(const FilePath& directory,
+                                         const FilePath& base_name,
+                                         const char* extension);
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8>
+class ValueArray8 {
+ public:
+  ValueArray8(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7,
+      T8 v8) : v1_(v1), v2_(v2), v3_(v3), v4_(v4), v5_(v5), v6_(v6), v7_(v7),
+      v8_(v8) {}
+    }
+    
+    // We don't want to require the users to write TypesN<...> directly,
+// as that would require them to count the length.  Types<...> is much
+// easier to write, but generates horrible messages when there is a
+// compiler error, as gcc insists on printing out each template
+// argument, even if it has the default value (this means Types<int>
+// will appear as Types<int, None, None, ..., None> in the compiler
+// errors).
+//
+// Our solution is to combine the best part of the two approaches: a
+// user would write Types<T1, ..., TN>, and Google Test will translate
+// that to TypesN<T1, ..., TN> internally to make error messages
+// readable.  The translation is done by the 'type' member of the
+// Types template.
+    
+    
+template<int req>
+struct hawkesll_backward_compensator {
+  template<typename DType>
+  MSHADOW_XINLINE static void Map(int i,
+                                  DType* mu_gbfr,
+                                  DType* alpha_gbfr,
+                                  DType* beta_gbfr,  // (N, K)
+                                  DType* out_grad,  // read this  (N,)
+                                  const DType* mu,  // (N, K)
+                                  const DType* alpha,   // (K,)
+                                  const DType* beta,    // (K,)
+                                  const DType* max_time,  // (N,)
+                                  const int K,
+                                  DType* last_buffer,
+                                  DType* phi_buffer,
+                                  DType* phig_buffer
+                                  ) {
+    DType d, ed;
+    int m = i % K;  // mark
+    int j = i / K;  // particle
+    int32_t part_ix_K = j*K;
+    DType* mug_ = &mu_gbfr[part_ix_K];
+    DType* alphag_ = &alpha_gbfr[part_ix_K];
+    DType* betag_ = &beta_gbfr[part_ix_K];
+    }
+    }
+    
+    )code' ADD_FILELINE)
+.set_attr_parser(ParamParser<MomentsParam>)
+.set_num_inputs(1)
+.set_num_outputs(2)
+.set_attr<nnvm::FListInputNames>('FListInputNames',
+  [](const NodeAttrs& attrs) {
+    return std::vector<std::string>{'data'};
+  })
+.set_attr<mxnet::FInferShape>('FInferShape', MomentsShape)
+.set_attr<nnvm::FInferType>('FInferType', MomentsType)
+.set_attr<FCompute>('FCompute<cpu>', MomentsForward<cpu>)
+.set_attr<FResourceRequest>('FResourceRequest',
+  [](const NodeAttrs& attrs) {
+    return std::vector<ResourceRequest>{ResourceRequest::kTempSpace};
+  })
+.set_attr<nnvm::FGradient>('FGradient', ElemwiseGradUseInOut{'_backward_moments'})
+.set_attr<nnvm::FInplaceOption>('FInplaceOption',
+  [](const NodeAttrs& attrs) {
+    return std::vector<std::pair<int, int> >{{0, 0}};
+  })
+.add_argument('data', 'NDArray-or-Symbol', 'Input ndarray')
+.add_arguments(MomentsParam::__FIELDS__());
+    
+    inline void MultiAllFiniteCPU(const nnvm::NodeAttrs& attrs,
+                              const OpContext &ctx,
+                              const std::vector<TBlob> &inputs,
+                              const std::vector<OpReqType> &req,
+                              const std::vector<TBlob> &outputs) {
+  using namespace mxnet_op;
+  Stream<cpu>* s = ctx.get_stream<cpu>();
+  const MultiAllFiniteParam& op_param = nnvm::get<MultiAllFiniteParam>(attrs.parsed);
+  Tensor<cpu, 2, float> out = outputs[0].FlatTo2D<cpu, float>(s);
+  if (op_param.init_output)
+    out = 1.;
+  MSHADOW_REAL_TYPE_SWITCH(inputs[0].type_flag_, DType, {
+    MultiAllFiniteKernelParam<DType> param =
+      FillMultiAllFiniteParam<cpu, DType>(op_param, ctx, inputs);
+    Kernel<MultiAllFiniteCPUKernel<DType>, cpu>::Launch(s, param.max_size,
+                                                       param, out.dptr_);
+  });
+}
+    
+    namespace mxnet {
+namespace op {
+    }
+    }
+    
+    NNVM_REGISTER_OP(amp_cast)
+.describe(R'code(Cast function between low precision float/FP32 used by AMP.
+    
+    
+    {    Assign(grad_in, req[deformablepsroipool::kData], 0);
+    if (!param_.no_trans) {
+      Assign(grad_trans, req[deformablepsroipool::kTrans], 0);
+    }
+    DeformablePSROIPoolBackwardAcc(grad_in, grad_trans, grad_out, data, bbox, trans,
+      top_count, param_.no_trans, param_.spatial_scale, param_.output_dim, param_.group_size,
+      param_.pooled_size, param_.part_size, param_.sample_per_part, param_.trans_std);
+    Assign(grad_roi, req[deformablepsroipool::kBox], 0);
+  }
+    
+          for (index_t ih = 0; ih < sample_per_part; ih++) {
+        for (index_t iw = 0; iw < sample_per_part; iw++) {
+          DType w = wstart + iw * sub_bin_size_w;
+          DType h = hstart + ih * sub_bin_size_h;
+          // bilinear interpolation
+          if (w < -0.5 || w > width - 0.5 || h < -0.5 || h > height - 0.5) {
+            continue;
+          }
+          w = min(max(w, static_cast<DType>(0)), static_cast<DType>(width - 1));
+          h = min(max(h, static_cast<DType>(0)), static_cast<DType>(height - 1));
+          index_t c = (ctop * group_size + gh) * group_size + gw;
+          // backward on feature
+          index_t x0 = floor(w);
+          index_t x1 = ceil(w);
+          index_t y0 = floor(h);
+          index_t y1 = ceil(h);
+          DType dist_x = w - x0, dist_y = h - y0;
+          DType q00 = (1 - dist_x) * (1 - dist_y);
+          DType q01 = (1 - dist_x) * dist_y;
+          DType q10 = dist_x * (1 - dist_y);
+          DType q11 = dist_x * dist_y;
+          index_t bottom_index_base = c * height * width;
+          offset_bottom_data_diff[bottom_index_base + y0 * width + x0] += q00 * diff_val;
+          offset_bottom_data_diff[bottom_index_base + y1 * width + x0] += q01 * diff_val;
+          offset_bottom_data_diff[bottom_index_base + y0 * width + x1] += q10 * diff_val;
+          offset_bottom_data_diff[bottom_index_base + y1 * width + x1] += q11 * diff_val;
+    }
+    }
+    
+    // keep zero-center
+struct dequantize_zero_centered {
+  template<typename DstDType, typename SrcDType>
+  MSHADOW_XINLINE static void Map(int i, DstDType *out, const SrcDType *in,
+                                  const float *imin_range, const float *imax_range,
+                                  const float quantized_range) {
+    const float real_range = MaxAbs(*imax_range, *imin_range);
+    out[i] = in[i] * (real_range / quantized_range);
+  }
+};
+    
+    /*!
+ *  Copyright (c) 2017 by Contributors
+ * \file quantize-inl.h
+ * \brief implementation of quantize operation
+ */
+#ifndef MXNET_OPERATOR_QUANTIZATION_QUANTIZE_INL_H_
+#define MXNET_OPERATOR_QUANTIZATION_QUANTIZE_INL_H_
+    
+    static bool ElemwiseAddShape(const nnvm::NodeAttrs& attrs,
+                             mxnet::ShapeVector* in_shape,
+                             mxnet::ShapeVector* out_shape) {
+  // A, B, A_min, A_max, B_min, B_max
+  CHECK_EQ(in_shape->size(), 6U);
+  // C, C_min, C_max
+  CHECK_EQ(out_shape->size(), 3U);
+  CHECK_EQ((*in_shape)[0], (*in_shape)[1]);
+    }
+    
+    
+    {
+    {}  // namespace storage
+}  // namespace mxnet
+    
+    /*!
+ *  Copyright (c) 2015 by Contributors
+ * \file broadcast_reduce_op.h
+ * \brief Function definition of broadcast and reduce operators
+ */
+#ifndef MXNET_OPERATOR_TENSOR_BROADCAST_REDUCE_OP_H_
+#define MXNET_OPERATOR_TENSOR_BROADCAST_REDUCE_OP_H_
+    
+    template <typename DType>
+void LstmBackward(DType* ws,
+                  DType* rs,
+                  const int L,
+                  const int D,
+                  const int T,
+                  const int N,
+                  const int I,
+                  const int H,
+                  DType* x_ptr,
+                  DType* hx_ptr,
+                  DType* cx_ptr,
+                  DType* w_ptr,
+                  DType* y_ptr,
+                  DType* dy_ptr,
+                  DType* dhy_ptr,
+                  DType* dcy_ptr,
+                  DType* dx_ptr,
+                  DType* dhx_ptr,
+                  DType* dcx_ptr,
+                  DType* dw_ptr,
+                  DType* db_ptr,
+                  int req_data,
+                  int req_params,
+                  int req_state,
+                  int req_statecell,
+                  const float dropout) {
+  DType* dropout_random = rs + (L - 1) * D * T * N * H;
+  DType* rs2 = rs + (L - 1) * D * T * N * H;
+  DType* tmp_buf = ws;
+  DType* ws2 = tmp_buf + 8 * T * H;
+  const int total_layers = D * L;
+  Tensor<cpu, 3, DType> hx(hx_ptr, Shape3(total_layers, N, H));
+  Tensor<cpu, 3, DType> cx(cx_ptr, Shape3(total_layers, N, H));
+  Tensor<cpu, 3, DType> dhx(dhx_ptr, Shape3(total_layers, N, H));
+  Tensor<cpu, 3, DType> dcx(dcx_ptr, Shape3(total_layers, N, H));
+  const int b_size = 2 * H * 4;
+  const int r_size = D * T * N * H * 6;
+  const int y_offset = T * N * H * 5;
+  const int w_size1 = (I + H) * H * 4;      // first layer
+  const int w_size2 = (D * H + H) * H * 4;  // other layers
+  const int cell_size = N * H;
+  DType* dy_tmp_ptr = ws2 + T * cell_size * 4 + cell_size * 3;
+  for (int i = L - 1; i >= 0; --i) {
+    const int input_size = i ? H * D : I;
+    const int w_size = i ? w_size2 : w_size1;
+    int idx = i * D;
+    DType* w_cur_ptr = i ? w_ptr + (w_size1 + (i - 1) * w_size2) * D : w_ptr;
+    DType* dw_cur_ptr = i ? dw_ptr + (w_size1 + (i - 1) * w_size2) * D : dw_ptr;
+    DType* db_cur_ptr = db_ptr + i * b_size * D;
+    DType* rs_cur_ptr = rs2 + i * r_size;
+    DType* dhy_cur_ptr = dhy_ptr ? dhy_ptr + i * cell_size * D : NULL;
+    DType* dcy_cur_ptr = dcy_ptr ? dcy_ptr + i * cell_size * D : NULL;
+    Tensor<cpu, 3, DType> y(rs_cur_ptr + y_offset, Shape3(T, N, H * D));
+    Tensor<cpu, 3, DType> dy(dy_ptr, Shape3(T, N, H * D));
+    Tensor<cpu, 2, DType> x(i ? y.dptr_ - r_size : x_ptr, Shape2(T * N, input_size));
+    Tensor<cpu, 2, DType> dx(i ? dy_tmp_ptr : dx_ptr, Shape2(T * N, input_size));
+    LstmBackwardSingleLayer<DType>(ws2, rs_cur_ptr, tmp_buf, false, T, N, input_size, H,
+                                   x, hx[idx], cx[idx], y, dy, dx, dhx[idx], dcx[idx],
+                                   dhy_cur_ptr, dcy_cur_ptr, w_cur_ptr, dw_cur_ptr, db_cur_ptr,
+                                   req_data, req_params, req_state, req_statecell);
+    if (D == 2) {
+      w_cur_ptr += w_size;
+      dw_cur_ptr += w_size;
+      db_cur_ptr += b_size;
+      ++idx;
+      dhy_cur_ptr = dhy_ptr ? dhy_cur_ptr + cell_size : NULL;
+      dcy_cur_ptr = dcy_ptr ? dcy_cur_ptr + cell_size : NULL;
+      LstmBackwardSingleLayer<DType>(ws2, rs_cur_ptr, tmp_buf, true, T, N, input_size, H,
+                                     x, hx[idx], cx[idx], y, dy, dx, dhx[idx], dcx[idx],
+                                     dhy_cur_ptr, dcy_cur_ptr, w_cur_ptr, dw_cur_ptr, db_cur_ptr,
+                                     req_data, req_params, req_state, req_statecell);
+    }
+    if (dropout > 0.0f && i > 0 && req_data != kNullOp) {
+      dropout_random = dropout_random - T * N * D * H;
+      const int omp_threads = mxnet::engine::OpenMP::Get()->GetRecommendedOMPThreadCount();
+      #pragma omp parallel for num_threads(omp_threads)
+      for (int j = 0; j < T * N * D * H; j++) {
+        if (dropout_random[j] == 0) {
+          dx.dptr_[j] = 0;
+        } else {
+          dx.dptr_[j] = dx.dptr_[j] / (1.0f - dropout);
+        }
+      }
+    }
+    dy_ptr = dx.dptr_;
+  }
+}
+    
+    namespace mongo {
+    }
+    
+    void Top::record(OperationContext* opCtx,
+                 StringData ns,
+                 LogicalOp logicalOp,
+                 LockType lockType,
+                 long long micros,
+                 bool command,
+                 Command::ReadWriteType readWriteType) {
+    if (ns[0] == '?')
+        return;
+    }
+    
+        virtual ~Base() {
+        if (!collection())
+            return;
+        WriteUnitOfWork wunit(&_opCtx);
+        _context.db()->dropCollection(&_opCtx, nss()).transitional_ignore();
+        wunit.commit();
+    }
+    
+    UnicodeString &ScientificNumberFormatter::format(
+        const Formattable &number,
+        UnicodeString &appendTo,
+        UErrorCode &status) const {
+    if (U_FAILURE(status)) {
+        return appendTo;
+    }
+    UnicodeString original;
+    FieldPositionIterator fpi;
+    fDecimalFormat->format(number, original, &fpi, status);
+    return fStyle->format(
+            original,
+            fpi,
+            fPreExponent,
+            *fStaticSets,
+            appendTo,
+            status);
+}
+    
+    #endif // __SCRIPTSET_H__
+
+    
+    void SearchIterator::setText(CharacterIterator &text, UErrorCode &status)
+{
+    if (U_SUCCESS(status)) {
+        text.getText(m_text_);
+        setText(m_text_, status);
+    }
+}
+    
+const UnicodeString & SearchIterator::getText(void) const
+{
+    return m_text_;
+}
+    
+    U_NAMESPACE_BEGIN
+    
+    class U_I18N_API SharedCalendar : public SharedObject {
+public:
+    SharedCalendar(Calendar *calToAdopt) : ptr(calToAdopt) { }
+    virtual ~SharedCalendar();
+    const Calendar *get() const { return ptr; }
+    const Calendar *operator->() const { return ptr; }
+    const Calendar &operator*() const { return *ptr; }
+private:
+    Calendar *ptr;
+    SharedCalendar(const SharedCalendar &);
+    SharedCalendar &operator=(const SharedCalendar &);
+};
+    
+    
+class U_I18N_API SharedDateFormatSymbols : public SharedObject {
+public:
+    SharedDateFormatSymbols(
+            const Locale &loc, const char *type, UErrorCode &status)
+            : dfs(loc, type, status) { }
+    virtual ~SharedDateFormatSymbols();
+    const DateFormatSymbols &get() const { return dfs; }
+private:
+    DateFormatSymbols dfs;
+    SharedDateFormatSymbols(const SharedDateFormatSymbols &);
+    SharedDateFormatSymbols &operator=(const SharedDateFormatSymbols &);
+};
