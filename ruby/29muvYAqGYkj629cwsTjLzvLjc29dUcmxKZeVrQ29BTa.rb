@@ -1,35 +1,61 @@
 
         
-                if value.nil?
-          unless block_given?
-            # The config file has something like this:
-            #
-            #   clean
-            #
-            # without specifying a value for the method call
-            # or a block. This is most likely a user error
-            # So we tell the user that they can provide a value
-            warning = ['In the config file '#{self.configfile_path}'']
-            warning << 'you have the line #{method_sym}, but didn't provide'
-            warning << 'any value. Make sure to append a value right after the'
-            warning << 'option name. Make sure to check the docs for more information'
-            UI.important(warning.join(' '))
-          end
-          return
+          def test_default_locale_template_is_used_when_locale_is_missing
+    I18n.locale = :dk
+    get :hello_world
+    assert_equal 'Hello World', @response.body
+  end
+    
+        should 'contain only the default collections' do
+      expected = {}
+      refute_equal expected, @site.collections
+      refute_nil @site.collections
+    end
+  end
+    
+          # return nil for `{{ site.config }}` even if --config was passed via CLI
+      def config; end
+    end
+  end
+end
+
+    
+        context 'when a custom highlighter is chosen' do
+      should 'use the chosen highlighter if it's available' do
+        override = {
+          'highlighter' => nil,
+          'markdown'    => 'kramdown',
+          'kramdown'    => {
+            'syntax_highlighter' => :coderay,
+          },
+        }
+    
+    #############################################################################
+#
+# Standard tasks
+#
+#############################################################################
+    
+    # No trailing slash
+Benchmark.ips do |x|
+  path = '/some/very/very/long/path/to/a/file/i/like'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
+end
+    
+              theme.create!
+          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
+                             ' is ready for you in #{theme.path.to_s.cyan}!'
+          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
         end
-    
-            # Decrease the size of the framed screenshot to fit into the defined padding + background
-        frame_width = background.width - horizontal_frame_padding * 2
-        frame_height = background.height - effective_text_height - vertical_frame_padding
-    
-    module Frameit
-  class Runner
-    def initialize
-      downloader = FrameDownloader.new
-      unless downloader.frames_exist?
-        downloader.download_frames
+        # rubocop:enable Metrics/AbcSize
       end
     end
+  end
+end
+
     
           def self.category
         :misc
@@ -39,222 +65,156 @@
 end
 
     
-        context '#update_build_information!' do
-      it 'updates description' do
-        updated_test_info = build.test_info.deep_copy
-        updated_test_info.description = 'a newer description'
-    
-        ##
-    # Return the session cookie.
-    #
-    # @return (String) the cookie-string in the RFC6265 format: https://tools.ietf.org/html/rfc6265#section-4.2.1
-    def cookie
-      @cookie.map(&:to_s).join(';')
-    end
-    
-          # Set app submission information
-      # Default Values
-      submission.content_rights_contains_third_party_content = false
-      submission.content_rights_has_rights = true
-      submission.add_id_info_uses_idfa = false
-    
-      describe :find_build do
-    context 'one build' do
-      let(:fake_builds) { make_fake_builds(1) }
-      it 'finds the one build' do
-        only_build = fake_builds.first
-        expect(review_submitter.find_build(fake_builds)).to eq(only_build)
-      end
-    end
-    
-    module Snapshot
-  # Responsible for building the fully working xcodebuild command
-  # Xcode 9 introduced the ability to run tests in parallel on multiple simulators
-  # This TestCommandGenerator constructs the appropriate `xcodebuild` command
-  # to be used for executing simultaneous tests
-  class TestCommandGenerator < TestCommandGeneratorBase
-    class << self
-      def generate(devices: nil, language: nil, locale: nil, log_path: nil)
-        parts = prefix
-        parts << 'xcodebuild'
-        parts += options(language, locale)
-        parts += destination(devices)
-        parts += build_settings
-        parts += actions
-        parts += suffix
-        parts += pipe(language: language, locale: locale, log_path: log_path)
-    
-          def self.description
-        'Get the build number of your project'
+        context 'when semantic version' do
+      it 'returns the current version once parsed' do
+        test_content = 'spec.version = '1.3.2''
+        result = @version_podspec_file.parse(test_content)
+        expect(result).to eq('1.3.2')
+        expect(@version_podspec_file.version_value).to eq('1.3.2')
+        expect(@version_podspec_file.version_match[:major]).to eq('1')
+        expect(@version_podspec_file.version_match[:minor]).to eq('3')
+        expect(@version_podspec_file.version_match[:patch]).to eq('2')
       end
     
-            return a.casecmp(b) if a_length == 1 && b_length == 1
-        return 1 if a_length == 1
-        return -1 if b_length == 1
+    require 'fastlane_core/print_table'
+require 'spaceship'
+require 'spaceship/tunes/tunes'
+require 'spaceship/tunes/members'
+require 'spaceship/test_flight'
+require 'fastlane_core/ipa_file_analyser'
+require_relative 'module'
     
-        SCHEME_RGX = /\A[^:\/?#]+:/
-    
-          unless root?
-        raise Invalid, 'missing name' if !name || name.empty?
-        raise Invalid, 'missing path' if !path || path.empty?
-        raise Invalid, 'missing type' if !type || type.empty?
+          def delete_from_beta_groups(beta_groups: nil)
+        beta_group_ids = beta_groups.map(&:id)
+        return Spaceship::ConnectAPI.delete_beta_tester_from_beta_groups(beta_tester_id: id, beta_group_ids: beta_group_ids)
       end
-    end
-    
-        def document?
-      @content =~ DOCUMENT_RGX
-    end
-    
-        def effective_path
-      @effective_path ||= effective_url.path
     end
   end
 end
 
     
-          def fetch_redirections
-        result = {}
-        with_filters 'apply_base_url', 'container', 'normalize_urls', 'internal_urls' do
-          build_pages do |page|
-            next if page[:response_effective_path] == page[:response_path]
-            result[page[:response_path].downcase] = page[:response_effective_path]
-          end
+          attr_mapping({
+        'installCount' => 'install_count',
+        'crashCount' => 'crash_count',
+        'sessionCount' => 'session_count',
+        'betaTesterState' => 'beta_tester_state',
+        'lastModifiedDate' => 'last_modified_date',
+        'installedCfBundleShortVersionString' => 'installed_cf_bundle_short_version_string',
+        'installedCfBundleVersion' => 'installed_cf_bundle_version'
+      })
+    
+          module Status
+        ENABLED = 'ENABLED'
+        DISABLED = 'DISABLED'
+      end
+    
+    DeviseCreateUsers.migrate(:up)
+    
+              path
         end
-        result
       end
     
-            css('br', 'hr', '.material-icons', '.header-link', '.breadcrumb').remove
-    
-            css('.openParens').each do |node|
-          node.parent.name = 'pre'
-          node.parent.content = node.parent.css('code, pre').map(&:content).join('\n')
-        end
-    
-        def reset_password_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :reset_password_instructions, opts)
-    end
-    
-          def extract_path_from_location(location)
-        uri = parse_uri(location)
-    
-          def template_paths
-        template_path = _prefixes.dup
-        template_path.unshift '#{@devise_mapping.scoped_path}/mailer' if self.class.scoped_views?
-        template_path
-      end
-    
-      #
-  # Attempts to enter exclusive section.  Returns +false+ if lock fails.
-  #
-  def mon_try_enter
-    if @mon_owner != Thread.current
-      unless @mon_mutex.try_lock
-        return false
-      end
-      @mon_owner = Thread.current
-      @mon_count = 0
-    end
-    @mon_count += 1
-    return true
-  end
-  # For backward compatibility
-  alias try_mon_enter mon_try_enter
-    
-        super
-  end
-    
-      def setup
-    super
-    
-      def header
-    <<-'HEADER'
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
-msgid ''
-msgstr ''
-'Project-Id-Version: PACKAGE VERSEION\n'
-'Report-Msgid-Bugs-To:\n'
-'PO-Revision-Date: YEAR-MO_DA HO:MI+ZONE\n'
-'Last-Translator: FULL NAME <EMAIL@ADDRESS>\n'
-'Language-Team: LANGUAGE <LL@li.org>\n'
-'Language:\n'
-'MIME-Version: 1.0\n'
-'Content-Type: text/plain; charset=CHARSET\n'
-'Content-Transfer-Encoding: 8bit\n'
-'Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n'
-    HEADER
-  end
-    
-    msgid 'Hello'
-msgstr 'Bonjour'
-      PO
-    end
-    
-            para('Pluses tight:'),
-        list(:BULLET,
-          item(nil, para('Plus 1')),
-          item(nil, para('Plus 2')),
-          item(nil, para('Plus 3'))),
-        para('Pluses loose:'),
-        list(:BULLET,
-          item(nil, para('Plus 1')),
-          item(nil, para('Plus 2')),
-          item(nil, para('Plus 3'))),
-    
-      def test_html_like_teletype_em_bold_SGML
-    assert_equal [@tt_on, 'cat', @tt_off, ' ', @em_on, 'and ', @em_to_bold, 'dog', @bold_off],
-                  @am.flow('<tt>cat</tt> <i>and <b></i>dog</b>')
-  end
-    
-    class TestRDocMarkupAttributes < RDoc::TestCase
-    
-    require_relative 'converter/fonts_conversion'
-require_relative 'converter/less_conversion'
-require_relative 'converter/js_conversion'
-require_relative 'converter/logger'
-require_relative 'converter/network'
-    
-            new(sandbox, sandbox.root.to_s, pods_project, umbrella_targets_descriptions)
-      end
-    
-              # Ensure that vendored static frameworks and libraries are not linked
-          # twice to the aggregate target, which shares the xcconfig of the user
-          # target.
-          #
-          def custom_build_settings
-            settings = {
-              'CODE_SIGN_IDENTITY[sdk=appletvos*]' => '',
-              'CODE_SIGN_IDENTITY[sdk=iphoneos*]'  => '',
-              'CODE_SIGN_IDENTITY[sdk=watchos*]'   => '',
-              'MACH_O_TYPE'                        => 'staticlib',
-              'OTHER_LDFLAGS'                      => '',
-              'OTHER_LIBTOOLFLAGS'                 => '',
-              'PODS_ROOT'                          => '$(SRCROOT)',
-              'PRODUCT_BUNDLE_IDENTIFIER'          => 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}',
-              'SKIP_INSTALL'                       => 'YES',
-    }
-    
-            # @return [String] the string to use as prefix for every build phase declared by the user within a podfile
-        #         or podspec.
-        #
-        USER_BUILD_PHASE_PREFIX = '[CP-User] '.freeze
-    
-        def handle_gist_redirecting(data)
-      redirected_url = data.header['Location']
-      if redirected_url.nil? || redirected_url.empty?
-        raise ArgumentError, 'GitHub replied with a 302 but didn't provide a location in the response headers.'
-      end
-    
-        def render(context)
-      if @img
-        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
+        # Receives an object and find a scope for it. If a scope cannot be found,
+    # raises an error. If a symbol is given, it's considered to be the scope.
+    def self.find_scope!(obj)
+      obj = obj.devise_scope if obj.respond_to?(:devise_scope)
+      case obj
+      when String, Symbol
+        return obj.to_sym
+      when Class
+        Devise.mappings.each_value { |m| return m.name if obj <= m.to }
       else
-        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
+        Devise.mappings.each_value { |m| return m.name if obj.is_a?(m.to) }
       end
+    
+            # Attempt to find a user by its reset_password_token to reset its
+        # password. If a user is found and token is still valid, reset its password and automatically
+        # try saving the record. If not user is found, returns a new user
+        # containing an error in reset_password_token attribute.
+        # Attributes must contain reset_password_token, password and confirmation
+        def reset_password_by_token(attributes={})
+          original_token       = attributes[:reset_password_token]
+          reset_password_token = Devise.token_generator.digest(self, :reset_password_token, original_token)
+    
+          private
+    
+      # Configure parameters from the request object used for authentication. Each entry
+  # given should be a request method and it will automatically be passed to the
+  # find_for_authentication method and considered in your model lookup. For instance,
+  # if you set :request_keys to [:subdomain], :subdomain will be used on authentication.
+  # The same considerations mentioned for authentication_keys also apply to request_keys.
+  # config.request_keys = []
+    
+    module Admin
+  class PodsController < AdminController
+    respond_to :html, :json, :mobile
+    
+          def to_boolean(str)
+        str.downcase == 'true'
+      end
+    
+      rescue_from ActiveRecord::RecordNotFound do
+    render plain: I18n.t('aspect_memberships.destroy.no_membership'), status: 404
+  end
+    
+      def create
+    begin
+      comment = comment_service.create(params[:post_id], params[:text])
+    rescue ActiveRecord::RecordNotFound
+      render plain: I18n.t('comments.create.error'), status: 404
+      return
+    end
+    
+      def update
+    note = Notification.where(:recipient_id => current_user.id, :id => params[:id]).first
+    if note
+      note.set_read_state(params[:set_unread] != 'true' )
+    
+    module LogStash
+  module PluginManager
+  end
+end
+    
+      describe '#hook_on_project_start' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_start' }
+    end
+  end
+  describe '#hook_on_project_first_start' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_first_start' }
+    end
+  end
+  describe '#hook_on_project_restart' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_restart' }
+    end
+  end
+  describe '#hook_on_project_exit' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_exit' }
+    end
+  end
+  describe '#hook_on_project_stop' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_stop' }
     end
   end
 end
+
+    
+      def is_pane
+    @actual.is_a? Tmuxinator::Pane
+  end
+end
+
+    
+        context 'environment variable $TMUXINATOR_CONFIG is nil' do
+      it 'is an empty string' do
+        allow(ENV).to receive(:[]).with('TMUXINATOR_CONFIG').
+          and_return nil
+        # allow(XDG).to receive(:[]).with('CONFIG').and_return nil
+        allow(File).to receive(:directory?).and_return true
+        expect(described_class.environment).to eq ''
+      end
+    end
