@@ -1,152 +1,120 @@
 
         
-        DATA = {'foo'=>'bar', 'alpha'=>{'beta'=>'gamma'}, 'lipsum'=>['lorem', 'ipsum', 'dolor']}
-    
-            # rubocop:disable Metrics/AbcSize
-        def process(args, opts)
-          if !args || args.empty?
-            raise Jekyll::Errors::InvalidThemeName, 'You must specify a theme name.'
-          end
-    
-            parsed_expr = parse_expression(expression)
-        @context.stack do
-          groups = input.group_by do |item|
-            @context[variable] = item
-            parsed_expr.render(@context)
-          end
-          grouped_array(groups)
-        end
+              desc 'Get the text for a specific template present in local filesystem' do
+        detail 'This feature was introduced in GitLab #{gitlab_version}.'
+        success Entities::Template
       end
+      params do
+        requires :name, type: String, desc: 'The name of the template'
+      end
+      get 'templates/#{template_type}/:name', requirements: { name: /[\w\.-]+/ } do
+        finder = TemplateFinder.build(template_type, nil, name: declared(params)[:name])
+        new_template = finder.execute
     
-    module Scheduler
+              # The key is untrusted input, so ensure we can't be directed outside
+          # of base_dir
+          Gitlab::Utils.check_path_traversal!(file_name)
     
-          theme.destroy!
+      describe '.find' do
+    it 'finds a template in the Foo category' do
+      create_template!('test-template')
     
-        it 'returns a label 'Yes' if a given agent is working' do
-      stub(@agent).working? { true }
-      label = working(@agent)
-      expect(label).to be_html_safe
-      expect(Nokogiri(label).text).to eq 'Yes'
-    end
+      def accounts
+    Account.where(id: account_ids)
+  end
     
-              @bar3 = Agents::DotBar.new(name: 'bar3').tap { |agent|
-            agent.user = users(:bob)
-            agent.sources << @bar2
-            agent.save!
-          },
-        ]
-        @foo.reload
-        @bar2.reload
+      def distribute_poll!
+    return if @poll.hide_totals?
+    ActivityPub::DistributePollUpdateWorker.perform_in(3.minutes, @poll.status.id)
+  end
     
-      describe '#style_colors' do
-    it 'returns a css style-formated version of the scenario foreground and background colors' do
-      expect(style_colors(scenario)).to eq('color:#AAAAAA;background-color:#000000')
-    end
+      def skip_distribution?
+    @status.direct_visibility? || @status.limited_visibility?
+  end
     
-          AgentLog.log_for_agent(agents(:jane_website_agent), 'some message', :level => 4, :outbound_event => events(:jane_website_agent_event))
-      expect(agents(:jane_website_agent).reload.last_error_log_at.to_i).to be_within(2).of(Time.now.to_i)
-    end
+    describe Settings::Preferences::NotificationsController do
+  render_views
     
-      describe '#working?' do
-    it 'it is working when at least one event was emitted' do
-      expect(@checker).not_to be_working
-      @checker.memory[:last_event] = '2014-04-17T10:25:31.000+02:00'
-      @checker.check
-      expect(@checker.reload).to be_working
-    end
+      def mark_as_processing!
+    redis.setex('move_in_progress:#{@account.id}', PROCESSING_COOLDOWN, true)
   end
 end
 
     
-    if defined?(ActionMailer)
-  class Devise::Mailer < Devise.parent_mailer.constantize
-    include Devise::Mailers::Helpers
+        old_account.update!(uri: 'https://example.org/alice', domain: 'example.org', protocol: :activitypub, inbox_url: 'https://example.org/inbox')
+    new_account.update!(uri: 'https://example.com/alice', domain: 'example.com', protocol: :activitypub, inbox_url: 'https://example.com/inbox', also_known_as: [old_account.uri])
     
-          def remove_domain_from_uri(uri)
-        [uri.path.sub(/\A\/+/, '/'), uri.query].compact.join('?')
-      end
-    
-        def self.find_by_path!(path, path_type=:fullpath)
-      Devise.mappings.each_value { |m| return m if path.include?(m.send(path_type)) }
-      raise 'Could not find a valid mapping for path #{path.inspect}'
+      context 'when a matching undo has been received first' do
+    let(:undo_json) do
+      {
+        '@context': 'https://www.w3.org/ns/activitystreams',
+        id: 'bar',
+        type: 'Undo',
+        actor: ActivityPub::TagManager.instance.uri_for(sender),
+        object: json,
+      }.with_indifferent_access
     end
     
-          devise_modules_hook! do
-        include Devise::Models::Authenticatable
+      def test_marshal_load_instance_method
+    instance_method = Marshal.load Marshal.dump(@c1.find_instance_method_named 'm')
     
-          def self.required_fields(klass)
-        []
-      end
-    
-      gem 'danger'
-end
-    
-          def executable_path
-        <<-EOS
-### Installation Source
-    
-      def delete_target_file?
-    return true if overwrite?
-    puts('File #{target_file} exist, do you want to overwrite it? (Y/N)')
-    ( 'y' == STDIN.gets.strip.downcase ? true : false)
+      def test_singleton
+    refute @a.singleton
   end
     
-        puts('No plugin updated') if update_count.zero?
+        assert_equal 'http://example/?page=this_page&foo=bar',
+                 cvs_url('http://example/?page=%s&foo=bar', 'this_page')
   end
     
-      let(:unordered_config_parts) { ordered_config_parts.shuffle }
-  let(:settings) { LogStash::SETTINGS }
+      def test_flags_multiple
+    options = {:flags => ['fuzzy', 'ruby-format']}
+    assert_equal <<-'ENTRY', entry('Hello', options).to_s
+#, fuzzy,ruby-format
+msgid 'Hello'
+msgstr ''
+    ENTRY
+  end
     
-      namespace :acceptance do
-    desc 'Run all acceptance'
-    task :all do
-      exit(RSpec::Core::Runner.run([Rake::FileList['acceptance/spec/lib/**/*_spec.rb']]))
-    end
+            def scope
+          @scope ||= if params[:option_type_id]
+                       Spree::OptionType.find(params[:option_type_id]).option_values.accessible_by(current_ability, :show)
+                     else
+                       Spree::OptionValue.accessible_by(current_ability, :show).load
+                     end
+        end
     
-              it 'fails when installing a non logstash plugin' do
-            command = logstash.run_command_in_path('bin/logstash-plugin install  bundler')
-            expect(command).not_to install_successfully
+              @properties = if params[:ids]
+                          @properties.where(id: params[:ids].split(',').flatten)
+                        else
+                          @properties.ransack(params[:q]).result
+                        end
+    
+            def load_transfer_params
+          @original_shipment         = Spree::Shipment.find_by!(number: params[:original_shipment_number])
+          @variant                   = Spree::Variant.find(params[:variant_id])
+          @quantity                  = params[:quantity].to_i
+          authorize! :show, @original_shipment
+          authorize! :create, Shipment
+        end
+    
+            def create
+          authorize! :create, StockLocation
+          @stock_location = StockLocation.new(stock_location_params)
+          if @stock_location.save
+            respond_with(@stock_location, status: 201, default_template: :show)
+          else
+            invalid_resource!(@stock_location)
           end
+        end
     
-            def correct(processed_source, node,
-                    previous_declaration, comments_as_separators)
-          @processed_source = processed_source
-          @comments_as_separators = comments_as_separators
+            def stock_location
+          render 'spree/api/v1/shared/stock_location_required', status: 422 and return unless params[:stock_location_id]
+          @stock_location ||= StockLocation.accessible_by(current_ability, :show).find(params[:stock_location_id])
+        end
     
-                1.upto(3) do |i|
-              next if !arguments[i] || arguments[i].hash_type?
-    
-        def initialize(tag_name, markup, tokens)
-      @by = nil
-      @source = nil
-      @title = nil
-      if markup =~ FullCiteWithTitle
-        @by = $1
-        @source = $2 + $3
-        @title = $4.titlecase.strip
-      elsif markup =~ FullCite
-        @by = $1
-        @source = $2 + $3
-      elsif markup =~ AuthorTitle
-        @by = $1
-        @title = $2.titlecase.strip
-      elsif markup =~ Author
-        @by = $1
-      end
-      super
-    end
-    
-      class IncludeCodeTag < Liquid::Tag
-    def initialize(tag_name, markup, tokens)
-      @title = nil
-      @file = nil
-      if markup.strip =~ /\s*lang:(\S+)/i
-        @filetype = $1
-        markup = markup.strip.sub(/lang:\S+/i,'')
-      end
-      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
-        @title = $1 || nil
-        @file = $3
-      end
-      super
-    end
+            def scope
+          variants = if @product
+                       @product.variants_including_master
+                     else
+                       Variant
+                     end
