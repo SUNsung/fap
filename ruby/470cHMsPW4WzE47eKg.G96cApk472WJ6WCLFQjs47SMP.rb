@@ -1,156 +1,195 @@
 
         
-          it 'imports a scenario that does not exist yet' do
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
-    click_on 'Start Import'
-    expect(page).to have_text('This scenario has a few agents to get you started. Feel free to change them or delete them as you see fit!')
-    expect(page).not_to have_text('This Scenario already exists in your system.')
-    check('I confirm that I want to import these Agents.')
-    click_on 'Finish Import'
-    expect(page).to have_text('Import successful!')
+        describe 'Dry running an Agent', js: true do
+  let(:agent)   { agents(:bob_website_agent) }
+  let(:formatting_agent) { agents(:bob_formatting_agent) }
+  let(:user)    { users(:bob) }
+  let(:emitter) { agents(:bob_weather_agent) }
+    
+        describe '#agents_dot' do
+      before do
+        @agents = [
+          @foo = Agents::DotFoo.new(name: 'foo').tap { |agent|
+            agent.user = users(:bob)
+            agent.save!
+          },
+    
+      describe '#style_colors' do
+    it 'returns a css style-formated version of the scenario foreground and background colors' do
+      expect(style_colors(scenario)).to eq('color:#AAAAAA;background-color:#000000')
+    end
+    
+      # Gets the actual resource stored in the instance variable
+  def resource
+    instance_variable_get(:'@#{resource_name}')
   end
     
-              expect(weather_agent_diff.schedule.updated).to eq('6pm')
-          expect(weather_agent_diff.keep_events_for.current).to eq(45.days)
-          expect(weather_agent_diff.keep_events_for.updated).to eq(2.days.to_s)
-          expect(weather_agent_diff.disabled.updated).to eq('true')
-          expect(weather_agent_diff.options.updated).to eq(weather_agent_options.merge('api_key' => 'foo'))
+      config.middleware.use Warden::Manager do |config|
+    Devise.warden_config = config
+  end
+    
+    module Devise
+  module Controllers
+    # Provide the ability to store a location.
+    # Used to redirect back to a desired path after sign in.
+    # Included by default in all controllers.
+    module StoreLocation
+      # Returns and delete (if it's navigational format) the url stored in the session for
+      # the given scope. Useful for giving redirect backs after sign up:
+      #
+      # Example:
+      #
+      #   redirect_to stored_location_for(:user) || root_path
+      #
+      def stored_location_for(resource_or_scope)
+        session_key = stored_location_key_for(resource_or_scope)
+    
+          # Configure default email options
+      def devise_mail(record, action, opts = {}, &block)
+        initialize_from_record(record)
+        mail headers_for(action, opts), &block
+      end
+    
+          def rememberable_value
+        if respond_to?(:remember_token)
+          remember_token
+        elsif respond_to?(:authenticatable_salt) && (salt = authenticatable_salt.presence)
+          salt
+        else
+          raise 'authenticatable_salt returned nil for the #{self.class.name} model. ' \
+            'In order to use rememberable, you must ensure a password is always set ' \
+            'or have a remember_token column in your model or implement your own ' \
+            'rememberable_value in the model with custom logic.'
+        end
+      end
+    
+    puts '\nUnable to find an RSS feed for the following blogs:'
+puts '==================================================='
+unavailable.each do |b|
+  puts '#{b.name} | #{b.web_url}'
+end
+puts '==================================================='
+
+    
+    
+    {              # Needed to ensure that static libraries won't try to embed the swift stdlib,
+              # since there's no where to embed in for a static library.
+              # Not necessary for dynamic frameworks either, since the aggregate targets are never shipped
+              # on their own, and are always further embedded into an app target.
+              'ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES' => 'NO',
+            }
+            super.merge(settings)
+          end
+    
+            it 'can be compared for equality with another variant with the same specs, platform, and whether it requires frameworks' do
+          spec = PodVariant.new(@specs, [], [], @platform, false)
+          spec.should == PodVariant.new(@specs, [], [], @platform, false)
+          spec.should.not == PodVariant.new([@specs.first], [], [], @platform)
+          spec.should.not == PodVariant.new(@specs, [], [], Platform.osx, false)
+          spec.should.not == PodVariant.new(@specs, [], [], @platform, true)
         end
     
-      describe '#schedule_scheduler_agents' do
-    it 'registers active SchedulerAgents' do
-      @scheduler.schedule_scheduler_agents
+                it 'adds the framework build path to the xcconfig, with quotes, as system framework search paths' do
+              @xcconfig.to_hash['OTHER_CFLAGS'].should.include '-iframework '${PODS_CONFIGURATION_BUILD_DIR}/OrangeFramework''
+            end
     
-      describe '#check' do
-    it 'should not emit events on its first run' do
-      expect { @checker.check }.to change { Event.count }.by(0)
-      expect(@checker.memory[:last_event]).to eq '2014-04-17T10:25:31.000+02:00'
-    end
-    it 'should check that initial run creates an event' do
-      @checker.memory[:last_event] = '2014-04-17T10:25:31.000+02:00'
-      expect { @checker.check }.to change { Event.count }.by(1)
-    end
-  end
+            private
     
-      describe '#receive' do
-    it 'sends a message' do
-      stub(HTTParty).post { {'id' => 1, 'message' => 'blah', 'title' => 'blah','source_name' => 'Custom Notification'} }
-      @checker.receive([@event])
+            if deprecated_pods.any?
+          UI.section 'The following pods are deprecated:' do
+            deprecated_pods.each do |spec|
+              if spec.deprecated_in_favor_of
+                UI.puts '- #{spec.name}' \
+                  ' (in favor of #{spec.deprecated_in_favor_of})'
+              else
+                UI.puts '- #{spec.name}'
+              end
+            end
+          end
+        end
+      end
+    
+            it 'does not add an embed frameworks build phase if the target to integrate is a messages extension' do
+          @pod_bundle.stubs(:build_type => Target::BuildType.dynamic_framework)
+          target = @target_integrator.send(:native_targets).first
+          target.stubs(:symbol_type).returns(:messages_extension)
+          @target_integrator.integrate!
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
+          phase.nil?.should == true
+        end
+    
+      GEMS_AND_ROOT_DIRECTORIES.each do |gem, directory|
+    file package(gem, '.gem') => ['pkg/', '#{directory + '/' + gem}.gemspec'] do |f|
+      sh 'cd #{directory} && gem build #{gem}.gemspec'
+      mv directory + '/' + File.basename(f.name), f.name
     end
     
-    # call-seq:
-#   Digest(name) -> digest_subclass
-#
-# Returns a Digest subclass by +name+ in a thread-safe manner even
-# when on-demand loading is involved.
-#
-#   require 'digest'
-#
-#   Digest('MD5')
-#   # => Digest::MD5
-#
-#   Digest(:SHA256)
-#   # => Digest::SHA256
-#
-#   Digest(:Foo)
-#   # => LoadError: library not found for class Digest::Foo -- digest/foo
-def Digest(name)
-  const = name.to_sym
-  Digest::REQUIRE_MUTEX.synchronize {
-    # Ignore autoload's because it is void when we have #const_missing
-    Digest.const_missing(const)
-  }
-rescue LoadError
-  # Constants do not necessarily rely on digest/*.
-  if Digest.const_defined?(const)
-    Digest.const_get(const)
-  else
-    raise
+          def call(env)
+        status, headers, body = @app.call(env)
+        header = options[:report_only] ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'
+        headers[header] ||= csp_policy if html? headers
+        [status, headers, body]
+      end
+    end
   end
 end
 
     
-    have_header('sys/cdefs.h')
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   CSRF
+    # Supported browsers:: all
+    # More infos::         http://flask.pocoo.org/docs/0.10/security/#json-security
+    #                      http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx
+    #
+    # JSON GET APIs are vulnerable to being embedded as JavaScript when the
+    # Array prototype has been patched to track data. Checks the referrer
+    # even on GET requests if the content type is JSON.
+    #
+    # If request includes Origin HTTP header, defers to HttpOrigin to determine
+    # if the request is safe. Please refer to the documentation for more info.
+    #
+    # The `:allow_if` option can be set to a proc to use custom allow/deny logic.
+    class JsonCsrf < Base
+      default_options :allow_if => nil
     
-    #ifdef HAVE_LONG_LONG
-#define INTEGER2NUM(n) \
-    (FIXNUM_MAX < (n) ? ULL2NUM(n) : \
-     FIXNUM_MIN > (LONG_LONG)(n) ? LL2NUM(n) : \
-     LONG2FIX(n))
-#else
-#define INTEGER2NUM(n) \
-    (FIXNUM_MAX < (n) ? ULONG2NUM(n) : \
-     FIXNUM_MIN > (long)(n) ? LONG2NUM(n) : \
-     LONG2FIX(n))
-#endif
+      subject { described_class.new(lambda {}) }
     
-        # Calculate the necessary offset and for each union member with the given
-    # +types+
-    def set_ctypes(types)
-      @ctypes = types
-      @offset = Array.new(types.length, 0)
-      @size   = self.class.size types
-    end
-  end
-end
-    
-    # SPECS ===============================================================
-    
-          def self.random_token
-        SecureRandom.base64(TOKEN_LENGTH)
+      context 'with custom session key' do
+    it 'denies requests with duplicate session cookies' do
+      mock_app do
+        use Rack::Protection::CookieTossing, :session_key => '_session'
+        run DummyApp
       end
     
-            # Set these key values to boolean 'true' to include in policy
-        NO_ARG_DIRECTIVES.each do |d|
-          if options.key?(d) && options[d].is_a?(TrueClass)
-            directives << d.to_s.sub(/_/, '-')
+        attr_reader :commands, :index, :name, :project
+    
+      factory :project_with_force_detach, class: Tmuxinator::Project do
+    transient do
+      file { yaml_load('spec/fixtures/detach.yml') }
+    end
+    initialize_with { Tmuxinator::Project.new(file, force_detach: true) }
+  end
+    
+      if pane_base_index = options.fetch(:pane_base_index) { 1 }
+    standard_options << 'pane-base-index #{pane_base_index}'
+  end
+    
+            yaml = {
+          'name' => name,
+          'project_root' => project_root,
+          'windows' => windows.map do |window_name, layout, window_panes|
+            {
+              window_name => {
+                'layout' => layout,
+                'panes' => window_panes
+              }
+            }
           end
-        end
+        }
     
-          def handle(hash)
-        was = hash.dup
-        hash.replace escape(hash)
-        was
-      end
-    
-      it 'returns the sorted config parts' do
-    expect(subject.config_parts).to eq(ordered_config_parts)
-  end
-    
-          it 'list the plugin with his version' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name} \(\d+\.\d+.\d+\)/)
+          it 'returns true' do
+        expect(described_class.editor?).to be_truthy
       end
     end
-  end
-end
-
-    
-    shared_examples 'logstash update' do |logstash|
-  describe 'logstash-plugin update on #{logstash.hostname}' do
-    before :each do
-      logstash.install({:version => LOGSTASH_VERSION})
-    end
-    
-            selected = if options[:match_path].is_a? Regexp
-                     request.fullpath =~ options[:match_path]
-                   elsif options[:match_path]
-                     request.fullpath.starts_with?('#{spree.admin_path}#{options[:match_path]}')
-                   else
-                     args.include?(controller.controller_name.to_sym)
-                   end
-    
-              def find_spree_current_order
-            Spree::Api::Dependencies.storefront_current_order_finder.constantize.new.execute(
-              store: spree_current_store,
-              user: spree_current_user,
-              token: order_token,
-              currency: current_currency
-            )
-          end
-    
-          @@stock_item_attributes = [
-        :id, :count_on_hand, :backorderable, :lock_version, :stock_location_id,
-        :variant_id
-      ]
