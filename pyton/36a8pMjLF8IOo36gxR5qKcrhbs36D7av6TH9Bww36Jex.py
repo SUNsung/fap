@@ -1,151 +1,126 @@
 
         
-            def message_user(self, friend_id, message):
-        pass
+        
+@implements_to_string
+class DebugFilesKeyError(KeyError, AssertionError):
+    '''Raised from request.files during debugging.  The idea is that it can
+    provide a better error message than just a generic KeyError/BadRequest.
+    '''
     
-        def can_fit_in_spot(self, spot):
-        return spot.size in (VehicleSize.LARGE, VehicleSize.COMPACT)
+    This typically means that you attempted to use functionality that needed
+to interface with the current application object in some way. To solve
+this, set up an application context with app.app_context().  See the
+documentation for more information.\
+'''
     
-        def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer),
-            self.mr(mapper=self.mapper_sort,
-                    reducer=self.reducer_identity),
-        ]
-    
-    
-class UserGraphService(object):
-    
-    _StateKeys = v1._StateKeys  # pylint: disable=protected-access
-    
-      Returns:
-    a MultipleGridAnchorGenerator
-  '''
-  if base_anchor_size is None:
-    base_anchor_size = [1.0, 1.0]
-  box_specs_list = []
-  if scales is None or not scales:
-    scales = [min_scale + (max_scale - min_scale) * i / (num_layers - 1)
-              for i in range(num_layers)] + [1.0]
-  else:
-    # Add 1.0 to the end, which will only be used in scale_next below and used
-    # for computing an interpolated scale for the largest scale in the list.
-    scales += [1.0]
-    
-      if optimizer_type == 'momentum_optimizer':
-    config = optimizer_config.momentum_optimizer
-    learning_rate = _create_learning_rate(config.learning_rate,
-                                          global_step=global_step)
-    summary_vars.append(learning_rate)
-    optimizer = tf.train.MomentumOptimizer(
-        learning_rate,
-        momentum=config.momentum_optimizer_value)
-    
-        Args:
-      indicator: boolean tensor of shape [N] whose True entries can be sampled.
-      batch_size: desired batch size. If None, keeps all positive samples and
-        randomly selects negative samples so that the positive sample fraction
-        matches self._positive_fraction. It cannot be None is is_static is True.
-      labels: boolean tensor of shape [N] denoting positive(=True) and negative
-          (=False) examples.
-      scope: name scope.
-    
-    import tensorflow as tf
-from google.protobuf import text_format
-from object_detection import export_tflite_ssd_graph_lib
-from object_detection.protos import pipeline_pb2
-    
-        prediction_dict = {
-        'refined_box_encodings': refined_box_encodings,
-        'class_predictions_with_background':
-        class_predictions_with_background,
-        'num_proposals': num_proposals,
-        'proposal_boxes': absolute_proposal_boxes,
-        'box_classifier_features': box_classifier_features,
-        'proposal_boxes_normalized': proposal_boxes_normalized,
-    }
-    return prediction_dict
-    
-      ECE is a scalar summary statistic of calibration error. It is the
-  sample-weighted average of the difference between the predicted and true
-  probabilities of a positive detection across uniformly-spaced model
-  confidences [0, 1]. See referenced paper for a thorough explanation.
-    
-    
-# admin for #19425 and #18388
-class BinaryTreeAdmin(admin.TabularInline):
-    model = BinaryTree
-    
-        def test_version_dev_tuple(self):
-        expect = ('1.2.3dev', 1, 2, 3)
-        ops = FakePostGISOperations(expect[0])
-        actual = ops.postgis_version_tuple()
-        self.assertEqual(expect, actual)
-    
-        # Copy any attributes that a decorator adds to the function it decorates.
-    for dec in decorators:
-        _update_method_wrapper(_wrapper, dec)
-    # Preserve any existing attributes of 'method', including the name.
-    update_wrapper(_wrapper, method)
-    return _wrapper
-    
-        def __init__(self, layer_ptr, ds):
+        def get_cookie_samesite(self, app):
+        '''Return ``'Strict'`` or ``'Lax'`` if the cookie should use the
+        ``SameSite`` attribute. This currently just returns the value of
+        the :data:`SESSION_COOKIE_SAMESITE` setting.
         '''
-        Initialize on an OGR C pointer to the Layer and the `DataSource` object
-        that owns this layer.  The `DataSource` object is required so that a
-        reference to it is kept with this Layer.  This prevents garbage
-        collection of the `DataSource` while this Layer is still active.
+        return app.config['SESSION_COOKIE_SAMESITE']
+    
+    
+def make_test_environ_builder(*args, **kwargs):
+    '''Create a :class:`flask.testing.EnvironBuilder`.
+    
+        bp.add_app_template_test(is_boolean)
+    app.register_blueprint(bp, url_prefix='/py')
+    assert 'is_boolean' in app.jinja_env.tests.keys()
+    assert app.jinja_env.tests['is_boolean'] == is_boolean
+    assert app.jinja_env.tests['is_boolean'](False)
+    
+            def to_python(self, value):
+            return Foo(value)
+    
+    
+@utils.memoize
+def get_pkgfile(command):
+    ''' Gets the packages that provide the given command using `pkgfile`.
+    
+        def test_app_alias(self, shell):
+        assert 'function fuck' in shell.app_alias('fuck')
+        assert 'function FUCK' in shell.app_alias('FUCK')
+        assert 'thefuck' in shell.app_alias('fuck')
+        assert 'TF_SHELL=fish' in shell.app_alias('fuck')
+        assert 'TF_ALIAS=fuck PYTHONIOENCODING' in shell.app_alias('fuck')
+        assert 'PYTHONIOENCODING=utf-8 thefuck' in shell.app_alias('fuck')
+        assert ARGUMENT_PLACEHOLDER in shell.app_alias('fuck')
+    
+    
+class TestGeneric(object):
+    @pytest.fixture
+    def shell(self):
+        return Generic()
+    
+    
+class UninstallError(PipenvException):
+    def __init__(self, package, command, return_values, return_code, **kwargs):
+        extra = [
+            '{0} {1}'.format(
+                crayons.blue('Attempted to run command: '),
+                crayons.yellow('$ {0!r}'.format(command), bold=True
+            )
+        )]
+        extra.extend([crayons.blue(line.strip()) for line in return_values.splitlines()])
+        if isinstance(package, (tuple, list, set)):
+            package = ' '.join(package)
+        message = '{0!s} {1!s}...'.format(
+            crayons.normal('Failed to uninstall package(s)'),
+            crayons.yellow('{0}!s'.format(package), bold=True)
+        )
+        self.exit_code = return_code
+        PipenvException.__init__(self, message=message, extra=extra)
+        self.extra = extra
+    
+    __all__ = [
+    DocumentError.__name__,
+    SchemaError.__name__,
+    TypeDefinition.__name__,
+    Validator.__name__,
+    'schema_registry',
+    'rules_set_registry',
+]
+
+    
+    # groups
+ERROR_GROUP = ErrorDefinition(0x80, None)
+MAPPING_SCHEMA = ErrorDefinition(0x81, 'schema')
+SEQUENCE_SCHEMA = ErrorDefinition(0x82, 'schema')
+# TODO remove KEYSCHEMA AND VALUESCHEMA with next major release
+KEYSRULES = KEYSCHEMA = ErrorDefinition(0x83, 'keysrules')
+VALUESRULES = VALUESCHEMA = ErrorDefinition(0x84, 'valuesrules')
+BAD_ITEMS = ErrorDefinition(0x8F, 'items')
+    
+            :param schema: The schema-definition to expand.
+        :return: The expanded schema-definition.
         '''
-        if not layer_ptr:
-            raise GDALException('Cannot create Layer, invalid pointer given')
-        self.ptr = layer_ptr
-        self._ds = ds
-        self._ldefn = capi.get_layer_defn(self._ptr)
-        # Does the Layer support random reading?
-        self._random_read = self.test_capability(b'RandomRead')
     
-            setting_name, refid = get_setting_name_and_refid(node)
+    from click_completion.core import completion_configuration, get_code, install, shells, resolve_ctx, get_choices, \
+    startswith, Shell
+from click_completion.lib import get_auto_shell
+from click_completion.patch import patch as _patch
     
-                    # Read the new file to memory
-                with open(_filename) as _file:
-                    _contents = _file.read()
-    
-        def _reset_stats(self):
-        self.tail.clear()
-        self.start = self.lastmark = self.lasttime = time()
-    
-        # Max concurrency is limited by global CONCURRENT_REQUESTS setting
-    max_concurrent_requests = 8
-    # Requests per second goal
-    qps = None # same as: 1 / download_delay
-    download_delay = None
-    # time in seconds to delay server responses
-    latency = None
-    # number of slots to create
-    slots = 1
-    
-    
-class ScrapyCommand(object):
-    
-        def run(self, args, opts):
-        if opts.verbose:
-            versions = scrapy_components_versions()
-            width = max(len(n) for (n, _) in versions)
-            patt = '%-{}s : %s'.format(width)
-            for name, version in versions:
-                print(patt % (name, version))
-        else:
-            print('Scrapy %s' % scrapy.__version__)
-    
-        def __init__(self, settings, aws_access_key_id=None, aws_secret_access_key=None, \
-            httpdownloadhandler=HTTPDownloadHandler, **kw):
-    
-    import six
-from w3lib import html
-    
-    try:
-    from cStringIO import StringIO as BytesIO
-except ImportError:
-    from io import BytesIO
+            :param filename: The pathname to the file to be signed.
+        :param signer: The identifier of the signer of the file.
+        :param sign_password: The passphrase for the signer's
+                              private key used for signing.
+        :param keystore: The path to a directory which contains the keys
+                         used in verification. If not specified, the
+                         instance's ``gpg_home`` attribute is used instead.
+        :return: The signing command as a list suitable to be
+                 passed to :class:`subprocess.Popen`.
+        '''
+        cmd = [self.gpg, '--status-fd', '2', '--no-tty']
+        if keystore is None:
+            keystore = self.gpg_home
+        if keystore:
+            cmd.extend(['--homedir', keystore])
+        if sign_password is not None:
+            cmd.extend(['--batch', '--passphrase-fd', '0'])
+        td = tempfile.mkdtemp()
+        sf = os.path.join(td, os.path.basename(filename) + '.asc')
+        cmd.extend(['--detach-sign', '--armor', '--local-user',
+                    signer, '--output', sf, filename])
+        logger.debug('invoking: %s', ' '.join(cmd))
+        return cmd, sf
