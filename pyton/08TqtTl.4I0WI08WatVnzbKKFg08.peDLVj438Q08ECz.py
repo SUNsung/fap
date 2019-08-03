@@ -1,133 +1,160 @@
 
         
-        import os
-import sys
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        errors = []
+title_links = []
+previous_links = []
+anchor_re = re.compile(anchor + '\s(.+)')
+section_title_re = re.compile('\*\s\[(.*)\]')
+link_re = re.compile('\[(.+)\]\((http.*)\)')
     
-    versions_info['versions'][version] = new_version
-versions_info['latest'] = version
+    	html = get_html(url)
+	contentid = r1(r'<meta name='contentid' scheme='DMINSTR2' content='([^']+)' />', html)
+	vid = r1(r''demand_ehow_videoid':'([^']+)'', html)
+	assert vid
     
+        if title is None:
+      title = url[0]
     
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
+            i = 1
     
-    with io.open(README_FILE, encoding='utf-8') as f:
-    oldreadme = f.read()
+            # partial derivatives to xs (usually the params of the neural net)
+        d_xs_new = dv[len(checkpoints_other):]
+        for j in range(len(xs)):
+            if d_xs_new[j] is not None:
+                if d_xs[j] is None:
+                    d_xs[j] = _unsparsify(d_xs_new[j])
+                else:
+                    d_xs[j] += _unsparsify(d_xs_new[j])
     
-    # NAME
+            logger.trace('Final mask shape: %s', retval.shape)
+        return retval
     
-    
-parser = youtube_dl.parseOpts()[0]
-build_completion(parser)
-
-    
-    
-class TestAgeRestriction(unittest.TestCase):
-    def _assert_restricted(self, url, filename, age, old_age=None):
-        self.assertTrue(_download_restricted(url, filename, old_age))
-        self.assertFalse(_download_restricted(url, filename, age))
-    
-    model.compile(loss=keras.losses.categorical_crossentropy,
-              optimizer=keras.optimizers.Adadelta(),
-              metrics=['accuracy'])
-    
-        with custom_object_scope({'MSE_MAE_loss': MSE_MAE_loss}):
-        loss = MSE_MAE_loss(0.3)
-        inputs = keras.layers.Input((2,))
-        outputs = keras.layers.Dense(1, name='model_output')(inputs)
-        model = keras.models.Model(inputs, outputs)
-        model.compile(optimizer='sgd', loss={'model_output': loss})
-        model.fit(np.random.rand(256, 2), np.random.rand(256, 1))
-        model.save(model_filename)
-    
-    
-def create_multi_input_model_from(layer1, layer2):
-    input_1 = Input(shape=(data_dim,))
-    input_2 = Input(shape=(data_dim,))
-    out1 = layer1(input_1)
-    out2 = layer2(input_2)
-    out = Average()([out1, out2])
-    model = Model([input_1, input_2], out)
-    model.add_loss(K.mean(out2))
-    model.add_loss(1)
-    model.add_loss(1)
-    return model
-    
-    print('Convert class vector to binary class matrix '
-      '(for use with categorical_crossentropy)')
-y_train = keras.utils.to_categorical(y_train, num_classes)
-y_test = keras.utils.to_categorical(y_test, num_classes)
-print('y_train shape:', y_train.shape)
-print('y_test shape:', y_test.shape)
-    
-    
-def cosine_proximity(y_true, y_pred):
-    y_true = K.l2_normalize(y_true, axis=-1)
-    y_pred = K.l2_normalize(y_pred, axis=-1)
-    return -K.sum(y_true * y_pred, axis=-1)
-    
-            try:
-            spidercls = self.crawler_process.spider_loader.load(name)
-        except KeyError:
-            pass
+        def set_config(self, configfile, config):
+        ''' Set the config to either global config or passed in config '''
+        section = '.'.join(self.__module__.split('.')[-2:])
+        if config is None:
+            retval = get_config(section, configfile)
         else:
-            # if spider already exists and not --force then halt
-            if not opts.force:
-                print('Spider %r already exists in module:' % name)
-                print('  %s' % spidercls.__module__)
-                return
-        template_file = self._find_template(opts.template)
-        if template_file:
-            self._genspider(module, name, domain, opts.template, template_file)
-            if opts.edit:
-                self.exitcode = os.system('scrapy edit '%s'' % name)
-    
-        def syntax(self):
-        return '[options]'
-    
-                # backward-compatible SSL/TLS method:
-            #
-            # * this will respect `method` attribute in often recommended
-            #   `ScrapyClientContextFactory` subclass
-            #   (https://github.com/scrapy/scrapy/issues/1429#issuecomment-131782133)
-            #
-            # * getattr() for `_ssl_method` attribute for context factories
-            #   not calling super(..., self).__init__
-            return CertificateOptions(verify=False,
-                        method=getattr(self, 'method',
-                                       getattr(self, '_ssl_method', None)),
-                        fixBrokenPeers=True,
-                        acceptableCiphers=DEFAULT_CIPHERS)
+            config.section = section
+            retval = config.config_dict
+            config.section = None
+        logger.debug('Config: %s', retval)
+        return retval
     
     
-def _get_boto_connection():
-    from boto.s3.connection import S3Connection
-    
-        def handleStatus(self, version, status, message):
-        self.factory.gotStatus(version, status, message)
-    
-        def __init__(self, debug=False):
-        self.jars = defaultdict(CookieJar)
-        self.debug = debug
-    
-        def process_request(self, request, spider):
-        for k, v in self._headers:
-            request.headers.setdefault(k, v)
+_DEFAULTS = {
+    'clip': {
+        'default': True,
+        'info': 'Should components of L*a*b* image be scaled by np.clip before converting '
+                'back to BGR color space?\nIf False then components will be min-max scaled '
+                'appropriately.\nClipping will keep target image brightness truer to the '
+                'input.\nScaling will adjust image brightness to avoid washed out portions in '
+                'the resulting color transfer that can be caused by clipping.',
+        'datatype': bool,
+        'rounding': None,
+        'min_max': None,
+        'choices': [],
+        'gui_radio': False,
+        'fixed': True,
+    },
+    'preserve_paper': {
+        'default': True,
+        'info': 'Should color transfer strictly follow methodology layed out in original '
+                'paper?\nThe method does not always produce aesthetically pleasing results.\n'
+                'If False then L*a*b* components will be scaled using the reciprocal of the '
+                'scaling factor proposed in the paper. This method seems to produce more '
+                'consistently aesthetically pleasing results.',
+        'datatype': bool,
+        'rounding': None,
+        'min_max': None,
+        'choices': [],
+        'gui_radio': False,
+        'fixed': True,
+    },
+}
 
     
+        The following keys are expected for the _DEFAULTS <metadata> dict:
+        datatype:  [required] A python type class. This limits the type of data that can be
+                   provided in the .ini file and ensures that the value is returned in the
+                   correct type to faceswap. Valid datatypes are: <class 'int'>, <class 'float'>,
+                   <class 'str'>, <class 'bool'>.
+        default:   [required] The default value for this option.
+        info:      [required] A string describing what this option does.
+        choices:   [optional] If this option's datatype is of <class 'str'> then valid
+                   selections can be defined here. This validates the option and also enables
+                   a combobox / radio option in the GUI.
+        gui_radio: [optional] If <choices> are defined, this indicates that the GUI should use
+                   radio buttons rather than a combobox to display this option.
+        min_max:   [partial] For <class 'int'> and <class 'float'> datatypes this is required
+                   otherwise it is ignored. Should be a tuple of min and max accepted values.
+                   This is used for controlling the GUI slider range. Values are not enforced.
+        rounding:  [partial] For <class 'int'> and <class 'float'> datatypes this is
+                   required otherwise it is ignored. Used for the GUI slider. For floats, this
+                   is the number of decimal places to display. For ints this is the step size.
+        fixed:     [optional] [train only]. Training configurations are fixed when the model is
+                   created, and then reloaded from the state file. Marking an item as fixed=False
+                   indicates that this value can be changed for existing models, and will override
+                   the value saved in the state file with the updated value in config. If not
+                   provided this will default to True.
+'''
     
-def display_temp(hass: HomeAssistant, temperature: float, unit: str,
-                 precision: float) -> float:
-    '''Convert temperature into preferred units/precision for display.'''
-    temperature_unit = unit
-    ha_unit = hass.config.units.temperature_unit
+        def set_config(self, configfile, config):
+        ''' Set the config to either global config or passed in config '''
+        section = '.'.join(self.__module__.split('.')[-2:])
+        if config is None:
+            retval = get_config(section, configfile=configfile)
+        else:
+            config.section = section
+            retval = config.config_dict
+            config.section = None
+        logger.debug('Config: %s', retval)
+        return retval
     
-        if unit_2 == LENGTH_MILES:
-        result = __meters_to_miles(meters)
-    elif unit_2 == LENGTH_FEET:
-        result = __meters_to_feet(meters)
-    elif unit_2 == LENGTH_KILOMETERS:
-        result = __meters_to_kilometers(meters)
+        The following variables should be defined:
+        _HELPTEXT: A string describing what this plugin does
+        _DEFAULTS: A dictionary containing the options, defaults and meta information. The
+                   dictionary should be defined as:
+                       {<option_name>: {<metadata>}}
+    
+        def get_erosion_kernel(self, mask):
+        ''' Get the erosion kernel '''
+        erosion_ratio = self.config['erosion'] / 100
+        mask_radius = np.sqrt(np.sum(mask)) / 2
+        kernel_size = max(1, int(abs(erosion_ratio * mask_radius)))
+        erosion_kernel = cv2.getStructuringElement(  # pylint: disable=no-member
+            cv2.MORPH_ELLIPSE,  # pylint: disable=no-member
+            (kernel_size, kernel_size))
+        logger.trace('erosion_kernel shape: %s', erosion_kernel.shape)
+        return erosion_kernel
+    
+        The following keys are expected for the _DEFAULTS <metadata> dict:
+        datatype:  [required] A python type class. This limits the type of data that can be
+                   provided in the .ini file and ensures that the value is returned in the
+                   correct type to faceswap. Valid datatypes are: <class 'int'>, <class 'float'>,
+                   <class 'str'>, <class 'bool'>.
+        default:   [required] The default value for this option.
+        info:      [required] A string describing what this option does.
+        choices:   [optional] If this option's datatype is of <class 'str'> then valid
+                   selections can be defined here. This validates the option and also enables
+                   a combobox / radio option in the GUI.
+        gui_radio: [optional] If <choices> are defined, this indicates that the GUI should use
+                   radio buttons rather than a combobox to display this option.
+        min_max:   [partial] For <class 'int'> and <class 'float'> datatypes this is required
+                   otherwise it is ignored. Should be a tuple of min and max accepted values.
+                   This is used for controlling the GUI slider range. Values are not enforced.
+        rounding:  [partial] For <class 'int'> and <class 'float'> datatypes this is
+                   required otherwise it is ignored. Used for the GUI slider. For floats, this
+                   is the number of decimal places to display. For ints this is the step size.
+        fixed:     [optional] [train only]. Training configurations are fixed when the model is
+                   created, and then reloaded from the state file. Marking an item as fixed=False
+                   indicates that this value can be changed for existing models, and will override
+                   the value saved in the state file with the updated value in config. If not
+                   provided this will default to True.
+'''
+    
+        The following variables should be defined:
+        _HELPTEXT: A string describing what this plugin does
+        _DEFAULTS: A dictionary containing the options, defaults and meta information. The
+                   dictionary should be defined as:
+                       {<option_name>: {<metadata>}}
