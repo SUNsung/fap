@@ -1,128 +1,123 @@
 
         
-        #include 'content/nw/src/api/bindings_common.h'
+        /**
+ * Changelog:
+ * - March 2013, Diederik Huys:    original version
+ * - November 2014, Pieter Wuille: updated to use Peter Dettman's parallel multiplication algorithm
+ * - December 2014, Pieter Wuille: converted from YASM to GCC inline assembly
+ */
+    
+        secp256k1_context_set_error_callback(none, counting_illegal_callback_fn, &ecount);
+    secp256k1_context_set_error_callback(sign, counting_illegal_callback_fn, &ecount);
+    secp256k1_context_set_error_callback(vrfy, counting_illegal_callback_fn, &ecount);
+    secp256k1_context_set_error_callback(both, counting_illegal_callback_fn, &ecount);
+    secp256k1_context_set_illegal_callback(none, counting_illegal_callback_fn, &ecount);
+    secp256k1_context_set_illegal_callback(sign, counting_illegal_callback_fn, &ecount);
+    secp256k1_context_set_illegal_callback(vrfy, counting_illegal_callback_fn, &ecount);
+    secp256k1_context_set_illegal_callback(both, counting_illegal_callback_fn, &ecount);
+    
+    #endif // BITCOIN_BECH32_H
+
+    
+      SequentialFile* orig_file;
+  Status s = env->NewSequentialFile(filename, &orig_file);
+  if (!s.ok())
+    return s;
     
     
-    {protected:
-  BaseEvent(){}
-  virtual ~BaseEvent(){}
+    {	ClassDB::bind_method('_add_task', &BackgroundProgress::_add_task);
+	ClassDB::bind_method('_task_step', &BackgroundProgress::_task_step);
+	ClassDB::bind_method('_end_task', &BackgroundProgress::_end_task);
+	ClassDB::bind_method('_update', &BackgroundProgress::_update);
+}
+    
+    
+    {	_update_mirroring();
+}
+    
+    	DebugDraw debug_draw;
+    
+    	static Mutex *lock;
+	static void setup();
+	static void cleanup();
+	static bool configured;
+    
+    	CFStringRef name = CFStringCreateWithCString(NULL, 'Godot', kCFStringEncodingASCII);
+	OSStatus result = MIDIClientCreate(name, NULL, NULL, &client);
+	CFRelease(name);
+	if (result != noErr) {
+		ERR_PRINTS('MIDIClientCreate failed, code: ' + itos(result));
+		return ERR_CANT_OPEN;
+	}
+    
+    #include 'core/os/midi_driver.h'
+#include 'core/vector.h'
+    
+    		Vector<int> points;
+    
+    godot_string GDAPI godot_pool_string_array_get(const godot_pool_string_array *p_self, const godot_int p_idx) {
+	const PoolVector<String> *self = (const PoolVector<String> *)p_self;
+	godot_string str;
+	String *s = (String *)&str;
+	memnew_placement(s, String);
+	*s = self->get(p_idx);
+	return str;
+}
+    
+    godot_bool GDAPI godot_string_name_operator_equal(const godot_string_name *p_self, const godot_string_name *p_other) {
+	const StringName *self = (const StringName *)p_self;
+	const StringName *other = (const StringName *)p_other;
+	return self == other;
+}
+    
+    SparsePageWriter::~SparsePageWriter() {
+  for (auto& queue : qworkers_) {
+    // use nullptr to signal termination.
+    std::shared_ptr<SparsePage> sig(nullptr);
+    queue.Push(std::move(sig));
+  }
+  for (auto& thread : workers_) {
+    thread->join();
+  }
+}
+    
+      str = tree.DumpModel(fmap, true, 'json');
+  ASSERT_NE(str.find(R'('split': 'feat_0')'), std::string::npos);
+  ASSERT_NE(str.find(R'('split': 'feat_1')'), std::string::npos);
+  ASSERT_NE(str.find(R'('split': 'feat_2')'), std::string::npos);
+    
+      Transform<>::Init(TestTransformRange<bst_float>{},
+	                Range{0, static_cast<Range::DifferenceType>(size)},
+	                TRANSFORM_GPU_RANGE)
+      .Eval(&out_vec, &in_vec);
+  std::vector<bst_float> res = out_vec.HostVector();
+    
+    // GPU version is not uploaded in CRAN anyway.
+// Specialize only when using R with CPU.
+#if XGBOOST_STRICT_R_MODE && !defined(XGBOOST_USE_CUDA)
+double LogGamma(double v);
+    
+    
+    {  bool operator==(const TreeParam& b) const {
+    return num_roots == b.num_roots && num_nodes == b.num_nodes &&
+           num_deleted == b.num_deleted && max_depth == b.max_depth &&
+           num_feature == b.num_feature &&
+           size_leaf_vector == b.size_leaf_vector;
+  }
 };
     
-       bool HasIcon(int command_id) override;
+    #endif // OPENPOSE_EXAMPLES_TUTORIAL_USER_POST_PROCESSING_HPP
+
     
-    void Menu::Append(MenuItem* menu_item) {
-  menu_items.push_back(menu_item);
-  if (GTK_IS_ACCEL_GROUP(gtk_accel_group)){
-    menu_item->UpdateKeys(gtk_accel_group);
-  }
-  gtk_menu_shell_append(GTK_MENU_SHELL(menu_), menu_item->menu_item_);
-}
+            Point<T> center() const;
     
-      if (menu_item->submenu_)
-    menu_model_->InsertSubMenuAt(pos, menu_item->id(), menu_item->label_,
-                                 menu_item->submenu_->menu_model_.get());
-  else if (menu_item->type_ == 'normal')
-    menu_model_->InsertItemAt(pos, menu_item->id(), menu_item->label_);
-  else if (menu_item->type_ == 'checkbox')
-    menu_model_->InsertCheckItemAt(pos, menu_item->id(), menu_item->label_);
-  else if (menu_item->type_ == 'separator')
-    menu_model_->InsertSeparatorAt(pos, ui::NORMAL_SEPARATOR);
+        private:
+        // PIMPL idiom
+        // http://www.cppsamples.com/common-tasks/pimpl.html
+        struct ImplGuiAdam;
+        std::shared_ptr<ImplGuiAdam> spImpl;
     
-    #include 'base/run_loop.h'
-#include 'content/public/browser/browsing_data_remover.h'
-#include 'extensions/browser/extension_function.h'
-    
-    class NwObjCallObjectMethodSyncFunction : public NWSyncExtensionFunction {
- public:
-  NwObjCallObjectMethodSyncFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-    void NwDesktopCaptureMonitor::OnSourceAdded(DesktopMediaList* list, int index) {
-    DesktopMediaList::Source src = list->GetSource(index);
-    }
-    
-    
-    {    // This function call won't return, and will engage in an infinite loop, processing events from the browser, and dispatching them.
-    emscripten_set_main_loop_arg(main_loop, NULL, 0, true);
-}
-    
-            // Rendering
-        FrameContext* frameCtxt = WaitForNextFrameResources();
-        UINT backBufferIdx = g_pSwapChain->GetCurrentBackBufferIndex();
-        frameCtxt->CommandAllocator->Reset();
-    
-        // Our state
-    bool show_demo_window = true;
-    bool show_another_window = false;
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-    
-    
-    {        // Create the constant buffer
-        {
-            D3D10_BUFFER_DESC desc;
-            desc.ByteWidth = sizeof(VERTEX_CONSTANT_BUFFER);
-            desc.Usage = D3D10_USAGE_DYNAMIC;
-            desc.BindFlags = D3D10_BIND_CONSTANT_BUFFER;
-            desc.CPUAccessFlags = D3D10_CPU_ACCESS_WRITE;
-            desc.MiscFlags = 0;
-            g_pd3dDevice->CreateBuffer(&desc, NULL, &g_pVertexConstantBuffer);
-        }
-    }
-    
-    // Implemented features:
-//  [X] Renderer: User texture binding. Use 'LPDIRECT3DTEXTURE9' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
-//  [X] Renderer: Support for large meshes (64k+ vertices) with 16-bits indices.
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    #include <stdarg.h>
-    
-    class StageParking : public Stage {
- public:
-  explicit StageParking(const ScenarioConfig::StageConfig& config)
-      : Stage(config) {}
-    }
-    
-    /**
- * @file
- **/
-    
-    namespace apollo {
-namespace planning {
-namespace scenario {
-namespace valet_parking {
-class StageApproachingParkingSpotTest : public ::testing::Test {
- public:
-  virtual void SetUp() {
-    config_.set_stage_type(
-        ScenarioConfig::VALET_PARKING_APPROACHING_PARKING_SPOT);
-  }
-    }
-    }
-    }
-    }
-    }
-    
-    #include <string>
-#include <vector>
-    
-    TEST(PredictionThreadPoolTest, global_for_each) {
-  std::vector<int> expect = {1, 2, 3, 4, 5, 6, 7, 8};
-  std::vector<int> real = {1, 2, 3, 4, 5, 6, 7, 8};
-    }
-    
-    std::unique_ptr<Stage> StopSignUnprotectedScenario::CreateStage(
-    const ScenarioConfig::StageConfig& stage_config) {
-  if (s_stage_factory_.Empty()) {
-    RegisterStages();
-  }
-  auto ptr = s_stage_factory_.CreateObjectOrNull(stage_config.stage_type(),
-                                                 stage_config);
-  if (ptr) {
-    ptr->SetContext(&context_);
-  }
-  return ptr;
-}
+        public:
+        PersonTracker(const bool mergeResults, const int levels = 3, const int patchSize = 31,
+                      const float confidenceThreshold = 0.05f, const bool trackVelocity = false,
+                      const bool scaleVarying = false, const float rescale = 640);
