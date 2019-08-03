@@ -1,247 +1,128 @@
 
         
         
-def test_when_cant_configure_automatically(shell_pid, shell, logs):
-    shell_pid.return_value = 12
-    shell.how_to_configure.return_value = ShellConfiguration(
-        content='eval $(thefuck --alias)',
-        path='/tmp/.bashrc',
-        reload='bash',
-        can_configure_automatically=False)
-    main()
-    logs.how_to_configure_alias.assert_called_once()
+@pytest.mark.parametrize('override, old, new', [
+    ({'key': 'val'}, {}, {'key': 'val'}),
+    ({'key': 'new-val'}, {'key': 'val'}, {'key': 'val'}),
+    ({'key': 'new-val', 'unset': 'unset'}, {'key': 'val'}, {'key': 'val', 'unset': 'unset'})])
+def test_default_settings(settings, override, old, new):
+    settings.clear()
+    settings.update(old)
+    default_settings(override)(lambda _: _)(None)
+    assert settings == new
+    
+    from thefuck.utils import replace_command
+from thefuck.specific.archlinux import get_pkgfile, archlinux_env
+    
+            return [package.split()[0] for package in packages]
+    except subprocess.CalledProcessError as err:
+        if err.returncode == 1 and err.output == '':
+            return []
+        else:
+            raise err
+    
+    install_requires = ['psutil', 'colorama', 'six', 'decorator', 'pyte']
+extras_require = {':python_version<'3.4'': ['pathlib2'],
+                  ':python_version<'3.3'': ['backports.shutil_get_terminal_size'],
+                  ':sys_platform=='win32'': ['win_unicode_console']}
+    
+        def test_app_alias(self, shell):
+        assert 'function fuck' in shell.app_alias('fuck')
+        assert 'function FUCK' in shell.app_alias('FUCK')
+        assert 'thefuck' in shell.app_alias('fuck')
+        assert 'TF_SHELL=fish' in shell.app_alias('fuck')
+        assert 'TF_ALIAS=fuck PYTHONIOENCODING' in shell.app_alias('fuck')
+        assert 'PYTHONIOENCODING=utf-8 thefuck' in shell.app_alias('fuck')
+        assert ARGUMENT_PLACEHOLDER in shell.app_alias('fuck')
+    
+        def app_alias(self, alias_name):
+        return ('alias {0} 'setenv TF_SHELL tcsh && setenv TF_ALIAS {0} && '
+                'set fucked_cmd=`history -h 2 | head -n 1` && '
+                'eval `thefuck ${{fucked_cmd}}`'').format(alias_name)
+    
+        t = Template('Viewing {} page. With data {{ data }}.'.format(request.method))
+    data = json.loads(request.body.decode('utf-8'))
+    c = Context({'data': data})
+    return HttpResponse(t.render(c))
     
     
-@pytest.fixture(params=containers)
-def proc(request, spawnu, TIMEOUT):
-    proc = spawnu(*request.param)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(u'tcsh')
-    proc.sendline(u'setenv PYTHONIOENCODING utf8')
-    proc.sendline(u'eval `thefuck --alias`')
-    return proc
+checkbox = forms.CheckboxInput({'class': 'action-select'}, lambda value: False)
     
-    no_match_output = '''
-Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
-Get:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease [89.2 kB]
-Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
-Get:4 http://security.ubuntu.com/ubuntu zesty-security InRelease [89.2 kB]
-Hit:5 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
-Hit:6 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
-Hit:7 https://download.docker.com/linux/ubuntu zesty InRelease
-Get:8 http://us.archive.ubuntu.com/ubuntu zesty-updates/main i386 Packages [232 kB]
-Get:9 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 Packages [235 kB]
-Get:10 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 DEP-11 Metadata [55.2 kB]
-Get:11 http://us.archive.ubuntu.com/ubuntu zesty-updates/main DEP-11 64x64 Icons [32.3 kB]
-Get:12 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 Packages [156 kB]
-Get:13 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe i386 Packages [156 kB]
-Get:14 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 DEP-11 Metadata [175 kB]
-Get:15 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe DEP-11 64x64 Icons [253 kB]
-Get:16 http://us.archive.ubuntu.com/ubuntu zesty-updates/multiverse amd64 DEP-11 Metadata [5,840 B]
-Get:17 http://us.archive.ubuntu.com/ubuntu zesty-backports/universe amd64 DEP-11 Metadata [4,588 B]
-Get:18 http://security.ubuntu.com/ubuntu zesty-security/main amd64 DEP-11 Metadata [12.7 kB]
-Get:19 http://security.ubuntu.com/ubuntu zesty-security/main DEP-11 64x64 Icons [17.6 kB]
-Get:20 http://security.ubuntu.com/ubuntu zesty-security/universe amd64 DEP-11 Metadata [21.6 kB]
-Get:21 http://security.ubuntu.com/ubuntu zesty-security/universe DEP-11 64x64 Icons [47.7 kB]
-Get:22 http://security.ubuntu.com/ubuntu zesty-security/multiverse amd64 DEP-11 Metadata [208 B]
-Fetched 1,673 kB in 0s (1,716 kB/s)
-Reading package lists... Done
-Building dependency tree
-Reading state information... Done
-All packages are up to date.
-'''
-    
-    
-@pytest.mark.skipif(_is_not_okay_to_test(),
-                    reason='No need to run if there\'s no formula')
-def test_get_new_command(brew_no_available_formula):
-    assert get_new_command(Command('brew install elsticsearch',
-                                   brew_no_available_formula))\
-        == 'brew install elasticsearch'
-    
-    if K.image_data_format() == 'channels_first':
-    x_train = x_train.reshape(x_train.shape[0], 1, img_rows, img_cols)
-    x_test = x_test.reshape(x_test.shape[0], 1, img_rows, img_cols)
-    input_shape = (1, img_rows, img_cols)
-else:
-    x_train = x_train.reshape(x_train.shape[0], img_rows, img_cols, 1)
-    x_test = x_test.reshape(x_test.shape[0], img_rows, img_cols, 1)
-    input_shape = (img_rows, img_cols, 1)
-    
-        x_train = np.empty((num_train_samples, 3, 32, 32), dtype='uint8')
-    y_train = np.empty((num_train_samples,), dtype='uint8')
-    
-        # Returns
-        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
-    '''
-    dirname = os.path.join('datasets', 'fashion-mnist')
-    base = 'http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/'
-    files = ['train-labels-idx1-ubyte.gz', 'train-images-idx3-ubyte.gz',
-             't10k-labels-idx1-ubyte.gz', 't10k-images-idx3-ubyte.gz']
-    
-    
-def test_imdb():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = imdb.load_data()
-        (x_train, y_train), (x_test, y_test) = imdb.load_data(maxlen=40)
-        assert len(x_train) == len(y_train)
-        assert len(x_test) == len(y_test)
-        word_index = imdb.get_word_index()
-        assert isinstance(word_index, dict)
-    
-    model.fit(x_train, y_train,
-          batch_size=batch_size,
-          epochs=epochs,
-          verbose=1,
-          validation_data=(x_test, y_test))
-score = model.evaluate(x_test, y_test, verbose=0)
-print('Test loss:', score[0])
-print('Test accuracy:', score[1])
+        def test_filtered_aggregate_ref_subquery_annotation(self):
+        aggs = Author.objects.annotate(
+            earliest_book_year=Subquery(
+                Book.objects.filter(
+                    contact__pk=OuterRef('pk'),
+                ).order_by('pubdate').values('pubdate__year')[:1]
+            ),
+        ).aggregate(
+            cnt=Count('pk', filter=Q(earliest_book_year=2008)),
+        )
+        self.assertEqual(aggs['cnt'], 2)
 
     
-    print('Evaluate IRNN...')
-model = Sequential()
-model.add(SimpleRNN(hidden_units,
-                    kernel_initializer=initializers.RandomNormal(stddev=0.001),
-                    recurrent_initializer=initializers.Identity(gain=1.0),
-                    activation='relu',
-                    input_shape=x_train.shape[1:]))
-model.add(Dense(num_classes))
-model.add(Activation('softmax'))
-rmsprop = RMSprop(lr=learning_rate)
-model.compile(loss='categorical_crossentropy',
-              optimizer=rmsprop,
-              metrics=['accuracy'])
     
-    classification_layers = [
-    Dense(128),
-    Activation('relu'),
-    Dropout(0.5),
-    Dense(num_classes),
-    Activation('softmax')
-]
+class PostGISOperator(SpatialOperator):
+    def __init__(self, geography=False, raster=False, **kwargs):
+        # Only a subset of the operators and functions are available for the
+        # geography type.
+        self.geography = geography
+        # Only a subset of the operators and functions are available for the
+        # raster type. Lookups that don't support raster will be converted to
+        # polygons. If the raster argument is set to BILATERAL, then the
+        # operator cannot handle mixed geom-raster lookups.
+        self.raster = raster
+        super().__init__(**kwargs)
     
+        def get_with_params(self):
+        with_params = []
+        if self.gin_pending_list_limit is not None:
+            with_params.append('gin_pending_list_limit = %d' % self.gin_pending_list_limit)
+        if self.fastupdate is not None:
+            with_params.append('fastupdate = %s' % ('on' if self.fastupdate else 'off'))
+        return with_params
     
-def create_network(n_dense=6,
-                   dense_units=16,
-                   activation='selu',
-                   dropout=AlphaDropout,
-                   dropout_rate=0.1,
-                   kernel_initializer='lecun_normal',
-                   optimizer='adam',
-                   num_classes=1,
-                   max_words=max_words):
-    '''Generic function to create a fully-connected neural network.
+        def test_name_auto_generation(self):
+        index = self.index_class(fields=['field'])
+        index.set_name_with_model(CharFieldModel)
+        self.assertRegex(index.name, r'postgres_te_field_[0-9a-f]{6}_%s' % self.index_class.suffix)
     
-        with pytest.raises(AssertionError):
-        conv_utils.conv_output_length(32, 5, 'diagonal', 2)
-    
-        def list_targets(self):
-        '''Lists the existing targets for the rule in AWS'''
-        try:
-            targets = self.client.list_targets_by_rule(Rule=self.name)
-        except botocore.exceptions.ClientError as e:
-            error_code = e.response.get('Error', {}).get('Code')
-            if error_code == 'ResourceNotFoundException':
-                return []
-            self.module.fail_json_aws(e, msg='Could not find target for rule %s' % self.name)
-        except botocore.exceptions.BotoCoreError as e:
-            self.module.fail_json_aws(e, msg='Could not find target for rule %s' % self.name)
-        return self._snakify(targets)['targets']
-    
-    options:
-  query:
-    description:
-      - Specifies the resource type for which to gather facts.  Leave blank to retrieve all facts.
-    required: true
-    choices: [ 'aliases', 'all', 'config', 'mappings', 'policy', 'versions' ]
-    default: 'all'
-  function_name:
-    description:
-      - The name of the lambda function for which facts are requested.
-    aliases: [ 'function', 'name']
-  event_source_arn:
-    description:
-      - For query type 'mappings', this is the Amazon Resource Name (ARN) of the Amazon Kinesis or DynamoDB stream.
-author: Pierre Jodouin (@pjodouin)
-requirements:
-    - boto3
-extends_documentation_fragment:
-  - aws
-  - ec2
-'''
-    
-            firewall_policy = oneandone_conn.remove_firewall_server(
-            firewall_id=firewall_id,
-            server_ip_id=server_ip_id)
-        return firewall_policy
-    except Exception as e:
-        module.fail_json(msg=str(e))
-    
-            elif desired_state == 'enabled':
-            if current_state == HOST_ABSENT:
-                self.allocate_host()
-                host = self.get_host_by_name(host_name)
-                self.wait_for_host_state(host, [HOST_STATES.MONITORED])
-            elif current_state in [HOST_STATES.DISABLED, HOST_STATES.OFFLINE]:
-                if one.host.status(host.ID, HOST_STATUS.ENABLED):
-                    self.wait_for_host_state(host, [HOST_STATES.MONITORED])
-                    result['changed'] = True
-                else:
-                    self.fail(msg='could not enable host')
-            elif current_state in [HOST_STATES.MONITORED]:
-                pass
-            else:
-                self.fail(msg='unknown host state %s, cowardly refusing to change state to enable' % current_state_name)
-    
-        params['api_key'] = module.params['token']
+        Test classes using this mixin need to define a `work_subdir` attribute
+    which designates the subdir under `tests/i18n/` that will be copied to the
+    temporary tree from which its test cases will run.
     
     
-def load_data(file_path):
-    '''加载数据
-        源数据格式为多行，每行为两个浮点数，分别表示 (x,y)
+class Driver(GDALBase):
     '''
-    data = []
-    with open(file_path, 'r', encoding='utf-8') as fr:
-        for line in fr.read().splitlines():
-            line_float = list(map(float, line.split('\t')))
-            data.append(line_float)
-    data = np.array(data)
-    return data
-    
-    
-def hard_sigmoid(x):
+    Wrap a GDAL/OGR Data Source Driver.
+    For more information, see the C API source code:
+    https://www.gdal.org/gdal_8h.html - https://www.gdal.org/ogr__api_8h.html
     '''
-    x = 0.                  x < -2.5
-      = 1.                  x > 2.5
-      = 0.2 * x + 0.5       otherwise
-    '''
-    x = (0.2 * x) + 0.5
-    x = tf.clip_by_value(x, 0., 1.)
-    return x
     
-            a = permute(a, [0, 2, 1])  # [batch_size, n_step, n_input]
-        o = tf.multiply(x, a)  # # [batch_size, n_step, n_input]
+        @property
+    def fields(self):
+        'Return a list of fields in the Feature.'
+        return [
+            force_str(
+                capi.get_field_name(capi.get_field_defn(self._layer._ldefn, i)),
+                self.encoding,
+                strings_only=True
+            ) for i in range(self.num_fields)
+        ]
     
+        return o
     
-def highway_conv2d(x, kernel_size,
-                   act_fn=relu,
-                   strides=1,
-                   padding='SAME',
-                   carry_bias=-1.0,
-                   name=None):
-    '''用于 conv2d 的 highway
-    Input shape:  [batch_size, in_h, in_w, in_channels]
-    Output shape: [batch_size, in_h, in_w, in_channels]
+        def __call__(self, x):
+        '''
+        Args:
+            x: 注意 x.dtype == float32
+        '''
+        # x = tf.cast(x, dtype=tf.float32)  # 交给外部处理
+        loss_regularization = 0.
+        if self.l1:
+            loss_regularization += tf.reduce_sum(self.l1 * tf.abs(x))
+        if self.l2:
+            loss_regularization += tf.reduce_sum(self.l2 * tf.square(x))
+        return loss_regularization
     
-    
-def permute(x, perm):
-    '''
-    Examples:
-        x.shape == [128, 32, 1]
-        x = permute(x, [0, 2, 1])
-        x.shape == [128, 1, 32]
+                  'Operating System :: OS Independent',
