@@ -1,321 +1,271 @@
 
         
-            def order_top_with_notification_levels(score)
-      -'COALESCE(topic_users.notification_level, 1) DESC, COALESCE(category_users.notification_level, 1) DESC, COALESCE(top_topics.#{score}, 0) DESC, topics.bumped_at DESC'
-    end
-    
-        since =
-      case period_type
-      when :daily then 1.day.ago
-      when :weekly then 1.week.ago
-      when :monthly then 1.month.ago
-      when :quarterly then 3.months.ago
-      when :yearly then 1.year.ago
-      else 1000.years.ago
+                a_split <=> b_split
+      else
+        a.casecmp(b)
       end
-    
-    describe ContentSecurityPolicy::Builder do
-  let(:builder) { described_class.new }
-    
-    # omniauth loves spending lots cycles in its magic middleware stack
-# this middleware bypasses omniauth middleware and only hits it when needed
-class Middleware::OmniauthBypassMiddleware
-    
-    module HighlightJs
-  HIGHLIGHTJS_DIR ||= '#{Rails.root}/vendor/assets/javascripts/highlightjs/'
-    
-      describe 'script-src' do
-    it 'always has self, logster, sidekiq, and assets' do
-      script_srcs = parse(policy)['script-src']
-      expect(script_srcs).to include(*%w[
-        'unsafe-eval'
-        'report-sample'
-        http://test.localhost/logs/
-        http://test.localhost/sidekiq/
-        http://test.localhost/mini-profiler-resources/
-        http://test.localhost/assets/
-        http://test.localhost/brotli_asset/
-        http://test.localhost/extra-locales/
-        http://test.localhost/highlight-js/
-        http://test.localhost/javascripts/
-        http://test.localhost/plugins/
-        http://test.localhost/theme-javascripts/
-        http://test.localhost/svg-sprite/
-      ])
-    end
-    
-        def initialize(analytics_ingester_client: AnalyticsIngesterClient.new(GA_TRACKING))
-      require 'securerandom'
-      @session_id = SecureRandom.uuid
-      @client = analytics_ingester_client
-      @threads = []
-      @launch_event_sent = false
-    end
-    
-          it 'adds no-build flag to command if no_build is set to true' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            carthage(
-              no_build: true
-            )
-          end').runner.execute(:test)
-    
-        # An empty argument will be skipped, so return empty quotes.
-    # https://github.com/ruby/ruby/blob/a6413848153e6c37f6b0fea64e3e871460732e34/lib/shellwords.rb#L142-L143
-    return ''''.dup if str.empty?
-    
-        context 'with keywords' do
-      let(:options) do
-        {
-          name: { 'en-US' => 'Fastlane Demo' },
-          description: { 'en-US' => 'Demo description' },
-          keywords: { 'en-US' => 'Some, key, words' }
-        }
-      end
-    
-    describe Admin::UsersController do
-  it 'requires to be signed in as an admin' do
-    login_as(users(:bob))
-    visit admin_users_path
-    expect(page).to have_text('Admin access required to view that page.')
-  end
-    
-        it 'shows the dry run pop up with previous events and allows use previously received event' do
-      emitter.events << Event.new(payload: {url: 'http://xkcd.com/'})
-      agent.sources << emitter
-      agent.options.merge!('url' => '', 'url_from_event' => '{{url}}')
-      agent.save!
-    
-      it 'imports a scenario that does not exist yet' do
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
-    click_on 'Start Import'
-    expect(page).to have_text('This scenario has a few agents to get you started. Feel free to change them or delete them as you see fit!')
-    expect(page).not_to have_text('This Scenario already exists in your system.')
-    check('I confirm that I want to import these Agents.')
-    click_on 'Finish Import'
-    expect(page).to have_text('Import successful!')
-  end
-    
-      describe '#scenario_label' do
-    it 'creates a scenario label with the scenario name' do
-      expect(scenario_label(scenario)).to eq(
-        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Scene</span>'
-      )
-    end
-    
-          expect(exporter.as_json[:links]).to eq([{ :source => guid_order(agent_list, :jane_weather_agent), :receiver => guid_order(agent_list, :jane_rain_notifier_agent) }])
-    end
-    
-      describe '#schedule_scheduler_agents' do
-    it 'registers active SchedulerAgents' do
-      @scheduler.schedule_scheduler_agents
-    
-      describe 'migrating a hash' do
-    it 'should convert every attribute' do
-      expect(LiquidMigrator.convert_hash({'a' => '$.data', 'b' => 'This is a <$.test>'})).to eq(
-                                  {'a' => '$.data', 'b' => 'This is a {{test}}'}
-      )
-    end
-    it 'should work with leading_dollarsign_is_jsonpath' do
-      expect(LiquidMigrator.convert_hash({'a' => '$.data', 'b' => 'This is a <$.test>'}, leading_dollarsign_is_jsonpath: true)).to eq(
-                                  {'a' => '{{data}}', 'b' => 'This is a {{test}}'}
-      )
-    end
-    it 'should use the corresponding *_path attributes when using merge_path_attributes'do
-      expect(LiquidMigrator.convert_hash({'a' => 'default', 'a_path' => '$.data'}, {leading_dollarsign_is_jsonpath: true, merge_path_attributes: true})).to eq(
-                                  {'a' => '{{data}}'}
-      )
-    end
-    it 'should raise an exception when encountering complex JSONPaths' do
-      expect { LiquidMigrator.convert_hash({'b' => 'This is <$.complex[2]>'}) }.
-        to raise_error('JSONPath '$.complex[2]' is too complex, please check your migration.')
-    end
-  end
-    
-        it 'cleans up old logs when there are more than log_length' do
-      stub(AgentLog).log_length { 4 }
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 1')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 2')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 3')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 4')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 4')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 1')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 5')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 5')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 2')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 6')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 6')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 3')
-    end
-    
-        it 'should raise error when invalid response arrives' do
-      stub(HTTParty).post { {'blah' => 'blah'} }
-      expect { @checker.send_notification({}) }.to raise_error(StandardError, /Invalid response from Boxcar:/)
-    end
-    
-      # GET /resource/sign_in
-  def new
-    self.resource = resource_class.new(sign_in_params)
-    clean_up_passwords(resource)
-    yield resource if block_given?
-    respond_with(resource, serialize_options(resource))
-  end
-    
-        def reset_password_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :reset_password_instructions, opts)
-    end
-    
-        unless env['devise.skip_trackable']
-      warden.session(scope)['last_request_at'] = Time.now.utc.to_i
     end
   end
 end
 
     
-        # Create magic predicates for verifying what module is activated by this map.
-    # Example:
-    #
-    #   def confirmable?
-    #     self.modules.include?(:confirmable)
-    #   end
-    #
-    def self.add_module(m)
-      class_eval <<-METHOD, __FILE__, __LINE__ + 1
-        def #{m}?
-          self.modules.include?(:#{m})
+        def build_pages
+      history = Set.new initial_urls.map(&:downcase)
+      instrument 'running.scraper', urls: initial_urls
+    
+        module MultipleBaseUrls
+      def self.included(base)
+        base.extend ClassMethods
+      end
+    
+        def self.subscribe_to(notifier)
+      attach_to(namespace, new, notifier)
+    end
+    
+    testdata( File.dirname($0) + '/scandata', ARGV ).each do |file|
+  $stderr.print File.basename(file) + ': '
+  begin
+    ok = File.read(file)
+    s = Racc::GrammarFileScanner.new( ok )
+    sym, (val, _lineno) = s.scan
+    if printonly then
+      $stderr.puts
+      $stderr.puts val
+      next
+    end
+    
+      it 'returns true when at EOF with a length greater than the size of uncompressed data' do
+    gz = Zlib::GzipReader.new @io
+    gz.eof?.should be_false
+    gz.read(11)
+    gz.eof?.should be_true
+  end
+    
+      before :each do
+    @data = '12345abcde'
+    @zip = [31, 139, 8, 0, 44, 220, 209, 71, 0, 3, 51, 52, 50, 54, 49, 77,
+            76, 74, 78, 73, 5, 0, 157, 5, 0, 36, 10, 0, 0, 0].pack('C*')
+    @io = StringIO.new @zip
+  end
+    
+      it 'invokes seek method on the associated IO object' do
+    # first, prepare the mock object:
+    (obj = mock('io')).should_receive(:get_io).any_number_of_times.and_return(@io)
+    def obj.read(args); get_io.read(args); end
+    def obj.seek(pos, whence = 0)
+      ScratchPad.record :seek
+      get_io.seek(pos, whence)
+    end
+    
+    describe :gzipreader_each, shared: true do
+    
+        describe 'with an empty string' do
+      it 'does not insert anything into the stream' do
+        @gz.ungetc ''
+        @gz.read.should == 'abcde'
+      end
+    
+    describe 'GzipWriter#write' do
+  before :each do
+    @data = '12345abcde'
+    @zip = [31, 139, 8, 0, 44, 220, 209, 71, 0, 3, 51, 52, 50, 54, 49, 77,
+            76, 74, 78, 73, 5, 0, 157, 5, 0, 36, 10, 0, 0, 0].pack('C*')
+    @io = StringIO.new ''.b
+  end
+    
+      before do
+    @zeros    = Zlib::Deflate.deflate('0' * 100_000)
+    @inflator = Zlib::Inflate.new
+    @chunks   = []
+    
+          File.open('bower.json', 'w') do |f|
+        f.puts JSON.pretty_generate(spec)
+      end
+    end
+  end
+end
+
+    
+        def str_to_byte_pos(pos)
+      @s.string.slice(0, pos).bytesize
+    end
+  end
+end
+    
+        def log_http_get_files(files, from, cached = false)
+      return if files.empty?
+      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
+      if cached
+        puts dark green s
+      else
+        puts dark cyan s
+      end
+    end
+    
+    class NodeMincerTest < Minitest::Test
+  DUMMY_PATH = 'test/dummy_node_mincer'
+    
+    module URI
+  ;
+  class << self
+# Does the char code correspond to an alpha-numeric char.
+# isAlphaNumeric('a'.ord) => true
+# isAlphaNumeric(''.ord) => false
+    def isAlphaNumeric(cc)
+      # a - z
+      if (97 <= cc && cc <= 122);
+        return true
+      end
+      # A - Z
+      if (65 <= cc && cc <= 90);
+        return true
+      end
+      # 0 - 9
+      if (48 <= cc && cc <= 57);
+        return true
+      end
+    
+          # private
+    
+          def string_to_code string
+        # sha bytes
+        b = [Digest::SHA1.hexdigest(string)[0, 20]].pack('H*').bytes.to_a
+        # Thanks donpark's IdenticonUtil.java for this.
+        # Match the following Java code
+        # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
+        #	 ((b[2] & 0xFF) << 8) | (b[3] & 0xFF)
+    
+        def self.teardown(&block)
+      define_method(:teardown, &block)
+    end
+  end
+  (
+  class << klass;
+    self
+  end).send(:define_method, :name) { name.gsub(/\W/, '_') }
+  $contexts << klass
+  klass.class_eval &block
+end
+    
+      test 'remove page extentions' do
+    view = Precious::Views::LatestChanges.new
+    assert_equal 'page', view.remove_page_extentions('page.wiki')
+    assert_equal 'page-wiki', view.remove_page_extentions('page-wiki.md')
+    assert_equal 'file.any_extention', view.remove_page_extentions('file.any_extention')
+  end
+    
+          catch(:IRB_EXIT) do
+        irb.eval_input
+      end
+    end
+  end
+    
+      end
+end
+
+    
+          def button_link_to(text, url, html_options = {})
+        if html_options[:method] &&
+            !html_options[:method].to_s.casecmp('get').zero? &&
+            !html_options[:remote]
+          form_tag(url, method: html_options.delete(:method), class: 'd-inline') do
+            button(text, html_options.delete(:icon), nil, html_options)
+          end
+        else
+          if html_options['data-update'].nil? && html_options[:remote]
+            object_name, action = url.split('/')[-2..-1]
+            html_options['data-update'] = [action, object_name.singularize].join('_')
+          end
+    
+          after_transition do |payment, transition|
+        payment.state_changes.create!(
+          previous_state: transition.from,
+          next_state: transition.to,
+          name: 'payment'
+        )
+      end
+    end
+    
+          def currency
+        @payment.currency
+      end
+    
+      def self.check_missing_translations
+    self.missing_translation_messages = []
+    self.used_translations ||= []
+    used_translations.map { |a| a.split('.') }.each do |translation_keys|
+      root = translations
+      processed_keys = []
+      translation_keys.each do |key|
+        root = root.fetch(key.to_sym)
+        processed_keys << key.to_sym
+      rescue KeyError
+        error = '#{(processed_keys << key).join('.')} (#{I18n.locale})'
+        unless Spree.missing_translation_messages.include?(error)
+          Spree.missing_translation_messages << error
         end
-      METHOD
-    end
-    
-        self.each_key { |k|
-      if (k.downcase == key.downcase)
-        self.store(k, value)
-        stored = true
-      end
-    }
-    
-        when IAX_TYPE_DTMF_END
-      self.dprint('DTMF END: #{pkt[11,1]}')
-    
-    module Rex
-module Proto
-module IPMI
-  require 'rex/proto/ipmi/channel_auth_reply'
-  require 'rex/proto/ipmi/open_session_reply'
-  require 'rex/proto/ipmi/rakp2'
-    
-      def self.create_ipmi_getchannel_probe
-    [   # Get Channel Authentication Capabilities
-      0x06, 0x00, 0xff, 0x07, # RMCP Header
-      0x00, 0x00, 0x00, 0x00,
-      0x00, 0x00, 0x00, 0x00, 0x00, 0x09, 0x20, 0x18,
-      0xc8, 0x81, 0x00, 0x38, 0x8e, 0x04, 0xb5
-    ].pack('C*')
-  end
-    
-                components.each do |c|
-              encoded << [c.length].pack('N')
-              encoded << c
-            end
-    
-              # Decrypts the cipher with etype encryption schema
-          #
-          # @param key [String] the key to decrypt
-          # @param msg_type [Integer] the message type
-          # @return [String] the decrypted `cipher`
-          # @raise [RuntimeError] if decryption doesn't succeed
-          # @raise [NotImplementedError] if encryption isn't supported
-          def decrypt(key, msg_type)
-            if cipher.nil? || cipher.empty?
-              return ''
-            end
-    
-    module Rex
-  module Proto
-    module Kerberos
-      module Model
-        # This class provides a representation of a Kerberos KDC-REQ (request) data
-        # definition
-        class KdcRequest < Element
-          # @!attribute pvno
-          #   @return [Integer] The protocol version number
-          attr_accessor :pvno
-          # @!attribute msg_type
-          #   @return [Integer] The type of a protocol message
-          attr_accessor :msg_type
-          # @!attribute pa_data
-          #   @return [Array<Rex::Proto::Kerberos::Model::PreAuthData>] Authentication information which may
-          #   be needed before credentials can be issued or decrypted
-          attr_accessor :pa_data
-          # @!attribute req_body
-          #   @return [Rex::Proto::Kerberos::Model:::KdcRequestBody] The request body
-          attr_accessor :req_body
-    
-              # @!attribute type
-          #   @return [Integer] The padata type
-          attr_accessor :type
-          # @!attribute value
-          #   @return [String] The padata value
-          attr_accessor :value
-    
-      if options.respond_to? 'keys'
-    options.each do |k,v|
-      unless v.nil?
-        v = v.join ',' if v.respond_to? 'join'
-        v = v.to_json if v.respond_to? 'keys'
-        output += ' data-#{k.sub'_','-'}='#{v}''
       end
     end
-  elsif options.respond_to? 'join'
-    output += ' data-value='#{config[key].join(',')}''
-  else
-    output += ' data-value='#{config[key]}''
-  end
-  output += '></#{tag}>'
-end
-    
-    Liquid::Template.register_tag('include_code', Jekyll::IncludeCodeTag)
-
-    
-    require 'pathname'
-require './plugins/octopress_filters'
-    
-        # npm installs dependencies in the module itself, so if you do
-    # 'npm install express' it installs dependencies (like 'connect')
-    # to: node_modules/express/node_modules/connect/...
-    #
-    # To that end, I don't think we necessarily need to include
-    # any automatic dependency information since every 'npm install'
-    # is fully self-contained. That's why you don't see any bother, yet,
-    # to include the package's dependencies in here.
-    #
-    # It's possible someone will want to decouple that in the future,
-    # but I will wait for that feature request.
   end
     
-      option '--publisher', 'PUBLISHER', 
-    'Set the publisher name for the repository',
-    :default => 'FPM'
-    
-        # Generate the package 'Prototype' file
-    File.open('#{build_path}/Prototype', 'w') do |prototype|
-      prototype.puts('i pkginfo')
-      prototype.puts('i preinstall') if self.scripts['pre-install']
-      prototype.puts('i postinstall') if self.scripts['post-install']
-    
-        realpath = Pathname.new(input_path).realpath.to_s
-    ::Dir.chdir(build_path) do
-      safesystem('unzip', realpath)
-    end
-    
-      match do
-    result = is_pane
-    
-          def stop_template
-        asset_path 'template-stop.erb'
+          def requires_authentication?
+        Spree::Api::Config[:requires_authentication]
       end
     
-        def windows?
-      windows.any?
+            def create
+          authorize! :create, Image
+          @image = scope.images.new(image_params)
+          if @image.save
+            respond_with(@image, status: 201, default_template: :show)
+          else
+            invalid_resource!(@image)
+          end
+        end
+    
+            def authorize
+          perform_payment_action(:authorize)
+        end
+    
+            def product_property
+          if @product
+            @product_property ||= @product.product_properties.find_by(id: params[:id])
+            @product_property ||= @product.product_properties.includes(:property).where(spree_properties: { name: params[:id] }).first
+            raise ActiveRecord::RecordNotFound unless @product_property
+    
+    Sidekiq.logger.level = Logger::ERROR
+    
+          assert_nil client.push('class' => MyWorker, 'args' => [0])
+      assert_match(/[0-9a-f]{12}/, client.push('class' => MyWorker, 'args' => [1]))
+      client.push_bulk('class' => MyWorker, 'args' => [[0], [1]]).each do |jid|
+        assert_match(/[0-9a-f]{12}/, jid)
+      end
+    end
+  end
+    
+        def initialize(params={})
+      @thehash = default.merge(params)
+    end
+    
+        it 'executes client middleware' do
+      Sidekiq.client_middleware.add MyStopper
+      begin
+        @retry.schedule (Time.now - 60).to_f, @error_1
+        @retry.schedule (Time.now - 60).to_f, @error_2
+        @scheduled.schedule (Time.now - 60).to_f, @future_2
+        @scheduled.schedule (Time.now - 60).to_f, @future_3
+    
+    @@ layout
+<html>
+  <head>
+    <title>Sinatra + Sidekiq</title>
+    <body>
+      <%= yield %>
+    </body>
+</html>
+    
+        def define_query
+      name = @name
+      @klass.send :define_method, '#{@name}?' do
+        send(name).file?
+      end
     end
