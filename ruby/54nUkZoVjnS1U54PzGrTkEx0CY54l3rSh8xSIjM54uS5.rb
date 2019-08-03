@@ -1,255 +1,202 @@
 
         
-        module Scheduler
+          it 'asks to accept conflicts when the scenario was modified' do
+    DefaultScenarioImporter.seed(user)
+    agent = user.agents.where(name: 'Rain Notifier').first
+    agent.options['expected_receive_period_in_days'] = 9001
+    agent.save!
+    visit new_scenario_imports_path
+    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
+    click_on 'Start Import'
+    expect(page).to have_text('This Scenario already exists in your system.')
+    expect(page).to have_text('9001')
+    check('I confirm that I want to import these Agents.')
+    click_on 'Finish Import'
+    expect(page).to have_text('Import successful!')
+  end
     
-        if env['REQUEST_METHOD'] == ('OPTIONS') && env['HTTP_ACCESS_CONTROL_REQUEST_METHOD']
-      return [200, Discourse::Cors.apply_headers(cors_origins, env, {}), []]
+        it 'works for running jobs' do
+      job.locked_at = Time.now
+      job.locked_by = 'test'
+      expect(status(job)).to eq('<span class='label label-info'>running</span>')
     end
     
-      def create
-    raise Discourse::NotFound unless report_collection_enabled?
+          context '#restart_dead_workers' do
+        before do
+          mock.instance_of(HuginnScheduler).run!
+          mock.instance_of(DelayedJobWorker).run!
+          @agent_runner.send(:run_workers)
     
-    class ContentSecurityPolicy
-  class Default
-    attr_reader :directives
-    
-    module HighlightJs
-  HIGHLIGHTJS_DIR ||= '#{Rails.root}/vendor/assets/javascripts/highlightjs/'
-    
-          current_user = lookup_user_api_user_and_update_key(user_api_key, @env[USER_API_CLIENT_ID])
-      raise Discourse::InvalidAccess unless current_user
-      raise Discourse::InvalidAccess if current_user.suspended? || !current_user.active
-    
-      def self.provides_callback_for(provider)
-    provider_id = provider.to_s.chomp '_oauth2'
-    
-      def preferred_locale
-    http_accept_language.preferred_language_from(available_locales)
-  end
-    
-    module SessionTrackingConcern
-  extend ActiveSupport::Concern
-    
-      def test_lparen
-    assert_equal [],
-                 scan('lparen', '')
-    assert_equal ['('],
-                 scan('lparen', '()')
-    assert_equal ['('],
-                 scan('lparen', 'm()')
-    assert_equal ['('],
-                 scan('lparen', 'm (a)')
-    assert_equal [],
-                 scan('lparen', ''()'')
-    assert_equal [],
-                 scan('lparen', ''%w()'')
-  end
-    
-      def test_bind_key_with_octal_number
-    input = %w{i n p u t}.map(&:ord)
-    assert_equal [input, '\1'.bytes], @config.bind_key(''input'', ''\1'')
-    assert_equal [input, '\12'.bytes], @config.bind_key(''input'', ''\12'')
-    assert_equal [input, '\123'.bytes], @config.bind_key(''input'', ''\123'')
-    assert_equal [input, '\123'.bytes + '4'.bytes], @config.bind_key(''input'', ''\1234'')
-  end
-    
-      def test_duplicated_rest_kw
-    assert_syntax_error('def foo(*a, a: 1) end', /duplicated argument name/)
-    assert_nothing_raised {def foo(*_, _: 1) end}
-    (obj = Object.new).instance_eval('def foo(*_, x: 42, _: 1) x end')
-    assert_equal(42, obj.foo(42))
-    assert_equal(42, obj.foo(2, _: 0))
-    assert_equal(2, obj.foo(x: 2, _: 0))
-  end
-    
-        def test_memory_leak_select
-      bug9978 = '[ruby-dev:48325] [Bug #9978]'
-      assert_no_memory_leak([], <<-'end;', '5_000.times(&doit)', bug9978, limit: 2.0)
-        ENV.clear
-        k = 'FOO'
-        (ENV[k] = 'bar'*5000 rescue 'bar'*1500)
-        doit = proc {ENV.select {break}}
-        500.times(&doit)
-      end;
+          expect(data[:agents][guid_order(agent_list, :jane_weather_agent)]).not_to have_key(:propagate_immediately) # can't receive events
+      expect(data[:agents][guid_order(agent_list, :jane_rain_notifier_agent)]).not_to have_key(:schedule) # can't be scheduled
     end
     
-      def test_dynamic_method
-    @assertion_count = 2
+        it 'should work' do
+      LiquidMigrator.convert_all_agent_options(@agent)
+      expect(@agent.reload.options).to eq({'auth_token' => 'token', 'color' => 'yellow', 'notify' => false, 'room_name' => 'test', 'username' => '{{username}}', 'message' => '{{message}}'})
+    end
     
-    ENV['GEM_SKIP'] = ENV['GEM_HOME'] = ENV['GEM_PATH'] = ''.freeze
+      describe 'up' do
+    it 'should update extract and template options for an existing WebsiteAgent' do
+      expect(agent.options).to include('extract' => old_extract,
+                                       'template' => old_template)
+      ConvertWebsiteAgentTemplateForMerge.new.up
+      agent.reload
+      expect(agent.options).to include('extract' => new_extract,
+                                       'template' => new_template)
+    end
+  end
     
-    #require_relative 'x'; exit(1)
+        it 'updates Agents' last_error_log_at when an error is logged' do
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'some message', :level => 3, :outbound_event => events(:jane_website_agent_event))
+      expect(agents(:jane_website_agent).reload.last_error_log_at).to be_nil
+    
+        it 'should raise error when response has an error' do
+      stub(HTTParty).post { {'error' => {'message' => 'Sample error'}} }
+      expect { @checker.send_notification({}) }.to raise_error(StandardError, /Sample error/)
+    end
+  end
+end
 
     
-          PROCESS_MEMORY_COUNTERS = struct [
-        'DWORD  cb',
-        'DWORD  PageFaultCount',
-        'SIZE_T PeakWorkingSetSize',
-        'SIZE_T WorkingSetSize',
-        'SIZE_T QuotaPeakPagedPoolUsage',
-        'SIZE_T QuotaPagedPoolUsage',
-        'SIZE_T QuotaPeakNonPagedPoolUsage',
-        'SIZE_T QuotaNonPagedPoolUsage',
-        'SIZE_T PagefileUsage',
-        'SIZE_T PeakPagefileUsage',
-      ]
+        DOCUMENT_RGX = /\A(?:\s|(?:<!--.*?-->))*<(?:\!doctype|html)/i
     
-        ##
-    # Runs the given +work+, gathering the times of each run. Range
-    # and times are then passed to a given +validation+ proc. Outputs
-    # the benchmark name and times in tab-separated format, making it
-    # easy to paste into a spreadsheet for graphing or further
-    # analysis.
-    #
-    # Ranges are specified by ::bench_range.
-    #
-    # Eg:
-    #
-    #   def bench_algorithm
-    #     validation = proc { |x, y| ... }
-    #     assert_performance validation do |n|
-    #       @obj.algorithm(n)
-    #     end
-    #   end
+        def effective_path
+      @effective_path ||= effective_url.path
+    end
+  end
+end
+
     
-    (allow file-write*
-  (literal
-    '/dev/dtracehelper'
-    '/dev/null'
-  )
-  (regex
-    #'^<%= Pod::Config.instance.project_root %>'
-    #'^<%= Pod::Config.instance.repos_dir %>'
-    #'^/Users/[^.]+/Library/Caches/CocoaPods/*'
-    #'^/dev/tty'
-    #'^/private/var'
-  )
-)
+        table = Rex::Text::Table.new(
+      'Header'    => '#{provider} credentials',
+      'Indent'    => 0,
+      'SortIndex' => 4,
+      'Columns'   => ['AuthID', 'Package', 'Domain', 'User', 'Password']
+    )
     
-            # Prints the list of specs & pod cache dirs for a single pod name.
-        #
-        # This output is valid YAML so it can be parsed with 3rd party tools
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        The various infos about a pod cache. Keys are
-        #        :spec_file, :version, :release and :slug
-        #
-        def print_pod_cache_infos(pod_name, cache_descriptors)
-          UI.puts '#{pod_name}:'
-          cache_descriptors.each do |desc|
-            if @short_output
-              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
+        # Start a new handler
+    start_handler
+  end
+    
+      def encode_block(state, buf)
+    # Have to have these for the decoder stub, so if they're not available,
+    # there's nothing we can do here.
+    %w{c h r ( ) . e v a l b a s e 6 4 _ d e c o d e ;}.uniq.each do |c|
+      raise BadcharError if state.badchars.include?(c)
+    end
+    
+    module Payload::Windows::BindTcpRc4_x64
+    
+    class MetasploitModule < Msf::Auxiliary
+  include Msf::Exploit::Remote::HttpClient
+    
+      def initialize(info = {})
+    super(update_info(info,
+      'Name'               => 'Jenkins ACL Bypass and Metaprogramming RCE',
+      'Description'        => %q{
+        This module exploits a vulnerability in Jenkins dynamic routing to
+        bypass the Overall/Read ACL and leverage Groovy metaprogramming to
+        download and execute a malicious JAR file.
+    }
+    
+    puts 'start: #{start.to_s(16)}'
+branch = `rasm2 -b 64 -a arm 'b 0x#{start.to_s(16)}'`
+puts 'branch: #{branch}'
+output_data[0,4] = [ branch[0..7] ].pack('H*')
+    
+        print_status('Dumping LSA secrets')
+    print_line(client.kiwi.lsa_dump_secrets)
+    print_line
+  end
+    
+    #
+# Default parameters
+#
+    
+        desc 'Check directories of files to be linked exist in shared'
+    task :make_linked_dirs do
+      next unless any? :linked_files
+      on release_roles :all do |_host|
+        execute :mkdir, '-p', linked_file_dirs(shared_path)
+      end
+    end
+    
+    Then(/^directories referenced in :linked_files are created in shared$/) do
+  dirs = TestApp.linked_files.map { |path| TestApp.shared_path.join(path).dirname }
+  dirs.each do |dir|
+    run_vagrant_command(test_dir_exists(dir))
+  end
+end
+    
+    Given(/^file '(.*?)' does not exist in shared path$/) do |file|
+  file_shared_path = TestApp.shared_path.join(file)
+  run_vagrant_command('mkdir -p #{TestApp.shared_path}')
+  run_vagrant_command('touch #{file_shared_path} && rm #{file_shared_path}')
+end
+    
+            filter = Object.new
+        def filter.filter(servers)
+          block.call(servers)
+        end
+      elsif !filter.respond_to? :filter
+        raise TypeError, 'Provided custom filter <#{filter.inspect}> does ' \
+                         'not have a public 'filter' method'
+      end
+      @custom_filters ||= []
+      @custom_filters << filter
+    end
+    
+    MESSAGE
+      end
+    end
+  end
+end
+
+    
+            destination_url = options[:url] || spree.send('#{options[:route]}_path')
+        titleized_label = Spree.t(options[:label], default: options[:label], scope: [:admin, :tab]).titleize
+    
+        def updater
+      @updater ||= OrderUpdater.new(self)
+    end
+    
+        def has_invalid_state?
+      INVALID_STATES.include?(state)
+    end
+    
+        def requires_manual_intervention?
+      validators.any?(&:requires_manual_intervention?)
+    end
+    
+            def self.create_inventory_units_from_order_and_params(order, inventory_unit_params)
+          inventory_unit_params.each_with_object([]) do |inventory_unit_param, inventory_units|
+            ensure_variant_id_from_params(inventory_unit_param)
+            existing = inventory_units.detect { |unit| unit.variant_id == inventory_unit_param[:variant_id] }
+            if existing
+              existing.quantity += 1
+            else
+              line_item = order.line_items.detect { |ln| ln.variant_id == inventory_unit_param[:variant_id] }
+              inventory_units << InventoryUnit.new(line_item: line_item, order_id: order.id, variant: line_item.variant, quantity: 1)
             end
-            UI.puts('  - Version: #{desc[:version]}')
-            UI.puts('    Type:    #{pod_type(desc)}')
-            UI.puts('    Spec:    #{desc[:spec_file]}')
-            UI.puts('    Pod:     #{desc[:slug]}')
-          end
-        end
-      end
-    end
-  end
-end
-
-    
-            def run
-          print_version
-          signal_end_of_output
-          listen
-        end
-    
-            @report.stubs(:actual_path).returns('/usr/bin/command')
-        report.should == expected
-      end
-    end
-  end
-end
-
-    
-      it 'denies post requests without any token' do
-    expect(post('/')).not_to be_ok
-  end
-    
-    ::Bundler.with_friendly_errors do
-  ::Bundler::CLI.start(ARGV, :debug => true)
-end
-
-    
-      # We compare the before the update and after the update
-  def display_updated_plugins(previous_gem_specs_map)
-    update_count = 0
-    find_latest_gem_specs.values.each do |spec|
-      name = spec.name.downcase
-      if previous_gem_specs_map.has_key?(name)
-        if spec.version != previous_gem_specs_map[name].version
-          puts('Updated #{spec.name} #{previous_gem_specs_map[name].version.to_s} to #{spec.version.to_s}')
-          update_count += 1
-        end
-      else
-        puts('Installed #{spec.name} #{spec.version.to_s}')
-        update_count += 1
-      end
-    end
-    
-      it 'returns the merged `ConfigPart#config_string`' do
-    expect(subject.config_string).to eq(ordered_config_parts.collect(&:text).join('\n'))
-  end
-    
-              it 'successfully install the plugin' do
-            command = logstash.run_command_in_path('bin/logstash-plugin install #{gem_path_on_vagrant}')
-            expect(command).to install_successfully
-            expect(logstash).to have_installed?('logstash-filter-dns')
           end
         end
     
-    context 'Precious::Views::Page' do
-  setup do
-    examples = testpath 'examples'
-    @path    = File.join(examples, 'test.git')
-    FileUtils.cp_r File.join(examples, 'empty.git'), @path, :remove_destination => true
-    @wiki = Gollum::Wiki.new(@path)
-  end
-    
-    # internal
-require File.expand_path('../gollum/uri_encode_component', __FILE__)
-    
-          @@user_attributes = [:id, :email, :created_at, :updated_at]
-    
-        # Change directory to the source path, and glob files
-    # This is done so that we end up with a 'flat' archive, that doesn't
-    # have any path artifacts from the packager's absolute path.
-    ::Dir::chdir(path) do
-      entries = ::Dir::glob('**', File::FNM_DOTMATCH)
-    
-      def compression_option
-    case self.attributes[:pacman_compression]
-      when nil, 'xz'
-        return '--xz'
-      when 'none'
-        return ''
-      when 'gz'
-        return '-z'
-      when 'bzip2'
-        return '-j'
-      else
-        return '--xz'
+          def requires_authentication?
+        Spree::Api::Config[:requires_authentication]
       end
-  end
     
-        if !File.exist?(setup_py)
-      logger.error('Could not find 'setup.py'', :path => setup_py)
-      raise 'Unable to find python package; tried #{setup_py}'
-    end
-    
-    module FPM
-  module Issues
-    module TarWriter
-      # See https://github.com/rubygems/rubygems/issues/1608
-      def self.has_issue_1608?
-        name, prefix = nil,nil
-        io = StringIO.new
-        ::Gem::Package::TarWriter.new(io) do |tw|
-          name, prefix = tw.split_name('/123456789'*9 + '/1234567890') # abs name 101 chars long
+            def update
+          @image = scope.images.accessible_by(current_ability, :update).find(params[:id])
+          if @image.update(image_params)
+            respond_with(@image, default_template: :show)
+          else
+            invalid_resource!(@image)
+          end
         end
-        return prefix.empty?
-      end
+    
+            def destroy
+          @option_value = scope.accessible_by(current_ability, :destroy).find(params[:id])
+          @option_value.destroy
+          render plain: nil, status: 204
+        end
