@@ -1,147 +1,268 @@
 
         
-            void KeyChord::Modifiers(Settings::KeyModifiers const& value)
-    {
-        _modifiers = value;
+        bool CheckCommandLineArguments(int argc, base::CommandLine::CharType** argv);
+    
+    
+    {  // Otherwise do the restart after all windows have been closed.
+  WindowList::AddObserver(this);
+  WindowList::CloseAllWindows();
+}
+    
+    #include 'base/time/time.h'
+#include 'base/values.h'
+#include 'content/public/browser/browser_context.h'
+#include 'content/public/browser/browser_task_traits.h'
+#include 'content/public/browser/browser_thread.h'
+#include 'content/public/browser/storage_partition.h'
+#include 'gin/dictionary.h'
+#include 'gin/object_template_builder.h'
+#include 'net/cookies/canonical_cookie.h'
+#include 'net/cookies/cookie_store.h'
+#include 'net/cookies/cookie_util.h'
+#include 'net/url_request/url_request_context.h'
+#include 'net/url_request/url_request_context_getter.h'
+#include 'shell/browser/atom_browser_context.h'
+#include 'shell/browser/cookie_change_notifier.h'
+#include 'shell/common/native_mate_converters/callback.h'
+#include 'shell/common/native_mate_converters/gurl_converter.h'
+#include 'shell/common/native_mate_converters/value_converter.h'
+    
+    class DownloadItem : public mate::TrackableObject<DownloadItem>,
+                     public download::DownloadItem::Observer {
+ public:
+  static mate::Handle<DownloadItem> Create(v8::Isolate* isolate,
+                                           download::DownloadItem* item);
     }
     
-    TYPED_TEST(NeuronLayerTest, TestExpGradientBase2Shift1) {
-  typedef typename TypeParam::Dtype Dtype;
-  const Dtype kBase = 2;
-  const Dtype kScale = 1;
-  const Dtype kShift = 1;
-  this->TestExpGradient(kBase, kScale, kShift);
+    void InAppPurchase::OnTransactionsUpdated(
+    const std::vector<in_app_purchase::Transaction>& transactions) {
+  Emit('transactions-updated', transactions);
 }
-    
-    template <typename Dtype>
-void Solver<Dtype>::Restore(const char* state_file) {
-  string state_filename(state_file);
-  if (state_filename.size() >= 3 &&
-      state_filename.compare(state_filename.size() - 3, 3, '.h5') == 0) {
-    RestoreSolverStateFromHDF5(state_filename);
-  } else {
-    RestoreSolverStateFromBinaryProto(state_filename);
-  }
-}
-    
-    int main(int argc, char** argv) {
-#ifndef GFLAGS_GFLAGS_H_
-  namespace gflags = google;
 #endif
-    }
-    
-     protected:
-  shared_ptr<SyncedMemory> data_;
-  shared_ptr<SyncedMemory> diff_;
-  shared_ptr<SyncedMemory> shape_data_;
-  vector<int> shape_;
-  int count_;
-  int capacity_;
-    
-    namespace caffe {
-    }
-    
-      // Returns the x,y means as an FCOORD.
-  FCOORD mean_point() const;
-    
-      // Sets up the DENORM to execute a non-linear transformation based on
-  // preserving an even distribution of stroke edges. The transformation
-  // operates only within the given box, scaling input coords within the box
-  // non-linearly to a box of target_width by target_height, with all other
-  // coords being clipped to the box edge. As with SetupNormalization above,
-  // final_xshift and final_yshift are applied after scaling, and the bottom-
-  // left of box is used as a pre-scaling origin.
-  // x_coords is a collection of the x-coords of vertical edges for each
-  // y-coord starting at box.bottom().
-  // y_coords is a collection of the y-coords of horizontal edges for each
-  // x-coord starting at box.left().
-  // Eg x_coords[0] is a collection of the x-coords of edges at y=bottom.
-  // Eg x_coords[1] is a collection of the x-coords of edges at y=bottom + 1.
-  // The second-level vectors must all be sorted in ascending order.
-  void SetupNonLinear(const DENORM* predecessor, const TBOX& box,
-                      float target_width, float target_height,
-                      float final_xshift, float final_yshift,
-                      const GenericVector<GenericVector<int> >& x_coords,
-                      const GenericVector<GenericVector<int> >& y_coords);
     
     
-    {  // Does this paragraph begin with a drop cap?
-  bool has_drop_cap;
-};
-    
-    // A useful base struct to facilitate the common operation of sorting a vector
-// of simple or smart-pointer data using a separate key. Similar to STL pair.
-template <typename Key, typename Data>
-struct KDPair {
-  KDPair() = default;
-  KDPair(Key k, Data d) : data(d), key(k) {}
-    }
-    
-    void ConstructRecord(uint64_t msg_num, uint64_t begin_time,
-                     uint64_t time_step) {
-  RecordWriter writer;
-  writer.SetSizeOfFileSegmentation(0);
-  writer.SetIntervalOfFileSegmentation(0);
-  writer.Open(TEST_FILE);
-  writer.WriteChannel(CHANNEL_NAME_1, MESSAGE_TYPE_1, PROTO_DESC);
-  for (uint64_t i = 0; i < msg_num; i++) {
-    auto msg = std::make_shared<RawMessage>(std::to_string(i));
-    writer.WriteMessage(CHANNEL_NAME_1, msg, begin_time + time_step * i);
-  }
-  ASSERT_EQ(msg_num, writer.GetMessageNumber(CHANNEL_NAME_1));
-  writer.Close();
-}
-    
-    #include <cmath>
-    
-    Chassis::ErrorCode GemController::chassis_error_code() {
-  std::lock_guard<std::mutex> lock(chassis_error_code_mutex_);
-  return chassis_error_code_;
-}
-    
-    #include 'modules/planning/traffic_rules/rerouting.h'
-    
-    inline void L2Norm(int feat_dim, float *feat_data) {
-  if (feat_dim == 0) {
-    return;
-  }
-  // feature normalization
-  float l2norm = 0.0f;
-  for (int i = 0; i < feat_dim; ++i) {
-    l2norm += feat_data[i] * feat_data[i];
-  }
-  if (l2norm == 0) {
-    float val = 1.f / std::sqrt(static_cast<float>(feat_dim));
-    for (int i = 0; i < feat_dim; ++i) {
-      feat_data[i] = val;
-    }
-  } else {
-    l2norm = std::sqrt(l2norm);
-    for (int i = 0; i < feat_dim; ++i) {
-      feat_data[i] /= l2norm;
-    }
-  }
-}
+    {}  // namespace
     
     
     {
-    {}  // namespace planning
-}  // namespace apollo
+    {      if (!F.shouldOptimize()) {
+        LLVM_DEBUG(llvm::dbgs() << '  anchor a no optimization function: '
+                                << F.getName() << '\n');
+        ensureAlive(&F);
+      }
+    }
+  }
+    
+    TEST(Converter, UnknownType) {
+  using namespace caffe2::testing;
+  caffe2::NetDef net;
+  NetMutator(&net)
+      .newOp('NeverSeen', {'X'}, {'X'})
+      .setDeviceOptionName('device_' + c10::to_string(rand() % 2));
+  auto nn = caffe2::convertToNNModule(net);
+  auto new_netdef = caffe2::convertToCaffe2Proto(nn);
+}
+    
+    namespace caffe2 {
+    }
+    
+        template<typename T>
+    Point<T> Point<T>::operator-(const T value) const
+    {
+        try
+        {
+            return Point<T>{T(x - value), T(y - value)};
+        }
+        catch (const std::exception& e)
+        {
+            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
+            return Point<T>{};
+        }
+    }
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+            const size_t lo = (*it_data) & 0x0F;
+        result += detail::to_wchar(lo);
+    
+    #include <map>
+#include 'thread/lock.h'
+#include 'socket/unix_socket.h'
+    
+        for (std::map<SOCKET, int>::iterator it = m_filter_map.begin(); it != m_filter_map.end(); ++it) {
+        maxsocket = maxsocket == INVALID_SOCKET ? it->first : maxsocket;
+        maxsocket = it->first > maxsocket ? it->first : maxsocket;
+    }
+    
+            if (NULL == p) {
+		ASSERT2(p, '_len=%' PRIu64 ', m_nMallocUnitSize=%' PRIu64 ', nMallocSize=%' PRIu64', m_nCapacity=%' PRIu64,
+				(uint64_t)_len, (uint64_t)malloc_unitsize_, (uint64_t)mallocsize, (uint64_t)capacity_);
+    }
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    
+    {    char_ =  env_->GetStringUTFChars(jstr_, NULL);
+}
+    
+    void operator delete[](void* _p, size_t /*_size*/) {
+    if (!_p)
+        return;
+    }
+    
+    
+int getaddrinfo_with_timeout(const char *node, const char *service, const struct addrinfo *hints, struct addrinfo **res, bool& _is_timeout, unsigned long long _timeout_msec) {
+    xverbose_function();
+    //Check param
+    
+    ScopedLock lock(sg_mutex);
+    
+    
+    Thread thread(&__WorkerFunc, node);
+    int start_ret = thread.start();
+    
+    if (start_ret != 0) {
+        xerror2(TSF'start the thread fail, host:%_', node);
+        return kRetCodeInternalStateError;
+    }
+    
+    DnsItem dns_item;
+    dns_item.threadid = thread.tid();
+    dns_item.node = node;
+    dns_item.service = service;
+    dns_item.hints = hints;
+    dns_item.res = res;
+    dns_item.status = kGetADDRNotBegin;
+    sg_dnsitem_vec.push_back(dns_item);
+    
+    
+    uint64_t time_end = gettickcount() + (uint64_t)_timeout_msec;
+    
+    while (true) {
+        uint64_t time_cur = gettickcount();
+        uint64_t time_wait = time_end > time_cur ? time_end - time_cur : 0;
+        
+        int wait_ret = sg_condition.wait(lock, (long)time_wait);
+        
+        std::vector<DnsItem>::iterator it = sg_dnsitem_vec.begin();
+        
+        for (; it != sg_dnsitem_vec.end(); ++it) {
+            if (dns_item.threadid == it->threadid)
+                break;
+        }
+        
+        xassert2(it != sg_dnsitem_vec.end());
+        
+        if (it != sg_dnsitem_vec.end()){
+            
+            if (ETIMEDOUT == wait_ret) {
+                it->status = kGetADDRTimeout;
+            }
+            
+            if (kGetADDRNotBegin== it->status || kGetADDRDoing == it->status) {
+                continue;
+            }
+            
+            if (kGetADDRSuc == it->status) {
+                if (it->EqualParameter(dns_item)) {
+                    sg_dnsitem_vec.erase(it);
+                    return 0;
+                } else {
+                    std::vector<DnsItem>::iterator iter = sg_dnsitem_vec.begin();
+                    int i = 0;
+                    for (; iter != sg_dnsitem_vec.end(); ++iter) {
+                        xerror2(TSF'sg_dnsitem_vec[%_]:%_', i++, iter->ToString());
+                    }
+                    xassert2(false, TSF'dns_item:%_', dns_item.ToString());
+                    return kRetCodeParamNotMatch;
+                }
+            }
+            
+            if (kGetADDRTimeout == it->status ) {
+                xinfo2(TSF 'dns get ip status:kGetADDRTimeout item:%_', it->ToString());
+                sg_dnsitem_vec.erase(it);
+                _is_timeout = true;
+                return kRetCodeGetADDRTimeout;
+            } else if (kGetADDRFail == it->status) {
+                xinfo2(TSF 'dns get ip status:kGetADDRFail item:%_', it->ToString());
+                int ret_code = it->error_code;
+                sg_dnsitem_vec.erase(it);
+                return ret_code;
+            }
+            
+            xassert2(false, TSF'%_', it->status);
+            
+            
+            sg_dnsitem_vec.erase(it);
+        }
+        return kRetCodeDnsItemNotFound;
+    }
+    
+    return kRetCodeInternalStateError;
+}
 
     
-    void TrafficLightUnprotectedLeftTurnScenario::RegisterStages() {
-  if (!s_stage_factory_.Empty()) {
-    s_stage_factory_.Clear();
-  }
-  s_stage_factory_.Register(
-      ScenarioConfig::TRAFFIC_LIGHT_UNPROTECTED_LEFT_TURN_CREEP,
-      [](const ScenarioConfig::StageConfig& config) -> Stage* {
-        return new TrafficLightUnprotectedLeftTurnStageCreep(config);
-      });
-  s_stage_factory_.Register(
-      ScenarioConfig::TRAFFIC_LIGHT_UNPROTECTED_LEFT_TURN_INTERSECTION_CRUISE,
-      [](const ScenarioConfig::StageConfig& config) -> Stage* {
-        return new TrafficLightUnprotectedLeftTurnStageIntersectionCruise(
-            config);
-      });
+    namespace weex {
+PlatformBridgeInMultiProcess* PlatformBridgeInMultiProcess::g_instance = NULL;
+    }
+    
+    
+    {
+    { private:
+  PlatformBridgeInMultiProcess();
+  virtual ~PlatformBridgeInMultiProcess();
+  static PlatformBridgeInMultiProcess* g_instance;
+  DISALLOW_COPY_AND_ASSIGN(PlatformBridgeInMultiProcess);
+};
+}  // namespace weex
+    
+    public:
+    typedef JSGlobalObject Base;
+    std::vector<INIT_FRAMEWORK_PARAMS *> m_initFrameworkParams;
+    std::string id = '';
+    TimerQueue* timeQueue = nullptr;
+    static WeexGlobalObject* create(VM& vm, Structure* structure)
+    {
+        WeexGlobalObject* object = new (NotNull, allocateCell<WeexGlobalObject>(vm.heap)) WeexGlobalObject(vm, structure);
+        //object->finishCreation(vm);
+        return object;
+    }
+    
+    static intptr_t g_RequestHandler_create = 0;
+static base::android::ScopedLocalJavaRef<jobject>
+    Java_RequestHandler_create(JNIEnv* env) {
+  /* Must call RegisterNativesImpl()  */
+  //CHECK_CLAZZ(env, RequestHandler_clazz(env),
+  //    RequestHandler_clazz(env), NULL);
+  jmethodID method_id =
+      base::android::GetMethod(
+      env, RequestHandler_clazz(env),
+      base::android::STATIC_METHOD,
+      'create',
+    }
+    
+    #ifndef WEEXV8_WEEXOBJECTHOLDER_H
+#define WEEXV8_WEEXOBJECTHOLDER_H
+    
+    ExeJsTask *ExeJsTask::clone() {
+    ExeJsTask *task = new ExeJsTask(instanceId, this->exeJsArgs->params);
+    for (int i = 0; i < this->extraArgs.size(); ++i) {
+        task->addExtraArg(this->extraArgs[i]);
+    }
+    return task;
 }
+
+    
+    InitFrameworkTask::InitFrameworkTask(const String &instanceId, const String &script,
+                                     std::vector<INIT_FRAMEWORK_PARAMS *> &params) : WeexTask(instanceId) {
+    }
+    
+    #ifndef WEEXV8_INITFRAMEWORKTASK_H
+#define WEEXV8_INITFRAMEWORKTASK_H
+    
+    #include 'android/jsengine/task/weex_task.h'
