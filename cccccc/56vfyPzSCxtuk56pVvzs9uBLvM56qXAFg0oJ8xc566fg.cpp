@@ -1,176 +1,220 @@
 
         
-        SECP256K1_INLINE static void secp256k1_fe_mul_inner(uint64_t *r, const uint64_t *a, const uint64_t * SECP256K1_RESTRICT b) {
-/**
- * Registers: rdx:rax = multiplication accumulator
- *            r9:r8   = c
- *            r15:rcx = d
- *            r10-r14 = a0-a4
- *            rbx     = b
- *            rdi     = r
- *            rsi     = a / t?
- */
-  uint64_t tmp1, tmp2, tmp3;
-__asm__ __volatile__(
-    'movq 0(%%rsi),%%r10\n'
-    'movq 8(%%rsi),%%r11\n'
-    'movq 16(%%rsi),%%r12\n'
-    'movq 24(%%rsi),%%r13\n'
-    'movq 32(%%rsi),%%r14\n'
-    }
-    
-        /* Check bad contexts and NULLs for signing */
-    ecount = 0;
-    CHECK(secp256k1_ecdsa_sign_recoverable(none, &recsig, message, privkey, NULL, NULL) == 0);
-    CHECK(ecount == 1);
-    CHECK(secp256k1_ecdsa_sign_recoverable(sign, &recsig, message, privkey, NULL, NULL) == 1);
-    CHECK(ecount == 1);
-    CHECK(secp256k1_ecdsa_sign_recoverable(vrfy, &recsig, message, privkey, NULL, NULL) == 0);
-    CHECK(ecount == 2);
-    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, privkey, NULL, NULL) == 1);
-    CHECK(ecount == 2);
-    CHECK(secp256k1_ecdsa_sign_recoverable(both, NULL, message, privkey, NULL, NULL) == 0);
-    CHECK(ecount == 3);
-    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, NULL, privkey, NULL, NULL) == 0);
-    CHECK(ecount == 4);
-    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, NULL, NULL, NULL) == 0);
-    CHECK(ecount == 5);
-    /* This will fail or succeed randomly, and in either case will not ARG_CHECK failure */
-    secp256k1_ecdsa_sign_recoverable(both, &recsig, message, privkey, recovery_test_nonce_function, NULL);
-    CHECK(ecount == 5);
-    /* These will all fail, but not in ARG_CHECK way */
-    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, zero_privkey, NULL, NULL) == 0);
-    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, over_privkey, NULL, NULL) == 0);
-    /* This one will succeed. */
-    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, privkey, NULL, NULL) == 1);
-    CHECK(ecount == 5);
-    
-    
-    {  return leveldb::test::RunAllTests();
+        void ChannelArguments::SetMaxSendMessageSize(int size) {
+  SetInt(GRPC_ARG_MAX_SEND_MESSAGE_LENGTH, size);
 }
-
     
-      int64_t num_record_drop_hidden = 0;
-  int64_t num_record_drop_obsolete = 0;
-  int64_t num_record_drop_range_del = 0;
-  int64_t num_range_del_drop_obsolete = 0;
-  // Deletions obsoleted before bottom level due to file gap optimization.
-  int64_t num_optimized_del_drop_obsolete = 0;
-  uint64_t total_filter_time = 0;
-    
-      // When an actor (column family) requests a stop token, all writes will be
-  // stopped until the stop token is released (deleted)
-  std::unique_ptr<WriteControllerToken> GetStopToken();
-  // When an actor (column family) requests a delay token, total delay for all
-  // writes to the DB will be controlled under the delayed write rate. Every
-  // write needs to call GetDelay() with number of bytes writing to the DB,
-  // which returns number of microseconds to sleep.
-  std::unique_ptr<WriteControllerToken> GetDelayToken(
-      uint64_t delayed_write_rate);
-  // When an actor (column family) requests a moderate token, compaction
-  // threads will be increased
-  std::unique_ptr<WriteControllerToken> GetCompactionPressureToken();
-    
-      delete db;
-    
-    #endif  // ROCKSDB_LITE
-
-    
-    // ============================================================================
-// folly/test/GLogBenchmark.cpp                    relative  time/iter  iters/s
-// ============================================================================
-// skip_overhead                                               36.37ns   27.49M
-// dev_null_log_overhead                                        2.61us  382.57K
-// ============================================================================
+    #include <grpc/grpc.h>
+#include <grpc/support/log.h>
+#include <grpc/support/sync.h>
+#include <grpcpp/channel.h>
+#include <grpcpp/client_context.h>
+#include <grpcpp/create_channel.h>
+#include <grpcpp/server.h>
+#include <grpcpp/server_builder.h>
+#include <grpcpp/server_context.h>
     
     
-    {void Executor::keepAliveRelease() {
-  LOG(FATAL) << __func__ << '() should not be called for folly::Executor types '
-             << 'which do not override keepAliveAcquire()';
+    {  value = GPR_GLOBAL_CONFIG_GET(string_var);
+  EXPECT_EQ(0, strcmp(value.get(), 'Test'));
 }
-} // namespace folly
+    
+    #endif  // GRPCPP_SUPPORT_CHANNEL_ARGUMENTS_H
 
     
+      request.set_message('Hello');
+  EXPECT_TRUE(stream->Write(request));
+  EXPECT_TRUE(stream->Read(&response));
+  EXPECT_EQ(response.message(), request.message());
     
-    {    auto res = CountedDetail::template get_shared_ptr_from_counted_base<T>(
-        p.get(), inc);
-    if (aliased) {
-      auto aliasedp =
-          CountedDetail::template get_shared_ptr_from_counted_base<SharedPtr>(
-              p.get());
-      res = *aliasedp;
-    }
-    return res;
-  }
+    #include <grpc/grpc.h>
+#include <grpc/support/log.h>
+#include <grpcpp/channel.h>
+#include <grpcpp/client_context.h>
+#include <grpcpp/create_channel.h>
+#include <grpcpp/ext/health_check_service_server_builder_option.h>
+#include <grpcpp/health_check_service_interface.h>
+#include <grpcpp/server.h>
+#include <grpcpp/server_builder.h>
+#include <grpcpp/server_context.h>
     
-    // Each level of cache has sharing sets, which are the set of cpus
-// that share a common cache at that level.  These are available in a
-// hex bitset form (/sys/devices/system/cpu/cpu0/index0/shared_cpu_map,
-// for example).  They are also available in a human-readable list form,
-// as in /sys/devices/system/cpu/cpu0/index0/shared_cpu_list.  The list
-// is a comma-separated list of numbers and ranges, where the ranges are
-// a pair of decimal numbers separated by a '-'.
-//
-// To sort the cpus for optimum locality we don't really need to parse
-// the sharing sets, we just need a unique representative from the
-// equivalence class.  The smallest value works fine, and happens to be
-// the first decimal number in the file.  We load all of the equivalence
-// class information from all of the cpu*/index* directories, order the
-// cpus first by increasing last-level cache equivalence class, then by
-// the smaller caches.  Finally, we break ties with the cpu number itself.
+        static UCM::Category CAT1 = { 1, L'CAT1', false }; // contains Unit1 - Unit3
+    static UCM::Category CAT2 = { 2, L'CAT2', false }; // contains Unit4 - Unit6
+    static UCM::Category CAT3 = { 3, L'CAT3', false }; // contains Unit7 - Unit9
     
-      // create an in6_addr from an uint8_t*
-  static inline in6_addr mkAddress6(const uint8_t* src) {
-    in6_addr addr;
-    std::memset(&addr, 0, 16);
-    std::memcpy(addr.s6_addr, src, 16);
-    return addr;
-  }
+        struct HISTORYITEMVECTOR
+    {
+        std::shared_ptr<CalculatorVector<std::pair<std::wstring, int>>> spTokens;
+        std::shared_ptr<CalculatorVector<std::shared_ptr<IExpressionCommand>>> spCommands;
+        std::wstring expression;
+        std::wstring result;
+    };
     
-    namespace op
+            CalcInput(wchar_t decSymbol)
+            : m_hasExponent(false)
+            , m_hasDecimal(false)
+            , m_decPtIndex(0)
+            , m_decSymbol(decSymbol)
+            , m_base()
+            , m_exponent()
+        {
+        }
+    
+    NarratorAnnouncement ^ CalculatorAnnouncement::GetCategoryNameChangedAnnouncement(String ^ announcement)
 {
-    /**
-     * Add your class description here.
-     */
-    class UserPostProcessing
+    return ref new NarratorAnnouncement(
+        announcement,
+        CalculatorActivityIds::CategoryNameChanged,
+        AutomationNotificationKind::ActionCompleted,
+        AutomationNotificationProcessing::ImportantMostRecent);
+}
+    
+        for (int n = 0; n < 20; n++)
     {
-    public:
-        /**
-         * Add your constructor description here.
-         */
-        UserPostProcessing();
-    }
+        printf('NewFrame() %d\n', n);
+        io.DisplaySize = ImVec2(1920, 1080);
+        io.DeltaTime = 1.0f / 60.0f;
+        ImGui::NewFrame();
     }
     
-        const auto FACE_NUMBER_PARTS = 70u;
-    #define FACE_PAIRS_RENDER_GPU \
-        0,1,  1,2,  2,3,  3,4,  4,5,  5,6,  6,7,  7,8,  8,9,  9,10,  10,11,  11,12,  12,13,  13,14,  14,15,  15,16,  17,18,  18,19,  19,20, \
-        20,21,  22,23,  23,24,  24,25,  25,26,  27,28,  28,29,  29,30,  31,32,  32,33,  33,34,  34,35,  36,37,  37,38,  38,39,  39,40,  40,41, \
-        41,36,  42,43,  43,44,  44,45,  45,46,  46,47,  47,42,  48,49,  49,50,  50,51,  51,52,  52,53,  53,54,  54,55,  55,56,  56,57,  57,58, \
-        58,59,  59,48,  60,61,  61,62,  62,63,  63,64,  64,65,  65,66,  66,67,  67,60
-    #define FACE_SCALES_RENDER_GPU 1
-    const std::vector<unsigned int> FACE_PAIRS_RENDER {FACE_PAIRS_RENDER_GPU};
-    #define FACE_COLORS_RENDER_GPU 255.f,    255.f,    255.f
-    const std::vector<float> FACE_COLORS_RENDER{FACE_COLORS_RENDER_GPU};
-    const std::vector<float> FACE_SCALES_RENDER{FACE_SCALES_RENDER_GPU};
+                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
+            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
+            ImGui::Checkbox('Another Window', &show_another_window);
     
-        public:
-        PersonIdExtractor(const float confidenceThreshold = 0.1f, const float inlierRatioThreshold = 0.5f,
-                          const float distanceThreshold = 30.f, const int numberFramesToDeletePerson = 10);
+            if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+            counter++;
+        ImGui::SameLine();
+        ImGui::Text('counter = %d', counter);
     
-        template<typename T>
-    Point<T>& Point<T>::operator*=(const T value)
-    {
-        try
-        {
-            x *= value;
-            y *= value;
-            // Return
-            return *this;
-        }
-        catch (const std::exception& e)
-        {
-            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
-            return *this;
-        }
+    // Forward declarations of helper functions
+bool CreateDeviceD3D(HWND hWnd);
+void CleanupDeviceD3D();
+void CreateRenderTarget();
+void CleanupRenderTarget();
+LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+    
+      Status GetChildrenFileAttributes(
+      const std::string& dir, std::vector<FileAttributes>* result) override {
+    PERF_TIMER_GUARD(env_get_children_file_attributes_nanos);
+    return EnvWrapper::GetChildrenFileAttributes(dir, result);
+  }
+    
+    namespace rocksdb {
     }
+    
+    class MyFilter : public rocksdb::CompactionFilter {
+ public:
+  bool Filter(int level, const rocksdb::Slice& key,
+              const rocksdb::Slice& existing_value, std::string* new_value,
+              bool* value_changed) const override {
+    fprintf(stderr, 'Filter(%s)\n', key.ToString().c_str());
+    ++count_;
+    assert(*value_changed == false);
+    return false;
+  }
+    }
+    
+    int main() {
+  DBOptions db_opt;
+  db_opt.create_if_missing = true;
+    }
+    
+      // Put key-value
+  s = db->Put(WriteOptions(), 'key1', 'value');
+  assert(s.ok());
+  std::string value;
+  // get value
+  s = db->Get(ReadOptions(), 'key1', &value);
+  assert(s.ok());
+  assert(value == 'value');
+    
+    // Simple RAII wrapper class for Snapshot.
+// Constructing this object will create a snapshot.  Destructing will
+// release the snapshot.
+class ManagedSnapshot {
+ public:
+  explicit ManagedSnapshot(DB* db);
+    }
+    
+      // Compress blocks using the specified compression algorithm.  This
+  // parameter can be changed dynamically.
+  //
+  // Default: kSnappyCompression, which gives lightweight but fast
+  // compression.
+  //
+  // Typical speeds of kSnappyCompression on an Intel(R) Core(TM)2 2.4GHz:
+  //    ~200-500MB/s compression
+  //    ~400-800MB/s decompression
+  // Note that these speeds are significantly faster than most
+  // persistent storage speeds, and therefore it is typically never
+  // worth switching to kNoCompression.  Even if the input data is
+  // incompressible, the kSnappyCompression implementation will
+  // efficiently detect that and will switch to uncompressed mode.
+  CompressionType compression;
+    
+    namespace folly {
+    }
+    
+      queue.write(9);
+  queue.write(8);
+    
+    void AsyncFileWriter::writeToFile(
+    std::vector<std::string>* ioQueue,
+    size_t numDiscarded) {
+  // kNumIovecs controls the maximum number of strings we write at once in a
+  // single writev() call.
+  constexpr int kNumIovecs = 64;
+  std::array<iovec, kNumIovecs> iovecs;
+    }
+    
+    
+    {    std::vector<std::string>* getCurrentQueue() {
+      return &queues[ioThreadCounter & 0x1];
+    }
+  };
+    
+    template <
+    typename Key,
+    typename Mapped,
+    typename Hasher = f14::DefaultHasher<Key>,
+    typename KeyEqual = f14::DefaultKeyEqual<Key>,
+    typename Alloc = f14::DefaultAlloc<std::pair<Key const, Mapped>>>
+class F14VectorMap;
+    
+      // Insert something huge
+  ptr = static_cast<size_t*>(arena.allocate(10 * requestedBlockSize));
+  allocatedItems.insert(ptr);
+  minimum_size += 10 * requestedBlockSize;
+  maximum_size +=
+      goodMallocSize(10 * requestedBlockSize + SysArena::kBlockOverhead);
+  EXPECT_TRUE(arena.totalSize() >= minimum_size);
+  EXPECT_TRUE(arena.totalSize() <= maximum_size);
+  VLOG(4) << minimum_size << ' < ' << arena.totalSize() << ' < '
+          << maximum_size;
+    
+      void adjustPermSize(size_t numActive) {
+    if (perm_.size() > numActive) {
+      perm_.erase(
+          std::remove_if(
+              perm_.begin(),
+              perm_.end(),
+              [=](size_t x) { return x >= numActive; }),
+          perm_.end());
+    } else {
+      while (perm_.size() < numActive) {
+        perm_.push_back(perm_.size());
+      }
+    }
+    assert(perm_.size() == numActive);
+  }
+    
+    // Ignore experimental/memory_resource for libc++ so that all programs
+// don't need to explicitly link the c++experimental lib
+#elif !defined(_LIBCPP_VERSION) && __has_include(<experimental/memory_resource>)
+    
+      virtual void flushDb(int dbIndex,
+                       std::function<void(const QString&)> callback) override;
+    
+      typedef std::function<void(QRegExp affectedKeysFilter, long processed,
+                             const QStringList& errors)>
+      OperationCallback;
