@@ -1,85 +1,90 @@
 
         
-            it 'allows to delete a user' do
-      visit admin_users_path
-      find(:css, 'a[href='/admin/users/#{users(:bob).id}']').click
-      expect(page).to have_text('User 'bob' was deleted.')
-      expect(page).to have_no_text('bob@example.com')
+                expect(FileStore::BaseStore.new.get_path_for_upload(upload))
+          .to eq('original/2X/4/4170ac2a2782a1516fe9e13d7322ae482c1bd594.png')
+      end
     end
     
-        it 'shows all options for agents that can be scheduled, create and receive events' do
-      select_agent_type('Website Agent scrapes')
-      expect(page).not_to have_content('This type of Agent cannot create events.')
-    end
+        result = result.where('topics.deleted_at IS NULL') if require_deleted_clause
+    result = result.where('topics.posts_count <= ?', options[:max_posts]) if options[:max_posts].present?
+    result = result.where('topics.posts_count >= ?', options[:min_posts]) if options[:min_posts].present?
     
-        it 'returns a correct icon tag for other services' do
-      icon = omniauth_provider_icon(:'37signals')
-      expect(icon).to be_html_safe
-      elem = Nokogiri(icon).at('i.fa.fa-lock')
-      expect(elem).to be_a Nokogiri::XML::Element
+            # no optimisation possible without losing details
+        expect(upload.filesize).to eq(9558)
+    
+      def staff_available_actions
+    UserHistory.staff_actions.sort.map do |name|
+      {
+        id: name,
+        action_id: UserHistory.actions[name] || UserHistory.actions[:custom_staff],
+      }
     end
   end
+end
+
     
-      describe '#relative_distance_of_time_in_words' do
-    it 'in the past' do
-      expect(relative_distance_of_time_in_words(Time.now-5.minutes)).to eq('5m ago')
+    
+# Documentation comments:
+#  - All documentation comes from Nutshell.
+#  - MonitorMixin.new_cond appears in the example, but is not documented in
+#    Nutshell.
+#  - All the internals (internal modules Accessible and Initializable, class
+#    ConditionVariable) appear in RDoc.  It might be good to hide them, by
+#    making them private, or marking them :nodoc:, etc.
+#  - RDoc doesn't recognise aliases, so we have mon_synchronize documented, but
+#    not synchronize.
+#  - mon_owner is in Nutshell, but appears as an accessor in a separate module
+#    here, so is hard/impossible to RDoc.  Some other useful accessors
+#    (mon_count and some queue stuff) are also in this module, and don't appear
+#    directly in the RDoc output.
+#  - in short, it may be worth changing the code layout in this file to make the
+#    documentation easier
+
+    
+        assert @co.document_children
+    
+        comment = doc(para('this is a comment'))
+    
     end
+
     
-      describe 'down' do
-    let :valid_options do
-      super().merge('extract' => new_extract,
-                    'template' => new_template)
-    end
-    
-      it 'replaces invalid byte sequences in a message' do
-    log = AgentLog.new(:agent => agents(:jane_website_agent), level: 3)
-    log.message = '\u{3042}\xffA\x95'
-    expect { log.save! }.not_to raise_error
-    expect(log.message).to eq('\u{3042}<ff>A\<95>')
+        assert_equal expected, doc
   end
     
-      gem.files         = `git ls-files -z`.split('\x0').reject { |f| f =~ /^docs/ }
-  gem.executables   = %w(cap capify)
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.require_paths = ['lib']
+        out = m.convert doc, tt
     
-      def test_file_exists(path)
-    exists?('f', path)
-  end
+      def test_file_equals
+    @d.file = 'file.rb'
     
-        [stdout, stderr, status]
-  end
+          spec['main'] =
+          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
+          find_files.(Bootstrap.fonts_path) +
+          %w(assets/javascripts/bootstrap.js)
     
-            @response = (gets || '').chomp
-      end
+      # Prepend all log lines with the following tags.
+  # config.log_tags = [ :subdomain, :uuid ]
     
-    http://capistranorb.com/documentation/advanced-features/custom-scm
-    
-          def each
-        servers_by_key.values.each { |server| yield server }
-      end
-    
-          # Returns an array of source file location(s) where the given key was
-      # assigned (i.e. where `set` was called). If the key was never assigned,
-      # returns `nil`.
-      def source_locations(key)
-        locations[key]
-      end
-    
-        def pane_index
-      index + tab.project.pane_base_index
+        it 'returns a flare tag if there is a flare tag in the list' do
+      valid_article = create(:article, tags: 'ama')
+      expect(described_class.new(valid_article).tag.name).to eq('ama')
     end
     
-    # Custom Matchers
-require_relative 'matchers/pane_matcher'
-    
-          def find_project_file(name, local = false)
-        path = config_path(name, local)
-        if File.exist?(path)
-          path
-        else
-          generate_project_file(name, path)
-        end
+          it 'renders articles of long length without breaking' do
+        # This is a pretty weak test, just to exercise different lengths with no breakage
+        article.update(title: (0...75).map { rand(65..90).chr }.join)
+        get article.path
+        article.update(title: (0...100).map { rand(65..90).chr }.join)
+        get article.path
+        article.update(title: (0...118).map { rand(65..90).chr }.join)
+        get article.path
+        expect(response.body).to include 'title'
       end
+    end
     
-        Make sure that you've set these variables in your ENV:
+      it 'renders a user index if there is a user with the username successfully' do
+    expect(get: '/#{user.username}').to route_to(
+      controller: 'stories',
+      action: 'index',
+      username: user.username,
+    )
+  end
