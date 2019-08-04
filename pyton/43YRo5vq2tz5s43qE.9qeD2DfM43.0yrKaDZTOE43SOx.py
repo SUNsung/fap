@@ -1,170 +1,119 @@
 
         
-            if results.overwrite and os.path.exists(output_directory):
-        shutil.rmtree(output_directory)
+            dilation = cfg.MRCNN.DILATION
+    dim_inner = cfg.MRCNN.DIM_REDUCED
+    
+    from detectron.core.config import cfg
+from detectron.utils.timer import Timer
+import detectron.datasets.dataset_catalog as dataset_catalog
+import detectron.utils.boxes as box_utils
+from detectron.utils.io import load_object
+import detectron.utils.segms as segm_utils
     
     
-def _add_multilevel_rois_for_test(blobs, name):
-    '''Distributes a set of RoIs across FPN pyramid levels by creating new level
-    specific RoI blobs.
-    
-    import pycocotools.mask as mask_util
-    
-        dim_bottleneck = cfg.RESNETS.NUM_GROUPS * cfg.RESNETS.WIDTH_PER_GROUP
-    (n1, n2, n3) = block_counts[:3]
-    s, dim_in = add_stage(model, 'res2', p, n1, dim_in, 256, dim_bottleneck, 1)
-    if freeze_at == 2:
-        model.StopGradient(s, s)
-    s, dim_in = add_stage(
-        model, 'res3', s, n2, dim_in, 512, dim_bottleneck * 2, 1
+def initialize_model_from_cfg(weights_file, gpu_id=0):
+    '''Initialize a model from the global cfg. Loads test-time weights and
+    creates the networks in the Caffe2 workspace.
+    '''
+    model = model_builder.create(cfg.MODEL.TYPE, train=False, gpu_id=gpu_id)
+    net_utils.initialize_gpu_from_weights_file(
+        model, weights_file, gpu_id=gpu_id,
     )
-    if freeze_at == 3:
-        model.StopGradient(s, s)
-    s, dim_in = add_stage(
-        model, 'res4', s, n3, dim_in, 1024, dim_bottleneck * 4, 1
-    )
-    if freeze_at == 4:
-        model.StopGradient(s, s)
-    if len(block_counts) == 4:
-        n4 = block_counts[3]
-        s, dim_in = add_stage(
-            model, 'res5', s, n4, dim_in, 2048, dim_bottleneck * 8,
-            cfg.RESNETS.RES5_DILATION
-        )
-        if freeze_at == 5:
-            model.StopGradient(s, s)
-        return s, dim_in, 1. / 32. * cfg.RESNETS.RES5_DILATION
-    else:
-        return s, dim_in, 1. / 16.
+    model_builder.add_inference_inputs(model)
+    workspace.CreateNet(model.net)
+    workspace.CreateNet(model.conv_body_net)
+    if cfg.MODEL.MASK_ON:
+        workspace.CreateNet(model.mask_net)
+    if cfg.MODEL.KEYPOINTS_ON:
+        workspace.CreateNet(model.keypoint_net)
+    return model
     
+        def test_merge_cfg_from_file(self):
+        with tempfile.NamedTemporaryFile() as f:
+            envu.yaml_dump(cfg, f)
+            s = cfg.MODEL.TYPE
+            cfg.MODEL.TYPE = 'dummy'
+            assert cfg.MODEL.TYPE != s
+            core_config.merge_cfg_from_file(f.name)
+            assert cfg.MODEL.TYPE == s
     
-# ---------------------------------------------------------------------------- #
-# ********************** DEPRECATED FUNCTIONALITY BELOW ********************** #
-# ---------------------------------------------------------------------------- #
+    import numpy as np
+import logging
+from collections import defaultdict
     
+    logger = logging.getLogger(__name__)
     
-_RENAME = {
-    # Removed 'ResNet_' from the name because it wasn't relevent
-    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v1up4convs':
-        'mask_rcnn_heads.mask_rcnn_fcn_head_v1up4convs',
-    # Removed 'ResNet_' from the name because it wasn't relevent
-    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v1up':
-        'mask_rcnn_heads.mask_rcnn_fcn_head_v1up',
-    # Removed 'ResNet_' from the name because it wasn't relevent
-    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v0upshare':
-        'mask_rcnn_heads.mask_rcnn_fcn_head_v0upshare',
-    # Removed 'ResNet_' from the name because it wasn't relevent
-    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v0up':
-        'mask_rcnn_heads.mask_rcnn_fcn_head_v0up',
-    # Removed head_builder module in favor of the more specific fast_rcnn name
-    'head_builder.add_roi_2mlp_head':
-        'fast_rcnn_heads.add_roi_2mlp_head',
-}
+    import argparse
+import os
+import sys
     
-    
-def compute_targets(ex_rois, gt_rois, weights=(1.0, 1.0, 1.0, 1.0)):
-    '''Compute bounding-box regression targets for an image.'''
-    return box_utils.bbox_transform_inv(ex_rois, gt_rois, weights).astype(
-        np.float32, copy=False
-    )
-
-    
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-    
-    
-def loader_loop(roi_data_loader):
-    load_timer = Timer()
-    iters = 100
-    for i in range(iters):
-        load_timer.tic()
-        roi_data_loader.get_next_minibatch()
-        load_timer.toc()
-        print('{:d}/{:d}: Average get_next_minibatch time: {:.3f}s'.format(
-              i + 1, iters, load_timer.average_time))
-    
-        result = s[lambda x: ['A', 'B']]
-    tm.assert_series_equal(result, s.loc[['A', 'B']])
-    
-    
-# our starting frame
-def seed_df(seed_nans, n, m):
-    np.random.seed(1234)
-    days = date_range('2015-08-24', periods=10)
-    
-    
-   class TestMyDtype(BaseDtypeTests):
-       pass
-    
-        with tm.ensure_clean() as path:
-        df = pd.read_json('{'a': ['foo', 'bar', 'baz'], 'b': [4, 5, 6]}')
-        df.to_json(path, orient='records', lines=True,
-                   compression=compression)
-    
-    
-class MyList(list):
-    pass
-    
-    parser = ArgumentParser(usage='%s -m jieba [options] filename' % sys.executable, description='Jieba command line interface.', epilog='If no filename specified, use STDIN instead.')
-parser.add_argument('-d', '--delimiter', metavar='DELIM', default=' / ',
-                    nargs='?', const=' ',
-                    help='use DELIM instead of ' / ' for word delimiter; or a space if it is used without DELIM')
-parser.add_argument('-p', '--pos', metavar='DELIM', nargs='?', const='_',
-                    help='enable POS tagging; if DELIM is specified, use DELIM instead of '_' for POS delimiter')
-parser.add_argument('-D', '--dict', help='use DICT as dictionary')
-parser.add_argument('-u', '--user-dict',
-                    help='use USER_DICT together with the default dictionary or DICT (if specified)')
-parser.add_argument('-a', '--cut-all',
-                    action='store_true', dest='cutall', default=False,
-                    help='full pattern cutting (ignored with POS tagging)')
-parser.add_argument('-n', '--no-hmm', dest='hmm', action='store_false',
-                    default=True, help='don't use the Hidden Markov Model')
-parser.add_argument('-q', '--quiet', action='store_true', default=False,
-                    help='don't print loading messages to stderr')
-parser.add_argument('-V', '--version', action='version',
-                    version='Jieba ' + jieba.__version__)
-parser.add_argument('filename', nargs='?', help='input file')
-    
-        def textrank(self, sentence, topK=20, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v'), withFlag=False):
+        def calc_delta(self, label):
         '''
-        Extract keywords from sentence using TextRank algorithm.
-        Parameter:
-            - topK: return how many top keywords. `None` for all possible words.
-            - withWeight: if True, return a list of (word, weight);
-                          if False, return a list of words.
-            - allowPOS: the allowed POS list eg. ['ns', 'n', 'vn', 'v'].
-                        if the POS of w is not in this list, it will be filtered.
-            - withFlag: if True, return a list of pair(word, weight) like posseg.cut
-                        if False, return a list of words
+        Desc:
+            计算每个节点的 delta
+        Args:
+            label --- 样本的真实值，也就是样本的标签
+        Returns:
+            None
         '''
-        self.pos_filt = frozenset(allowPOS)
-        g = UndirectWeightedGraph()
-        cm = defaultdict(int)
-        words = tuple(self.tokenizer.cut(sentence))
-        for i, wp in enumerate(words):
-            if self.pairfilter(wp):
-                for j in xrange(i + 1, i + self.span):
-                    if j >= len(words):
-                        break
-                    if not self.pairfilter(words[j]):
-                        continue
-                    if allowPOS and withFlag:
-                        cm[(wp, words[j])] += 1
-                    else:
-                        cm[(wp.word, words[j].word)] += 1
+        # 获取输出层的所有节点
+        output_nodes = self.layers[-1].nodes
+        # 遍历所有的 label
+        for i in range(len(label)):
+            # 计算输出层节点的 delta
+            output_nodes[i].calc_output_layer_delta(label[i])
+        # 这个用法就是切片的用法， [-2::-1] 就是将 layers 这个数组倒过来，从没倒过来的时候的倒数第二个元素开始，到翻转过来的倒数第一个数，比如这样：aaa = [1,2,3,4,5,6,7,8,9],bbb = aaa[-2::-1] ==> bbb = [8, 7, 6, 5, 4, 3, 2, 1]
+        # 实际上就是除掉输出层之外的所有层按照相反的顺序进行遍历
+        for layer in self.layers[-2::-1]:
+            # 遍历每层的所有节点
+            for node in layer.nodes:
+                # 计算隐藏层的 delta
+                node.calc_hidden_layer_delta()
     
-        def __init__(self, idf_path=None):
-        self.path = ''
-        self.idf_freq = {}
-        self.median_idf = 0.0
-        if idf_path:
-            self.set_new_path(idf_path)
+        def gradient_check(self, sample_feature, sample_label):
+        '''
+        梯度检查
+        network: 神经网络对象
+        sample_feature: 样本的特征
+        sample_label: 样本的标签
+        '''
+    
+        centList, myNewAssments = biKMeans(dataMat, 3)
     
     
-if len(args) < 1:
-    print(USAGE)
-    sys.exit(1)
+# Checks if this version respects the GA version format ('x.y.z') and not an RC
+def is_tag_latest(version):
+    ga_version = all(n.isdigit() for n in version.split('.')) and version.count('.') == 2
+    return ga_version and yesno('Should this release be tagged as \'latest\'? [Y/n]: ', default=True)
     
-    cat abc.txt | python jiebacmd.py | sort | uniq -c | sort -nr -k1 | head -100
+    import logging
+import os.path
+import ssl
+    
+    
+def test_push_image(mock_service):
+    mock_service.options['build'] = '.'
+    mock_service.options['image'] = image_id = 'abcd'
+    mock_service.push.return_value = expected = 'sha256:thedigest'
+    mock_service.image.return_value = {'RepoDigests': []}
+    
+        @mock.patch('compose.network.Network.true_name', lambda n: n.full_name)
+    def test_check_remote_network_labels_mismatch(self):
+        net = Network(None, 'compose_test', 'net1', 'overlay', labels={
+            'com.project.touhou.character': 'sakuya.izayoi'
+        })
+        remote = {
+            'Driver': 'overlay',
+            'Options': None,
+            'Labels': {
+                'com.docker.compose.network': 'net1',
+                'com.docker.compose.project': 'compose_test',
+                'com.project.touhou.character': 'marisa.kirisame',
+            }
+        }
+        with mock.patch('compose.network.log') as mock_log:
+            check_remote_network_config(remote, net)
+    
+            log.warning('Service %s is trying to use reuse the network stack '
+                    'of another service that is not running.' % (self.id))
+        return None
