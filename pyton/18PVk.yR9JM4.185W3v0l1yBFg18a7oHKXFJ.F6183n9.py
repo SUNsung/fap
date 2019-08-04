@@ -1,110 +1,50 @@
 
         
-        
-try:
-    if int(pkg_resources.get_distribution('pip').version.split('.')[0]) < 6:
-        print('pip older than 6.0 not supported, please upgrade pip with:\n\n'
-              '    pip install -U pip')
-        sys.exit(-1)
-except pkg_resources.DistributionNotFound:
-    pass
+            def _escalate_call(self):
+        self.call.state = CallState.READY
+        call = self.call
+        self.call = None
+        self.call_center.notify_call_escalated(call)
     
-        def test_gin_index(self):
-        # Ensure the table is there and doesn't have an index.
-        self.assertNotIn('field', self.get_constraints(IntegerArrayModel._meta.db_table))
-        # Add the index
-        index_name = 'integer_array_model_field_gin'
-        index = GinIndex(fields=['field'], name=index_name)
-        with connection.schema_editor() as editor:
-            editor.add_index(IntegerArrayModel, index)
-        constraints = self.get_constraints(IntegerArrayModel._meta.db_table)
-        # Check gin index was added
-        self.assertEqual(constraints[index_name]['type'], GinIndex.suffix)
-        # Drop the index
-        with connection.schema_editor() as editor:
-            editor.remove_index(IntegerArrayModel, index)
-        self.assertNotIn(index_name, self.get_constraints(IntegerArrayModel._meta.db_table))
+        def __init__(self, cards):
+        super(BlackJackHand, self).__init__(cards)
     
-        Parameters
-    ----------
-    im : PIL image
-        Input image.
-    flatten : bool
-        If true, convert the output to grey-scale.
-    mode : str, optional
-        Mode to convert image to, e.g. ``'RGB'``.  See the Notes of the
-        `imread` docstring for more details.
+        def reject_friend_request(self, friend_id):
+        pass
     
-        xx = range(0, n * step, step)
-    plt.figure('scikit-learn tree benchmark results')
-    plt.subplot(211)
-    plt.title('Learning with varying number of samples')
-    plt.plot(xx, scikit_classifier_results, 'g-', label='classification')
-    plt.plot(xx, scikit_regressor_results, 'r-', label='regression')
-    plt.legend(loc='upper left')
-    plt.xlabel('number of samples')
-    plt.ylabel('Time (s)')
     
-    legend1_values_list = list(legend1.values())
-legend1_keys_list = list(legend1.keys())
+class RemoveDuplicateUrls(MRJob):
     
-    The data is generated with the ``make_checkerboard`` function, then
-shuffled and passed to the Spectral Biclustering algorithm. The rows
-and columns of the shuffled matrix are rearranged to show the
-biclusters found by the algorithm.
+        def set(self, key, value):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                item.value = value
+                return
+        self.table[hash_index].append(Item(key, value))
     
-    for connectivity in (None, knn_graph):
-    for n_clusters in (30, 3):
-        plt.figure(figsize=(10, 4))
-        for index, linkage in enumerate(('average',
-                                         'complete',
-                                         'ward',
-                                         'single')):
-            plt.subplot(1, 4, index + 1)
-            model = AgglomerativeClustering(linkage=linkage,
-                                            connectivity=connectivity,
-                                            n_clusters=n_clusters)
-            t0 = time.time()
-            model.fit(X)
-            elapsed_time = time.time() - t0
-            plt.scatter(X[:, 0], X[:, 1], c=model.labels_,
-                        cmap=plt.cm.nipy_spectral)
-            plt.title('linkage=%s\n(time %.2fs)' % (linkage, elapsed_time),
-                      fontdict=dict(verticalalignment='top'))
-            plt.axis('equal')
-            plt.axis('off')
+        def __init__(self, pages, data_store, reverse_index_queue, doc_index_queue):
+        self.pages = pages
+        self.data_store = data_store
+        self.reverse_index_queue = reverse_index_queue
+        self.doc_index_queue = doc_index_queue
     
-    iris = datasets.load_iris()
-X = iris.data
-y = iris.target
+        :param filepath: Optional filepath the the blns.txt file
+    :returns: The list of naughty strings
+    '''
     
-    def clean_text(text, replacements = {':': '_', ' ': '_', '/': '_', '.': '', ''': ''}):
-    for key, rep in replacements.items():
-        text = text.replace(key, rep)
-    return text    
+    fp.close()
+
     
-            # Adding unique constraint on 'GroupTagKey', fields ['project_id',
-        # 'group_id', 'environment_id', '_key']
-        db.create_unique(
-            u'tagstore_grouptagkey', [
-                'project_id', 'group_id', 'environment_id', 'key'])
+        iterkeys = lambda d: d.iterkeys()
+    itervalues = lambda d: d.itervalues()
+    iteritems = lambda d: d.iteritems()
     
-            # Deleting model 'EventTag'
-        db.delete_table(u'tagstore_eventtag')
     
-            # Adding model 'GroupTagValue'
-        db.create_table(u'tagstore_grouptagvalue', (
-            ('id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(primary_key=True)),
-            ('project_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(db_index=True)),
-            ('group_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(db_index=True)),
-            ('times_seen', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(default=0)),
-            ('_key', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                to=orm['tagstore.TagKey'], db_column='key_id')),
-            ('_value', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                to=orm['tagstore.TagValue'], db_column='value_id')),
-            ('last_seen', self.gf('django.db.models.fields.DateTimeField')(
-                null=True, db_index=True)),
-            ('first_seen', self.gf('django.db.models.fields.DateTimeField')(
-                null=True, db_index=True)),
-        ))
-        db.send_create_signal('tagstore', ['GroupTagValue'])
+def ChineseAnalyzer(stoplist=STOP_WORDS, minsize=1, stemfn=stem, cachesize=50000):
+    return (ChineseTokenizer() | LowercaseFilter() |
+            StopFilter(stoplist=stoplist, minsize=minsize) |
+            StemFilter(stemfn=stemfn, ignore=None, cachesize=cachesize))
+
+    
+    tags = jieba.analyse.extract_tags(content, topK=topK)
