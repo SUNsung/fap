@@ -1,176 +1,149 @@
 
         
-                @path = File.expand_path(path)
-        podspec_content = File.read(path)
+                        logger.info('Invalid ID, pruning: #{id}')
+                nfs_cleanup(id)
+              end
+            end
+          end
+        rescue Errno::EACCES
+          raise Vagrant::Errors::NFSCantReadExports
+        end
     
-                editor = editor(screenshot)
+    # Disable checkpoint
+Checkpoint.disable!
+
     
-          UI.success('Successfully submitted the app for review!')
+        it 'returns true if installed' do
+      expect(machine.communicate).to receive(:test).
+        with(command, sudo: true).and_return(true)
+      subject.chef_installed(machine, 'chef_solo', version)
     end
     
-            return ['-destination '#{value}'']
+      subject { described_class }
+    
+          home_vagrantfile = nil
+      root_vagrantfile = nil
+      home_vagrantfile = find_vagrantfile(home_path) if home_path
+      if root_path
+        root_vagrantfile = find_vagrantfile(root_path, @vagrantfile_name)
       end
     
-        def handle_results(tests_exit_status)
-      result = TestResultParser.new.parse_result(test_results)
-      SlackPoster.new.run(result)
+      describe 'local data path' do
+    it 'is set to the proper default' do
+      default = instance.root_path.join(described_class::DEFAULT_LOCAL_DATA)
+      expect(instance.local_data_path).to eq(default)
+    end
     
-            app.tunes_all_build_trains(platform: platform).each do |train|
-          message = []
-          message << 'Found train (version): #{train.version_string}'
-          message << ', comparing to supplied version: #{version}' if version
-          UI.verbose(message.join(' '))
-    
-          def self.find_api_token(params)
-        return if params[:gsp_path]
-        unless params[:api_token].to_s.length > 0
-          Dir['./**/Info.plist'].each do |current|
-            result = Actions::GetInfoPlistValueAction.run(path: current, key: 'Fabric')
-            next unless result
-            next unless result.kind_of?(Hash)
-            params[:api_token] ||= result['APIKey']
-            UI.verbose('found an APIKey in #{current}')
+                problem '\'\#{share}#{match[1]}\' should be \'\#{#{match[2]}}\''
           end
-        end
+    
+            uses_from_macos('foo')
       end
     
-          def self.get_version_number!(plist_file)
-        plist = Xcodeproj::Plist.read_from_path(plist_file)
-        UI.user_error!('Unable to read plist: #{plist_file}') unless plist
+      describe '#uses_from_macos' do
+    before do
+      sierra_os_version = OS::Mac::Version.from_symbol(:sierra)
     
-      context '#in_use?' do
-    let(:index) { [] }
-    
-          iso_env.box3('base', '1.0', :foo, vagrantfile: <<-VF)
-      Vagrant.configure('2') do |config|
-        config.ssh.port = 123
-      end
-      VF
-    
-            # Filters triggers to be fired based on configured restraints
-        #
-        # @param [Array] triggers An array of triggers to be filtered
-        # @param [String] guest_name The name of the current guest
-        # @param [Symbol] type The type of trigger (:command or :type)
-        # @return [Array] The filtered array of triggers
-        def filter_triggers(triggers, guest_name, type)
-          # look for only_on trigger constraint and if it doesn't match guest
-          # name, throw it away also be sure to preserve order
-          filter = triggers.dup
-    
-          # Load dependencies into a request set for resolution
-      request_set = Gem::RequestSet.new(*plugin_deps)
-      # Never allow dependencies to be remotely satisfied during cleaning
-      request_set.remote = false
-    
-      def run_vagrant_command(command)
-    stdout, stderr, status = vagrant_cli_command('ssh -c #{command.inspect}')
-    return [stdout, stderr] if status.success?
-    raise VagrantSSHCommandError, status
+        it 'allows specifying recommended dependencies' do
+      subject.depends_on 'bar' => :recommended
+      expect(subject).to have_defined_option('without-bar')
+    end
   end
-end
     
-        def backtrace_pattern
-      loc = Rake.application.find_rakefile_location
-      return unless loc
+            Thanks!
+      EOS
+    end
     
-          def warn_set_scm_is_deprecated
-        $stderr.puts(<<-MESSAGE)
-[Deprecation Notice] `set :scm, #{scm_name.inspect}` is deprecated.
-To ensure your project is compatible with future versions of Capistrano,
-remove the :scm setting and instead add these lines to your Capfile after
-`require 'capistrano/deploy'`:
+          def latest_version
+        case MacOS.version
+        when '10.9'  then '6.2'
+        when '10.10' then '7.2.1'
+        when '10.11' then '8.2.1'
+        when '10.12' then '9.2'
+        when '10.13' then '10.1'
+        when '10.14' then '10.2.1'
+        when '10.15' then '11.0'
+        else
+          raise 'macOS '#{MacOS.version}' is invalid' unless OS::Mac.prerelease?
     
-          def untrusted_keys
-        keys - @trusted_keys
+          # For OS::Mac::Version compatability
+      def requires_nehalem_cpu?
+        Hardware.oldest_cpu(self) == :nehalem
       end
-    
-      # escape unicode
-  content.gsub!(/./) { |c| c.bytesize > 1 ? '\\u{#{c.codepoints.first.to_s(16)}}' : c }
-    
-          def instrument(env)
-        return unless i = options[:instrumenter]
-        env['rack.protection.attack'] = self.class.name.split('::').last.downcase
-        i.instrument('rack.protection', env)
-      end
-    
-            # Set these key values to boolean 'true' to include in policy
-        NO_ARG_DIRECTIVES.each do |d|
-          if options.key?(d) && options[d].is_a?(TrueClass)
-            directives << d.to_s.sub(/_/, '-')
-          end
-        end
-    
-          def session_key
-        @session_key ||= options[:session_key]
-      end
+      # https://en.wikipedia.org/wiki/Nehalem_(microarchitecture)
+      # Ensure any extra methods are also added to version/null.rb
+      alias requires_sse4? requires_nehalem_cpu?
+      alias requires_sse41? requires_nehalem_cpu?
+      alias requires_sse42? requires_nehalem_cpu?
+      alias requires_popcnt? requires_nehalem_cpu?
     end
   end
 end
 
     
-          alias react deny
+      it 'prints the file used to cache the Cask' do
+    transmission_location = CurlDownloadStrategy.new(
+      local_transmission.url.to_s, local_transmission.token, local_transmission.version,
+      cache: Cask::Cache.path, **local_transmission.url.specs
+    ).cached_location
+    caffeine_location = CurlDownloadStrategy.new(
+      local_caffeine.url.to_s, local_caffeine.token, local_caffeine.version,
+      cache: Cask::Cache.path, **local_caffeine.url.specs
+    ).cached_location
     
-        headers = get('/', {}, 'wants' => 'text/html').headers
-    expect(headers['Content-Security-Policy']).to eq('connect-src https://api.mybank.com; default-src none; font-src https://cdn.mybank.net; frame-src self; img-src https://cdn.mybank.net; media-src https://cdn.mybank.net; object-src https://cdn.mybank.net; report-uri /my_amazing_csp_report_parser; sandbox allow-scripts; script-src https://cdn.mybank.net; style-src https://cdn.mybank.net')
-    expect(headers['Content-Security-Policy-Report-Only']).to be_nil
-  end
-    
-          def gateway_error(exception)
-        @order.errors.add(:base, exception.message)
-        invalid_resource!(@order)
+      describe '#source_modified_time' do
+    it 'returns the right modification time' do
+      cached_location.cd do
+        setup_git_repo
       end
-    
-              unless inventory_unit.respond_to?(can_event) &&
-              inventory_unit.send(can_event)
-            render plain: { exception: 'cannot transition to #{@event}' }.to_json,
-                   status: 200
-            false
-          end
-        end
-    
-            def update
-          @option_type = Spree::OptionType.accessible_by(current_ability, :update).find(params[:id])
-          if @option_type.update(option_type_params)
-            render :show
-          else
-            invalid_resource!(@option_type)
-          end
-        end
-    
-            def show
-          respond_with(@payment)
-        end
-    
-        it 'returns nil if an except is provided' do
-      valid_article = create(:article, tags: 'explainlikeimfive')
-      expect(described_class.new(valid_article, 'explainlikeimfive').tag).to eq(nil)
-    end
-    
-          it 'flashes an error message' do
-        post '/users/api_secrets', params: { api_secret: invalid_params }
-        expect(flash[:error]).to be_truthy
-        expect(flash[:notice]).to be_nil
-      end
-    end
-  end
-end
-
-    
-          it 'renders to appropriate page if user changes username twice and go to middle username' do
-        user.update(username: 'new_hotness_#{rand(10_000)}')
-        middle_username = user.username
-        user.update(username: 'new_new_username_#{rand(10_000)}')
-        get '/#{middle_username}/#{article.slug}'
-        expect(response.body).to redirect_to('/#{user.username}/#{article.slug}')
-      end
-    end
-    
-        it 'returns unauthorized if the user is not the author' do
-      second_user = create(:user)
-      article = create(:article, user: second_user)
-      expect { get '#{article.path}/manage' }.to raise_error(Pundit::NotAuthorizedError)
+      expect(subject.source_modified_time.to_i).to eq(1_485_115_153)
     end
   end
     
-      private
+            Download the source packages for the given <formula>.
+        For tarballs, also print SHA-256 checksums.
+      EOS
+      switch '--HEAD',
+             description: 'Fetch HEAD version instead of stable version.'
+      switch '--devel',
+             description: 'Fetch development version instead of stable version.'
+      switch :verbose,
+             description: 'Do a verbose VCS checkout, if the URL represents a VCS. This is useful for '\
+                          'seeing if an existing VCS cache has been updated.'
+      switch :force,
+             description: 'Remove a previously cached version and re-fetch.'
+      switch '--retry',
+             description: 'Retry if a download fails or re-download if the checksum of a previously cached '\
+                         'version no longer matches.'
+      switch '--deps',
+             description: 'Download dependencies for any listed <formula>.'
+      switch '-s', '--build-from-source',
+             description: 'Download the source for rather than a bottle.'
+      switch '--build-bottle',
+             description: 'Download the source (for eventual bottling) rather than a bottle.'
+      switch '--force-bottle',
+             description: 'Download a bottle if it exists for the current or newest version of macOS, '\
+                          'even if it would not be used during installation.'
+      switch :verbose
+      switch :debug
+      conflicts '--devel', '--HEAD'
+      conflicts '--build-from-source', '--build-bottle', '--force-bottle'
+    end
+  end
+    
+      namespace :check do
+    desc 'Check shared and release directories exist'
+    task :directories do
+      on release_roles :all do
+        execute :mkdir, '-p', shared_path, releases_path
+      end
+    end
+    
+          private
+    
+            if callable.is_a?(Question)
+          ValidatedQuestion.new(validation_callback)
+        else
+          validation_callback
+        end
+      end
