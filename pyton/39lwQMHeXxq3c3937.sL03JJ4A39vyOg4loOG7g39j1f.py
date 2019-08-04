@@ -1,43 +1,75 @@
 
         
-            Beyond permissions, groups are a convenient way to categorize users to
-    apply some label, or extended functionality, to them. For example, you
-    could create a group 'Special users', and you could write code that would
-    do special things to those users -- such as giving them access to a
-    members-only portion of your site, or sending them members-only email
-    messages.
+            Username and password are required. Other fields are optional.
     '''
-    name = models.CharField(_('name'), max_length=150, unique=True)
-    permissions = models.ManyToManyField(
-        Permission,
-        verbose_name=_('permissions'),
-        blank=True,
+    username_validator = UnicodeUsernameValidator()
+    
+                try:
+                vtup = self.postgis_version_tuple()
+            except ProgrammingError:
+                raise ImproperlyConfigured(
+                    'Cannot determine PostGIS version for database '%s' '
+                    'using command 'SELECT postgis_lib_version()'. '
+                    'GeoDjango requires at least PostGIS version 2.2. '
+                    'Was the database created from a spatial database '
+                    'template?' % self.connection.settings_dict['NAME']
+                )
+            version = vtup[1:]
+        return version
+    
+        def deconstruct(self):
+        path, args, kwargs = super().deconstruct()
+        if self.fastupdate is not None:
+            kwargs['fastupdate'] = self.fastupdate
+        if self.gin_pending_list_limit is not None:
+            kwargs['gin_pending_list_limit'] = self.gin_pending_list_limit
+        return path, args, kwargs
+    
+        def test_no_version_number(self):
+        ops = FakePostGISOperations()
+        with self.assertRaises(ImproperlyConfigured):
+            ops.spatial_version
+
+    
+    
+# OFTDate, OFTTime, OFTDateTime fields.
+class OFTDate(Field):
+    @property
+    def value(self):
+        'Return a Python `date` object for the OFTDate field.'
+        try:
+            yy, mm, dd, hh, mn, ss, tz = self.as_datetime()
+            return date(yy.value, mm.value, dd.value)
+        except (TypeError, ValueError, GDALException):
+            return None
+    
+    This module provides the capabilities for the Requests hooks system.
+    
+    
+  def _HandleFixitResponse( self ):
+    if not len( self._response[ 'fixits' ] ):
+      vimsupport.PostVimMessage( 'No fixits found for current line',
+                                 warning = False )
+    else:
+      try:
+        fixit_index = 0
+    
+    
+  def UpdateWithNewDiagnostics( self, diags ):
+    self._diagnostics = [ _NormalizeDiagnostic( x ) for x in
+                            self._ApplyDiagnosticFilter( diags ) ]
+    self._ConvertDiagListToDict()
+    
+    
+def FormatDebugInfoResponse_NoExtraConf_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'extra_conf' ].update( {
+    'is_loaded': False,
+    'path': None
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'No extra configuration file found\n'
     )
-    
-    
-class IntConverter:
-    regex = '[0-9]+'
-    
-             cache_page = decorator_from_middleware_with_args(CacheMiddleware)
-         # ...
-    
-            # Explicit dependencies
-        self.assertLess(ordered_sigs.index('s2'), ordered_sigs.index('s1'))
-        self.assertLess(ordered_sigs.index('s3'), ordered_sigs.index('s2'))
-    
-        def __iter__(self):
-        'Iterate over each Feature in the Layer.'
-        # ResetReading() must be called before iteration is to begin.
-        capi.reset_reading(self._ptr)
-        for i in range(self.num_feat):
-            yield Feature(capi.get_next_feature(self._ptr), self)
-    
-    from sentry.models import Identity, IdentityProvider, IdentityStatus, Integration, OrganizationIntegration
-from sentry.testutils import TestCase
-from sentry.integrations.slack.link_identity import build_linking_url
-    
-        def backwards(self, orm):
-    
-            # Changing field 'TagKey.environment_id'
-        db.alter_column(u'tagstore_tagkey', 'environment_id', self.gf(
-            'sentry.db.models.fields.bounded.BoundedBigIntegerField')(null=True))
+  )
