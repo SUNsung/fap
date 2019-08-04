@@ -1,175 +1,174 @@
 
         
-        
-    {  DISALLOW_COPY_AND_ASSIGN(Clipboard);
-};
-    
-    
-namespace nwapi {
+        namespace xla {
+namespace gpu {
+    }
     }
     
-    Menu::Menu(int id,
-           const base::WeakPtr<ObjectManager>& object_manager,
-           const base::DictionaryValue& option,
-           const std::string& extension_id)
-  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
-  Create(option);
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    
+    { private:
+  const std::vector<BufferAllocation::Slice> tuple_element_buffers_;
+  const BufferAllocation::Slice dest_buffer_;
+};
+    
+    Example 1:
+  DATA  = [1, 2, 3, 4, 5, 6, 7, 8]
+  RANGES = [
+    [
+      [2, 4],
+      [0, 2],
+    ],
+    [
+      [0, 0],
+      [6, 2],
+    ]
+  ]
+  lengths = [4, 2]
+  OUTPUT[0] = [[3, 4, 5, 6], [0, 0, 0, 0]]
+  OUTPUT[1] = [[1, 2], [7, 8]]
+    
+    OPERATOR_SCHEMA(Im2Col)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .SetDoc('The Im2Col operator from Matlab.')
+    .TensorInferenceFunction(
+        [](const OperatorDef& def, const vector<TensorShape>& in) {
+          ArgumentHelper helper(def);
+          auto pad = helper.GetSingleArgument<int>('pad', 0);
+          auto kernel_h = helper.GetSingleArgument<int>(
+              'kernel_h', helper.GetSingleArgument<int>('kernel', 0));
+          auto kernel_w = helper.GetSingleArgument<int>(
+              'kernel_w', helper.GetSingleArgument<int>('kernel', 0));
+          auto dilation_h = helper.GetSingleArgument<int>(
+              'dilation_h', helper.GetSingleArgument<int>('dilation', 1));
+          auto dilation_w = helper.GetSingleArgument<int>(
+              'dilation_w', helper.GetSingleArgument<int>('dilation', 1));
+          auto stride_h = helper.GetSingleArgument<int>(
+              'stride_h', helper.GetSingleArgument<int>('stride', 1));
+          auto stride_w = helper.GetSingleArgument<int>(
+              'stride_w', helper.GetSingleArgument<int>('stride', 1));
+          auto order = StringToStorageOrder(
+              helper.GetSingleArgument<string>('order', 'NCHW'));
+    }
+    
+    String ResourceFormatLoaderVideoStreamGDNative::get_resource_type(const String &p_path) const {
+	String el = p_path.get_extension().to_lower();
+	if (VideoDecoderServer::get_instance()->get_extensions().has(el))
+		return 'VideoStreamGDNative';
+	return '';
 }
-    
-    class NwClipboardSetListSyncFunction : public NWSyncExtensionFunction {
- public:
-  NwClipboardSetListSyncFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
- public:
-  NwMenuGetNSStringWithFixupFunction(){}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    
- protected:
-  ~NwMenuGetNSStringWithFixupFunction() override {}
-    
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
-};
-    
-    
-    {/*!
- * \brief Macro to register metric.
- *
- * \code
- * // example of registering a objective ndcg@k
- * XGBOOST_REGISTER_METRIC(RMSE, 'ndcg')
- * .describe('Rooted mean square error.')
- * .set_body([](const char* param) {
- *     int at_k = atoi(param);
- *     return new NDCG(at_k);
- *   });
- * \endcode
- */
-#define XGBOOST_REGISTER_METRIC(UniqueId, Name)                         \
-  ::xgboost::MetricReg&  __make_ ## MetricReg ## _ ## UniqueId ## __ =  \
-      ::dmlc::Registry< ::xgboost::MetricReg>::Get()->__REGISTER__(Name)
-}  // namespace xgboost
-#endif  // XGBOOST_METRIC_H_
 
     
-      static Predictor* Create(std::string const& name, LearnerTrainParam const*);
+    	operator Variant() const;
     
-    /**
- * \brief Select coordinate with the greatest gradient magnitude.
- * \note It has O(num_feature^2) complexity. It is fully deterministic.
- *
- * \note It allows restricting the selection to top_k features per group with
- * the largest magnitude of univariate weight change, by passing the top_k value
- * through the `param` argument of Setup(). That would reduce the complexity to
- * O(num_feature*top_k).
- */
-class GreedyFeatureSelector : public FeatureSelector {
+    	for (int i = 0; i < connected_sources.size(); i++) {
+		MIDIEndpointRef source = connected_sources[i];
+		MIDIPortDisconnectSource(port_in, source);
+	}
+	connected_sources.clear();
+    
+    	Vector<MIDIEndpointRef> connected_sources;
+    
+    
+    {	MIDIDriverWinMidi();
+	virtual ~MIDIDriverWinMidi();
+};
+    
+    #include 'db/builder.h'
+    
+    
+    {}  // namespace leveldb
+    
+    // WriteBatchInternal provides static methods for manipulating a
+// WriteBatch that we don't want in the public WriteBatch interface.
+class WriteBatchInternal {
  public:
-  void Setup(const gbm::GBLinearModel &model,
-             const std::vector<GradientPair> &gpair,
-             DMatrix *p_fmat, float alpha, float lambda, int param) override {
-    top_k_ = static_cast<bst_uint>(param);
-    const bst_uint ngroup = model.param.num_output_group;
-    if (param <= 0) top_k_ = std::numeric_limits<bst_uint>::max();
-    if (counter_.size() == 0) {
-      counter_.resize(ngroup);
-      gpair_sums_.resize(model.param.num_feature * ngroup);
+  // Return the number of entries in the batch.
+  static int Count(const WriteBatch* batch);
     }
-    for (bst_uint gid = 0u; gid < ngroup; ++gid) {
-      counter_[gid] = 0u;
+    
+    class Slice;
+    
+      // Add an element that should not be reflected in the iterator.
+  ASSERT_OK(db->Put(write_options, '25', 'cd'));
+    
+    #endif  // STORAGE_LEVELDB_TABLE_MERGER_H_
+
+    
+    
+    {  // - DSC comments must be printable ASCII; control chars and
+  //   backslashes have to be escaped (we do cheap Unicode-to-ASCII
+  //   conversion by simply ignoring the high byte)
+  // - lines are limited to 255 chars (we limit to 200 here to allow
+  //   for the keyword, which was emitted by the caller)
+  // - lines that start with a left paren are treated as <text>
+  //   instead of <textline>, so we escape a leading paren
+  if (s->getLength() >= 2 &&
+      (s->getChar(0) & 0xff) == 0xfe &&
+      (s->getChar(1) & 0xff) == 0xff) {
+    i = 3;
+    step = 2;
+  } else {
+    i = 0;
+    step = 1;
+  }
+  for (j = 0; i < s->getLength() && j < 200; i += step) {
+    c = s->getChar(i) & 0xff;
+    if (c == '\\') {
+      writePS('\\\\');
+      j += 2;
+    } else if (c < 0x20 || c > 0x7e || (j == 0 && c == '(')) {
+      writePSFmt('\\{0:03o}', c);
+      j += 4;
+    } else {
+      writePSChar(c);
+      ++j;
     }
   }
-    }
+  writePS('\n');
+}
+
     
-    namespace aria2 {
-    }
-    
-    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
-                                             std::chrono::seconds interval)
-    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
-{
+    void PSTokenizer::consumeChar() {
+  charBuf = -1;
 }
     
-    public:
-  // _remoteNode is always null
-  DHTUnknownMessage(const std::shared_ptr<DHTNode>& localNode,
-                    const unsigned char* data, size_t length,
-                    const std::string& ipaddr, uint16_t port);
+      // Return a list of annots. Ownership is transferred to the caller.
+  Annots *getAnnots(Catalog *catalog);
     
-    class Env;
-class WriteControllerToken;
+    class PageLabelInfo {
+public:
+  PageLabelInfo(Object *tree, int numPages);
+  ~PageLabelInfo();
+  GBool labelToIndex(GooString *label, int *index);
+  GBool indexToLabel(int index, GooString *label);
+    }
     
-      // create column family
-  ColumnFamilyHandle* cf;
-  s = db->CreateColumnFamily(ColumnFamilyOptions(), 'new_cf', &cf);
-  assert(s.ok());
+    //------------------------------------------------------------------------
+// PageTransition
+//------------------------------------------------------------------------
     
-      // Initialize pointer options for each column family
-  for (size_t i = 0; i < loaded_cf_descs.size(); ++i) {
-    auto* loaded_bbt_opt = reinterpret_cast<BlockBasedTableOptions*>(
-        loaded_cf_descs[0].options.table_factory->GetOptions());
-    // Expect the same as BlockBasedTableOptions will be loaded form file.
-    assert(loaded_bbt_opt->block_size == bbt_opts.block_size);
-    // However, block_cache needs to be manually initialized as documented
-    // in rocksdb/utilities/options_util.h.
-    loaded_bbt_opt->block_cache = cache;
+    
+    {  // clip
+  if (haveCSPattern || (render & 4)) {
+    if ((path = font->getGlyphPath(code))) {
+      path->offset((SplashCoord)x, (SplashCoord)y);
+      if (textClipPath) {
+	textClipPath->append(path);
+	delete path;
+      } else {
+	textClipPath = path;
+      }
+    }
   }
-  // In addition, as pointer options are initialized with default value,
-  // we need to properly initialized all the pointer options if non-defalut
-  // values are used before calling DB::Open().
-  assert(loaded_cf_descs[0].options.compaction_filter == nullptr);
-  loaded_cf_descs[0].options.compaction_filter = compaction_filter.get();
-    
-      // Decide we want to revert the last write from this transaction.
-  txn->RollbackToSavePoint();
-    
-    // Supported only for Leveled compaction
-Status SuggestCompactRange(DB* db, ColumnFamilyHandle* column_family,
-                           const Slice* begin, const Slice* end);
-Status SuggestCompactRange(DB* db, const Slice* begin, const Slice* end);
-    
-    /*
- * Class:     org_rocksdb_BackupableDBOptions
- * Method:    setShareTableFiles
- * Signature: (JZ)V
- */
-void Java_org_rocksdb_BackupableDBOptions_setShareTableFiles(JNIEnv* /*env*/,
-                                                             jobject /*jobj*/,
-                                                             jlong jhandle,
-                                                             jboolean flag) {
-  auto* bopt = reinterpret_cast<rocksdb::BackupableDBOptions*>(jhandle);
-  bopt->share_table_files = flag;
 }
     
-      env->ReleaseStringUTFChars(jcheckpoint_path, checkpoint_path);
-    
-    
-    {  int ret = x;
-  return ret;
-}
-    
-      Byte t1(bytes + 1);
-  int32_t t = t1.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
-    
-    namespace apollo {
-namespace canbus {
-namespace gem {
-    }
-    }
-    }
-    
-            /**
-         * Copy constructor.
-         * It performs `fast copy`: For performance purpose, copying a Rectangle<T> or Datum or cv::Mat just copies
-         * the reference, it still shares the same internal data.
-         * Modifying the copied element will modify the original one.
-         * Use clone() for a slower but real copy, similarly to cv::Mat and Rectangle<T>.
-         * @param rectangle Rectangle to be copied.
-         */
-        Rectangle<T>(const Rectangle<T>& rectangle);
+      // Destructor.
+  virtual ~SplashOutputDev();
