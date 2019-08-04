@@ -1,225 +1,155 @@
 
         
-        #ifndef BITCOIN_REVERSELOCK_H
-#define BITCOIN_REVERSELOCK_H
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
+    // Safe container for an owned PyObject. On destruction, the reference count of
+// the contained object will be decremented.
+using Safe_PyObjectPtr = std::unique_ptr<PyObject, detail::PyDecrefDeleter>;
+Safe_PyObjectPtr make_safe(PyObject* o);
     
-    {    secp256k1_ecdsa_recoverable_signature_load(ctx, &r, &s, &recid, signature);
-    VERIFY_CHECK(recid >= 0 && recid < 4);  /* should have been caught in parse_compact */
-    secp256k1_scalar_set_b32(&m, msg32, NULL);
-    if (secp256k1_ecdsa_sig_recover(&ctx->ecmult_ctx, &r, &s, &q, &m, recid)) {
-        secp256k1_pubkey_save(pubkey, &q);
-        return 1;
-    } else {
-        memset(pubkey, 0, sizeof(*pubkey));
-        return 0;
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    // This enum represents potential configurations of L1/shared memory when
+// running a particular kernel. These values represent user preference, and
+// the runtime is not required to respect these choices.
+enum class KernelCacheConfig {
+  // Indicates no preference for device L1/shared memory configuration.
+  kNoPreference,
     }
+    
+            explicit Rational(PRAT prat) noexcept;
+        PRAT ToPRAT() const;
+    
+        std::array<CalcEngine::Rational, NUM_WIDTH_LENGTH> m_chopNumbers;      // word size enforcement
+    std::array<std::wstring, NUM_WIDTH_LENGTH> m_maxDecimalValueStrings;   // maximum values represented by a given word width based off m_chopNumbers
+    static std::unordered_map<std::wstring, std::wstring> s_engineStrings; // the string table shared across all instances
+    wchar_t m_decimalSeparator;
+    wchar_t m_groupSeparator;
+    
+        case IDM_DEG:
+    case IDM_RAD:
+    case IDM_GRAD:
+        m_angletype = static_cast<ANGLE_TYPE>(wParam - IDM_DEG);
+        break;
+    
+        // to be changed when pszexp is back
+    tokens->GetString(&generatedExpression);
+    // Prefixing and suffixing the special Unicode markers to ensure that the expression
+    // in the history doesn't get broken for RTL languages
+    spHistoryItem->historyItemVector.expression = L'\u202d' + generatedExpression + L'\u202c';
+    spHistoryItem->historyItemVector.result = wstring(result);
+    addedIndex = AddItem(spHistoryItem);
+    
+    using namespace CalculatorApp::Common::Automation;
+using namespace Windows::UI::Xaml::Automation;
+using namespace Windows::UI::Xaml::Automation::Peers;
+using namespace Windows::UI::Xaml::Controls;
+    
+    NarratorAnnouncement::NarratorAnnouncement(
+    String ^ announcement,
+    String ^ activityId,
+    AutomationNotificationKind kind,
+    AutomationNotificationProcessing processing)
+    : m_announcement(announcement)
+    , m_activityId(activityId)
+    , m_kind(kind)
+    , m_processing(processing)
+{
 }
     
-        std::string vStr('zippy');
-    BOOST_CHECK(arr.push_back(vStr));
     
-    static void TestKey(const std::string& key,
-                    uint64_t seq,
-                    ValueType vt) {
-  std::string encoded = IKey(key, seq, vt);
-    }
-    
-      void WritableFileClosed(const FileState& state);
-  Status DropUnsyncedFileData();
-  Status DeleteFilesCreatedAfterLastDirSync();
-  void DirWasSynced();
-  bool IsFileCreatedSinceLastDirSync(const std::string& filename);
-  void ResetState();
-  void UntrackFile(const std::string& f);
-  // Setting the filesystem to inactive is the test equivalent to simulating a
-  // system reset. Setting to inactive will freeze our saved filesystem state so
-  // that it will stop being recorded. It can then be reset back to the state at
-  // the time of the reset.
-  bool IsFilesystemActive() const { return filesystem_active_; }
-  void SetFilesystemActive(bool active) { filesystem_active_ = active; }
-    
-                for (int i=0; i<nr_gain_filtering_iterations_; ++i)
-                sepFilter2D(gain_map, gain_map, CV_32F, ker, ker);
-    
-                for (size_t i = 0; i < dsize.height; ++i)
-            {
-                const u8 * src0_row = internal::getRowPtr(srcBase, srcStride, i << 2);
-                const u8 * src1_row = internal::getRowPtr(srcBase, srcStride, (i << 2) + 1);
-                const u8 * src2_row = internal::getRowPtr(srcBase, srcStride, (i << 2) + 2);
-                const u8 * src3_row = internal::getRowPtr(srcBase, srcStride, (i << 2) + 3);
-                u8 * dst_row = internal::getRowPtr(dstBase, dstStride, i);
-                size_t sj = 0, dj = 0;
-    }
-    
-        cv::GMatP in;
-    auto out = GResize3p3p::on(in, out_sz, interp);
-    cv::GComputation c(cv::GIn(in), cv::GOut(out));
-    
-    TEST(ByteSinkTest, Flush) {
-  string str;
-  FlushingByteSink f_sink(&str);
-  WriteAndFlush(&f_sink);
-  EXPECT_STREQ('abcz', str.c_str());
+    {    // By default ImGuiFreeType will use IM_ALLOC()/IM_FREE().
+    // However, as FreeType does lots of allocations we provide a way for the user to redirect it to a separate memory heap if desired:
+    IMGUI_API void SetAllocatorFunctions(void* (*alloc_func)(size_t sz, void* user_data), void (*free_func)(void* ptr, void* user_data), void* user_data = NULL);
 }
-    
-    namespace google {
-namespace protobuf {
-namespace internal {
-namespace {
-    }
-    }
-    }
-    }
-    
-    #endif  // PROTOBUF_BENCHMARKS_UTIL_DATA_PROTO2_TO_PROTO3_UTIL_H_
 
     
-        if (dataset.message_name() == 'benchmarks.proto3.GoogleMessage1') {
-      message = new benchmarks::proto3::GoogleMessage1;
-    } else if (dataset.message_name() == 'benchmarks.proto2.GoogleMessage1') {
-      message = new benchmarks::proto2::GoogleMessage1;
-    } else if (dataset.message_name() == 'benchmarks.proto2.GoogleMessage2') {
-      message = new benchmarks::proto2::GoogleMessage2;
-    } else if (dataset.message_name() ==
-        'benchmarks.google_message3.GoogleMessage3') {
-      message = new benchmarks::google_message3::GoogleMessage3;
-    } else if (dataset.message_name() ==
-        'benchmarks.google_message4.GoogleMessage4') {
-      message = new benchmarks::google_message4::GoogleMessage4;
-    } else {
-      std::cerr << 'Unknown message type: ' << dataset.message_name();
-      exit(1);
+    // Main code
+int main(int, char**)
+{
+    // Create application window
+    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
+    ::RegisterClassEx(&wc);
+    HWND hwnd = ::CreateWindow(wc.lpszClassName, _T('Dear ImGui DirectX9 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
     }
     
+    // DirectX data
+static LPDIRECT3DDEVICE9        g_pd3dDevice = NULL;
+static LPDIRECT3DVERTEXBUFFER9  g_pVB = NULL;
+static LPDIRECT3DINDEXBUFFER9   g_pIB = NULL;
+static LPDIRECT3DTEXTURE9       g_FontTexture = NULL;
+static int                      g_VertexBufferSize = 5000, g_IndexBufferSize = 10000;
     
-    {
-    {
-    {}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-    
-      // Optional:  Delete all global objects allocated by libprotobuf.
-  google::protobuf::ShutdownProtobufLibrary();
-    
-      if (!InitDescriptorMappingTypes())
-    return false;
-    
-    std::string TempFileName(const std::string& dbname, uint64_t number) {
-  assert(number > 0);
-  return MakeFileName(dbname, number, 'dbtmp');
-}
-    
-    
-    {}  // namespace leveldb
-    
-    TEST(VersionEditTest, EncodeDecode) {
-  static const uint64_t kBig = 1ull << 50;
-    }
-    
-    TEST(WriteBatchTest, Corruption) {
-  WriteBatch batch;
-  batch.Put(Slice('foo'), Slice('bar'));
-  batch.Delete(Slice('box'));
-  WriteBatchInternal::SetSequence(&batch, 200);
-  Slice contents = WriteBatchInternal::Contents(&batch);
-  WriteBatchInternal::SetContents(&batch,
-                                  Slice(contents.data(), contents.size() - 1));
-  ASSERT_EQ(
-      'Put(foo, bar)@200'
-      'ParseError()',
-      PrintContents(&batch));
-}
-    
-    // See doc/table_format.md for an explanation of the filter block format.
-    
-    
-    {}  // namespace leveldb
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_IMPL_API bool     ImGui_ImplDX9_CreateDeviceObjects();
+IMGUI_IMPL_API void     ImGui_ImplDX9_InvalidateDeviceObjects();
 
     
-    struct ReadOptions;
+        // Cleanup
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
     
-        /**
-     * Targets one or more of the next write ops in this batch op using a NSTargeter.  The
-     * resulting TargetedWrites are aggregated together in the returned TargetedWriteBatches.
-     *
-     * If 'recordTargetErrors' is false, any targeting error will abort all current batches and
-     * the method will return the targeting error.  No targetedBatches will be returned on
-     * error.
-     *
-     * Otherwise, if 'recordTargetErrors' is true, targeting errors will be recorded for each
-     * write op that fails to target, and the method will return OK.
-     *
-     * (The idea here is that if we are sure our NSTargeter is up-to-date we should record
-     * targeting errors, but if not we should refresh once first.)
-     *
-     * Returned TargetedWriteBatches are owned by the caller.
-     */
-    Status targetBatch(const NSTargeter& targeter,
-                       bool recordTargetErrors,
-                       std::map<ShardId, TargetedWriteBatch*>* targetedBatches);
-    
-    /**
- * Provides the minimal api for a simple out of line executor that can run non-cancellable
- * callbacks.
- *
- * The contract for scheduling work on an executor is that it never blocks the caller.  It doesn't
- * necessarily need to offer forward progress guarantees, but actual calls to schedule() should not
- * deadlock.
- *
- * If you manage the lifetime of your executor using a shared_ptr, you can begin a chain of
- * execution like this:
- *      ExecutorFuture(myExec)
- *          .then([] { return doThing1(); })
- *          .then([] { return doThing2(); })
- *          ...
- */
-class OutOfLineExecutor {
-public:
-    using Task = unique_function<void(Status)>;
+        // Main loop
+    while (true)
+    {
+        if (s3eDeviceCheckQuitRequest())
+            break;
     }
     
-        if (auto skip = cmd.getSkip()) {
-        BSONObjBuilder skipBuilder(pipelineBuilder.subobjStart());
-        skipBuilder.append('$skip', skip.get());
-        skipBuilder.doneFast();
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
+    
+    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
+// **Prefer using the code in the example_sdl_opengl3/ folder**
+// See imgui_impl_sdl.cpp for details.
+    
+     protected:
+  Config config_;
+  std::unique_ptr<Input> input_ = nullptr;
+  std::unique_ptr<Input> positioning_input_ = nullptr;
+  std::string topic_;
+  double packet_rate_ = 0.0;
+    
+    namespace apollo {
+namespace prediction {
+    }
     }
     
-    void PopNode::validateUpdate(mutablebson::ConstElement updatedElement,
-                             mutablebson::ConstElement leftSibling,
-                             mutablebson::ConstElement rightSibling,
-                             std::uint32_t recursionLevel,
-                             ModifyResult modifyResult) const {
-    invariant(modifyResult == ModifyResult::kNormalUpdate);
-    }
+    #include 'cyber/record/record_viewer.h'
     
-    void PushNode::setValueForNewElement(mutablebson::Element* element) const {
-    BSONObj emptyArray;
-    invariant(element->setValueArray(emptyArray));
-    (void)performPush(element, nullptr);
+    
+    {  Notify();
+  return true;
 }
     
-    namespace mongo {
-    }
-    
-        void _incrementHistogram(OperationContext* opCtx,
-                             long long latency,
-                             OperationLatencyHistogram* histogram,
-                             Command::ReadWriteType readWriteType);
-    
-        BSONObj keyPattern = BSON('a' << 1 << 'b' << 1);
-    createIndex(collection,
-                BSON('name'
-                     << 'a_1_b_1'
-                     << 'ns'
-                     << _nss.ns()
-                     << 'key'
-                     << keyPattern
-                     << 'v'
-                     << static_cast<int>(kIndexVersion)))
-        .transitional_ignore();
-    
-    
-int32_t RegexMatcher::start(int32_t group, UErrorCode &status) const {
-    return (int32_t)start64(group, status);
-}
+    #include 'modules/planning/math/curve_math.h'
