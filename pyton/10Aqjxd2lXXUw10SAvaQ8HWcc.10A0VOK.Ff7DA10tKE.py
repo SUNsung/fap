@@ -1,278 +1,212 @@
 
         
-            # This be set automatically once the plugin has been loaded.
-    package_name = None
+        # Find all the faces in the image using the default HOG-based model.
+# This method is fairly accurate, but not as accurate as the CNN model and not GPU accelerated.
+# See also: find_faces_in_picture_cnn.py
+face_locations = face_recognition.face_locations(image)
+    
+    # Find all the faces in the image using a pre-trained convolutional neural network.
+# This method is more accurate than the default HOG model, but it's slower
+# unless you have an nvidia GPU and dlib compiled with CUDA extensions. But if you do,
+# this will use GPU acceleration and perform well.
+# See also: find_faces_in_picture.py
+face_locations = face_recognition.face_locations(image, number_of_times_to_upsample=0, model='cnn')
+    
+            if file.filename == '':
+            return redirect(request.url)
+    
+    # Open video file
+video_capture = cv2.VideoCapture('short_hamilton_clip.mp4')
+    
+        :param img: An image (as a numpy array)
+    :param number_of_times_to_upsample: How many times to upsample the image looking for faces. Higher numbers find smaller faces.
+    :param model: Which face detection model to use. 'hog' is less accurate but faster on CPUs. 'cnn' is a more accurate
+                  deep-learning model which is GPU/CUDA accelerated (if available). The default is 'hog'.
+    :return: A list of tuples of found face locations in css (top, right, bottom, left) order
+    '''
+    if model == 'cnn':
+        return [_trim_css_to_bounds(_rect_to_css(face.rect), img.shape) for face in _raw_face_locations(img, number_of_times_to_upsample, 'cnn')]
+    else:
+        return [_trim_css_to_bounds(_rect_to_css(face), img.shape) for face in _raw_face_locations(img, number_of_times_to_upsample, model)]
+    
+        # Apply some eyeliner
+    d.line(face_landmarks['left_eye'] + [face_landmarks['left_eye'][0]], fill=(0, 0, 0, 110), width=6)
+    d.line(face_landmarks['right_eye'] + [face_landmarks['right_eye'][0]], fill=(0, 0, 0, 110), width=6)
+    
+    from timeit import Timer
     
     
-def test_default_options_overwrite(httpbin):
-    env = MockEnvironment()
-    env.config['default_options'] = ['--form']
-    env.config.save()
-    r = http('--json', httpbin.url + '/post', 'foo=bar', env=env)
-    assert r.json['json'] == {'foo': 'bar'}
+def main():
+    parse_command_line()
+    if options.dump:
+        print(tmpl.code)
+        sys.exit(0)
+    t = Timer(render)
+    results = t.timeit(options.num) / options.num
+    print('%0.3f ms per iteration' % (results * 1000))
     
-        def test_POST_explicit_JSON_auto_JSON_accept(self, httpbin):
-        r = http('--json', 'POST', httpbin.url + '/post')
-        assert HTTP_OK in r
-        assert r.json['headers']['Accept'] == JSON_ACCEPT
-        # Make sure Content-Type gets set even with no data.
-        # https://github.com/jakubroztocil/httpie/issues/137
-        assert 'application/json' in r.json['headers']['Content-Type']
     
-        exc = Timeout('Request timed out')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR_TIMEOUT
-    assert error_msg == 'Request timed out (30s).'
+def all():
+    return unittest.defaultTestLoader.loadTestsFromNames(TEST_MODULES)
+    
+        def test_oauth10_get_user(self):
+        response = self.fetch(
+            '/oauth10/client/login?oauth_token=zxcv',
+            headers={'Cookie': '_oauth_request_token=enhjdg==|MTIzNA=='},
+        )
+        response.rethrow()
+        parsed = json_decode(response.body)
+        self.assertEqual(parsed['email'], 'foo@example.com')
+        self.assertEqual(parsed['access_token'], dict(key='uiop', secret='5678'))
+    
+    
+class ClientTestMixin(object):
+    def setUp(self):
+        super(ClientTestMixin, self).setUp()  # type: ignore
+        self.server = CapServer()
+        sock, port = bind_unused_port()
+        self.server.add_sockets([sock])
+        self.client = self.client_class(port=port)
+    
+        def get_ucp_test_image_tag(self, tag=None):
+        return '{image}:{tag}'.format(
+            image=COMPOSE_TESTS_IMAGE_BASE_NAME,
+            tag=tag or self.version
+        )
+    
+        def find_release(self, version):
+        print('Retrieving release draft for {}'.format(version))
+        releases = self.gh_repo.get_releases()
+        for release in releases:
+            if release.tag_name == version and release.title == version:
+                return release
+        return None
+    
+        @property
+    def stop_signal(self):
+        return self.get('Config.StopSignal')
+    
+        if 'id' in event:
+        write_to_stream('%s: ' % event['id'], stream)
+    
+            if event['id'] in thread_map:
+            if thread_map[event['id']].is_alive():
+                continue
+            # Container was stopped and started, we need a new thread
+            thread_map.pop(event['id'], None)
+    
+        def __init__(self, volumes):
+        self.volumes = volumes
+    
+    
+class Save:
+    def __init__(self):
+        self.stream = None
+        self.filt = None
+        self.active_flows: typing.Set[flow.Flow] = set()
+    
+    
+class SetHeaders:
+    def __init__(self):
+        self.lst = []
+    
+        def response(self, flow: http.HTTPFlow):
+        if self.flt:
+            for name, (value, attrs) in flow.response.cookies.items(multi=True):
+                # FIXME: We now know that Cookie.py screws up some cookies with
+                # valid RFC 822/1123 datetime specifications for expiry. Sigh.
+                dom_port_path = ckey(attrs, flow)
+    
+    
+class ServerConnection(tcp.TCPClient, stateobject.StateObject):
+    '''
+    A server connection
+    
+    		page.addToken(0x05, 'LinkId')
+		page.addToken(0x06, 'DisplayName')
+		page.addToken(0x07, 'IsFolder')
+		page.addToken(0x08, 'CreationDate')
+		page.addToken(0x09, 'LastModifiedDate')
+		page.addToken(0x0A, 'IsHidden')
+		page.addToken(0x0B, 'ContentLength')
+		page.addToken(0x0C, 'ContentType')
+		self.codePages.append(page)
+		# endregion
+    
+        def __init__(self, wbxmlBytes):
+    
+            # find candidate events that are of the same topic as the provided
+        # error.
+        for data, _ in queue:
+            data = data.copy()
+            # and do they have a timestamp, uuid, and payload?
+            assert data.pop('event_ts', None) is not None, \
+                'event_ts is missing'
+            assert data.pop('uuid', None) is not None, 'uuid is missing'
+            # there is some variability, but this should at least be present
+            assert 'event_topic' in data, 'event_topic is missing'
+    
+        def test_no_body_signing_register(self):
+        res = self.do_login(
+            headers={
+                signing.SIGNATURE_BODY_HEADER: None,
+            },
+            expect_errors=True,
+        )
+        self.assert_403_response(res, 'signing.body.invalid.invalid_format')
+    
+            # Scenario: call raises AuthorizeNetException
+        _request.make_request.side_effect = AuthorizeNetException('')
+        return_value = delete_payment_profile(self.customer_id,
+                                              self.payment_profile_id)
+        self.assertFalse(return_value)
+    
+    
+    {                    'request_url': request.fullpath,
+                    'domain': request.host,
+                    'geoip_country': context.location,
+                    'oauth2_client_id': context.oauth2_client._id,
+                    'oauth2_client_app_type': context.oauth2_client.app_type,
+                    'oauth2_client_name': context.oauth2_client.name,
+                    'referrer_domain': self.domain_mock(),
+                    'referrer_url': request.headers.get(),
+                    'user_agent': request.user_agent,
+                    'user_agent_parsed': request.parsed_agent.to_dict(),
+                    'obfuscated_data': {
+                        'client_ip': request.ip,
+                    }
+                },
+            )
+        )
+    
+            for width in (108, 216, 320, 640, 960, 1080):
+            url = self.provider.resize_image(image, width)
+            self.assertEqual(url, 'http://s3.amazonaws.com/a.jpg')
 
     
-    import numpy as np
-from scipy.cluster import hierarchy
-import matplotlib.pyplot as plt
-    
-    fit_data = data[np.argsort(model.row_labels_)]
-fit_data = fit_data[:, np.argsort(model.column_labels_)]
-    
-    This example is commented in the
-:ref:`tutorial section of the user manual <introduction>`.
-    
-    
-# Plot clustering results
-for index, metric in enumerate(['cosine', 'euclidean', 'cityblock']):
-    model = AgglomerativeClustering(n_clusters=n_clusters,
-                                    linkage='average', affinity=metric)
-    model.fit(X)
-    plt.figure()
-    plt.axes([0, 0, 1, 1])
-    for l, c in zip(np.arange(model.n_clusters), 'rgbk'):
-        plt.plot(X[model.labels_ == l].T, c=c, alpha=.5)
-    plt.axis('tight')
-    plt.axis('off')
-    plt.suptitle('AgglomerativeClustering(affinity=%s)' % metric, size=20)
-    
-    np.random.seed(0)
-    
-    # #############################################################################
-# Compute clustering with MeanShift
-    
-    import numpy as np
-import matplotlib.pyplot as plt
-    
-        test_suite = 'tests',
-    
-        # Get (branch, commit) if running from a git repo.
-    head = git.get_head(kwargs['repo_path'])
-    
-        def prepare(self, **kwargs):
-    
-    
-    def download_by_id(self, vid = '', title = None, output_dir='.', merge=True, info_only=False,**kwargs):
-        '''self, str->None
-        
-        Keyword arguments:
-        self: self
-        vid: The video ID for BokeCC cloud, something like
-        FE3BB999594978049C33DC5901307461
-        
-        Calls the prepare() to download the video.
-        
-        If no title is provided, this method shall try to find a proper title
-        with the information providin within the
-        returned content of the API.'''
-    
-        if '_text' in dictified['video'][0]['size'][0]:  #size exists for 1 piece
-        video_dict['size'] = sum([int(i['size'][0]['_text']) for i in dictified['video']])
-    
-        elif 'subject' in url:
-        titles = re.findall(r'data-title='([^']*)'>', html)
-        song_id = re.findall(r'<li class='song-item' id='([^']*)'', html)
-        song_ssid = re.findall(r'data-ssid='([^']*)'', html)
-        get_song_url = 'http://music.douban.com/j/songlist/get_song_url'
-    
-            if s: self.streams['video'] = {'url': s }
-        if mp3: self.streams['audio'] = { 'url': mp3 }
-        if pdf: self.streams['slides'] = { 'url': pdf }
-    
-    from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
-    
-            # Removing index on 'EventTag', fields ['environment_id', 'key', 'value']
-        db.delete_index(u'tagstore_eventtag', ['environment_id', 'key_id', 'value_id'])
-    
-            # Removing index on 'TagValue', fields ['project_id', '_key', 'last_seen']
-        db.delete_index(u'tagstore_tagvalue', ['project_id', 'key_id', 'last_seen'])
-    
-        fftv.publish('cartoon')
-    fftv.publish('music')
-    fftv.publish('ads')
-    fftv.publish('movie')
-    fftv.publish('cartoon')
-    fftv.publish('cartoon')
-    fftv.publish('movie')
-    fftv.publish('blank')
-    
-        def __new__(cls, name, bases, attrs):
-        new_cls = type.__new__(cls, name, bases, attrs)
-        '''
-            Here the name of the class is used as key but it could be any class
-            parameter.
-        '''
-        cls.REGISTRY[new_cls.__name__] = new_cls
-        return new_cls
-    
-        x1 = 'x1'
-    x2 = 'x2'
-    
-        # Compute masks at different aspect ratios
-    for aspect_ratio in cfg.TEST.MASK_AUG.ASPECT_RATIOS:
-        masks_ar = im_detect_mask_aspect_ratio(model, im, aspect_ratio, boxes)
-        masks_ts.append(masks_ar)
-    
-        # For other levels add top-down and lateral connections
-    for i in range(num_backbone_stages - 1):
-        add_topdown_lateral_module(
-            model,
-            output_blobs[i],             # top-down blob
-            lateral_input_blobs[i + 1],  # lateral blob
-            output_blobs[i + 1],         # next output blob
-            fpn_dim,                     # output dimension
-            fpn_dim_lateral[i + 1]       # lateral input dimension
+        def test_expired_header(self):
+        body = '{'user': 'reddit', 'password': 'hunter2'}'
+        platform = 'test'
+        version = 1
+        header = '1:%s:%s:0:deadbeef' % (platform, version)
+        self.assert_invalid(
+            body,
+            header=header,
+            error=signing.ERRORS.EXPIRED_TOKEN,
+            global_version=1,
+            platform=platform,
+            version=version,
+            has_mac=True,
         )
+
     
+        def test_padding_roundtrip(self):
+        from r2.lib.tracking import _unpad_message, _pad_message
+        tested = _unpad_message(_pad_message(MESSAGE))
+        self.assertEquals(MESSAGE, tested)
     
-def add_roi_Xconv1fc_head(model, blob_in, dim_in, spatial_scale):
-    '''Add a X conv + 1fc head, as a reference if not using GroupNorm'''
-    hidden_dim = cfg.FAST_RCNN.CONV_HEAD_DIM
-    roi_size = cfg.FAST_RCNN.ROI_XFORM_RESOLUTION
-    roi_feat = model.RoIFeatureTransform(
-        blob_in,
-        'roi_feat',
-        blob_rois='rois',
-        method=cfg.FAST_RCNN.ROI_XFORM_METHOD,
-        resolution=roi_size,
-        sampling_ratio=cfg.FAST_RCNN.ROI_XFORM_SAMPLING_RATIO,
-        spatial_scale=spatial_scale
-    )
-    
-    
-def add_roi_pose_head_v1convX(model, blob_in, dim_in, spatial_scale):
-    '''Add a Mask R-CNN keypoint head. v1convX design: X * (conv).'''
-    hidden_dim = cfg.KRCNN.CONV_HEAD_DIM
-    kernel_size = cfg.KRCNN.CONV_HEAD_KERNEL
-    pad_size = kernel_size // 2
-    current = model.RoIFeatureTransform(
-        blob_in,
-        '_[pose]_roi_feat',
-        blob_rois='keypoint_rois',
-        method=cfg.KRCNN.ROI_XFORM_METHOD,
-        resolution=cfg.KRCNN.ROI_XFORM_RESOLUTION,
-        sampling_ratio=cfg.KRCNN.ROI_XFORM_SAMPLING_RATIO,
-        spatial_scale=spatial_scale
-    )
-    
-    def add_training_inputs(model, roidb=None):
-    '''Create network input ops and blobs used for training. To be called
-    *after* model_builder.create().
-    '''
-    # Implementation notes:
-    #   Typically, one would create the input ops and then the rest of the net.
-    #   However, creating the input ops depends on loading the dataset, which
-    #   can take a few minutes for COCO.
-    #   We prefer to avoid waiting so debugging can fail fast.
-    #   Thus, we create the net *without input ops* prior to loading the
-    #   dataset, and then add the input ops after loading the dataset.
-    #   Since we defer input op creation, we need to do a little bit of surgery
-    #   to place the input ops at the start of the network op list.
-    assert model.train, 'Training inputs can only be added to a trainable model'
-    if roidb is not None:
-        # To make debugging easier you can set cfg.DATA_LOADER.NUM_THREADS = 1
-        model.roi_data_loader = RoIDataLoader(
-            roidb,
-            num_loaders=cfg.DATA_LOADER.NUM_THREADS,
-            minibatch_queue_size=cfg.DATA_LOADER.MINIBATCH_QUEUE_SIZE,
-            blobs_queue_capacity=cfg.DATA_LOADER.BLOBS_QUEUE_CAPACITY
+        def test_weird_protocols(self):
+        self.assertIsNotSafeRedditUrl(
+            'javascript://%s/%%0d%%0aalert(1)' % g.domain
         )
-    orig_num_op = len(model.net._net.op)
-    blob_names = roi_data_minibatch.get_minibatch_blob_names(is_training=True)
-    for gpu_id in range(cfg.NUM_GPUS):
-        with c2_utils.NamedCudaScope(gpu_id):
-            for blob_name in blob_names:
-                workspace.CreateBlob(core.ScopedName(blob_name))
-            model.net.DequeueBlobs(
-                model.roi_data_loader._blobs_queue_name, blob_names
-            )
-    # A little op surgery to move input ops to the start of the net
-    diff = len(model.net._net.op) - orig_num_op
-    new_op = model.net._net.op[-diff:] + model.net._net.op[:-diff]
-    del model.net._net.op[:]
-    model.net._net.op.extend(new_op)
-    
-        # ==========================================================================
-    # cls loss - depends on softmax/sigmoid outputs
-    # ==========================================================================
-    for lvl in range(k_min, k_max + 1):
-        suffix = 'fpn{}'.format(lvl)
-        cls_lvl_logits = 'retnet_cls_pred_' + suffix
-        if not cfg.RETINANET.SOFTMAX:
-            cls_focal_loss = model.net.SigmoidFocalLoss(
-                [
-                    cls_lvl_logits, 'retnet_cls_labels_' + suffix,
-                    'retnet_fg_num'
-                ],
-                ['fl_{}'.format(suffix)],
-                gamma=cfg.RETINANET.LOSS_GAMMA,
-                alpha=cfg.RETINANET.LOSS_ALPHA,
-                scale=model.GetLossScale(),
-                num_classes=model.num_classes - 1
-            )
-            gradients.append(cls_focal_loss)
-            losses.append('fl_{}'.format(suffix))
-        else:
-            cls_focal_loss, gated_prob = model.net.SoftmaxFocalLoss(
-                [
-                    cls_lvl_logits, 'retnet_cls_labels_' + suffix,
-                    'retnet_fg_num'
-                ],
-                ['fl_{}'.format(suffix), 'retnet_prob_{}'.format(suffix)],
-                gamma=cfg.RETINANET.LOSS_GAMMA,
-                alpha=cfg.RETINANET.LOSS_ALPHA,
-                scale=model.GetLossScale(),
-                num_classes=model.num_classes
-            )
-            gradients.append(cls_focal_loss)
-            losses.append('fl_{}'.format(suffix))
-    
-    from detectron.core.config import cfg
-from detectron.modeling.generate_anchors import generate_anchors
-from detectron.utils.c2 import const_fill
-from detectron.utils.c2 import gauss_fill
-import detectron.modeling.FPN as FPN
-import detectron.utils.blob as blob_utils
-    
-    import logging
-    
-    from detectron.core.config import cfg
-import detectron.roi_data.fast_rcnn as fast_rcnn_roi_data
-import detectron.roi_data.retinanet as retinanet_roi_data
-import detectron.roi_data.rpn as rpn_roi_data
-import detectron.utils.blob as blob_utils
-    
-    
-class BatchPermutationOpTest(unittest.TestCase):
-    def _run_op_test(self, X, I, check_grad=False):
-        with core.DeviceScope(core.DeviceOption(caffe2_pb2.CUDA, 0)):
-            op = core.CreateOperator('BatchPermutation', ['X', 'I'], ['Y'])
-            workspace.FeedBlob('X', X)
-            workspace.FeedBlob('I', I)
-        workspace.RunOperatorOnce(op)
-        Y = workspace.FetchBlob('Y')
-    
-    
-def test_fixarray():
-    check_array(1, 0)
-    check_array(1, (1 << 4) - 1)
-    
-        expected = series.groupby(groupers).mean()
-    
-        s = s.sort_index()
+        self.assertIsNotSafeRedditUrl('hackery:whatever')
