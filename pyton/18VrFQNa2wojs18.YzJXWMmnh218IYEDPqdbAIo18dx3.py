@@ -1,112 +1,114 @@
 
         
-            try:
-        citext_oids = get_citext_oids(connection.alias)
-        array_type = psycopg2.extensions.new_array_type(citext_oids, 'citext[]', psycopg2.STRING)
-        psycopg2.extensions.register_type(array_type, None)
-    except ProgrammingError:
-        # citext is not available on the database.
-        #
-        # The same comments in the except block of the above call to
-        # register_hstore() also apply here.
-        pass
-
+          Args:
+    length: Sequence length.
+    hidden_size: Size of the
+    min_timescale: Minimum scale that will be applied at each position
+    max_timescale: Maximum scale that will be applied at each position
     
+      def __init__(self, output_dir=None, root_data_dir=None, **kwargs):
+    def_flags = {}
+    def_flags['param_set'] = 'big'
+    def_flags['use_synthetic_data'] = True
+    def_flags['train_steps'] = 200
+    def_flags['steps_between_evals'] = 200
+    def_flags['hooks'] = ['ExamplesPerSecondHook']
     
-class RangeMaxValueValidator(MaxValueValidator):
-    def compare(self, a, b):
-        return a.upper is None or a.upper > b
-    message = _('Ensure that this range is completely less than or equal to %(limit_value)s.')
+      def _ComputeVlad(self,
+                   features,
+                   codebook,
+                   use_l2_normalization=True,
+                   num_assignments=1):
+    '''Compute VLAD representation.
     
-        def load(self):
-        try:
-            session_data = self._cache.get(self.cache_key)
-        except Exception:
-            # Some backends (e.g. memcache) raise an exception on invalid
-            # cache keys. If this happens, reset the session. See #17810.
-            session_data = None
-        if session_data is not None:
-            return session_data
-        self._session_key = None
-        return {}
+      Args:
+    image_names: List of image names. These are used to compose output file
+      names for boxes and features.
+    image_paths: List of image paths. image_paths[i] is the path for the image
+      named by image_names[i]. `image_names` and `image_paths` must have the
+      same number of elements.
+    delf_config_path: Path to DelfConfig proto text file.
+    detector_model_dir: Directory where detector SavedModel is located.
+    detector_thresh: Threshold used to decide if an image's detected box
+      undergoes feature extraction.
+    output_features_dir: Directory where DELF features will be written to.
+    output_boxes_dir: Directory where detected boxes will be written to.
+    output_mapping: CSV file which maps each .delf file name to the image ID and
+      detected box ID.
     
-        def __init__(self, session_key=None):
-        self._cache = caches[settings.SESSION_CACHE_ALIAS]
-        super().__init__(session_key)
+      aggregation_extraction.ExtractAggregatedRepresentationsToFiles(
+      image_names=image_list,
+      features_dir=cmd_args.features_dir,
+      aggregation_config_path=cmd_args.aggregation_config_path,
+      mapping_path=cmd_args.index_mapping_path,
+      output_aggregation_dir=cmd_args.output_aggregation_dir)
     
-        class Meta:
-        abstract = True
-        verbose_name = _('session')
-        verbose_name_plural = _('sessions')
+    from delf import feature_extractor
     
-        def as_hidden(self, attrs=None, **kwargs):
-        '''
-        Return a string of HTML for representing this as an <input type='hidden'>.
-        '''
-        return self.as_widget(self.field.hidden_widget(), attrs, **kwargs)
+    args = parser.parse_args()
     
-    
-class ContentDecodingError(RequestException, BaseHTTPError):
-    '''Failed to decode response content'''
-    
-        All keys are expected to be strings. The structure remembers the
-    case of the last key to be set, and ``iter(instance)``,
-    ``keys()``, ``items()``, ``iterkeys()``, and ``iteritems()``
-    will contain case-sensitive keys. However, querying and contains
-    testing is case insensitive::
-    
-    import sys
-    
-    
-@pytest.mark.parametrize('size,resolved', [
-    ('xx-small', '6pt'),
-    ('x-small', '{pt:f}pt'.format(pt=7.5)),
-    ('small', '{pt:f}pt'.format(pt=9.6)),
-    ('medium', '12pt'),
-    ('large', '{pt:f}pt'.format(pt=13.5)),
-    ('x-large', '18pt'),
-    ('xx-large', '24pt'),
-    
-    
-def test_incorrect_type_map():
-    unpacker = Unpacker()
-    unpacker.feed(packb(1))
-    try:
-        unpacker.read_map_header()
-        assert 0, 'should raise exception'
-    except UnexpectedTypeException:
-        assert 1, 'okay'
-    
-    
-class MyDict(dict):
-    pass
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-                if self._state in [CANCELLED, CANCELLED_AND_NOTIFIED]:
-                raise CancelledError()
-            elif self._state == FINISHED:
-                return self._exception
+        def __cut_detail(self, sentence):
+        blocks = re_han_detail.split(sentence)
+        for blk in blocks:
+            if re_han_detail.match(blk):
+                for word in self.__cut(blk):
+                    yield word
             else:
-                raise TimeoutError()
+                tmp = re_skip_detail.split(blk)
+                for x in tmp:
+                    if x:
+                        if re_num.match(x):
+                            yield pair(x, 'm')
+                        elif re_eng.match(x):
+                            yield pair(x, 'eng')
+                        else:
+                            yield pair(x, 'x')
     
-    # A shorter title for the navigation bar.  Default is the same as html_title.
-#html_short_title = None
     
-      if is_bad_config:
-    raise ValueError(
-        'You passed in `--do_lower_case=%s` with `--init_checkpoint=%s`. '
-        'However, `%s` seems to be a %s model, so you '
-        'should pass in `--do_lower_case=%s` so that the fine-tuning matches '
-        'how the model was pre-training. If this error is wrong, please '
-        'just comment out this check.' % (actual_flag, init_checkpoint,
-                                          model_name, case_name, opposite_flag))
+    {        self.assertTrue(is_valid('[]'))
+        self.assertTrue(is_valid('[]()[]'))
+        self.assertFalse(is_valid('[[[]]'))
+        self.assertTrue(is_valid('{([])}'))
+        self.assertFalse(is_valid('(}'))
     
-            tokens_a = []
-        for j in range(a_end):
-          tokens_a.extend(current_chunk[j])
+    
+class TestHuffmanCoding(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.file_in_name = 'huffman_coding_in.txt'
+        cls.file_out_bin_name = 'huffman_coding_out.bin'
+        cls.file_out_name = 'huffman_coding_out.txt'
+    
+            assert renderer, '.accepted_renderer not set on Response'
+        assert accepted_media_type, '.accepted_media_type not set on Response'
+        assert context is not None, '.renderer_context not set on Response'
+        context['response'] = self
+    
+        def handle(self, *args, **options):
+        username = options['username']
+        reset_token = options['reset_token']
+    
+                # if a form media type, copy data & files refs to the underlying
+            # http request so that closable objects are handled appropriately.
+            if is_form_media_type(self.content_type):
+                self._request._post = self.POST
+                self._request._files = self.FILES
+    
+            available_requests = self.num_requests - len(self.history) + 1
+        if available_requests <= 0:
+            return None
+    
+    
+def get_breadcrumbs(url, request=None):
+    '''
+    Given a url returns a list of breadcrumbs, which are each a
+    tuple of (name, url).
+    '''
+    from rest_framework.reverse import preserve_builtin_query_params
+    from rest_framework.views import APIView
+    
+        def test_generic_fk(self):
+        '''
+        Test a relationship that spans a GenericForeignKey field.
+        IE. A forward generic relationship.
+        '''
