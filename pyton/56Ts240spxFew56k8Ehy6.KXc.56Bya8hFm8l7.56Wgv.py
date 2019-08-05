@@ -1,237 +1,151 @@
 
         
-        
-def serialize(regularizer):
-    return serialize_keras_object(regularizer)
+          def _resized_image_given_text_proto(self, image, text_proto):
+    image_resizer_config = image_resizer_pb2.ImageResizer()
+    text_format.Merge(text_proto, image_resizer_config)
+    image_resizer_fn = image_resizer_builder.build(image_resizer_config)
+    image_placeholder = tf.placeholder(tf.uint8, [1, None, None, 3])
+    resized_image, _ = image_resizer_fn(image_placeholder)
+    with self.test_session() as sess:
+      return sess.run(resized_image, feed_dict={image_placeholder: image})
     
-        out1 = utils.preprocess_input(x, 'channels_last')
-    out1int = utils.preprocess_input(xint, 'channels_last')
-    out2 = utils.preprocess_input(np.transpose(x, (2, 0, 1)),
-                                  'channels_first')
-    out2int = utils.preprocess_input(np.transpose(xint, (2, 0, 1)),
-                                     'channels_first')
-    assert_allclose(out1, out2.transpose(1, 2, 0))
-    assert_allclose(out1int, out2int.transpose(1, 2, 0))
-    
-        input_tensor = Input(shape=(data_dim,))
-    dummy_model = Model(input_tensor, dense_layer(input_tensor))
-    
-    This example has modular design. The encoder, decoder and autoencoder
-are 3 models that share weights. For example, after training the
-autoencoder, the encoder can be used to  generate latent vectors
-of input data for low-dim visualization like PCA or TSNE.
-'''
-    
-    # convert class vectors to binary class matrices
-y_train = keras.utils.to_categorical(y_train, num_classes)
-y_test = keras.utils.to_categorical(y_test, num_classes)
+        Returns:
+      A tuple containing the number of positive and negative labels in the
+      subsample.
+    '''
+    input_length = tf.shape(sorted_indices_tensor)[0]
+    valid_positive_index = tf.greater(sorted_indices_tensor,
+                                      tf.zeros(input_length, tf.int32))
+    num_sampled_pos = tf.reduce_sum(tf.cast(valid_positive_index, tf.int32))
+    max_num_positive_samples = tf.constant(
+        int(sample_size * self._positive_fraction), tf.int32)
+    num_positive_samples = tf.minimum(max_num_positive_samples, num_sampled_pos)
+    num_negative_samples = tf.constant(sample_size,
+                                       tf.int32) - num_positive_samples
     
     
-def categorical_crossentropy(y_true, y_pred):
-    return K.categorical_crossentropy(y_true, y_pred)
+def prefetch(tensor_dict, capacity):
+  '''Creates a prefetch queue for tensors.
     
-    import scrapy
-from scrapy.commands import ScrapyCommand
-from scrapy.utils.template import render_templatefile, string_camelcase
-from scrapy.exceptions import UsageError
+        Returns:
+      A dictionary containing:
+        box_encodings: A list of float tensors of shape
+          [batch_size, num_anchors_i, q, code_size] representing the location of
+          the objects, where q is 1 or the number of classes. Each entry in the
+          list corresponds to a feature map in the input `image_features` list.
+        class_predictions_with_background: A list of float tensors of shape
+          [batch_size, num_anchors_i, num_classes + 1] representing the class
+          predictions for the proposals. Each entry in the list corresponds to a
+          feature map in the input `image_features` list.
+        (optional) Predictions from other heads.
+    '''
+    predictions = {
+        BOX_ENCODINGS: [],
+        CLASS_PREDICTIONS_WITH_BACKGROUND: [],
+    }
+    for head_name in self._other_heads.keys():
+      predictions[head_name] = []
+    # TODO(rathodv): Come up with a better way to generate scope names
+    # in box predictor once we have time to retrain all models in the zoo.
+    # The following lines create scope names to be backwards compatible with the
+    # existing checkpoints.
+    box_predictor_scopes = [_NoopVariableScope()]
+    if len(image_features) > 1:
+      box_predictor_scopes = [
+          tf.variable_scope('BoxPredictor_{}'.format(i))
+          for i in range(len(image_features))
+      ]
+    for (image_feature,
+         num_predictions_per_location, box_predictor_scope) in zip(
+             image_features, num_predictions_per_location_list,
+             box_predictor_scopes):
+      net = image_feature
+      with box_predictor_scope:
+        with slim.arg_scope(self._conv_hyperparams_fn()):
+          with slim.arg_scope([slim.dropout], is_training=self._is_training):
+            # Add additional conv layers before the class predictor.
+            features_depth = static_shape.get_depth(image_feature.get_shape())
+            depth = max(min(features_depth, self._max_depth), self._min_depth)
+            tf.logging.info('depth of additional conv before box predictor: {}'.
+                            format(depth))
+            if depth > 0 and self._num_layers_before_predictor > 0:
+              for i in range(self._num_layers_before_predictor):
+                net = slim.conv2d(
+                    net,
+                    depth, [1, 1],
+                    reuse=tf.AUTO_REUSE,
+                    scope='Conv2d_%d_1x1_%d' % (i, depth))
+            sorted_keys = sorted(self._other_heads.keys())
+            sorted_keys.append(BOX_ENCODINGS)
+            sorted_keys.append(CLASS_PREDICTIONS_WITH_BACKGROUND)
+            for head_name in sorted_keys:
+              if head_name == BOX_ENCODINGS:
+                head_obj = self._box_prediction_head
+              elif head_name == CLASS_PREDICTIONS_WITH_BACKGROUND:
+                head_obj = self._class_prediction_head
+              else:
+                head_obj = self._other_heads[head_name]
+              prediction = head_obj.predict(
+                  features=net,
+                  num_predictions_per_location=num_predictions_per_location)
+              predictions[head_name].append(prediction)
+    return predictions
     
-    from antlr3.constants import EOF
-from antlr3.exceptions import NoViableAltException, BacktrackingFailed
     
-        def __init__(self, state=None):
-        # Input stream of the recognizer. Must be initialized by a subclass.
-        self.input = None
+class TestGetValidHistoryWithoutCurrent(object):
+    @pytest.yield_fixture(autouse=True)
+    def fail_on_warning(self):
+        warnings.simplefilter('error')
+        yield
+        warnings.resetwarnings()
     
-    	for video in tab.childNodes:
-		if re.search(contentid, video.attributes['link'].value):
-			url = video.attributes['flv'].value
-			break
+    install_requires = ['psutil', 'colorama', 'six', 'decorator', 'pyte']
+extras_require = {':python_version<'3.4'': ['pathlib2'],
+                  ':python_version<'3.3'': ['backports.shutil_get_terminal_size'],
+                  ':sys_platform=='win32'': ['win_unicode_console']}
     
-        type, ext, size = url_info(video_url, headers=fake_headers)
+        def test_info(self, shell, Popen):
+        Popen.return_value.stdout.read.side_effect = [b'3.5.9']
+        assert shell.info() == 'ZSH 3.5.9'
     
-            else:
-            # gallery image
-            content = get_content(self.url)
-            image = json.loads(match1(content, r'image\s*:\s*({.*}),'))
-            ext = image['ext']
-            self.streams = {
-                'original': {
-                    'src': ['http://i.imgur.com/%s%s' % (image['hash'], ext)],
-                    'size': image['size'],
-                    'container': ext[1:]
-                },
-                'thumbnail': {
-                    'src': ['http://i.imgur.com/%ss%s' % (image['hash'], '.jpg')],
-                    'container': 'jpg'
-                }
-            }
-            self.title = image['title'] or image['hash']
-    
-        # Post-hoc scale-specific 3x3 convs
-    blobs_fpn = []
-    spatial_scales = []
-    for i in range(num_backbone_stages):
-        if cfg.FPN.USE_GN:
-            # use GroupNorm
-            fpn_blob = model.ConvGN(
-                output_blobs[i],
-                'fpn_{}'.format(fpn_level_info.blobs[i]),
-                dim_in=fpn_dim,
-                dim_out=fpn_dim,
-                group_gn=get_group_gn(fpn_dim),
-                kernel=3,
-                pad=1,
-                stride=1,
-                weight_init=xavier_fill,
-                bias_init=const_fill(0.0)
-            )
+        def how_to_configure(self):
+        if os.path.join(os.path.expanduser('~'), '.bashrc'):
+            config = '~/.bashrc'
+        elif os.path.join(os.path.expanduser('~'), '.bash_profile'):
+            config = '~/.bash_profile'
         else:
-            fpn_blob = model.Conv(
-                output_blobs[i],
-                'fpn_{}'.format(fpn_level_info.blobs[i]),
-                dim_in=fpn_dim,
-                dim_out=fpn_dim,
-                kernel=3,
-                pad=1,
-                stride=1,
-                weight_init=xavier_fill,
-                bias_init=const_fill(0.0)
-            )
-        blobs_fpn += [fpn_blob]
-        spatial_scales += [fpn_level_info.spatial_scales[i]]
+            config = 'bash config'
+    
+        def to_shell(self, command_script):
+        '''Prepares command for running in shell.'''
+        return command_script
+    
+        @memoize
+    def get_aliases(self):
+        raw_aliases = os.environ.get('TF_SHELL_ALIASES', '').split('\n')
+        return dict(self._parse_alias(alias)
+                    for alias in raw_aliases if alias and '=' in alias)
     
     
-def add_fast_rcnn_losses(model):
-    '''Add losses for RoI classification and bounding box regression.'''
-    cls_prob, loss_cls = model.net.SoftmaxWithLoss(
-        ['cls_score', 'labels_int32'], ['cls_prob', 'loss_cls'],
-        scale=model.GetLossScale()
-    )
-    loss_bbox = model.net.SmoothL1Loss(
-        [
-            'bbox_pred', 'bbox_targets', 'bbox_inside_weights',
-            'bbox_outside_weights'
-        ],
-        'loss_bbox',
-        scale=model.GetLossScale()
-    )
-    loss_gradients = blob_utils.get_loss_gradients(model, [loss_cls, loss_bbox])
-    model.Accuracy(['cls_prob', 'labels_int32'], 'accuracy_cls')
-    model.AddLosses(['loss_cls', 'loss_bbox'])
-    model.AddMetrics('accuracy_cls')
-    return loss_gradients
+@pytest.mark.usefixtures('no_memoize')
+@pytest.mark.parametrize('script, output', [
+    ('vom file.py', 'vom: not found'),
+    ('fucck', 'fucck: not found'),
+    ('puthon', ''puthon' is not recognized as an internal or external command'),
+    ('got commit', 'got: command not found')])
+def test_match(mocker, script, output):
+    mocker.patch('thefuck.rules.no_command.which', return_value=None)
     
     
-def _build_forward_graph(model, single_gpu_build_func):
-    '''Construct the forward graph on each GPU.'''
-    all_loss_gradients = {}  # Will include loss gradients from all GPUs
-    # Build the model on each GPU with correct name and device scoping
-    for gpu_id in range(cfg.NUM_GPUS):
-        with c2_utils.NamedCudaScope(gpu_id):
-            all_loss_gradients.update(single_gpu_build_func(model))
-    return all_loss_gradients
-    
-    
-def add_single_scale_rpn_losses(model):
-    '''Add losses for a single scale RPN model (i.e., no FPN).'''
-    # Spatially narrow the full-sized RPN label arrays to match the feature map
-    # shape
-    model.net.SpatialNarrowAs(
-        ['rpn_labels_int32_wide', 'rpn_cls_logits'], 'rpn_labels_int32'
-    )
-    for key in ('targets', 'inside_weights', 'outside_weights'):
-        model.net.SpatialNarrowAs(
-            ['rpn_bbox_' + key + '_wide', 'rpn_bbox_pred'], 'rpn_bbox_' + key
-        )
-    loss_rpn_cls = model.net.SigmoidCrossEntropyLoss(
-        ['rpn_cls_logits', 'rpn_labels_int32'],
-        'loss_rpn_cls',
-        scale=model.GetLossScale()
-    )
-    loss_rpn_bbox = model.net.SmoothL1Loss(
-        [
-            'rpn_bbox_pred', 'rpn_bbox_targets', 'rpn_bbox_inside_weights',
-            'rpn_bbox_outside_weights'
-        ],
-        'loss_rpn_bbox',
-        beta=1. / 9.,
-        scale=model.GetLossScale()
-    )
-    loss_gradients = blob_utils.get_loss_gradients(
-        model, [loss_rpn_cls, loss_rpn_bbox]
-    )
-    model.AddLosses(['loss_rpn_cls', 'loss_rpn_bbox'])
-    return loss_gradients
+@for_app('pyenv')
+def get_new_command(command):
+    broken = re.findall(r'pyenv: no such command `([^']*)'', command.output)[0]
+    matched = [replace_argument(command.script, broken, common_typo)
+               for common_typo in COMMON_TYPOS.get(broken, [])]
+    matched.extend(replace_command(command, broken, get_pyenv_commands()))
+    return matched
 
     
-        # Select foreground RoIs as those with >= FG_THRESH overlap
-    fg_inds = np.where(max_overlaps >= cfg.TRAIN.FG_THRESH)[0]
-    # Guard against the case when an image has fewer than fg_rois_per_image
-    # foreground RoIs
-    fg_rois_per_this_image = np.minimum(fg_rois_per_image, fg_inds.size)
-    # Sample foreground regions without replacement
-    if fg_inds.size > 0:
-        fg_inds = npr.choice(
-            fg_inds, size=fg_rois_per_this_image, replace=False
-        )
-    
-                if k.find('retnet_cls_labels') >= 0:
-                tmp = []
-                # concat anchors within an image
-                for i in range(0, len(v), A):
-                    tmp.append(np.concatenate(v[i: i + A], axis=1))
-                # concat images
-                blobs[k] = np.concatenate(tmp, axis=0)
-            else:
-                # for the bbox branch elements [per FPN level],
-                #  we have the targets and the fg boxes locations
-                # in the shape: M x 4 where M is the number of fg locations in a
-                # given image at the current FPN level. For the given level,
-                # the bbox predictions will be. The elements in the list are in
-                # order [[a0, ..., a9], [a0, ..., a9]]
-                # Concatenate them to form M x 4
-                blobs[k] = np.concatenate(v, axis=0)
-    return True
-    
-        roi_data_loader.register_sigint_handler()
-    roi_data_loader.start(prefill=True)
-    total_time = 0
-    for i in range(opts.num_batches):
-        start_t = time.time()
-        for _ in range(opts.x_factor):
-            workspace.RunNetOnce(net)
-        total_time += (time.time() - start_t) / opts.x_factor
-        logger.info(
-            '{:d}/{:d}: Averge dequeue time: {:.3f}s  [{:d}/{:d}]'.format(
-                i + 1, opts.num_batches, total_time / (i + 1),
-                roi_data_loader._minibatch_queue.qsize(),
-                cfg.DATA_LOADER.MINIBATCH_QUEUE_SIZE
-            )
-        )
-        # Sleep to simulate the time taken by running a little network
-        time.sleep(opts.sleep_time)
-        # To inspect:
-        # blobs = workspace.FetchBlobs(all_blobs)
-        # from IPython import embed; embed()
-    logger.info('Shutting down data loader...')
-    roi_data_loader.shutdown()
-    
-            mocap_id = sim.model.body_mocapid[obj1_id]
-        if mocap_id != -1:
-            # obj1 is the mocap, obj2 is the welded body
-            body_idx = obj2_id
-        else:
-            # obj2 is the mocap, obj1 is the welded body
-            mocap_id = sim.model.body_mocapid[obj2_id]
-            body_idx = obj1_id
-    
-        def register(self, closeable):
-        '''Registers an object with a 'close' method.
-    
-        def gas(self, gas):
-        'control: rear wheel drive'
-        gas = np.clip(gas, 0, 1)
-        for w in self.wheels[2:4]:
-            diff = gas - w.gas
-            if diff > 0.1: diff = 0.1  # gradually increase, but stop immediately
-            w.gas += diff
+    if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw?|\.exe)?$', '', sys.argv[0])
+    sys.exit({2}())'''
