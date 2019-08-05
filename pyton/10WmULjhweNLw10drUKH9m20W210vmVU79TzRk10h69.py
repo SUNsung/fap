@@ -1,121 +1,198 @@
 
         
-                # shell command to list all cert
-        # certutil -L -d sql:$HOME/.pki/nssdb
+            def get_queue(self, name, maxsize=0):
+        ''' Return a queue from the manager
+            If it doesn't exist, create it '''
+        logger.debug('QueueManager getting: '%s'', name)
+        queue = self.queues.get(name, None)
+        if not queue:
+            self.add_queue(name, maxsize)
+            queue = self.queues[name]
+        logger.debug('QueueManager got: '%s'', name)
+        return queue
     
-            if response.status not in self.config.check_ip_accept_status:
-            return False
+            def _unsparsify(var_x):
+            if not isinstance(var_x, tf.IndexedSlices):
+                return var_x
+            assert var_x.dense_shape is not None, \
+                'memory_saving_gradients encountered sparse gradients of unknown shape'
+            indices = var_x.indices
+            while indices.shape.ndims < var_x.values.shape.ndims:
+                indices = tf.expand_dims(indices, -1)
+            return tf.scatter_nd(indices, var_x.values, var_x.dense_shape)
     
-            if cmd.startswith('#'):
-            log.write('%s' % cmd)
-            continue
+            self.input_spec = InputSpec(ndim=ndim)
     
-        data = response.content
-    response_headers = response.headers
-    if 'content-encoding' not in response_headers and len(response.content) < URLFETCH_DEFLATE_MAXSIZE and response_headers.get('content-type', '').startswith(('text/', 'application/json', 'application/javascript')):
-        if 'gzip' in accept_encoding:
-            response_headers['Content-Encoding'] = 'gzip'
-            compressobj = zlib.compressobj(zlib.Z_DEFAULT_COMPRESSION, zlib.DEFLATED, -zlib.MAX_WBITS, zlib.DEF_MEM_LEVEL, 0)
-            dataio = BytesIO()
-            dataio.write('\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff')
-            dataio.write(compressobj.compress(data))
-            dataio.write(compressobj.flush())
-            dataio.write(struct.pack('<LL', zlib.crc32(data) & 0xFFFFFFFFL, len(data) & 0xFFFFFFFFL))
-            data = dataio.getvalue()
-        elif 'deflate' in accept_encoding:
-            response_headers['Content-Encoding'] = 'deflate'
-            data = zlib.compress(data)[2:-4]
-    if data:
-         response_headers['Content-Length'] = str(len(data))
-    response_headers_data = zlib.compress('\n'.join('%s:%s' % (k.title(), v) for k, v in response_headers.items() if not k.startswith('x-google-')))[2:-4]
-    if 'rc4' not in options:
-        start_response('200 OK', [('Content-Type', __content_type__)])
-        yield struct.pack('!hh', int(response.status_code), len(response_headers_data))+response_headers_data
-        yield data
-    else:
-        start_response('200 OK', [('Content-Type', __content_type__), ('X-GOA-Options', 'rc4')])
-        yield struct.pack('!hh', int(response.status_code), len(response_headers_data))
-        yield rc4crypt(response_headers_data, __password__)
-        yield rc4crypt(data, __password__)
+        def seriation(self, tree, points, current_index):
+        ''' Seriation method for sorted similarity
+            input:
+                - tree is a hierarchical tree (dendrogram)
+                - points is the number of points given to the clustering process
+                - current_index is the position in the tree for the recursive traversal
+            output:
+                - order implied by the hierarchical tree
     
-                    if c >= self.min[s] and c <= self.max[s]:
-                    # move to next state
-                    snext = self.transition[s][c-self.min[s]]
-                    #print 'in range, next state = %d' % snext
-                    
-                    if snext < 0:
-                        #print 'not a normal transition'
-                        # was in range but not a normal transition
-                        # must check EOT, which is like the else clause.
-                        # eot[s]>=0 indicates that an EOT edge goes to another
-                        # state.
-                        if self.eot[s] >= 0: # EOT Transition to accept state?
-                            #print 'EOT trans to accept state %d' % self.eot[s]
-                            
-                            s = self.eot[s]
-                            input.consume()
-                            # TODO: I had this as return accept[eot[s]]
-                            # which assumed here that the EOT edge always
-                            # went to an accept...faster to do this, but
-                            # what about predicated edges coming from EOT
-                            # target?
-                            continue
+        def extract_tabs(self, command='extract'):
+        ''' Build the extract tabs '''
+        logger.debug('Build extract tabs')
+        helptext = ('Updates preview from output every 5 '
+                    'seconds to limit disk contention')
+        PreviewExtract(self, 'preview', helptext, 5000, command)
+        logger.debug('Built extract tabs')
     
-                else:
-                if isinstance(self.input, CharStream):
-                    self.c = self.input.LT(1)
-                    self.line = self.input.line
-                    self.charPositionInLine = self.input.charPositionInLine
+    from lib.config import FaceswapConfig
+from lib.utils import full_path_split
     
-            See also reportError()
-	'''
-        return self._state.syntaxErrors
+        The following variables should be defined:
+        _HELPTEXT: A string describing what this plugin does
+        _DEFAULTS: A dictionary containing the options, defaults and meta information. The
+                   dictionary should be defined as:
+                       {<option_name>: {<metadata>}}
     
-        def test_unset_attr(self):
-        for func in [self.b, self.fi.a]:
-            try:
-                func.non_existent_attr
-            except AttributeError:
-                pass
-            else:
-                self.fail('using unknown attributes should raise '
-                          'AttributeError')
+        @staticmethod
+    def get_mask_type(mask_type, predicted_available):
+        ''' Return the requested mask type. Return default mask if
+            predicted requested but not available '''
+        logger.debug('Requested mask_type: %s', mask_type)
+        if mask_type == 'predicted' and not predicted_available:
+            mask_type = model_masks.get_default_mask()
+            logger.warning('Predicted selected, but the model was not trained with a mask. '
+                           'Switching to '%s'', mask_type)
+        logger.debug('Returning mask_type: %s', mask_type)
+        return mask_type
     
-                path = self.handler.translate_path('c:c:foo\\c:c:bar/filename')
-            path = path.replace(ntpath.sep, os.sep)
-            self.assertEqual(path, self.translated)
+            logger.trace('Blending box')
+        mask = np.expand_dims(self.mask, axis=-1)
+        new_face = np.clip(np.concatenate((new_face, mask), axis=-1), 0.0, 1.0)
+        logger.trace('Blended box')
+        return new_face
+
     
-    [1] http://www.yummly.com/recipe/Roasted-Asparagus-Epicurious-203718
+        The following variables should be defined:
+        _HELPTEXT: A string describing what this plugin does
+        _DEFAULTS: A dictionary containing the options, defaults and meta information. The
+                   dictionary should be defined as:
+                       {<option_name>: {<metadata>}}
     
-            print('Ordered results using pool.map() --- will block till complete:')
-        for x in pool.map(calculatestar, TASKS):
-            print('\t', x)
-        print()
+        def run(self, new_face):
+        ''' Perform selected adjustment on face '''
+        logger.trace('Performing scaling adjustment')
+        # Remove Mask for processing
+        reinsert_mask = False
+        if new_face.shape[2] == 4:
+            reinsert_mask = True
+            final_mask = new_face[:, :, -1]
+            new_face = new_face[:, :, :3]
+        new_face = self.process(new_face)
+        new_face = np.clip(new_face, 0.0, 1.0)
+        if reinsert_mask and new_face.shape[2] != 4:
+            # Reinsert Mask
+            new_face = np.concatenate((new_face, np.expand_dims(final_mask, axis=-1)), -1)
+        logger.trace('Performed scaling adjustment')
+        return new_face
+
     
-    #
-#
-#
+        The following keys are expected for the _DEFAULTS <metadata> dict:
+        datatype:  [required] A python type class. This limits the type of data that can be
+                   provided in the .ini file and ensures that the value is returned in the
+                   correct type to faceswap. Valid datatypes are: <class 'int'>, <class 'float'>,
+                   <class 'str'>, <class 'bool'>.
+        default:   [required] The default value for this option.
+        info:      [required] A string describing what this option does.
+        choices:   [optional] If this option's datatype is of <class 'str'> then valid
+                   selections can be defined here. This validates the option and also enables
+                   a combobox / radio option in the GUI.
+        gui_radio: [optional] If <choices> are defined, this indicates that the GUI should use
+                   radio buttons rather than a combobox to display this option.
+        min_max:   [partial] For <class 'int'> and <class 'float'> datatypes this is required
+                   otherwise it is ignored. Should be a tuple of min and max accepted values.
+                   This is used for controlling the GUI slider range. Values are not enforced.
+        rounding:  [partial] For <class 'int'> and <class 'float'> datatypes this is
+                   required otherwise it is ignored. Used for the GUI slider. For floats, this
+                   is the number of decimal places to display. For ints this is the step size.
+        fixed:     [optional] [train only]. Training configurations are fixed when the model is
+                   created, and then reloaded from the state file. Marking an item as fixed=False
+                   indicates that this value can be changed for existing models, and will override
+                   the value saved in the state file with the updated value in config. If not
+                   provided this will default to True.
+'''
     
-        - register() themselves and save the returned ID
-    - unregister() themselves upon close()
-    - include a __del__ method which close()'s the object
+        The following keys are expected for the _DEFAULTS <metadata> dict:
+        datatype:  [required] A python type class. This limits the type of data that can be
+                   provided in the .ini file and ensures that the value is returned in the
+                   correct type to faceswap. Valid datatypes are: <class 'int'>, <class 'float'>,
+                   <class 'str'>, <class 'bool'>.
+        default:   [required] The default value for this option.
+        info:      [required] A string describing what this option does.
+        choices:   [optional] If this option's datatype is of <class 'str'> then valid
+                   selections can be defined here. This validates the option and also enables
+                   a combobox / radio option in the GUI.
+        gui_radio: [optional] If <choices> are defined, this indicates that the GUI should use
+                   radio buttons rather than a combobox to display this option.
+        min_max:   [partial] For <class 'int'> and <class 'float'> datatypes this is required
+                   otherwise it is ignored. Should be a tuple of min and max accepted values.
+                   This is used for controlling the GUI slider range. Values are not enforced.
+        rounding:  [partial] For <class 'int'> and <class 'float'> datatypes this is
+                   required otherwise it is ignored. Used for the GUI slider. For floats, this
+                   is the number of decimal places to display. For ints this is the step size.
+        fixed:     [optional] [train only]. Training configurations are fixed when the model is
+                   created, and then reloaded from the state file. Marking an item as fixed=False
+                   indicates that this value can be changed for existing models, and will override
+                   the value saved in the state file with the updated value in config. If not
+                   provided this will default to True.
+'''
+    
+        def response(self, flow):
+        if not flow.reply.has_message:
+            self.run(flow, flow.response.headers)
+
+    
+    
+def ckey(attrs: Dict[str, str], f: http.HTTPFlow) -> TOrigin:
     '''
+        Returns a (domain, port, path) tuple.
+    '''
+    domain = f.request.host
+    path = '/'
+    if 'domain' in attrs:
+        domain = attrs['domain']
+    if 'path' in attrs:
+        path = attrs['path']
+    return (domain, f.request.port, path)
     
-    def create_seed(a=None, max_bytes=8):
-    '''Create a strong random seed. Otherwise, Python 2 would seed using
-    the system time, which might be non-robust especially in the
-    presence of concurrency.
+            self.id = str(uuid.uuid4())
+        self.alpn_proto_negotiated = None
+        self.tls_version = None
+        self.via = None
+        self.timestamp_start = None
+        self.timestamp_end = None
+        self.timestamp_tcp_setup = None
+        self.timestamp_tls_setup = None
     
-    def add_new_rollouts(spec_ids, overwrite):
-    environments = [spec for spec in envs.registry.all() if spec._entry_point is not None]
-    if spec_ids:
-        environments = [spec for spec in environments if spec.id in spec_ids]
-        assert len(environments) == len(spec_ids), 'Some specs not found'
-    with open(ROLLOUT_FILE) as data_file:
-        rollout_dict = json.load(data_file)
-    modified = False
-    for spec in environments:
-        if not overwrite and spec.id in rollout_dict:
-            logger.debug('Rollout already exists for {}. Skipping.'.format(spec.id))
-        else:
-            modified = update_rollout_dict(spec, rollout_dict) or modified
+        for i in range(3):
+        for j in range(3):
+            grid_add = 0
+            for k in range(3):
+                for l in range(3):
+                    grid_add += board[i*3+k][j*3+l]
+            if grid_add != 45:
+                return False
+    return True
+    
+            def get_code_tree(T):
+            nonlocal tree_code
+            if T.sign is not None:
+                signs.append(T.sign)
+            if T.left:
+                tree_code += '0'
+                get_code_tree(T.left)
+            if T.right:
+                tree_code += '1'
+                get_code_tree(T.right)
+    
+        def insert(self, val):
+        if val not in self.idxs:
+            self.nums.append(val)
+            self.idxs[val] = len(self.nums)-1
+            return True
+        return False
