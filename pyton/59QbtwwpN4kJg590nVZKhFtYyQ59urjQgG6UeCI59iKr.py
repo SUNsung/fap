@@ -1,44 +1,72 @@
 
         
-        no_match_output = '''
-Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
-Get:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease [89.2 kB]
-Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
-Get:4 http://security.ubuntu.com/ubuntu zesty-security InRelease [89.2 kB]
-Hit:5 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
-Hit:6 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
-Hit:7 https://download.docker.com/linux/ubuntu zesty InRelease
-Get:8 http://us.archive.ubuntu.com/ubuntu zesty-updates/main i386 Packages [232 kB]
-Get:9 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 Packages [235 kB]
-Get:10 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 DEP-11 Metadata [55.2 kB]
-Get:11 http://us.archive.ubuntu.com/ubuntu zesty-updates/main DEP-11 64x64 Icons [32.3 kB]
-Get:12 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 Packages [156 kB]
-Get:13 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe i386 Packages [156 kB]
-Get:14 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 DEP-11 Metadata [175 kB]
-Get:15 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe DEP-11 64x64 Icons [253 kB]
-Get:16 http://us.archive.ubuntu.com/ubuntu zesty-updates/multiverse amd64 DEP-11 Metadata [5,840 B]
-Get:17 http://us.archive.ubuntu.com/ubuntu zesty-backports/universe amd64 DEP-11 Metadata [4,588 B]
-Get:18 http://security.ubuntu.com/ubuntu zesty-security/main amd64 DEP-11 Metadata [12.7 kB]
-Get:19 http://security.ubuntu.com/ubuntu zesty-security/main DEP-11 64x64 Icons [17.6 kB]
-Get:20 http://security.ubuntu.com/ubuntu zesty-security/universe amd64 DEP-11 Metadata [21.6 kB]
-Get:21 http://security.ubuntu.com/ubuntu zesty-security/universe DEP-11 64x64 Icons [47.7 kB]
-Get:22 http://security.ubuntu.com/ubuntu zesty-security/multiverse amd64 DEP-11 Metadata [208 B]
-Fetched 1,673 kB in 0s (1,716 kB/s)
-Reading package lists... Done
-Building dependency tree
-Reading state information... Done
-All packages are up to date.
-'''
+            # Separating the 'table of contents' from the contents (blocks)
+    table_of_contents = ''.join(read_me.split('- - -')[0])
+    blocks = ''.join(read_me.split('- - -')[1]).split('\n# ')
+    for i in range(len(blocks)):
+        if i == 0:
+            blocks[i] = blocks[i] + '\n'
+        else:
+            blocks[i] = '# ' + blocks[i] + '\n'
     
-            def reset(path):
-            os.mkdir('d')
-            with tarfile.TarFile(path, 'w') as archive:
-                for file in ('a', 'b', 'c', 'd/e'):
-                    with open(file, 'w') as f:
-                        f.write('*')
+      Args:
+    grid_height: size of the grid in the y direction (int or int scalar tensor)
+    grid_width: size of the grid in the x direction (int or int scalar tensor)
+    scales: a 1-d  (float) tensor representing the scale of each box in the
+      basis set.
+    aspect_ratios: a 1-d (float) tensor representing the aspect ratio of each
+      box in the basis set.  The length of the scales and aspect_ratios tensors
+      must be equal.
+    base_anchor_size: base anchor size as [height, width]
+      (float tensor of shape [2])
+    anchor_stride: difference in centers between base anchors for adjacent grid
+                   positions (float tensor of shape [2])
+    anchor_offset: center of the anchor with scale and aspect ratio 1 for the
+                   upper left element of the grid, this should be zero for
+                   feature networks with only VALID padding and even receptive
+                   field size, but may need some additional calculation if other
+                   padding is used (float tensor of shape [2])
+  Returns:
+    a BoxList holding a collection of N anchor boxes
+  '''
+  ratio_sqrts = tf.sqrt(aspect_ratios)
+  heights = scales / ratio_sqrts * base_anchor_size[0]
+  widths = scales * ratio_sqrts * base_anchor_size[1]
     
-        def __init__(self):
-        super(BaseAdapter, self).__init__()
+        tiled_anchor_centers = tf.tile(
+        tf.stack([ycenter_a, xcenter_a]), [self._num_keypoints, 1])
+    tiled_anchor_sizes = tf.tile(
+        tf.stack([ha, wa]), [self._num_keypoints, 1])
+    tkeypoints = (keypoints - tiled_anchor_centers) / tiled_anchor_sizes
     
-            # Deleting model 'ProcessingIssue'
-        db.delete_table('sentry_processingissue')
+      def call(self, inputs, training=None):
+    # Override the call arg only if the batchnorm is frozen. (Ignore None)
+    if self._training is False:  # pylint: disable=g-bool-id-comparison
+      training = self._training
+    return super(FreezableBatchNorm, self).call(inputs, training=training)
+
+    
+        Args:
+      rpn_box_encodings: 3-D float tensor of shape
+        [batch_size, num_valid_anchors, self._box_coder.code_size] containing
+        predicted boxes.
+      rpn_objectness_predictions_with_background: 3-D float tensor of shape
+        [batch_size, num_valid_anchors, 2] containing class
+        predictions (logits) for each of the anchors.  Note that this
+        tensor *includes* background class predictions (at class index 0).
+      rpn_features: A 4-D float32 tensor with shape
+        [batch_size, height, width, depth] representing image features from the
+        RPN.
+      anchors: 2-D float tensor of shape
+        [num_anchors, self._box_coder.code_size].
+      image_shape: A 1D int32 tensors of size [4] containing the image shape.
+      true_image_shapes: int32 tensor of shape [batch, 3] where each row is
+        of the form [height, width, channels] indicating the shapes
+        of true images in the resized images, as resized images can be padded
+        with zeros.
+    
+    
+class WeightSharedConvolutionalMaskHead(head.KerasHead):
+  '''Weight shared convolutional mask prediction head based on Keras.'''
+    
+            i = 1
