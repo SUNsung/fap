@@ -1,136 +1,90 @@
 
         
-        versions_info = json.load(open('update/versions.json'))
-if 'signature' in versions_info:
-    del versions_info['signature']
+        
+class LinkedList(object):
+    
+    from enum import Enum
     
     
-def main():
-    with open('supportedsites.html.in', 'r', encoding='utf-8') as tmplf:
-        template = tmplf.read()
+class HitCounts(MRJob):
     
-        with io.open(infile, encoding='utf-8') as inf:
-        readme = inf.read()
+        def __init__(self):
+        self.lookup = {}  # key: person_id, value: person_server
     
-    print('WARNING: Lazy loading extractors is an experimental feature that may not always work', file=sys.stderr)
+        def adjust_request_args(self, args):
+        args['url'] = self.args[0]
+        return args
     
-        def test_allsubtitles(self):
-        print('Skipping, only available from Spain')
-        return
-        self.DL.params['writesubtitles'] = True
-        self.DL.params['allsubtitles'] = True
-        subtitles = self.getSubtitles()
-        self.assertEqual(set(subtitles.keys()), set(['es']))
-        self.assertEqual(md5(subtitles['es']), '69e70cae2d40574fb7316f31d6eb7fca')
+        class _v20_S3Connection(S3Connection):
+        '''A dummy S3Connection wrapper that doesn't do any synchronous download'''
+        def _mexe(self, http_request, *args, **kwargs):
+            http_request.authorize(connection=self)
+            return http_request.headers
+    
+        def __init__(self, headers):
+        self._headers = headers
+    
+        # The font size ('10pt', '11pt' or '12pt').
+    #'pointsize': '10pt',
+    
+    Algorithm Description:
+The knn classifier is first trained on a set of labeled (known) faces and can then predict the person
+in an unknown image by finding the k most similar faces (images with closet face-features under eucledian distance)
+in its training set, and performing a majority vote (possibly weighted) on their label.
     
     
-class UnaccentExtension(CreateExtension):
+def print_result(filename, location):
+    top, right, bottom, left = location
+    print('{},{},{},{},{}'.format(filename, top, right, bottom, left))
     
-        def __init__(self, keys, strict=False, messages=None):
-        self.keys = set(keys)
-        self.strict = strict
-        if messages is not None:
-            self.messages = {**self.messages, **messages}
+    # This is a super simple (but slow) example of running face recognition on live video from your webcam.
+# There's a second example that's a little more complicated but runs faster.
     
-        def save(self, must_create=False):
-        if self.session_key is None:
-            return self.create()
-        if must_create:
-            func = self._cache.add
-        elif self._cache.get(self.cache_key) is not None:
-            func = self._cache.set
-        else:
-            raise UpdateError
-        result = func(self.cache_key,
-                      self._get_session(no_load=must_create),
-                      self.get_expiry_age())
-        if must_create and not result:
-            raise CreateError
+    # Load a second sample picture and learn how to recognize it.
+biden_image = face_recognition.load_image_file('biden.jpg')
+biden_face_encoding = face_recognition.face_encodings(biden_image)[0]
     
-        def load(self):
-        try:
-            data = self._cache.get(self.cache_key)
-        except Exception:
-            # Some backends (e.g. memcache) raise an exception on invalid
-            # cache keys. If this happens, reset the session. See #17810.
-            data = None
     
-        @get_item_parameters
-    def test_get(self, key, value):
-        assert self.lookup_dict.get(key) == value
+  def ShouldUseCache( self ):
+    return bool( self.user_options[ 'cache_omnifunc' ] )
+    
+      current_buffer = VimBuffer( 'buffer',
+                              contents = [ '†åsty_π.ππ' ],
+                              filetype = FILETYPE,
+                              omnifunc = Omnifunc )
+    
+            # When there are multiple fixit suggestions, present them as a list to
+        # the user hand have her choose which one to apply.
+        if len( self._response[ 'fixits' ] ) > 1:
+          fixit_index = vimsupport.SelectFromList(
+            'Multiple FixIt suggestions are available at this location. '
+            'Which one would you like to apply?',
+            [ fixit[ 'text' ] for fixit in self._response[ 'fixits' ] ] )
+    
+    
+@contextlib.contextmanager
+def UserOptions( options ):
+  old_vim_options = test_utils.VIM_OPTIONS.copy()
+  test_utils.VIM_OPTIONS.update( DEFAULT_CLIENT_OPTIONS )
+  test_utils.VIM_OPTIONS.update( options )
+  try:
+    yield
+  finally:
+    test_utils.VIM_OPTIONS = old_vim_options
+    
+    
+def SendShutdownRequest():
+  request = ShutdownRequest()
+  # This is a blocking call.
+  request.Start()
 
     
     
-def dispatch_hook(key, hooks, hook_data, **kwargs):
-    '''Dispatches a hook dictionary on a given piece of data.'''
-    hooks = hooks or {}
-    hooks = hooks.get(key)
-    if hooks:
-        if hasattr(hooks, '__call__'):
-            hooks = [hooks]
-        for hook in hooks:
-            _hook_data = hook(hook_data, **kwargs)
-            if _hook_data is not None:
-                hook_data = _hook_data
-    return hook_data
-
+def _assert_accepts( filter, text ):
+  _assert_accept_equals( filter, text, True )
     
-    
-def test_idna_without_version_attribute(mocker):
-    '''Older versions of IDNA don't provide a __version__ attribute, verify
-    that if we have such a package, we don't blow up.
-    '''
-    mocker.patch('requests.help.idna', new=None)
-    assert info()['idna'] == {'version': ''}
-    
-        def test_server_finishes_when_no_connections(self):
-        '''the server thread exits even if there are no connections'''
-        server = Server.basic_response_server()
-        with server:
-            pass
-    
-        def post(self, url, data=None, json=None, **kwargs):
-        r'''Sends a POST request. Returns :class:`Response` object.
-    
-                def __iter__(self):
-                return iter(self.data)
-    
-        def test_shall_toggle_from_am_to_fm(self):
-        self.radio.toggle_amfm()
-        state = self.radio.state.name
-        expected_state_name = 'FM'
-        self.assertEqual(state, expected_state_name)
-    
-        def test_sales_manager_shall_talk_through_proxy_with_delay(cls):
-        cls.p.busy = 'No'
-        start_time = time()
-        cls.p.talk()
-        end_time = time()
-        execution_time = end_time - start_time
-        print_output = cls.output.getvalue()
-        expected_print_output = 'Proxy checking for Sales Manager availability\n\
-Sales Manager ready to talk\n'
-        cls.assertEqual(print_output, expected_print_output)
-        expected_execution_time = 1
-        cls.assertEqual(int(execution_time * 10), expected_execution_time)
-    
-        jim = Subscriber('jim', message_center)
-    jim.subscribe('cartoon')
-    jack = Subscriber('jack', message_center)
-    jack.subscribe('music')
-    gee = Subscriber('gee', message_center)
-    gee.subscribe('movie')
-    vani = Subscriber('vani', message_center)
-    vani.subscribe('movie')
-    vani.unsubscribe('movie')
-    
-            instance = pool.get(key)
-        if instance is None:
-            instance = super(FlyweightMeta, cls).__call__(*args, **kwargs)
-            pool[key] = instance
-        return instance
-    
-    The Chain of responsibility is an object oriented version of the
-`if ... elif ... elif ... else ...` idiom, with the
-benefit that the condition–action blocks can be dynamically rearranged
-and reconfigured at runtime.
+        # For pickling to work, the __module__ variable needs to be set to the frame
+    # where the named tuple is created.  Bypass this step in enviroments where
+    # sys._getframe is not defined (Jython for example).
+    if hasattr(_sys, '_getframe'):
+        result.__module__ = _sys._getframe(1).f_globals.get('__name__', '__main__')
