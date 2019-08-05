@@ -1,197 +1,244 @@
 
         
-        #include 'tensorflow/core/framework/op.h'
+          /// Disable round-trip verification of mangled debug types.
+  unsigned DisableRoundTripDebugTypes : 1;
     
-    REGISTER_OP('Invalid')
-    .Attr('invalid attr: int32')  // invalid since the name has a space.
-    .Doc(R'doc(
-An op to test that invalid ops do not successfully generate invalid python code.
-)doc');
+      /// This class provides a non-trivial .cxx_construct or .cxx_destruct
+  /// implementation.
+  HasCXXStructors      = 0x00004,
     
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    namespace stream_executor {
-namespace host {
+    /// Header layout for a key path's data buffer header.
+class KeyPathBufferHeader {
+  uint32_t Data;
+  
+  constexpr KeyPathBufferHeader(unsigned Data) : Data(Data) {}
+  
+  static constexpr uint32_t validateSize(uint32_t size) {
+    return assert(size <= _SwiftKeyPathBufferHeader_SizeMask
+                  && 'size too big!'),
+           size;
+  }
+public:
+  constexpr KeyPathBufferHeader(unsigned size,
+                                bool trivialOrInstantiableInPlace,
+                                bool hasReferencePrefix)
+    : Data((validateSize(size) & _SwiftKeyPathBufferHeader_SizeMask)
+           | (trivialOrInstantiableInPlace ? _SwiftKeyPathBufferHeader_TrivialFlag : 0)
+           | (hasReferencePrefix ? _SwiftKeyPathBufferHeader_HasReferencePrefixFlag : 0)) 
+  {
+  }
+  
+  constexpr KeyPathBufferHeader withSize(unsigned size) const {
+    return (Data & ~_SwiftKeyPathBufferHeader_SizeMask) | validateSize(size);
+  }
+  
+  constexpr KeyPathBufferHeader withIsTrivial(bool isTrivial) const {
+    return (Data & ~_SwiftKeyPathBufferHeader_TrivialFlag)
+      | (isTrivial ? _SwiftKeyPathBufferHeader_TrivialFlag : 0);
+  }
+  constexpr KeyPathBufferHeader withIsInstantiableInPlace(bool isTrivial) const {
+    return (Data & ~_SwiftKeyPathBufferHeader_TrivialFlag)
+      | (isTrivial ? _SwiftKeyPathBufferHeader_TrivialFlag : 0);
+  }
     }
+    
+    /// RAII class that suppresses diagnostics by temporarily disabling all of
+/// the diagnostic consumers.
+class DiagnosticSuppression {
+  DiagnosticEngine &diags;
+  std::vector<DiagnosticConsumer *> consumers;
     }
     
-    uint64 HostTimer::Nanoseconds() const {
-  return duration_cast<std::chrono::nanoseconds>(duration_).count();
-}
+    public:
+  /// For templates such as DotFileEmitter.
+  using NodeType = ModuleDepGraphNode;
     
-      // Actually starts (rather than enqueues starting) the timer.
-  void StartNow();
+      // Write the document-level setup.
+  void writeDocSetup(PDFDoc *doc, Catalog *catalog, int firstPage, int lastPage, GBool duplexA);
+    
+    #endif
+
+    
+      // transtion
+  pageDict->lookupNF('Trans', &trans);
+  if (!(trans.isRef() || trans.isDict() || trans.isNull())) {
+    error(-1, 'Page transition object (page %d) is wrong type (%s)',
+	  num, trans.getTypeName());
+    trans.free();
+  }
+    
+      for (i = 0; i < intervals.getLength(); i++) {
+    interval = (Interval *) intervals.get(i);
+    const int base = interval->base;
+    prefixLength = interval->prefix->getLength();
+    if (label->cmpN(interval->prefix, prefixLength) != 0)
+      continue;
+    }
+    
+    #include <config.h>
+    
+    Sound::Sound(Object *obj, bool readAttrs)
+{
+  streamObj = new Object();
+  streamObj->initNull();
+  obj->copy(streamObj);
+    }
+    
+        glfwDestroyWindow(window);
+    glfwTerminate();
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+    // Forward declarations of helper functions
+bool CreateDeviceD3D(HWND hWnd);
+void CleanupDeviceD3D();
+void CreateRenderTarget();
+void CleanupRenderTarget();
+LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+    
+            // 3. Show another simple window.
+        if (show_another_window)
+        {
+            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
+        }
+    
+    IMGUI_IMPL_API bool     ImGui_ImplDX9_Init(IDirect3DDevice9* device);
+IMGUI_IMPL_API void     ImGui_ImplDX9_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplDX9_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data);
     
     
-    {  // Indicates a preference for equal amounts of L1 cache and shared memory.
-  kPreferEqual,
+    {  /*
+   * The fields we need here are just m_mask and m_table.  This would leave 4
+   * byte padding hole, though, which some users (e.g. IndexedStringMap) might
+   * have a use for, so we expose it as a slot for our users.
+   */
+  uint32_t  m_mask;
+  ExtraType m_extra;  // not ours
+  Elm*      m_table;
 };
     
     
-    {  // Cache the options for any kind of descriptor.
-  // Descriptor pointers are owned by the DescriptorPool above.
-  // Python objects are owned by the map.
-  std::unordered_map<const void*, PyObject*>* descriptor_options;
-} PyDescriptorPool;
+    {  ActRecState() {}
+  void pushFunc(const NormalizedInstruction& ni);
+  void pop();
+  const Func* knownFunc();
+};
     
-    std::string JSOneofIndex(const OneofDescriptor* oneof) {
-  int index = -1;
-  for (int i = 0; i < oneof->containing_type()->oneof_decl_count(); i++) {
-    const OneofDescriptor* o = oneof->containing_type()->oneof_decl(i);
-    // If at least one field in this oneof is not JSPB-ignored, count the oneof.
-    for (int j = 0; j < o->field_count(); j++) {
-      const FieldDescriptor* f = o->field(j);
-      if (!IgnoreField(f)) {
-        index++;
-        break;  // inner loop
-      }
+      /**
+   * Get this node's parent.
+   */
+  const Hdf parent() const;
+  Hdf parent();
+    
+      printFrameHdr(fd, frame_num);
+  demangle(fd, funcname);
+  printStr(fd, ' at ');
+  write_path(fd, filename);
+  printStr(fd, ':');
+  printInt(fd, frame.lineno);
+  printStr(fd, '\n');
+    
+    // Get a huge page from NUMA node `node`, and return the mapped address
+// specified by `addr` or nullptr on failure.  If `addr` is nullptr, the system
+// will choose a proper address.  If the address range [addr, addr+1G) already
+// contains address in the process address space, nullptr is returned and the
+// mapping won't be changed.  If `node` is -1, any NUMA node is OK.
+void* mmap_1g(void* addr, int node, bool map_fixed);
+    
+    namespace HPHP {
+///////////////////////////////////////////////////////////////////////////////
     }
-    if (o == oneof) {
-      break;
+    
+    void cgFloor(IRLS& env, const IRInstruction* inst) {
+  implRound<RoundDirection::floor>(vmain(env), env, inst);
+}
+void cgCeil(IRLS& env, const IRInstruction* inst) {
+  implRound<RoundDirection::ceil>(vmain(env), env, inst);
+}
+    
+    #pragma once
+    
+    void TestServer::RunServer() {
+  std::string out, err;
+  auto const portConfig = '-vServer.Port=' +
+    folly::to<std::string>(s_server_port);
+  auto const adminConfig = '-vAdminServer.Port=' +
+    folly::to<std::string>(s_admin_port);
+  auto const rpcConfig = '-vSatellites.rpc.Port=' +
+    folly::to<std::string>(s_rpc_port);
+  auto const fd = folly::to<std::string>(inherit_fd);
+  auto option = inherit_fd >= 0
+    ? '--port-fd=' + fd
+    : '-vServer.TakeoverFilename=' + std::string(s_filename);
+  auto serverType = std::string('-vServer.Type=') + m_serverType;
+  auto pidFile = std::string('-vPidFile=') + s_pidfile;
+  auto repoFile = std::string('-vRepo.Central.Path=') + s_repoFile;
+  auto logFile = std::string('-vLog.File=') + s_logFile;
     }
+    
+    class GraphSegmentorTest : public testing::Test {
+ protected:
+  void SetUp() {
+    edges_ = new Edge[10];
+    edges_[0].w = 6.f;
+    edges_[0].a = 1;
+    edges_[0].b = 2;
+    edges_[1].w = 1.f;
+    edges_[1].a = 1;
+    edges_[1].b = 3;
+    edges_[2].w = 5.f;
+    edges_[2].a = 1;
+    edges_[2].b = 4;
+    edges_[3].w = 5.f;
+    edges_[3].a = 3;
+    edges_[3].b = 2;
+    edges_[4].w = 5.f;
+    edges_[4].a = 3;
+    edges_[4].b = 4;
+    edges_[5].w = 3.f;
+    edges_[5].a = 5;
+    edges_[5].b = 2;
+    edges_[6].w = 6.f;
+    edges_[6].a = 3;
+    edges_[6].b = 5;
+    edges_[7].w = 4.f;
+    edges_[7].a = 3;
+    edges_[7].b = 0;
+    edges_[8].w = 2.f;
+    edges_[8].a = 4;
+    edges_[8].b = 0;
+    edges_[9].w = 6.f;
+    edges_[9].a = 5;
+    edges_[9].b = 0;
   }
-  return StrCat(index);
-}
-    
-      // Generate definitions for all message classes and enums in all files,
-  // processing the files in dependence order.
-  void GenerateFilesInDepOrder(
-      const GeneratorOptions& options, io::Printer* printer,
-      const std::vector<const FileDescriptor*>& file) const;
-  // Helper for above.
-  void GenerateFileAndDeps(const GeneratorOptions& options,
-                           io::Printer* printer, const FileDescriptor* root,
-                           std::set<const FileDescriptor*>* all_files,
-                           std::set<const FileDescriptor*>* generated) const;
-    
-    const char* EpsCopyInputStream::ReadStringFallback(const char* ptr, int size,
-                                                   std::string* s) {
-  s->clear();
-  // TODO(gerbens) assess security. At the moment its parity with
-  // CodedInputStream but it allows a payload to reserve large memory.
-  if (PROTOBUF_PREDICT_TRUE(size <= buffer_end_ - ptr + limit_)) {
-    s->reserve(size);
-  }
-  return AppendStringFallback(ptr, size, s);
-}
-    
-      std::pair<const char*, bool> DoneFallback(const char* ptr, int d);
-  const char* Next(int overrun, int d);
-  const char* SkipFallback(const char* ptr, int size);
-  const char* AppendStringFallback(const char* ptr, int size, std::string* str);
-  const char* ReadStringFallback(const char* ptr, int size, std::string* str);
-    
-      // Get the number of cleared objects that are currently being kept
-  // around for reuse.
-  int ClearedCount() const;
-  // Add an element to the pool of cleared objects, passing ownership to
-  // the RepeatedPtrField.  The element must be cleared prior to calling
-  // this method.
-  //
-  // This method cannot be called when the repeated field is on an arena or when
-  // |value| is; both cases will trigger a GOOGLE_DCHECK-failure.
-  void AddCleared(Element* value);
-  // Remove a single element from the cleared pool and return it, passing
-  // ownership to the caller.  The element is guaranteed to be cleared.
-  // Requires:  ClearedCount() > 0
-  //
-  //
-  // This method cannot be called when the repeated field is on an arena; doing
-  // so will trigger a GOOGLE_DCHECK-failure.
-  Element* ReleaseCleared();
-    
-    TEST(MessageDifferencerTest, TreatRepeatedFieldAsSetWithIgnoredFields) {
-  protobuf_unittest::TestDiffMessage msg1;
-  protobuf_unittest::TestDiffMessage msg2;
-  TextFormat::MergeFromString('rm { a: 11\n b: 12 }', &msg1);
-  TextFormat::MergeFromString('rm { a: 11\n b: 13 }', &msg2);
-  util::MessageDifferencer differ;
-  differ.TreatAsSet(GetFieldDescriptor(msg1, 'rm'));
-  differ.AddIgnoreCriteria(new TestIgnorer);
-  EXPECT_TRUE(differ.Compare(msg1, msg2));
-}
-    
-    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
-//   can only really compare the output against a golden value, which is a
-//   fairly tedious and fragile testing strategy.  If we want to go that route,
-//   it probably makes sense to bite the bullet and write a test that compares
-//   the whole generated output for unittest.proto against a golden value, with
-//   a very simple script that can be run to regenerate it with the latest code.
-//   This would mean that updates to the golden file would have to be included
-//   in any change to the code generator, which would actually be fairly useful
-//   as it allows the reviewer to see clearly how the generated code is
-//   changing.
-    
-    GBool PSTokenizer::getToken(char *buf, int size, int *length) {
-  GBool comment, backslash;
-  int c;
-  int i;
     }
     
-    //========================================================================
-//
-// Modified under the Poppler project - http://poppler.freedesktop.org
-//
-// All changes made under the Poppler project to this file are licensed
-// under GPL version 2 or later
-//
-// Copyright (C) 2006 Scott Turner <scotty1024@mac.com>
-//
-// To see a description of the changes please see the Changelog file that
-// came with your tarball or type make ChangeLog if you are building from git
-//
-//========================================================================
     
-      if (isPage) {
-    // cropBox can not be bigger than mediaBox
-    if (cropBox.x2 - cropBox.x1 > mediaBox.x2 - mediaBox.x1)
     {
-      cropBox.x1 = mediaBox.x1;
-      cropBox.x2 = mediaBox.x2;
-    }
-    if (cropBox.y2 - cropBox.y1 > mediaBox.y2 - mediaBox.y1)
     {
-      cropBox.y1 = mediaBox.y1;
-      cropBox.y2 = mediaBox.y2;
-    }
-  }
+    {}  // namespace io
+}  // namespace cyber
+}  // namespace apollo
+
     
-    class PageLabelInfo {
-public:
-  PageLabelInfo(Object *tree, int numPages);
-  ~PageLabelInfo();
-  GBool labelToIndex(GooString *label, int *index);
-  GBool indexToLabel(int index, GooString *label);
-    }
+    TEST(NaviSpeedTsGraph, ErrorTest) {}
+    
+    const std::string& Scenario::Name() const { return name_; }
     
     
-    {  if (windowParams.type == MediaWindowParameters::windowFloating) {
-    Object winDict;
-    if (obj->dictLookup('F',&winDict)->isDict()) {
-      windowParams.parseFWParams(&winDict);
-    }
-    winDict.free();
-  }
-}
-    
-    
-    {  if (!(core = (WinPDFCore *)doc->getGUIData()) ||
-      !(password = core->getPassword())) {
-    return NULL;
-  }
-  return new StandardAuthData(password, password->copy());
-#else
-  return NULL;
-#endif
-}
-    
-        // out_of_range.403
-    try
-    {
-        // try to use a JSON pointer to an nonexistent object key
-        json::const_reference ref = j.at('/foo'_json_pointer);
-    }
-    catch (json::out_of_range& e)
-    {
-        std::cout << e.what() << '\n';
-    }
+    { private:
+  bool is_receiving_ = false;
+  bool is_sending_finish_ = false;
+  CanAgent *other_agent_ = nullptr;
+  TestCanParam *param_ptr_ = nullptr;
+  std::unique_ptr<std::thread> thread_recv_;
+  std::unique_ptr<std::thread> thread_send_;
+};
