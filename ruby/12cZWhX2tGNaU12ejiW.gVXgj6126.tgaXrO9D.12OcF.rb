@@ -1,140 +1,161 @@
 
         
-            it 'should return consistent encodings for fresh and cached downloads' do
-      # Net::HTTP always returns binary ASCII-8BIT encoding. File.read auto-detects the encoding
-      # Make sure we File.read after downloading a file for consistency
+            should 'hide unpublished page' do
+      refute_exist dest_dir('/unpublished.html')
+    end
     
-      def descriptions_for(user)
-    descriptions_by_id[user.id].join ', '
+    def gem_file
+  '#{name}-#{Gem::Version.new(version)}.gem'
+end
+    
+    Nullam luctus fermentum est id blandit. Phasellus consectetur ullamcorper
+ligula, at finibus eros laoreet id. Etiam sit amet est in libero efficitur
+tristique. Ut nec magna augue. Quisque ut fringilla lacus, ac dictum enim.
+Aliquam vel ornare mauris. Suspendisse ornare diam tempor nulla facilisis
+aliquet. Sed ultrices placerat ultricies.
+TEXT
+    
+    def graceful_require
+  Jekyll::External.require_with_graceful_fail('json')
+  JSON.pretty_generate(DATA)
+end
+    
+    DOC_PATH = File.join(File.expand_path(__dir__), '_puppies', 'rover.md')
+COL_PATH = File.join(File.expand_path(__dir__), '_puppies')
+    
+        if successfully_sent?(resource)
+      respond_with({}, location: after_resending_confirmation_instructions_path_for(resource_name))
+    else
+      respond_with(resource)
+    end
   end
     
-          expect(Rails.logger.warnings).to eq(1)
-      expect(status).to eq(429)
+        # The path used after sending unlock password instructions
+    def after_sending_unlock_instructions_path_for(resource)
+      new_session_path(resource) if is_navigational_format?
     end
     
-          group2.update!(automatic: true)
+      def respond_with_navigational(*args, &block)
+    respond_with(*args) do |format|
+      format.any(*navigational_formats, &block)
+    end
+  end
     
-          result = reviewable.perform(current_user, params[:action_id].to_sym, args)
-    rescue Reviewable::InvalidAction => e
-      # Consider InvalidAction an InvalidAccess
-      raise Discourse::InvalidAccess.new(e.message)
-    rescue Reviewable::UpdateConflict
-      return render_json_error(I18n.t('reviewables.conflict'), status: 409)
+        def reset_password_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :reset_password_instructions, opts)
     end
     
-    RSpec.describe Admin::GroupsController do
-  fab!(:admin) { Fabricate(:admin) }
-  fab!(:user) { Fabricate(:user) }
-  fab!(:group) { Fabricate(:group) }
+    DeviseCreateUsers.migrate(:up)
     
-            expect(upload.extension).to eq('png')
-        expect(File.extname(upload.url)).to eq('.png')
-        expect(upload.original_filename).to eq('png_as.png')
+          generate_helpers!(Devise::URL_HELPERS)
+    
+        def initialize(name, options) #:nodoc:
+      @scoped_path = options[:as] ? '#{options[:as]}/#{name}' : name.to_s
+      @singular = (options[:singular] || @scoped_path.tr('/', '_').singularize).to_sym
+    
+    describe SoftwareSpec do
+  subject(:spec) { described_class.new }
+    
+          def pretty_name
+        to_sym.to_s.split('_').map(&:capitalize).join(' ')
       end
     
-        let(:src) do
-      [
-        'def foo; end',
-        'def bar; end',
-        'def baz; end'
-      ].join('\n')
+          ohai 'Installing Formula dependencies: #{not_installed.map(&:to_s).join(', ')}'
+      not_installed.each do |formula|
+        FormulaInstaller.new(formula).tap do |fi|
+          fi.installed_as_dependency = true
+          fi.installed_on_request = false
+          fi.show_header = true
+          fi.verbose = verbose?
+          fi.prelude
+          fi.install
+          fi.finish
+        end
+      end
     end
     
-            def correct_for_blockarg_type(node)
-          lambda do |corrector|
-            range = range_with_surrounding_space(range: node.source_range,
-                                                 side: :left)
-            range = range_with_surrounding_comma(range, :left)
-            corrector.remove(range)
+          it 'adds the appropriate curl args' do
+        expect(subject).to receive(:system_command!) { |*, args:, **|
+          expect(args.each_cons(2)).to include(['--user-agent', 'Mozilla/25.0.1'])
+        }
+    
+            # Initialize a new instance from its attributes.
+        #
+        # @param [Array<Specification>] specs      @see #specs
+        # @param [Array<Specification>] test_specs @see #test_specs
+        # @param [Array<Specification>] app_specs  @see #app_specs
+        # @param [Platform] platform               @see #platform
+        # @param [Target::BuildType] build_type    @see #build_type
+        #
+        def initialize(specs, test_specs, app_specs, platform, build_type = Target::BuildType.static_library)
+          @specs = specs
+          @test_specs = test_specs
+          @app_specs = app_specs
+          @platform = platform
+          @build_type = build_type
+          @hash = [specs, platform, build_type].hash
+        end
+    
+    Then(/^the release is created$/) do
+  run_vagrant_command('ls -g #{TestApp.releases_path}')
+end
+    
+        def servers
+      @servers ||= Servers.new
+    end
+    
+          def question
+        if default.nil?
+          I18n.t(:question, key: key, scope: :capistrano)
+        else
+          I18n.t(:question_default, key: key, default_value: default, scope: :capistrano)
+        end
+      end
+    
+            def fetch(key)
+          @properties[key]
+        end
+    
+          def each
+        servers_by_key.values.each { |server| yield server }
+      end
+    
+          # TODO: translate attribute first
+      # if BASE_ATTRIBUTES_KEY.key respond to a string message, then short_message is returned
+      # if BASE_ATTRIBUTES_KEY.key respond to a Hash, means it may have problem , summary and resolution
+      def compose_message(key, **attributes)
+        short_message = translate_message(key, **attributes)
+        if short_message.is_a? Hash
+          @problem = problem(key, **attributes)
+          @summary = summary(key, **attributes)
+          @resolution = resolution(key, **attributes)
+          [['Problem', @problem], ['Summary', @summary], ['Resolution', @resolution]].reduce('') do |message, detail_array|
+            message << '\n#{detail_array[0]}:\n  #{detail_array[1]}' unless detail_array[1].blank?
+            message
           end
+        else
+          short_message
         end
       end
-    end
-  end
-end
-
     
-              args.one? || !args[-2].hash_type?
+          context 'when the fallback locale is not available' do
+        before do
+          I18n.available_locales = %i[de jp]
+          I18n.default_locale = :de
         end
-      end
-    end
-  end
-end
-
     
-      it 'can correct MethodDefParentheses and other offense' do
-    create_file('example.rb', <<~RUBY)
-      def primes limit
-        1.upto(limit).select { |i| i.even? }
-      end
-    RUBY
-    expect(cli.run(%w[-D --auto-correct])).to eq(0)
-    expect($stderr.string).to eq('')
-    expect(IO.read('example.rb')).to eq(<<~RUBY)
-      # frozen_string_literal: true
+              get '/', a: %w[the other]
+          expect(last_response.status).to eq(200)
+          expect(last_response.body).to eq('['the', 'other']')
     
-      context 'when a variable is reassigned ' \
-          'with logical operator assignment and referenced' do
-    it 'accepts' do
-      expect_no_offenses(<<~RUBY)
-        def some_method
-          foo = do_something_returns_object_or_nil
-          foo ||= 1
-          foo
+    task :spec
+    
+          # This module extends user defined helpers
+      # to provide some API-specific functionality.
+      module BaseHelper
+        attr_accessor :api
+        def params(name, &block)
+          @named_params ||= {}
+          @named_params[name] = block
         end
-      RUBY
-    end
-  end
-    
-        def file_checksum(file, config_store)
-      digester = Digest::SHA1.new
-      mode = File.stat(file).mode
-      digester.update(
-        '#{file}#{mode}#{config_store.for(file).signature}'
-      )
-      digester.file(file)
-      digester.hexdigest
-    rescue Errno::ENOENT
-      # Spurious files that come and go should not cause a crash, at least not
-      # here.
-      '_'
-    end
-    
-      it 'registers an offense for `raise` guard clause not followed ' \
-     'by empty line when `if` condition is after heredoc' do
-    expect_offense(<<~RUBY)
-      def foo
-        raise ArgumentError, <<-MSG if path
-          Must be called with mount point
-        MSG
-      ^^^^^ Add empty line after guard clause.
-        bar
-      end
-    RUBY
-  end
-    
-          # Checks whether this is a multiline block. This is overridden here
-      # because the general version in `Node` does not work for `block` nodes.
-      #
-      # @return [Boolean] whether the `block` literal is on a several lines
-      def multiline?
-        !single_line?
-      end
-    
-        def pre
-      _pre = yaml['pre']
-    
-    FactoryBot.define do
-  factory :project, class: Tmuxinator::Project do
-    transient do
-      file { yaml_load('spec/fixtures/sample.yml') }
-    end
-    
-        desc 'debug [PROJECT] [ARGS]', COMMANDS[:debug]
-    method_option :attach, type: :boolean,
-                           aliases: '-a',
-                           desc: 'Attach to tmux session after creation.'
-    method_option :name, aliases: '-n',
-                         desc: 'Give the session a different name'
-    method_option 'project-config', aliases: '-p',
-                                    desc: 'Path to project config file'
