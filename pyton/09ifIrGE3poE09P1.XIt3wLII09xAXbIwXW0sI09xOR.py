@@ -1,20 +1,7 @@
 
         
-            def escalate_call(self):
-        self.call.level = Rank.DIRECTOR
-        self._escalate_call()
-    
-            Accessing a node updates its position to the front of the LRU list.
-        '''
-        node = self.lookup.get(query)
-        if node is None:
-            return None
-        self.linked_list.move_to_front(node)
-        return node.results
-    
-        def _find_available_spot(self, vehicle):
-        '''Find an available spot where vehicle can fit, or return None'''
-        pass
+        
+class SpendingByCategory(MRJob):
     
             (2016-01, url0), 1
         (2016-01, url0), 1
@@ -24,135 +11,165 @@
         period = self.extract_year_month(line)
         yield (period, url), 1
     
-    from mrjob.job import MRJob
-    
-        def remove(self, key):
+        def set(self, key, value):
         hash_index = self._hash_function(key)
-        for index, item in enumerate(self.table[hash_index]):
+        for item in self.table[hash_index]:
             if item.key == key:
-                del self.table[hash_index][index]
+                item.value = value
                 return
-        raise KeyError('Key not found')
-
+        self.table[hash_index].append(Item(key, value))
     
-        def parse_query(self, query):
-        '''Remove markup, break text into terms, deal with typos,
-        normalize capitalization, convert to use boolean operations.
-        '''
-        ...
     
-    import traceback
-    
-    RETURN = '''
-updates:
-  description: The set of commands that will be pushed to the remote device.
-  returned: always
-  type: list
-  sample: ['hostname foo', 'router bgp 1', 'router-id 1.1.1.1']
-commands:
-  description: The set of commands that will be pushed to the remote device
-  returned: always
-  type: list
-  sample: ['hostname foo', 'router bgp 1', 'router-id 1.1.1.1']
-saved:
-  description: Returns whether the configuration is saved to the startup
-               configuration or not.
-  returned: When not check_mode.
-  type: bool
-  sample: True
-backup_path:
-  description: The full path to the backup file
-  returned: when backup is yes
-  type: str
-  sample: /playbooks/ansible/backup/dellos10_config.2016-07-16@22:28:34
+DOCUMENTATION = '''
+---
+module: dellos10_config
+version_added: '2.2'
+author: 'Senthil Kumar Ganesan (@skg-net)'
+short_description: Manage Dell EMC Networking OS10 configuration sections
+description:
+  - OS10 configurations use a simple block indent file syntax
+    for segmenting configuration into sections.  This module provides
+    an implementation for working with OS10 configuration sections in
+    a deterministic way.
+extends_documentation_fragment: dellos10
+options:
+  lines:
+    description:
+      - The ordered set of commands that should be configured in the
+        section.  The commands must be the exact same commands as found
+        in the device running-config. Be sure to note the configuration
+        command syntax as some commands are automatically modified by the
+        device config parser. This argument is mutually exclusive with I(src).
+    aliases: ['commands']
+  parents:
+    description:
+      - The ordered set of parents that uniquely identify the section or hierarchy
+        the commands should be checked against.  If the parents argument
+        is omitted, the commands are checked against the set of top
+        level or global commands.
+  src:
+    description:
+      - Specifies the source path to the file that contains the configuration
+        or configuration template to load.  The path to the source file can
+        either be the full path on the Ansible control host or a relative
+        path from the playbook or role root directory. This argument is
+        mutually exclusive with I(lines).
+  before:
+    description:
+      - The ordered set of commands to push on to the command stack if
+        a change needs to be made.  This allows the playbook designer
+        the opportunity to perform configuration commands prior to pushing
+        any changes without affecting how the set of commands are matched
+        against the system.
+  after:
+    description:
+      - The ordered set of commands to append to the end of the command
+        stack if a change needs to be made.  Just like with I(before) this
+        allows the playbook designer to append a set of commands to be
+        executed after the command set.
+  match:
+    description:
+      - Instructs the module on the way to perform the matching of
+        the set of commands against the current device config.  If
+        match is set to I(line), commands are matched line by line.  If
+        match is set to I(strict), command lines are matched with respect
+        to position.  If match is set to I(exact), command lines
+        must be an equal match.  Finally, if match is set to I(none), the
+        module will not attempt to compare the source configuration with
+        the running configuration on the remote device.
+    default: line
+    choices: ['line', 'strict', 'exact', 'none']
+  replace:
+    description:
+      - Instructs the module on the way to perform the configuration
+        on the device.  If the replace argument is set to I(line) then
+        the modified lines are pushed to the device in configuration
+        mode.  If the replace argument is set to I(block) then the entire
+        command block is pushed to the device in configuration mode if any
+        line is not correct.
+    default: line
+    choices: ['line', 'block']
+  update:
+    description:
+      - The I(update) argument controls how the configuration statements
+        are processed on the remote device.  Valid choices for the I(update)
+        argument are I(merge) and I(check).  When you set this argument to
+        I(merge), the configuration changes merge with the current
+        device running configuration.  When you set this argument to I(check)
+        the configuration updates are determined but not actually configured
+        on the remote device.
+    default: merge
+    choices: ['merge', 'check']
+  save:
+    description:
+      - The C(save) argument instructs the module to save the running-
+        config to the startup-config at the conclusion of the module
+        running.  If check mode is specified, this argument is ignored.
+    type: bool
+    default: 'no'
+  config:
+    description:
+      - The module, by default, will connect to the remote device and
+        retrieve the current running-config to use as a base for comparing
+        against the contents of source.  There are times when it is not
+        desirable to have the task get the current running-config for
+        every task in a playbook.  The I(config) argument allows the
+        implementer to pass in the configuration to use as the base
+        config for comparison.
+  backup:
+    description:
+      - This argument will cause the module to create a full backup of
+        the current C(running-config) from the remote device before any
+        changes are made. If the C(backup_options) value is not given,
+        the backup file is written to the C(backup) folder in the playbook
+        root directory. If the directory does not exist, it is created.
+    type: bool
+    default: 'no'
+  backup_options:
+    description:
+      - This is a dict object containing configurable options related to backup file path.
+        The value of this option is read only when C(backup) is set to I(yes), if C(backup) is set
+        to I(no) this option will be silently ignored.
+    suboptions:
+      filename:
+        description:
+          - The filename to be used to store the backup configuration. If the the filename
+            is not given it will be generated based on the hostname, current time and date
+            in format defined by <hostname>_config.<current-date>@<current-time>
+      dir_path:
+        description:
+          - This option provides the path ending with directory name in which the backup
+            configuration file will be stored. If the directory does not exist it will be first
+            created and the filename is either the value of C(filename) or default filename
+            as described in C(filename) options description. If the path value is not given
+            in that case a I(backup) directory will be created in the current working directory
+            and backup configuration will be copied in C(filename) within I(backup) directory.
+        type: path
+    type: dict
+    version_added: '2.8'
 '''
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.network.dellos10.dellos10 import get_config, get_sublevel_config
-from ansible.module_utils.network.dellos10.dellos10 import dellos10_argument_spec, check_args
-from ansible.module_utils.network.dellos10.dellos10 import load_config, run_commands
-from ansible.module_utils.network.dellos10.dellos10 import WARNING_PROMPTS_RE
-from ansible.module_utils.network.common.config import NetworkConfig, dumps
     
-            before=dict(type='list'),
-        after=dict(type='list'),
+        mutually_exclusive = [('lines', 'src'),
+                          ('parents', 'src')]
     
-            match=dict(default='line', choices=['line', 'strict', 'exact', 'none']),
-        replace=dict(default='line', choices=['line', 'block', 'config']),
-    
-        def test_lsblk_uuid_no_lsblk(self):
+        def test_udevadm_uuid(self):
         module = Mock()
-        module.get_bin_path = Mock(return_value=None)
+        module.run_command = Mock(return_value=(0, UDEVADM_OUTPUT, ''))  # (rc, out, err)
         lh = linux.LinuxHardware(module=module, load_on_init=False)
-        lsblk_uuids = lh._lsblk_uuid()
-    
-    
-class AnsibleAssertionError(AnsibleError, AssertionError):
-    '''Invalid assertion'''
-    pass
-    
-            use_option=dict(type='bool', default=True),
-        vendor_class=dict(default='DHCP')
-    )
+        udevadm_uuid = lh._udevadm_uuid('mock_device')
     
         param_to_xpath_map = collections.OrderedDict()
     param_to_xpath_map.update([
         ('name', {'xpath': 'name', 'is_key': True}),
-        ('unit', {'xpath': 'name', 'top': 'unit', 'is_key': True}),
-        ('mode', {'xpath': 'interface-mode', 'top': 'unit/family/ethernet-switching'}),
-        ('access_vlan', {'xpath': 'members', 'top': 'unit/family/ethernet-switching/vlan'}),
-        ('trunk_vlans', {'xpath': 'members', 'top': 'unit/family/ethernet-switching/vlan'}),
-        ('filter_input', {'xpath': 'input', 'top': 'unit/family/ethernet-switching/filter'}),
-        ('filter_output', {'xpath': 'output', 'top': 'unit/family/ethernet-switching/filter'}),
-        ('native_vlan', {'xpath': 'native-vlan-id'}),
+        ('vlan_id', 'vlan-id'),
+        ('l3_interface', 'l3-interface'),
+        ('filter_input', 'forwarding-options/filter/input'),
+        ('filter_output', 'forwarding-options/filter/output'),
         ('description', 'description')
     ])
     
-    from numpy import (amin, amax, ravel, asarray, arange, ones, newaxis,
-                   transpose, iscomplexobj, uint8, issubdtype, array)
+        def __init__(self):
+        self.graph = defaultdict(list)
     
-        See also
-    --------
-    StratifiedKFold
-        Takes group information into account to avoid building folds with
-        imbalanced class distributions (for binary or multiclass
-        classification tasks).
-    
-    from .splitting import Splitter
-from .histogram import HistogramBuilder
-from .predictor import TreePredictor
-from .utils import sum_parallel
-from .types import PREDICTOR_RECORD_DTYPE
-from .types import Y_DTYPE
-    
-    import numpy as np
-import gc
-from time import time
-from collections import defaultdict
-import matplotlib.pyplot as plt
-from sklearn.datasets import fetch_lfw_people
-from sklearn.decomposition import IncrementalPCA, PCA
-    
-                std = y_train.std(axis=0)
-            mean = y_train.mean(axis=0)
-            y_train = (y_train - mean) / std
-            y_test = (y_test - mean) / std
-    
-    
-if __name__ == '__main__':
-    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
-    # block to be able to use a multi-core grid search that also works under
-    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
-    # The multiprocessing module is used as the backend of joblib.Parallel
-    # that is used when n_jobs != 1 in GridSearchCV
-    
-    exercise_dir = os.path.dirname(__file__)
-if exercise_dir == '':
-    exercise_dir = '.'
-    
-    from sklearn import datasets
-from sklearn.utils import shuffle
-from sklearn.metrics import mean_squared_error
-from sklearn.svm.classes import NuSVR
-from sklearn.ensemble.gradient_boosting import GradientBoostingRegressor
-from sklearn.linear_model.stochastic_gradient import SGDClassifier
-from sklearn.metrics import hamming_loss
+    if len(sys.argv)>2:
+    n_topic = int(sys.argv[2])
