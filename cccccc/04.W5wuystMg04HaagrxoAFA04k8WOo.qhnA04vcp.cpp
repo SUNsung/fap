@@ -1,33 +1,113 @@
 
         
-        #include 'caffe/blob.hpp'
-#include 'caffe/proto/caffe.pb.h'
-#include 'caffe/syncedmem.hpp'
-#include 'caffe/util/math_functions.hpp'
+        int CertificateManagerModel::ImportUserCert(const std::string& data) {
+  return cert_db_->ImportUserCert(data);
+}
     
-      vector<shared_ptr<Batch<Dtype> > > prefetch_;
-  BlockingQueue<Batch<Dtype>*> prefetch_free_;
-  BlockingQueue<Batch<Dtype>*> prefetch_full_;
-  Batch<Dtype>* prefetch_current_;
     
-    /**
- * @brief Index into the input blob along its first axis.
- *
- * This layer can be used to select, reorder, and even replicate examples in a
- * batch.  The second blob is cast to int and treated as an index into the
- * first axis of the first blob.
- */
-template <typename Dtype>
-class BatchReindexLayer : public Layer<Dtype> {
- public:
-  explicit BatchReindexLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+    {}  // namespace mate
+    
+      // Helper class for linux specific messages.  LinuxWatcher is ref counted
+  // because it posts messages between threads.
+  class LinuxWatcher;
+  scoped_refptr<LinuxWatcher> watcher_;
+  int sock_;
+  bool listen_on_ready_ = false;
+#endif
+    
+    // Checks the visibility of the enumerated window and signals once a visible
+// window has been found.
+BOOL CALLBACK BrowserWindowEnumeration(HWND window, LPARAM param) {
+  bool* result = reinterpret_cast<bool*>(param);
+  *result = ::IsWindowVisible(window) != 0;
+  // Stops enumeration if a visible window has been found.
+  return !*result;
+}
+    
+          // colon indicates that the argument starts with a URI scheme
+      if (c == ':') {
+        // it could also be a Windows filesystem path
+        if (p == arg + 1)
+          break;
     }
     
+      Blob<Dtype>* blob_data = new Blob<Dtype>();
+  hdf5_load_nd_dataset(file_id, HDF5_DATA_DATASET_NAME, 0, 4,
+                       blob_data, reshape);
+  this->CheckBlobEqual(*(this->blob_data_), *blob_data);
     
-    { protected:
+    template <typename Dtype>
+void ClipLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& top,
+    const vector<bool>& propagate_down,
+    const vector<Blob<Dtype>*>& bottom) {
+  if (propagate_down[0]) {
+    const Dtype* bottom_data = bottom[0]->cpu_data();
+    const Dtype* top_diff = top[0]->cpu_diff();
+    Dtype* bottom_diff = bottom[0]->mutable_cpu_diff();
+    const int count = bottom[0]->count();
+    }
+    }
+    
+    template <typename Dtype>
+void InnerProductLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top) {
+  const int num_output = this->layer_param_.inner_product_param().num_output();
+  bias_term_ = this->layer_param_.inner_product_param().bias_term();
+  transpose_ = this->layer_param_.inner_product_param().transpose();
+  N_ = num_output;
+  const int axis = bottom[0]->CanonicalAxisIndex(
+      this->layer_param_.inner_product_param().axis());
+  // Dimensions starting from 'axis' are 'flattened' into a single
+  // length K_ vector. For example, if bottom[0]'s shape is (N, C, H, W),
+  // and axis == 1, N inner products with dimension CHW are performed.
+  K_ = bottom[0]->count(axis);
+  // Check if we need to set up the weights
+  if (this->blobs_.size() > 0) {
+    LOG(INFO) << 'Skipping parameter initialization';
+  } else {
+    if (bias_term_) {
+      this->blobs_.resize(2);
+    } else {
+      this->blobs_.resize(1);
+    }
+    // Initialize the weights
+    vector<int> weight_shape(2);
+    if (transpose_) {
+      weight_shape[0] = K_;
+      weight_shape[1] = N_;
+    } else {
+      weight_shape[0] = N_;
+      weight_shape[1] = K_;
+    }
+    this->blobs_[0].reset(new Blob<Dtype>(weight_shape));
+    // fill the weights
+    shared_ptr<Filler<Dtype> > weight_filler(GetFiller<Dtype>(
+        this->layer_param_.inner_product_param().weight_filler()));
+    weight_filler->Fill(this->blobs_[0].get());
+    // If necessary, initialize and fill the bias term
+    if (bias_term_) {
+      vector<int> bias_shape(1, N_);
+      this->blobs_[1].reset(new Blob<Dtype>(bias_shape));
+      shared_ptr<Filler<Dtype> > bias_filler(GetFiller<Dtype>(
+          this->layer_param_.inner_product_param().bias_filler()));
+      bias_filler->Fill(this->blobs_[1].get());
+    }
+  }  // parameter initialization
+  this->param_propagate_down_.resize(this->blobs_.size(), true);
+}
+    
+    namespace caffe {
+    }
+    
+    template <typename Dtype>
+void Net<Dtype>::CopyTrainedLayersFromBinaryProto(
+    const string& trained_filename) {
+  NetParameter param;
+  ReadNetParamsFromBinaryFileOrDie(trained_filename, &param);
+  CopyTrainedLayersFrom(param);
+}
+    
+     protected:
   virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
   virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
@@ -36,72 +116,68 @@ class BatchReindexLayer : public Layer<Dtype> {
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
   virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual inline bool reverse_dimensions() { return false; }
-  virtual void compute_output_shape();
-};
     
+    // gflags 2.1 issue: namespace google was changed to gflags without warning.
+// Luckily we will be able to use GFLAGS_GFLAGS_H_ to detect if it is version
+// 2.1. If yes, we will add a temporary solution to redirect the namespace.
+// TODO(Yangqing): Once gflags solves the problem in a more elegant way, let's
+// remove the following hack.
+#ifndef GFLAGS_GFLAGS_H_
+namespace gflags = google;
+#endif  // GFLAGS_GFLAGS_H_
     
-    {}  // namespace caffe
+            ConfigArray sSizes = config('streamSizes', '');
+        m_streamSizes = sSizes;
+        sSizes = config('lookupTableOrderSizes', ''); // this allows having a multiple streams of inputs with
+        // different lookuptable order sizes. the older one lookupTableOrder is still kept to have backward
+        // support.
+        m_lookupTabelOrderSizes = sSizes;
     
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of SigmoidLayer.
- */
-template <typename Dtype>
-class CuDNNSigmoidLayer : public SigmoidLayer<Dtype> {
- public:
-  explicit CuDNNSigmoidLayer(const LayerParameter& param)
-      : SigmoidLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNSigmoidLayer();
+            // this section is for back compat only, skip over
+        if (fstream.TryGetMarker(FileMarker::fileMarkerBeginSection, L'BNodesReqMultiSeqHandling'))
+        {
+            fprintf(stderr, 'WARNING: Ignoring defunct 'BNodesReqMultiSeqHandling' section in input file.\n');
+            fstream >> num;
+            for (size_t i = 0; i < num; i++)
+                fstream >> nodeName; // dummy
+            fstream.GetMarker(FileMarker::fileMarkerEndSection, L'ENodesReqMultiSeqHandling');
+        }
+    
+            combinedEvalOrder = SortByGlobalEvalOrder(combinedEvalOrder);
+        set<ComputationNodeBasePtr> completedSEQNodes;
+        for (auto& node : combinedEvalOrder)
+        {
+            if (node->IsPartOfLoop())
+            {
+                shared_ptr<SEQTraversalFlowControlNode> recInfo = FindInRecurrentLoops(m_allSEQNodes, node);
+                assert(recInfo != nullptr);
+                if (completedSEQNodes.insert(recInfo).second)
+                    node = recInfo;
+                else
+                    node = nullptr;
+            }
     }
     
-      DHTTaskQueue* taskQueue_;
-    
-      ~DHTTaskExecutor();
-    
-      void setTaskQueue(DHTTaskQueue* taskQueue);
-    
-    #include 'DHTTaskQueue.h'
-#include 'DHTTaskExecutor.h'
-    
-    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
-                                           const std::string& ipaddr,
-                                           uint16_t port,
-                                           const unsigned char* secret) const
-{
-  unsigned char src[DHT_ID_LENGTH + COMPACT_LEN_IPV6 + SECRET_SIZE];
-  memset(src, 0, sizeof(src));
-  int compactlen = bittorrent::packcompact(src + DHT_ID_LENGTH, ipaddr, port);
-  if (compactlen == 0) {
-    throw DL_ABORT_EX(fmt('Token generation failed: ipaddr=%s, port=%u',
-                          ipaddr.c_str(), port));
-  }
-  memcpy(src, infoHash, DHT_ID_LENGTH);
-  memcpy(src + DHT_ID_LENGTH + COMPACT_LEN_IPV6, secret, SECRET_SIZE);
-  unsigned char md[20];
-  message_digest::digest(md, sizeof(md), MessageDigest::sha1().get(), src,
-                         sizeof(src));
-  return std::string(&md[0], &md[sizeof(md)]);
-}
+    #include 'Basics.h'
+#include 'MPIWrapper.h'
+#include 'Matrix.h'
+#include 'SimpleDistGradAggregatorHelper.h'
+#include 'DistGradHeader.h'
+#include 'IDistGradAggregator.h'
+#include 'SimpleDistGradAggregator.h'
+#include 'V2SimpleDistGradAggregator.h'
     
     
-    {} // namespace aria2
+    {
+    {
+    {
+    {BOOST_AUTO_TEST_SUITE_END()
+}}}}
+
     
-    #include 'DHTNode.h'
-#include 'util.h'
-#include 'a2functional.h'
     
-    public:
-  // _remoteNode is always null
-  DHTUnknownMessage(const std::shared_ptr<DHTNode>& localNode,
-                    const unsigned char* data, size_t length,
-                    const std::string& ipaddr, uint16_t port);
-    
-    bool DNSCache::CacheEntry::contains(const std::string& addr) const
-{
-  return find(addr) != addrEntries_.end();
+    {    // After values of accumulators have been aggregated across nodes, we have to update evaluation results for
+    // evaluation nodes that accumulate results.
+    UpdateEpochEvaluationForAccumulatedResult<ElemType>(epochEvalErrors, evaluationNodes, localEpochEvalErrors,
+                                                        containsAccumulatedResult);
 }
