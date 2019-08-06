@@ -1,204 +1,260 @@
 
         
-        
-def main():
-    argument_spec = vmware_argument_spec()
-    argument_spec.update(dict(
-        switch=dict(type='str', required=True, aliases=['switch_name']),
-        name=dict(type='str', required=True),
-        state=dict(type='str', required=True, choices=['present', 'absent']),
-        session_type=dict(type='str', default='dvPortMirror', choices=['dvPortMirror',
-                                                                       'encapsulatedRemoteMirrorSource',
-                                                                       'remoteMirrorDest',
-                                                                       'remoteMirrorSource']),
-        enabled=dict(type='bool', default=True),
-        description=dict(type='str'),
-        source_port_transmitted=dict(type='str'),
-        source_port_received=dict(type='str'),
-        destination_port=dict(type='str'),
-        encapsulation_vlan_id=dict(type='int'),
-        strip_original_vlan=dict(type='bool'),
-        mirrored_packet_length=dict(type='int'),
-        normal_traffic_allowed=dict(type='bool'),
-        sampling_rate=dict(type='int'),
-        source_vm_transmitted=dict(type='dict',
-                                   options=dict(
-                                       name=dict(type='str'),
-                                       nic_label=dict(type='str'))),
-        source_vm_received=dict(type='dict',
-                                options=dict(
-                                    name=dict(type='str'),
-                                    nic_label=dict(type='str'))),
-        destination_vm=dict(type='dict',
-                            options=dict(
-                                name=dict(type='str'),
-                                nic_label=dict(type='str'))),
-    ))
-    module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=False)
-    session = VMwareVspanSession(module)
-    session.process_operation()
-    
-            spec = dict(
-            region=dict(type='str', default='na'),
-            mcp_user=dict(type='str', required=False),
-            mcp_password=dict(type='str', required=False, no_log=True),
-            location=dict(type='str', required=True),
-            validate_certs=dict(type='bool', required=False, default=True)
-        )
-    
-    EXAMPLES = '''
-# Note - You must set the CLC_V2_API_USERNAME And CLC_V2_API_PASSWD Environment variables before running these examples
-    
-            if not CLC_FOUND:
-            self.module.fail_json(msg=missing_required_lib('clc-sdk'), exception=CLC_IMP_ERR)
-        if not REQUESTS_FOUND:
-            self.module.fail_json(msg=missing_required_lib('requests'), exception=REQUESTS_IMP_ERR)
-        if requests.__version__ and LooseVersion(
-                requests.__version__) < LooseVersion('2.5.0'):
-            self.module.fail_json(
-                msg='requests library  version should be >= 2.5.0')
-    
-    EXAMPLES = '''
-# Add a user to a password file and ensure permissions are set
-- htpasswd:
-    path: /etc/nginx/passwdfile
-    name: janedoe
-    password: '9s36?;fyNp'
-    owner: root
-    group: www-data
-    mode: 0640
-    
-    from __future__ import (absolute_import, division, print_function)
-__metaclass__ = type
+        from httpie.compat import is_windows
+from httpie.config import DEFAULT_CONFIG_DIR, Config
     
     
-    def predict(self, input):
-        '''
-        From the input stream, predict what alternative will succeed
-	using this DFA (representing the covering regular approximation
-	to the underlying CFL).  Return an alternative number 1..n.  Throw
-	 an exception upon error.
-	'''
-        mark = input.mark()
-        s = 0 # we always start at s0
-        try:
-            for _ in xrange(50000):
-                #print '***Current state = %d' % s
-                
-                specialState = self.special[s]
-                if specialState >= 0:
-                    #print 'is special'
-                    s = self.specialStateTransition(specialState, input)
-                    if s == -1:
-                        self.noViableAlt(s, input)
-                        return 0
-                    input.consume()
-                    continue
-    
-            The recognizer attempts to recover from single missing
-        symbols. But, actions might refer to that missing symbol.
-        For example, x=ID {f($x);}. The action clearly assumes
-        that there has been an identifier matched previously and that
-        $x points at that token. If that token is missing, but
-        the next token in the stream is what we want we assume that
-        this token is missing and we keep going. Because we
-        have to return some token to replace the missing token,
-        we have to conjure one up. This method gives the user control
-        over the tokens returned for missing tokens. Mostly,
-        you will want to create something special for identifier
-        tokens. For literals such as '{' and ',', the default
-        action in the parser or tree parser works. It simply creates
-        a CommonToken of the appropriate type. The text will be the token.
-        If you change what tokens must be created by the lexer,
-        override this method to create the appropriate tokens.
-        '''
-    }
+def repr_dict_nice(d):
+    def prepare_dict(d):
+        for k, v in d.items():
+            if isinstance(v, dict):
+                v = dict(prepare_dict(v))
+            elif isinstance(v, bytes):
+                v = v.decode('utf8')
+            elif not isinstance(v, (int, str)):
+                v = repr(v)
+            yield k, v
+    return json.dumps(
+        dict(prepare_dict(d)),
+        indent=4, sort_keys=True,
+    )
     
     
-def deserialize_event(event):
-    # Deserialize into Python dictionary and extract the 'NewImage' (the new version of the full ddb document)
-    ddb = event.get('dynamodb')
-    if ddb:
-        result = {
-            '__action_type': event.get('eventName'),
-        }
-    
-            def forward_request(self, method, path, data, headers):
-            sleep_time = int(path.replace('/', ''))
-            time.sleep(sleep_time)
-            response = Response()
-            response.status_code = 200
-            response._content = ('%s' % sleep_time) * file_length
-            return response
+with codecs.open(FILE_PATH, encoding='utf8') as f:
+    # Strip because we don't want new lines in the data so that we can
+    # easily count occurrences also when embedded in JSON (where the new
+    # line would be escaped).
+    FILE_CONTENT = f.read().strip()
     
     
-def get_handler_file_from_name(handler_name, runtime=LAMBDA_DEFAULT_RUNTIME):
-    # TODO: support Java Lambdas in the future
-    delimiter = '.'
-    if runtime.startswith(LAMBDA_RUNTIME_NODEJS):
-        file_ext = '.js'
-    elif runtime.startswith(LAMBDA_RUNTIME_GOLANG):
-        file_ext = ''
-    elif runtime.startswith(LAMBDA_RUNTIME_DOTNETCORE2) or runtime.startswith(LAMBDA_RUNTIME_DOTNETCORE21):
-        file_ext = '.dll'
-        delimiter = ':'
-    elif runtime.startswith(LAMBDA_RUNTIME_RUBY):
-        file_ext = '.rb'
-    elif runtime.startswith(LAMBDA_RUNTIME_CUSTOM_RUNTIME):
-        file_ext = '.sh'
+def has_docutils():
+    try:
+        # noinspection PyUnresolvedReferences
+        import docutils
+        return True
+    except ImportError:
+        return False
+    
+    # The reST default role (used for this markup: `text`) to use for all
+# documents.
+#default_role = None
+    
+            # Find all people in the image using a trained classifier model
+        # Note: You can pass in either a classifier file name or a classifier model instance
+        predictions = predict(full_file_path, model_path='trained_knn_model.clf')
+    
+    print('I found {} face(s) in this photograph.'.format(len(face_locations)))
+    
+    if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5001, debug=True)
+
+    
+        for face_location in face_locations:
+        print_result(image_to_check, face_location)
+    
+    with open('README.rst') as readme_file:
+    readme = readme_file.read()
+    
+    
+def load_image_file(file, mode='RGB'):
+    '''
+    Loads an image file (.jpg, .png, etc) into a numpy array
+    
+    
+# Many subprocess use to process frames.
+def process(worker_id, read_frame_list, write_frame_list):
+    known_face_encodings = Global.known_face_encodings
+    known_face_names = Global.known_face_names
+    while not Global.is_exit:
+    
+        name = 'Unknown'
+    
+    import face_recognition
+from sklearn import svm
+import os
+    
+    IMPORT_MAPPING.update({
+    'cPickle': 'pickle',
+    '_elementtree': 'xml.etree.ElementTree',
+    'FileDialog': 'tkinter.filedialog',
+    'SimpleDialog': 'tkinter.simpledialog',
+    'DocXMLRPCServer': 'xmlrpc.server',
+    'SimpleHTTPServer': 'http.server',
+    'CGIHTTPServer': 'http.server',
+    # For compatibility with broken pickles saved in old Python 3 versions
+    'UserDict': 'collections',
+    'UserList': 'collections',
+    'UserString': 'collections',
+    'whichdb': 'dbm',
+    'StringIO':  'io',
+    'cStringIO': 'io',
+})
+    
+    
+def decistmt(s):
+    result = []
+    g = tokenize(BytesIO(s.encode('utf-8')).readline)   # tokenize the string
+    for toknum, tokval, _, _, _  in g:
+        if toknum == NUMBER and '.' in tokval:  # replace NUMBER tokens
+            result.extend([
+                (NAME, 'Decimal'),
+                (OP, '('),
+                (STRING, repr(tokval)),
+                (OP, ')')
+            ])
+        else:
+            result.append((toknum, tokval))
+    return untokenize(result).decode('utf-8')
+    
+            LDVERSION = LDVERSION.replace('$(VERSION)', VERSION)
+        LDVERSION = LDVERSION.replace('$(ABIFLAGS)', ABIFLAGS)
+        config_suffix = '-' + LDVERSION
+        if getVersionMajorMinor() >= (3, 6):
+            config_suffix = config_suffix + '-darwin'
     else:
-        file_ext = '.py'
-    return '%s%s' % (handler_name.split(delimiter)[0], file_ext)
+        config_suffix = ''      # Python 2.x
     
-        def return_response(self, method, path, data, headers, response):
-        if response.status_code >= 400:
-            LOG.debug('Error response from CloudFormation (%s) %s %s: %s' %
-                      (response.status_code, method, path, response.content))
-        if response._content:
-            aws_stack.fix_account_id_in_arns(response)
+        def __init__(self):
+        Thread.__init__(self, name='MainThread', daemon=False)
+        self._set_tstate_lock()
+        self._started.set()
+        self._set_ident()
+        if _HAVE_THREAD_NATIVE_ID:
+            self._set_native_id()
+        with _active_limbo_lock:
+            _active[self._ident] = self
     
-        def test_extract_query_params(self):
-        path, query_params = apigateway_listener.extract_query_string_params(
-            '/foo/bar?foo=foo&bar=bar&bar=baz'
-        )
-        self.assertEqual(path, '/foo/bar')
-        self.assertEqual(query_params, {'foo': 'foo', 'bar': ['bar', 'baz']})
+        def test_scope_isolation_from_global(self):
+        expected = {0: None, 1: None, 2: None, 3: None, 4: None, 5: None,
+                    6: None, 7: None, 8: None, 9: None}
+        actual = {g: None for g in range(10)}
+        self.assertEqual(actual, expected)
+        self.assertEqual(g, 'Global variable')
     
-            self.assertEqual(response.headers['content-length'], '0')
-        # clean up
-        self._delete_bucket(bucket_name, [object_key])
+            Return value is a tuple (type, encoding) where type is None if
+        the type can't be guessed (no or unknown suffix) or a string
+        of the form type/subtype, usable for a MIME Content-type
+        header; and encoding is None for no encoding or the name of
+        the program used to encode (e.g. compress or gzip).  The
+        mappings are table driven.  Encoding suffixes are case
+        sensitive; type suffixes are first tried case sensitive, then
+        case insensitive.
     
-    INSTALL_DIR_INFRA = '%s/infra' % ROOT_PATH
-INSTALL_DIR_NPM = '%s/node_modules' % ROOT_PATH
-INSTALL_DIR_ES = '%s/elasticsearch' % INSTALL_DIR_INFRA
-INSTALL_DIR_DDB = '%s/dynamodb' % INSTALL_DIR_INFRA
-INSTALL_DIR_KCL = '%s/amazon-kinesis-client' % INSTALL_DIR_INFRA
-INSTALL_DIR_STEPFUNCTIONS = '%s/stepfunctions' % INSTALL_DIR_INFRA
-INSTALL_DIR_ELASTICMQ = '%s/elasticmq' % INSTALL_DIR_INFRA
-INSTALL_PATH_LOCALSTACK_FAT_JAR = '%s/localstack-utils-fat.jar' % INSTALL_DIR_INFRA
-URL_LOCALSTACK_FAT_JAR = ('https://repo1.maven.org/maven2/' +
-    'cloud/localstack/localstack-utils/{v}/localstack-utils-{v}-fat.jar').format(v=LOCALSTACK_MAVEN_VERSION)
+            NOTE: the 'message id' form isn't supported by XOVER
+        '''
+        cmd = 'OVER' if 'OVER' in self._caps else 'XOVER'
+        if isinstance(message_spec, (tuple, list)):
+            start, end = message_spec
+            cmd += ' {0}-{1}'.format(start, end or '')
+        elif message_spec is not None:
+            cmd = cmd + ' ' + message_spec
+        resp, lines = self._longcmdstring(cmd, file)
+        fmt = self._getoverviewfmt()
+        return resp, _parse_overview(lines, fmt)
     
+            When the count of unfinished tasks drops to zero, join() unblocks.
+        '''
+        with self.all_tasks_done:
+            while self.unfinished_tasks:
+                self.all_tasks_done.wait()
     
-def stop_infra():
-    if common.INFRA_STOPPED:
-        return
-    common.INFRA_STOPPED = True
+            The returned string is always coerced to lower case.  If there is no
+        Content-Type header, or if that header has no charset parameter,
+        failobj is returned.
+        '''
+        missing = object()
+        charset = self.get_param('charset', missing)
+        if charset is missing:
+            return failobj
+        if isinstance(charset, tuple):
+            # RFC 2231 encoded, so decode it, and it better end up as ascii.
+            pcharset = charset[0] or 'us-ascii'
+            try:
+                # LookupError will be raised if the charset isn't known to
+                # Python.  UnicodeError will be raised if the encoded text
+                # contains a character not in the charset.
+                as_bytes = charset[2].encode('raw-unicode-escape')
+                charset = str(as_bytes, pcharset)
+            except (LookupError, UnicodeError):
+                charset = charset[2]
+        # charset characters must be in us-ascii range
+        try:
+            charset.encode('us-ascii')
+        except UnicodeError:
+            return failobj
+        # RFC 2046, $4.1.2 says charsets are not case sensitive
+        return charset.lower()
     
-        # set basic CLI commands
-    config.CLI_COMMANDS['infra'] = {
-        'description': 'Commands to manage the infrastructure',
-        'function': cli.cmd_infra
+                    --===--
+                ''')),
+    
+        # As an early adopter, we sanity check the
+    # test.support.import_fresh_module utility function
+    def test_pure_python(self):
+        self.assertIsNot(original_warnings, self.module)
+        self.assertTrue(hasattr(self.module.warn, '__code__'))
+    
+            # Adding index on 'TagValue', fields ['project_id', '_key', 'last_seen']
+        db.create_index(u'tagstore_tagvalue', ['project_id', 'key_id', 'last_seen'])
+    
+            # Adding index on 'EventTag', fields ['project_id', 'key', 'value']
+        db.create_index(u'tagstore_eventtag', ['project_id', 'key_id', 'value_id'])
+    
+            # Adding index on 'TagValue', fields ['project_id', '_key', 'last_seen']
+        db.create_index(u'tagstore_tagvalue', ['project_id', 'key_id', 'last_seen'])
+    
+        models = {
+        'tagstore.eventtag': {
+            'Meta': {'unique_together': '(('project_id', 'event_id', 'key', 'value'),)', 'object_name': 'EventTag', 'index_together': '(('project_id', 'key', 'value'), ('group_id', 'key', 'value'))'},
+            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'db_index': 'True'}),
+            'event_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {}),
+            'group_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {}),
+            'value': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagValue']', 'db_column': ''value_id''})
+        },
+        'tagstore.grouptagkey': {
+            'Meta': {'unique_together': '(('project_id', 'group_id', '_key'),)', 'object_name': 'GroupTagKey'},
+            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            'group_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'db_index': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'db_index': 'True'}),
+            'values_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
+        },
+        'tagstore.grouptagvalue': {
+            'Meta': {'unique_together': '(('project_id', 'group_id', '_key', '_value'),)', 'object_name': 'GroupTagValue', 'index_together': '(('project_id', '_key', '_value', 'last_seen'),)'},
+            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            '_value': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagValue']', 'db_column': ''value_id''}),
+            'first_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'group_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'db_index': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'last_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'db_index': 'True'}),
+            'times_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
+        },
+        'tagstore.tagkey': {
+            'Meta': {'unique_together': '(('project_id', 'environment_id', 'key'),)', 'object_name': 'TagKey'},
+            'environment_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'null': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'key': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'db_index': 'True'}),
+            'status': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'}),
+            'values_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
+        },
+        'tagstore.tagvalue': {
+            'Meta': {'unique_together': '(('project_id', '_key', 'value'),)', 'object_name': 'TagValue', 'index_together': '(('project_id', '_key', 'last_seen'),)'},
+            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            'data': ('sentry.db.models.fields.gzippeddict.GzippedDictField', [], {'null': 'True', 'blank': 'True'}),
+            'first_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'last_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'db_index': 'True'}),
+            'times_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'}),
+            'value': ('django.db.models.fields.CharField', [], {'max_length': '200'})
+        }
     }
-    config.CLI_COMMANDS['start'] = {
-        'description': 'Shorthand to start the infrastructure',
-        'function': cli.cmd_infra
-    }
-    config.CLI_COMMANDS['web'] = {
-        'description': 'Commands to manage the Web dashboard',
-        'function': cli.cmd_web
-    }
-    config.CLI_COMMANDS['ssh'] = {
-        'description': 'Shorthand to obtain a shell in the running container',
-        'function': cli.cmd_ssh
-    }
+    
+    from datetime import timedelta
+from django.db.models import Max
+from django.utils import timezone
