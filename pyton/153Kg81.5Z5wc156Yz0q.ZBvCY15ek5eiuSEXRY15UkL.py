@@ -1,146 +1,160 @@
 
         
-            def receive_friend_request(self, friend_id):
-        pass
-    
-        def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer)
-        ]
-    
-        def remove_link_to_crawl(self, url):
-        '''Remove the given link from `links_to_crawl`.'''
-        pass
-    
-        # Create the mapping from string path to an index in the embeddings matrix
-    if self.hparams.input in ['path', 'integrated', 'integrated-nc']:
-      self.path_to_index = tf.contrib.lookup.HashTable(
-          tf.contrib.lookup.KeyValueTensorInitializer(
-              tf.constant(path_to_index.keys()),
-              tf.constant(path_to_index.values()),
-              key_dtype=tf.string, value_dtype=tf.int32), 0)
-    
-    P_nxn = rng.randn(N, N) / np.sqrt(N)
-    
-        us = np.zeros([1, ntime_steps])
-    for t in range(ntime_steps):
-      x_t = alpha*x_tm1 + np.dot(W,r_tm1) + b
-      if input_time is not None and t == input_time:
-        us[0,t] = input_magnitude
-        x_t += Bin * us[0,t] # DCS is this what was used?
-      r_t = np.tanh(x_t)
-      x_tm1 = x_t
-      r_tm1 = r_t
-      rs[:,t] = r_t
-    return rs, us
-    
-        # Create the supervisor.  It will take care of initialization, summaries,
-    # checkpoints, and recovery.
-    sv = tf.Supervisor(
-        logdir=log_dir,
-        is_chief=is_chief,
-        saver=model.saver,
-        global_step=model.global_step,
-        recovery_wait_secs=30,
-        summary_op=None,
-        init_fn=init_fn)
-    
-        maintain_averages_op = None
-    baselines = tf.stack(baselines, axis=1)
-    advantages = tf.stack(advantages, axis=1)
-    
-    FLAGS = tf.app.flags.FLAGS
-    
-      variable_mapping = {
-      str(model_str) + '/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel':
-          encoder_lstm_w_0,
-      str(model_str) + '/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias':
-          encoder_lstm_b_0,
-      str(model_str) + '/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/kernel':
-          encoder_lstm_w_1,
-      str(model_str) + '/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/bias':
-          encoder_lstm_b_1
-  }
-  return variable_mapping
-    
-            while self.values[new_key] is not None \
-                and self.values[new_key] != key:
-            i += 1
-            new_key = self.hash_function(key + i*i) if not \
-                self.balanced_factor() >= self.lim_charge else None
-    
-    	TEMPORARY_ARRAY = [ element for element in ARRAY[1:] if element >= PIVOT ]
-	TEMPORARY_ARRAY = [PIVOT] + longestSub(TEMPORARY_ARRAY)
-	if ( len(TEMPORARY_ARRAY) > len(LONGEST_SUB) ):
-		return TEMPORARY_ARRAY
-	else:
-		return LONGEST_SUB
-    
-    	Arguments:
-		i {[int]} -- [integer]
-	'''
+            @memoize
+    def get_aliases(self):
+        raw_aliases = os.environ.get('TF_SHELL_ALIASES', '').split('\n')
+        return dict(self._parse_alias(alias)
+                    for alias in raw_aliases if alias and '=' in alias)
     
     
-        '''
-        loop over all possible splits for the decision tree. find the best split.
-        if no split exists that is less than 2 * error for the entire array
-        then the data set is not split and the average for the entire array is used as the predictor
-        '''
-        for i in range(len(X)):
-            if len(X[:i]) < self.min_leaf_size:
-                continue
-            elif len(X[i:]) < self.min_leaf_size:
-                continue
-            else:
-                error_left = self.mean_squared_error(X[:i], np.mean(y[:i]))
-                error_right = self.mean_squared_error(X[i:], np.mean(y[i:]))
-                error = error_left + error_right
-                if error < min_error:
-                    best_split = i
-                    min_error = error
+@pytest.mark.usefixtures('no_memoize')
+@pytest.mark.parametrize('script, result', [
+    ('vom file.py', ['vim file.py']),
+    ('fucck', ['fsck']),
+    ('got commit', ['git commit', 'go commit'])])
+def test_get_new_command(script, result):
+    assert get_new_command(Command(script, '')) == result
+
     
-    def compute_heterogeneity(data, k, centroids, cluster_assignment):
     
-    heterogeneity = 0.0
-    for i in range(k):
-        
-        # Select all data points that belong to cluster i. Fill in the blank (RHS only)
-        member_data_points = data[cluster_assignment==i, :]
-        
-        if member_data_points.shape[0] > 0: # check if i-th cluster is non-empty
-            # Compute distances from centroid to data points (RHS only)
-            distances = pairwise_distances(member_data_points, [centroids[i]], metric='euclidean')
-            squared_distances = distances**2
-            heterogeneity += np.sum(squared_distances)
-        
-    return heterogeneity
+@pytest.mark.parametrize('script, pyenv_cmd', [
+    ('pyenv globe', 'globe'),
+    ('pyenv intall 3.8.0', 'intall'),
+    ('pyenv list', 'list'),
+])
+def test_match(script, pyenv_cmd, output):
+    assert match(Command(script, output=output))
     
-            a += a
-        b >>= 1
+    from thefuck.utils import (cache, for_app, replace_argument, replace_command,
+                           which)
     
-    # frequency taken from http://en.wikipedia.org/wiki/Letter_frequency
-englishLetterFreq = {'E': 12.70, 'T': 9.06, 'A': 8.17, 'O': 7.51, 'I': 6.97,
-                     'N': 6.75, 'S': 6.33, 'H': 6.09, 'R': 5.99, 'D': 4.25,
-                     'L': 4.03, 'C': 2.78, 'U': 2.76, 'M': 2.41, 'W': 2.36,
-                     'F': 2.23, 'G': 2.02, 'Y': 1.97, 'P': 1.93, 'B': 1.29,
-                     'V': 0.98, 'K': 0.77, 'J': 0.15, 'X': 0.15, 'Q': 0.10,
-                     'Z': 0.07}
-ETAOIN = 'ETAOINSHRDLCUMWFGYPBVKJXQZ'
-LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    This is better.
     
-        if unit_1 == unit_2 or unit_1 not in VALID_UNITS:
-        return value
     
-            elif version.is_prerelease:
-            if version.pre[0] == 'a':
-                to_change['pre'] = ('b', 0)
-            if version.pre[0] == 'b':
-                to_change['pre'] = ('b', version.pre[1] + 1)
-            else:
-                to_change['pre'] = ('b', 0)
-                to_change['release'] = _bump_release(version.release, 'patch')
+def _get_operations(app):
+    proc = subprocess.Popen([app, '--help'],
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE)
+    lines = proc.stdout.readlines()
     
-    def print_title(title, pattern = '-'):
-    print('\n'.join(('', title, pattern * len(title)))) 
+        A SAML identity provide might look like this, type: onelogin, instance:
+    acme-org.onelogin.com.
+    '''
+    __core__ = False
+    
+            # Removing index on 'EventTag', fields ['group_id', 'key', 'value']
+        db.delete_index(u'tagstore_eventtag', ['group_id', 'key', 'value'])
+    
+            # Deleting model 'GroupTagKey'
+        db.delete_table(u'tagstore_grouptagkey')
+    
+            # Adding model 'GroupTagValue'
+        db.create_table(u'tagstore_grouptagvalue', (
+            ('_value', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                to=orm['tagstore.TagValue'], db_column='value_id')),
+            ('project_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(db_index=True)),
+            ('environment_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(null=True)),
+            ('times_seen', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(default=0)),
+            ('_key', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                to=orm['tagstore.TagKey'], db_column='key_id')),
+            ('first_seen', self.gf('django.db.models.fields.DateTimeField')(
+                null=True, db_index=True)),
+            ('group_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(db_index=True)),
+            ('id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(primary_key=True)),
+            ('last_seen', self.gf('django.db.models.fields.DateTimeField')(
+                null=True, db_index=True)),
+        ))
+        db.send_create_signal('tagstore', ['GroupTagValue'])
+    
+            # Adding unique constraint on 'EventTag', fields ['event_id', 'key', 'value']
+        db.create_unique(u'tagstore_eventtag', ['event_id', 'key_id', 'value_id'])
+    
+        models = {
+        'tagstore.eventtag': {
+            'Meta': {'unique_together': '(('project_id', 'event_id', 'key', 'value'),)', 'object_name': 'EventTag', 'index_together': '(('project_id', 'key', 'value'), ('group_id', 'key', 'value'))'},
+            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'db_index': 'True'}),
+            'event_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {}),
+            'group_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {}),
+            'value': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagValue']', 'db_column': ''value_id''})
+        },
+        'tagstore.grouptagkey': {
+            'Meta': {'unique_together': '(('project_id', 'group_id', '_key'),)', 'object_name': 'GroupTagKey'},
+            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            'group_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
+            'values_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
+        },
+        'tagstore.grouptagvalue': {
+            'Meta': {'unique_together': '(('project_id', 'group_id', '_key', '_value'),)', 'object_name': 'GroupTagValue', 'index_together': '(('project_id', '_key', '_value', 'last_seen'),)'},
+            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            '_value': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagValue']', 'db_column': ''value_id''}),
+            'first_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'group_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'last_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
+            'times_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
+        },
+        'tagstore.tagkey': {
+            'Meta': {'unique_together': '(('project_id', 'environment_id', 'key'),)', 'object_name': 'TagKey'},
+            'environment_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'key': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
+            'status': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'}),
+            'values_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
+        },
+        'tagstore.tagvalue': {
+            'Meta': {'unique_together': '(('project_id', '_key', 'value'),)', 'object_name': 'TagValue', 'index_together': '(('project_id', '_key', 'last_seen'),)'},
+            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            'data': ('sentry.db.models.fields.gzippeddict.GzippedDictField', [], {'null': 'True', 'blank': 'True'}),
+            'first_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'last_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
+            'times_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'}),
+            'value': ('django.db.models.fields.CharField', [], {'max_length': '200'})
+        }
+    }
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+'''
+    
+    
+class ChatRoom(object):
+    '''Mediator class'''
+    
+    *TL;DR
+Creates new object instances by cloning prototype.
+'''
+    
+    
+def main():
+    ui = Ui()
+    ui.get_product_list()
+    ui.get_product_information('cheese')
+    ui.get_product_information('eggs')
+    ui.get_product_information('milk')
+    ui.get_product_information('arepas')
+    
+    
+*What is this pattern about?
+The Facade pattern is a way to provide a simpler unified interface to
+a more complex system. It provides an easier way to access functions
+of the underlying system by providing a single entry point.
+This kind of abstraction is seen in many real life situations. For
+example, we can turn on a computer by just pressing a button, but in
+fact there are many procedures and operations done when that happens
+(e.g., loading programs from disk to memory). In this case, the button
+serves as an unified interface to all the underlying procedures to
+turn on a computer.
