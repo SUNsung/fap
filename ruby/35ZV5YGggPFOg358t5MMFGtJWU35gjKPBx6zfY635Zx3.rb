@@ -1,46 +1,38 @@
 
         
-                result = Fastlane::FastFile.new.parse('lane :test do
-          add_git_tag ({
-            tag: '#{tag}',
-            message: '#{message}',
-            commit: '#{commit}'
-          })
-        end').runner.execute(:test)
+          s.add_development_dependency 'activesupport', '< 5.0.0' # Please see issue #432
+  s.add_development_dependency 'awesome_print', '~> 1.2'
+  s.add_development_dependency 'bundler', '>= 1.3'
+  s.add_development_dependency 'coveralls', '~> 0.8'
+  s.add_development_dependency 'factory_bot', '~> 4.8'
+  s.add_development_dependency 'pry', '~> 0.10'
+  s.add_development_dependency 'rake', '~> 10.4'
+  s.add_development_dependency 'rspec', '~> 3.3'
+  s.add_development_dependency 'rubocop', '~> 0.48.1'
+  s.add_development_dependency 'simplecov', '~> 0.16'
     
-              it 'raises an exception' do
-            expect do
-              Fastlane::FastFile.new.parse('lane :test do
-                  carthage(command: '#{command}', output: 'bla.framework.zip')
-                end').runner.execute(:test)
-            end.to raise_error('Output option is available only for 'archive' command.')
-          end
-        end
+    describe Tmuxinator::Hooks::Project do
+  let(:project) { FactoryBot.build(:project) }
     
-      # Setup the root logger with the Rails log level and the desired set of
-  # appenders. The list of appenders to use should be set in the environment
-  # specific configuration file.
-  #
-  # For example, in a production application you would not want to log to
-  # STDOUT, but you would want to send an email for 'error' and 'fatal'
-  # messages:
-  #
-  # => config/environments/production.rb
-  #
-  #     config.log_to = %w[file email]
-  #
-  # In development you would want to log to STDOUT and possibly to a file:
-  #
-  # => config/environments/development.rb
-  #
-  #     config.log_to = %w[stdout file]
-  #
-  Logging.logger.root.appenders = config.log_to unless config.log_to.empty?
+        msg = 'Actual pane does not match expected'
+    msg << '\n  Expected #{@commands} but has #{actual.commands}' if @commands
+    msg << '\n  Expected pane to have #{@expected_attrs}' if @expected_attrs
+  end
     
-        change.down do
-      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
-      Mention.where(mentions_container_type: 'Comment').destroy_all
-      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
+      captured_stdout = StringIO.new
+  captured_stderr = StringIO.new
+    
+        after do
+      File.delete(local_project_path)
     end
   end
-end
+    
+    describe Tmuxinator::Doctor do
+  describe '.installed?' do
+    context 'tmux is installed' do
+      before do
+        allow(Kernel).to receive(:system) { true }
+      end
+    
+      describe '#synchronize_after?' do
+    subject { window.synchronize_after? }
