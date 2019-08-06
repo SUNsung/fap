@@ -1,144 +1,223 @@
 
         
-                attr_reader :symbol
+                File.open(@path, 'w') { |file| file.puts(updated_podspec_content) } unless Helper.test?
     
-              # Add the help option, which must be on every command.
-          opts.on_tail('-h', '--help', 'Print this help') do
-            safe_puts(opts.help)
-            return nil
+          context 'with appendix' do
+        it 'returns the current version once parsed with appendix' do
+          test_content = 'spec.version = '1.3.2.4''
+          result = @version_podspec_file.parse(test_content)
+          expect(result).to eq('1.3.2.4')
+          expect(@version_podspec_file.version_value).to eq('1.3.2.4')
+          expect(@version_podspec_file.version_match[:major]).to eq('1')
+          expect(@version_podspec_file.version_match[:minor]).to eq('3')
+          expect(@version_podspec_file.version_match[:patch]).to eq('2')
+          expect(@version_podspec_file.version_match[:appendix]).to eq('.4')
+        end
+    
+          it 'returns true for enterprise accounts' do
+        PortalStubbing.adp_stub_multiple_teams
+    
+            unless Snapshot.cache[:result_bundle_path][language_key]
+          path = File.join(Snapshot.config[:output_directory], 'test_output', language_key, Snapshot.config[:scheme]) + '.test_result'
+          if File.directory?(path)
+            FileUtils.remove_dir(path)
+          end
+          Snapshot.cache[:result_bundle_path][language_key] = path
+        end
+        return Snapshot.cache[:result_bundle_path][language_key]
+      end
+    
+          def self.find_api_token(params)
+        return if params[:gsp_path]
+        unless params[:api_token].to_s.length > 0
+          Dir['./**/Info.plist'].each do |current|
+            result = Actions::GetInfoPlistValueAction.run(path: current, key: 'Fabric')
+            next unless result
+            next unless result.kind_of?(Hash)
+            params[:api_token] ||= result['APIKey']
+            UI.verbose('found an APIKey in #{current}')
+          end
+        end
+      end
+    
+              if method_called_ever?(body_node, :virtualenv_create) ||
+             method_called_ever?(body_node, :virtualenv_install_with_resources)
+            find_method_with_args(body_node, :resource, 'setuptools') do
+              problem 'Formulae using virtualenvs do not need a `setuptools` resource.'
+            end
           end
     
-            # This is called to upgrade this V1 config to V2. The parameter given
-        # is the full V2 configuration object, so you can do anything to it
-        # that you want.
-        #
-        # No return value is expected, modifications should be made directly
-        # to the new V2 object.
-        #
-        # @param [V2::Root] new
-        def upgrade(new)
-        end
+          path = if timestamp == :latest
+        Pathname.glob(metadata_versioned_path(version: version).join('*')).max
+      else
+        timestamp = new_timestamp if timestamp == :now
+        metadata_versioned_path(version: version).join(timestamp)
+      end
     
-            # This is the method called to 'prepare' the provisioner. This is called
-        # before any actions are run by the action runner (see {Vagrant::Actions::Runner}).
-        # This can be used to setup shared folders, forward ports, etc. Whatever is
-        # necessary on a 'meta' level.
-        #
-        # No return value is expected.
-        def prepare
+          def <=>(other)
+        @comparison_cache.fetch(other) do
+          v = SYMBOLS.fetch(other) { other.to_s }
+          @comparison_cache[other] = super(Version.new(v))
         end
+      end
     
-            # This is called as a last-minute hook that allows the configuration
-        # object to finalize itself before it will be put into use. This is
-        # a useful place to do some defaults in the case the user didn't
-        # configure something or so on.
-        #
-        # An example of where this sort of thing is used or has been used:
-        # the 'vm' configuration key uses this to make sure that at least
-        # one sub-VM has been defined: the default VM.
-        #
-        # The configuration object is expected to mutate itself.
-        def finalize!
-          # Default implementation is to do nothing.
+    require 'extend/optparse'
+    
+      it_behaves_like 'a command that requires a Cask token'
+  it_behaves_like 'a command that handles invalid options'
+    
+        ARGV.formulae.each do |f|
+      bintray_package = Utils::Bottles::Bintray.package f.name
+      bintray_repo_url = 'https://api.bintray.com/packages/homebrew/mirror'
+      package_url = '#{bintray_repo_url}/#{bintray_package}'
+    
+        # use Feedbag as a backup to Google Feeds Api
+    if rss_url.nil?
+      rss_url = Feedbag.find(web_url).first
+      if rss_url.nil?
+        suggested_paths = ['/rss', '/feed', '/feeds', '/atom.xml', '/feed.xml', '/rss.xml', '.atom']
+        suggested_paths.each do |suggested_path|
+          rss_url = Feedbag.find('#{web_url.chomp('/')}#{suggested_path}').first
+          break if rss_url
         end
+      end
+    end
+  end
     
-            # This is called early, before a machine is instantiated, to check
-        # if this provider is usable. This should return true or false.
-        #
-        # If raise_error is true, then instead of returning false, this
-        # should raise an error with a helpful message about why this
-        # provider cannot be used.
-        #
-        # @param [Boolean] raise_error If true, raise exception if not usable.
-        # @return [Boolean]
-        def self.usable?(raise_error=false)
-          # Return true by default for backwards compat since this was
-          # introduced long after providers were being written.
-          true
+          def add_claims_to_scopes
+        return unless params[:claims]
+        claims_json = JSON.parse(params[:claims])
+        return unless claims_json
+        claims_array = claims_json['userinfo'].try(:keys)
+        return unless claims_array
+        req = build_rack_request
+        claims = claims_array.unshift(req[:scope]).join(' ')
+        req.update_param('scope', claims)
+      end
+    
+          def find
+        client = Api::OpenidConnect::OAuthApplication.find_by(client_name: params[:client_name])
+        if client
+          render json: {client_id: client.client_id}
+        else
+          render json: {error: 'Client with name #{params[:client_name]} does not exist'}
         end
+      end
     
-      it { expect(subject.tmux_window_and_pane_target).to eql 'foo:0.1' }
+    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
+#   licensed under the Affero General Public License version 3 or later.  See
+#   the COPYRIGHT file.
+    
+      def contacts_data
+    current_user.contacts.mutual.joins(person: :profile)
+      .pluck(*%w(contacts.id profiles.first_name profiles.last_name people.diaspora_handle))
+      .map {|contact_id, *name_attrs|
+        {value: contact_id, name: ERB::Util.h(Person.name_from_attrs(*name_attrs)) }
+      }
+  end
 end
 
     
-        context 'with deprecations' do
-      it 'still gets the list of windows' do
-        expect(project_with_deprecations.windows).to_not be_empty
-      end
-    end
+        redirect_to stream_path
   end
+end
+
     
-      match do
-    result = is_pane
+        opts = params.require(:message).permit(:text)
+    message = current_user.build_message(conversation, opts)
     
-      expansion(:html_body) { o.html_body }
-    
-        if @domain.save
-      if @domain.verified?
-        redirect_to_with_json [:setup, organization, @server, @domain]
+      def read_all
+    current_type = types[params[:type]]
+    notifications = Notification.where(recipient_id: current_user.id, unread: true)
+    notifications = notifications.where(type: current_type) if params[:type]
+    notifications.update_all(unread: false)
+    respond_to do |format|
+      if current_user.unread_notifications.count > 0
+        format.html { redirect_to notifications_path }
+        format.mobile { redirect_to notifications_path }
       else
-        redirect_to_with_json [:verify, organization, @server, @domain]
+        format.html { redirect_to stream_path }
+        format.mobile { redirect_to stream_path }
       end
-    else
-      render_form_errors 'new', @domain
+      format.xml { render :xml => {}.to_xml }
+      format.json { render :json => {}.to_json }
     end
   end
     
-                if qs[:after]
-              begin
-                options[:where][:timestamp][:greater_than] = get_time_from_string(qs[:after]).to_f
-              rescue TimeUndetermined => e
-                flash.now[:alert] = 'Couldn't determine time for after from '#{qs[:after]}''
-              end
-            end
-          end
-        end
+        # control tar.
+    begin
+      write_pkginfo(control_path)
+      write_control_scripts(control_path)
+      tar_path(control_path, controltar_path)
+    ensure
+      FileUtils.rm_r(control_path)
+    end
+    
+      def self.default_prefix
+    npm_prefix = safesystemout('npm', 'prefix', '-g').chomp
+    if npm_prefix.count('\n') > 0
+      raise FPM::InvalidPackageConfiguration, '`npm prefix -g` returned unexpected output.'
+    elsif !File.directory?(npm_prefix)
+      raise FPM::InvalidPackageConfiguration, '`npm prefix -g` returned a non-existent directory'
+    end
+    logger.info('Setting default npm install prefix', :prefix => npm_prefix)
+    npm_prefix
+  end
+    
+        if self.attributes[:osxpkg_payload_free?]
+      args << '--nopayload'
+    else
+      args += ['--root', staging_path]
+    end
+    
+      def output(output_path)
+    
+    # Fixup the category to an acceptable solaris category
+    case @category
+    when nil, 'default'
+      @category = 'Applications/System Utilities'
+    end
+    
+    end
+    
+        # Copy 'files' from builddir to :output/files
+    Find.find('files', 'manifests') do |path|
+      logger.info('Copying path: #{path}')
+      if File.directory?(path)
+        ::Dir.mkdir(File.join(params[:output], path))
       else
-        session['msg_query_#{@server.id}_#{scope}'] = nil
+        FileUtils.cp(path, File.join(params[:output], path))
       end
     end
+  end # def build!
     
-      private
-    
-      def create
-    @track_domain = @server.track_domains.build(params.require(:track_domain).permit(:name, :domain_id, :track_loads, :track_clicks, :excluded_click_domains, :ssl_enabled))
-    if @track_domain.save
-      redirect_to_with_json [:return_to, [organization, @server, :track_domains]]
-    else
-      render_form_errors 'new', @track_domain
+          expect(instance.render).to match %r{wemux.ls.2>\/dev\/null}
     end
   end
     
-      def create
-    @organization_user = organization.organization_users.build(params.require(:organization_user).permit(:email_address, :admin, :all_servers))
-    if @organization_user.save
-      AppMailer.user_invite(@organization_user.user, organization).deliver
-      redirect_to_with_json [organization, :users], :notice => 'An invitation will be sent to #{@organization_user.user.email_address} which will allow them to access your organization.'
-    else
-      render_form_errors 'new', @organization_user
-    end
-  end
+        private
     
-      def format_delivery_details(server, text)
-    text.gsub!(/\<msg\:(\d+)\>/) do
-      id = $1.to_i
-      link_to('message ##{id}', organization_server_message_path(server.organization, server, id), :class => 'u-link')
+        def tmux_window_command_prefix
+      '#{project.tmux} send-keys -t #{project.name}:#{index + project.base_index}'
     end
-    text.html_safe
-  end
     
-          # This module extends user defined helpers
-      # to provide some API-specific functionality.
-      module BaseHelper
-        attr_accessor :api
-        def params(name, &block)
-          @named_params ||= {}
-          @named_params[name] = block
+      context 'hook value is Array' do
+    before do
+      project.yaml[hook_name] = [
+        'echo 'on hook'',
+        'echo 'another command here''
+      ]
+    end
+    
+      subject { instance }
+    
+            it 'sets force_attach to true when 'attach: true' is provided' do
+          project = described_class.new.create_project(attach: true,
+                                                       name: name)
+          expect(project.force_attach).to eq(true)
         end
     
-            def error_formatter(format, options)
-          formatter = if options.is_a?(Hash) && options.key?(:with)
-                        options[:with]
-                      else
-                        options
-                      end
+            expect(described_class.directories).to eq ['TMUXINATOR_CONFIG']
+      end
+    end
+  end
