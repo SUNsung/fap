@@ -1,126 +1,110 @@
 
         
-            def fragment_url_string?(str)
-      str[0] == '#'
-    end
+          def test_font_helper_with_suffix_question
+    assert_match %r(url\(['']?/assets/.*eot\?.*['']?\)), @css
+  end
     
-        def ==(other)
-      other.is_a?(self.class) && filters == other.filters
-    end
-    
-            css('h1 + code').each do |node|
-          node.before('<p></p>')
-          while node.next_element.name == 'code'
-            node.previous_element << ' '
-            node.previous_element << node.next_element
-          end
-          node.previous_element.prepend_child(node)
-        end
-    
-        # Scrub the high bits out of the call IDs
-    src_call ^= 0x8000 if (src_call & 0x8000 != 0)
-    dst_call ^= 0x8000 if (dst_call & 0x8000 != 0)
-    
-              # Encodes the Rex::Proto::Kerberos::Model::ApReq into an ASN.1 String
-          #
-          # @return [String]
-          def encode
-            elems = []
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_pvno], 0, :CONTEXT_SPECIFIC)
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_msg_type], 1, :CONTEXT_SPECIFIC)
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_options], 2, :CONTEXT_SPECIFIC)
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_ticket], 3, :CONTEXT_SPECIFIC)
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_authenticator], 4, :CONTEXT_SPECIFIC)
-            seq = OpenSSL::ASN1::Sequence.new(elems)
-    
-              # Rex::Proto::Kerberos::Model::Checksum decoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def decode(input)
-            raise ::NotImplementedError, 'Checksum decoding not supported'
-          end
-    
-              # Decodes the sname field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Rex::Proto::Kerberos::Type::PrincipalName]
-          def decode_sname(input)
-            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
-          end
-        end
+          it 'Does not render variant when no variants published' do
+        html_variant = create(:html_variant, published: false, approved: true)
+        get article.path + '?variant_version=1'
+        expect(response.body).not_to include html_variant.html
       end
+    
+      it 'renders a podcast index if there is a podcast with the slug successfully' do
+    expect(get: '/#{podcast.slug}').to route_to(
+      controller: 'stories',
+      action: 'index',
+      username: podcast.slug,
+    )
+  end
+    
+      describe 'GET /:path/stats' do
+    before { sign_in user }
+    
+    desc 'Update configurations to support publishing to root or sub directory'
+task :set_root_dir, :dir do |t, args|
+  puts '>>> !! Please provide a directory, eg. rake config_dir[publishing/subdirectory]' unless args.dir
+  if args.dir
+    if args.dir == '/'
+      dir = ''
+    else
+      dir = '/' + args.dir.sub(/(\/*)(.+)/, '\\2').sub(/\/$/, '');
     end
+    rakefile = IO.read(__FILE__)
+    rakefile.sub!(/public_dir(\s*)=(\s*)([''])[\w\-\/]*['']/, 'public_dir\\1=\\2\\3public#{dir}\\3')
+    File.open(__FILE__, 'w') do |f|
+      f.write rakefile
+    end
+    compass_config = IO.read('config.rb')
+    compass_config.sub!(/http_path(\s*)=(\s*)([''])[\w\-\/]*['']/, 'http_path\\1=\\2\\3#{dir}/\\3')
+    compass_config.sub!(/http_images_path(\s*)=(\s*)([''])[\w\-\/]*['']/, 'http_images_path\\1=\\2\\3#{dir}/images\\3')
+    compass_config.sub!(/http_fonts_path(\s*)=(\s*)([''])[\w\-\/]*['']/, 'http_fonts_path\\1=\\2\\3#{dir}/fonts\\3')
+    compass_config.sub!(/css_dir(\s*)=(\s*)([''])[\w\-\/]*['']/, 'css_dir\\1=\\2\\3public#{dir}/stylesheets\\3')
+    File.open('config.rb', 'w') do |f|
+      f.write compass_config
+    end
+    jekyll_config = IO.read('_config.yml')
+    jekyll_config.sub!(/^destination:.+$/, 'destination: public#{dir}')
+    jekyll_config.sub!(/^subscribe_rss:\s*\/.+$/, 'subscribe_rss: #{dir}/atom.xml')
+    jekyll_config.sub!(/^root:.*$/, 'root: /#{dir.sub(/^\//, '')}')
+    File.open('_config.yml', 'w') do |f|
+      f.write jekyll_config
+    end
+    rm_rf public_dir
+    mkdir_p '#{public_dir}#{dir}'
+    puts '## Site's root directory is now '/#{dir.sub(/^\//, '')}' ##'
   end
 end
     
-      if config.log_to.include? 'file'
-    # Configure an appender that will write log events to a file.
-    if AppConfig.environment.logging.logrotate.enable?
-      # The file will be rolled on a daily basis, and the rolled files will be kept
-      # the configured number of days. Older files will be deleted. The default pattern
-      # layout is used when formatting log events into strings.
-      Logging.appenders.rolling_file('file',
-                                     filename:      config.paths['log'].first,
-                                     keep:          AppConfig.environment.logging.logrotate.days.to_i,
-                                     age:           'daily',
-                                     truncate:      false,
-                                     auto_flushing: true,
-                                     layout:        layout
-                                    )
-    else
-      # No file rolling, use logrotate to roll the logfile.
-      Logging.appenders.file('file',
-                             filename:      config.paths['log'].first,
-                             truncate:      false,
-                             auto_flushing: true,
-                             layout:        layout
-                            )
-    end
-  end
-    
-      def up_down(change)
-    change.up do
-      Mention.update_all(mentions_container_type: 'Post')
-      change_column :mentions, :mentions_container_type, :string, null: false
-      Notification.where(type: 'Notifications::Mentioned').update_all(type: 'Notifications::MentionedInPost')
-    end
-    
-      class SendPrivate < Base
-    def perform(*_args)
-      # don't federate in cucumber
-    end
-  end
-    
-        it 'generates the aspects_manage_contacts_json fixture', fixture: true do
-      # adds one not mutual contact
-      bob.share_with(FactoryGirl.create(:person), @aspect)
-    
-      describe '#destroy' do
-    let(:post) { FactoryGirl.create(:status_message) }
-    
-      describe '#create' do
-    it 'redirects to /stream for a non-mobile user' do
-      post :create, params: {user: {remember_me: '0', username: @user.username, password: 'evankorth'}}
-      expect(response).to be_redirect
-      expect(response.location).to match /^#{stream_url}\??$/
-    end
-    
-          get_web_content(redirected_url)
-    end
-    
-            Dir.chdir(includes_dir) do
-          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
-          if choices.include?(file)
-            source = File.read(file)
-            partial = Liquid::Template.parse(source)
-            context.stack do
-              rtn = rtn + partial.render(context)
-            end
-          else
-            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
+        def render(context)
+      quote = paragraphize(super)
+      author = '<strong>#{@by.strip}</strong>' if @by
+      if @source
+        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
+        parts = []
+        url.each do |part|
+          if (parts + [part]).join('/').length < 32
+            parts << part
           end
         end
+        source = parts.join('/')
+        source << '/&hellip;' unless source == @source
       end
-      rtn
+      if !@source.nil?
+        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
+      elsif !@title.nil?
+        cite = ' <cite>#{@title}</cite>'
+      end
+      blockquote = if @by.nil?
+        quote
+      elsif cite
+        '#{quote}<footer>#{author + cite}</footer>'
+      else
+        '#{quote}<footer>#{author}</footer>'
+      end
+      '<blockquote>#{blockquote}</blockquote>'
+    end
+    
+        # Outputs a single category as an <a> link.
+    #
+    #  +category+ is a category string to format as an <a> link
+    #
+    # Returns string
+    #
+    def category_link(category)
+      dir = @context.registers[:site].config['category_dir']
+      '<a class='category' href='/#{dir}/#{category.to_url}/'>#{category}</a>'
+    end
+    
+    class ConfigTag < Liquid::Tag
+  def initialize(tag_name, options, tokens)
+    super
+    options = options.split(' ').map {|i| i.strip }
+    @key = options.slice!(0)
+    @tag = nil
+    @classname = nil
+    options.each do |option|
+      @tag = $1 if option =~ /tag:(\S+)/ 
+      @classname = $1 if option =~ /classname:(\S+)/
     end
   end
