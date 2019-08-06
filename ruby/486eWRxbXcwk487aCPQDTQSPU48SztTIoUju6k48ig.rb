@@ -1,152 +1,330 @@
 
         
-            assert_not @developer.created_at_changed?, 'created_at should not be changed'
-    assert_not @developer.changed?, 'record should not be changed'
-    assert_not_equal previously_created_at, @developer.created_at
-    assert_not_equal @previously_updated_at, @developer.updated_at
-  end
+            def find_app(apple_id: nil, app_identifier: nil)
+      if app_identifier
+        app = Spaceship::ConnectAPI::App.find(app_identifier)
+        UI.user_error!('Could not find an app by #{app_identifier}') unless app
+        return app
+      end
     
-        %w(btree hash).each do |using|
-      expected = 'CREATE  INDEX `index_people_on_last_name` USING #{using} ON `people` (`last_name`) '
-      assert_equal expected, add_index(:people, :last_name, using: using)
-    end
+            resps = Spaceship::ConnectAPI.get_beta_testers(filter: filter, includes: includes, limit: limit, sort: sort).all_pages
+        return resps.map(&:to_models).flatten
+      end
     
-        initializer 'action_mailbox.config' do
-      config.after_initialize do |app|
-        ActionMailbox.logger = app.config.action_mailbox.logger || Rails.logger
-        ActionMailbox.incinerate = app.config.action_mailbox.incinerate.nil? ? true : app.config.action_mailbox.incinerate
-        ActionMailbox.incinerate_after = app.config.action_mailbox.incinerate_after || 30.days
-        ActionMailbox.queues = app.config.action_mailbox.queues || {}
-        ActionMailbox.ingress = app.config.action_mailbox.ingress
+          def self.all(filter: {}, includes: nil, limit: nil, sort: nil)
+        resps = Spaceship::ConnectAPI.get_certificates(filter: filter, includes: includes).all_pages
+        return resps.map(&:to_models).flatten
       end
     end
   end
 end
 
     
-      # Ignore bad email addresses and do not raise email delivery errors.
-  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
-  # config.action_mailer.raise_delivery_errors = false
+      # A period that the user is allowed to confirm their account before their
+  # token becomes invalid. For example, if set to 3.days, the user can confirm
+  # their account within 3 days after the mail was sent, but on the fourth day
+  # their account can't be confirmed with the token any more.
+  # Default is nil, meaning there is no restriction on how long a user can take
+  # before confirming their account.
+  # config.confirm_within = 3.days
     
-          it 'is secure when there are no registered editable fields' do
-        Group.plugin_editable_group_custom_fields.clear
-        params = group_params
-        params[:group].merge!(custom_fields: { test: :hello1, test2: :hello2 })
+      test 'warden manager user configuration through a block' do
+    Devise.yield_and_restore do
+      executed = false
+      Devise.warden do |config|
+        executed = true
+        assert_kind_of Warden::Config, config
+      end
     
-          ensure_cors!
-      presigned_url(obj, :put, UPLOAD_URL_EXPIRES_AFTER_SECONDS)
-    rescue Aws::Errors::ServiceError => e
-      Rails.logger.warn('Failed to generate upload URL for S3: #{e.message.presence || e.class.name}')
-      raise StorageError
+        def translation_scope
+      'devise.confirmations'
     end
+end
+
     
-      def get_path_for_s3_upload(path)
-    path = File.join(@s3_bucket_folder_path, path) if @s3_bucket_folder_path && path !~ /^#{@s3_bucket_folder_path}\//
-    path
+      def failure
+    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
+    redirect_to after_omniauth_failure_path_for(resource_name)
   end
     
-      def file_prefix(db_name, multisite)
-    multisite ? '\\/#{db_name}' : ''
+        if record.timedout?(last_request_at) &&
+        !env['devise.skip_timeout'] &&
+        !proxy.remember_me_is_active?(record)
+      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
+      throw :warden, scope: scope, message: :timeout
+    end
+    
+        # Create magic predicates for verifying what module is activated by this map.
+    # Example:
+    #
+    #   def confirmable?
+    #     self.modules.include?(:confirmable)
+    #   end
+    #
+    def self.add_module(m)
+      class_eval <<-METHOD, __FILE__, __LINE__ + 1
+        def #{m}?
+          self.modules.include?(:#{m})
+        end
+      METHOD
+    end
+    
+            # Returns the path to the Chef binary, taking into account the
+        # `binary_path` configuration option.
+        def chef_binary_path(binary)
+          return binary if !@config.binary_path
+          return File.join(@config.binary_path, binary)
+        end
+    
+      describe '#chef_installed' do
+    let(:version) { '15.0.0' }
+    let(:command) { 'test -x /opt/chef_solo/bin/knife&& /opt/chef_solo/bin/knife --version | grep '15.0.0'' }
+    
+      before do
+    allow(machine).to receive(:communicate).and_return(communicator)
+  end
+    
+      describe '#chef_installed' do
+    let(:version) { '15.0.0' }
+    let(:command) { 'test -x /opt/chef_solo/bin/knife&& /opt/chef_solo/bin/knife --version | grep '15.0.0'' }
+    
+      let(:environment)   { isolated_environment }
+    
+      # A helper to register a provider for use in tests.
+  def register_provider(name, config_class=nil, options=nil)
+    provider_cls = Class.new(VagrantTests::DummyProvider) do
+      if options && options[:unusable]
+        def self.usable?(raise_error=false)
+          raise Vagrant::Errors::VagrantError if raise_error
+          false
+        end
+      end
+    end
+    
+              host_env.machine(
+            host_machine_name,
+            host_env.default_provider(
+              exclude: [:docker],
+              force_default: false,
+            ))
+        end
+    
+          expect(subject.state.id).to eq(:not_created)
+    end
+  end
+    
+        # Run all the queued up actions, parallelizing if possible.
+    #
+    # This will parallelize if and only if the provider of every machine
+    # supports parallelization and parallelization is possible from
+    # initialization of the class.
+    def run
+      par = false
+    
+        records.each { |account| authorize(account.user, :reject?) }
+           .each { |account| SuspendAccountService.new.call(account, including_user: true, destroy: true, skip_distribution: true) }
   end
 end
 
     
-      end
-end
-
+      def perform(status_id)
+    @status  = Status.find(status_id)
+    @account = @status.account
     
-        def prepare_format
-      @column_separator = @options[:column_separator].to_s.encode(@encoding)
-      row_separator = @options[:row_separator]
-      if row_separator == :auto
-        @row_separator = $INPUT_RECORD_SEPARATOR.encode(@encoding)
-      else
-        @row_separator = row_separator.to_s.encode(@encoding)
-      end
-      @quote_character = @options[:quote_character]
-      @force_quotes = @options[:force_quotes]
-      unless @force_quotes
-        @quotable_pattern =
-          Regexp.new('[\r\n'.encode(@encoding) +
-                     Regexp.escape(@column_separator) +
-                     Regexp.escape(@quote_character.encode(@encoding)) +
-                     ']'.encode(@encoding))
-      end
-      @quote_empty = @options.fetch(:quote_empty, true)
+    class ActivityPub::DistributionWorker
+  include Sidekiq::Worker
+  include Payloadable
+    
+      private
+    
+      describe 'PUT #update' do
+    it 'updates notifications settings' do
+      user.settings['notification_emails'] = user.settings['notification_emails'].merge('follow' => false)
+      user.settings['interactions'] = user.settings['interactions'].merge('must_be_follower' => true)
+    
+        def pam_conflict(_attributes)
+      # Block pam login tries on traditional account
     end
     
-      # This is especially important for JRuby, since eof? there
-  # is more than just a simple accessor.
-  it 'does not affect the reading data' do
-    gz = Zlib::GzipReader.new @io
-    0.upto(9) do |i|
-      gz.eof?.should be_false
-      gz.read(1).should == @data[i, 1]
-    end
-    gz.eof?.should be_true
-    gz.read().should == ''
-    gz.eof?.should be_true
+      def origin_account
+    @account
   end
     
-        gz = Zlib::GzipReader.new(obj)
-    gz.rewind()
+          it 'does not process payload if no signature exists' do
+        expect_any_instance_of(ActivityPub::LinkedDataSignature).to receive(:verify_account!).and_return(nil)
+        expect(ActivityPub::Activity).not_to receive(:factory)
     
-    describe 'GzipWriter#write' do
-  before :each do
-    @data = '12345abcde'
-    @zip = [31, 139, 8, 0, 44, 220, 209, 71, 0, 3, 51, 52, 50, 54, 49, 77,
-            76, 74, 78, 73, 5, 0, 157, 5, 0, 36, 10, 0, 0, 0].pack('C*')
-    @io = StringIO.new ''.b
-  end
-    
-          it 'Does not render variant when no variants published' do
-        html_variant = create(:html_variant, published: false, approved: true)
-        get article.path + '?variant_version=1'
-        expect(response.body).not_to include html_variant.html
+          it 'creates a block from sender to recipient' do
+        expect(sender.blocking?(recipient)).to be true
       end
     
-      def define_categories
-    cat_info = {
-      'collabs': ['Collaborators Wanted', '#5AE8D9'],
-      'cfp': ['Call For Proposal', '#f58f8d'],
-      'forhire': ['Available For Hire', '#b78cf4'],
-      'education': ['Education', '#5AABE8'],
-      'jobs': ['Now Hiring', '#53c3ad'],
-      'mentors': ['Offering Mentorship', '#A69EE8'],
-      'mentees': ['Looking For Mentorship', '#88aedb'],
-      'forsale': ['Stuff For Sale', '#d0adfb'],
-      'events': ['Upcoming Event', '#f8b3d0'],
-      'misc': ['Miscellaneous', '#6393FF'],
-      'products': ['Products & Tools', '#5AE8D9']
-    }
-    @category = cat_info[@listing.category.to_sym][0]
-    @cat_color = cat_info[@listing.category.to_sym][1]
+    start = -1
+min = -1
+max = 0
+for segment in macho.segments
+  next if segment.segname == MachO::LoadCommands::SEGMENT_NAMES[:SEG_PAGEZERO]
+  puts 'segment: #{segment.segname} #{segment.vmaddr.to_s(16)}'
+  if min == -1 or min > segment.vmaddr
+    min = segment.vmaddr
+  end
+  if max < segment.vmaddr + segment.vmsize
+    max = segment.vmaddr + segment.vmsize
   end
 end
-
     
-        Rails.cache.fetch(cache_key, expires_in: 1.hour) do
-      src = GeneratedImage.new(article).social_image
-      return src if src.start_with? 'https://res.cloudinary.com/'
+      var target = [];
+  var stale = 0;
+  Object.defineProperties(target, props);
+  stale = target.stale;
     
-      def self.upbuff!(buffer_update_id, admin_id, body_text, status)
-    buffer_update = BufferUpdate.find(buffer_update_id)
-    if status == 'confirmed'
-      buffer_response = send_to_buffer(body_text, buffer_update.buffer_profile_id_code)
-      buffer_update.update!(buffer_response: buffer_response, status: status, approver_user_id: admin_id, body_text: body_text)
+        register_options(
+      [
+        OptString.new('FILENAME', [false, 'The LNK file']),
+        OptString.new('DLLNAME', [false, 'The DLL file containing the payload']),
+        OptString.new('PATH', [false, 'An explicit path to where the files should be written to'])
+      ]
+    )
+    
+        if datastore['SVC_GEN']
+      com_opts[:harness] = File.join(Msf::Config.install_root, 'external', 'source', 'psh_exe', 'dot_net_service.cs')
+      com_opts[:assemblies] = ['System.ServiceProcess.dll', 'System.Configuration.Install.dll']
     else
-      buffer_update.update!(status: status, approver_user_id: admin_id)
+      com_opts[:harness] = File.join(Msf::Config.install_root, 'external', 'source', 'psh_exe','dot_net_exe.cs')
     end
+    
+        # Check for result
+    begin
+      size = session.fs.file.stat(net_com_opts[:target].gsub('\\', '\\\\')).size
+      print_good 'File #{net_com_opts[:target].gsub('\\', '\\\\')} found, #{size}kb'
+    rescue
+      print_error 'File #{net_com_opts[:target].gsub('\\', '\\\\')} not found,' \
+                  ' NET CLR version #{datastore['NET_CLR_VER']} possibly not available'
+      return
+    end
+    
+    # Exec a command and return the results
+def m_exec(session, cmd)
+  r = session.sys.process.execute(cmd, nil, {'Hidden' => true, 'Channelized' => true})
+  b = ''
+  while(d = r.channel.read)
+    b << d
+  end
+  r.channel.close
+  r.close
+  b
+end
+    
+    
+end
+
+    
+    TLV_TYPE_REGISTER_NAME      = TLV_META_TYPE_STRING  | 2540
+TLV_TYPE_REGISTER_SIZE      = TLV_META_TYPE_UINT    | 2541
+TLV_TYPE_REGISTER_VALUE_32  = TLV_META_TYPE_UINT    | 2542
+TLV_TYPE_REGISTER           = TLV_META_TYPE_GROUP   | 2550
+    
+          # Generates the contents of the module.modulemap file.
+      #
+      # @return [String]
+      #
+      def generate
+        <<-MODULE_MAP.strip_heredoc
+#{module_specifier_prefix}module #{target.product_module_name}#{module_declaration_attributes} {
+  #{headers.join('\n  ')}
+    }
+    
+            # @note Test specs are intentionally not included as part of the equality for pod variants since a
+        #       pod variant should not be affected by the number of test nor app specs included.
+        #
+        # @return [Bool] whether the {PodVariant} is equal to another taking all
+        #         all their attributes into account
+        #
+        def ==(other)
+          self.class == other.class &&
+          build_type == other.build_type &&
+            platform == other.platform &&
+            specs == other.specs
+        end
+        alias_method :eql?, :==
+    
+          it 'returns scopes by versioned platform names if they qualify' do
+        variants = PodVariantSet.new([
+          PodVariant.new([@root_spec], [], [], Platform.ios),
+          PodVariant.new([@root_spec], [], [], Platform.new(:ios, '7.0')),
+        ])
+        variants.scope_suffixes.values.should == %w(iOS iOS7.0)
+      end
+    
+                  FileUtils.expects(:ln_sf).with(relative_path, target_module_path)
+              native_target = mock(:build_configurations => [])
+              @installer.send(:create_module_map, native_target)
+            end
+          end
+    
+          describe 'with configuration dependent pod targets' do
+        before do
+          file_accessor = fixture_file_accessor(@spec, Platform.ios)
+          @pod_target_release = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@spec],
+                                              [@target_definition], [file_accessor])
+          @target.stubs(:pod_targets_for_build_configuration).with('Debug').returns([@pod_target])
+          @target.stubs(:pod_targets_for_build_configuration).with('Release').returns([@pod_target, @pod_target_release])
+          @target.stubs(:pod_targets).returns([@pod_target, @pod_target_release])
+          @target.stubs(:user_build_configurations).returns('Debug' => :debug, 'Release' => :release)
+        end
+    
+              describe 'with boolean build settings' do
+            it 'does not warn if the values are equal' do
+              @consumer_a.stubs(:user_target_xcconfig).returns('ENABLE_HEADER_DEPENDENCIES' => 'YES')
+              @consumer_b.stubs(:user_target_xcconfig).returns('ENABLE_HEADER_DEPENDENCIES' => 'YES')
+              @xcconfig = @generator.generate
+              @xcconfig.to_hash['ENABLE_HEADER_DEPENDENCIES'].should == 'YES'
+            end
+    
+          def escape_hash(hash)
+        hash = hash.dup
+        hash.each { |k,v| hash[k] = escape(v) }
+        hash
+      end
+    
+      it 'accepts post requests with masked X-CSRF-Token header' do
+    post('/', {}, 'rack.session' => session, 'HTTP_X_CSRF_TOKEN' => masked_token)
+    expect(last_response).to be_ok
   end
     
-      def update
-    prevent_request_if_requested_twice
-    @user = current_user
-    @user.assign_attributes(user_params)
-    @errors = []
-    confirm_presence
-    respond_to do |format|
-      if @invalid_form
-        render :edit
-        return
+        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
+      env = {'HTTP_HOST' => 'foo.com'}
+      subject.options[:allow_empty_referrer] = false
+      expect(subject.referrer(env)).to be_nil
+    end
+    
+    require_relative '../lib/bootstrap/environment'
+    
+    require 'clamp'
+require 'pluginmanager/util'
+require 'pluginmanager/gemfile'
+require 'pluginmanager/install'
+require 'pluginmanager/remove'
+require 'pluginmanager/list'
+require 'pluginmanager/update'
+require 'pluginmanager/pack'
+require 'pluginmanager/unpack'
+require 'pluginmanager/generate'
+require 'pluginmanager/prepare_offline_pack'
+require 'pluginmanager/proxy_support'
+configure_proxy
+    
+          def get_installer_for(plugin_name)
+        uri = pack_uri(plugin_name)
+    
+        def initialize(local_file)
+      @local_file = local_file
+    end
+    
+        context 'update all the plugins' do
+      it 'has executed successfully' do
+        logstash.run_command_in_path('bin/logstash-plugin update --no-verify')
+        expect(logstash).to have_installed?(plugin_name, '0.1.1')
       end
+    end
+  end
+end
