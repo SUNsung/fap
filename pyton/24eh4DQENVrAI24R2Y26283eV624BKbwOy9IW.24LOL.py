@@ -1,234 +1,284 @@
 
         
-        containers = (('thefuck/python3-tcsh',
-               u'''FROM python:3
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'),
-              ('thefuck/python2-tcsh',
-               u'''FROM python:2
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'))
+            @staticmethod
+    def _set_user_agent(clc):
+        if hasattr(clc, 'SetRequestsSession'):
+            agent_string = 'ClcAnsibleModule/' + __version__
+            ses = requests.Session()
+            ses.headers.update({'Api-Client': agent_string})
+            ses.headers['User-Agent'] += ' ' + agent_string
+            clc.SetRequestsSession(ses)
     
-        new_command = get_new_command(Command('sudo apt list --upgradable', match_output))
-    assert new_command == 'sudo apt upgrade'
-
+    #
+# Copyright (c) 2015 CenturyLink
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
     
-    
-@pytest.mark.parametrize('command', [
-    Command('cargo buid', no_such_subcommand_old),
-    Command('cargo buils', no_such_subcommand)])
-def test_match(command):
-    assert match(command)
-    
-    
-@parametrize_extensions
-@parametrize_filename
-@parametrize_script
-def test_side_effect(ext, tar_error, filename, unquoted, quoted, script, fixed):
-    tar_error(unquoted.format(ext))
-    side_effect(Command(script.format(filename.format(ext)), ''), None)
-    assert set(os.listdir('.')) == {unquoted.format(ext), 'd'}
-    
-        data = response.content
-    response_headers = response.headers
-    if 'content-encoding' not in response_headers and len(response.content) < URLFETCH_DEFLATE_MAXSIZE and response_headers.get('content-type', '').startswith(('text/', 'application/json', 'application/javascript')):
-        if 'gzip' in accept_encoding:
-            response_headers['Content-Encoding'] = 'gzip'
-            compressobj = zlib.compressobj(zlib.Z_DEFAULT_COMPRESSION, zlib.DEFLATED, -zlib.MAX_WBITS, zlib.DEF_MEM_LEVEL, 0)
-            dataio = BytesIO()
-            dataio.write('\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff')
-            dataio.write(compressobj.compress(data))
-            dataio.write(compressobj.flush())
-            dataio.write(struct.pack('<LL', zlib.crc32(data) & 0xFFFFFFFFL, len(data) & 0xFFFFFFFFL))
-            data = dataio.getvalue()
-        elif 'deflate' in accept_encoding:
-            response_headers['Content-Encoding'] = 'deflate'
-            data = zlib.compress(data)[2:-4]
-    if data:
-         response_headers['Content-Length'] = str(len(data))
-    response_headers_data = zlib.compress('\n'.join('%s:%s' % (k.title(), v) for k, v in response_headers.items() if not k.startswith('x-google-')))[2:-4]
-    if 'rc4' not in options:
-        start_response('200 OK', [('Content-Type', __content_type__)])
-        yield struct.pack('!hh', int(response.status_code), len(response_headers_data))+response_headers_data
-        yield data
-    else:
-        start_response('200 OK', [('Content-Type', __content_type__), ('X-GOA-Options', 'rc4')])
-        yield struct.pack('!hh', int(response.status_code), len(response_headers_data))
-        yield rc4crypt(response_headers_data, __password__)
-        yield rc4crypt(data, __password__)
-    
-    # begin[licence]
-#
-# [The 'BSD licence']
-# Copyright (c) 2005-2008 Terence Parr
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-# end[licence]
-    
-            Terence implemented packed table initializers, because Java has a
-        size restriction on .class files and the lookup tables can grow
-        pretty large. The generated JavaLexer.java of the Java.g example
-        would be about 15MB with uncompressed array initializers.
-    
-            # Walk buffer, executing instructions and emitting tokens
-        i = start
-        while i <= end and i < len(self.tokens):
-            op = indexToOp.get(i)
-            # remove so any left have index size-1
-            try:
-                del indexToOp[i]
-            except KeyError:
-                pass
-    
-        ### Tests for TestLoader.loadTestsFromName()
-    ################################################################
-    
-        def test_cookie_first_line_no_bom(self):
-        lines = (
-            b'# -*- coding: latin-1 -*-\n',
-            b'print(something)\n',
-            b'do_something(else)\n'
-        )
-        encoding, consumed_lines = detect_encoding(self.get_readline(lines))
-        self.assertEqual(encoding, 'iso-8859-1')
-        self.assertEqual(consumed_lines, [b'# -*- coding: latin-1 -*-\n'])
-    
-    def getText(nodelist):
-    rc = []
-    for node in nodelist:
-        if node.nodeType == node.TEXT_NODE:
-            rc.append(node.data)
-    return ''.join(rc)
-    
-            print('Testing ApplyResult.get() with timeout:', end=' ')
-        res = pool.apply_async(calculate, TASKS[0])
-        while 1:
-            sys.stdout.flush()
-            try:
-                sys.stdout.write('\n\t%s' % res.get(0.02))
-                break
-            except multiprocessing.TimeoutError:
-                sys.stdout.write('.')
-        print()
-        print()
-    
-    print('Enter your SQL commands to execute in sqlite3.')
-print('Enter a blank line to exit.')
-    
-    cur.close()
-con.close()
-
-    
-    
-def _FormatYcmdDebugInfo( ycmd ):
-  python = ycmd[ 'python' ]
-  clang = ycmd[ 'clang' ]
-  message = ( 'Server Python interpreter: {0}\n'
-              'Server Python version: {1}\n'
-              'Server has Clang support compiled in: {2}\n'
-              'Clang version: {3}\n'.format( python[ 'executable' ],
-                                             python[ 'version' ],
-                                             clang[ 'has_support' ],
-                                             clang[ 'version' ] ) )
-  extra_conf = ycmd[ 'extra_conf' ]
-  extra_conf_path = extra_conf[ 'path' ]
-  if not extra_conf_path:
-    message += 'No extra configuration file found\n'
-  elif not extra_conf[ 'is_loaded' ]:
-    message += ( 'Extra configuration file found but not loaded\n'
-                 'Extra configuration path: {0}\n'.format( extra_conf_path ) )
-  else:
-    message += ( 'Extra configuration file found and loaded\n'
-                 'Extra configuration path: {0}\n'.format( extra_conf_path ) )
-  return message
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    
-  def _ThreadMain( self ):
-    while True:
-      time.sleep( self._ping_interval_seconds )
-    
-    
-def FormatDebugInfoResponse_ExtraConfFoundButNotLoaded_test():
-  response = deepcopy( GENERIC_RESPONSE )
-  response[ 'extra_conf' ].update( {
-    'is_loaded': False,
-    'path': '/path/to/extra/conf'
-  } )
-  assert_that(
-    FormatDebugInfoResponse( response ),
-    contains_string(
-      'Extra configuration file found but not loaded\n'
-      'Extra configuration path: /path/to/extra/conf\n'
-    )
-  )
-    
-    from ycm.tests.test_utils import MockVimModule
-MockVimModule()
-    
-    from concurrent.futures import _base
-    
-        # Parse and validate the field names.  Validation serves two purposes,
-    # generating informative error messages and preventing template injection attacks.
-    if isinstance(field_names, basestring):
-        field_names = field_names.replace(',', ' ').split() # names separated by whitespace and/or commas
-    field_names = tuple(map(str, field_names))
-    for name in (typename,) + field_names:
-        if not all(c.isalnum() or c=='_' for c in name):
-            raise ValueError('Type names and field names can only contain alphanumeric characters and underscores: %r' % name)
-        if _iskeyword(name):
-            raise ValueError('Type names and field names cannot be a keyword: %r' % name)
-        if name[0].isdigit():
-            raise ValueError('Type names and field names cannot start with a number: %r' % name)
-    seen_names = set()
-    for name in field_names:
-        if name.startswith('_'):
-            raise ValueError('Field names cannot start with an underscore: %r' % name)
-        if name in seen_names:
-            raise ValueError('Encountered duplicate field name: %r' % name)
-        seen_names.add(name)
-    
-    def download_urls_sequential(urls, timeout=60):
-    url_to_content = {}
-    for url in urls:
+        def _loadbalancerpool_exists(self, alias, location, port, lb_id):
+        '''
+        Checks to see if a pool exists on the specified port on the provided load balancer
+        :param alias: the account alias
+        :param location: the datacenter the load balancer resides in
+        :param port: the port to check and see if it exists
+        :param lb_id: the id string of the provided load balancer
+        :return: result: The id string of the pool or False
+        '''
+        result = False
         try:
-            url_to_content[url] = load_url(url, timeout=timeout)
-        except:
-            pass
-    return url_to_content
+            pool_list = self.clc.v2.API.Call(
+                'GET', '/v2/sharedLoadBalancers/%s/%s/%s/pools' %
+                (alias, location, lb_id))
+        except APIFailedResponse as e:
+            return self.module.fail_json(
+                msg='Unable to fetch the load balancer pools for for load balancer id: {0}. {1}'.format(
+                    lb_id, str(e.response_text)))
+        for pool in pool_list:
+            if int(pool.get('port')) == int(port):
+                result = pool.get('id')
+        return result
     
-        sqrt_n = int(math.floor(math.sqrt(n)))
-    for i in range(3, sqrt_n + 1, 2):
-        if n % i == 0:
-            return False
-    return True
+        @staticmethod
+    def _alert_policy_exists(server, alert_policy_id):
+        '''
+        Checks if the alert policy exists for the server
+        :param server: the clc server object
+        :param alert_policy_id: the alert policy
+        :return: True: if the given alert policy id associated to the server, False otherwise
+        '''
+        result = False
+        alert_policies = server.alertPolicies
+        if alert_policies:
+            for alert_policy in alert_policies:
+                if alert_policy.get('id') == alert_policy_id:
+                    result = True
+        return result
+    
+        def __init__(self, module):
+        '''
+        Construct module
+        '''
+        self.module = module
+        if not CLC_FOUND:
+            self.module.fail_json(msg=missing_required_lib('clc-sdk'), exception=CLC_IMP_ERR)
+        if not REQUESTS_FOUND:
+            self.module.fail_json(msg=missing_required_lib('requests'), exception=REQUESTS_IMP_ERR)
+        if requests.__version__ and LooseVersion(requests.__version__) < LooseVersion('2.5.0'):
+            self.module.fail_json(
+                msg='requests library  version should be >= 2.5.0')
+    
+    
+@api_wrapper
+def create_pool(module, system):
+    '''Create Pool'''
+    name = module.params['name']
+    size = module.params['size']
+    vsize = module.params['vsize']
+    ssd_cache = module.params['ssd_cache']
+    
+        except TaigaException as exc:
+        msg = 'An exception happened: %s' % to_native(exc)
+        return (False, changed, msg, {})
+    
+    - name: Set a record and ensure that this is the only one
+  netcup_dns:
+    api_key: '...'
+    api_password: '...'
+    customer_id: '...'
+    name: 'demo'
+    domain: 'example.com'
+    type: 'AAAA'
+    value: '::1'
+    solo: true
+'''
+    
+        if not layman.is_installed(name):
+        return False
+    
+    - name: Disable HTTP and increase session timeout to max value 10800 secs
+  imc_rest:
+    hostname: '{{ imc_host }}'
+    username: '{{ imc_username }}'
+    password: '{{ imc_password }}'
+    validate_certs: no
+    timeout: 120
+    content: |
+        <configConfMo><inConfig>
+          <commHttp dn='sys/svc-ext/http-svc' adminState='disabled'/>
+        </inConfig></configConfMo>
+    
+        # --- run command ---
+    try:
+        ipmi_cmd = command.Command(
+            bmc=name, userid=user, password=password, port=port
+        )
+        module.debug('ipmi instantiated - name: '%s'' % name)
+    
+        if not repository:
+        module.fail_json(msg='Repository %s/%s doesn't exist' % (user, repo))
+    
+            return ret == 1
+    
+        if sys.platform == 'win32':
+        win32_lib = os.path.abspath( os.path.join(python_path, 'lib', 'win32'))
+        sys.path.append(win32_lib)
+    elif sys.platform.startswith('linux'):
+        linux_lib = os.path.abspath( os.path.join(python_path, 'lib', 'linux'))
+        sys.path.append(linux_lib)
+    elif sys.platform == 'darwin':
+        darwin_lib = os.path.abspath( os.path.join(python_path, 'lib', 'darwin'))
+        sys.path.append(darwin_lib)
+        extra_lib = '/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python'
+        sys.path.append(extra_lib)
+    
+            if network_ok:
+            self.last_check_time = time.time()
+            self.report_ok()
+            xlog.debug('network %s is ok, cost:%d ms', self.type, 1000 * (time.time() - time_now))
+        else:
+            xlog.warn('network %s fail', self.type)
+            self.network_stat = 'Fail'
+            self.last_check_time = time.time()
+    
+    EOF = -1
+    
+            elif isinstance(e, MismatchedTokenException):
+            tokenName = '<unknown>'
+            if e.expecting == EOF:
+                tokenName = 'EOF'
+            else:
+                tokenName = self.tokenNames[e.expecting]
+    
+            Using setter/getter methods is deprecated. Use o.channel instead.'''
+    
+    setup_encode_face = '''
+import face_recognition
+    
+    # The model was trained in a way that faces with a distance of 0.6 or less should be a match. But if you want to
+# be more strict, you can look for a smaller face distance. For example, using a 0.55 cutoff would reduce false
+# positive matches at the risk of more false negatives.
+    
+        # You can access the actual face itself like this:
+    face_image = image[top:bottom, left:right]
+    pil_image = Image.fromarray(face_image)
+    pil_image.show()
+
+    
+    
+def print_result(filename, location):
+    top, right, bottom, left = location
+    print('{},{},{},{},{}'.format(filename, top, right, bottom, left))
+    
+            batched_detected_faces = api.batch_face_locations(images, number_of_times_to_upsample=0)
+    
+            # Find all the faces and face encodings in the frame of video, cost most time
+        face_locations = face_recognition.face_locations(rgb_frame)
+        face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
+    
+        # Apply some eyeliner
+    d.line(face_landmarks['left_eye'] + [face_landmarks['left_eye'][0]], fill=(0, 0, 0, 110), width=6)
+    d.line(face_landmarks['right_eye'] + [face_landmarks['right_eye'][0]], fill=(0, 0, 0, 110), width=6)
+    
+    '''
+Structure:
+        <test_image>.jpg
+        <train_dir>/
+            <person_1>/
+                <person_1_face-1>.jpg
+                <person_1_face-2>.jpg
+                .
+                .
+                <person_1_face-n>.jpg
+           <person_2>/
+                <person_2_face-1>.jpg
+                <person_2_face-2>.jpg
+                .
+                .
+                <person_2_face-n>.jpg
+            .
+            .
+            <person_n>/
+                <person_n_face-1>.jpg
+                <person_n_face-2>.jpg
+                .
+                .
+                <person_n_face-n>.jpg
+'''
+    
+    from django.core.urlresolvers import reverse
+from django.db import IntegrityError
+from django.http import Http404
+from django.utils import timezone
+from django.views.decorators.cache import never_cache
+    
+            # Adding unique constraint on 'TagKey', fields ['project_id', 'environment_id', 'key']
+        db.create_unique(u'tagstore_tagkey', ['project_id', 'environment_id', 'key'])
+    
+            # Adding unique constraint on 'TagKey', fields ['project_id', 'environment_id', 'key']
+        db.create_unique(u'tagstore_tagkey', ['project_id', 'environment_id', 'key'])
+    
+            # Adding unique constraint on 'GroupTagValue', fields ['project_id',
+        # 'group_id', 'environment_id', '_key', '_value']
+        db.create_unique(
+            u'tagstore_grouptagvalue', [
+                'project_id', 'group_id', 'environment_id', 'key_id', 'value_id'])
+    
+        if not resolution_list:
+        return
+    
+    '''
+https://www.djangospin.com/design-patterns-python/mediator/
+    
+        >>> data1.data = 3
+    DecimalViewer: Subject Data 1 has data 3
+    HexViewer: Subject Data 1 has data 0x3
+    
+    from __future__ import print_function
+    
+    '''
+*What is this pattern about?
+The Borg pattern (also known as the Monostate pattern) is a way to
+implement singleton behavior, but instead of having only one instance
+of a class, there are multiple instances that share the same state. In
+other words, the focus is on sharing state instead of sharing instance
+identity.
+    
+    *TL;DR
+Decouples an abstraction from its implementation.
+'''
+    
+        STOP_WORDS = set((
+        'the', 'of', 'is', 'and', 'to', 'in', 'that', 'we', 'for', 'an', 'are',
+        'by', 'be', 'as', 'on', 'with', 'can', 'if', 'from', 'which', 'you', 'it',
+        'this', 'then', 'at', 'have', 'all', 'not', 'one', 'has', 'or', 'that'
+    ))
+    
+    def cut(sentence):
+    sentence = strdecode(sentence)
+    blocks = re_han.split(sentence)
+    for blk in blocks:
+        if re_han.match(blk):
+            for word in __cut(blk):
+                if word not in Force_Split_Words:
+                    yield word
+                else:
+                    for c in word:
+                        yield c
+        else:
+            tmp = re_skip.split(blk)
+            for x in tmp:
+                if x:
+                    yield x
+
+    
+    # default Tokenizer instance
+    
+    parser = OptionParser(USAGE)
+parser.add_option('-k', dest='topK')
+opt, args = parser.parse_args()
+    
+    content = open(file_name, 'rb').read()
+    
+    for topic_idx, topic in enumerate(nmf.components_):
+    print('Topic #%d:' % topic_idx)
+    print(' '.join([feature_names[i]
+                    for i in topic.argsort()[:-n_top_words - 1:-1]]))
+    print('')
