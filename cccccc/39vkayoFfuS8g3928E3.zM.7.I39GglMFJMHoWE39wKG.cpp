@@ -1,256 +1,431 @@
 
         
-            http://www.apache.org/licenses/LICENSE-2.0
+        // Forward declarations
+HRESULT CreatePseudoConsoleAndPipes(HPCON*, HANDLE*, HANDLE*);
+HRESULT InitializeStartupInfoAttachedToPseudoConsole(STARTUPINFOEX*, HPCON);
+void __cdecl PipeListener(LPVOID);
     
-      for (const auto& node : item_.MainOpsFanin()) {
-    PrintNodeInfo(node, properties, debug, os);
+    // Owned filenames have the form:
+//    dbname/CURRENT
+//    dbname/LOCK
+//    dbname/LOG
+//    dbname/LOG.old
+//    dbname/MANIFEST-[0-9]+
+//    dbname/[0-9]+.(log|sst|ldb)
+bool ParseFileName(const std::string& filename, uint64_t* number,
+                   FileType* type) {
+  Slice rest(filename);
+  if (rest == 'CURRENT') {
+    *number = 0;
+    *type = kCurrentFile;
+  } else if (rest == 'LOCK') {
+    *number = 0;
+    *type = kDBLockFile;
+  } else if (rest == 'LOG' || rest == 'LOG.old') {
+    *number = 0;
+    *type = kInfoLogFile;
+  } else if (rest.starts_with('MANIFEST-')) {
+    rest.remove_prefix(strlen('MANIFEST-'));
+    uint64_t num;
+    if (!ConsumeDecimalNumber(&rest, &num)) {
+      return false;
+    }
+    if (!rest.empty()) {
+      return false;
+    }
+    *type = kDescriptorFile;
+    *number = num;
+  } else {
+    // Avoid strtoull() to keep filename format independent of the
+    // current locale
+    uint64_t num;
+    if (!ConsumeDecimalNumber(&rest, &num)) {
+      return false;
+    }
+    Slice suffix = rest;
+    if (suffix == Slice('.log')) {
+      *type = kLogFile;
+    } else if (suffix == Slice('.sst') || suffix == Slice('.ldb')) {
+      *type = kTableFile;
+    } else if (suffix == Slice('.dbtmp')) {
+      *type = kTempFile;
+    } else {
+      return false;
+    }
+    *number = num;
   }
-  for (const auto& node : item_.EnqueueOpsFanin()) {
-    PrintNodeInfo(node, properties, debug, os);
-  }
+  return true;
+}
     
-    #include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/op_kernel.h'
+    // Return the name of the current file.  This file contains the name
+// of the current manifest file.  The result will be prefixed with
+// 'dbname'.
+std::string CurrentFileName(const std::string& dbname);
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    TEST(WriteBatchTest, Empty) {
+  WriteBatch batch;
+  ASSERT_EQ('', PrintContents(&batch));
+  ASSERT_EQ(0, WriteBatchInternal::Count(&batch));
+}
     
-    // We define the PY_ARRAY_UNIQUE_SYMBOL in this .cc file and provide an
-// ImportNumpy function to populate it.
-#define TF_IMPORT_NUMPY
+    inline bool operator==(const Slice& x, const Slice& y) {
+  return ((x.size() == y.size()) &&
+          (memcmp(x.data(), y.data(), x.size()) == 0));
+}
     
-    #ifndef PyObject_HEAD
-struct _object;
-typedef _object PyObject;
+    inline bool Snappy_Uncompress(const char* input, size_t length, char* output) {
+#if HAVE_SNAPPY
+  return snappy::RawUncompress(input, length, output);
+#else
+  // Silence compiler warnings about unused arguments.
+  (void)input;
+  (void)length;
+  (void)output;
+  return false;
+#endif  // HAVE_SNAPPY
+}
+    
+    // Generate new filter every 2KB of data
+static const size_t kFilterBaseLg = 11;
+static const size_t kFilterBase = 1 << kFilterBaseLg;
+    
+    class Comparator;
+class Iterator;
+    
+      const char* p = s.data();
+  for (int power = 0; power <= 63; power++) {
+    uint64_t v = static_cast<uint64_t>(1) << power;
+    uint64_t actual;
+    actual = DecodeFixed64(p);
+    ASSERT_EQ(v - 1, actual);
+    p += sizeof(uint64_t);
+    }
+    
+        // Note that we only apply the TransientTxnError label if the 'autocommit' field is present in
+    // the session options. When present, 'autocommit' will always be false, so we don't check its
+    // value.
+    if (sessionOptions.getAutocommit() &&
+        isTransientTransactionError(code,
+                                    hasWriteConcernError,
+                                    commandName == 'commitTransaction' ||
+                                        commandName == 'coordinateCommitTransaction')) {
+        // An error code for which isTransientTransactionError() is true indicates a transaction
+        // failure with no persistent side effects.
+        labelArray << txn::TransientTxnErrorFieldName;
+    }
+    
+    class ServiceContext;
+    
+        BSONObj query2 = BSON('$where' << BSONCodeWScope(code, BSON('a' << true)));
+    auto expr2 = unittest::assertGet(
+        ExtensionsCallbackReal(&_opCtx, &_nss).parseWhere(query2.firstElement()));
+    
+    RemoveTransliterator::RemoveTransliterator() : Transliterator(UnicodeString(TRUE, ::CURR_ID, -1), 0) {}
+    
+    #include 'unicode/utypes.h'
+    
+    #if !UCONFIG_NO_FORMATTING
+    
+        auto nvmlRes = nvmlInit();
+    std::array<char, NVML_DEVICE_UUID_BUFFER_SIZE> thisDeviceUUID{ 'C', 'P', 'U', 0 };
+    
+    #ifdef COMING_SOON
+template <class ElemType>
+shared_ptr<ComputationNode<ElemType>> ComputationNetworkBuilder<ElemType>::SequenceDecoder(const ComputationNodePtr label, const ComputationNodePtr prediction, const ComputationNodePtr pairscore, const std::wstring nodeName)
+{
+    return net.AddNodeToNetAndAttachInputs(New<SequenceDecoderNode<ElemType>>(net.GetDeviceId(), nodeName), { label, prediction, pairscore });
+}
 #endif
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+        // --- properties
     
+    // copy constructor, creates a new disconnected copy of this node
+// doesn't copy everything, so use for macro expansion only (it's private)
+// copyMe - node to copy
+template <typename ElemType>
+NDLNode<ElemType>::NDLNode(const NDLNode<ElemType>& copyMe)
+{
+    m_name        = copyMe.m_name;        // value on the left of the equals
+    m_value       = copyMe.m_value;       // value on the right of the equals (CN node name, or value)
+    m_parent      = copyMe.m_parent;      // parent script
+    m_type        = copyMe.m_type;        // type of node
+    m_paramString = copyMe.m_paramString; // parameter of a function/array
+    m_paramMacro  = copyMe.m_paramMacro;  // parameter of a macro (the variables used in the macro definition)
+    // don't copy over m_parameters, they will be reparsed after the copy
+    }
     
+        inline void transpose(ElemType *src, ElemType *dst, const int N, const int M)
     {
-    {}  // namespace host
-}  // namespace stream_executor
-
-    
-    using std::chrono::duration_cast;
-    
-    // This file contains declarations relating to kernel cache configuration
-// parameters recognized by the StreamExecutor.
-#ifndef TENSORFLOW_STREAM_EXECUTOR_KERNEL_CACHE_CONFIG_H_
-#define TENSORFLOW_STREAM_EXECUTOR_KERNEL_CACHE_CONFIG_H_
-    
-    namespace caffe {
+        for (auto n = 0; n < N*M; n++) {
+            auto i = n / N;
+            auto j = n%N;
+            dst[n] = src[M*j + i];
+        }
     }
     
-      virtual inline const char* type() const { return 'Bias'; }
-  virtual inline int MinBottomBlobs() const { return 1; }
-  virtual inline int MaxBottomBlobs() const { return 2; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    
-      virtual inline const char* type() const { return 'Convolution'; }
-    
-      Blob<int> offsets;
-  Blob<int> src_strides_;
-  Blob<int> dest_strides_;
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of DeConvolutionLayer.
- *        Fallback to DeConvolutionLayer for CPU mode.
- *
- * cuDNN accelerates deconvolution through forward kernels for filtering and
- * bias plus backward kernels for the gradient w.r.t. the filters, biases, and
- * inputs. Caffe + cuDNN further speeds up the computation through forward
- * parallelism across groups and backward parallelism across gradients.
-*/
-template <typename Dtype>
-class CuDNNDeconvolutionLayer : public DeconvolutionLayer<Dtype> {
- public:
-  explicit CuDNNDeconvolutionLayer(const LayerParameter& param)
-    : DeconvolutionLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-                          const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-                       const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNDeconvolutionLayer();
+    namespace Microsoft { namespace MSR { namespace CNTK {
+    }
+    }
     }
     
-    #ifdef USE_CUDNN
-template <typename Dtype>
-class CuDNNLCNLayer : public LRNLayer<Dtype> {
- public:
-  explicit CuDNNLCNLayer(const LayerParameter& param)
-      : LRNLayer<Dtype>(param), handles_setup_(false), tempDataSize(0),
-        tempData1(NULL), tempData2(NULL) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNLCNLayer();
-    }
+    #include 'a2netcompat.h'
+#include 'DlAbortEx.h'
+#include 'message.h'
+#include 'fmt.h'
+#include 'console.h'
+#include 'OptionParser.h'
+#include 'prefs.h'
+#ifdef HAVE_LIBGMP
+#  include 'a2gmp.h'
+#endif // HAVE_LIBGMP
+#include 'LogFactory.h'
+#include 'util.h'
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+      // private key `keyfile' must be decrypted.
+  virtual bool addCredentialFile(const std::string& certfile,
+                                 const std::string& keyfile) = 0;
     
-    /* TessWinding */
-#define GLU_TESS_WINDING_ODD               100130
-#define GLU_TESS_WINDING_NONZERO           100131
-#define GLU_TESS_WINDING_POSITIVE          100132
-#define GLU_TESS_WINDING_NEGATIVE          100133
-#define GLU_TESS_WINDING_ABS_GEQ_TWO       100134
-    
-    
-    {    // put the inner array into the outer array
-    writePSFmt('{0:d} array 1 index {1:d} 2 index put\n',
-	       innerSize, outer);
-    line = col = 0;
-    writePS((char *)(useASCIIHex ? 'dup 0 <' : 'dup 0 <~'));
-    for (;;) {
-      do {
-	c = str->getChar();
-      } while (c == '\n' || c == '\r');
-      if (c == (useASCIIHex ? '>' : '~') || c == EOF) {
-	break;
-      }
-      if (c == 'z') {
-	writePSChar(c);
-	++col;
-      } else {
-	writePSChar(c);
-	++col;
-	for (i = 1; i <= (useASCIIHex ? 1 : 4); ++i) {
-	  do {
-	    c = str->getChar();
-	  } while (c == '\n' || c == '\r');
-	  if (c == (useASCIIHex ? '>' : '~') || c == EOF) {
-	    break;
-	  }
-	  writePSChar(c);
-	  ++col;
-	}
-      }
-      if (c == (useASCIIHex ? '>' : '~') || c == EOF) {
-	break;
-      }
-      // each line is: 'dup nnnnn <~...data...~> put<eol>'
-      // so max data length = 255 - 20 = 235
-      // chunks are 1 or 4 bytes each, so we have to stop at 232
-      // but make it 225 just to be safe
-      if (col > 225) {
-	writePS((char *)(useASCIIHex ? '> put\n' : '~> put\n'));
-	++line;
-	if (line >= innerSize) break;
-	writePSFmt((char *)(useASCIIHex ? 'dup {0:d} <' : 'dup {0:d} <~'), line);
-	col = 0;
-      }
-    }
-    if (c == (useASCIIHex ? '>' : '~') || c == EOF) {
-      writePS((char *)(useASCIIHex ? '> put\n' : '~> put\n'));
-      if (useRLE) {
-	++line;
-	writePSFmt('{0:d} <> put\n', line);
-      } else {
-	writePS('pop\n');
-      }
-      break;
-    }
-    writePS('pop\n');
-    size -= innerSize;
+      if (store_) {
+    ::CertCloseStore(store_, 0);
   }
-  writePS('pop\n');
-  str->close();
+  store_ = store;
+  cred_.reset();
     
-      // skip leading whitespace and comments
-  comment = gFalse;
-  while (1) {
-    if ((c = getChar()) == EOF) {
-      buf[0] = '\0';
-      *length = 0;
-      return gFalse;
+    /**
+ * General preferences
+ */
+// values: 1*digit
+extern PrefPtr PREF_TIMEOUT;
+// values: 1*digit
+extern PrefPtr PREF_DNS_TIMEOUT;
+// values: 1*digit
+extern PrefPtr PREF_CONNECT_TIMEOUT;
+// values: 1*digit
+extern PrefPtr PREF_MAX_TRIES;
+// values: 1*digit
+extern PrefPtr PREF_AUTO_SAVE_INTERVAL;
+// values: a string that your file system recognizes as a file name.
+extern PrefPtr PREF_LOG;
+// values: a string that your file system recognizes as a directory.
+extern PrefPtr PREF_DIR;
+// values: a string that your file system recognizes as a file name.
+extern PrefPtr PREF_OUT;
+// values: 1*digit
+extern PrefPtr PREF_SPLIT;
+// value: true | false
+extern PrefPtr PREF_DAEMON;
+// value: a string
+extern PrefPtr PREF_REFERER;
+// value: 1*digit
+extern PrefPtr PREF_LOWEST_SPEED_LIMIT;
+// value: 1*digit
+extern PrefPtr PREF_PIECE_LENGTH;
+// value: 1*digit
+extern PrefPtr PREF_MAX_DOWNLOAD_LIMIT;
+// value: 1*digit
+extern PrefPtr PREF_STARTUP_IDLE_TIME;
+// value: prealloc | falloc | none
+extern PrefPtr PREF_FILE_ALLOCATION;
+// value: 1*digit
+extern PrefPtr PREF_NO_FILE_ALLOCATION_LIMIT;
+// value: true | false
+extern PrefPtr PREF_ALLOW_OVERWRITE;
+// value: true | false
+extern PrefPtr PREF_REALTIME_CHUNK_CHECKSUM;
+// value: true | false
+extern PrefPtr PREF_CHECK_INTEGRITY;
+// value: string that your file system recognizes as a file name.
+extern PrefPtr PREF_NETRC_PATH;
+// value:
+extern PrefPtr PREF_CONTINUE;
+// value:
+extern PrefPtr PREF_NO_NETRC;
+// value: 1*digit
+extern PrefPtr PREF_MAX_OVERALL_DOWNLOAD_LIMIT;
+// value: 1*digit
+extern PrefPtr PREF_MAX_DOWNLOADS;
+// value: string that your file system recognizes as a file name.
+extern PrefPtr PREF_INPUT_FILE;
+// value: true | false
+extern PrefPtr PREF_DEFERRED_INPUT;
+// value: 1*digit
+extern PrefPtr PREF_MAX_CONCURRENT_DOWNLOADS;
+// value: true | false
+extern PrefPtr PREF_OPTIMIZE_CONCURRENT_DOWNLOADS;
+// value: 1*digit ['.' [ 1*digit ] ]
+extern PrefPtr PREF_OPTIMIZE_CONCURRENT_DOWNLOADS_COEFFA;
+// value: 1*digit ['.' [ 1*digit ] ]
+extern PrefPtr PREF_OPTIMIZE_CONCURRENT_DOWNLOADS_COEFFB;
+// value: true | false
+extern PrefPtr PREF_FORCE_SEQUENTIAL;
+// value: true | false
+extern PrefPtr PREF_AUTO_FILE_RENAMING;
+// value: true | false
+extern PrefPtr PREF_PARAMETERIZED_URI;
+// value: true | false
+extern PrefPtr PREF_ALLOW_PIECE_LENGTH_CHANGE;
+// value: true | false
+extern PrefPtr PREF_NO_CONF;
+// value: string
+extern PrefPtr PREF_CONF_PATH;
+// value: 1*digit
+extern PrefPtr PREF_STOP;
+// value: true | false
+extern PrefPtr PREF_QUIET;
+// value: true | false
+extern PrefPtr PREF_ASYNC_DNS;
+// value: 1*digit
+extern PrefPtr PREF_SUMMARY_INTERVAL;
+// value: debug, info, notice, warn, error
+extern PrefPtr PREF_LOG_LEVEL;
+// value: debug, info, notice, warn, error
+extern PrefPtr PREF_CONSOLE_LOG_LEVEL;
+// value: inorder | feedback | adaptive
+extern PrefPtr PREF_URI_SELECTOR;
+// value: 1*digit
+extern PrefPtr PREF_SERVER_STAT_TIMEOUT;
+// value: string that your file system recognizes as a file name.
+extern PrefPtr PREF_SERVER_STAT_IF;
+// value: string that your file system recognizes as a file name.
+extern PrefPtr PREF_SERVER_STAT_OF;
+// value: true | false
+extern PrefPtr PREF_REMOTE_TIME;
+// value: 1*digit
+extern PrefPtr PREF_MAX_FILE_NOT_FOUND;
+// value: epoll | select
+extern PrefPtr PREF_EVENT_POLL;
+// value: true | false
+extern PrefPtr PREF_ENABLE_RPC;
+// value: 1*digit
+extern PrefPtr PREF_RPC_LISTEN_PORT;
+// value: string
+extern PrefPtr PREF_RPC_USER;
+// value: string
+extern PrefPtr PREF_RPC_PASSWD;
+// value: 1*digit
+extern PrefPtr PREF_RPC_MAX_REQUEST_SIZE;
+// value: true | false
+extern PrefPtr PREF_RPC_LISTEN_ALL;
+// value: true | false
+extern PrefPtr PREF_RPC_ALLOW_ORIGIN_ALL;
+// value: string that your file system recognizes as a file name.
+extern PrefPtr PREF_RPC_CERTIFICATE;
+// value: string that your file system recognizes as a file name.
+extern PrefPtr PREF_RPC_PRIVATE_KEY;
+// value: true | false
+extern PrefPtr PREF_RPC_SECURE;
+// value: true | false
+extern PrefPtr PREF_RPC_SAVE_UPLOAD_METADATA;
+// value: true | false
+extern PrefPtr PREF_DRY_RUN;
+// value: true | false
+extern PrefPtr PREF_REUSE_URI;
+// value: string
+extern PrefPtr PREF_ON_DOWNLOAD_START;
+extern PrefPtr PREF_ON_DOWNLOAD_PAUSE;
+extern PrefPtr PREF_ON_DOWNLOAD_STOP;
+extern PrefPtr PREF_ON_DOWNLOAD_COMPLETE;
+extern PrefPtr PREF_ON_DOWNLOAD_ERROR;
+// value: string
+extern PrefPtr PREF_INTERFACE;
+// value: string
+extern PrefPtr PREF_MULTIPLE_INTERFACE;
+// value: true | false
+extern PrefPtr PREF_DISABLE_IPV6;
+// value: true | false
+extern PrefPtr PREF_HUMAN_READABLE;
+// value: true | false
+extern PrefPtr PREF_REMOVE_CONTROL_FILE;
+// value: true | false
+extern PrefPtr PREF_ALWAYS_RESUME;
+// value: 1*digit
+extern PrefPtr PREF_MAX_RESUME_FAILURE_TRIES;
+// value: string that your file system recognizes as a file name.
+extern PrefPtr PREF_SAVE_SESSION;
+// value: 1*digit
+extern PrefPtr PREF_MAX_CONNECTION_PER_SERVER;
+// value: 1*digit
+extern PrefPtr PREF_MIN_SPLIT_SIZE;
+// value: true | false
+extern PrefPtr PREF_CONDITIONAL_GET;
+// value: true | false
+extern PrefPtr PREF_SELECT_LEAST_USED_HOST;
+// value: true | false
+extern PrefPtr PREF_ENABLE_ASYNC_DNS6;
+// value: 1*digit
+extern PrefPtr PREF_MAX_DOWNLOAD_RESULT;
+// value: 1*digit
+extern PrefPtr PREF_RETRY_WAIT;
+// value: string
+extern PrefPtr PREF_ASYNC_DNS_SERVER;
+// value: true | false
+extern PrefPtr PREF_SHOW_CONSOLE_READOUT;
+// value: default | inorder | geom
+extern PrefPtr PREF_STREAM_PIECE_SELECTOR;
+// value: true | false
+extern PrefPtr PREF_TRUNCATE_CONSOLE_READOUT;
+// value: true | false
+extern PrefPtr PREF_PAUSE;
+// value: default | full | hide
+extern PrefPtr PREF_DOWNLOAD_RESULT;
+// value: true | false
+extern PrefPtr PREF_HASH_CHECK_ONLY;
+// values: hashType=digest
+extern PrefPtr PREF_CHECKSUM;
+// value: pid
+extern PrefPtr PREF_STOP_WITH_PROCESS;
+// value: true | false
+extern PrefPtr PREF_ENABLE_MMAP;
+// value: true | false
+extern PrefPtr PREF_FORCE_SAVE;
+// value: true | false
+extern PrefPtr PREF_SAVE_NOT_FOUND;
+// value: 1*digit
+extern PrefPtr PREF_DISK_CACHE;
+// value: string
+extern PrefPtr PREF_GID;
+// values: 1*digit
+extern PrefPtr PREF_SAVE_SESSION_INTERVAL;
+// value: true |false
+extern PrefPtr PREF_ENABLE_COLOR;
+// value: string
+extern PrefPtr PREF_RPC_SECRET;
+// values: 1*digit
+extern PrefPtr PREF_DSCP;
+// values: true | false
+extern PrefPtr PREF_PAUSE_METADATA;
+// values: 1*digit
+extern PrefPtr PREF_RLIMIT_NOFILE;
+// values: SSLv3 | TLSv1 | TLSv1.1 | TLSv1.2
+extern PrefPtr PREF_MIN_TLS_VERSION;
+// value: 1*digit
+extern PrefPtr PREF_SOCKET_RECV_BUFFER_SIZE;
+// value: 1*digit
+extern PrefPtr PREF_MAX_MMAP_LIMIT;
+// value: true | false
+extern PrefPtr PREF_STDERR;
+// value: true | false
+extern PrefPtr PREF_KEEP_UNFINISHED_DOWNLOAD_RESULT;
+    
+    void DHTReplaceNodeTask::startup() { sendMessage(); }
+    
+    namespace aria2 {
     }
-    if (comment) {
-      if (c == '\x0a' || c == '\x0d') {
-	comment = gFalse;
-      }
-    } else if (c == '%') {
-      comment = gTrue;
-    } else if (specialChars[c] != 1) {
-      break;
-    }
-  }
     
-      // Get direction
-  PageTransitionDirection getDirection() { return direction; }
+        // output element at index 2 (third element)
+    std::cout << array.at(2) << '\n';
     
-      XRef *xref;			// the xref table for this PDF file
-  Lexer *lexer;			// input stream
-  GBool allowStreams;		// parse stream objects?
-  Object buf1, buf2;		// next two tokens
-  int inlineImg;		// set when inline image data is encountered
     
-    #include <config.h>
-    
-      //
-  // Parse media clip data
-  //
-  if (obj->dictLookup('C', &tmp2)->isDict()) { // media clip
-    hasClip = gTrue;
-    if (tmp2.dictLookup('S', &tmp)->isName()) {
-      if (!strcmp(tmp.getName(), 'MCD')) { // media clip data
-        Object obj1, obj2;
-	if (tmp2.dictLookup('D', &obj1)->isDict()) {
-	  if (obj1.dictLookup('F', &obj2)->isString()) {
-	    fileName = obj2.getString()->copy();
-	  }
-	  obj2.free();
-	  if (obj1.dictLookup('EF', &obj2)->isDict()) {
-	    Object embedded;
-	    if (obj2.dictLookup('F', &embedded)->isStream()) {
-	      isEmbedded = gTrue;
-	      embeddedStream = embedded.getStream();
-	      // 'copy' stream
-	      embeddedStream->incRef();
-	    }
-	    embedded.free();
-	  }
-	  obj2.free();
+    // out_of_range.106
+    try
+    {
+        // try to use an array index with leading '0'
+        json::reference ref = j.at('/array/01'_json_pointer);
     }
-    }
-    }
+    catch (json::parse_error& e)
+    {
+        std::cout << e.what() << '\n';
     }
     
-    #include <config.h>
-    
-    DHTReplaceNodeTask::DHTReplaceNodeTask(const std::shared_ptr<DHTBucket>& bucket,
-                                       const std::shared_ptr<DHTNode>& newNode)
-    : bucket_(bucket),
-      newNode_(newNode),
-      numRetry_(0),
-      timeout_(DHT_MESSAGE_TIMEOUT)
-{
-}
-    
-    public:
-  DHTRoutingTable(const std::shared_ptr<DHTNode>& localNode);
-    
-      Time serializedTime_;
-    
-    std::shared_ptr<DHTTask>
-DHTTaskFactoryImpl::createNodeLookupTask(const unsigned char* targetID)
-{
-  auto task = std::make_shared<DHTNodeLookupTask>(targetID);
-  setCommonProperty(task);
-  return task;
-}
+        // create a JSON string directly from a string literal
+    json j_string_literal('The quick brown fox jumps over the lazy dog.');
