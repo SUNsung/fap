@@ -1,214 +1,266 @@
 
         
-        from .common import InfoExtractor
-from .cbs import CBSIE
-from ..compat import (
-    compat_b64decode,
-    compat_urllib_parse_unquote,
-)
-from ..utils import (
-    parse_duration,
-)
+        This script loads the ```s2s.h5``` model saved by [lstm_seq2seq.py
+](/examples/lstm_seq2seq/) and generates sequences from it. It assumes
+that no changes have been made (for example: ```latent_dim``` is unchanged,
+and the input data and model architecture are unchanged).
     
     
-class BitChuteChannelIE(InfoExtractor):
-    _VALID_URL = r'https?://(?:www\.)?bitchute\.com/channel/(?P<id>[^/?#&]+)'
-    _TEST = {
-        'url': 'https://www.bitchute.com/channel/victoriaxrave/',
-        'playlist_mincount': 185,
-        'info_dict': {
-            'id': 'victoriaxrave',
-        },
-    }
+def _runner(init, shape, target_mean=None, target_std=None,
+            target_max=None, target_min=None):
+    variable = K.variable(init(shape))
+    output = K.get_value(variable)
+    lim = 3e-2
+    if target_std is not None:
+        assert abs(output.std() - target_std) < lim
+    if target_mean is not None:
+        assert abs(output.mean() - target_mean) < lim
+    if target_max is not None:
+        assert abs(output.max() - target_max) < lim
+    if target_min is not None:
+        assert abs(output.min() - target_min) < lim
     
-        def test_cache(self):
-        ydl = FakeYDL({
-            'cachedir': self.test_dir,
-        })
-        c = Cache(ydl)
-        obj = {'x': 1, 'y': ['ä', '\\a', True]}
-        self.assertEqual(c.load('test_cache', 'k.'), None)
-        c.store('test_cache', 'k.', obj)
-        self.assertEqual(c.load('test_cache', 'k2'), None)
-        self.assertFalse(_is_empty(self.test_dir))
-        self.assertEqual(c.load('test_cache', 'k.'), obj)
-        self.assertEqual(c.load('test_cache', 'y'), None)
-        self.assertEqual(c.load('test_cache2', 'k.'), None)
-        c.remove()
-        self.assertFalse(os.path.exists(self.test_dir))
-        self.assertEqual(c.load('test_cache', 'k.'), None)
-    
-        shlib_version_number = grepValue(os.path.join(archsrc, 'Makefile'),
-            'SHLIB_VERSION_NUMBER')
-    #   e.g. -> '1.0.0'
-    libcrypto = 'libcrypto.dylib'
-    libcrypto_versioned = libcrypto.replace('.', '.'+shlib_version_number+'.')
-    #   e.g. -> 'libcrypto.1.0.0.dylib'
-    libssl = 'libssl.dylib'
-    libssl_versioned = libssl.replace('.', '.'+shlib_version_number+'.')
-    #   e.g. -> 'libssl.1.0.0.dylib'
-    
-            When invoked with the blocking argument set to false, do not block. If a
-        call without an argument would block, return false immediately;
-        otherwise, do the same thing as when called without arguments, and
-        return true.
-    
-        def test_named_expression_assignment_12(self):
-        def spam(a):
-            return a
-        res = [[y := spam(x), x/y] for x in range(1, 5)]
-    
-        def dir(self, *args):
-        '''List a directory in long form.
-        By default list current directory to stdout.
-        Optional last argument is callback function; all
-        non-empty arguments before it are concatenated to the
-        LIST command.  (This *should* only be used for a pathname.)'''
-        cmd = 'LIST'
-        func = None
-        if args[-1:] and type(args[-1]) != type(''):
-            args, func = args[:-1], args[-1]
-        for arg in args:
-            if arg:
-                cmd = cmd + (' ' + arg)
-        self.retrlines(cmd, func)
-    
-    
-if HAVE_SSL:
-    
-        def empty(self):
-        '''Return True if the queue is empty, False otherwise (not reliable!).'''
-        return len(self._queue) == 0
-    
-        def test_bad_str(self):
-        # issue 6415
-        # Warnings instance with a bad format string for __str__ should not
-        # trigger a bus error.
-        class BadStrWarning(Warning):
-            '''Warning with a bad format string for __str__.'''
-            def __str__(self):
-                return ('A bad formatted string %(err)' %
-                        {'err' : 'there is no %(err)s'})
-    
-          cwd: Sets the current directory before the child is executed.
-    
-        def test_timeout(self):
-        self.assertTrue(self.timeout.timeout)
-        self.assertFalse(self.invalid.timeout)
-    
-        @test_util.patch_get_utility()
-    def test_deploy_certificate_restart_failure2(self, mock_get_utility):
-        installer = mock.MagicMock()
-        installer.restart.side_effect = errors.PluginError
-        installer.rollback_checkpoints.side_effect = errors.ReverterError
-        self.client.installer = installer
-    
-        assert output.count('TEST_CERT') == 2, ('Did not find two test certs as expected ({0})'
-                                            .format(output.count('TEST_CERT')))
-    assert output.count('EXPIRED') == 2, ('Did not find two expired certs as expected ({0})'
-                                          .format(output.count('EXPIRED')))
-    
-    def get_extension(link):
-    extension = os.path.splitext(link)[1][1:]
-    if extension in ['pdf', 'html']:
-        return extension
-    if 'pdf' in extension:
-        return 'pdf'    
-    return 'pdf'    
-    
-    
-def get_im_dir(name):
-    '''Retrieve the image directory for the dataset.'''
-    return _DATASETS[name][_IM_DIR]
-    
-    
-def fpn_level_info_ResNet50_conv5():
-    return FpnLevelInfo(
-        blobs=('res5_2_sum', 'res4_5_sum', 'res3_3_sum', 'res2_2_sum'),
-        dims=(2048, 1024, 512, 256),
-        spatial_scales=(1. / 32., 1. / 16., 1. / 8., 1. / 4.)
-    )
-    
-        for i in range(cfg.KRCNN.NUM_STACKED_CONVS):
-        current = model.Conv(
-            current,
-            'conv_fcn' + str(i + 1),
-            dim_in,
-            hidden_dim,
-            kernel_size,
-            stride=1,
-            pad=pad_size,
-            weight_init=(cfg.KRCNN.CONV_INIT, {'std': 0.01}),
-            bias_init=('ConstantFill', {'value': 0.})
-        )
-        current = model.Relu(current, current)
-        dim_in = hidden_dim
-    
-        # ==========================================================================
-    # cls loss - depends on softmax/sigmoid outputs
-    # ==========================================================================
-    for lvl in range(k_min, k_max + 1):
-        suffix = 'fpn{}'.format(lvl)
-        cls_lvl_logits = 'retnet_cls_pred_' + suffix
-        if not cfg.RETINANET.SOFTMAX:
-            cls_focal_loss = model.net.SigmoidFocalLoss(
-                [
-                    cls_lvl_logits, 'retnet_cls_labels_' + suffix,
-                    'retnet_fg_num'
-                ],
-                ['fl_{}'.format(suffix)],
-                gamma=cfg.RETINANET.LOSS_GAMMA,
-                alpha=cfg.RETINANET.LOSS_ALPHA,
-                scale=model.GetLossScale(),
-                num_classes=model.num_classes - 1
-            )
-            gradients.append(cls_focal_loss)
-            losses.append('fl_{}'.format(suffix))
-        else:
-            cls_focal_loss, gated_prob = model.net.SoftmaxFocalLoss(
-                [
-                    cls_lvl_logits, 'retnet_cls_labels_' + suffix,
-                    'retnet_fg_num'
-                ],
-                ['fl_{}'.format(suffix), 'retnet_prob_{}'.format(suffix)],
-                gamma=cfg.RETINANET.LOSS_GAMMA,
-                alpha=cfg.RETINANET.LOSS_ALPHA,
-                scale=model.GetLossScale(),
-                num_classes=model.num_classes
-            )
-            gradients.append(cls_focal_loss)
-            losses.append('fl_{}'.format(suffix))
-    
-        cache_key = str(stride) + str(anchor_sizes) + str(anchor_aspect_ratios)
-    if cache_key in _threadlocal_foa.cache:
-        return _threadlocal_foa.cache[cache_key]
-    
-        sampled_fg_rois *= im_scale
-    repeated_batch_idx = batch_idx * blob_utils.ones(
-        (sampled_fg_rois.shape[0], 1)
-    )
-    sampled_fg_rois = np.hstack((repeated_batch_idx, sampled_fg_rois))
-    
-    from detectron.core.config import cfg
-import detectron.utils.blob as blob_utils
-import detectron.utils.boxes as box_utils
-import detectron.utils.segms as segm_utils
+        # Compute quantities required for feature-wise normalization
+    # (std, mean, and principal components if ZCA whitening is applied).
+    datagen.fit(x_train)
     
     
 if __name__ == '__main__':
-    workspace.GlobalInit(['caffe2', '--caffe2_log_level=0'])
-    logger = setup_logging(__name__)
-    logger.setLevel(logging.DEBUG)
-    logging.getLogger('detectron.roi_data.loader').setLevel(logging.INFO)
-    np.random.seed(cfg.RNG_SEED)
-    args = parse_args()
-    logger.info('Called with args:')
-    logger.info(args)
-    if args.cfg_file is not None:
-        merge_cfg_from_file(args.cfg_file)
-    if args.opts is not None:
-        merge_cfg_from_list(args.opts)
-    assert_and_infer_cfg()
-    logger.info('Running with config:')
-    logger.info(pprint.pformat(cfg))
-    main(args)
+    pytest.main([__file__])
+
+    
+        def _call_end_hook(self, mode):
+        '''Helper function for on_{train|test|predict}_end methods.'''
+        if mode == _TRAIN:
+            self.on_train_end()
+        elif mode == _TEST:
+            self.on_test_end()
+        else:
+            self.on_predict_end()
+    
+        @interfaces.legacy_gaussiannoise_support
+    def __init__(self, stddev, **kwargs):
+        super(GaussianNoise, self).__init__(**kwargs)
+        self.supports_masking = True
+        self.stddev = stddev
+    
+            # Arguments
+            chars: Characters that can appear in the input.
+        '''
+        self.chars = sorted(set(chars))
+        self.char_indices = dict((c, i) for i, c in enumerate(self.chars))
+        self.indices_char = dict((i, c) for i, c in enumerate(self.chars))
+    
+    
+_HELPTEXT = (
+    'Options for transfering the color distribution from the source to the target image using the '
+    'mean and standard deviations of the L*a*b* color space.\nThis implementation is (loosely) '
+    'based on the 'Color Transfer between Images' paper by Reinhard et al., 2001. matching the '
+    'histograms between the source and destination faces.'
+)
+    
+        The following variables should be defined:
+        _HELPTEXT: A string describing what this plugin does
+        _DEFAULTS: A dictionary containing the options, defaults and meta information. The
+                   dictionary should be defined as:
+                       {<option_name>: {<metadata>}}
+    
+        # MASK MANIPULATIONS
+    def erode(self, mask):
+        ''' Erode/dilate mask if requested '''
+        kernel = self.get_erosion_kernel(mask)
+        if self.config['erosion'] > 0:
+            logger.trace('Eroding mask')
+            mask = cv2.erode(mask, kernel, iterations=1)  # pylint: disable=no-member
+        else:
+            logger.trace('Dilating mask')
+            mask = cv2.dilate(mask, kernel, iterations=1)  # pylint: disable=no-member
+        return mask
+    
+                       <option_name> should always be lower text.
+                   <metadata> dictionary requirements are listed below.
+    
+        def run(self, new_face):
+        ''' Perform selected adjustment on face '''
+        logger.trace('Performing scaling adjustment')
+        # Remove Mask for processing
+        reinsert_mask = False
+        if new_face.shape[2] == 4:
+            reinsert_mask = True
+            final_mask = new_face[:, :, -1]
+            new_face = new_face[:, :, :3]
+        new_face = self.process(new_face)
+        new_face = np.clip(new_face, 0.0, 1.0)
+        if reinsert_mask and new_face.shape[2] != 4:
+            # Reinsert Mask
+            new_face = np.concatenate((new_face, np.expand_dims(final_mask, axis=-1)), -1)
+        logger.trace('Performed scaling adjustment')
+        return new_face
+
+    
+    
+_DEFAULTS = {
+    'method': {
+        'default': 'unsharp_mask',
+        'info': 'The type of sharpening to use:'
+                '\n\t box: Fastest, but weakest method. Uses a box filter to assess edges.'
+                '\n\t gaussian: Slower, but better than box. Uses a gaussian filter to assess '
+                'edges.'
+                '\n\t unsharp-mask: Slowest, but most tweakable. Uses the unsharp-mask method '
+                'to assess edges.',
+        'datatype': str,
+        'rounding': None,
+        'min_max': None,
+        'choices': ['box', 'gaussian', 'unsharp_mask'],
+        'gui_radio': True,
+        'fixed': True,
+    },
+    'amount': {
+        'default': 150,
+        'info': 'Percentage that controls the magnitude of each overshoot (how much darker '
+                'and how much lighter the edge borders become).\nThis can also be thought of '
+                'as how much contrast is added at the edges. It does not affect the width of '
+                'the edge rims.',
+        'datatype': int,
+        'rounding': 1,
+        'min_max': (100, 500),
+        'choices': [],
+        'gui_radio': False,
+        'fixed': True,
+    },
+    'radius': {
+        'default': 0.3,
+        'info': 'Affects the size of the edges to be enhanced or how wide the edge rims '
+                'become, so a smaller radius enhances smaller-scale detail.\nRadius is set as '
+                'a percentage of the final frame width and rounded to the nearest pixel. E.g '
+                'for a 1280 width frame, a 0.6 percenatage will give a radius of 8px.\nHigher '
+                'radius values can cause halos at the edges, a detectable faint light rim '
+                'around objects. Fine detail needs a smaller radius. \nRadius and amount '
+                'interact; reducing one allows more of the other.',
+        'datatype': float,
+        'rounding': 1,
+        'min_max': (0.1, 5.0),
+        'choices': [],
+        'gui_radio': False,
+        'fixed': True,
+    },
+    'threshold': {
+        'default': 5.0,
+        'info': '[unsharp_mask only] Controls the minimal brightness change that will be '
+                'sharpened or how far apart adjacent tonal values have to be before the '
+                'filter does anything.\nThis lack of action is important to prevent smooth '
+                'areas from becoming speckled. The threshold setting can be used to sharpen '
+                'more pronounced edges, while leaving subtler edges untouched. \nLow values '
+                'should sharpen more because fewer areas are excluded. \nHigher threshold '
+                'values exclude areas of lower contrast.',
+        'datatype': float,
+        'rounding': 1,
+        'min_max': (1.0, 10.0),
+        'choices': [],
+        'gui_radio': False,
+        'fixed': True,
+    },
+}
+
+    
+        The following variables should be defined:
+        _HELPTEXT: A string describing what this plugin does
+        _DEFAULTS: A dictionary containing the options, defaults and meta information. The
+                   dictionary should be defined as:
+                       {<option_name>: {<metadata>}}
+    
+        The following keys are expected for the _DEFAULTS <metadata> dict:
+        datatype:  [required] A python type class. This limits the type of data that can be
+                   provided in the .ini file and ensures that the value is returned in the
+                   correct type to faceswap. Valid datatypes are: <class 'int'>, <class 'float'>,
+                   <class 'str'>, <class 'bool'>.
+        default:   [required] The default value for this option.
+        info:      [required] A string describing what this option does.
+        choices:   [optional] If this option's datatype is of <class 'str'> then valid
+                   selections can be defined here. This validates the option and also enables
+                   a combobox / radio option in the GUI.
+        gui_radio: [optional] If <choices> are defined, this indicates that the GUI should use
+                   radio buttons rather than a combobox to display this option.
+        min_max:   [partial] For <class 'int'> and <class 'float'> datatypes this is required
+                   otherwise it is ignored. Should be a tuple of min and max accepted values.
+                   This is used for controlling the GUI slider range. Values are not enforced.
+        rounding:  [partial] For <class 'int'> and <class 'float'> datatypes this is
+                   required otherwise it is ignored. Used for the GUI slider. For floats, this
+                   is the number of decimal places to display. For ints this is the step size.
+        fixed:     [optional] [train only]. Training configurations are fixed when the model is
+                   created, and then reloaded from the state file. Marking an item as fixed=False
+                   indicates that this value can be changed for existing models, and will override
+                   the value saved in the state file with the updated value in config. If not
+                   provided this will default to True.
+'''
+    
+    
+_DEFAULTS = {
+    'coverage': {
+        'default': 62.5,
+        'info': 'How much of the extracted image to train on. Generally the model is optimized'
+                '\nto the default value. Sensible values to use are:'
+                '\n\t62.5%% spans from eyebrow to eyebrow.'
+                '\n\t75.0%% spans from temple to temple.'
+                '\n\t87.5%% spans from ear to ear.'
+                '\n\t100.0%% is a mugshot.',
+        'datatype': float,
+        'rounding': 1,
+        'min_max': (62.5, 100.0),
+        'choices': [],
+        'gui_radio': False,
+        'fixed': True,
+    },
+}
+
+    
+        dynamodb = aws_stack.connect_to_resource('dynamodb')
+    # create table with stream forwarding config
+    aws_stack.create_dynamodb_table(TEST_TABLE_NAME, partition_key=PARTITION_KEY)
+    table = dynamodb.Table(TEST_TABLE_NAME)
+    
+        def test_extract_path_params(self):
+        params = apigateway_listener.extract_path_params('/foo/bar', '/foo/{param1}')
+        self.assertEqual(params, {'param1': 'bar'})
+    
+    TEST_STREAM_NAME = 'firehose_test_' + short_uid()
+TEST_TAG_1 = {'Key': 'MyTag', 'Value': 'TestValue'}
+TEST_TAG_2 = {'Key': 'AnotherTag', 'Value': 'AnotherValue'}
+TEST_TAGS = [TEST_TAG_1, TEST_TAG_2]
+    
+            # create state machine
+        role_arn = aws_stack.role_arn('sfn_role')
+        definition = clone(STATE_MACHINE_DEF)
+        lambda_arn_1 = aws_stack.lambda_function_arn(TEST_LAMBDA_NAME_1)
+        lambda_arn_2 = aws_stack.lambda_function_arn(TEST_LAMBDA_NAME_2)
+        definition['States']['step1']['Resource'] = lambda_arn_1
+        definition['States']['step2']['Resource'] = lambda_arn_2
+        definition = json.dumps(definition)
+        result = self.sfn_client.create_state_machine(
+            name=STATE_MACHINE_NAME, definition=definition, roleArn=role_arn)
+    
+    
+def as_tuple(ireq):
+    '''
+    Pulls out the (name: str, version:str, extras:(str)) tuple from the pinned InstallRequirement.
+    '''
+    if not is_pinned_requirement(ireq):
+        raise TypeError('Expected a pinned InstallRequirement, got {}'.format(ireq))
+    
+    from cerberus.validator import DocumentError, Validator
+from cerberus.schema import rules_set_registry, schema_registry, SchemaError
+from cerberus.utils import TypeDefinition
+    
+        def _check_with_bulk_schema(self, field, value):
+        # resolve schema registry reference
+        if isinstance(value, _str_type):
+            if value in self.known_rules_set_refs:
+                return
+            else:
+                self.known_rules_set_refs.add(value)
+            definition = self.target_validator.rules_set_registry.get(value)
+            if definition is None:
+                self._error(field, 'Rules set definition %s not found.' % value)
+                return
+            else:
+                value = definition
