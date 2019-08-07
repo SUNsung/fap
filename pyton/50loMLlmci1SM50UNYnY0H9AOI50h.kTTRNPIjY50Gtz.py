@@ -1,205 +1,265 @@
 
         
-            def __init__(self, user_id, name, pass_hash):
-        self.user_id = user_id
-        self.name = name
-        self.pass_hash = pass_hash
-        self.friends_by_id = {}  # key: friend id, value: User
-        self.friend_ids_to_private_chats = {}  # key: friend id, value: private chats
-        self.group_chats_by_id = {}  # key: chat id, value: GroupChat
-        self.received_friend_requests_by_friend_id = {}  # key: friend id, value: AddRequest
-        self.sent_friend_requests_by_friend_id = {}  # key: friend id, value: AddRequest
+            def __init__(self, employee_id, name):
+        super(Operator, self).__init__(employee_id, name, Rank.DIRECTOR)
     
-    from mrjob.job import MRJob
+        def set(self, results, query):
+        '''Set the result for the given query key in the cache.
     
+        def __init__(self, seller_category_map, seller_category_overrides_map):
+        self.seller_category_map = seller_category_map
+        self.seller_category_overrides_map = seller_category_overrides_map
     
-@pytest.mark.parametrize('path', ('/create', '/1/update', '/1/delete'))
-def test_login_required(client, path):
-    response = client.post(path)
-    assert response.headers['Location'] == 'http://localhost/auth/login'
+            (2016-01, url0), 2
+        (2016-01, url1), 1
+        '''
+        yield key, sum(values)
     
+        def reducer(self, key, values):
+        total = sum(values)
+        if total == 1:
+            yield key, total
     
-def set_filename_version(filename, version_number, pattern):
-    changed = []
+        def _hash_function(self, key):
+        return key % self.size
     
-                elif opt in ('-g', '--gui'):
-                # Run using GUI.
-                conf['gui'] = True
+        def add_link_to_crawl(self, url):
+        '''Add the given link to `links_to_crawl`.'''
+        pass
     
-        theplatform_download_by_pid(pid, title, output_dir=output_dir, merge=merge, info_only=info_only)
+    CONTENT_TYPE_FORM_URLENCODED = 'application/x-www-form-urlencoded'
+CONTENT_TYPE_MULTI_PART = 'multipart/form-data'
     
-        if '_text' in dictified['video'][0]['size'][0]:  #size exists for 1 piece
-        video_dict['size'] = sum([int(i['size'][0]['_text']) for i in dictified['video']])
+    packages = ['requests']
     
-        fc2video_download_by_upid(upid, output_dir, merge, info_only)
+    try:
+    import simplejson as json
+except ImportError:
+    import json
     
+        This function works best on CPython and PyPy: in particular, it probably
+    doesn't work for Jython or IronPython. Future investigation should be done
+    to work out the correct shape of the code for those platforms.
+    '''
+    implementation = platform.python_implementation()
     
-site_info = 'huomao.com'
-download = huomaotv_download
-download_playlist = playlist_not_supported('huomao')
+    '''
+requests.hooks
+~~~~~~~~~~~~~~
+    
+        def test_super_len_correctly_calculates_len_of_partially_read_file(self):
+        '''Ensure that we handle partially consumed file like objects.'''
+        s = StringIO.StringIO()
+        s.write('foobarbogus')
+        assert super_len(s) == 0
+    
+                return x_1, y_1
+    
+        def set_defaults(self):
+        ''' Set the default values for config '''
+        logger.debug('Setting defaults')
+        current_dir = os.path.dirname(__file__)
+        for dirpath, _, filenames in os.walk(current_dir):
+            default_files = [fname for fname in filenames if fname.endswith('_defaults.py')]
+            if not default_files:
+                continue
+            base_path = os.path.dirname(os.path.realpath(sys.argv[0]))
+            import_path = '.'.join(full_path_split(dirpath.replace(base_path, ''))[1:])
+            plugin_type = import_path.split('.')[-1]
+            for filename in default_files:
+                self.load_module(filename, import_path, plugin_type)
+    
+        def run(self, old_face, new_face, raw_mask):
+        ''' Perform selected adjustment on face '''
+        logger.trace('Performing color adjustment')
+        # Remove Mask for processing
+        reinsert_mask = False
+        if new_face.shape[2] == 4:
+            reinsert_mask = True
+            final_mask = new_face[:, :, -1]
+            new_face = new_face[:, :, :3]
+        new_face = self.process(old_face, new_face, raw_mask)
+        new_face = np.clip(new_face, 0.0, 1.0)
+        if reinsert_mask and new_face.shape[2] != 4:
+            # Reinsert Mask
+            new_face = np.concatenate((new_face, np.expand_dims(final_mask, axis=-1)), -1)
+        logger.trace('Performed color adjustment')
+        return new_face
 
     
-        def test_strong_etag_not_match(self):
-        computed_etag = ''xyzzy''
-        etags = ''xyzzy1''
-        self.check_url(
-            '/cache/' + computed_etag, method='GET',
-            headers=[('If-None-Match', etags)],
-            expected_status=200)
+    
+class Mask(Adjustment):
+    ''' Return the requested mask '''
+    def __init__(self, mask_type, output_size, predicted_available, **kwargs):
+        super().__init__(mask_type, output_size, predicted_available, **kwargs)
+        self.do_erode = self.config.get('erosion', 0) != 0
+        self.do_blend = self.config.get('type', None) is not None
+    
+                       <option_name> should always be lower text.
+                   <metadata> dictionary requirements are listed below.
     
     
-def handle_sigchld(sig, frame):
-    IOLoop.current().add_callback_from_signal(IOLoop.current().stop)
-    
-    define('url', default='ws://localhost:9001')
-define('name', default='Tornado')
-    
-        '''
-    
-            # Create temporary test application
-        os.mkdir(os.path.join(self.path, 'testapp'))
-        open(os.path.join(self.path, 'testapp/__init__.py'), 'w').close()
-        with open(os.path.join(self.path, 'testapp/__main__.py'), 'w') as f:
-            f.write(main)
-    
-    class IPyAutocall(object):
-    ''' Instances of this class are always autocalled
-    
-    This happens regardless of 'autocall' variable state. Use this to
-    develop macro-like mechanisms.
-    '''
-    _ip = None
-    rewrite = True
-    def __init__(self, ip=None):
-        self._ip = ip
-    
-    def set_ip(self, ip):
-        ''' Will be used to set _ip point to current ipython instance b/f call
-        
-        Override this method if you don't want this to happen.
-        
-        '''
-        self._ip = ip
-    
-            Parameters
-        ----------
-        data : dict
-            A dictionary having keys that are valid MIME types (like
-            'text/plain' or 'image/svg+xml') and values that are the data for
-            that MIME type. The data itself must be a JSON'able data
-            structure. Minimally all data should have the 'text/plain' data,
-            which can be displayed by all frontends. If more than the plain
-            text is given, it is up to the frontend to decide which
-            representation to use.
-        metadata : dict
-            A dictionary for metadata related to the data. This can contain
-            arbitrary key, value pairs that frontends can use to interpret
-            the data.  Metadata specific to each mime-type can be specified
-            in the metadata dict with the same mime-type keys as
-            the data itself.
-        source : str, deprecated
-            Unused.
-        transient: dict, keyword-only
-            A dictionary for transient data.
-            Data in this dictionary should not be persisted as part of saving this output.
-            Examples include 'display_id'.
-        update: bool, keyword-only, default: False
-            If True, only update existing outputs with the same display_id,
-            rather than creating a new output.
-        '''
-    
-            - line_ori: unmodified input line from the user. This is not
-          necessarily valid Python.
-        '''
-    
-        Instances also serve to decorate command methods.
-    '''
-    
-            # all-random (note for auto-testing)
-        '''
-    
-    #-----------------------------------------------------------------------------
-# Imports
-#-----------------------------------------------------------------------------
-    
-            # For brevity
-        history_manager = self.shell.history_manager
-    
-    
-def download_file(url):
-    local_fname = url.split('/')[-1]
-    local_fname = os.path.join('dist', local_fname)
-    print(local_fname)
-    safe_makedirs('dist')
-    r = requests.get(url, stream=True)
-    with open(local_fname, 'wb') as f:
-        for chunk in r.iter_content(chunk_size=1024):
-            if chunk:    # filter out keep-alive new chunks
-                f.write(chunk)
-    return local_fname
-    
-            logger.info(
-            'Stats will be exported to Cassandra cluster {} ({}) in keyspace {}'.format(
-                cluster.metadata.cluster_name, cluster.metadata.all_hosts(), self.keyspace))
-    
-            # Add a timer to avoid any trigger when Glances is started (issue#732)
-        # Action can be triggered after refresh * 2 seconds
-        if hasattr(args, 'time'):
-            self.start_timer = Timer(args.time * 2)
-        else:
-            self.start_timer = Timer(3)
-    
-    How to read the stats
----------------------
-    
-        The list (Python list) is composed of items (Python dict).
-    An item is defined (dict keys):
-    *...
-    '''
-    
-    '''Attribute class.'''
-    
-        def __init__(self, config=None, args=None):
-        '''Init the export class.'''
-        # Export name (= module name without glances_)
-        self.export_name = self.__class__.__module__[len('glances_'):]
-        logger.debug('Init export module %s' % self.export_name)
-    
-        def export(self, name, columns, points):
-        '''Write the points to the InfluxDB server.'''
-        # Manage prefix
-        if self.prefix is not None:
-            name = self.prefix + '.' + name
-        # Write input to the InfluxDB database
-        try:
-            self.client.write_points(self._normalize(name, columns, points))
-        except Exception as e:
-            logger.error('Cannot export {} stats to InfluxDB ({})'.format(name,
-                                                                          e))
-        else:
-            logger.debug('Export {} stats to InfluxDB'.format(name))
+_DEFAULTS = {
+    'container': {
+        'default': 'mp4',
+        'info': 'Video container to use.',
+        'datatype': str,
+        'rounding': None,
+        'min_max': None,
+        'choices': ['avi', 'flv', 'mkv', 'mov', 'mp4', 'mpeg', 'webm'],
+        'gui_radio': True,
+        'fixed': True,
+    },
+    'codec': {
+        'default': 'libx264',
+        'info': 'Video codec to use:'
+                '\n\t libx264: H.264. A widely supported and commonly used codec.'
+                '\n\t libx265: H.265 / HEVC video encoder application library.',
+        'datatype': str,
+        'rounding': None,
+        'min_max': None,
+        'choices': ['libx264', 'libx265'],
+        'gui_radio': True,
+        'fixed': True,
+    },
+    'crf': {
+        'default': 23,
+        'info': 'Constant Rate Factor:  0 is lossless and 51 is worst quality possible. A '
+                'lower value generally leads to higher quality, and a subjectively sane range '
+                'is 17-28. Consider 17 or 18 to be visually lossless or nearly so; it should '
+                'look the same or nearly the same as the input but it isn't technically '
+                'lossless.\nThe range is exponential, so increasing the CRF value +6 results '
+                'in roughly half the bitrate / file size, while -6 leads to roughly twice the '
+                'bitrate.',
+        'datatype': int,
+        'rounding': 1,
+        'min_max': (0, 51),
+        'choices': [],
+        'gui_radio': False,
+        'fixed': True,
+    },
+    'preset': {
+        'default': 'medium',
+        'info': 'A preset is a collection of options that will provide a certain encoding '
+                'speed to compression ratio.\nA slower preset will provide better compression '
+                '(compression is quality per filesize).\nUse the slowest preset that you have '
+                'patience for.',
+        'datatype': str,
+        'rounding': None,
+        'min_max': None,
+        'choices': [
+            'ultrafast',
+            'superfast',
+            'veryfast',
+            'faster',
+            'fast',
+            'medium',
+            'slow',
+            'slower',
+            'veryslow',
+        ],
+        'gui_radio': True,
+        'fixed': True,
+    },
+    'tune': {
+        'default': 'none',
+        'info': 'Change settings based upon the specifics of your input:'
+                '\n\t none: Don't perform any additional tuning.'
+                '\n\t film: [H.264 only] Use for high quality movie content; lowers '
+                'deblocking.'
+                '\n\t animation: [H.264 only] Good for cartoons; uses higher deblocking and '
+                'more reference frames.'
+                '\n\t grain: Preserves the grain structure in old, grainy film material.'
+                '\n\t stillimage: [H.264 only] Good for slideshow-like content.'
+                '\n\t fastdecode: Allows faster decoding by disabling certain filters.'
+                '\n\t zerolatency: Good for fast encoding and low-latency streaming.',
+        'datatype': str,
+        'rounding': None,
+        'min_max': None,
+        'choices': [
+            'none',
+            'film',
+            'animation',
+            'grain',
+            'stillimage',
+            'fastdecode',
+            'zerolatency',
+        ],
+        'gui_radio': False,
+        'fixed': True,
+    },
+    'profile': {
+        'default': 'auto',
+        'info': '[H.264 Only] Limit the output to a specific H.264 profile. Don't change this '
+                'unless your target device only supports a certain profile.',
+        'datatype': str,
+        'rounding': None,
+        'min_max': None,
+        'choices': ['auto', 'baseline', 'main', 'high', 'high10', 'high422', 'high444'],
+        'gui_radio': False,
+        'fixed': True,
+    },
+    'level': {
+        'default': 'auto',
+        'info': '[H.264 Only] Set the encoder level, Don't change this unless your target '
+                'device only supports a certain level.',
+        'datatype': str,
+        'rounding': None,
+        'min_max': None,
+        'choices': [
+            'auto',
+            '1',
+            '1b',
+            '1.1',
+            '1.2',
+            '1.3',
+            '2',
+            '2.1',
+            '2.2',
+            '3',
+            '3.1',
+            '3.2',
+            '4',
+            '4.1',
+            '4.2',
+            '5',
+            '5.1',
+            '5.2',
+            '6',
+            '6.1',
+            '6.2',
+        ],
+        'gui_radio': False,
+        'fixed': True,
+    },
+}
 
     
-            # Load the InfluxDB configuration file
-        self.export_enable = self.load_conf('opentsdb',
-                                            mandatories=['host', 'port'],
-                                            options=['prefix', 'tags'])
-        if not self.export_enable:
-            sys.exit(2)
+      for filter_type in iterkeys( config ):
+    compiler = FILTER_COMPILERS.get( filter_type )
     
-        def export(self, name, columns, points):
-        '''Export the stats to the Statsd server.'''
-        if name == self.plugins_to_export()[0] and self.buffer != {}:
-            # One complete loop have been done
-            logger.debug('Export stats ({}) to RESTful endpoint ({})'.format(listkeys(self.buffer),
-                                                                             self.client))
-            # Export stats
-            post(self.client, json=self.buffer, allow_redirects=True)
-            # Reset buffer
-            self.buffer = {}
+        poll_again = _HandlePollResponse( response, diagnostics_handler )
+    if poll_again:
+      self._SendRequest()
+      return True
     
-        final_file.seek(0)  # Write at the top.
-    write_data(final_file, '# This hosts file is a merged collection '
-                           'of hosts from reputable sources,\n')
-    write_data(final_file, '# with a dash of crowd sourcing via Github\n#\n')
-    write_data(final_file, '# Date: ' + time.strftime('%d %B %Y %H:%M:%S (%Z)', time.gmtime()) + '\n')
+    
+def HandlePollResponse_NoMessages_test():
+  assert_that( _HandlePollResponse( True, None ), equal_to( True ) )
+    
+        def __repr__(self):
+        with self._condition:
+            if self._state == FINISHED:
+                if self._exception:
+                    return '<Future at %s state=%s raised %s>' % (
+                        hex(id(self)),
+                        _STATE_TO_DESCRIPTION_MAP[self._state],
+                        self._exception.__class__.__name__)
+                else:
+                    return '<Future at %s state=%s returned %s>' % (
+                        hex(id(self)),
+                        _STATE_TO_DESCRIPTION_MAP[self._state],
+                        self._result.__class__.__name__)
+            return '<Future at %s state=%s>' % (
+                    hex(id(self)),
+                   _STATE_TO_DESCRIPTION_MAP[self._state])
