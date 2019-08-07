@@ -1,199 +1,125 @@
 
         
-        #include <QIcon>
-#include <QPixmap>
-#include <QString>
-    
-    #ifndef SECP256K1_FIELD_INNER5X52_IMPL_H
-#define SECP256K1_FIELD_INNER5X52_IMPL_H
-    
-    const char* InternalKeyComparator::Name() const {
-  return 'leveldb.InternalKeyComparator';
-}
-    
-    
-    {  // No copying allowed
-  LookupKey(const LookupKey&);
-  void operator=(const LookupKey&);
-};
-    
-    
-// Owned filenames have the form:
-//    dbname/CURRENT
-//    dbname/LOCK
-//    dbname/LOG
-//    dbname/LOG.old
-//    dbname/MANIFEST-[0-9]+
-//    dbname/[0-9]+.(log|sst|ldb)
-bool ParseFileName(const std::string& fname,
-                   uint64_t* number,
-                   FileType* type) {
-  Slice rest(fname);
-  if (rest == 'CURRENT') {
-    *number = 0;
-    *type = kCurrentFile;
-  } else if (rest == 'LOCK') {
-    *number = 0;
-    *type = kDBLockFile;
-  } else if (rest == 'LOG' || rest == 'LOG.old') {
-    *number = 0;
-    *type = kInfoLogFile;
-  } else if (rest.starts_with('MANIFEST-')) {
-    rest.remove_prefix(strlen('MANIFEST-'));
-    uint64_t num;
-    if (!ConsumeDecimalNumber(&rest, &num)) {
-      return false;
-    }
-    if (!rest.empty()) {
-      return false;
-    }
-    *type = kDescriptorFile;
-    *number = num;
-  } else {
-    // Avoid strtoull() to keep filename format independent of the
-    // current locale
-    uint64_t num;
-    if (!ConsumeDecimalNumber(&rest, &num)) {
-      return false;
-    }
-    Slice suffix = rest;
-    if (suffix == Slice('.log')) {
-      *type = kLogFile;
-    } else if (suffix == Slice('.sst') || suffix == Slice('.ldb')) {
-      *type = kTableFile;
-    } else if (suffix == Slice('.dbtmp')) {
-      *type = kTempFile;
-    } else {
-      return false;
-    }
-    *number = num;
-  }
-  return true;
-}
-    
-        try
-    {
-        coshrat(&prat, RATIONAL_BASE, RATIONAL_PRECISION);
-    }
-    catch (uint32_t error)
-    {
-        destroyrat(prat);
-        throw(error);
+        void PinJoint2D::_notification(int p_what) {
     }
     
-    void CHistoryCollector::AddBinOpToHistory(int nOpCode, bool fNoRepetition)
-{
-    int iCommandEnd = AddCommand(std::make_shared<CBinaryCommand>(nOpCode));
-    m_lastBinOpStartIndex = IchAddSzToEquationSz(L' ', -1);
-    }
+    		} else if (p_event->is_action('ui_down')) {
     
-        Number::Number(PNUMBER p) noexcept
-        : m_sign{ p->sign }
-        , m_exp{ p->exp }
-        , m_mantissa{}
-    {
-        m_mantissa.reserve(p->cdigit);
-        copy(p->mant, p->mant + p->cdigit, back_inserter(m_mantissa));
+    bool gjk_epa_calculate_distance(const ShapeSW *p_shape_A, const Transform &p_transform_A, const ShapeSW *p_shape_B, const Transform &p_transform_B, Vector3 &r_result_A, Vector3 &r_result_B) {
     }
     
     
-    {    ProcessCommandWorker(wParam);
-}
+    {	};
     
-    COpndCommand::COpndCommand(shared_ptr<CalculatorVector<int>> const& commands, bool fNegative, bool fDecimal, bool fSciFmt)
-    : m_commands(commands)
-    , m_fNegative(fNegative)
-    , m_fSciFmt(fSciFmt)
-    , m_fDecimal(fDecimal)
-    , m_fInitialized(false)
-    , m_value{}
-{
-}
-    
-    
-    {    friend class CalculatorEngineTests::CalcEngineTests;
-};
-
-    
-    NarratorAnnouncement ^ CalculatorAnnouncement::GetMemoryItemChangedAnnouncement(String ^ announcement)
-{
-    return ref new NarratorAnnouncement(
-        announcement, CalculatorActivityIds::MemoryItemChanged, AutomationNotificationKind::ActionCompleted, AutomationNotificationProcessing::MostRecent);
-}
-    
-    
-    {
-    {        static NarratorAnnouncement ^ GetOpenParenthesisCountChangedAnnouncement(Platform::String ^ announcement);
-        static NarratorAnnouncement ^ GetNoRightParenthesisAddedAnnouncement(Platform::String ^ announcement);
-    };
-}
-
-    
-    DependencyProperty ^ NarratorNotifier::s_announcementProperty;
-    
-            property NarratorAnnouncement^ Announcement
-        {
-            NarratorAnnouncement^ get() { return GetAnnouncement(this); }
-            void set(NarratorAnnouncement^ value)
-            {
-                SetAnnouncement(this, value);
-            }
-        }
-    
-    DHTReplaceNodeTask::DHTReplaceNodeTask(const std::shared_ptr<DHTBucket>& bucket,
-                                       const std::shared_ptr<DHTNode>& newNode)
-    : bucket_(bucket),
-      newNode_(newNode),
-      numRetry_(0),
-      timeout_(DHT_MESSAGE_TIMEOUT)
-{
-}
-    
-    namespace aria2 {
-    }
-    
-      const std::shared_ptr<DHTNode>& getLocalNode() const { return localNode_; }
-    
-    DHTRoutingTableSerializer::DHTRoutingTableSerializer(int family)
-    : family_(family)
-{
-}
+    #define ERR_FAIL_NULL(m_param)                                                                              \
+	{                                                                                                       \
+		if (unlikely(!m_param)) {                                                                           \
+			_err_print_error(FUNCTION_STR, __FILE__, __LINE__, 'Parameter ' ' _STR(m_param) ' ' is null.'); \
+			return;                                                                                         \
+		}                                                                                                   \
+		_err_error_exists = false;                                                                          \
+	}
     
     public:
-  DHTRoutingTableSerializer(int family);
+	bool is_valid() const;
+	bool intersect_segment(const Vector3 &p_begin, const Vector3 &p_end, Vector3 &r_point, Vector3 &r_normal) const;
+	bool intersect_ray(const Vector3 &p_begin, const Vector3 &p_dir, Vector3 &r_point, Vector3 &r_normal) const;
+	bool intersect_convex_shape(const Plane *p_planes, int p_plane_count) const;
+	bool inside_convex_shape(const Plane *p_planes, int p_plane_count, Vector3 p_scale = Vector3(1, 1, 1)) const;
+	Vector3 get_area_normal(const AABB &p_aabb) const;
+	PoolVector<Face3> get_faces() const;
     
+      void SetSendMessage(ByteBuffer* buf, const void** msg,
+                      bool* fail_send_message,
+                      std::function<Status(const void*)> serializer) {
+    send_message_ = buf;
+    orig_send_message_ = msg;
+    fail_send_message_ = fail_send_message;
+    serializer_ = serializer;
+  }
     
-    {  virtual bool finished() = 0;
+    std::shared_ptr<Channel> CreateChannelForTestCase(
+    const grpc::string& test_case,
+    std::vector<
+        std::unique_ptr<experimental::ClientInterceptorFactoryInterface>>
+        interceptor_creators = {});
+    
+    void ChannelArguments::SetSslTargetNameOverride(const grpc::string& name) {
+  SetString(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG, name);
+}
+    
+      closesocket(lst_sock);
+  grpc_tcp_prepare_socket(cli_sock);
+  grpc_tcp_prepare_socket(svr_sock);
+    
+    static void test_setenv_getenv(void) {
+  const char* name = 'FOO';
+  const char* value = 'BAR';
+  char* retrieved_value;
+    }
+    
+    ChannelCredentials::~ChannelCredentials() {}
+    
+      std::shared_ptr<grpc::Channel> CreateChannelImpl(
+      const string& target, const grpc::ChannelArguments& args) override {
+    return CreateChannelWithInterceptors(
+        target, args,
+        std::vector<std::unique_ptr<
+            experimental::ClientInterceptorFactoryInterface>>());
+  }
+    
+        stream->WritesDone();
+    EXPECT_FALSE(stream->Read(&response));
+    EXPECT_FALSE(stream->Read(&response));
+    
+    #ifndef ROCKSDB_LITE
+TEST_F(DBTestCompactionFilter, CompactionFilter) {
+  Options options = CurrentOptions();
+  options.max_open_files = -1;
+  options.num_levels = 3;
+  options.compaction_filter_factory = std::make_shared<KeepFilterFactory>();
+  options = CurrentOptions(options);
+  CreateAndReopenWithCF({'pikachu'}, options);
+    }
+    
+      bool PartialMerge(const Slice& /*key*/, const Slice& /*left_operand*/,
+                    const Slice& right_operand, std::string* new_value,
+                    Logger* /*logger*/) const override {
+    new_value->assign(right_operand.data(), right_operand.size());
+    return true;
+  }
+    
+      const int kNumL0Files = 4;
+    
+    // Example structure that describes a compaction task.
+struct CompactionTask {
+  CompactionTask(
+      DB* _db, Compactor* _compactor,
+      const std::string& _column_family_name,
+      const std::vector<std::string>& _input_file_names,
+      const int _output_level,
+      const CompactionOptions& _compact_options,
+      bool _retry_on_fail)
+          : db(_db),
+            compactor(_compactor),
+            column_family_name(_column_family_name),
+            input_file_names(_input_file_names),
+            output_level(_output_level),
+            compact_options(_compact_options),
+            retry_on_fail(_retry_on_fail) {}
+  DB* db;
+  Compactor* compactor;
+  const std::string& column_family_name;
+  std::vector<std::string> input_file_names;
+  int output_level;
+  CompactionOptions compact_options;
+  bool retry_on_fail;
 };
     
-      DHTMessageFactory* factory_;
+    #include 'rocksdb/db.h'
+#include 'rocksdb/options.h'
+#include 'rocksdb/slice.h'
+#include 'rocksdb/utilities/transaction.h'
+#include 'rocksdb/utilities/optimistic_transaction_db.h'
     
-    void DHTTaskQueueImpl::executeTask()
-{
-  A2_LOG_DEBUG('Updating periodicTaskQueue1');
-  periodicTaskQueue1_.update();
-  A2_LOG_DEBUG('Updating periodicTaskQueue2');
-  periodicTaskQueue2_.update();
-  A2_LOG_DEBUG('Updating immediateTaskQueue');
-  immediateTaskQueue_.update();
-}
-    
-    DHTUnknownMessage::DHTUnknownMessage(const std::shared_ptr<DHTNode>& localNode,
-                                     const unsigned char* data, size_t length,
-                                     const std::string& ipaddr, uint16_t port)
-    : DHTMessage(localNode, std::shared_ptr<DHTNode>()),
-      length_(length),
-      ipaddr_(ipaddr),
-      port_(port)
-{
-  if (length_ == 0) {
-    data_ = nullptr;
-  }
-  else {
-    data_ = new unsigned char[length];
-    memcpy(data_, data, length);
-  }
-}
-    
-    namespace aria2 {
-    }
+      const Snapshot* snapshot();
