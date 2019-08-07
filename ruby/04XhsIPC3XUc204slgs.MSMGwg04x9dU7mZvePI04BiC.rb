@@ -1,257 +1,220 @@
 
         
-                  # The sleep ensures that the output is truly flushed before any `sudo`
-          # commands are issued.
-          ui.info I18n.t('vagrant.hosts.bsd.nfs_export')
-          sleep 0.5
-    
-          def rsync_pre(machine, opts)
-        guest_path = Shellwords.escape(opts[:guestpath])
-        machine.communicate.sudo('mkdir -p #{guest_path}')
+                  theme.create!
+          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
+                             ' is ready for you in #{theme.path.to_s.cyan}!'
+          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
+        end
+        # rubocop:enable Metrics/AbcSize
       end
-    
-        let(:empty_opts) {{:type=>:rsync,
-                 :guestpath=>'/vagrant',
-                 :hostpath=>'/home/user/syncfolder',
-                 :disabled=>false,
-                 :__vagrantfile=>true,
-                 :exclude=>[],
-                 :owner=>'vagrant',
-                 :group=>'vagrant'}}
-    
-    # Unset all host plugins so that we aren't executing subprocess things
-# to detect a host for every test.
-Vagrant.plugin('2').manager.registered.dup.each do |plugin|
-  if plugin.components.hosts.to_hash.length > 0
-    Vagrant.plugin('2').manager.unregister(plugin)
+    end
   end
 end
+
     
-          expect(app).to receive(:call).with(env)
-    
-        it 'returns true if installed' do
-      expect(machine.communicate).to receive(:test).
-        with(command, sudo: true).and_return(true)
-      subject.chef_installed(machine, 'chef_solo', version)
+        def process(args)
+      arg_is_present? args, '--server', 'The --server command has been replaced by the \
+                          'serve' subcommand.'
+      arg_is_present? args, '--serve', 'The --serve command has been replaced by the \
+                          'serve' subcommand.'
+      arg_is_present? args, '--no-server', 'To build Jekyll without launching a server, \
+                          use the 'build' subcommand.'
+      arg_is_present? args, '--auto', 'The switch '--auto' has been replaced with \
+                          '--watch'.'
+      arg_is_present? args, '--no-auto', 'To disable auto-replication, simply leave off \
+                          the '--watch' switch.'
+      arg_is_present? args, '--pygments', 'The 'pygments'settings has been removed in \
+                          favour of 'highlighter'.'
+      arg_is_present? args, '--paginate', 'The 'paginate' setting can only be set in \
+                          your config files.'
+      arg_is_present? args, '--url', 'The 'url' setting can only be set in your \
+                          config files.'
+      no_subcommand(args)
     end
     
-              # Test if the provider is usable or not
-          begin
-            provider_cls.usable?(true)
-          rescue Errors::VagrantError => e
-            raise Errors::ProviderNotUsable,
-              machine: name.to_s,
-              provider: provider.to_s,
-              message: e.to_s
-          end
-        else
-          box_formats = provider
+        # The path used after resending confirmation instructions.
+    def after_resending_confirmation_instructions_path_for(resource_name)
+      is_navigational_format? ? new_session_path(resource_name) : '/'
+    end
+    
+          # Sign in a user that already was authenticated. This helper is useful for logging
+      # users in after sign up. All options given to sign_in is passed forward
+      # to the set_user method in warden.
+      # If you are using a custom warden strategy and the timeoutable module, you have to
+      # set `env['devise.skip_timeout'] = true` in the request to use this method, like we do
+      # in the sessions controller: https://github.com/plataformatec/devise/blob/master/app/controllers/devise/sessions_controller.rb#L7
+      #
+      # Examples:
+      #
+      #   sign_in :user, @user                      # sign_in(scope, resource)
+      #   sign_in @user                             # sign_in(resource)
+      #   sign_in @user, event: :authentication     # sign_in(resource, options)
+      #   sign_in @user, store: false               # sign_in(resource, options)
+      #
+      def sign_in(resource_or_scope, *args)
+        options  = args.extract_options!
+        scope    = Devise::Mapping.find_scope!(resource_or_scope)
+        resource = args.last || resource_or_scope
+    
+              recoverable.reset_password_token = original_token if recoverable.reset_password_token.present?
+          recoverable
         end
-      end
     
-          env = environment.create_vagrant_env
-      expect(env.pushes).to eq([:noop])
-    end
-  end
+            # Initialize a new instance from its attributes.
+        #
+        # @param [Array<Specification>] specs      @see #specs
+        # @param [Array<Specification>] test_specs @see #test_specs
+        # @param [Array<Specification>] app_specs  @see #app_specs
+        # @param [Platform] platform               @see #platform
+        # @param [Target::BuildType] build_type    @see #build_type
+        #
+        def initialize(specs, test_specs, app_specs, platform, build_type = Target::BuildType.static_library)
+          @specs = specs
+          @test_specs = test_specs
+          @app_specs = app_specs
+          @platform = platform
+          @build_type = build_type
+          @hash = [specs, platform, build_type].hash
+        end
     
-      describe '#install_local' do
-    let(:plugin_source){ double('plugin_source', spec: plugin_spec) }
-    let(:plugin_spec){ double('plugin_spec', name: plugin_name, version: plugin_version) }
-    let(:plugin_name){ 'PLUGIN_NAME' }
-    let(:plugin_version){ '1.0.0' }
-    let(:plugin_path){ 'PLUGIN_PATH' }
-    let(:sources){ 'SOURCES' }
-    
-            def build(dir, **opts, &block)
-          name = machine.name.to_s
-          @logger.debug('Applying build for `#{name}` using `#{dir}` directory.')
-          begin
-            update_composition do |composition|
-              services = composition['services'] ||= {}
-              services[name] ||= {}
-              services[name]['build'] = {'context' => dir}
-              # Extract custom dockerfile location if set
-              if opts[:extra_args] && opts[:extra_args].include?('--file')
-                services[name]['build']['dockerfile'] = opts[:extra_args][opts[:extra_args].index('--file') + 1]
+                spec_names = specs.map do |spec|
+              spec.root? ? '.root' : spec.name.split('/')[1..-1].join('_')
+            end.sort
+            if spec_names.empty?
+              omit_common_specs ? '.common' : nil
+            else
+              if omit_common_specs
+                spec_names.unshift('.common')
+              elsif omit_default_specs
+                spec_names.unshift('.default')
               end
-              # Extract any build args that can be found
-              case opts[:build_args]
-              when Array
-                if opts[:build_args].include?('--build-arg')
-                  idx = 0
-                  build_args = {}
-                  while(idx < opts[:build_args].size)
-                    arg_value = opts[:build_args][idx]
-                    idx += 1
-                    if arg_value.start_with?('--build-arg')
-                      if !arg_value.include?('=')
-                        arg_value = opts[:build_args][idx]
-                        idx += 1
-                      end
-                      key, val = arg_value.to_s.split('=', 2).to_s.split('=')
-                      build_args[key] = val
-                    end
-                  end
-                end
-              when Hash
-                services[name]['build']['args'] = opts[:build_args]
+              spec_names.reduce('') do |acc, name|
+                '#{acc}#{acc.empty? || name[0] == '.' ? '' : '-'}#{name}'
               end
             end
-          rescue => error
-            @logger.error('Failed to apply build using `#{dir}` directory: #{error.class} - #{error}')
-            update_composition do |composition|
-              composition['services'].delete(name)
-            end
-            raise
           end
         end
     
-                  expect(action_runner).to receive(:run).with(any_args) { |action, opts|
-                expect(opts[:box_download_ca_cert]).to eq('foo')
-                expect(opts[:box_download_ca_path]).to eq('bar')
-                expect(opts[:box_download_client_cert]).to eq('baz')
-                expect(opts[:box_download_insecure]).to be(true)
-                true
-              }
+              # Creates a script that copies the resources to the bundle of the client
+          # target.
+          #
+          # @note   The bridge support file needs to be created before the prefix
+          #         header, otherwise it will not be added to the resources script.
+          #
+          # @return [void]
+          #
+          def create_copy_resources_script
+            path = target.copy_resources_script_path
+            generator = Generator::CopyResourcesScript.new(target.resource_paths_by_config, target.platform)
+            update_changed_file(generator, path)
+            add_file_to_support_group(path)
+          end
     
-          def destroy
-        authorization = Api::OpenidConnect::Authorization.find_by(id: params[:id])
-        if authorization
-          authorization.destroy
+    require 'rubygems'
+require 'bundler/setup'
+require 'bacon'
+require 'mocha-on-bacon'
+require 'pretty_bacon'
+require 'pathname'
+    
+    module Pod
+  class Target
+    describe BuildType do
+      describe '#initialize' do
+        it 'returns static library by default' do
+          BuildType.new.should == BuildType.static_library
+        end
+    
+          # Creates a default launchscreen storyboard.
+      #
+      # @param  [Project] project
+      #         the Xcodeproj to generate the launchscreen storyboard into.
+      #
+      # @param  [PBXNativeTarget] target
+      #         the native target to link the generated launchscreen storyboard into.
+      #
+      # @param  [Symbol] platform
+      #         the platform of the target. Can be `:ios` or `:osx`, etc.
+      #
+      # @param  [String] deployment_target
+      #         the deployment target for the platform.
+      #
+      # @param  [String] name
+      #         The name to use for the target, defaults to 'App'.
+      #
+      # @return [PBXFileReference] the created file reference of the launchscreen storyboard.
+      #
+      def self.add_launchscreen_storyboard(project, target, group, deployment_target, name = 'App')
+        launch_storyboard_file = AppTargetHelper.create_launchscreen_storyboard_file(project, deployment_target, name)
+        launch_storyboard_ref = group.new_file(launch_storyboard_file)
+        target.resources_build_phase.add_file_reference(launch_storyboard_ref)
+      end
+    
+          def ==(other)
+        if other.class == self.class
+          other.source_path == @source_path && other.dsym_path == @dsym_path && other.bcsymbolmap_paths == @bcsymbolmap_paths
         else
-          flash[:error] = I18n.t('api.openid_connect.authorizations.destroy.fail', id: params[:id])
+          false
         end
-        redirect_to api_openid_connect_user_applications_url
       end
     
-          def create
-        req = Rack::Request.new(request.env)
-        if req['client_assertion_type'] == 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
-          handle_jwt_bearer(req)
+            it 'does not remove existing embed frameworks build phases from integrated framework targets' do
+          @pod_bundle.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @target_integrator.integrate!
+          @pod_bundle.stubs(:requires_frameworks? => false)
+          target = @target_integrator.send(:native_targets).first
+          @target_integrator.integrate!
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
+          phase.should.not.be.nil
         end
-        self.status, headers, self.response_body = Api::OpenidConnect::TokenEndpoint.new.call(request.env)
-        headers.each {|name, value| response.headers[name] = value }
-        nil
-      end
     
-      def raw
-    @conversation = current_user.conversations.where(id: params[:conversation_id]).first
-    if @conversation
-      @first_unread_message_id = @conversation.first_unread_message(current_user).try(:id)
-      @conversation.set_read(current_user)
-      render partial: 'conversations/show', locals: {conversation: @conversation}
-    else
-      head :not_found
+    def bump_version
+  old_file = File.read('lib/#{name}.rb')
+  old_version_line = old_file[/^\s*VERSION\s*=\s*.*/]
+  new_version = next_version
+  # replace first match of old vesion with new version
+  old_file.sub!(old_version_line, '  VERSION = '#{new_version}'')
+    
+        def self.private_key
+      @private_key ||= OpenSSL::PKey::RSA.new(File.open(Postal.lets_encrypt_private_key_path))
     end
+    
+      #
+  # SPF
+  #
+    
+      expansion(:attachments) {
+    o.attachments.map do |attachment|
+      {
+        :filename => attachment.filename.to_s,
+        :content_type => attachment.mime_type,
+        :data => Base64.encode64(attachment.body.to_s),
+        :size => attachment.body.to_s.bytesize,
+        :hash => Digest::SHA1.hexdigest(attachment.body.to_s)
+      }
+    end
+  }
+    
+      def safe_params
+    params.require(:ip_address).permit(:ipv4, :ipv6, :hostname)
   end
     
-      namespace :install do
-    GEMS_AND_ROOT_DIRECTORIES.each do |gem, directory|
-      desc 'Build and install #{gem} as local gem'
-      task gem => package(gem, '.gem') do
-        sh 'gem install #{package(gem, '.gem')}'
+      def deliveries
+    render :json => {:html => render_to_string(:partial => 'deliveries', :locals => {:message => @message})}
+  end
+    
+      def destroy
+    unless current_user.authenticate(params[:password])
+      respond_to do |wants|
+        wants.html do
+          redirect_to [:delete, organization, @server], :alert => 'The password you entered was not valid. Please check and try again.'
+        end
+        wants.json do
+          render :json => {:alert => 'The password you entere was invalid. Please check and try again'}
+        end
       end
+      return
     end
-    
-        # we assume that the first file that requires 'sinatra' is the
-    # app_file. all other path related options are calculated based
-    # on this path by default.
-    set :app_file, caller_files.first || $0
-    
-    <style type='text/css' media='screen'>
-  *                   {margin: 0; padding: 0; border: 0; outline: 0;}
-  div.clear           {clear: both;}
-  body                {background: #EEEEEE; margin: 0; padding: 0;
-                       font-family: 'Lucida Grande', 'Lucida Sans Unicode',
-                       'Garuda';}
-  code                {font-family: 'Lucida Console', monospace;
-                       font-size: 12px;}
-  li                  {height: 18px;}
-  ul                  {list-style: none; margin: 0; padding: 0;}
-  ol:hover            {cursor: pointer;}
-  ol li               {white-space: pre;}
-  #explanation        {font-size: 12px; color: #666666;
-                       margin: 20px 0 0 100px;}
-/* WRAP */
-  #wrap               {width: 1000px; background: #FFFFFF; margin: 0 auto;
-                       padding: 30px 50px 20px 50px;
-                       border-left: 1px solid #DDDDDD;
-                       border-right: 1px solid #DDDDDD;}
-/* HEADER */
-  #header             {margin: 0 auto 25px auto;}
-  #header img         {float: left;}
-  #header #summary    {float: left; margin: 12px 0 0 20px; width:660px;
-                       font-family: 'Lucida Grande', 'Lucida Sans Unicode';}
-  h1                  {margin: 0; font-size: 36px; color: #981919;}
-  h2                  {margin: 0; font-size: 22px; color: #333333;}
-  #header ul          {margin: 0; font-size: 12px; color: #666666;}
-  #header ul li strong{color: #444444;}
-  #header ul li       {display: inline; padding: 0 10px;}
-  #header ul li.first {padding-left: 0;}
-  #header ul li.last  {border: 0; padding-right: 0;}
-/* BODY */
-  #backtrace,
-  #get,
-  #post,
-  #cookies,
-  #rack               {width: 980px; margin: 0 auto 10px auto;}
-  p#nav               {float: right; font-size: 14px;}
-/* BACKTRACE */
-  a#expando           {float: left; padding-left: 5px; color: #666666;
-                      font-size: 14px; text-decoration: none; cursor: pointer;}
-  a#expando:hover     {text-decoration: underline;}
-  h3                  {float: left; width: 100px; margin-bottom: 10px;
-                       color: #981919; font-size: 14px; font-weight: bold;}
-  #nav a              {color: #666666; text-decoration: none; padding: 0 5px;}
-  #backtrace li.frame-info {background: #f7f7f7; padding-left: 10px;
-                           font-size: 12px; color: #333333;}
-  #backtrace ul       {list-style-position: outside; border: 1px solid #E9E9E9;
-                       border-bottom: 0;}
-  #backtrace ol       {width: 920px; margin-left: 50px;
-                       font: 10px 'Lucida Console', monospace; color: #666666;}
-  #backtrace ol li    {border: 0; border-left: 1px solid #E9E9E9;
-                       padding: 2px 0;}
-  #backtrace ol code  {font-size: 10px; color: #555555; padding-left: 5px;}
-  #backtrace-ul li    {border-bottom: 1px solid #E9E9E9; height: auto;
-                       padding: 3px 0;}
-  #backtrace-ul .code {padding: 6px 0 4px 0;}
-  #backtrace.condensed .system,
-  #backtrace.condensed .framework {display:none;}
-/* REQUEST DATA */
-  p.no-data           {padding-top: 2px; font-size: 12px; color: #666666;}
-  table.req           {width: 980px; text-align: left; font-size: 12px;
-                       color: #666666; padding: 0; border-spacing: 0;
-                       border: 1px solid #EEEEEE; border-bottom: 0;
-                       border-left: 0;
-                       clear:both}
-  table.req tr th     {padding: 2px 10px; font-weight: bold;
-                       background: #F7F7F7; border-bottom: 1px solid #EEEEEE;
-                       border-left: 1px solid #EEEEEE;}
-  table.req tr td     {padding: 2px 20px 2px 10px;
-                       border-bottom: 1px solid #EEEEEE;
-                       border-left: 1px solid #EEEEEE;}
-/* HIDE PRE/POST CODE AT START */
-  .pre-context,
-  .post-context       {display: none;}
-    
-          def self.token(session)
-        self.new(nil).mask_authenticity_token(session)
-      end
-    
-          def encrypt(value)
-        options[:encryptor].hexdigest value.to_s
-      end
-    
-            if has_vector?(request, headers)
-          warn env, 'attack prevented by #{self.class}'
-    
-        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
-      env = {'HTTP_HOST' => 'foo.com'}
-      subject.options[:allow_empty_referrer] = false
-      expect(subject.referrer(env)).to be_nil
-    end
-    
-        headers = get('/', {}, 'wants' => 'text/html').headers
-    expect(headers['Content-Security-Policy']).to be_nil
-    expect(headers['Content-Security-Policy-Report-Only']).to eq('connect-src 'self'; default-src none; img-src 'self'; report-uri /my_amazing_csp_report_parser; script-src 'self'; style-src 'self'')
+    @server.soft_destroy
+    redirect_to_with_json organization_root_path(organization), :notice => '#{@server.name} has been deleted successfully'
   end
