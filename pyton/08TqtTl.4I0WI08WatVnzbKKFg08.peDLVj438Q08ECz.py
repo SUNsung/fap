@@ -1,160 +1,204 @@
 
         
-        errors = []
-title_links = []
-previous_links = []
-anchor_re = re.compile(anchor + '\s(.+)')
-section_title_re = re.compile('\*\s\[(.*)\]')
-link_re = re.compile('\[(.+)\]\((http.*)\)')
+        # define outlier/anomaly detection methods to be compared
+anomaly_algorithms = [
+    ('Robust covariance', EllipticEnvelope(contamination=outliers_fraction)),
+    ('One-Class SVM', svm.OneClassSVM(nu=outliers_fraction, kernel='rbf',
+                                      gamma=0.1)),
+    ('Isolation Forest', IsolationForest(contamination=outliers_fraction,
+                                         random_state=42)),
+    ('Local Outlier Factor', LocalOutlierFactor(
+        n_neighbors=35, contamination=outliers_fraction))]
+    
+        n : int
+        Index of the column of X to be swapped.
+    '''
+    if m < 0:
+        m += X.shape[1]
+    if n < 0:
+        n += X.shape[1]
+    if isinstance(X, sp.csc_matrix):
+        inplace_swap_row_csr(X, m, n)
+    elif isinstance(X, sp.csr_matrix):
+        inplace_swap_row_csc(X, m, n)
+    else:
+        _raise_typeerror(X)
+    
+    In both cases, only 10% of the features are informative.
+'''
+import numpy as np
+import gc
+from time import time
+from sklearn.datasets.samples_generator import make_regression
+    
+        n_samples = 2000
+    list_n_features = np.linspace(500, 3000, 5).astype(np.int)
+    lasso_results, lars_lasso_results = compute_bench(alpha, [n_samples],
+                                           list_n_features, precompute=False)
+    plt.subplot(212)
+    plt.plot(list_n_features, lasso_results, 'b-', label='Lasso')
+    plt.plot(list_n_features, lars_lasso_results, 'r-', label='LassoLars')
+    plt.title('%d samples, alpha=%s' % (n_samples, alpha))
+    plt.legend(loc='upper left')
+    plt.xlabel('number of features')
+    plt.ylabel('Time (s)')
+    plt.axis('tight')
+    plt.show()
+
+    
+    plot(euclidean_distances)
+plot(rbf_kernels)
+plt.show()
+
+    
+    
+def _get_git_revision():
+    try:
+        revision = subprocess.check_output(REVISION_CMD.split()).strip()
+    except (subprocess.CalledProcessError, OSError):
+        print('Failed to execute git to get revision')
+        return None
+    return revision.decode('utf-8')
+    
+        # TASK: print the mean and std for each candidate along with the parameter
+    # settings for all the candidates explored by grid search.
+    n_candidates = len(grid_search.cv_results_['params'])
+    for i in range(n_candidates):
+        print(i, 'params - %s; mean - %0.2f; std - %0.2f'
+                 % (grid_search.cv_results_['params'][i],
+                    grid_search.cv_results_['mean_test_score'][i],
+                    grid_search.cv_results_['std_test_score'][i]))
+    
+    Demonstrate how model complexity influences both prediction accuracy and
+computational performance.
+    
+    We selected two sets of two variables from the Boston housing data set
+as an illustration of what kind of analysis can be done with several
+outlier detection tools. For the purpose of visualization, we are working
+with two-dimensional examples, but one should be aware that things are
+not so trivial in high-dimension, as it will be pointed out.
+    
+    model = SpectralBiclustering(n_clusters=n_clusters, method='log',
+                             random_state=0)
+model.fit(data)
+score = consensus_score(model.biclusters_,
+                        (rows[:, row_idx], columns[:, col_idx]))
+    
+        strings = []
+    with open(filepath, 'r') as f:
+    
+    def youku_acfun_proxy(vid, sign, ref):
+    endpoint = 'http://player.acfun.cn/flash_data?vid={}&ct=85&ev=3&sign={}&time={}'
+    url = endpoint.format(vid, sign, str(int(time.time() * 1000)))
+    json_data = json.loads(get_content(url, headers=dict(referer=ref)))['data']
+    enc_text = base64.b64decode(json_data)
+    dec_text = rc4(b'8bdc7e1a', enc_text).decode('utf8')
+    youku_json = json.loads(dec_text)
+    
+        description = proj_info['description'],
+    keywords = proj_info['keywords'],
+    
+    def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html(url)
+    title = r1(r'<title>(.*)</title>', html)
+    assert title
+    id = r1(r'flvid\s*=\s*(\d+)', html)
+    assert id
+    baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
+    
+            for i in link_list:
+            self.stream_types.append({'id': str(i[0])})
+            self.streams[i[0]] = {'url': i[1]}
+    
+            if not title:
+            self.title = vid
+    
+    from ..common import get_content, r1, match1, playlist_not_supported
+from ..extractor import VideoExtractor
     
     	html = get_html(url)
 	contentid = r1(r'<meta name='contentid' scheme='DMINSTR2' content='([^']+)' />', html)
 	vid = r1(r''demand_ehow_videoid':'([^']+)'', html)
 	assert vid
     
-        if title is None:
-      title = url[0]
-    
-            i = 1
-    
-            # partial derivatives to xs (usually the params of the neural net)
-        d_xs_new = dv[len(checkpoints_other):]
-        for j in range(len(xs)):
-            if d_xs_new[j] is not None:
-                if d_xs[j] is None:
-                    d_xs[j] = _unsparsify(d_xs_new[j])
-                else:
-                    d_xs[j] += _unsparsify(d_xs_new[j])
-    
-            logger.trace('Final mask shape: %s', retval.shape)
-        return retval
-    
-        def set_config(self, configfile, config):
-        ''' Set the config to either global config or passed in config '''
-        section = '.'.join(self.__module__.split('.')[-2:])
-        if config is None:
-            retval = get_config(section, configfile)
-        else:
-            config.section = section
-            retval = config.config_dict
-            config.section = None
-        logger.debug('Config: %s', retval)
-        return retval
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
     
     
-_DEFAULTS = {
-    'clip': {
-        'default': True,
-        'info': 'Should components of L*a*b* image be scaled by np.clip before converting '
-                'back to BGR color space?\nIf False then components will be min-max scaled '
-                'appropriately.\nClipping will keep target image brightness truer to the '
-                'input.\nScaling will adjust image brightness to avoid washed out portions in '
-                'the resulting color transfer that can be caused by clipping.',
-        'datatype': bool,
-        'rounding': None,
-        'min_max': None,
-        'choices': [],
-        'gui_radio': False,
-        'fixed': True,
-    },
-    'preserve_paper': {
-        'default': True,
-        'info': 'Should color transfer strictly follow methodology layed out in original '
-                'paper?\nThe method does not always produce aesthetically pleasing results.\n'
-                'If False then L*a*b* components will be scaled using the reciprocal of the '
-                'scaling factor proposed in the paper. This method seems to produce more '
-                'consistently aesthetically pleasing results.',
-        'datatype': bool,
-        'rounding': None,
-        'min_max': None,
-        'choices': [],
-        'gui_radio': False,
-        'fixed': True,
-    },
-}
+def compute_bbox_regression_targets(entry):
+    '''Compute bounding-box regression targets for an image.'''
+    # Indices of ground-truth ROIs
+    rois = entry['boxes']
+    overlaps = entry['max_overlaps']
+    labels = entry['max_classes']
+    gt_inds = np.where((entry['gt_classes'] > 0) & (entry['is_crowd'] == 0))[0]
+    # Targets has format (class, tx, ty, tw, th)
+    targets = np.zeros((rois.shape[0], 5), dtype=np.float32)
+    if len(gt_inds) == 0:
+        # Bail if the image has no ground-truth ROIs
+        return targets
+    
+    
+def _generate_anchors(base_size, scales, aspect_ratios):
+    '''Generate anchor (reference) windows by enumerating aspect ratios X
+    scales wrt a reference (0, 0, base_size - 1, base_size - 1) window.
+    '''
+    anchor = np.array([1, 1, base_size, base_size], dtype=np.float) - 1
+    anchors = _ratio_enum(anchor, aspect_ratios)
+    anchors = np.vstack(
+        [_scale_enum(anchors[i, :], scales) for i in range(anchors.shape[0])]
+    )
+    return anchors
+    
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+    
+            # data for select_smooth_l1 loss
+        num_classes = cfg.MODEL.NUM_CLASSES - 1
+        inds_4d = np.where(_labels > 0)
+        M = len(inds_4d)
+        _roi_bbox_targets = np.zeros((0, 4))
+        _roi_fg_bbox_locs = np.zeros((0, 4))
+        if M > 0:
+            im_inds, y, x = inds_4d[0], inds_4d[2], inds_4d[3]
+            _roi_bbox_targets = np.zeros((len(im_inds), 4))
+            _roi_fg_bbox_locs = np.zeros((len(im_inds), 4))
+            lbls = _labels[im_inds, :, y, x]
+            for i, lbl in enumerate(lbls):
+                l = lbl[0] - 1
+                if not cfg.RETINANET.CLASS_SPECIFIC_BBOX:
+                    l = 0
+                assert l >= 0 and l < num_classes, 'label out of the range'
+                _roi_bbox_targets[i, :] = _bbox_targets[:, :, y[i], x[i]]
+                _roi_fg_bbox_locs[i, :] = np.array([[0, l, y[i], x[i]]])
+        blobs_out.append(
+            dict(
+                retnet_cls_labels=_labels[:, :, 0:h, 0:w].astype(np.int32),
+                retnet_roi_bbox_targets=_roi_bbox_targets.astype(np.float32),
+                retnet_roi_fg_bbox_locs=_roi_fg_bbox_locs.astype(np.float32),
+            ))
+    out_num_fg = np.array([num_fg + 1.0], dtype=np.float32)
+    out_num_bg = (
+        np.array([num_bg + 1.0]) * (cfg.MODEL.NUM_CLASSES - 1) +
+        out_num_fg * (cfg.MODEL.NUM_CLASSES - 2))
+    return blobs_out, out_num_fg, out_num_bg
 
     
-        The following keys are expected for the _DEFAULTS <metadata> dict:
-        datatype:  [required] A python type class. This limits the type of data that can be
-                   provided in the .ini file and ensures that the value is returned in the
-                   correct type to faceswap. Valid datatypes are: <class 'int'>, <class 'float'>,
-                   <class 'str'>, <class 'bool'>.
-        default:   [required] The default value for this option.
-        info:      [required] A string describing what this option does.
-        choices:   [optional] If this option's datatype is of <class 'str'> then valid
-                   selections can be defined here. This validates the option and also enables
-                   a combobox / radio option in the GUI.
-        gui_radio: [optional] If <choices> are defined, this indicates that the GUI should use
-                   radio buttons rather than a combobox to display this option.
-        min_max:   [partial] For <class 'int'> and <class 'float'> datatypes this is required
-                   otherwise it is ignored. Should be a tuple of min and max accepted values.
-                   This is used for controlling the GUI slider range. Values are not enforced.
-        rounding:  [partial] For <class 'int'> and <class 'float'> datatypes this is
-                   required otherwise it is ignored. Used for the GUI slider. For floats, this
-                   is the number of decimal places to display. For ints this is the step size.
-        fixed:     [optional] [train only]. Training configurations are fixed when the model is
-                   created, and then reloaded from the state file. Marking an item as fixed=False
-                   indicates that this value can be changed for existing models, and will override
-                   the value saved in the state file with the updated value in config. If not
-                   provided this will default to True.
-'''
+        def time_cache_readonly(self):
+        self.obj.prop
     
-        def set_config(self, configfile, config):
-        ''' Set the config to either global config or passed in config '''
-        section = '.'.join(self.__module__.split('.')[-2:])
-        if config is None:
-            retval = get_config(section, configfile=configfile)
-        else:
-            config.section = section
-            retval = config.config_dict
-            config.section = None
-        logger.debug('Config: %s', retval)
-        return retval
+            print('Test: Enqueue on empty stack')
+        print('Test: Enqueue on non-empty stack')
+        print('Test: Multiple enqueue in a row')
+        num_items = 3
+        for i in range(0, num_items):
+            queue.enqueue(i)
     
-        The following variables should be defined:
-        _HELPTEXT: A string describing what this plugin does
-        _DEFAULTS: A dictionary containing the options, defaults and meta information. The
-                   dictionary should be defined as:
-                       {<option_name>: {<metadata>}}
+            print('Test: Pop on no elements')
+        assert_equal(stacks.pop(), None)
     
-        def get_erosion_kernel(self, mask):
-        ''' Get the erosion kernel '''
-        erosion_ratio = self.config['erosion'] / 100
-        mask_radius = np.sqrt(np.sum(mask)) / 2
-        kernel_size = max(1, int(abs(erosion_ratio * mask_radius)))
-        erosion_kernel = cv2.getStructuringElement(  # pylint: disable=no-member
-            cv2.MORPH_ELLIPSE,  # pylint: disable=no-member
-            (kernel_size, kernel_size))
-        logger.trace('erosion_kernel shape: %s', erosion_kernel.shape)
-        return erosion_kernel
-    
-        The following keys are expected for the _DEFAULTS <metadata> dict:
-        datatype:  [required] A python type class. This limits the type of data that can be
-                   provided in the .ini file and ensures that the value is returned in the
-                   correct type to faceswap. Valid datatypes are: <class 'int'>, <class 'float'>,
-                   <class 'str'>, <class 'bool'>.
-        default:   [required] The default value for this option.
-        info:      [required] A string describing what this option does.
-        choices:   [optional] If this option's datatype is of <class 'str'> then valid
-                   selections can be defined here. This validates the option and also enables
-                   a combobox / radio option in the GUI.
-        gui_radio: [optional] If <choices> are defined, this indicates that the GUI should use
-                   radio buttons rather than a combobox to display this option.
-        min_max:   [partial] For <class 'int'> and <class 'float'> datatypes this is required
-                   otherwise it is ignored. Should be a tuple of min and max accepted values.
-                   This is used for controlling the GUI slider range. Values are not enforced.
-        rounding:  [partial] For <class 'int'> and <class 'float'> datatypes this is
-                   required otherwise it is ignored. Used for the GUI slider. For floats, this
-                   is the number of decimal places to display. For ints this is the step size.
-        fixed:     [optional] [train only]. Training configurations are fixed when the model is
-                   created, and then reloaded from the state file. Marking an item as fixed=False
-                   indicates that this value can be changed for existing models, and will override
-                   the value saved in the state file with the updated value in config. If not
-                   provided this will default to True.
-'''
-    
-        The following variables should be defined:
-        _HELPTEXT: A string describing what this plugin does
-        _DEFAULTS: A dictionary containing the options, defaults and meta information. The
-                   dictionary should be defined as:
-                       {<option_name>: {<metadata>}}
+            print('Success: test_end_to_end')
