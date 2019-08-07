@@ -1,383 +1,275 @@
 
         
-        
-    {  // Reorder the frequency matrix from
-  //    [[F(0, 0),  F(0, -1/4),   F(0, -2/4)],
-  //    [F(-1/4, 0), F(-1/4, -1/4), F(-1/4, -2/4)],
-  //    [F(-2/4, 0), F(-2/4, -1/4), F(-2/4, -2/4)],
-  //    [F(-3/4, 0), F(-3/4, -1/4), F(-3/4, -2/4)]]
-  // to
-  //    [[F(0, 0),  F(0, 1/4),   F(0, 2/4)],
-  //    [F(1/4, 0), F(1/4, 1/4), F(1/4, 2/4)],
-  //    [F(2/4, 0), F(2/4, 1/4), F(2/4, 2/4)],
-  //    [F(3/4, 0), F(3/4, 1/4), F(3/4, 2/4)]]
-  for (int i = 0; i < fft_height; ++i) {
-    for (int j = 1; j < fft_width + 2; j += 2) {
-      fft_input_output[i][j] = -fft_input_output[i][j];
-    }
+          // Read ACK message from the other process. It might be blocked for a certain
+  // timeout, to make sure the other process has enough time to return ACK.
+  char buf[kMaxACKMessageLength + 1];
+  ssize_t len = ReadFromSocket(socket.fd(), buf, kMaxACKMessageLength, timeout);
+    
+     private:
+  base::FilePath save_path_;
+  file_dialog::DialogSettings dialog_options_;
+  download::DownloadItem* download_item_;
+    
+    void Notification::Close() {
+  if (notification_) {
+    notification_->Dismiss();
+    notification_.reset();
   }
 }
     
+      device::mojom::WakeLock* GetWakeLock();
     
-    {
-    {#undef DEFINE_GPU_SPEC
-}  // namespace functor
-}  // namespace tensorflow
     
-    #endif  // TENSORFLOW_CORE_KERNELS_MATRIX_SET_DIAG_OP_H_
+template <>
+const char *
+FloatAttribute::staticTypeName ()
+{
+    return 'float';
+}
+    
+    
+OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_EXIT
+    
+    
+    //----------------------------------------------------------
+    // Default value, used to fill the slice when a file without
+    // a channel that corresponds to this slice is read.
+    //----------------------------------------------------------
+    
+    #endif /* GENERICOUTPUTFILE_H_ */
 
     
-      // Returns true if the tensor given by index 'i' is an output of the entire
-  // subgraph.
-  bool IsSubgraphOutput(int i) const { return subgraph_outputs_[i]; }
     
-    TEST_F(OpLevelCostEstimatorTest, FusedConv2DBiasActivationNCHW_HWIO) {
-  auto cost = PredictCosts(DescribeFusedConv2DBiasActivation(
-      16, 19, 19, 48, 48, 5, 5, 19, 19, 256, /* has_side_input = */ true,
-      'NCHW', 'HWIO'));
-  EXPECT_EQ(Costs::Duration(1416808), cost.memory_time);
-  EXPECT_EQ(Costs::Duration(355616770), cost.compute_time);
-  EXPECT_EQ(Costs::Duration(357033578), cost.execution_time);
-  EXPECT_EQ(1, cost.num_ops_total);
-  EXPECT_FALSE(cost.inaccurate);
-  EXPECT_EQ(0, cost.num_ops_with_unknown_shapes);
+void
+IStream::clear ()
+{
+    // empty
 }
     
-    #else
+    #include 'ImfMultiPartInputFile.h'
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    #ifndef IMFINPUTPARTDATA_H_
+#define IMFINPUTPARTDATA_H_
     
-    /**
- * Changelog:
- * - March 2013, Diederik Huys:    original version
- * - November 2014, Pieter Wuille: updated to use Peter Dettman's parallel multiplication algorithm
- * - December 2014, Pieter Wuille: converted from YASM to GCC inline assembly
- */
-    
-      // Adds the given pix to the set of pages in the PDF file, with the given
-  // caption added to the top.
-  void AddPix(const Pix* pix, const char* caption) {
-    int depth = pixGetDepth(const_cast<Pix*>(pix));
-    int color = depth < 8 ? 1 : (depth > 8 ? 0x00ff0000 : 0x80);
-    Pix* pix_debug = pixAddSingleTextblock(
-        const_cast<Pix*>(pix), fonts_, caption, color, L_ADD_BELOW, nullptr);
-    pixaAddPix(pixa_, pix_debug, L_INSERT);
+    template <typename Dtype>
+void HDF5DataLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top) {
+  // Refuse transformation parameters since HDF5 is totally generic.
+  CHECK(!this->layer_param_.has_transform_param()) <<
+      this->type() << ' does not transform data.';
+  // Read the source to parse the filenames.
+  const string& source = this->layer_param_.hdf5_data_param().source();
+  LOG(INFO) << 'Loading list of HDF5 filenames from: ' << source;
+  hdf_filenames_.clear();
+  std::ifstream source_file(source.c_str());
+  if (source_file.is_open()) {
+    std::string line;
+    while (source_file >> line) {
+      hdf_filenames_.push_back(line);
+    }
+  } else {
+    LOG(FATAL) << 'Failed to open source file: ' << source;
   }
-    
-    // A useful base struct to facilitate the common operation of sorting a vector
-// of simple or smart-pointer data using a separate key. Similar to STL pair.
-template <typename Key, typename Data>
-struct KDPair {
-  KDPair() = default;
-  KDPair(Key k, Data d) : data(d), key(k) {}
+  source_file.close();
+  num_files_ = hdf_filenames_.size();
+  current_file_ = 0;
+  LOG(INFO) << 'Number of HDF5 files: ' << num_files_;
+  CHECK_GE(num_files_, 1) << 'Must have at least 1 HDF5 filename listed in '
+    << source;
     }
     
-      // Initialize the bool array to the given size of feature space.
-  // The feature_map is just borrowed, and must exist for the entire
-  // lifetime of the IntFeatureDist.
-  void Init(const IntFeatureMap* feature_map);
-    
-    void get_btree_superblock_and_txn_for_reading(
-        cache_conn_t *cache_conn,
-        cache_snapshotted_t snapshotted,
-        scoped_ptr_t<real_superblock_t> *got_superblock_out,
-        scoped_ptr_t<txn_t> *txn_out);
-    
-    MUST_USE bool store_t::acquire_sindex_superblock_for_read(
-        const sindex_name_t &name,
-        const std::string &table_name,
-        real_superblock_t *superblock,
-        release_superblock_t release_superblock,
-        scoped_ptr_t<sindex_superblock_t> *sindex_sb_out,
-        std::vector<char> *opaque_definition_out,
-        uuid_u *sindex_uuid_out)
-    THROWS_ONLY(sindex_not_ready_exc_t) {
-    assert_thread();
-    rassert(opaque_definition_out != NULL);
-    rassert(sindex_uuid_out != NULL);
-    }
-    
-    // The following macros are useful for writing death tests.
-    
-    #ifndef GTEST_INCLUDE_GTEST_GTEST_MESSAGE_H_
-#define GTEST_INCLUDE_GTEST_GTEST_MESSAGE_H_
-    
-      // Returns the TestResult containing information on test failures and
-  // properties logged outside of individual test cases.
-  const TestResult& ad_hoc_test_result() const;
-    
-    #endif  // GTEST_INCLUDE_GTEST_GTEST_PRED_IMPL_H_
-
-    
-    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
-    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
-    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
-    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
-    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
-    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
-    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
-    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
-    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27>
-struct Templates27 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates26<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
-      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27> Tail;
-};
-    
-    $range i 1..n-1
-$for i [[
-$range j 1..i
-$range k i+1..n
-template <$for j, [[typename T$j]]>
-struct Types<$for j, [[T$j]]$for k[[, internal::None]]> {
-  typedef internal::Types$i<$for j, [[T$j]]> type;
-};
-    
-      // Returns true if no interceptors are run. Returns false otherwise if there
-  // are interceptors registered. After the interceptors are done running \a f
-  // will be invoked. This is to be used only by BaseAsyncRequest and
-  // SyncRequest.
-  bool RunInterceptors(std::function<void(void)> f) {
-    // This is used only by the server for initial call request
-    GPR_CODEGEN_ASSERT(reverse_ == true);
-    GPR_CODEGEN_ASSERT(call_->client_rpc_info() == nullptr);
-    auto* server_rpc_info = call_->server_rpc_info();
-    if (server_rpc_info == nullptr ||
-        server_rpc_info->interceptors_.size() == 0) {
-      return true;
-    }
-    callback_ = std::move(f);
-    RunServerInterceptors();
-    return false;
+      LayerParameter param;
+  param.mutable_hdf5_output_param()->set_file_name(this->output_file_name_);
+  // This code block ensures that the layer is deconstructed and
+  //   the output hdf5 file is closed.
+  {
+    HDF5OutputLayer<Dtype> layer(param);
+    layer.SetUp(this->blob_bottom_vec_, this->blob_top_vec_);
+    EXPECT_EQ(layer.file_name(), this->output_file_name_);
+    layer.Forward(this->blob_bottom_vec_, this->blob_top_vec_);
   }
+  file_id = H5Fopen(this->output_file_name_.c_str(), H5F_ACC_RDONLY,
+                          H5P_DEFAULT);
+  ASSERT_GE(
+    file_id, 0)<< 'Failed to open HDF5 file' <<
+          this->input_file_name_;
     
-    static grpc_iomgr_platform_vtable vtable = {
-    iomgr_platform_init,
-    iomgr_platform_flush,
-    iomgr_platform_shutdown,
-    iomgr_platform_shutdown_background_closure,
-    iomgr_platform_is_any_background_poller_thread,
-    iomgr_platform_add_closure_to_background_poller};
+    namespace caffe {
+    }
     
-    
-    {  joined = gpr_strjoin(parts, 1, &joined_len);
-  GPR_ASSERT(0 == strcmp('one', joined));
-  gpr_free(joined);
+    template <>
+void hdf5_save_nd_dataset<float>(
+    const hid_t file_id, const string& dataset_name, const Blob<float>& blob,
+    bool write_diff) {
+  int num_axes = blob.num_axes();
+  hsize_t *dims = new hsize_t[num_axes];
+  for (int i = 0; i < num_axes; ++i) {
+    dims[i] = blob.shape(i);
+  }
+  const float* data;
+  if (write_diff) {
+    data = blob.cpu_diff();
+  } else {
+    data = blob.cpu_data();
+  }
+  herr_t status = H5LTmake_dataset_float(
+      file_id, dataset_name.c_str(), num_axes, dims, data);
+  CHECK_GE(status, 0) << 'Failed to make float dataset ' << dataset_name;
+  delete[] dims;
 }
+    
+    #include 'caffe/layers/neuron_layer.hpp'
+    
+    #ifdef USE_CUDNN
+#include 'caffe/layers/cudnn_conv_layer.hpp'
+#include 'caffe/layers/cudnn_deconv_layer.hpp'
+#include 'caffe/layers/cudnn_lcn_layer.hpp'
+#include 'caffe/layers/cudnn_lrn_layer.hpp'
+#include 'caffe/layers/cudnn_pooling_layer.hpp'
+#include 'caffe/layers/cudnn_relu_layer.hpp'
+#include 'caffe/layers/cudnn_sigmoid_layer.hpp'
+#include 'caffe/layers/cudnn_softmax_layer.hpp'
+#include 'caffe/layers/cudnn_tanh_layer.hpp'
+#endif
+    
+    using std::min;
+using std::max;
+    
+    void convert_dataset(const char* image_filename, const char* label_filename,
+        const char* db_path, const string& db_backend) {
+  // Open files
+  std::ifstream image_file(image_filename, std::ios::in | std::ios::binary);
+  std::ifstream label_file(label_filename, std::ios::in | std::ios::binary);
+  CHECK(image_file) << 'Unable to open file ' << image_filename;
+  CHECK(label_file) << 'Unable to open file ' << label_filename;
+  // Read the magic and the meta data
+  uint32_t magic;
+  uint32_t num_items;
+  uint32_t num_labels;
+  uint32_t rows;
+  uint32_t cols;
+    }
     
     int main(int argc, char** argv) {
-  ::testing::InitGoogleTest(&argc, argv);
-  int ret = RUN_ALL_TESTS();
-  return ret;
-}
-
-    
-    // Initialize the lock, with an optional workqueue to shift load to when
-// necessary
-grpc_combiner* grpc_combiner_create(void);
-    
-    
-    {}  // namespace grpc_impl
-
-    
-    
-    {
-    { private:
-  std::shared_ptr<grpc::Channel> CreateChannelWithInterceptors(
-      const string& target, const grpc::ChannelArguments& args,
-      std::vector<
-          std::unique_ptr<experimental::ClientInterceptorFactoryInterface>>
-          interceptor_creators) override {
-    grpc_channel_args channel_args;
-    args.SetChannelArgs(&channel_args);
-    return CreateChannelInternal(
-        '',
-        grpc_cronet_secure_channel_create(engine_, target.c_str(),
-                                          &channel_args, nullptr),
-        std::move(interceptor_creators));
+  if (argc != 4) {
+    printf('This script converts the MNIST dataset to the leveldb format used\n'
+           'by caffe to train a siamese network.\n'
+           'Usage:\n'
+           '    convert_mnist_data input_image_file input_label_file '
+           'output_db_file\n'
+           'The MNIST dataset could be downloaded at\n'
+           '    http://yann.lecun.com/exdb/mnist/\n'
+           'You should gunzip them after downloading.\n');
+  } else {
+    google::InitGoogleLogging(argv[0]);
+    convert_dataset(argv[1], argv[2], argv[3]);
   }
-  void* engine_;
+  return 0;
+}
+#else
+int main(int argc, char** argv) {
+  LOG(FATAL) << 'This example requires LevelDB; compile with USE_LEVELDB.';
+}
+#endif  // USE_LEVELDB
+
+    
+    
+    { protected:
+  shared_ptr<SyncedMemory> rand_vec_;
 };
-}  // namespace grpc
-namespace grpc_impl {
-std::shared_ptr<ChannelCredentials> CronetChannelCredentials(void* engine) {
-  return std::shared_ptr<ChannelCredentials>(
-      new grpc::CronetChannelCredentialsImpl(engine));
-}
-}  // namespace grpc_impl
-
     
-    #include <gtest/gtest.h>
+    #include 'db/dbformat.h'
+#include 'leveldb/db.h'
     
-    TEST_F(HybridEnd2endTest, GenericEchoAsyncRequestStreamResponseStream) {
-  typedef EchoTestService::WithAsyncMethod_RequestStream<
-      EchoTestService::WithGenericMethod_Echo<
-          EchoTestService::WithAsyncMethod_ResponseStream<TestServiceImpl>>>
-      SType;
-  SType service;
-  AsyncGenericService generic_service;
-  SetUpServer(&service, nullptr, &generic_service, nullptr);
-  ResetStub();
-  std::thread generic_handler_thread(HandleGenericCall, &generic_service,
-                                     cqs_[0].get());
-  std::thread request_stream_handler_thread(HandleClientStreaming<SType>,
-                                            &service, cqs_[1].get());
-  std::thread response_stream_handler_thread(HandleServerStreaming<SType>,
-                                             &service, cqs_[2].get());
-  TestAllMethods();
-  generic_handler_thread.join();
-  request_stream_handler_thread.join();
-  response_stream_handler_thread.join();
-}
+    // Return the name of the old info log file for 'dbname'.
+std::string OldInfoLogFileName(const std::string& dbname);
     
-    String toString(const Array& arr);
-String toStringForDisplay(const Array& arr);
-    
-        // Using the new protocol, so variables contain only names.  Fetch the value
-    // separately.
-    CmdVariable cmd;
-    cmd.m_frame = frame;
-    cmd.m_variables.reset();
-    cmd.m_varName = name;
-    cmd.m_filter = text;
-    cmd.m_formatMaxLen = 200;
-    cmd.m_version = 2;
-    auto rcmd = client.xend<CmdVariable>(&cmd);
-    if (!rcmd->m_variables.empty()) {
-      assertx(rcmd->m_variables[name].isString());
-      value = rcmd->m_variables[name].toString();
-      found = true;
-    } else if (text.empty()) {
-      // Not missing because filtered out, assume the value is too large.
-      value = s_omitted;
-      found = true;
-    } else if (name.find(text, 0, false) >= 0) {
-      // Server should have matched it.  Assume missing because value is too
-      // large.
-      value = s_omitted;
-      found = true;
-    } else {
-      // The variable was filtered out on the server, using text.  Or it was
-      // just too large.  Either way we skip over it.
-      continue;
-    }
-    
-          switch (scope->m_scopeType) {
-        case ScopeType::Locals:
-          success = setLocalVariable(
-            session,
-            name,
-            strValue,
-            scope,
-            &body
-          );
-          break;
-    }
-    
-    TypedValue* ActRec::getExtraArg(unsigned ind) const {
-  assertx(hasExtraArgs() || hasVarEnv());
-  return hasExtraArgs() ? getExtraArgs()->getExtraArg(ind) :
-         hasVarEnv()    ? getVarEnv()->getExtraArg(ind) :
-         static_cast<TypedValue*>(nullptr);
-}
-    
-    
-    {  Init::InitFromSpec(traceSpec, modules.data());
-  CompactVector<BumpRelease> result;
-  for (int i = 0; i < NumModules; i++) {
-    if (modules[i]) {
-      result.emplace_back(static_cast<Module>(i), -modules[i]);
-    }
+    Iterator* TableCache::NewIterator(const ReadOptions& options,
+                                  uint64_t file_number, uint64_t file_size,
+                                  Table** tableptr) {
+  if (tableptr != nullptr) {
+    *tableptr = nullptr;
   }
-  return result;
-}
-    
-    
-    {    // exception out_of_range.401
-    try
-    {
-        // try to write at a nonexisting key
-        object.at('the fast') = 'il rapido';
-    }
-    catch (json::out_of_range& e)
-    {
-        std::cout << e.what() << '\n';
-    }
-}
-
-    
-    using json = nlohmann::json;
-    
-    
-    {    std::cout << null << '\n';
-    std::cout << *res2.first << ' ' << std::boolalpha << res2.second << '\n';
-}
-
-    
-    /// Prefix used for posix tar archive.
-const std::string kTestCarveNamePrefix = 'carve_';
-    
-    
-    {
-    {  // If we modify the input interval the splay will change.
-  auto splay3 = restoreSplayedValue('pack_test_query_name', 3600 * 10);
-  EXPECT_GE(splay3, 3600U * 10 - (360 * 10));
-  EXPECT_LE(splay3, 3600U * 10 + (360 * 10));
-  EXPECT_NE(splay, splay3);
-}
-}
-
-    
-    Expected<int32_t, DatabaseError> Database::getInt32Or(
-    const std::string& domain,
-    const std::string& key,
-    const int32_t default_value) {
-  auto result = getInt32(domain, key);
-  if (!result && result.getError() == DatabaseError::KeyNotFound) {
-    return default_value;
-  }
-  return result;
-}
-    
-    void InMemoryDatabase::close() {
-  VLOG(1) << 'Closing db... ';
-  debug_only::verifyTrue(is_open_, 'database is not open');
-  is_open_ = false;
-  auto status = destroyDB();
-  debug_only::verifyTrue(status.isValue(),
-                         'InMemoryDatabase::destroyDB couldn't fail');
-}
-    
-      /** @brief Virtual method which should implement custom logging.
-   *
-   *  LoggerPlugin::logString should be implemented by a subclass of
-   *  LoggerPlugin which needs to log a string in a custom way.
-   *
-   *  @return an instance of osquery::Status which indicates the success or
-   *  failure of the operation.
-   */
-  virtual Status logString(const std::string& s) = 0;
-    
-    namespace osquery {
     }
     
-    GTEST_TEST(InMemoryDatabaseTest, test_unknown_key) {
-  auto db = std::make_unique<InMemoryDatabase>('test');
-  ASSERT_FALSE(db->open().isError());
-  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'key', 12).isError());
-  auto result = db->getInt32(kPersistentSettings, 'key_');
-  EXPECT_FALSE(result);
-  EXPECT_EQ(result.takeError(), DatabaseError::KeyNotFound);
+    namespace leveldb {
+    }
+    
+    namespace leveldb {
+    }
+    
+    TEST(WriteBatchTest, Corruption) {
+  WriteBatch batch;
+  batch.Put(Slice('foo'), Slice('bar'));
+  batch.Delete(Slice('box'));
+  WriteBatchInternal::SetSequence(&batch, 200);
+  Slice contents = WriteBatchInternal::Contents(&batch);
+  WriteBatchInternal::SetContents(&batch,
+                                  Slice(contents.data(), contents.size() - 1));
+  ASSERT_EQ(
+      'Put(foo, bar)@200'
+      'ParseError()',
+      PrintContents(&batch));
 }
     
+      // Three-way comparison.  Returns value:
+  //   <  0 iff '*this' <  'b',
+  //   == 0 iff '*this' == 'b',
+  //   >  0 iff '*this' >  'b'
+  int compare(const Slice& b) const;
     
-    {  m_operation.clear();
-  return true;
+    namespace leveldb {
+    }
+    
+    void BlockHandle::EncodeTo(std::string* dst) const {
+  // Sanity check that all fields have been set
+  assert(offset_ != ~static_cast<uint64_t>(0));
+  assert(size_ != ~static_cast<uint64_t>(0));
+  PutVarint64(dst, offset_);
+  PutVarint64(dst, size_);
 }
     
-      bool multiConnectionOperation() const override { return false; }
+    // Return an iterator that provided the union of the data in
+// children[0,n-1].  Takes ownership of the child iterators and
+// will delete them when the result iterator is deleted.
+//
+// The result does no duplicate suppression.  I.e., if a particular
+// key is present in K child iterators, it will be yielded K times.
+//
+// REQUIRES: n >= 0
+Iterator* NewMergingIterator(const Comparator* comparator, Iterator** children,
+                             int n);
+    
+        actual = DecodeFixed64(p);
+    ASSERT_EQ(v + 0, actual);
+    p += sizeof(uint64_t);
+    
+    namespace ImGuiFreeType
+{
+    // Hinting greatly impacts visuals (and glyph sizes).
+    // When disabled, FreeType generates blurrier glyphs, more or less matches the stb's output.
+    // The Default hinting mode usually looks good, but may distort glyphs in an unusual way.
+    // The Light hinting mode generates fuzzier glyphs but better matches Microsoft's rasterizer.
+    }
+    
+        for (int n = 0; n < 20; n++)
+    {
+        printf('NewFrame() %d\n', n);
+        io.DisplaySize = ImVec2(1920, 1080);
+        io.DeltaTime = 1.0f / 60.0f;
+        ImGui::NewFrame();
+    }
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+    void CleanupRenderTarget()
+{
+    if (g_mainRenderTargetView) { g_mainRenderTargetView->Release(); g_mainRenderTargetView = NULL; }
+}
+    
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
