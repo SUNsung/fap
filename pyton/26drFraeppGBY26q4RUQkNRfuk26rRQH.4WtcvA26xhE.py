@@ -1,55 +1,81 @@
 
         
-            def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer)
-        ]
+                # FIXME: Authorization *sometimes* is not present on Python3
+        assert (r2.json['headers']['Authorization']
+                == HTTPBasicAuth.make_header(u'test', UNICODE))
+        # httpbin doesn't interpret utf8 headers
+        assert UNICODE in r2
     
-        def __init__(self, size):
-        self.size = size
-        self.table = [[] for _ in range(self.size)]
+            actual = get_unique_filename(orig_name, attempts(unique_on_attempt))
+        assert expected == actual
     
-        def move_to_front(self, node):
-        ...
     
-        def crawl(self):
-        while True:
-            page = self.data_store.extract_max_priority_page()
-            if page is None:
-                break
-            if self.data_store.crawled_similar(page.signature):
-                self.data_store.reduce_priority_link_to_crawl(page.url)
-            else:
-                self.crawl_page(page)
-            page = self.data_store.extract_max_priority_page()
+class HTTPieHTTPAdapter(HTTPAdapter):
+    
+            '''
+        available_plugins = plugin_manager.get_formatters_grouped()
+        self.enabled_plugins = []
+        for group in groups:
+            for cls in available_plugins[group]:
+                p = cls(env=env, **kwargs)
+                if p.enabled:
+                    self.enabled_plugins.append(p)
+    
+        '''
+    color = b'\x1b['
+    encoding = outfile.encoding
+    for chunk in stream:
+        if color in chunk:
+            outfile.write(chunk.decode(encoding))
+        else:
+            outfile.buffer.write(chunk)
+        if flush:
+            outfile.flush()
+    
+    
+def repr_dict_nice(d):
+    def prepare_dict(d):
+        for k, v in d.items():
+            if isinstance(v, dict):
+                v = dict(prepare_dict(v))
+            elif isinstance(v, bytes):
+                v = v.decode('utf8')
+            elif not isinstance(v, (int, str)):
+                v = repr(v)
+            yield k, v
+    return json.dumps(
+        dict(prepare_dict(d)),
+        indent=4, sort_keys=True,
+    )
+    
+        def test_implicit_GET_with_headers(self, httpbin):
+        r = http(httpbin.url + '/headers', 'Foo:bar')
+        assert HTTP_OK in r
+        assert r.json['headers']['Foo'] == 'bar'
+    
+    
+@pytest.mark.parametrize(
+    'func',
+    [np.isfinite, np.isinf, np.isnan, np.signbit],
+    ids=lambda func: func.__name__,
+)
+def test_numpy_type_funcs(idx, func):
+    msg = (
+        'ufunc '{}' not supported for the input types, and the inputs'
+        ' could not be safely coerced to any supported types according to'
+        ' the casting rule ''safe'''
+    ).format(func.__name__)
+    with pytest.raises(TypeError, match=msg):
+        func(idx)
 
     
-    import pytest
-    
-        if cookie_dict is not None:
-        names_from_jar = [cookie.name for cookie in cookiejar]
-        for name in cookie_dict:
-            if overwrite or (name not in names_from_jar):
-                cookiejar.set_cookie(create_cookie(name, cookie_dict[name]))
-    
-        This function works best on CPython and PyPy: in particular, it probably
-    doesn't work for Jython or IronPython. Future investigation should be done
-    to work out the correct shape of the code for those platforms.
-    '''
-    implementation = platform.python_implementation()
-    
-            # Merge all the kwargs.
-        proxies = merge_setting(proxies, self.proxies)
-        stream = merge_setting(stream, self.stream)
-        verify = merge_setting(verify, self.verify)
-        cert = merge_setting(cert, self.cert)
-    
-        subprocess.run([
-        'git', 'commit', '-am', 'Bumped version to {}'.format(bumped)])
-    
-        with patch('homeassistant.config.async_hass_config_yaml',
-               Mock(return_value=mock_coro(config))):
-        yield from hass.services.async_call(
-            automation.DOMAIN, automation.SERVICE_RELOAD, blocking=True)
+            target = [-0.1, 0.5, 1.1]
+        tm.assert_numpy_array_equal(
+            idx.get_indexer(target, 'pad'), np.array([-1, 0, 1], dtype=np.intp)
+        )
+        tm.assert_numpy_array_equal(
+            idx.get_indexer(target, 'backfill'), np.array([0, 1, 2], dtype=np.intp)
+        )
+        tm.assert_numpy_array_equal(
+            idx.get_indexer(target, 'nearest'), np.array([0, 1, 1], dtype=np.intp)
+        )
