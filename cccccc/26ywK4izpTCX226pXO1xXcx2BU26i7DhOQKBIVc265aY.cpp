@@ -1,127 +1,171 @@
 
         
-        private:
-    NetworkStyle(const QString &appName, const int iconColorHueShift, const int iconColorSaturationReduction, const char *titleAddText);
-    
-        ~reverse_lock() {
-        templock.lock();
-        templock.swap(lock);
-    }
-    
-    
-    {    secp256k1_ecdsa_recoverable_signature_load(ctx, &r, &s, &recid, signature);
-    VERIFY_CHECK(recid >= 0 && recid < 4);  /* should have been caught in parse_compact */
-    secp256k1_scalar_set_b32(&m, msg32, NULL);
-    if (secp256k1_ecdsa_sig_recover(&ctx->ecmult_ctx, &r, &s, &q, &m, recid)) {
-        secp256k1_pubkey_save(pubkey, &q);
-        return 1;
-    } else {
-        memset(pubkey, 0, sizeof(*pubkey));
-        return 0;
-    }
+        v8::Local<v8::Object> Dictionary::GetHandle() const {
+  return object_;
 }
     
-    bool UniValue::get_bool() const
-{
-    if (typ != VBOOL)
-        throw std::runtime_error('JSON value is not a boolean as expected');
-    return getBool();
-}
-    
-      // Compaction range falls after files
-  Compact('r', 'z');
-  ASSERT_EQ('1,1,1', FilesPerLevel());
-    
-    TEST(FormatTest, InternalKeyShortestSuccessor) {
-  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
-            ShortSuccessor(IKey('foo', 100, kTypeValue)));
-  ASSERT_EQ(IKey('\xff\xff', 100, kTypeValue),
-            ShortSuccessor(IKey('\xff\xff', 100, kTypeValue)));
-}
-    
-    //========================================================================
-//
-// Modified under the Poppler project - http://poppler.freedesktop.org
-//
-// All changes made under the Poppler project to this file are licensed
-// under GPL version 2 or later
-//
-// Copyright (C) 2006 Scott Turner <scotty1024@mac.com>
-// Copyright (C) 2008 Albert Astals Cid <aacid@kde.org>
-//
-// To see a description of the changes please see the Changelog file that
-// came with your tarball or type make ChangeLog if you are building from git
-//
-//========================================================================
-    
-      // Get the next PostScript token.  Returns false at end-of-stream.
-  GBool getToken(char *buf, int size, int *length);
-    
-    #ifdef USE_GCC_PRAGMAS
-#pragma implementation
-#endif
-    
-    //------------------------------------------------------------------------
-// ProfileData
-//------------------------------------------------------------------------
-    
-      if (obj->dictLookup('F', &tmp)->isInt()) {
-    int t = tmp.getInt();
-    
-    switch(t) {
-    case 0: fittingPolicy = fittingMeet; break;
-    case 1: fittingPolicy = fittingSlice; break;
-    case 2: fittingPolicy = fittingFill; break;
-    case 3: fittingPolicy = fittingScroll; break;
-    case 4: fittingPolicy = fittingHidden; break;
-    case 5: fittingPolicy = fittingUndefined; break;
-    }
+      template <typename T>
+  void Return(const T& val) {
+    info_->GetReturnValue().Set(ConvertToV8(isolate_, val));
   }
-  tmp.free();
     
-    #endif /* _RENDITION_H_ */
+    // This function is a convenient way to create a handle from a raw pointer
+// without having to write out the type of the object explicitly.
+template <typename T>
+mate::Handle<T> CreateHandle(v8::Isolate* isolate, T* object) {
+  return mate::Handle<T>(object->GetWrapper(), object);
+}
+    
+    void InspectableWebContentsImpl::SendJsonRequest(
+    const DispatchCallback& callback,
+    const std::string& browser_id,
+    const std::string& url) {
+  callback.Run(nullptr);
+}
+    
+    #ifndef SHELL_APP_COMMAND_LINE_ARGS_H_
+#define SHELL_APP_COMMAND_LINE_ARGS_H_
+    
+    OPERATOR_SCHEMA(Floor)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .AllowInplace({{0, 0}})
+    .SetDoc(R'DOC(
+Element-wise application of the floor function ($y=floor(x)$) to the input
+tensor `X`. Output tensor shape is the same as the input tensor. This
+operator can be used in an in-place fashion by using the same input blob as the
+output blob.
+    
+    
+    {REGISTER_CPU_OPERATOR(Glu, GluOp<float, CPUContext>);
+} // namespace caffe2
 
     
-    void *ExternalSecurityHandler::getAuthData() {
-  void *authData;
-    }
-    
-      virtual void *makeAuthData(GooString *ownerPassword,
-			     GooString *userPassword);
-  virtual void *getAuthData();
-  virtual void freeAuthData(void *authData);
-  virtual GBool authorize(void *authData);
-  virtual int getPermissionFlags() { return permFlags; }
-  virtual GBool getOwnerPasswordOk() { return ownerPasswordOk; }
-  virtual Guchar *getFileKey() { return fileKey; }
-  virtual int getFileKeyLength() { return fileKeyLength; }
-  virtual int getEncVersion() { return encVersion; }
-  virtual int getEncRevision() { return encRevision; }
-  virtual CryptAlgorithm getEncAlgorithm() { return encAlgorithm; }
-    
-    class Sound
+    // Helper class really a internal class to CCalcEngine, to accumulate each history line of text by collecting the
+// operands, operator, unary operator etc. Since it is a separate entity, it can be unit tested on its own but does
+// rely on CCalcEngine calling it in appropriate order.
+class CHistoryCollector
 {
 public:
-  // Try to parse the Object s
-  static Sound *parseSound(Object *s);
+    CHistoryCollector(ICalcDisplay* pCalcDisplay, std::shared_ptr<IHistoryDisplay> pHistoryDisplay, wchar_t decimalSymbol); // Can throw errors
+    ~CHistoryCollector();
+    void AddOpndToHistory(std::wstring_view numStr, CalcEngine::Rational const& rat, bool fRepetition = false);
+    void RemoveLastOpndFromHistory();
+    void AddBinOpToHistory(int nOpCode, bool fNoRepetition = true);
+    void ChangeLastBinOp(int nOpCode, bool fPrecInvToHigher);
+    void AddUnaryOpToHistory(int nOpCode, bool fInv, ANGLE_TYPE angletype);
+    void AddOpenBraceToHistory();
+    void AddCloseBraceToHistory();
+    void PushLastOpndStart(int ichOpndStart = -1);
+    void PopLastOpndStart();
+    void EnclosePrecInversionBrackets();
+    bool FOpndAddedToHistory();
+    void CompleteHistoryLine(std::wstring_view numStr);
+    void ClearHistoryLine(std::wstring_view errStr);
+    int AddCommand(_In_ const std::shared_ptr<IExpressionCommand>& spCommand);
+    void UpdateHistoryExpression(uint32_t radix, int32_t precision);
+    void SetDecimalSymbol(wchar_t decimalSymbol);
     }
     
-      imgMaskData.imgStr = new ImageStream(str, width, 1, 1);
-  imgMaskData.imgStr->reset();
-  imgMaskData.invert = invert ? 0 : 1;
-  imgMaskData.width = width;
-  imgMaskData.height = height;
-  imgMaskData.y = 0;
-    
-    public:
-    
-    namespace HPHP {
-///////////////////////////////////////////////////////////////////////////////
-    }
-    
-    
-    {}
+    {
+    PRAT ptmp = nullptr;
+    DUPRAT(ptmp, (*px));
+    subrat(&ptmp, rat_one, precision);
+    addrat(px, rat_one, precision);
+    divrat(px, ptmp, precision);
+    (*px)->pp->sign *= -1;
+    lograt(px, precision);
+    divrat(px, rat_two, precision);
+    destroyrat(ptmp);
+}
 
     
-    #include 'hphp/runtime/base/url.h'
-#include 'hphp/util/assertions.h'
+    // This static variable is used only to call the initialization function, to initialize the other static variables.
+int NarratorAnnouncementHostFactory::s_init = NarratorAnnouncementHostFactory::Initialize();
+int NarratorAnnouncementHostFactory::Initialize()
+{
+    RegisterHosts();
+    NarratorAnnouncementHostFactory::s_hostProducer = GetHostProducer();
+    }
+    
+    /// <summary>
+/// Notifies listeners that a property value has changed.
+/// </summary>
+/// <param name='propertyName'>Name of the property used to notify listeners.</param>
+void BindableBase::OnPropertyChanged(String ^ propertyName)
+{
+    PropertyChanged(this, ref new PropertyChangedEventArgs(propertyName));
+}
+    
+      // create temporary place holders for the initialized NDArrays
+  // to be passed back to front end
+  std::vector<NDArray> in_arg_vec;
+  std::vector<NDArray> arg_grad_vec;
+  std::vector<NDArray> aux_state_vec;
+  *out = Executor::SimpleBind(*sym, ctx, ctx_map, in_arg_ctx_vec, arg_grad_ctx_vec,
+                              aux_state_ctx_vec, arg_shape_map, arg_dtype_map, arg_stype_map,
+                              grad_req_type_vec, shared_arg_name_set, &in_arg_vec,
+                              &arg_grad_vec, &aux_state_vec,
+                              use_shared_buffer ? &shared_buffer_map : nullptr,
+                              reinterpret_cast<Executor*>(shared_exec_handle));
+    
+      std::vector<NDArray*> ndinputs, ndoutputs;
+  SetNDInputsOutputs(op, &ndinputs, &ndoutputs, num_inputs, inputs,
+      num_outputs, infered_num_outputs, num_visible_outputs, outputs);
+    
+    /*!
+ *  Copyright (c) 2017 by Contributors
+ * \file quantize-inl.h
+ * \brief implementation of quantize operation
+ */
+#ifndef MXNET_OPERATOR_QUANTIZATION_QUANTIZE_INL_H_
+#define MXNET_OPERATOR_QUANTIZATION_QUANTIZE_INL_H_
+    
+      mxnet::TShape oshape;
+  if (keepdims) {
+    oshape = mxnet::TShape(ishape);
+  } else if (exclude) {
+    oshape = mxnet::TShape(axes.ndim(), 1);
+  } else {
+    oshape = mxnet::TShape(std::max(1, ishape.ndim() - axes.ndim()), 1);
+  }
+    
+    IMGUI_IMPL_API bool     ImGui_ImplDX10_Init(ID3D10Device* device);
+IMGUI_IMPL_API void     ImGui_ImplDX10_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplDX10_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data);
+    
+        // Setup window
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+    SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
+    SDL_Window* window = SDL_CreateWindow('Dear ImGui SDL2+OpenGL example', SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
+    SDL_GLContext gl_context = SDL_GL_CreateContext(window);
+    SDL_GL_MakeCurrent(window, gl_context);
+    SDL_GL_SetSwapInterval(1); // Enable vsync
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+            err = vkResetCommandPool(g_Device, command_pool, 0);
+        check_vk_result(err);
+        VkCommandBufferBeginInfo begin_info = {};
+        begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+        begin_info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+        err = vkBeginCommandBuffer(command_buffer, &begin_info);
+        check_vk_result(err);
+    
+            // Start the Dear ImGui frame
+        ImGui_ImplDX11_NewFrame();
+        ImGui_ImplWin32_NewFrame();
+        ImGui::NewFrame();
+    
+        // Setup desired DX state
+    ImGui_ImplDX12_SetupRenderState(draw_data, ctx, fr);
+    
+    #pragma once
