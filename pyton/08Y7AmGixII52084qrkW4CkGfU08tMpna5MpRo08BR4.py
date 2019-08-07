@@ -1,208 +1,143 @@
 
         
-            def __init__(self):
-        self.bitrate = None
-        self.definition = None
-        self.size = None
-        self.height = None
-        self.width = None
-        self.type = None
-        self.url = None
+            def take_call(self, call):
+        '''Assume the employee will always successfully take the call.'''
+        self.call = call
+        self.call.employee = self
+        self.call.state = CallState.IN_PROGRESS
     
-        html = get_content(url)
-    pid = match1(html, r'video\.settings\.pid\s*=\s*\'([^\']+)\'')
-    title = match1(html, r'video\.settings\.title\s*=\s*\'([^\']+)\'')
+        def __init__(self, message_id, message, timestamp):
+        self.message_id = message_id
+        self.message = message
+        self.timestamp = timestamp
     
     
-def cntv_download(url, **kwargs):
-    if re.match(r'http://tv\.cntv\.cn/video/(\w+)/(\w+)', url):
-        rid = match1(url, r'http://tv\.cntv\.cn/video/\w+/(\w+)')
-    elif re.match(r'http://tv\.cctv\.com/\d+/\d+/\d+/\w+.shtml', url):
-        rid = r1(r'var guid = '(\w+)'', get_content(url))
-    elif re.match(r'http://\w+\.cntv\.cn/(\w+/\w+/(classpage/video/)?)?\d+/\d+\.shtml', url) or \
-         re.match(r'http://\w+.cntv.cn/(\w+/)*VIDE\d+.shtml', url) or \
-         re.match(r'http://(\w+).cntv.cn/(\w+)/classpage/video/(\d+)/(\d+).shtml', url) or \
-         re.match(r'http://\w+.cctv.com/\d+/\d+/\d+/\w+.shtml', url) or \
-         re.match(r'http://\w+.cntv.cn/\d+/\d+/\d+/\w+.shtml', url): 
-        page = get_content(url)
-        rid = r1(r'videoCenterId','(\w+)'', page)
-        if rid is None:
-            guid = re.search(r'guid\s*=\s*'([0-9a-z]+)'', page).group(1)
-            rid = guid
-    elif re.match(r'http://xiyou.cntv.cn/v-[\w-]+\.html', url):
-        rid = r1(r'http://xiyou.cntv.cn/v-([\w-]+)\.html', url)
-    else:
-        raise NotImplementedError(url)
+class Bus(Vehicle):
     
-    site_info = 'Dailymotion.com'
-download = dailymotion_download
-download_playlist = playlist_not_supported('dailymotion')
-
-    
-    import urllib.request, urllib.parse
-from ..common import *
-    
-                with open('htmlout.html', 'w') as out:
-                out.write(header)
-    
-        The following variables should be defined:
-        _HELPTEXT: A string describing what this plugin does
-        _DEFAULTS: A dictionary containing the options, defaults and meta information. The
-                   dictionary should be defined as:
-                       {<option_name>: {<metadata>}}
+            (2016-01, url0), 2
+        (2016-01, url1), 1
+        '''
+        yield key, sum(values)
     
     
-_DEFAULTS = {
-    'type': {
-        'default': 'normalized',
-        'info': 'The type of blending to use:'
-                '\n\t gaussian: Blend with Gaussian filter. Slower, but often better than '
-                'Normalized'
-                '\n\t normalized: Blend with Normalized box filter. Faster than Gaussian'
-                '\n\t none: Don't perform blending',
-        'datatype': str,
-        'rounding': None,
-        'min_max': None,
-        'choices': ['gaussian', 'normalized', 'none'],
-        'gui_radio': True,
-        'fixed': True,
-    },
-    'radius': {
-        'default': 3.0,
-        'info': 'Radius dictates how much blending should occur.\nThis figure is set as a '
-                'percentage of the mask diameter to give the radius in pixels. Eg: for a mask '
-                'with diameter 200px, a percentage of 6% would give a final radius of 3px.\n'
-                'Higher percentage means more blending.',
-        'datatype': float,
-        'rounding': 1,
-        'min_max': (0.1, 25.0),
-        'choices': [],
-        'gui_radio': False,
-        'fixed': True,
-    },
-    'passes': {
-        'default': 4,
-        'info': 'The number of passes to perform. Additional passes of the blending algorithm '
-                'can improve smoothing at a time cost. This is more useful for 'box' type '
-                'blending.\nAdditional passes have exponentially less effect so it's not '
-                'worth setting this too high.',
-        'datatype': int,
-        'rounding': 1,
-        'min_max': (1, 8),
-        'choices': [],
-        'gui_radio': False,
-        'fixed': True,
-    },
-    'erosion': {
-        'default': 0.0,
-        'info': 'Erosion kernel size as a percentage of the mask radius area.\nPositive '
-                'values apply erosion which reduces the size of the swapped area.\nNegative '
-                'values apply dilation which increases the swapped area.',
-        'datatype': float,
-        'rounding': 1,
-        'min_max': (-100.0, 100.0),
-        'choices': [],
-        'gui_radio': False,
-        'fixed': True,
-    },
-}
-
+    def getMissingType(self):
+        return self.expecting
     
-        def close(self):
-        ''' Close the ffmpeg writer and mux the audio '''
-        self.writer.close()
-
     
-        def load_module(self, filename, module_path, plugin_type):
-        ''' Load the defaults module and add defaults '''
-        logger.debug('Adding defaults: (filename: %s, module_path: %s, plugin_type: %s',
-                     filename, module_path, plugin_type)
-        module = os.path.splitext(filename)[0]
-        section = '.'.join((plugin_type, module.replace('_defaults', '')))
-        logger.debug('Importing defaults module: %s.%s', module_path, module)
-        mod = import_module('{}.{}'.format(module_path, module))
-        self.add_section(title=section, info=mod._HELPTEXT)  # pylint:disable=protected-access
-        for key, val in mod._DEFAULTS.items():  # pylint:disable=protected-access
-            self.add_item(section=section, title=key, **val)
-        logger.debug('Added defaults: %s', section)
-
+    def reset(self):
+        BaseRecognizer.reset(self) # reset all recognizer state variables
     
-        The following keys are expected for the _DEFAULTS <metadata> dict:
-        datatype:  [required] A python type class. This limits the type of data that can be
-                   provided in the .ini file and ensures that the value is returned in the
-                   correct type to faceswap. Valid datatypes are: <class 'int'>, <class 'float'>,
-                   <class 'str'>, <class 'bool'>.
-        default:   [required] The default value for this option.
-        info:      [required] A string describing what this option does.
-        choices:   [optional] If this option's datatype is of <class 'str'> then valid
-                   selections can be defined here. This validates the option and also enables
-                   a combobox / radio option in the GUI.
-        gui_radio: [optional] If <choices> are defined, this indicates that the GUI should use
-                   radio buttons rather than a combobox to display this option.
-        min_max:   [partial] For <class 'int'> and <class 'float'> datatypes this is required
-                   otherwise it is ignored. Should be a tuple of min and max accepted values.
-                   This is used for controlling the GUI slider range. Values are not enforced.
-        rounding:  [partial] For <class 'int'> and <class 'float'> datatypes this is
-                   required otherwise it is ignored. Used for the GUI slider. For floats, this
-                   is the number of decimal places to display. For ints this is the step size.
-        fixed:     [optional] [train only]. Training configurations are fixed when the model is
-                   created, and then reloaded from the state file. Marking an item as fixed=False
-                   indicates that this value can be changed for existing models, and will override
-                   the value saved in the state file with the updated value in config. If not
-                   provided this will default to True.
-'''
+    # Load a test image and get encondings for it
+image_to_test = face_recognition.load_image_file('obama2.jpg')
+image_to_test_encoding = face_recognition.face_encodings(image_to_test)[0]
     
-            self.connector = None
-        self.cursor = None
+    print('I found {} face(s) in this photograph.'.format(len(face_locations)))
     
-                if len(values) == len(self.columns):
-                self.execute('INSERT INTO '%s' VALUES (%s)' % (self.name, ','.join(['?'] * len(values))), safechardecode(values))
-            else:
-                errMsg = 'wrong number of columns used in replicating insert'
-                raise SqlmapValueException(errMsg)
+    # This is a demo of running face recognition on a video file and saving the results to a new video file.
+#
+# PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
+# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
+# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
     
-                    for column in colList:
-                    columns[column] = None
+    # This code finds all faces in a list of images using the CNN model.
+#
+# This demo is for the _special case_ when you need to find faces in LOTS of images very quickly and all the images
+# are the exact same size. This is common in video processing applications where you have lots of video frames
+# to process.
+#
+# If you are processing a lot of images and using a GPU with CUDA, batch processing can be ~3x faster then processing
+# single images at a time. But if you aren't using a GPU, then batch processing isn't going to be very helpful.
+#
+# PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read the video file.
+# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
+# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
     
-            for column in colList:
-            column = safeSQLIdentificatorNaming(column)
-            conf.db = origDb
-            conf.tbl = origTbl
+            result = runner.invoke(face_detection_cli.main, args=[image_file])
+        self.assertEqual(result.exit_code, 0)
+        self.assertTrue('obama_partial_face2.jpg' in result.output)
+        self.assertTrue('obama.jpg' in result.output)
+        self.assertTrue('obama2.jpg' in result.output)
+        self.assertTrue('obama3.jpg' in result.output)
+        self.assertTrue('biden.jpg' in result.output)
     
-            for tbl in tblList:
-            if conf.db is not None and len(kb.data.cachedColumns) > 0 \
-               and conf.db in kb.data.cachedColumns and tbl in \
-               kb.data.cachedColumns[conf.db]:
-                infoMsg = 'fetched tables' columns on '
-                infoMsg += 'database '%s'' % unsafeSQLIdentificatorNaming(conf.db)
-                logger.info(infoMsg)
+    # Load the jpg file into a numpy array
+image = face_recognition.load_image_file('two_people.jpg')
     
-        Tested against:
-        * MySQL 4.0.18, 5.0.22
     
-        Tested against:
-        * MySQL 4.0.18, 5.1.56, 5.5.11
+def detect_faces_in_image(file_stream):
+    # 用face_recognition.face_encodings(img)接口提前把奥巴马人脸的编码录入
+    known_face_encoding = [-0.09634063,  0.12095481, -0.00436332, -0.07643753,  0.0080383,
+                            0.01902981, -0.07184699, -0.09383309,  0.18518871, -0.09588896,
+                            0.23951106,  0.0986533 , -0.22114635, -0.1363683 ,  0.04405268,
+                            0.11574756, -0.19899382, -0.09597053, -0.11969153, -0.12277931,
+                            0.03416885, -0.00267565,  0.09203379,  0.04713435, -0.12731361,
+                           -0.35371891, -0.0503444 , -0.17841317, -0.00310897, -0.09844551,
+                           -0.06910533, -0.00503746, -0.18466514, -0.09851682,  0.02903969,
+                           -0.02174894,  0.02261871,  0.0032102 ,  0.20312519,  0.02999607,
+                           -0.11646006,  0.09432904,  0.02774341,  0.22102901,  0.26725179,
+                            0.06896867, -0.00490024, -0.09441824,  0.11115381, -0.22592428,
+                            0.06230862,  0.16559327,  0.06232892,  0.03458837,  0.09459756,
+                           -0.18777156,  0.00654241,  0.08582542, -0.13578284,  0.0150229 ,
+                            0.00670836, -0.08195844, -0.04346499,  0.03347827,  0.20310158,
+                            0.09987706, -0.12370517, -0.06683611,  0.12704916, -0.02160804,
+                            0.00984683,  0.00766284, -0.18980607, -0.19641446, -0.22800779,
+                            0.09010898,  0.39178532,  0.18818057, -0.20875394,  0.03097027,
+                           -0.21300618,  0.02532415,  0.07938635,  0.01000703, -0.07719778,
+                           -0.12651891, -0.04318593,  0.06219772,  0.09163868,  0.05039065,
+                           -0.04922386,  0.21839413, -0.02394437,  0.06173781,  0.0292527 ,
+                            0.06160797, -0.15553983, -0.02440624, -0.17509389, -0.0630486 ,
+                            0.01428208, -0.03637431,  0.03971229,  0.13983178, -0.23006812,
+                            0.04999552,  0.0108454 , -0.03970895,  0.02501768,  0.08157793,
+                           -0.03224047, -0.04502571,  0.0556995 , -0.24374914,  0.25514284,
+                            0.24795187,  0.04060191,  0.17597422,  0.07966681,  0.01920104,
+                           -0.01194376, -0.02300822, -0.17204897, -0.0596558 ,  0.05307484,
+                            0.07417042,  0.07126575,  0.00209804]
     
-        logger.debug('renaming directory names to random values')
-    for dirpath in dirpaths:
+    logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
+    
+    
+class dfl_full(Mask):  # pylint: disable=invalid-name
+    ''' DFL facial mask '''
+    def build_mask(self):
+        mask = np.zeros(self.face.shape[0:2] + (1, ), dtype=np.float32)
+    
+        def process(self, new_face):
+        ''' The blend box function. Adds the created mask to the alpha channel '''
+        if self.skip:
+            logger.trace('Skipping blend box')
+            return new_face
+    
+    
+class Mask(Adjustment):
+    ''' Return the requested mask '''
+    def __init__(self, mask_type, output_size, predicted_available, **kwargs):
+        super().__init__(mask_type, output_size, predicted_available, **kwargs)
+        self.do_erode = self.config.get('erosion', 0) != 0
+        self.do_blend = self.config.get('type', None) is not None
+    
+                       <option_name> should always be lower text.
+                   <metadata> dictionary requirements are listed below.
+    
+        def write(self, filename, image):
+        logger.trace('Outputting: (filename: '%s'', filename)
+        filename = self.output_filename(filename)
         try:
-            os.rename(dirpath, os.path.join(os.path.dirname(dirpath), ''.join(random.sample(string.ascii_letters, random.randint(4, 8)))))
-        except:
-            pass
+            with open(filename, 'wb') as outfile:
+                outfile.write(image)
+        except Exception as err:  # pylint: disable=broad-except
+            logger.error('Failed to save image '%s'. Original Error: %s', filename, err)
     
-            with open(sys.argv[1], 'r') as f:
-            for item in f:
-                item = item.strip()
-                try:
-                    str.encode(item)
-                    if item in items:
-                        if item:
-                            print(item)
-                    else:
-                        items.append(item)
-                except:
-                    pass
-    
-    
-def is_a_tty(stream):
-    return hasattr(stream, 'isatty') and stream.isatty()
+        def get_save_kwargs(self):
+        ''' Return the save parameters for the file format '''
+        filetype = self.config['format']
+        kwargs = dict()
+        if filetype in ('gif', 'jpg', 'png'):
+            kwargs['optimize'] = self.config['optimize']
+        if filetype == 'gif':
+            kwargs['interlace'] = self.config['gif_interlace']
+        if filetype == 'png':
+            kwargs['compress_level'] = self.config['png_compress_level']
+        if filetype == 'tif':
+            kwargs['compression'] = self.config['tif_compression']
+        logger.debug(kwargs)
+        return kwargs
