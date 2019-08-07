@@ -1,82 +1,178 @@
 
         
-        Post = Struct.new(:title, :author_name, :body, :secret, :persisted, :written_on, :cost) do
-  extend ActiveModel::Naming
-  include ActiveModel::Conversion
-  extend ActiveModel::Translation
+          # Enable serving of images, stylesheets, and JavaScripts from an asset server.
+  # config.action_controller.asset_host = 'http://assets.example.com'
     
-      namespace :package do
-    GEMS_AND_ROOT_DIRECTORIES.each do |gem, directory|
-      desc 'Build #{gem} packages'
-      task gem => %w[.gem .tar.gz].map { |e| package(gem, e) }
+    require 'isolation/abstract_unit'
+    
+        should 'return false with no glob patterns' do
+      assert !@filter.glob_include?([], 'a.txt')
     end
     
-          def redirect(env)
-        request = Request.new(env)
-        warn env, 'attack prevented by #{self.class}'
-        [302, {'Content-Type' => 'text/html', 'Location' => request.path}, []]
+          def [](key)
+        if key != 'posts' && @obj.collections.key?(key)
+          @obj.collections[key].docs
+        else
+          super(key)
+        end
       end
     
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   CSRF
-    # Supported browsers:: all
-    # More infos::         http://flask.pocoo.org/docs/0.10/security/#json-security
-    #                      http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx
-    #
-    # JSON GET APIs are vulnerable to being embedded as JavaScript when the
-    # Array prototype has been patched to track data. Checks the referrer
-    # even on GET requests if the content type is JSON.
-    #
-    # If request includes Origin HTTP header, defers to HttpOrigin to determine
-    # if the request is safe. Please refer to the documentation for more info.
-    #
-    # The `:allow_if` option can be set to a proc to use custom allow/deny logic.
-    class JsonCsrf < Base
-      default_options :allow_if => nil
-    
-        def URIEncodePair(cc1, cc2, result, index)
-      u = ((cc1 >> 6) & 0xF) + 1;
-      w = (cc1 >> 2) & 0xF;
-      x = cc1 & 3;
-      y = (cc2 >> 6) & 0xF;
-      z = cc2 & 63;
-      octets = Array.new(4);
-      octets[0] = (u >> 2) + 240;
-      octets[1] = (((u & 3) << 4) | w) + 128;
-      octets[2] = ((x << 4) | y) + 128;
-      octets[3] = z + 128;
-      return URIEncodeOctets(octets, result, index);
-    end
-    
-          # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
-      def left_shift(int, shift)
-        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
-        # 1>>31, 2**32
-        (r & 2147483648) == 0 ? r : r - 4294967296
-      end
-    
-          def allow_editing
-        @allow_editing
-      end
-    
-    ENV['RACK_ENV'] = 'test'
-require 'gollum'
-require 'gollum/app'
-    
-        get '/compare/A/fc66539528eb96f21b2bbdbf557788fe8a1196ac..b26b791cb7917c4f37dd9cb4d1e0efb24ac4d26f'
-    
-        # Test page_header_from_content(@content)
-    actual = @view.title
-    assert_equal '1 & 2', actual
-  end
-    
-        def initialize(dir, existing, attempted, message = nil)
-      @dir            = dir
-      @existing_path  = existing
-      @attempted_path = attempted
-      super(message || 'Cannot write #{@dir}/#{@attempted_path}, found #{@dir}/#{@existing_path}.')
-    end
-  end
+    # Just a slash
+Benchmark.ips do |x|
+  path = '/'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
 end
+    
+    def global_require
+  JSON.pretty_generate(DATA)
+end
+    
+        def upload_purchase_review_screenshot(app_id, upload_file, content_provider_id, sso_token_for_image)
+      upload_file(app_id: app_id, upload_file: upload_file, path: '/upload/image', content_provider_id: content_provider_id, sso_token: sso_token_for_image, du_validation_rule_set: get_picture_type(upload_file))
+    end
+    
+          def setup
+        # Since September 2015 we don't get the url any more, so we have to manually build it
+        self.url = '#{HOST_URL}/#{self.asset_token}'
+      end
+    
+          # @return (Boolean) Display Trade Representative Contact Information on the Korean App Store or not
+      attr_accessor :trade_representative_is_displayed_on_app_store
+    
+        #####################################################
+    # @!group Applications
+    #####################################################
+    
+          context 'with appendix' do
+        it 'returns the current version once parsed with appendix' do
+          test_content = 'spec.version = '1.3.2.4''
+          result = @version_podspec_file.parse(test_content)
+          expect(result).to eq('1.3.2.4')
+          expect(@version_podspec_file.version_value).to eq('1.3.2.4')
+          expect(@version_podspec_file.version_match[:major]).to eq('1')
+          expect(@version_podspec_file.version_match[:minor]).to eq('3')
+          expect(@version_podspec_file.version_match[:patch]).to eq('2')
+          expect(@version_podspec_file.version_match[:appendix]).to eq('.4')
+        end
+    
+            return parts
+      end
+    
+            # @return (Array) Returns all iPods registered for this account
+        def all_ipod_touches
+          client.devices_by_class('ipod').map { |device| self.factory(device) }
+        end
+    
+          def self.fill_in_default_values(params)
+        embed = Actions.lane_context[Actions::SharedValues::SIGH_PROFILE_PATH] || ENV['SIGH_PROFILE_PATH']
+        params[:embed] ||= embed if embed
+        params
+      end
+    
+      # ==> Configuration for :lockable
+  # Defines which strategy will be used to lock an account.
+  # :failed_attempts = Locks an account after a number of failed attempts to sign in.
+  # :none            = No lock strategy. You should handle locking by yourself.
+  # config.lock_strategy = :failed_attempts
+    
+              render 'admins/pods'
+        end
+        format.mobile { render 'admins/pods' }
+        format.json { render json: pods_json }
+      end
+    end
+    
+      private
+    
+      def inspect_source(source, file = nil)
+    RuboCop::Formatter::DisabledConfigFormatter.config_to_allow_offenses = {}
+    RuboCop::Formatter::DisabledConfigFormatter.detected_styles = {}
+    processed_source = parse_source(source, file)
+    raise 'Error parsing example code' unless processed_source.valid_syntax?
+    
+          it 'registers an offense if no method is defined' do
+        src = <<~RUBY
+          class << A
+            #{modifier}
+          end
+        RUBY
+        inspect_source(src)
+        expect(cop.offenses.size).to eq(1)
+      end
+    
+          it { expect(send_node.lambda?).to be_falsey }
+    end
+    
+          it 'does auto-correction' do
+        corrected = autocorrect_source(source)
+        expect(corrected).to eq(<<~RUBY)
+          foo def a
+            a1
+              end
+    
+        it 'auto-correct Hash.new to {} as the first parameter to a method' do
+      source = 'yadayada.map { a }.reduce Hash.new, :merge'
+      new_source = autocorrect_source(source)
+      expect(new_source).to eq('yadayada.map { a }.reduce({}, :merge)')
+    end
+    
+              it_behaves_like 'registers an offense',
+                          'Use the `lambda` method for multiline lambdas.'
+          it_behaves_like 'auto-correct', <<~RUBY
+            lambda do |hello|
+              puts hello
+            end
+          RUBY
+        end
+    
+        context 'with EnforcedStyle: forbid_for_equality_operators_only' do
+      let(:cop_config) do
+        { 'EnforcedStyle' => 'forbid_for_equality_operators_only' }
+      end
+    
+    module RuboCop
+  module AST
+    # A node extension for `for` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `for` nodes within RuboCop.
+    class ForNode < Node
+      # Returns the keyword of the `for` statement as a string.
+      #
+      # @return [String] the keyword of the `until` statement
+      def keyword
+        'for'
+      end
+    
+    module RuboCop
+  module AST
+    # A node extension for `pair` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `pair` nodes within RuboCop.
+    class PairNode < Node
+      include HashElementNode
+    
+        context 'when story is a user' do
+      it 'renders to appropriate page if user changes username' do
+        old_username = user.username
+        user.update(username: 'new_hotness_#{rand(10_000)}')
+        get '/#{old_username}/#{article.slug}'
+        expect(response.body).to redirect_to('/#{user.username}/#{article.slug}')
+      end
+    
+    class ConfigTag < Liquid::Tag
+  def initialize(tag_name, options, tokens)
+    super
+    options = options.split(' ').map {|i| i.strip }
+    @key = options.slice!(0)
+    @tag = nil
+    @classname = nil
+    options.each do |option|
+      @tag = $1 if option =~ /tag:(\S+)/ 
+      @classname = $1 if option =~ /classname:(\S+)/
+    end
+  end
+    
+    end
