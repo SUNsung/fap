@@ -1,172 +1,234 @@
 
         
-          plt.subplot(nrows,2,5+subplot_cidx)
-  plot_time_series(means, bidx,
-                   n_to_plot=n_to_plot, scale=1.0,
-                   title=col_title + ' Spikes (LFADS - red, Spikes - black)')
-  plot_time_series(data_bxtxn, bidx, n_to_plot=n_to_plot, color='k', scale=1.0)
+            Various helpers to make the development experience better.
     
-      # First generate all firing rates. in the next loop, generate all
-  # replications this allows the random state for rate generation to be
-  # independent of n_replications.
-  dataset_name = 'dataset_N' + str(N) + '_S' + str(S)
-  if S < N:
-    dataset_name += '_n' + str(n+1)
-    
-    with tf.Session() as sess:
-  # restore the latest model ckpt
-  if FLAGS.checkpoint_path == 'SAMPLE_CHECKPOINT':
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    model_checkpoint_path = os.path.join(dir_path, 'trained_itb/model-65000')
-  else:
-    model_checkpoint_path = FLAGS.checkpoint_path
-  try:
-    saver.restore(sess, model_checkpoint_path)
-    print ('Model restored from', model_checkpoint_path)
-  except:
-    assert False, ('No checkpoints to restore from, is the path %s correct?'
-                   %model_checkpoint_path)
-    
-      E = len(data_e)
-  spikes_e = []
-  for e in range(E):
-    data = data_e[e]
-    N,T = data.shape
-    data_s = np.zeros([N,T]).astype(np.int)
-    for n in range(N):
-      f = data[n,:]
-      s = rng.poisson(f*max_firing_rate*dt, size=T)
-      data_s[n,:] = s
-    spikes_e.append(data_s)
-    
-      Returns:
-    flat_list: Flattened list.
-    flat_list_idxs: Flattened list indices.
-  '''
-  flat_list = []
-  flat_list_idxs = []
-  start_idx = 0
-  for item in list_of_lists:
-    if isinstance(item, list):
-      flat_list += item
-      l = len(item)
-      idxs = range(start_idx, start_idx+l)
-      start_idx = start_idx+l
-    else:                   # a value
-      flat_list.append(item)
-      idxs = [start_idx]
-      start_idx += 1
-    flat_list_idxs.append(idxs)
+        :param s: JSON string to deserialize.
+    :param app: App instance to use to configure the JSON decoder.
+        Uses ``current_app`` if not given, and falls back to the default
+        encoder when not in an app context.
+    :param kwargs: Extra arguments passed to :func:`json.dumps`.
     
     
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+def test_template_test_with_template(app, client):
+    bp = flask.Blueprint('bp', __name__)
     
-      This generates batch_size pointers into the raw PTB data, and allows
-  minibatch iteration along these pointers.
-    
-        # Maximize reward.
-    gen_grads = tf.gradients(-final_gen_reward, gen_vars)
-    gen_grads_clipped, _ = tf.clip_by_global_norm(gen_grads,
-                                                  FLAGS.grad_clipping)
-    maximize_op = gen_optimizer.apply_gradients(
-        zip(gen_grads_clipped, gen_vars), global_step=global_step)
-    
-          # seq2seq_vd derived from the same code base as seq2seq_zaremba.
-      elif (FLAGS.generator_model == 'seq2seq_zaremba' or
-            FLAGS.generator_model == 'seq2seq_vd'):
-        # Encoder.
-        gen_encoder_variable_maps = variable_mapping.gen_encoder_seq2seq(
-            hparams)
-        gen_encoder_init_saver = tf.train.Saver(
-            var_list=gen_encoder_variable_maps)
-        # Decoder.
-        gen_decoder_variable_maps = variable_mapping.gen_decoder_seq2seq(
-            hparams)
-        gen_decoder_init_saver = tf.train.Saver(
-            var_list=gen_decoder_variable_maps)
-        init_savers['gen_encoder_init_saver'] = gen_encoder_init_saver
-        init_savers['gen_decoder_init_saver'] = gen_decoder_init_saver
-    
-        # make url_for('index') == url_for('blog.index')
-    # in another app, you might define a separate main index here with
-    # app.route, while giving the blog blueprint a url_prefix, but for
-    # the tutorial the blog will be the main index
-    app.add_url_rule('/', endpoint='index')
-    
-        return render_template('auth/login.html')
-    
-    from flaskr.auth import login_required
-from flaskr.db import get_db
-    
-    master_doc = 'index'
-extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.intersphinx',
-    'sphinxcontrib.log_cabinet',
-    'pallets_sphinx_themes',
-    'sphinx_issues',
-]
-intersphinx_mapping = {
-    'python': ('https://docs.python.org/3/', None),
-    'werkzeug': ('https://werkzeug.palletsprojects.com/', None),
-    'click': ('https://click.palletsprojects.com/', None),
-    'jinja': ('http://jinja.pocoo.org/docs/', None),
-    'itsdangerous': ('https://itsdangerous.palletsprojects.com/', None),
-    'sqlalchemy': ('https://docs.sqlalchemy.org/', None),
-    'wtforms': ('https://wtforms.readthedocs.io/en/stable/', None),
-    'blinker': ('https://pythonhosted.org/blinker/', None),
-}
-issues_github_path = 'pallets/flask'
-    
-        def get_auth_plugin(self, auth_type):
-        return self.get_auth_plugin_mapping()[auth_type]
-    
-    
-def test_max_redirects(httpbin):
-    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
-             error_exit_ok=True)
-    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
+        with pytest.raises(AttributeError):
+        import unimportable  # noqa: F401
 
     
-    # Check minimum required Python version
-import sys
-if sys.version_info < (2, 7):
-    print('Scrapy %s requires Python 2.7' % __version__)
-    sys.exit(1)
+        headers['Accept'] = 'application/json'
+    headers['Content-Type'] = 'application/json'
     
     
-def sanitize_module_name(module_name):
-    '''Sanitize the given module name, by replacing dashes and points
-    with underscores and prefixing it with a letter if it doesn't start
-    with one
+def main():
     '''
-    module_name = module_name.replace('-', '_').replace('.', '_')
-    if module_name[0] not in string.ascii_letters:
-        module_name = 'a' + module_name
-    return module_name
+    The main function.  Instantiates the module and calls process_request.
+    :return: none
+    '''
+    module = AnsibleModule(
+        argument_spec=ClcFirewallPolicy._define_module_argument_spec(),
+        supports_check_mode=True)
     
-        def test_delete___dict__(self):
+        def _ensure_aa_policy_present(
+            self, server, server_params):
+        '''
+        ensures the server is updated with the provided anti affinity policy
+        :param server: the CLC server object
+        :param server_params: the dictionary of server parameters
+        :return: (changed, group) -
+            changed: Boolean whether a change was made
+            result: The result from the CLC API call
+        '''
+        changed = False
+        acct_alias = self.clc.v2.Account.GetAlias()
+    
+        elif module.params['state'] == 'absent' and instance is None:
+        module.exit_json(changed=False, instance={})
+    
+    
+def present(dest, username, password, crypt_scheme, create, check_mode):
+    ''' Ensures user is present
+    
+    MATRIX_IMP_ERR = None
+try:
+    from matrix_client.client import MatrixClient
+except ImportError:
+    MATRIX_IMP_ERR = traceback.format_exc()
+    matrix_found = False
+else:
+    matrix_found = True
+    
+    EXAMPLES = r'''
+- name: Power down server
+  imc_rest:
+    hostname: '{{ imc_hostname }}'
+    username: '{{ imc_username }}'
+    password: '{{ imc_password }}'
+    validate_certs: no
+    content: |
+      <configConfMo><inConfig>
+        <computeRackUnit dn='sys/rack-unit-1' adminPower='down'/>
+      </inConfig></configConfMo>
+  delegate_to: localhost
+    
+            # test if we're actually logged in
+        if password or login_token:
+            gh_obj.me()
+    except github3.exceptions.AuthenticationFailed as e:
+        module.fail_json(msg='Failed to connect to GitHub: %s' % to_native(e),
+                         details='Please check username and password or token '
+                                 'for repository %s' % repo)
+    
+    Note that this accuracy of this l1-penalized linear model is significantly
+below what can be reached by an l2-penalized linear model or a non-linear
+multi-layer perceptron model on this dataset.
+    
+        xx = np.arange(100, 100 + n * step, step)
+    plt.figure('scikit-learn vs. glmnet benchmark results')
+    plt.title('Regression in high dimensional spaces (%d samples)' % n_samples)
+    plt.plot(xx, scikit_results, 'b-', label='scikit-learn')
+    plt.plot(xx, glmnet_results, 'r-', label='glmnet')
+    plt.legend()
+    plt.xlabel('number of features')
+    plt.ylabel('Time (s)')
+    plt.axis('tight')
+    plt.show()
+
+    
+    n_samples = np.logspace(.5, 3, 9)
+n_features = np.logspace(1, 3.5, 7)
+N_samples, N_features = np.meshgrid(n_samples,
+                                    n_features)
+scikits_time = np.zeros(N_samples.shape)
+scipy_time = np.zeros(N_samples.shape)
+    
+                gc.collect()
+            print('- benchmarking RidgeRegression')
+            clf = Ridge(alpha=alpha, fit_intercept=False)
+            tstart = time()
+            clf.fit(X_train, y_train)
+            ridge_results[i, j, 0] = mean_squared_error(clf.predict(X_test),
+                                                        y_test)
+            ridge_results[i, j, 1] = time() - tstart
+    
+        dim = start_dim
+    for i in range(0, n):
+        print('============================================')
+        print('Entering iteration %s of %s' % (i, n))
+        print('============================================')
+        dim += step
+        X = np.random.randn(100, dim)
+        Y = np.random.randint(0, n_classes, (100,))
+        bench_scikit_tree_classifier(X, Y)
+        Y = np.random.randn(100)
+        bench_scikit_tree_regressor(X, Y)
+    
+    For each class of models we make the model complexity vary through the choice
+of relevant model parameters and measure the influence on both computational
+performance (latency) and predictive power (MSE or Hamming Loss).
+'''
+    
+    This example demonstrates how to generate a checkerboard dataset and
+bicluster it using the Spectral Biclustering algorithm.
+    
+        plt.imshow(avg_dist, interpolation='nearest', cmap=plt.cm.gnuplot2,
+               vmin=0)
+    plt.xticks(range(n_clusters), labels, rotation=45)
+    plt.yticks(range(n_clusters), labels)
+    plt.colorbar()
+    plt.suptitle('Interclass %s distances' % metric, size=18)
+    plt.tight_layout()
+    
+        if len(sys.argv) > 2:
+        top_domain = sys.argv[2]
+    else:
+        top_domain = None
+    
+    
+pteredor_is_running = False
+    
+    
+class RC4FileObject(object):
+    '''fileobj for rc4'''
+    def __init__(self, stream, key):
+        self.__stream = stream
+        self.__cipher = _Crypto_Cipher_ARC4_new(key) if key else lambda x:x
+    def __getattr__(self, attr):
+        if attr not in ('__stream', '__cipher'):
+            return getattr(self.__stream, attr)
+    def read(self, size=-1):
+        return self.__cipher.encrypt(self.__stream.read(size))
+    
+    ## Anything on different channel than DEFAULT_CHANNEL is not parsed
+# by parser.
+HIDDEN_CHANNEL = 99
+    
+    
+class FixedTest(unittest.TestCase):
+    '''Tests for acme.fields.Fixed.'''
+    
+    # The language for content autogenerated by Sphinx. Refer to documentation
+# for a list of supported languages.
+#
+# This is also used if you do content translation via gettext catalogs.
+# Usually you set 'language' from the command line for these cases.
+language = 'en'
+    
+        # Default config is pebble
+    directory_url = os.environ.get('SERVER', PEBBLE_DIRECTORY_URL)
+    http_01_port = int(os.environ.get('HTTP_01_PORT', HTTP_01_PORT))
+    tls_alpn_01_port = int(os.environ.get('TLS_ALPN_01_PORT', TLS_ALPN_01_PORT))
+    
+            face = cv2.resize(face,  # pylint:disable=no-member
+                          dsize=(self.input_size, self.input_size),
+                          interpolation=interpolation)
+        return face
+    
+            mask = BlurMask(self.config['type'],
+                        mask,
+                        self.config['radius'],
+                        self.config['passes']).blurred
+        logger.debug('Built box mask. Shape: %s', mask.shape)
+        return mask
+    
+                       <option_name> should always be lower text.
+                   <metadata> dictionary requirements are listed below.
+    
+    from plugins.convert._config import Config
+    
+        The following variables should be defined:
+        _HELPTEXT: A string describing what this plugin does
+        _DEFAULTS: A dictionary containing the options, defaults and meta information. The
+                   dictionary should be defined as:
+                       {<option_name>: {<metadata>}}
+    
+        def write(self, filename, image):
+        logger.trace('Outputting: (filename: '%s'', filename)
+        filename = self.output_filename(filename)
         try:
-            del self.b.__dict__
-        except TypeError:
-            pass
-        else:
-            self.fail('deleting function dictionary should raise TypeError')
+            with open(filename, 'wb') as outfile:
+                outfile.write(image)
+        except Exception as err:  # pylint: disable=broad-except
+            logger.error('Failed to save image '%s'. Original Error: %s', filename, err)
     
-            results = [pool.apply_async(calculate, t) for t in TASKS]
-        imap_it = pool.imap(calculatestar, TASKS)
-        imap_unordered_it = pool.imap_unordered(calculatestar, TASKS)
     
-        # Get and print some more results
-    for i in range(len(TASKS2)):
-        print('\t', done_queue.get())
+_HELPTEXT = (
+    'Options for outputting converted frames to a series of images using OpenCV\n'
+    'OpenCV can be faster than other image writers, but lacks some configuration '
+    'options and formats.'
+)
     
-                if buffer.lstrip().upper().startswith('SELECT'):
-                print(cur.fetchall())
-        except sqlite3.Error as e:
-            print('An error occurred:', e.args[0])
-        buffer = ''
-    
-    p = Point(4.0, -3.2)
+        def get_save_kwargs(self):
+        ''' Return the save parameters for the file format '''
+        filetype = self.config['format']
+        kwargs = dict()
+        if filetype in ('gif', 'jpg', 'png'):
+            kwargs['optimize'] = self.config['optimize']
+        if filetype == 'gif':
+            kwargs['interlace'] = self.config['gif_interlace']
+        if filetype == 'png':
+            kwargs['compress_level'] = self.config['png_compress_level']
+        if filetype == 'tif':
+            kwargs['compression'] = self.config['tif_compression']
+        logger.debug(kwargs)
+        return kwargs
