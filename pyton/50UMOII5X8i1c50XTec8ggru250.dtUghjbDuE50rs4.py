@@ -1,115 +1,181 @@
 
         
-        
-class _BenchSpider(scrapy.Spider):
-    '''A spider that follows all links'''
-    name = 'follow'
-    total = 10000
-    show = 20
-    baseurl = 'http://localhost:8998'
-    link_extractor = LinkExtractor()
+        known_encodings = [
+    obama_face_encoding,
+    biden_face_encoding
+]
     
-        def short_desc(self):
-        return 'Fetch a URL using the Scrapy downloader'
+        # Print the location of each face in this image
+    top, right, bottom, left = face_location
+    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
     
-        def download_request(self, request, spider):
-        p = urlparse_cached(request)
-        scheme = 'https' if request.meta.get('is_secure') else 'http'
-        bucket = p.hostname
-        path = p.path + '?' + p.query if p.query else p.path
-        url = '%s://%s.s3.amazonaws.com%s' % (scheme, bucket, path)
-        if self.anon:
-            request = request.replace(url=url)
-        elif self._signer is not None:
-            import botocore.awsrequest
-            awsrequest = botocore.awsrequest.AWSRequest(
-                method=request.method,
-                url='%s://s3.amazonaws.com/%s%s' % (scheme, bucket, path),
-                headers=request.headers.to_unicode_dict(),
-                data=request.body)
-            self._signer.add_auth(awsrequest)
-            request = request.replace(
-                url=url, headers=awsrequest.headers.items())
-        else:
-            signed_headers = self.conn.make_request(
-                    method=request.method,
-                    bucket=bucket,
-                    key=unquote(p.path),
-                    query_args=unquote(p.query),
-                    headers=request.headers,
-                    data=request.body)
-            request = request.replace(url=url, headers=signed_headers)
-        return self._download_http(request, spider)
+    
+def test_image(image_to_check, model):
+    unknown_image = face_recognition.load_image_file(image_to_check)
+    face_locations = face_recognition.face_locations(unknown_image, number_of_times_to_upsample=0, model=model)
+    
+        for file in image_files_in_folder(known_people_folder):
+        basename = os.path.splitext(os.path.basename(file))[0]
+        img = face_recognition.load_image_file(file)
+        encodings = face_recognition.face_encodings(img)
+    
+        def test_cnn_face_locations(self):
+        img = api.load_image_file(os.path.join(os.path.dirname(__file__), 'test_images', 'obama.jpg'))
+        detected_faces = api.face_locations(img, model='cnn')
+    
+    with open('README.rst') as readme_file:
+    readme = readme_file.read()
+    
+    # Load a second sample picture and learn how to recognize it.
+biden_image = face_recognition.load_image_file('biden.jpg')
+biden_face_encoding = face_recognition.face_encodings(biden_image)[0]
+    
+    
+KEY = jose.JWKRSA.load(test_util.load_vector('rsa512_key.pem'))
+    
+        def test_conflicts(self):
+        # Note: Defined IP is more important than defined port in match
+        self.assertTrue(self.addr.conflicts(self.addr1))
+        self.assertTrue(self.addr.conflicts(self.addr2))
+        self.assertTrue(self.addr.conflicts(self.addr_defined))
+        self.assertFalse(self.addr.conflicts(self.addr_default))
+    
+            # return_value is essentially set to (None, None) in
+        # _mock_obtain_certificate(), which breaks this test.
+        # Thus fixed by the next line.
+        authzr = authzr_ret or self._authzr_from_domains(self.eg_domains)
+    
+    
+def _get_voc_results_file_template(json_dataset, salt):
+    info = voc_info(json_dataset)
+    year = info['year']
+    image_set = info['image_set']
+    devkit_path = info['devkit_path']
+    # VOCdevkit/results/VOC2007/Main/<comp_id>_det_test_aeroplane.txt
+    filename = 'comp4' + salt + '_det_' + image_set + '_{:s}.txt'
+    return os.path.join(devkit_path, 'results', 'VOC' + year, 'Main', filename)
+    
+    
+def add_ResNet101_conv5_body(model):
+    return add_ResNet_convX_body(model, (3, 4, 23, 3))
+    
+    import logging
+    
+        if not model.train or cfg.MODEL.FASTER_RCNN:
+        # Proposals are needed during:
+        #  1) inference (== not model.train) for RPN only and Faster R-CNN
+        #  OR
+        #  2) training for Faster R-CNN
+        # Otherwise (== training for RPN only), proposals are not needed
+        model.net.Sigmoid('rpn_cls_logits', 'rpn_cls_probs')
+        model.GenerateProposals(
+            ['rpn_cls_probs', 'rpn_bbox_pred', 'im_info'],
+            ['rpn_rois', 'rpn_roi_probs'],
+            anchors=anchors,
+            spatial_scale=spatial_scale
+        )
+    
+        def forward(self, inputs, outputs):
+        '''See modeling.detector.GenerateProposalLabels for inputs/outputs
+        documentation.
+        '''
+        # During training we reuse the data loader code. We populate roidb
+        # entries on the fly using the rois generated by RPN.
+        # im_info: [[im_height, im_width, im_scale], ...]
+        rois = inputs[0].data
+        roidb = blob_utils.deserialize(inputs[1].data)
+        im_info = inputs[2].data
+        im_scales = im_info[:, 2]
+        output_blob_names = fast_rcnn_roi_data.get_fast_rcnn_blob_names()
+        # For historical consistency with the original Faster R-CNN
+        # implementation we are *not* filtering crowd proposals.
+        # This choice should be investigated in the future (it likely does
+        # not matter).
+        json_dataset.add_proposals(roidb, rois, im_scales, crowd_thresh=0)
+        roidb_utils.add_bbox_regression_targets(roidb)
+        blobs = {k: [] for k in output_blob_names}
+        fast_rcnn_roi_data.add_fast_rcnn_blobs(blobs, im_scales, roidb)
+        for i, k in enumerate(output_blob_names):
+            blob_utils.py_op_copy_blob(blobs[k], outputs[i])
 
     
-        text = html.remove_tags_with_content(text, ('script', 'noscript'))
-    text = html.replace_entities(text)
-    text = html.remove_comments(text)
-    return _ajax_crawlable_re.search(text) is not None
+    
+def _add_multilevel_rois(blobs):
+    '''By default training RoIs are added for a single feature map level only.
+    When using FPN, the RoIs must be distributed over different FPN levels
+    according the level assignment heuristic (see: modeling.FPN.
+    map_rois_to_fpn_levels).
+    '''
+    lvl_min = cfg.FPN.ROI_MIN_LEVEL
+    lvl_max = cfg.FPN.ROI_MAX_LEVEL
+    
+    from caffe2.proto import caffe2_pb2
+from caffe2.python import core
+from caffe2.python import gradient_checker
+from caffe2.python import workspace
+    
+    
+class SigmoidActivator(object):
+    def forward(self, weighted_input):
+        return 1.0 / (1.0 + np.exp(-weighted_input))
+    
+            # 计算对本次输入x的权重梯度
+        xt = x.transpose()
+        self.Wfx_grad = np.dot(self.delta_f_list[-1], xt)
+        self.Wix_grad = np.dot(self.delta_i_list[-1], xt)
+        self.Wox_grad = np.dot(self.delta_o_list[-1], xt)
+        self.Wcx_grad = np.dot(self.delta_ct_list[-1], xt)
+    
+    
+# 二分 KMeans 聚类算法, 基于 kMeans 基础之上的优化，以避免陷入局部最小值
+def biKMeans(dataMat, k, distMeas=distEclud):
+    m = shape(dataMat)[0]
+    clusterAssment = mat(zeros((m, 2)))  # 保存每个数据点的簇分配结果和平方误差
+    centroid0 = mean(dataMat, axis=0).tolist()[0]  # 质心初始化为所有数据点的均值
+    centList = [centroid0]  # 初始化只有 1 个质心的 list
+    for j in range(m):  # 计算所有数据点到初始质心的距离平方误差
+        clusterAssment[j, 1] = distMeas(mat(centroid0), dataMat[j, :])**2
+    while (len(centList) < k):  # 当质心数量小于 k 时
+        lowestSSE = inf
+        for i in range(len(centList)):  # 对每一个质心
+            ptsInCurrCluster = dataMat[nonzero(
+                clusterAssment[:, 0].A == i)[0], :]  # 获取当前簇 i 下的所有数据点
+            centroidMat, splitClustAss = kMeans(
+                ptsInCurrCluster, 2, distMeas)  # 将当前簇 i 进行二分 kMeans 处理
+            sseSplit = sum(splitClustAss[:, 1])  # 将二分 kMeans 结果中的平方和的距离进行求和
+            sseNotSplit = sum(
+                clusterAssment[nonzero(clusterAssment[:, 0].A != i)[0],
+                               1])  # 将未参与二分 kMeans 分配结果中的平方和的距离进行求和
+            print('sseSplit, and notSplit: ', sseSplit, sseNotSplit)
+            if (sseSplit + sseNotSplit) < lowestSSE:
+                bestCentToSplit = i
+                bestNewCents = centroidMat
+                bestClustAss = splitClustAss.copy()
+                lowestSSE = sseSplit + sseNotSplit
+        # 找出最好的簇分配结果    
+        bestClustAss[nonzero(bestClustAss[:, 0].A == 1)[0], 0] = len(
+            centList)  # 调用二分 kMeans 的结果，默认簇是 0,1. 当然也可以改成其它的数字
+        bestClustAss[nonzero(bestClustAss[:, 0].A == 0)[0],
+                     0] = bestCentToSplit  # 更新为最佳质心
+        print('the bestCentToSplit is: ', bestCentToSplit)
+        print('the len of bestClustAss is: ', len(bestClustAss))
+        # 更新质心列表
+        centList[bestCentToSplit] = bestNewCents[0, :].tolist()[
+            0]  # 更新原质心 list 中的第 i 个质心为使用二分 kMeans 后 bestNewCents 的第一个质心
+        centList.append(
+            bestNewCents[1, :].tolist()[0])  # 添加 bestNewCents 的第二个质心
+        clusterAssment[nonzero(clusterAssment[:, 0].A == bestCentToSplit)[
+            0], :] = bestClustAss  # 重新分配最好簇下的数据（质心）以及SSE
+    return mat(centList), clusterAssment
+    
+    # 计算均值( varSum是计算方差的展开形式 )
+mean_ = cumVal/cumN
+varSum = (cumSumSq - 2*mean_*cumVal + cumN*mean_*mean_)/cumN
+# 输出 数据总量，均值，平方的均值（方差）
+print ('数据总量：%d\t均值：%f\t方差：%f' % (cumN, mean_, varSum))
+print('reduce report: still alive', file=sys.stderr)
 
     
-        def test_repr(self):
-        self.assertEqual('PollError(exhausted=%s, updated={sentinel.AR: '
-                         'sentinel.AR2})' % repr(set()), repr(self.invalid))
-    
-    
-class Signature(jose.Signature):
-    '''ACME-specific Signature. Uses ACME-specific Header for customer fields.'''
-    __slots__ = jose.Signature._orig_slots  # pylint: disable=no-member
-    
-            self.vhosts.append(
-            obj.VirtualHost(
-                'path', 'aug_path', set([obj.Addr.fromstring('*:80')]),
-                False, False,
-                'wildcard.com', set(['*.wildcard.com'])))
-    
-    ========================================  =====================================
-``--dns-cloudflare-credentials``          Cloudflare credentials_ INI file.
-                                          (Required)
-``--dns-cloudflare-propagation-seconds``  The number of seconds to wait for DNS
-                                          to propagate before asking the ACME
-                                          server to verify the DNS record.
-                                          (Default: 10)
-========================================  =====================================
-    
-    # The version info for the project you're documenting, acts as replacement for
-# |version| and |release|, also used in various other places throughout the
-# built documents.
-#
-# The short X.Y version.
-version = u'0'
-# The full version, including alpha/beta/rc tags.
-release = u'0'
-    
-    .. code-block:: bash
-   :caption: To acquire a certificate for ``example.com``
-    
-    # The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
-    
-       certbot certonly \\
-     --dns-digitalocean \\
-     --dns-digitalocean-credentials ~/.secrets/certbot/digitalocean.ini \\
-     -d example.com
-    
-        def test_publisher_shall_append_subscription_message_to_queue(cls):
-        ''' msg_queue ~ Provider.notify(msg) ~ Publisher.publish(msg) '''
-        expected_msg = 'expected msg'
-        pro = Provider()
-        pub = Publisher(pro)
-        Subscriber('sub name', pro)
-        cls.assertEqual(len(pro.msg_queue), 0)
-        pub.publish(expected_msg)
-        cls.assertEqual(len(pro.msg_queue), 1)
-        cls.assertEqual(pro.msg_queue[0], expected_msg)
-    
-        def test_2nd_am_station_after_scan(self):
-        self.radio.scan()
-        station = self.radio.state.stations[self.radio.state.pos]
-        expected_station = '1380'
-        self.assertEqual(station, expected_station)
-    
-        >>> class ClassRegistree(BaseRegisteredClass):
-    ...    def __init__(self, *args, **kwargs):
-    ...        pass
+       # input value = feature vector for one training example, e.g. '3.0, 7.0, 2.0'
+   featurematrix = [float(item) for item in value.split(',')]
+   A = numpy.matrix(featurematrix)
