@@ -1,104 +1,61 @@
 
         
-        
-@bp.route('/login', methods=('GET', 'POST'))
-def login():
-    '''Log in a registered user by adding the user id to the session.'''
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        db = get_db()
-        error = None
-        user = db.execute(
-            'SELECT * FROM user WHERE username = ?', (username,)
-        ).fetchone()
+                #: as blueprints can be registered multiple times with the
+        #: application and not everything wants to be registered
+        #: multiple times on it, this attribute can be used to figure
+        #: out if the blueprint was registered in the past already.
+        self.first_registration = first_registration
+    
+        :copyright: 2010 Pallets
+    :license: BSD-3-Clause
+'''
+import hashlib
+import warnings
+from datetime import datetime
     
     
-@pytest.fixture
-def app():
-    '''Create and configure a new app instance for each test.'''
-    # create a temporary file to isolate the database for each test
-    db_fd, db_path = tempfile.mkstemp()
-    # create the app with common test config
-    app = create_app({'TESTING': True, 'DATABASE': db_path})
-    
-            if not title:
-            error = 'Title is required.'
+class Environment(BaseEnvironment):
+    '''Works like a regular Jinja2 environment but has some additional
+    knowledge of how Flask's blueprint works so that it can prepend the
+    name of the blueprint to referenced templates if necessary.
+    '''
     
     
-class Blueprint(_PackageBoundObject):
-    '''Represents a blueprint, a collection of routes and other
-    app-related functions that can be registered on a real application
-    later.
+@pytest.fixture(autouse=True)
+def leak_detector():
+    yield
     
+        if module.params['backup']:
+        if not module.check_mode:
+            result['__backup__'] = get_config(module)
+    commands = list()
     
-def finalize_headers(headers):
-    final_headers = {}
-    for name, value in headers.items():
-        if value is not None:
+        result = {'changed': False}
     
-    from httpie.compat import is_windows
-from httpie.config import DEFAULT_CONFIG_DIR, Config
+            if self._play_context.connection == 'network_cli':
+            provider = self._task.args.get('provider', {})
+            if any(provider.values()):
+                display.warning(''provider' is unnecessary when using 'network_cli' and will be ignored')
+        elif self._play_context.connection == 'local':
+            provider = load_provider(f5_provider_spec, self._task.args)
+            transport = provider['transport'] or transport
     
-        '''
-    return path.replace('\\', '\\\\\\')
+                self.module.add_cleanup_file(sudo_askpass_file.name)
     
-    
-@mock.patch('httpie.input.AuthCredentials._getpass',
-            new=lambda self, prompt: 'password')
-def test_password_prompt(httpbin):
-    r = http('--auth', 'user',
-             'GET', httpbin.url + '/basic-auth/user/password')
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
-    
-    
-def test_unicode_json_item(httpbin):
-    r = http('--json', 'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
-    assert HTTP_OK in r
-    assert r.json['json'] == {'test': UNICODE}
-    
-        @property
-    def path(self):
-        '''Return the config file path creating basedir, if needed.'''
-        path = self._get_path()
-        try:
-            os.makedirs(os.path.dirname(path), mode=0o700)
-        except OSError as e:
-            if e.errno != errno.EEXIST:
-                raise
-        return path
-    
-        '''
-    
-        @classmethod
-    # pylint: disable=arguments-differ,too-many-arguments
-    def sign(cls, payload, key, alg, nonce, url=None, kid=None):
-        # Per ACME spec, jwk and kid are mutually exclusive, so only include a
-        # jwk field if kid is not provided.
-        include_jwk = kid is None
-        return super(JWS, cls).sign(payload, key=key, alg=alg,
-                                    protect=frozenset(['nonce', 'url', 'kid', 'jwk', 'alg']),
-                                    nonce=nonce, url=url, kid=kid,
-                                    include_jwk=include_jwk)
-
-    
-    from acme import test_util
-    
-    # If true, `todo` and `todoList` produce output, else they produce nothing.
-todo_include_todos = True
-    
-    AUGEAS_LENS_DIR = pkg_resources.resource_filename(
-    'certbot_apache', 'augeas_lens')
-'''Path to the Augeas lens directory'''
-    
-       certbot certonly \\
-     --dns-cloudxns \\
-     --dns-cloudxns-credentials ~/.secrets/certbot/cloudxns.ini \\
-     -d example.com
-    
-        print('Done!')
-    if failures:
-        print('Some downloads have failed:')
-        for fail in failures:
-            print('> ' + fail)
+    - name: Configure interface in access and trunk mode using aggregate
+  junos_l2_interface:
+    aggregate:
+    - name: ge-0/0/1
+      description: test-interface-access
+      mode: access
+      access_vlan: red
+    - name: ge-0/0/2
+      description: test-interface-trunk
+      mode: trunk
+      trunk_vlans:
+      - blue
+      - green
+      native_vlan: 100
+    active: True
+    state: present
+'''
