@@ -1,103 +1,150 @@
 
         
-        
-@pytest.fixture(params=[(python_3, False),
-                        (python_3, True),
-                        (python_2, False)])
-def proc(request, spawnu, TIMEOUT):
-    container, instant_mode = request.param
-    proc = spawnu(*container)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(init_zshrc.format(
-        u'--enable-experimental-instant-mode' if instant_mode else ''))
-    proc.sendline(u'zsh')
-    if instant_mode:
-        assert proc.expect([TIMEOUT, u'instant mode ready: True'])
-    return proc
+            def add_user(self, user):
+        pass
+    
+        def extract_year_month(self, line):
+        '''Return the year and month portions of the timestamp.'''
+        pass
+    
+        def reducer(self, key, values):
+        total = sum(values)
+        if total == 1:
+            yield key, total
+    
+        def crawl_page(self, page):
+        for url in page.child_urls:
+            self.data_store.add_link_to_crawl(url)
+        self.reverse_index_queue.generate(page)
+        self.doc_index_queue.generate(page)
+        self.data_store.remove_link_to_crawl(page.url)
+        self.data_store.insert_crawled_link(page.url, page.signature)
+    
+      Returns:
+     The total loss for a batch of data.
+  '''
+  with tf.variable_scope(
+      tf.get_variable_scope(), reuse=True if reuse_variable else None):
+    _build_deeplab(iterator, {common.OUTPUT_TYPE: num_of_classes}, ignore_label)
+    
+    from delf import datum_io
+    
+          return vlad
+    
+      Returns:
+    List of subtoken sets, where subtokens in set i have the same length=i.
+  '''
+  # Create list of buckets, where subtokens in bucket i have length i.
+  subtoken_buckets = []
+  for subtoken, count in six.iteritems(subtoken_counts):
+    if count < min_count:  # Filter out subtokens that don't appear enough
+      continue
+    while len(subtoken_buckets) <= len(subtoken):
+      subtoken_buckets.append(set())
+    subtoken_buckets[len(subtoken)].add(subtoken)
+  return subtoken_buckets
     
     
-@pytest.mark.parametrize('script, output', [
-    ('vim', invalid_operation('vim')),
-    ('apt-get', '')])
-def test_not_match(script, output):
-    assert not match(Command(script, output))
+def _metric_max_over_ground_truths(metric_fn, prediction, ground_truths):
+  '''Computes the max over all metric scores.'''
+  scores_for_ground_truths = []
+  for ground_truth in ground_truths:
+    score = metric_fn(prediction, ground_truth)
+    scores_for_ground_truths.append(score)
+  return max(scores_for_ground_truths)
     
-    no_match_output = '''
-Listing... Done
-'''
+      # Find nearest-neighbor matches using a KD tree.
+  index_image_tree = spatial.cKDTree(index_image_descriptors)
+  _, indices = index_image_tree.query(
+      query_descriptors, distance_upper_bound=_FEATURE_DISTANCE_THRESHOLD)
+    
+      # Perform geometric verification using RANSAC.
+  _, inliers = measure.ransac((locations_1_to_use, locations_2_to_use),
+                              transform.AffineTransform,
+                              min_samples=3,
+                              residual_threshold=20,
+                              max_trials=1000)
+    
+    for face_location in face_locations:
     
     
-output = '''sshfs: OsxfuseRequirement unsatisfied!
+def detect_faces_in_image(file_stream):
+    # Pre-calculated face encoding of Obama generated with face_recognition.face_encodings(img)
+    known_face_encoding = [-0.09634063,  0.12095481, -0.00436332, -0.07643753,  0.0080383,
+                            0.01902981, -0.07184699, -0.09383309,  0.18518871, -0.09588896,
+                            0.23951106,  0.0986533 , -0.22114635, -0.1363683 ,  0.04405268,
+                            0.11574756, -0.19899382, -0.09597053, -0.11969153, -0.12277931,
+                            0.03416885, -0.00267565,  0.09203379,  0.04713435, -0.12731361,
+                           -0.35371891, -0.0503444 , -0.17841317, -0.00310897, -0.09844551,
+                           -0.06910533, -0.00503746, -0.18466514, -0.09851682,  0.02903969,
+                           -0.02174894,  0.02261871,  0.0032102 ,  0.20312519,  0.02999607,
+                           -0.11646006,  0.09432904,  0.02774341,  0.22102901,  0.26725179,
+                            0.06896867, -0.00490024, -0.09441824,  0.11115381, -0.22592428,
+                            0.06230862,  0.16559327,  0.06232892,  0.03458837,  0.09459756,
+                           -0.18777156,  0.00654241,  0.08582542, -0.13578284,  0.0150229 ,
+                            0.00670836, -0.08195844, -0.04346499,  0.03347827,  0.20310158,
+                            0.09987706, -0.12370517, -0.06683611,  0.12704916, -0.02160804,
+                            0.00984683,  0.00766284, -0.18980607, -0.19641446, -0.22800779,
+                            0.09010898,  0.39178532,  0.18818057, -0.20875394,  0.03097027,
+                           -0.21300618,  0.02532415,  0.07938635,  0.01000703, -0.07719778,
+                           -0.12651891, -0.04318593,  0.06219772,  0.09163868,  0.05039065,
+                           -0.04922386,  0.21839413, -0.02394437,  0.06173781,  0.0292527 ,
+                            0.06160797, -0.15553983, -0.02440624, -0.17509389, -0.0630486 ,
+                            0.01428208, -0.03637431,  0.03971229,  0.13983178, -0.23006812,
+                            0.04999552,  0.0108454 , -0.03970895,  0.02501768,  0.08157793,
+                           -0.03224047, -0.04502571,  0.0556995 , -0.24374914,  0.25514284,
+                            0.24795187,  0.04060191,  0.17597422,  0.07966681,  0.01920104,
+                           -0.01194376, -0.02300822, -0.17204897, -0.0596558 ,  0.05307484,
+                            0.07417042,  0.07126575,  0.00209804]
     
+            # empty python list
+        faces_to_compare = []
     
-no_such_subcommand_old = '''No such subcommand
+            Use attention **before** lstm:
+            ```
+            tf.reset_default_graph()
     
-        def delete(self, session_key=None):
-        super().delete(session_key)
-        if session_key is None:
-            if self.session_key is None:
-                return
-            session_key = self.session_key
-        self._cache.delete(self.cache_key_prefix + session_key)
+        with tf.variable_scope(name or 'conv2d', reuse=reuse):
+        W, b = get_wb(kernel_shape)
     
-        def save(self, must_create=False):
-        '''
-        Save the current session data to the database. If 'must_create' is
-        True, raise a database error if the saving operation doesn't create a
-        new entry (as opposed to possibly updating an existing entry).
-        '''
-        if self.session_key is None:
-            return self.create()
-        data = self._get_session(no_load=must_create)
-        obj = self.create_model_instance(data)
-        using = router.db_for_write(self.model, instance=obj)
-        try:
-            with transaction.atomic(using=using):
-                obj.save(force_insert=must_create, force_update=not must_create, using=using)
-        except IntegrityError:
-            if must_create:
-                raise CreateError
-            raise
-        except DatabaseError:
-            if not must_create:
-                raise UpdateError
-            raise
+            with tf.variable_scope('transform'):
+            W_T, b_T = get_wb([n_input, n_input], b_initializer=tf.initializers.constant(carry_bias))
     
-    from .cifar import load_batch
-from ..utils.data_utils import get_file
-from .. import backend as K
-import numpy as np
-import os
+            # similarity matrix
+        S = tf.reshape(tf.einsum('ntjd,do->ntjo', h_u_hu, W_s), [-1, T, J])  # [N, T, J]
+        # 以上操作等价于
+        # S = tf.reshape(tf.matmul(tf.reshape(h_u_hu, [-1, 3*d]), W_s), [-1, T, J])
     
-    if K.image_data_format() == 'channels_first':
-    x_train = x_train.reshape(x_train.shape[0], 1, img_rows, img_cols)
-    x_test = x_test.reshape(x_test.shape[0], 1, img_rows, img_cols)
-    input_shape = (1, img_rows, img_cols)
-else:
-    x_train = x_train.reshape(x_train.shape[0], img_rows, img_cols, 1)
-    x_test = x_test.reshape(x_test.shape[0], img_rows, img_cols, 1)
-    input_shape = (img_rows, img_cols, 1)
+            try:
+            idp = IdentityProvider.objects.get(
+                external_id=integration.external_id,
+                type='slack',
+            )
+        except IdentityProvider.DoesNotExist:
+            raise Http404
     
-    x = Conv2DTranspose(filters=1,
-                    kernel_size=kernel_size,
-                    padding='same')(x)
+            message = 'Background workers haven't checked in recently. '
+        if backlogged:
+            message += 'It seems that you have a backlog of %d tasks. Either your workers aren't running or you need more capacity.' % size
+        else:
+            message += 'This is likely an issue with your configuration or the workers aren't running.'
     
-    batch_size = 32
-num_classes = 10
-epochs = 200
-hidden_units = 100
+            # Removing index on 'EventTag', fields ['group_id', 'key', 'value']
+        db.delete_index(u'tagstore_eventtag', ['group_id', 'key_id', 'value_id'])
     
-    model = Sequential()
-model.add(Dense(512, activation='relu', input_shape=(784,)))
-model.add(Dropout(0.2))
-model.add(Dense(512, activation='relu'))
-model.add(Dropout(0.2))
-model.add(Dense(num_classes, activation='softmax'))
+        complete_apps = ['tagstore']
+
     
-    print('Convert class vector to binary class matrix '
-      '(for use with categorical_crossentropy)')
-y_train = keras.utils.to_categorical(y_train, num_classes)
-y_test = keras.utils.to_categorical(y_test, num_classes)
-print('y_train shape:', y_train.shape)
-print('y_test shape:', y_test.shape)
+        This is currenlty only used for ``in_next_release`` resolutions.
+    '''
+    try:
+        release = Release.objects.get_from_cache(
+            id=release_id,
+        )
+    except Release.DoesNotExist:
+        return
+    
+            for job in job_list:
+            logger.debug('Sending scheduled job %s with payload %r', job.name, job.payload)
+            app.send_task(job.name, kwargs=job.payload)
+            job.delete()
