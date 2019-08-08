@@ -1,132 +1,183 @@
 
         
-            flag_methods = [
-        ctl_common.define_ctl_flags,
-        lambda: imagenet_main.define_imagenet_flags()
-    ]
+            Args:
+      input_tensor: An int32 tensor of shape [N] to be sliced.
+      num_start_samples: Number of examples to be sliced from the beginning
+        of the input tensor.
+      num_end_samples: Number of examples to be sliced from the end of the
+        input tensor.
+      total_num_samples: Sum of is num_start_samples and num_end_samples. This
+        should be a scalar.
     
-        super(TransformerEstimatorBenchmark, self).__init__(
-        output_dir=output_dir,
-        default_flags=default_flags,
-        flag_methods=flag_methods)
+        filtered_boxes = box_list_ops.filter_greater_than(boxes, thresh)
+    with self.test_session() as sess:
+      filtered_output = sess.run(filtered_boxes.get())
+      self.assertAllClose(filtered_output, exp_output)
     
-      if inter_op:
-    flags.DEFINE_integer(
-        name='inter_op_parallelism_threads', short_name='inter', default=0,
-        help=help_wrap('Number of inter_op_parallelism_threads to use for CPU. '
-                       'See TensorFlow config.proto for details.')
-    )
-    
-    flags.DEFINE_integer('log_steps', 10,
-                     'Display logging information at every log_steps.')
-    
-    
-if __name__ == '__main__':
-  tf.app.run()
-
-    
-    # Extensions.
-_DELF_EXTENSION = '.delf'
-_IMAGE_EXTENSION = '.jpg'
-    
-        if words is None:
-        words = url
-    
-        if blueprint is not None and seems_fishy:
-        info.append(
-            '  The template was looked up from an endpoint that '
-            'belongs to the blueprint '%s'.' % blueprint
-        )
-        info.append('  Maybe you did not place a template in the right folder?')
-        info.append('  See http://flask.pocoo.org/docs/blueprints/#templates')
-    
-    
-def detect_encoding(data):
-    '''Detect which UTF codec was used to encode the given bytes.
-    
-        def to_json(self, value):
-        return text_type(value.__html__())
-    
-        def create_app(info):
-        raise Exception('oh no')
-        return Flask('flaskgroup')
-    
-        class Test(Base):
-        SECRET_KEY = 'config'
-    
-    
-def test_prefix_package_paths(
-    limit_loader, modules_tmpdir, modules_tmpdir_prefix, purge_module, site_packages
-):
-    app = site_packages.mkdir('site_package')
-    init = app.join('__init__.py')
-    init.write('import flask\napp = flask.Flask(__name__)')
-    purge_module('site_package')
-    
-    from ansible.module_utils.network.nos.nos import run_commands, get_config, load_config
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.network.common.config import NetworkConfig, dumps
-    
-                if Sentinel == Sentinel():
-                print('Sentinel value')
-        '''
-        return cls
-
-    
-        @patch('ansible.module_utils.facts.hardware.linux.LinuxHardware._mtab_entries', return_value=MTAB_ENTRIES)
-    @patch('ansible.module_utils.facts.hardware.linux.LinuxHardware._find_bind_mounts', return_value=BIND_MOUNTS)
-    @patch('ansible.module_utils.facts.hardware.linux.LinuxHardware._lsblk_uuid', return_value=LSBLK_UUIDS)
-    @patch('ansible.module_utils.facts.hardware.linux.get_mount_size', side_effect=mock_get_mount_size)
-    @patch('ansible.module_utils.facts.hardware.linux.LinuxHardware._udevadm_uuid', return_value=UDEVADM_UUID)
-    def test_get_mount_facts(self,
-                             mock_get_mount_size,
-                             mock_lsblk_uuid,
-                             mock_find_bind_mounts,
-                             mock_mtab_entries,
-                             mock_udevadm_uuid):
-        module = Mock()
-        # Returns a LinuxHardware-ish
-        lh = linux.LinuxHardware(module=module, load_on_init=False)
-    
-    
-class AnsibleFailJson(Exception):
-    '''Exception class to be raised by module.fail_json and caught by the test case'''
-    pass
-    
-        result = wapi.run(network_type, ib_spec)
-    
-        if sys.platform == 'win32':
-        win32_lib = os.path.abspath( os.path.join(python_path, 'lib', 'win32'))
-        sys.path.append(win32_lib)
-    elif sys.platform.startswith('linux'):
-        linux_lib = os.path.abspath( os.path.join(python_path, 'lib', 'linux'))
-        sys.path.append(linux_lib)
-    
-    
-@section Exceptions
-    
-    # In an action, a lexer rule can set token to this SKIP_TOKEN and ANTLR
-# will avoid creating a token for this symbol and try to fetch another.
-SKIP_TOKEN = CommonToken(type=INVALID_TOKEN_TYPE)
-    
-    
-def score_euclidean(a, b):
-    '''计算两个点之间的欧式距离'''
-    s = np.sqrt(np.sum(np.power(a - b, 2)))
-    return s
-    
-                with tf.Session() as sess:
-                tf.global_variables_initializer().run()
-                o_val = o.eval()
-            ```
+        Returns:
+      mask_predictions: A float tensors of shape
+        [batch_size, num_anchors, num_masks, mask_height, mask_width]
+        representing the mask predictions for the proposals.
     '''
-    n_input = int(x.get_shape()[-1])
-    if n_step is None:
-        n_step = int(x.get_shape()[-2])  # 这种写法，不兼容 keras.layers.LSTM，此时需要手工传入 n_step
+    mask_predictions = features
+    for layer in self._mask_predictor_layers:
+      mask_predictions = layer(mask_predictions)
+    batch_size = features.get_shape().as_list()[0]
+    if batch_size is None:
+      batch_size = tf.shape(features)[0]
+    mask_predictions = tf.reshape(
+        mask_predictions,
+        [batch_size, -1, self._num_masks, self._mask_height, self._mask_width])
+    return mask_predictions
     
-        with tf.variable_scope(name or 'attention_flow', reuse=reuse):
-        h_expand = tf.tile(tf.expand_dims(h, axis=2), [1, 1, J, 1])  # [N, T, J, d]
-        u_expand = tf.tile(tf.expand_dims(u, axis=1), [1, T, 1, 1])  # [N, T, J, d]
-        hu = tf.multiply(h_expand, u_expand)  # [N, T, J, d]
-        h_u_hu = tf.concat([h_expand, u_expand, hu], axis=-1)  # [N, T, J, 3d]
-        W_s = get_w([3 * d, 1])  # [3d, 1]
+            if now - self.lastmark >= 3:
+            self.lastmark = now
+            qps = len(self.tail) / sum(self.tail)
+            print('samplesize={0} concurrent={1} qps={2:0.2f}'.format(len(self.tail), self.concurrent, qps))
+    
+        def syntax(self):
+        return '[options]'
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('--verbose', '-v', dest='verbose', action='store_true',
+            help='also display twisted/python/platform info (useful for bug reports)')
+    
+            dfd = slot.close()
+    
+        def process_request(self, request, spider):
+        request.headers.setdefault('Accept-Encoding',
+                                   b','.join(ACCEPTED_ENCODINGS))
+    
+    NAME_MAPPING.update({
+    ('__builtin__', 'basestring'): ('builtins', 'str'),
+    ('exceptions', 'StandardError'): ('builtins', 'Exception'),
+    ('UserDict', 'UserDict'): ('collections', 'UserDict'),
+    ('socket', '_socketobject'): ('socket', 'SocketType'),
+})
+    
+        # Internal methods used by condition variables
+    
+        def makepasv(self):
+        if self.af == socket.AF_INET:
+            host, port = parse227(self.sendcmd('PASV'))
+        else:
+            host, port = parse229(self.sendcmd('EPSV'), self.sock.getpeername())
+        return host, port
+    
+            openedFile = None
+        try:
+            # If a string was passed then open a file with that name
+            if isinstance(file, (str, bytes)):
+                openedFile = file = open(file, 'wb')
+    
+    
+@need_c_queue
+class CPriorityQueueTest(PriorityQueueTest, unittest.TestCase):
+    queue = c_queue
+    
+            Does not raise an exception if the header is missing.
+        '''
+        name = name.lower()
+        newheaders = []
+        for k, v in self._headers:
+            if k.lower() != name:
+                newheaders.append((k, v))
+        self._headers = newheaders
+    
+                    simple body
+    
+                for data in (b'', b'short string'):
+                data = type2test(data)
+                print(repr(data))
+                try:
+                    data.decode(encoding={invalid!r})
+                except LookupError:
+                    sys.exit(10)
+                else:
+                    sys.exit(23)
+    
+          universal_newlines: Alias of text, provided for backwards compatibility.
+    
+        def test___repr__nondefault_limit(self):
+        stream = asyncio.Stream(mode=asyncio.StreamMode.READ,
+                                loop=self.loop, limit=123,
+                                _asyncio_internal=True)
+        self.assertEqual('<Stream mode=StreamMode.READ limit=123>', repr(stream))
+    
+        type = models.CharField(max_length=64)
+    config = EncryptedJsonField()
+    date_added = models.DateTimeField(default=timezone.now, null=True)
+    external_id = models.CharField(max_length=64, null=True)
+    
+        def get(self, request):
+        context = {
+            'dsn': self._get_project_key().dsn_public,
+            'event_id': '342a3d7f690a49f8bd7c4cf0e61a9ded',
+            'options': urlencode({k: v for k, v in six.iteritems(request.GET)}),
+        }
+    
+        models = {
+        'tagstore.eventtag': {
+            'Meta': {'unique_together': '(('event_id', 'key', 'value'),)', 'object_name': 'EventTag', 'index_together': '(('project_id', 'key', 'value'), ('group_id', 'key', 'value'), ('environment_id', 'key', 'value'))'},
+            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'db_index': 'True'}),
+            'environment_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {}),
+            'event_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {}),
+            'group_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {}),
+            'value': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagValue']', 'db_column': ''value_id''})
+        },
+        'tagstore.grouptagkey': {
+            'Meta': {'unique_together': '(('project_id', 'group_id', 'environment_id', '_key'),)', 'object_name': 'GroupTagKey'},
+            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            'environment_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'null': 'True'}),
+            'group_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'db_index': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'db_index': 'True'}),
+            'values_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
+        },
+        'tagstore.grouptagvalue': {
+            'Meta': {'unique_together': '(('project_id', 'group_id', 'environment_id', '_key', '_value'),)', 'object_name': 'GroupTagValue', 'index_together': '(('project_id', '_key', '_value', 'last_seen'),)'},
+            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            '_value': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagValue']', 'db_column': ''value_id''}),
+            'environment_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'null': 'True'}),
+            'first_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'group_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'db_index': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'last_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'db_index': 'True'}),
+            'times_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
+        },
+        'tagstore.tagkey': {
+            'Meta': {'unique_together': '(('project_id', 'environment_id', 'key'),)', 'object_name': 'TagKey'},
+            'environment_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'null': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'key': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'db_index': 'True'}),
+            'status': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'}),
+            'values_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
+        },
+        'tagstore.tagvalue': {
+            'Meta': {'unique_together': '(('project_id', 'environment_id', '_key', 'value'),)', 'object_name': 'TagValue', 'index_together': '(('project_id', '_key', 'last_seen'),)'},
+            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            'data': ('sentry.db.models.fields.gzippeddict.GzippedDictField', [], {'null': 'True', 'blank': 'True'}),
+            'environment_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'null': 'True'}),
+            'first_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'last_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'db_index': 'True'}),
+            'times_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'}),
+            'value': ('django.db.models.fields.CharField', [], {'max_length': '200'})
+        }
+    }
+    
+        This is currenlty only used for ``in_next_release`` resolutions.
+    '''
+    try:
+        release = Release.objects.get_from_cache(
+            id=release_id,
+        )
+    except Release.DoesNotExist:
+        return
