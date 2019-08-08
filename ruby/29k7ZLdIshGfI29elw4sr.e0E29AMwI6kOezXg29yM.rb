@@ -1,128 +1,191 @@
 
         
-                def test_invert_change_table_comment_with_from_and_to_with_nil
-          change = @recorder.inverse_of :change_table_comment, [:table, from: nil, to: 'new_value']
-          assert_equal [:change_table_comment, [:table, from: 'new_value', to: nil]], change
-        end
+            context 'when semantic version' do
+      it 'returns the current version once parsed' do
+        test_content = 'spec.version = '1.3.2''
+        result = @version_podspec_file.parse(test_content)
+        expect(result).to eq('1.3.2')
+        expect(@version_podspec_file.version_value).to eq('1.3.2')
+        expect(@version_podspec_file.version_match[:major]).to eq('1')
+        expect(@version_podspec_file.version_match[:minor]).to eq('3')
+        expect(@version_podspec_file.version_match[:patch]).to eq('2')
       end
     
-      def test_valid_uses_create_context_when_new
-    r = WrongReply.new
-    r.title = 'Wrong Create'
-    assert_not_predicate r, :valid?
-    assert r.errors[:title].any?, 'A reply with a bad title should mark that attribute as invalid'
-    assert_equal ['is Wrong Create'], r.errors[:title], 'A reply with a bad content should contain an error'
+        # Horizontal adding around the frames
+    def horizontal_frame_padding
+      padding = fetch_config['padding']
+      if padding.kind_of?(String) && padding.split('x').length == 2
+        padding = padding.split('x')[0]
+        padding = padding.to_i unless padding.end_with?('%')
+      end
+      return scale_padding(padding)
+    end
+    
+      describe :find_build do
+    context 'one build' do
+      let(:fake_builds) { make_fake_builds(1) }
+      it 'finds the one build' do
+        only_build = fake_builds.first
+        expect(review_submitter.find_build(fake_builds)).to eq(only_build)
+      end
+    end
+    
+        def zip_build_products
+      return unless Scan.config[:should_zip_build_products]
+    
+            if Helper.test?
+          Actions.lane_context[SharedValues::IPA_OUTPUT_PATH] = File.join(absolute_dest_directory, 'test.ipa')
+          Actions.lane_context[SharedValues::DSYM_OUTPUT_PATH] = File.join(absolute_dest_directory, 'test.app.dSYM.zip')
+          return build_args
+        end
+    
+        helpers do
+      def render_response(template_type, template)
+        not_found!(template_type.to_s.singularize) unless template
+        present template, with: Entities::Template
+      end
+    end
+    
+      describe '#can_remove?' do
+    context 'when user can destroy_group_member' do
+      before do
+        allow(presenter).to receive(:can?).with(user, :destroy_group_member, presenter).and_return(true)
+      end
+    
+        context '(de)activating users' do
+      it 'does not show deactivation buttons for the current user' do
+        visit admin_users_path
+        expect(page).to have_no_css('a[href='/admin/users/#{users(:jane).id}/deactivate']')
+      end
+    
+        fill_in(:agent_options, with: '{
+      'expected_receive_period_in_days': '2'
+      'keep_event': 'false'
+    }')
+    expect(get_alert_text_from { click_on 'Save' }).to have_text('Sorry, there appears to be an error in your JSON input. Please fix it before continuing.')
   end
     
-        def to_json
-      JSON.generate(as_json)
-    end
+      it 'imports a scenario which requires a service' do
+    visit new_scenario_imports_path
+    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'spec/data_fixtures/twitter_scenario.json'))
+    click_on 'Start Import'
+    check('I confirm that I want to import these Agents.')
+    expect { click_on 'Finish Import' }.to change(Scenario, :count).by(1)
+    expect(page).to have_text('Import successful!')
   end
 end
 
     
-        delegate :puts, :print, :tty?, to: :$stdout
-    
-        if resource.errors.empty?
-      set_flash_message! :notice, :unlocked
-      respond_with_navigational(resource){ redirect_to after_unlock_path_for(resource) }
-    else
-      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
-    end
-  end
-    
-          # Forgets the given resource by deleting a cookie
-      def forget_me(resource)
-        scope = Devise::Mapping.find_scope!(resource)
-        resource.forget_me!
-        cookies.delete(remember_key(resource, scope), forget_cookie_values(resource))
-      end
-    
-          # Sign out a given user or scope. This helper is useful for signing out a user
-      # after deleting accounts. Returns true if there was a logout and false if there
-      # is no user logged in on the referred scope
-      #
-      # Examples:
-      #
-      #   sign_out :user     # sign_out(scope)
-      #   sign_out @user     # sign_out(resource)
-      #
-      def sign_out(resource_or_scope=nil)
-        return sign_out_all_scopes unless resource_or_scope
-        scope = Devise::Mapping.find_scope!(resource_or_scope)
-        user = warden.user(scope: scope, run_callbacks: false) # If there is no user
-    
-        def log_transform(*args, from: caller[1][/`.*'/][1..-2].sub(/^block in /, ''))
-      puts '    #{cyan from}#{cyan ': #{args * ', '}' unless args.empty?}'
+        before do
+      stub(Agents::DotFoo).valid_type?('Agents::DotFoo') { true }
+      stub(Agents::DotBar).valid_type?('Agents::DotBar') { true }
     end
     
-        it 'returns a flare tag if there are 2 flare tags in the list' do
-      valid_article = create(:article, tags: %w[ama explainlikeimfive])
-      expect(described_class.new(valid_article).tag.name).to eq('explainlikeimfive')
     end
-  end
+
     
-      it 'creates channel with users' do
-    chat_channel = ChatChannel.create_with_users([create(:user), create(:user)])
-    expect(chat_channel.users.size).to eq(2)
-    expect(chat_channel.has_member?(User.first)).to eq(true)
-  end
-    
-        it 'shows v1 if article has frontmatter' do
-      article = create(:article, user_id: user.id)
-      get '#{article.path}/edit'
-      expect(response.body).to include('articleform__form--v1')
-    end
-  end
-    
-      def self.upbuff!(buffer_update_id, admin_id, body_text, status)
-    buffer_update = BufferUpdate.find(buffer_update_id)
-    if status == 'confirmed'
-      buffer_response = send_to_buffer(body_text, buffer_update.buffer_profile_id_code)
-      buffer_update.update!(buffer_response: buffer_response, status: status, approver_user_id: admin_id, body_text: body_text)
-    else
-      buffer_update.update!(status: status, approver_user_id: admin_id)
-    end
-  end
-    
-          time = Time.now.to_f
-      Sidekiq.redis do |conn|
-        conn.multi do
-          conn.sadd('processes', odata['key'])
-          conn.hmset(odata['key'], 'info', Sidekiq.dump_json(odata), 'busy', 10, 'beat', time)
-          conn.sadd('processes', 'fake:pid')
+            it 'kills no long active workers' do
+          mock.instance_of(HuginnScheduler).run!
+          mock.instance_of(DelayedJobWorker).run!
+          @agent_runner.send(:run_workers)
+          AgentRunner.class_variable_set(:@@agents, [DelayedJobWorker])
+          mock.instance_of(HuginnScheduler).stop!
+          @agent_runner.send(:run_workers)
         end
       end
     
-      def options
-    { :concurrency => 3, :queues => ['default'] }
+          expect(data[:agents][guid_order(agent_list, :jane_weather_agent)]).not_to have_key(:propagate_immediately) # can't receive events
+      expect(data[:agents][guid_order(agent_list, :jane_rain_notifier_agent)]).not_to have_key(:schedule) # can't be scheduled
+    end
+    
+        it 'should raise an exception when encountering complex JSONPaths' do
+      @agent.options['username_path'] = '$.very.complex[*]'
+      expect { LiquidMigrator.convert_all_agent_options(@agent) }.
+        to raise_error('JSONPath '$.very.complex[*]' is too complex, please check your migration.')
+    end
+    
+      it 'truncates message to a reasonable length' do
+    log = AgentLog.new(:agent => agents(:jane_website_agent), :level => 3)
+    log.message = 'a' * 11_000
+    log.save!
+    expect(log.message.length).to eq(10_000)
   end
     
-          msg['locale'] = 'jp'
-      I18n.locale = I18n.default_locale
-      assert_equal :en, I18n.locale
-      mw = Sidekiq::Middleware::I18n::Server.new
-      mw.call(nil, msg, nil) do
-        assert_equal :jp, I18n.locale
+          def find_matching_tag(tag)
+        # Used primarily by developers testing beta macOS releases.
+        if OS::Mac.prerelease? && ARGV.skip_or_later_bottles?
+          generic_find_matching_tag(tag)
+        else
+          generic_find_matching_tag(tag) ||
+            find_older_compatible_tag(tag)
+        end
       end
-      assert_equal :en, I18n.locale
+    
+          expect(spec.deps.first.name).to eq('foo')
     end
     
-          q = Sidekiq::Queue.new('custom_queue')
-      qs = q.size
-      assert SomeScheduledWorker.perform_in(-300, 'mike')
-      assert_equal 3, ss.size
-      assert_equal qs+1, q.size
+    describe SoftwareSpec do
+  alias_matcher :have_defined_resource, :be_resource_defined
+  alias_matcher :have_defined_option, :be_option_defined
     
-      def perform(idx)
-    #raise idx.to_s if idx % 100 == 1
+    module OS
+  module Mac
+    class Version < ::Version
+      SYMBOLS = {
+        catalina:    '10.15',
+        mojave:      '10.14',
+        high_sierra: '10.13',
+        sierra:      '10.12',
+        el_capitan:  '10.11',
+        yosemite:    '10.10',
+        mavericks:   '10.9',
+      }.freeze
+    
+        def self.lookup_command(command_name)
+      @lookup ||= Hash[commands.zip(command_classes)]
+      command_name = ALIASES.fetch(command_name, command_name)
+      @lookup.fetch(command_name, command_name)
+    end
+    
+    require 'clamp'
+require 'pluginmanager/util'
+require 'pluginmanager/gemfile'
+require 'pluginmanager/install'
+require 'pluginmanager/remove'
+require 'pluginmanager/list'
+require 'pluginmanager/update'
+require 'pluginmanager/pack'
+require 'pluginmanager/unpack'
+require 'pluginmanager/generate'
+require 'pluginmanager/prepare_offline_pack'
+require 'pluginmanager/proxy_support'
+configure_proxy
+    
+    Sidekiq.logger.level = Logger::ERROR
+    
+      it 'shuts down the system' do
+    mgr = new_manager(options)
+    mgr.stop(::Process.clock_gettime(::Process::CLOCK_MONOTONIC))
   end
-end
     
-          # Create an Atom-feed for each index.
-      feed = CategoryFeed.new(self, self.source, category_dir, category)
-      feed.render(self.layouts, site_payload)
-      feed.write(self.dest)
-      # Record the fact that this page has been added, otherwise Site::cleanup will remove it.
-      self.pages << feed
+            assert_equal 1, @retry.size
+        assert_equal 1, @scheduled.size
+      end
     end
+    
+    class TimedWorker
+  include Sidekiq::Worker
+    
+    ## -- Rsync Deploy config -- ##
+# Be sure your public key is listed in your server's ~/.ssh/authorized_keys file
+ssh_user       = 'user@domain.com'
+ssh_port       = '22'
+document_root  = '~/website.com/'
+rsync_delete   = false
+rsync_args     = ''  # Any extra arguments to pass to rsync
+deploy_default = 'rsync'
+    
+    module Jekyll
+    
+    require 'pathname'
+require './plugins/octopress_filters'
