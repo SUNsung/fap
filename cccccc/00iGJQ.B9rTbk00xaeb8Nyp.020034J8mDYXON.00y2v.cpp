@@ -1,281 +1,281 @@
 
         
-          uint8_t* result = allocator.AllocateMemory(1, 1);
-  TF_LITE_MICRO_EXPECT_NE(nullptr, result);
-    
-    #include <gtest/gtest.h>
-#include 'tensorflow/lite/interpreter.h'
-#include 'tensorflow/lite/kernels/custom_ops_register.h'
-#include 'tensorflow/lite/kernels/test_util.h'
-#include 'tensorflow/lite/model.h'
+        #include 'absl/types/span.h'
+#include 'tensorflow/compiler/xla/service/gpu/buffer_allocations.h'
+#include 'tensorflow/compiler/xla/service/gpu/hlo_execution_profiler.h'
+#include 'tensorflow/compiler/xla/service/gpu/sequential_thunk.h'
+#include 'tensorflow/compiler/xla/service/gpu/thunk.h'
+#include 'tensorflow/compiler/xla/service/hlo_instruction.h'
+#include 'tensorflow/core/platform/stream_executor_no_cuda.h'
     
     Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-implied.
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
     
-    
-    {  // Verify metrics.
-  EvaluationStageMetrics metrics = stage.LatestMetrics();
-  EXPECT_EQ(metrics.num_runs(), 1);
-  const auto& max_latency = metrics.process_metrics().total_latency().max_us();
-  EXPECT_GT(max_latency, 0);
-  EXPECT_LT(max_latency, 1e7);
-  EXPECT_LE(metrics.process_metrics().total_latency().last_us(), max_latency);
-  EXPECT_LE(metrics.process_metrics().total_latency().min_us(), max_latency);
-  EXPECT_GT(metrics.process_metrics().total_latency().sum_us(), max_latency);
-  EXPECT_LE(metrics.process_metrics().total_latency().avg_us(), max_latency);
-  EXPECT_EQ(
-      metrics.process_metrics().tflite_inference_metrics().num_inferences(), 2);
-}
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-      if (num_retvals != node_data->NumOutputs()) {
-    return tensorflow::errors::Internal(
-        'Unexpected number of outputs from EagerExecute');
-  }
-    
-    template <typename T, typename Index, int IXDIM>
-struct GatherNdSlice<GPUDevice, T, Index, IXDIM> {
-  Index operator()(const GPUDevice& d, const Index unused_slice_size,
-                   typename TTypes<int32>::Scalar Tscratch,
-                   typename TTypes<T, IXDIM + 1>::ConstTensor Tparams,
-                   typename TTypes<Index>::ConstMatrix Tindices,
-                   typename TTypes<T>::Matrix Tout) {
-    const int64 indices_size = Tindices.dimension(1);
-    const int64 out_size = Tout.size();
-    int64 s_size = Tout.dimension(1);
-    Eigen::array<int64, IXDIM> batch_strides;
-    Eigen::array<int64, IXDIM> batch_indices;
-    if (IXDIM > 0) {
-      batch_strides[size_t(IXDIM - 1)] = s_size;
-      batch_indices[size_t(IXDIM - 1)] = Tparams.dimension(IXDIM - 1);
-    }
-    for (int i = IXDIM - 1; i > 0; --i) {
-      batch_indices[i - 1] = Tparams.dimension(i - 1);
-      batch_strides[i - 1] = batch_strides[i] * Tparams.dimension(i);
-    }
-    GpuLaunchConfig config = GetGpuLaunchConfig(out_size, d);
-    }
-    }
-    
-      std::string error;
-  auto isUptodateOpt = parentUnitWriter.isUnitUpToDateForOutputFile(/*FilePath=*/filename,
-                                                                /*TimeCompareFilePath=*/filename, error);
-  if (!isUptodateOpt.hasValue()) {
-    diags.diagnose(SourceLoc(), diag::error_index_failed_status_check, error);
-    return true;
-  }
-  if (*isUptodateOpt)
-    return false;
-    
-    namespace {
-/// Infers the availability required to access a type.
-class AvailabilityInferenceTypeWalker : public TypeWalker {
-public:
-  ASTContext &AC;
-  AvailabilityContext AvailabilityInfo = AvailabilityContext::alwaysAvailable();
-    }
-    }
-    
-      void appendFunctionSignature(AnyFunctionType *fn,
-                               const ValueDecl *forDecl = nullptr);
-    
-      DiagnosticSuppression(const DiagnosticSuppression &) = delete;
-  DiagnosticSuppression &operator=(const DiagnosticSuppression &) = delete;
-    
-      bool insert(const Key1 &k1, const Key2 &k2, Value &v) {
-    const bool r1 = map1.insert(k1, k2, v);
-    const bool r2 = map2.insert(k2, k1, v);
-    assertConsistent(r1, r2);
-    return r1;
-  }
-  bool insert(const Key2 &k2, const Key1 &k1, Value &v) {
-    return insert(k1, k2, v);
-  }
-  Optional<Value> find(const Key1 &k1, const Key2 &k2) const {
-    auto v = map1.find(k1, k2);
-    assert(assertConsistent(v, map2.find(k2, k1)));
-    return v;
-  }
-  Optional<Value> find(const Key2 &k2, Key1 &k1) const { return find(k1, k2); }
-    
-    double UniValue::get_real() const
-{
-    if (typ != VNUM)
-        throw std::runtime_error('JSON value is not a number as expected');
-    double retval;
-    if (!ParseDouble(getValStr(), &retval))
-        throw std::runtime_error('JSON double out of range');
-    return retval;
-}
-    
-    #ifndef BITCOIN_CRYPTO_RIPEMD160_H
-#define BITCOIN_CRYPTO_RIPEMD160_H
-    
-    TEST(FormatTest, InternalKey_EncodeDecode) {
-  const char* keys[] = { '', 'k', 'hello', 'longggggggggggggggggggggg' };
-  const uint64_t seq[] = {
-    1, 2, 3,
-    (1ull << 8) - 1, 1ull << 8, (1ull << 8) + 1,
-    (1ull << 16) - 1, 1ull << 16, (1ull << 16) + 1,
-    (1ull << 32) - 1, 1ull << 32, (1ull << 32) + 1
-  };
-  for (int k = 0; k < sizeof(keys) / sizeof(keys[0]); k++) {
-    for (int s = 0; s < sizeof(seq) / sizeof(seq[0]); s++) {
-      TestKey(keys[k], seq[s], kTypeValue);
-      TestKey('hello', 1, kTypeDeletion);
-    }
-  }
-}
-    
-    Status DumpTable(Env* env, const std::string& fname, WritableFile* dst) {
-  uint64_t file_size;
-  RandomAccessFile* file = NULL;
-  Table* table = NULL;
-  Status s = env->GetFileSize(fname, &file_size);
-  if (s.ok()) {
-    s = env->NewRandomAccessFile(fname, &file);
-  }
-  if (s.ok()) {
-    // We use the default comparator, which may or may not match the
-    // comparator used in this database. However this should not cause
-    // problems since we only use Table operations that do not require
-    // any comparisons.  In particular, we do not call Seek or Prev.
-    s = Table::Open(Options(), file, file_size, &table);
-  }
-  if (!s.ok()) {
-    delete table;
-    delete file;
-    return s;
-  }
-    }
-    
-    namespace leveldb {
-    }
+      VLOG(2) << 'Infeeding to GPU: ' << hlo_instruction()->ToString();
     
     
-template <>
-void
-EnvmapAttribute::readValueFrom (OPENEXR_IMF_INTERNAL_NAMESPACE::IStream &is, int size, int version)
-{
-    unsigned char tmp;
-    Xdr::read <StreamIO> (is, tmp);
-    _value = Envmap (tmp);
-}
-    
-        int             _rleSymbol;        // RLE symbol written by the encoder.
-                                       // This could be 65536, so beware
-                                       // when you use shorts to hold things.
-    
-    
-typedef TypedAttribute<float> FloatAttribute;
-template <> IMF_EXPORT const char *FloatAttribute::staticTypeName ();
-    
-    //-----------------------------------------------------------------------------
-//
-//      class Slice
-//      class FrameBuffer
-//
-//-----------------------------------------------------------------------------
-    
-    
-//-----------------------------------------------------------------------------
-//
-//	Low-level file input and output for OpenEXR.
-//
-//-----------------------------------------------------------------------------
-    
-                _data->tFile = new TiledInputFile (_data->header,
-                                               _data->_streamData->is,
-                                               _data->version,
-                                               _data->numThreads);
-        }
-        
-        else if(!_data->header.hasType() || _data->header.type()==SCANLINEIMAGE)
-        {
-            _data->sFile = new ScanLineInputFile (_data->header,
-                                                  _data->_streamData->is,
-                                                  _data->numThreads);
-        }else{
-            // type set but not recognised
-            
-            THROW(IEX_NAMESPACE::ArgExc, 'InputFile cannot handle parts of type ' << _data->header.type());
-        }
-    }
-    else
     {
-        if(_data->header.hasType() && _data->header.type()==DEEPSCANLINE)
-        {
-            _data->isTiled=false;
-            const Box2i &dataWindow = _data->header.dataWindow();
-            _data->minY = dataWindow.min.y;
-            _data->maxY = dataWindow.max.y;
-            
-            _data->dsFile = new DeepScanLineInputFile (_data->part);
-            _data->compositor = new CompositeDeepScanLine;
-            _data->compositor->addSource(_data->dsFile);
-        }
-        else if (isTiled (_data->header.type()))
-        {
-            _data->isTiled = true;
-            _data->lineOrder = _data->header.lineOrder();
+    {}  // namespace gpu
+}  // namespace xla
     
     
-void
-InputPart::rawPixelDataToBuffer (int scanLine, char *pixelData, int &pixelDataSize) const
-{
-    file->rawPixelDataToBuffer(scanLine, pixelData, pixelDataSize);
+    {
+    {}  // namespace gpu
+}  // namespace xla
+    
+    
+    {        // TODO(b/111309141): Run this on a separate stream so it doesn't block
+        // the GPU from doing work during the transfer. This could be handled by
+        // making StreamAssignment do something intelligent with outfeed thunks.
+        stream
+            .ThenMemcpy((*buffer)->destination()->untyped_data(), data_address,
+                        (*buffer)->length())
+            .ThenDoHostCallback([buffer]() { (*buffer)->Done(); });
+        return Status::OK();
+      }));
+    
+    namespace xla {
+namespace gpu {
+    }
+    }
+    
+    #include 'absl/strings/str_cat.h'
+#include 'absl/strings/str_format.h'
+#include 'tensorflow/compiler/xla/service/gpu/hlo_execution_profiler.h'
+#include 'tensorflow/compiler/xla/types.h'
+#include 'tensorflow/compiler/xla/util.h'
+#include 'tensorflow/compiler/xla/xla_data.pb.h'
+#include 'tensorflow/core/platform/logging.h'
+#include 'tensorflow/core/platform/stream_executor_no_cuda.h'
+#include 'tensorflow/stream_executor/blas.h'
+#include 'tensorflow/stream_executor/device_memory.h'
+    
+      Status ExecuteOnStream(const ExecuteParams& params) override;
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    class TensorScatterAddOp : public XlaOpKernel {
+ public:
+  explicit TensorScatterAddOp(OpKernelConstruction* context)
+      : XlaOpKernel(context) {}
+    }
+    
+    #include <algorithm>
+#include 'third_party/eigen3/unsupported/Eigen/CXX11/Tensor'
+#include 'tensorflow/core/framework/op_kernel.h'
+#include 'tensorflow/core/framework/register_types.h'
+#include 'tensorflow/core/framework/tensor.h'
+#include 'tensorflow/core/framework/tensor_types.h'
+#include 'tensorflow/core/platform/logging.h'
+#include 'tensorflow/core/platform/types.h'
+#include 'tensorflow/core/util/work_sharder.h'
+    
+     protected:
+  HDF5DataLayerTest()
+      : filename(NULL),
+        blob_top_data_(new Blob<Dtype>()),
+        blob_top_label_(new Blob<Dtype>()),
+        blob_top_label2_(new Blob<Dtype>()) {}
+  virtual void SetUp() {
+    blob_top_vec_.push_back(blob_top_data_);
+    blob_top_vec_.push_back(blob_top_label_);
+    blob_top_vec_.push_back(blob_top_label2_);
+    }
+    
+    template <>
+void hdf5_load_nd_dataset<float>(hid_t file_id, const char* dataset_name_,
+        int min_dim, int max_dim, Blob<float>* blob, bool reshape) {
+  hdf5_load_nd_dataset_helper(file_id, dataset_name_, min_dim, max_dim, blob,
+                              reshape);
+  herr_t status = H5LTread_dataset_float(
+    file_id, dataset_name_, blob->mutable_cpu_data());
+  CHECK_GE(status, 0) << 'Failed to read float dataset ' << dataset_name_;
 }
     
+    #include 'caffe/layers/neuron_layer.hpp'
     
-template <>
-const char *
-IntAttribute::staticTypeName ()
-{
-    return 'int';
-}
+    template <typename Dtype>
+void ClipLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& top,
+    const vector<bool>& propagate_down,
+    const vector<Blob<Dtype>*>& bottom) {
+  if (propagate_down[0]) {
+    const Dtype* bottom_data = bottom[0]->cpu_data();
+    const Dtype* top_diff = top[0]->cpu_diff();
+    Dtype* bottom_diff = bottom[0]->mutable_cpu_diff();
+    const int count = bottom[0]->count();
+    }
+    }
     
-      std::multimap<grpc::string_ref, grpc::string_ref>* GetRecvTrailingMetadata()
-      override {
-    GPR_CODEGEN_ASSERT(false &&
-                       'It is illegal to call GetRecvTrailingMetadata on a '
-                       'method which has a Cancel notification');
-    return nullptr;
+    TYPED_TEST(NeuronLayerTest, TestPReLUInPlace) {
+  typedef typename TypeParam::Dtype Dtype;
+  // Set layer parameters
+  LayerParameter ip_layer_param;
+  LayerParameter prelu_layer_param;
+  InnerProductParameter *ip_param =
+      ip_layer_param.mutable_inner_product_param();
+  ip_param->mutable_weight_filler()->set_type('gaussian');
+  ip_param->set_num_output(3);
+  InnerProductLayer<Dtype> ip(ip_layer_param);
+  PReLULayer<Dtype> prelu(prelu_layer_param);
+  InnerProductLayer<Dtype> ip2(ip_layer_param);
+  PReLULayer<Dtype> prelu2(prelu_layer_param);
+  // Set up blobs
+  vector<Blob<Dtype>*> blob_bottom_vec_2;
+  vector<Blob<Dtype>*> blob_middle_vec_2;
+  vector<Blob<Dtype>*> blob_top_vec_2;
+  shared_ptr<Blob<Dtype> > blob_bottom_2(new Blob<Dtype>());
+  shared_ptr<Blob<Dtype> > blob_middle_2(new Blob<Dtype>());
+  shared_ptr<Blob<Dtype> > blob_top_2(new Blob<Dtype>());
+  blob_bottom_vec_2.push_back(blob_bottom_2.get());
+  blob_middle_vec_2.push_back(blob_middle_2.get());
+  blob_top_vec_2.push_back(blob_top_2.get());
+  blob_bottom_2->CopyFrom(*this->blob_bottom_, false, true);
+  // SetUp layers
+  ip.SetUp(this->blob_bottom_vec_, this->blob_top_vec_);
+  prelu.SetUp(this->blob_top_vec_, this->blob_top_vec_);
+  ip2.SetUp(blob_bottom_vec_2, blob_middle_vec_2);
+  prelu2.SetUp(blob_middle_vec_2, blob_top_vec_2);
+  caffe_copy(ip2.blobs()[0]->count(), ip.blobs()[0]->cpu_data(),
+      ip2.blobs()[0]->mutable_cpu_data());
+  // Forward in-place
+  ip.Forward(this->blob_bottom_vec_, this->blob_top_vec_);
+  prelu.Forward(this->blob_top_vec_, this->blob_top_vec_);
+  // Forward non-in-place
+  ip2.Forward(blob_bottom_vec_2, blob_middle_vec_2);
+  prelu2.Forward(blob_middle_vec_2, blob_top_vec_2);
+  // Check numbers
+  for (int s = 0; s < blob_top_2->count(); ++s) {
+    EXPECT_EQ(this->blob_top_->cpu_data()[s], blob_top_2->cpu_data()[s]);
   }
-    
-      GPR_ASSERT(WSAConnect(cli_sock, (grpc_sockaddr*)&addr, addr_len, NULL, NULL,
-                        NULL, NULL) == 0);
-  svr_sock = accept(lst_sock, (grpc_sockaddr*)&addr, &addr_len);
-  GPR_ASSERT(svr_sock != INVALID_SOCKET);
-    
-    DWORD grpc_get_default_wsa_socket_flags() { return s_wsa_socket_flags; }
-    
-    
-    {  gpr_setenv(name, value);
-  retrieved_value = gpr_getenv(name);
-  GPR_ASSERT(retrieved_value != nullptr);
-  GPR_ASSERT(strcmp(value, retrieved_value) == 0);
-  gpr_free(retrieved_value);
+  // Fill top diff with random numbers
+  shared_ptr<Blob<Dtype> > tmp_blob(new Blob<Dtype>());
+  tmp_blob->ReshapeLike(*blob_top_2.get());
+  FillerParameter filler_param;
+  GaussianFiller<Dtype> filler(filler_param);
+  filler.Fill(tmp_blob.get());
+  caffe_copy(blob_top_2->count(), tmp_blob->cpu_data(),
+      this->blob_top_->mutable_cpu_diff());
+  caffe_copy(blob_top_2->count(), tmp_blob->cpu_data(),
+      blob_top_2->mutable_cpu_diff());
+  // Backward in-place
+  vector<bool> propagate_down;
+  propagate_down.push_back(true);
+  prelu.Backward(this->blob_top_vec_, propagate_down, this->blob_top_vec_);
+  ip.Backward(this->blob_top_vec_, propagate_down, this->blob_bottom_vec_);
+  // Backward non-in-place
+  prelu2.Backward(blob_top_vec_2, propagate_down, blob_middle_vec_2);
+  ip2.Backward(blob_middle_vec_2, propagate_down, blob_bottom_vec_2);
+  // Check numbers
+  for (int s = 0; s < blob_bottom_2->count(); ++s) {
+    EXPECT_FLOAT_EQ(this->blob_bottom_->cpu_diff()[s],
+        blob_bottom_2->cpu_diff()[s]);
+  }
+  for (int s = 0; s < ip.blobs()[0]->count(); ++s) {
+    EXPECT_FLOAT_EQ(ip.blobs()[0]->cpu_diff()[s],
+        ip2.blobs()[0]->cpu_diff()[s]);
+  }
+  for (int s = 0; s < ip.blobs()[1]->count(); ++s) {
+    EXPECT_FLOAT_EQ(ip.blobs()[1]->cpu_diff()[s],
+        ip2.blobs()[1]->cpu_diff()[s]);
+  }
+  for (int s = 0; s < prelu.blobs()[0]->count(); ++s) {
+    EXPECT_FLOAT_EQ(prelu.blobs()[0]->cpu_diff()[s],
+        prelu2.blobs()[0]->cpu_diff()[s]);
+  }
 }
     
-    GPR_GLOBAL_CONFIG_DECLARE_BOOL(bool_var);
+      // Make and apply the update value for the current iteration.
+  virtual void ApplyUpdate() = 0;
+    
+    	wchar_t commandStr[MAX_PATH + 20] = { 0 };
+	wchar_t baseCommandStr[MAX_PATH + 20] = { 0 };
+	if (!single) {
+		swprintf_s(baseCommandStr, L'\'%s\'', exePath);
+	}
+	else {
+		swprintf_s(baseCommandStr, L'\'%s\' /single', exePath);
+	}
     
     
-    { protected:
-  std::unique_ptr<Server> server_;
-  std::unique_ptr<grpc::testing::EchoTestService::Stub> stub_;
-  std::unique_ptr<ProtoReflectionDescriptorDatabase> desc_db_;
-  std::unique_ptr<protobuf::DescriptorPool> desc_pool_;
-  std::unordered_set<string> known_files_;
-  std::unordered_set<string> known_types_;
-  const protobuf::DescriptorPool* ref_desc_pool_;
-  int port_;
-  reflection::ProtoServerReflectionPlugin plugin_;
+    {  switch (level) {
+  case psLevel1:
+    state->getStrokeGray(&gray);
+    writePSFmt('{0:.4g} G\n', colToDbl(gray));
+    break;
+  case psLevel1Sep:
+    state->getStrokeCMYK(&cmyk);
+    c = colToDbl(cmyk.c);
+    m = colToDbl(cmyk.m);
+    y = colToDbl(cmyk.y);
+    k = colToDbl(cmyk.k);
+    writePSFmt('{0:.4g} {1:.4g} {2:.4g} {3:.4g} K\n', c, m, y, k);
+    addProcessColor(c, m, y, k);
+    break;
+  case psLevel2:
+  case psLevel3:
+    if (state->getStrokeColorSpace()->getMode() != csPattern) {
+      colorPtr = state->getStrokeColor();
+      writePS('[');
+      for (i = 0; i < state->getStrokeColorSpace()->getNComps(); ++i) {
+	if (i > 0) {
+	  writePS(' ');
+	}
+	writePSFmt('{0:.4g}', colToDbl(colorPtr->c[i]));
+      }
+      writePS('] SC\n');
+    }
+    break;
+  case psLevel2Sep:
+  case psLevel3Sep:
+    if (state->getStrokeColorSpace()->getMode() == csSeparation) {
+      sepCS = (GfxSeparationColorSpace *)state->getStrokeColorSpace();
+      color.c[0] = gfxColorComp1;
+      sepCS->getCMYK(&color, &cmyk);
+      writePSFmt('{0:.4g} {1:.4g} {2:.4g} {3:.4g} {4:.4g} ({5:t}) CK\n',
+		 colToDbl(state->getStrokeColor()->c[0]),
+		 colToDbl(cmyk.c), colToDbl(cmyk.m),
+		 colToDbl(cmyk.y), colToDbl(cmyk.k),
+		 sepCS->getName());
+      addCustomColor(sepCS);
+    } else {
+      state->getStrokeCMYK(&cmyk);
+      c = colToDbl(cmyk.c);
+      m = colToDbl(cmyk.m);
+      y = colToDbl(cmyk.y);
+      k = colToDbl(cmyk.k);
+      writePSFmt('{0:.4g} {1:.4g} {2:.4g} {3:.4g} K\n', c, m, y, k);
+      addProcessColor(c, m, y, k);
+    }
+    break;
+  }
+  t3Cacheable = gFalse;
+}
+    
+    
+    {  GooList intervals;
 };
+
     
-      grpc::string name() override { return PLUGIN_NAME; }
+    #include 'PageTransition.h'
+    
+    //------------------------------------------------------------------------
+// Parser
+//------------------------------------------------------------------------
+    
+                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    
+    bool ImGui_ImplOpenGL2_CreateFontsTexture()
+{
+    // Build texture atlas
+    ImGuiIO& io = ImGui::GetIO();
+    unsigned char* pixels;
+    int width, height;
+    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);   // Load as RGBA 32-bits (75% of the memory is wasted, but default font is so small) because it is more likely to be compatible with user's existing shaders. If your ImTextureId represent a higher-level concept than just a GL texture id, consider calling GetTexDataAsAlpha8() instead to save on GPU memory.
+    }
