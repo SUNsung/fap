@@ -1,124 +1,70 @@
 
         
-            def order_top_with_pinned_category_for(score)
-      # display pinned topics first
-      -'CASE WHEN (COALESCE(topics.pinned_at, '#{lowest_date}') > COALESCE(tu.cleared_pinned_at, '#{lowest_date}')) THEN 0 ELSE 1 END,
-       top_topics.#{score} DESC,
-       topics.bumped_at DESC'
+              def monotonic_subscribe(pattern = nil, callback = nil, &block)
+        notifier.subscribe(pattern, callback, monotonic: true, &block)
+      end
+    
+        DATA_URL = 'data:'.freeze
+    
+        alias_method :insert_before, :insert
+    
+        def process_response?(response)
+      raise NotImplementedError
     end
     
-      def create
-    raise Discourse::NotFound unless report_collection_enabled?
+          before do
+        allow_any_instance_of(Vagrant::Errors::VagrantError).
+          to receive(:translate_error)
+        allow(machine.ui).to receive(:error)
+      end
     
-          script_srcs = parse(builder.build)['script-src']
     
-        def normalize(directive)
-      directive.to_s.gsub('-', '_').to_sym
-    end
-    
-        def report_uri
-      '#{base_url}/csp_reports'
+  describe '#rsync_command' do
+    it 'returns the rsync command' do
+      expect( subject.rsync_command(machine) ).to eq('sudo rsync')
     end
   end
-end
-
     
-        def build_theme_extension(raw)
-      {}.tap do |extension|
-        raw.split('|').each do |entry|
-          directive, source = entry.split(':', 2).map(&:strip)
+      subject { described_class.new(machine) }
     
-      it 'can be extended by plugins' do
-    plugin = Class.new(Plugin::Instance) do
-      attr_accessor :enabled
-      def enabled?
-        @enabled
-      end
-    end.new(nil, '#{Rails.root}/spec/fixtures/plugins/csp_extension/plugin.rb')
+        let(:box_output_path) { File.join(scratch, 'package.box') }
     
-      def self.last_seen_key(id)
-    # frozen
-    -'user-last-seen:#{id}'
-  end
+    require Vagrant.source_root.join('plugins/provisioners/chef/cap/omnios/chef_installed')
     
-        # possible we have an api call, impersonate
-    if api_key
-      current_user = lookup_api_user(api_key, request)
-      raise Discourse::InvalidAccess.new(I18n.t('invalid_api_credentials'), nil, custom_message: 'invalid_api_credentials') unless current_user
-      raise Discourse::InvalidAccess if current_user.suspended? || !current_user.active
-      @env[API_KEY_ENV] = true
-      rate_limit_admin_api_requests(api_key)
-    end
-    
-        def URIEncodePair(cc1, cc2, result, index)
-      u = ((cc1 >> 6) & 0xF) + 1;
-      w = (cc1 >> 2) & 0xF;
-      x = cc1 & 3;
-      y = (cc2 >> 6) & 0xF;
-      z = cc2 & 63;
-      octets = Array.new(4);
-      octets[0] = (u >> 2) + 240;
-      octets[1] = (((u & 3) << 4) | w) + 128;
-      octets[2] = ((x << 4) | y) + 128;
-      octets[3] = z + 128;
-      return URIEncodeOctets(octets, result, index);
-    end
-    
-          def show_revert
-        !@message
-      end
-    
-          # return path set in app.rb not @page.path
-      def path
-        @path
-      end
-    
-          def string_to_code string
-        # sha bytes
-        b = [Digest::SHA1.hexdigest(string)[0, 20]].pack('H*').bytes.to_a
-        # Thanks donpark's IdenticonUtil.java for this.
-        # Match the following Java code
-        # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
-        #	 ((b[2] & 0xFF) << 8) | (b[3] & 0xFF)
-    
-    MiniTest::Reporters.use!
-    
-          def call(env)
-        @mg.call(env)
-      end
-    end
-    
-    # Rack::Handler does not work with Ctrl + C. Use Rack::Server instead.
-    Rack::Server.new(:app => MapGollum.new(base_path), :Port => options[:port], :Host => options[:bind]).start
-  end
-end
-
-    
-        # Extract the path string that Gollum::Wiki expects
-    def extract_path(file_path)
-      return nil if file_path.nil?
-      last_slash = file_path.rindex('/')
-      if last_slash
-        file_path[0, last_slash]
-      end
-    end
-    
-      s.authors  = ['Tom Preston-Werner', 'Rick Olson']
-  s.email    = 'tom@github.com'
-  s.homepage = 'http://github.com/gollum/gollum'
-    
-        context 'active sessions' do
       before do
-        cmd = '#{project.tmux_command} ls 2> /dev/null'
-        resp = ''\
-          'foo: 1 window (created Sun May 25 10:12:00 1986) [0x0] (detached)\n'\
-          'bar: 1 window (created Sat Sept 01 00:00:00 1990) [0x0] (detached)'
-        call_tmux_ls = receive(:`).with(cmd).at_least(:once).and_return(resp)
+    allow(machine).to receive(:communicate).and_return(communicator)
+  end
     
-        context '$EDITOR is not set' do
-      before do
-        allow(ENV).to receive(:[]).with('EDITOR') { nil }
+          # Add the sub-machine configuration to the loader and keys
+      vm_config_key = '#{object_id}_machine_#{name}'
+      @loader.set(vm_config_key, sub_machine.config_procs)
+      keys << vm_config_key
+    
+    require_relative '../config/bundler_helper'
+require 'etc'
+    
+          def delete_authorization_session_variables
+        session.delete(:client_id)
+        session.delete(:response_type)
+        session.delete(:redirect_uri)
+        session.delete(:scopes)
+        session.delete(:state)
+        session.delete(:nonce)
       end
     
-          Kernel.system('$EDITOR #{new_config_path}')
-    end
+          def validation_fail_as_json(e)
+        render json: {error: :invalid_client_metadata, error_description: e.message}, status: 400
+      end
+    
+          def fetch_public_key(o_auth_app, jwt)
+        public_key = fetch_public_key_from_json(o_auth_app.jwks, jwt)
+        if public_key.empty? && o_auth_app.jwks_uri
+          response = Faraday.get(o_auth_app.jwks_uri)
+          public_key = fetch_public_key_from_json(response.body, jwt)
+        end
+        raise Rack::OAuth2::Server::Authorize::BadRequest(:unauthorized_client) if public_key.empty?
+        public_key
+      end
+    
+    class MessagesController < ApplicationController
+  before_action :authenticate_user!
