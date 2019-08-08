@@ -1,103 +1,114 @@
 
         
-        DATA = {'foo'=>'bar', 'alpha'=>{'beta'=>'gamma'}, 'lipsum'=>['lorem', 'ipsum', 'dolor']}
-    
-    
-def pathutil_relative
-  Pathutil.new(DOC_PATH).relative_path_from(COL_PATH).to_s
-end
-    
-    CONTENT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
-    
-        it 'understands hl=8-' do
-      stub(params).[](:hl) { '8-' }
-      expect((1..10).select { |i| highlighted?(i) }).to eq [8, 9, 10]
-    end
-    
-        describe '#agents_dot' do
-      before do
-        @agents = [
-          @foo = Agents::DotFoo.new(name: 'foo').tap { |agent|
-            agent.user = users(:bob)
-            agent.save!
-          },
-    
-        context '#load_workers' do
-      before do
-        AgentRunner.class_variable_set(:@@agents, [HuginnScheduler, DelayedJobWorker])
+            # The path used after confirmation.
+    def after_confirmation_path_for(resource_name, resource)
+      if signed_in?(resource_name)
+        signed_in_root_path(resource)
+      else
+        new_session_path(resource_name)
       end
-    
-      describe '#hour_to_schedule_name' do
-    it 'for 0h' do
-      expect(@scheduler.send(:hour_to_schedule_name, 0)).to eq('midnight')
     end
     
-        it 'should work with nested hashes' do
-      @agent.options['very'] = {'nested' => '$.value'}
-      LiquidMigrator.convert_all_agent_options(@agent)
-      expect(@agent.reload.options).to eq({'auth_token' => 'token', 'color' => 'yellow', 'very' => {'nested' => '{{value}}'}, 'notify' => false, 'room_name' => 'test', 'username' => '{{username}}', 'message' => '{{message}}'})
-    end
+      # Check if there is no signed in user before doing the sign out.
+  #
+  # If there is no signed in user, it will set the flash message and redirect
+  # to the after_sign_out path.
+  def verify_signed_out_user
+    if all_signed_out?
+      set_flash_message! :notice, :already_signed_out
     
-    Given(/^(\d+) valid existing releases$/) do |num|
-  a_day = 86_400 # in seconds
-  offset = -(a_day * num.to_i)
-  num.to_i.times do
-    run_vagrant_command('mkdir -p #{TestApp.release_path(TestApp.timestamp(offset))}')
-    offset += a_day
-  end
-end
-    
-      at_exit do
-    if ENV['KEEP_RUNNING']
-      puts 'Vagrant vm will be left up because KEEP_RUNNING is set.'
-      puts 'Rerun without KEEP_RUNNING set to cleanup the vm.'
-    else
-      vagrant_cli_command('destroy -f')
-    end
+      # Returns real navigational formats which are supported by Rails
+  def navigational_formats
+    @navigational_formats ||= Devise.navigational_formats.select { |format| Mime::EXTENSION_LOOKUP[format.to_s] }
   end
     
-        def cmdline_filters
-      @cmdline_filters ||= []
-    end
+    if defined?(ActionMailer)
+  class Devise::Mailer < Devise.parent_mailer.constantize
+    include Devise::Mailers::Helpers
     
-          # Given a callable that provides a value, wrap the callable with another
-      # object that responds to `call`. This new object will perform validation
-      # and then return the original callable's value.
-      #
-      # If the callable is a `Question`, the object returned by this method will
-      # also be a `Question` (a `ValidatedQuestion`, to be precise). This
-      # ensures that `is_a?(Question)` remains true even after the validation
-      # wrapper is applied. This is needed so that `Configuration#is_question?`
-      # works as expected.
-      #
-      def assert_valid_later(key, callable)
-        validation_callback = lambda do
-          value = callable.call
-          assert_valid_now(key, value)
-          value
-        end
-    
-          # Returns an array of source file location(s) where the given key was
-      # assigned (i.e. where `set` was called). If the key was never assigned,
-      # returns `nil`.
-      def source_locations(key)
-        locations[key]
+          # Forgets the given resource by deleting a cookie
+      def forget_me(resource)
+        scope = Devise::Mapping.find_scope!(resource)
+        resource.forget_me!
+        cookies.delete(remember_key(resource, scope), forget_cookie_values(resource))
       end
     
-      <a href='/'>Refresh page</a>
+          private
     
-      # Tell Action Mailer not to deliver emails to the real world.
-  # The :test delivery method accumulates sent emails in the
-  # ActionMailer::Base.deliveries array.
-  config.action_mailer.delivery_method = :test
+      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
+     options[:store] != false && !env['devise.skip_timeoutable']
+    last_request_at = warden.session(scope)['last_request_at']
+    
+          # Resets reset password token and send reset password instructions by email.
+      # Returns the token sent in the e-mail.
+      def send_reset_password_instructions
+        token = set_reset_password_token
+        send_reset_password_instructions_notification(token)
+    
+      let(:user) { Fabricate(:user) }
+    
+      private
+    
+    RSpec.describe ActivityPub::Activity::Move do
+  let(:follower)    { Fabricate(:account) }
+  let(:old_account) { Fabricate(:account) }
+  let(:new_account) { Fabricate(:account) }
+    
+      context 'when the recipient follows the sender' do
+    before do
+      recipient.follow!(sender)
+    end
+    
+      include Msf::Payload::Single
+  include Msf::Sessions::CommandShellOptions
+    
+    lib_path = root.join('lib').to_path
+    
+    # Framework context and core classes
+require 'msf/core/framework'
+require 'msf/core/db_manager'
+require 'msf/core/event_dispatcher'
+require 'msf/core/module_manager'
+require 'msf/core/module_set'
+require 'msf/core/plugin_manager'
+require 'msf/core/session'
+require 'msf/core/session_manager'
+require 'msf/core/analyze'
+    
+      bins.each do |from, to|
+    next if (from != 'metsvc.exe' and remove)
+    to ||= from
+    print_status(' >> Uploading #{from}...')
+    fd = client.fs.file.new(tempdir + '\\' + to, 'wb')
+    path = (from == 'metsrv.x86.dll') ? MetasploitPayloads.meterpreter_path('metsrv','x86.dll') : File.join(based, from)
+    fd.write(::File.read(path, ::File.size(path)))
+    fd.close
+  end
+    
+      describe 'client' do
+    it 'pushes messages to redis' do
+      q = Sidekiq::Queue.new('foo')
+      pre = q.size
+      jid = Sidekiq::Client.push('queue' => 'foo', 'class' => MyWorker, 'args' => [1, 2])
+      assert jid
+      assert_equal 24, jid.size
+      assert_equal pre + 1, q.size
+    end
+    
+        def locales
+      ['web/locales']
+    end
+    
+      describe 'lifecycle events' do
+    it 'handles invalid input' do
+      Sidekiq.options[:lifecycle_events][:startup].clear
+    
+        after do
+      Sidekiq::Testing.disable!
+      Sidekiq::Queues.clear_all
+    end
+    
+      def perform(msg='lulz you forgot a msg!')
+    $redis.lpush('sinkiq-example-messages', msg)
+  end
+end
