@@ -1,155 +1,85 @@
 
         
-        private:
-    Ui::SignVerifyMessageDialog *ui;
-    WalletModel *model;
-    const PlatformStyle *platformStyle;
-    
-      // (a) Cause log sync calls to fail
-  Options options = CurrentOptions();
-  options.env = env_;
-  Reopen(&options);
-  env_->data_sync_error_.Release_Store(env_);
-    
-    #include <ctype.h>
-#include <stdio.h>
-#include 'db/filename.h'
-#include 'db/dbformat.h'
-#include 'leveldb/env.h'
-#include 'util/logging.h'
-    
-      fname = CurrentFileName('foo');
-  ASSERT_EQ('foo/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(0, number);
-  ASSERT_EQ(kCurrentFile, type);
-    
-    INSTANTIATE_TEST_CASE_P(videoio, videoio_bunny,
-                          testing::Combine(
-                              testing::ValuesIn(bunny_params),
-                              testing::ValuesIn(backend_params)));
-    
-        static CV_ALWAYS_INLINE
-    void calculate_integral_for_line(const uchar *srcs,
-                                     double *sums, double *sums_above,
-                                     double *sqsums, double *sqsums_above,
-                                     int num_ops_in_line)
+            virtual void CopyTo(ComputationNodeBasePtr nodeP, const std::wstring& newName, const CopyNodeFlags flags) const override
     {
-        __m512i sum_accumulator   = _mm512_setzero_si512();  // holds rolling sums for the line
-        __m512i sqsum_accumulator = _mm512_setzero_si512();  // holds rolling sqsums for the line
-    }
-    
-    Ptr<IVideoWriter> cv::create_MFX_writer(const std::string &filename, int _fourcc, double fps, const Size &frameSize, bool isColor)
-{
-    if (codecIdByFourCC(_fourcc) > 0)
-    {
-        Ptr<VideoWriter_IntelMFX> a = makePtr<VideoWriter_IntelMFX>(filename, _fourcc, fps, frameSize, isColor);
-        if (a->isOpened())
-            return a;
-    }
-    return Ptr<VideoWriter_IntelMFX>();
-}
-
-    
-    #include 'precomp.hpp'
-#ifdef HAVE_EIGEN
-#include <Eigen/Core>
-#include <Eigen/Dense>
-#endif
-    
-        template <typename T> struct logical_not : unary_function<T, bool>
-    {
-        __device__ __forceinline__ bool operator ()(typename TypeTraits<T>::ParameterType a) const
+        Base::CopyTo(nodeP, newName, flags);
+        if (flags & CopyNodeFlags::copyNodeValue)
         {
-            return !a;
+            auto node = dynamic_pointer_cast<QuantizedTimesNode<ElemType>>(nodeP);
+            node->m_bitShiftA = m_bitShiftA;
+            node->m_bitShiftB = m_bitShiftB;
         }
-        __host__ __device__ __forceinline__ logical_not() {}
-        __host__ __device__ __forceinline__ logical_not(const logical_not&) {}
-    };
-    
-    
-    // Equals the GNU Octave colormap 'jet'.
-    class Jet : public ColorMap {
     }
     
-        glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+        // Implementation of Blockwise Model Update and Filtering (BMUF, a.k.a. block momentum) 
+    // For detail, see the following paper
+    // Kai Chen and Qiang Huo, 'Scalable training of deep learning machines by incremental block training 
+    // with intra-block parallel optimization and blockwise model-update filtering', 
+    // in International Conference on Acoustics, Speech and Signal Processing , March 2016, Shanghai, China. 
     
+                    // Subtract it from the previous model
+                auto blockGrad = std::make_shared<Matrix<ElemType>>(prevWeight, CPUDEVICE);
+                *blockGrad -= currentWeight;                                              // matW becomes local block gradient (of one worker)
     
-    // exception type_error.304
-    try
+                nodePtr->AttachInputs(inputNodes);
+        }
+        else
+        {
+#if 1
+            vector<ComputationNodeBasePtr> inputNodes;
+            for (let& in : inputs)
+            {
+                ComputationNodeBase *p = (ComputationNodeBase *)in;
+                inputNodes.push_back(p ? p->shared_from_this() : nullptr);
+            }
+    
+            if (fstream.TryGetMarker(FileMarker::fileMarkerBeginSection, L'BOutputNodes'))
+        {
+            fstream >> num;
+            for (size_t i = 0; i < num; i++)
+            {
+                fstream >> nodeName;
+                AddToNodeGroup(L'output', GetNodeFromName(nodeName));
+            }
+            fstream.GetMarker(FileMarker::fileMarkerEndSection, L'EOutputNodes');
+        }
+    
+    public:
+    // TODO: move these to ComputationNetworkBuilder.cpp
+    
+        // helper to access to element(0,0) without having to type-cast
+    virtual double Get00Element() const = 0;
+    virtual MatrixBasePtr ValuePtr() const = 0; // for use in readers that pass the agnostic object around
+    
+        template<class ElemType>
+    static size_t GetNumSubminibatchesNeeded(IDataReader* dataReader,
+                                           size_t maxSamplesInRAM,
+                                           size_t numSubminibatches,
+                                           size_t tunedMBSize)
     {
-        // use at() on a non-object type
-        json str = 'I am a string';
-        str.at('the good') = 'Another string';
-    }
-    catch (json::type_error& e)
-    {
-        std::cout << e.what() << '\n';
+        if (numSubminibatches > 1) // user-specified maximum number of samples
+            return numSubminibatches;
     }
     
-        // output changed array
-    std::cout << array << '\n';
-    
-        // create (floating point) JSON numbers
-    json j_ok(v_ok);
-    json j_nan(v_nan);
-    json j_infinity(v_infinity);
-    json j_float(n_float);
-    json j_float_nan(n_float_nan);
-    json j_double(n_double);
+    struct AdamInfo
+{
+    double meanMomentum; //beta_1
+    double varMomentum;  //beta_2
+    double epsilon;
+    }
     
     
-    {/**
- * @brief Start a file carve of the given paths
- *
- * @return A status returning if the carves were started successfully
- */
-Status carvePaths(const std::set<std::string>& paths);
-} // namespace osquery
-
-    
-        writeTextFile(files_to_carve_dir_ / 'secrets.txt',
-                  'This is a message I'd rather no one saw.');
-    writeTextFile(files_to_carve_dir_ / 'evil.exe',
-                  'MZP\x00\x02\x00\x00\x00\x04\x00\x0f\x00\xff\xff');
-    
-    
-    {  return Status::success();
+    {    eval->Destroy();
 }
     
-    namespace fs = boost::filesystem;
+        // Accumulators should contain mean values. We calculated them based on aggregated sums and number of samples.
+    for (Matrix<ElemType>* acc : accumulatorValues)
+        (*acc) /= (ElemType) gradHeader->numSamples;
     
-    ExpectedSuccess<DatabaseError> InMemoryDatabase::putString(
-    const std::string& domain,
-    const std::string& key,
-    const std::string& value) {
-  return putValue(domain, key, value);
-}
-    
-    
-    {} // namespace osquery
-
-    
-      // If this is an extension and the flag was not found, forward the request.
-  if (Registry::get().external() && !found) {
-    PluginResponse resp;
-    Registry::call('config', {{'name', name}, {'action', 'option'}}, resp);
-    if (resp.size() != 0) {
-      auto value = resp[0].find('value');
-      if (value != resp[0].end()) {
-        return value->second;
-      }
+        bool ContainsAccumulatedResult(const ComputationNodeBasePtr& node) const
+    {
+        // Node contains accumulated result if it can be found in the list of accumulation nodes specified in
+        // CriterionAccumulator constructor.
+        return std::find(m_accumulatorCriterionNodes.begin(), m_accumulatorCriterionNodes.end(), node) !=
+               m_accumulatorCriterionNodes.end();
     }
-  }
-    
-      /**
-   * @brief Attach a table at runtime.
-   *
-   * The SQL implementation plugin may need to manage how virtual tables are
-   * attached at run time. In the case of SQLite where a single DB object is
-   * managed, tables are enumerated and attached during initialization.
-   */
-  virtual Status attach(const std::string& /*name*/) {
-    return Status::success();
-  }
