@@ -1,205 +1,201 @@
 
         
-        
-class MSE_MAE_loss:
-    '''Loss function with internal state, for testing serialization code.'''
-    def __init__(self, mse_fraction):
-        self.mse_fraction = mse_fraction
+        from django.db.models.fields import DecimalField, FloatField, IntegerField
+from django.db.models.functions import Cast
     
-    
-def create_multi_input_model_from(layer1, layer2):
-    input_1 = Input(shape=(data_dim,))
-    input_2 = Input(shape=(data_dim,))
-    out1 = layer1(input_1)
-    out2 = layer2(input_2)
-    out = Average()([out1, out2])
-    model = Model([input_1, input_2], out)
-    model.add_loss(K.mean(out2))
-    model.add_loss(1)
-    model.add_loss(1)
-    return model
-    
-        E.g. for use with categorical_crossentropy.
-    
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-import keras
-from keras.layers import Activation, Dense, Input
-from keras.layers import Conv2D, Flatten
-from keras.layers import Reshape, Conv2DTranspose
-from keras.models import Model
-from keras import backend as K
-from keras.datasets import mnist
-import numpy as np
-import matplotlib.pyplot as plt
-from PIL import Image
-    
-    arxiv:1504.00941v2 [cs.NE] 7 Apr 2015
-http://arxiv.org/pdf/1504.00941v2.pdf
-    
-    
-def test_deconv_length():
-    assert conv_utils.deconv_length(None, 1, 7, 'same', None) is None
-    assert conv_utils.deconv_length(224, 1, 7, 'same', None) == 224
-    assert conv_utils.deconv_length(224, 2, 7, 'same', None) == 448
-    assert conv_utils.deconv_length(32, 1, 5, 'valid', None) == 36
-    assert conv_utils.deconv_length(32, 2, 5, 'valid', None) == 67
-    assert conv_utils.deconv_length(32, 1, 5, 'full', None) == 28
-    assert conv_utils.deconv_length(32, 2, 5, 'full', None) == 59
-    assert conv_utils.deconv_length(224, 1, 7, 'same', 0) == 224
-    assert conv_utils.deconv_length(224, 2, 7, 'same', 0) == 447
-    assert conv_utils.deconv_length(224, 2, 7, 'same', 1) == 448
-    assert conv_utils.deconv_length(32, 1, 5, 'valid', 0) == 36
-    assert conv_utils.deconv_length(32, 2, 5, 'valid', 0) == 67
-    assert conv_utils.deconv_length(32, 2, 5, 'valid', 1) == 68
-    assert conv_utils.deconv_length(6, 1, 3, 'full', 0) == 4
-    assert conv_utils.deconv_length(6, 2, 3, 'full', 1) == 10
-    assert conv_utils.deconv_length(6, 2, 3, 'full', 2) == 11
-    
-        def render(self, request):
-        now = time()
-        delta = now - self.lasttime
-    
-        def help(self):
-        '''An extensive help for the command. It will be shown when using the
-        'help' command. It can contain newlines, since not post-formatting will
-        be applied to its contents.
+        def get_distance(self, f, dist_val, lookup_type):
         '''
-        return self.long_desc()
+        Retrieve the distance parameters for the given geometry field,
+        distance lookup value, and the distance lookup type.
     
-        def __enter__(self):
-        from scrapy.utils.test import get_testenv
-        pargs = [sys.executable, '-u', '-m', 'scrapy.utils.benchserver']
-        self.proc = subprocess.Popen(pargs, stdout=subprocess.PIPE,
-                                     env=get_testenv())
-        self.proc.stdout.readline()
+        def get_constraints(self, table):
+        '''
+        Get the indexes on the table using a new cursor.
+        '''
+        with connection.cursor() as cursor:
+            return connection.introspection.get_constraints(cursor, table)
     
-            # start checks
-        if opts.list:
-            for spider, methods in sorted(contract_reqs.items()):
-                if not methods and not opts.verbose:
-                    continue
-                print(spider)
-                for method in sorted(methods):
-                    print('  * %s' % method)
+        def __init__(self, ds_input, ds_driver=False, write=False, encoding='utf-8'):
+        # The write flag.
+        if write:
+            self._write = 1
         else:
-            start = time.time()
-            self.crawler_process.start()
-            stop = time.time()
+            self._write = 0
+        # See also https://trac.osgeo.org/gdal/wiki/rfc23_ogr_unicode
+        self.encoding = encoding
+    
+    from django.contrib.gis.gdal.base import GDALBase
+from django.contrib.gis.gdal.error import GDALException
+from django.contrib.gis.gdal.prototypes import ds as vcapi, raster as rcapi
+from django.utils.encoding import force_bytes, force_str
+    
+        # #### Feature Methods ####
+    def get(self, field):
+        '''
+        Return the value of the field, instead of an instance of the Field
+        object.  May take a string of the field name or a Field object as
+        parameters.
+        '''
+        field_name = getattr(field, 'name', field)
+        return self[field_name].value
+    
+                except ArgumentTypeError as e:
+                if self.args.traceback:
+                    raise
+                self.error(e.args[0])
     
     
-class Command(ScrapyCommand):
-    
-            editor = self.settings['EDITOR']
-        try:
-            spidercls = self.crawler_process.spider_loader.load(args[0])
-        except KeyError:
-            return self._err('Spider not found: %s' % args[0])
+def get_requests_session(ssl_version):
+    requests_session = requests.Session()
+    requests_session.mount(
+        'https://',
+        HTTPieHTTPAdapter(ssl_version=ssl_version)
+    )
+    for cls in plugin_manager.get_transport_plugins():
+        transport_plugin = cls()
+        requests_session.mount(prefix=transport_plugin.prefix,
+                               adapter=transport_plugin.get_adapter())
+    return requests_session
     
         @property
-    def templates_dir(self):
-        _templates_base_dir = self.settings['TEMPLATES_DIR'] or \
-            join(scrapy.__path__[0], 'templates')
-        return join(_templates_base_dir, 'spiders')
+    def config(self):
+        if not hasattr(self, '_config'):
+            self._config = Config(directory=self.config_dir)
+            if self._config.is_new():
+                self._config.save()
+            else:
+                self._config.load()
+        return self._config
+    
+        return chain(*output)
+    
+    
+with codecs.open(JSON_FILE_PATH, encoding='utf8') as f:
+    JSON_FILE_CONTENT = f.read()
+    
+                if not kwargs['caption']:
+                print('Skipping captions.')
+                return
+            for lang in self.caption_tracks:
+                filename = '%s.%s.srt' % (get_filename(self.title), lang)
+                print('Saving %s ... ' % filename, end='', flush=True)
+                srt = self.caption_tracks[lang]
+                with open(os.path.join(kwargs['output_dir'], filename),
+                          'w', encoding='utf-8') as x:
+                    x.write(srt)
+                print('Done.')    
+    
+        # download the playlist        
+    # playlist sample:http://www.kugou.com/yy/special/single/487279.html
+    else:
+        html = get_html(url)
+        pattern = re.compile('data='(\w+)\|(\d+)'')
+        for v in pattern.findall(html):
+            urls.append('http://www.kugou.com/song/#hash=%s&album_id=%s' % (v[0], v[1]))
+            print('http://www.kugou.com/song/#hash=%s&album_id=%s' % (v[0], v[1]))
+    
+            assert vid
+    
+    site_info = 'CBS.com'
+download = cbs_download
+download_playlist = playlist_not_supported('cbs')
 
     
-        def prepare_request(self, spider, request, opts):
-        def callback(response):
-            # memorize first request
-            if not self.first_response:
-                self.first_response = response
+                if not info_only:
+                try:
+                    download_urls([real_url], title, ext, size, output_dir, merge = merge)
+                except:
+                    pass
     
-            def getCertificateOptions(self):
-            # setting verify=True will require you to provide CAs
-            # to verify against; in other words: it's not that simple
+    	html = get_html(url)
+	contentid = r1(r'<meta name='contentid' scheme='DMINSTR2' content='([^']+)' />', html)
+	vid = r1(r''demand_ehow_videoid':'([^']+)'', html)
+	assert vid
     
-    from scrapy.exceptions import NotConfigured
-from scrapy.utils.httpobj import urlparse_cached
-from scrapy.utils.boto import is_botocore
-from .http import HTTPDownloadHandler
+                    mapping = KBaseMapping(base=int(base))
+                sym_to_name = {}
+                for no in range(int(size), 0, -1):
+                    no_in_base = mapping.mapping(no)
+                    val = names[no] if no < len(names) and names[no] else no_in_base
+                    sym_to_name[no_in_base] = val
     
-        Code is a simple port of what is already in the /scripts directory
+        file_path = './data.txt'
+    data = load_data(file_path)
     
-        def test_request_line_trimming(self):
-        self.con._http_vsn_str = 'HTTP/1.1\n'
-        self.con.putrequest('XYZBOGUS', '/')
-        self.con.endheaders()
-        res = self.con.getresponse()
-        self.assertEqual(res.status, HTTPStatus.NOT_IMPLEMENTED)
+        # tokens_list = get_all_subset(tokens)
+    # for tokens in tokens_list:
+    #     ret[tokens] = search_tokens(tokens, inverse_index, word_freq)
     
-            for button, filename, name in button_sources:
-            with  self.subTest(name=name):
-                button.invoke()
-                fn = findfile(filename, subdir='idlelib')
-                get = dialog._current_textview.viewframe.textframe.text.get
-                with open(fn, encoding='utf-8') as f:
-                    self.assertEqual(f.readline().strip(), get('1.0', '1.end'))
-                    f.readline()
-                    self.assertEqual(f.readline().strip(), get('3.0', '3.end'))
-                dialog._current_textview.destroy()
+        with tf.variable_scope(name, reuse=reuse):
+        alpha = get_w(alpha_shape, w_initializer=alpha_init, name='alpha')
+        # o = relu(x) + 0.5 * tf.multiply(alpha, x - tf.abs(x))  # TFLearn
+        o = leaky_relu(x, alpha)  # TensorLayer / <Deep Learning>
     
     
-def _get_resource_reader(
-        package: ModuleType) -> Optional[resources_abc.ResourceReader]:
-    # Return the package's loader if it's a ResourceReader.  We can't use
-    # a issubclass() check here because apparently abc.'s __subclasscheck__()
-    # hook wants to create a weak reference to the object, but
-    # zipimport.zipimporter does not support weak references, resulting in a
-    # TypeError.  That seems terrible.
-    spec = package.__spec__
-    if hasattr(spec.loader, 'get_resource_reader'):
-        return cast(resources_abc.ResourceReader,
-                    spec.loader.get_resource_reader(spec.name))
-    return None
+def multi_dense(x, n_unit_ls, act_fn=relu, name=None):
+    '''多层全连接
+    Input shape:  [batch_size, n_input]
+    Output shape: [batch_size, n_unit_list[-1]]
     
-    # We can extract the richest alternative in order to display it:
-richest = msg.get_body()
-partfiles = {}
-if richest['content-type'].maintype == 'text':
-    if richest['content-type'].subtype == 'plain':
-        for line in richest.get_content().splitlines():
-            print(line)
-        sys.exit()
-    elif richest['content-type'].subtype == 'html':
-        body = richest
-    else:
-        print('Don't know how to display {}'.format(richest.get_content_type()))
-        sys.exit()
-elif richest['content-type'].content_type == 'multipart/related':
-    body = richest.get_body(preferencelist=('html'))
-    for part in richest.iter_attachments():
-        fn = part.get_filename()
-        if fn:
-            extension = os.path.splitext(part.get_filename())[1]
-        else:
-            extension = mimetypes.guess_extension(part.get_content_type())
-        with tempfile.NamedTemporaryFile(suffix=extension, delete=False) as f:
-            f.write(part.get_content())
-            # again strip the <> to go from email form of cid to html form.
-            partfiles[part['content-id'][1:-1]] = f.name
-else:
-    print('Don't know how to display {}'.format(richest.get_content_type()))
-    sys.exit()
-with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
-    # The magic_html_parser has to rewrite the href='cid:....' attributes to
-    # point to the filenames in partfiles.  It also has to do a safety-sanitize
-    # of the html.  It could be written using html.parser.
-    f.write(magic_html_parser(body.get_content(), partfiles))
-webbrowser.open(f.name)
-os.remove(f.name)
-for fn in partfiles.values():
-    os.remove(fn)
+        def __call__(self, x):
+        '''
+        Args:
+            x: 注意 x.dtype == float32
+        '''
+        # x = tf.cast(x, dtype=tf.float32)  # 交给外部处理
+        loss_regularization = 0.
+        if self.l1:
+            loss_regularization += tf.reduce_sum(self.l1 * tf.abs(x))
+        if self.l2:
+            loss_regularization += tf.reduce_sum(self.l2 * tf.square(x))
+        return loss_regularization
     
-            print('Testing IMapIterator.next() with timeout:', end=' ')
-        it = pool.imap(calculatestar, TASKS)
-        while 1:
-            sys.stdout.flush()
-            try:
-                sys.stdout.write('\n\t%s' % it.next(0.02))
-            except StopIteration:
-                break
-            except multiprocessing.TimeoutError:
-                sys.stdout.write('.')
-        print()
-        print()
+    
+def get_params_dict():
+    '''以字典形式获取所有 trainable 参数'''
+    param_dict = dict()
+    for var in tf.trainable_variables():
+        param_dict[var.name] = {'shape': list(map(int, var.shape)),
+                                'number': int(reduce(mul, var.shape, 1))}
+    return param_dict
+    
+    
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
+
+    
+        def __str__(self):
+        return self.name
+    
+        >>> try:
+    ...    num_obj.do_stuff()
+    ... except Exception:
+    ...    print('-> doing stuff failed!')
+    ...    import sys
+    ...    import traceback
+    ...    traceback.print_exc(file=sys.stdout)
+    -> doing stuff failed!
+    Traceback (most recent call last):
+    ...
+    TypeError: ...str...int...
+    
+        >>> data2.data = 5
+    HexViewer: Subject Data 2 has data 0x5
+    DecimalViewer: Subject Data 2 has data 5
+    
+        def not_specification(self):
+        raise NotImplementedError()
+    
+        def __repr__(self):
+        fmt = '<Price: {}, price after discount: {}>'
+        return fmt.format(self.price, self.price_after_discount())
+    
+        def __str__(self):
+        return self.state
+    
+        filenames = []
+    for (dirpath, dnames, fnames) in os.walk(path):
+        for fname in fnames:
+            if fname.endswith('.md'):
+                filenames.append(os.sep.join([dirpath, fname]))
