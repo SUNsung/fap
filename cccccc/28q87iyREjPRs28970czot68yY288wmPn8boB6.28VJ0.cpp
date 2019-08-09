@@ -1,244 +1,318 @@
 
         
-          /// Disable round-trip verification of mangled debug types.
-  unsigned DisableRoundTripDebugTypes : 1;
+        bool MenuDelegate::GetIconForCommandId(int command_id,
+                                       gfx::Image* icon) const {
+  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return false;
+  if (item->icon_.IsEmpty())
+    return false;
+    }
     
-      /// This class provides a non-trivial .cxx_construct or .cxx_destruct
-  /// implementation.
-  HasCXXStructors      = 0x00004,
     
-    /// Header layout for a key path's data buffer header.
-class KeyPathBufferHeader {
-  uint32_t Data;
-  
-  constexpr KeyPathBufferHeader(unsigned Data) : Data(Data) {}
-  
-  static constexpr uint32_t validateSize(uint32_t size) {
-    return assert(size <= _SwiftKeyPathBufferHeader_SizeMask
-                  && 'size too big!'),
-           size;
+    {  // Convert from content coordinates to window coordinates.
+  // This code copied from chrome_web_contents_view_delegate_views.cc
+  aura::Window* target_window = GetActiveNativeView(rfh);
+  aura::Window* root_window = target_window->GetRootWindow();
+  views::Widget* top_level_widget =
+    views::Widget::GetTopLevelWidgetForNativeView(target_window);
+  aura::client::ScreenPositionClient* screen_position_client =
+        aura::client::GetScreenPositionClient(root_window);
+  if (screen_position_client) {
+    screen_position_client->ConvertPointToScreen(target_window,
+             &screen_point);
   }
-public:
-  constexpr KeyPathBufferHeader(unsigned size,
-                                bool trivialOrInstantiableInPlace,
-                                bool hasReferencePrefix)
-    : Data((validateSize(size) & _SwiftKeyPathBufferHeader_SizeMask)
-           | (trivialOrInstantiableInPlace ? _SwiftKeyPathBufferHeader_TrivialFlag : 0)
-           | (hasReferencePrefix ? _SwiftKeyPathBufferHeader_HasReferencePrefixFlag : 0)) 
+  set_delay_destruction(true);
+  menu_runner_.reset(new views::MenuRunner(menu_model_.get(), views::MenuRunner::CONTEXT_MENU,
+                                           base::Bind(&Menu::OnMenuClosed, base::Unretained(this))));
+  menu_runner_->RunMenuAt(top_level_widget,
+                       nullptr,
+                       gfx::Rect(screen_point, gfx::Size()),
+                          views::MenuAnchorPosition::kTopRight,
+                       ui::MENU_SOURCE_NONE);
+  // It is possible for the same MenuMessageLoopAura to start a nested
+  // message-loop while it is already running a nested loop. So make
+  // sure the quit-closure gets reset to the outer loop's quit-closure
+  // once the innermost loop terminates.
   {
-  }
+    base::AutoReset<base::Closure> reset_quit_closure(&message_loop_quit_,
+                                                      base::Closure());
   
-  constexpr KeyPathBufferHeader withSize(unsigned size) const {
-    return (Data & ~_SwiftKeyPathBufferHeader_SizeMask) | validateSize(size);
-  }
+    //base::MessageLoop* loop = base::MessageLoop::current();
+    base::MessageLoopCurrent::ScopedNestableTaskAllower allow;
+    base::RunLoop run_loop;
+    message_loop_quit_ = run_loop.QuitClosure();
   
-  constexpr KeyPathBufferHeader withIsTrivial(bool isTrivial) const {
-    return (Data & ~_SwiftKeyPathBufferHeader_TrivialFlag)
-      | (isTrivial ? _SwiftKeyPathBufferHeader_TrivialFlag : 0);
+    run_loop.Run();
   }
-  constexpr KeyPathBufferHeader withIsInstantiableInPlace(bool isTrivial) const {
-    return (Data & ~_SwiftKeyPathBufferHeader_TrivialFlag)
-      | (isTrivial ? _SwiftKeyPathBufferHeader_TrivialFlag : 0);
-  }
-    }
+  set_delay_destruction(false);
+  if (pending_destruction())
+    object_manager_->OnDeallocateObject(id_);
+}
     
-    /// RAII class that suppresses diagnostics by temporarily disabling all of
-/// the diagnostic consumers.
-class DiagnosticSuppression {
-  DiagnosticEngine &diags;
-  std::vector<DiagnosticConsumer *> consumers;
-    }
     
-    public:
-  /// For templates such as DotFileEmitter.
-  using NodeType = ModuleDepGraphNode;
+    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.callObjectMethodAsync', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwObjCallObjectMethodAsyncFunction);
+};
     
-      // Write the document-level setup.
-  void writeDocSetup(PDFDoc *doc, Catalog *catalog, int firstPage, int lastPage, GBool duplexA);
-    
-    #endif
-
-    
-      // transtion
-  pageDict->lookupNF('Trans', &trans);
-  if (!(trans.isRef() || trans.isDict() || trans.isNull())) {
-    error(-1, 'Page transition object (page %d) is wrong type (%s)',
-	  num, trans.getTypeName());
-    trans.free();
+      void NwDesktopCaptureMonitor::Stop() {
+    started_ = false;
+    media_list_.clear();
   }
     
-      for (i = 0; i < intervals.getLength(); i++) {
-    interval = (Interval *) intervals.get(i);
-    const int base = interval->base;
-    prefixLength = interval->prefix->getLength();
-    if (label->cmpN(interval->prefix, prefixLength) != 0)
-      continue;
+      // Sets the destination filename and enables images to be written to a PDF
+  // on destruction.
+  void WritePDF(const char* filename) {
+    if (pixaGetCount(pixa_) > 0) {
+      pixaConvertToPdf(pixa_, 300, 1.0f, 0, 0, 'AllDebugImages', filename);
+      pixaClear(pixa_);
     }
+  }
     
-    #include <config.h>
+      // Computes all the cross product distances of the points from the line,
+  // storing the actual (signed) cross products in distances_.
+  // Ignores distances of points that are further away than the previous point,
+  // and overlaps the previous point by at least half.
+  void ComputeDistances(const ICOORD& start, const ICOORD& end);
     
-    Sound::Sound(Object *obj, bool readAttrs)
-{
-  streamObj = new Object();
-  streamObj->initNull();
-  obj->copy(streamObj);
-    }
+      double m() const;  // get gradient
+  double c(double m) const;            // get constant
+  double rms(double m, double c) const;            // get error
+  double pearson() const;  // get correlation coefficient.
     
-        glfwDestroyWindow(window);
-    glfwTerminate();
+    // Possible normalization methods. Use NEGATIVE values as these also
+// double up as markers for the last sub-classifier.
+enum NormalizationMode {
+  NM_BASELINE = -3,         // The original BL normalization mode.
+  NM_CHAR_ISOTROPIC = -2,   // Character normalization but isotropic.
+  NM_CHAR_ANISOTROPIC = -1  // The original CN normalization mode.
+};
     
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
+      // Return whether this model is likely to agree with the other model on most
+  // paragraphs they are marked.
+  bool Comparable(const ParagraphModel &other) const;
     
-    // Forward declarations of helper functions
-bool CreateDeviceD3D(HWND hWnd);
-void CleanupDeviceD3D();
-void CreateRenderTarget();
-void CleanupRenderTarget();
-LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+    // Computes the Otsu threshold(s) for the given histogram.
+// Also returns H = total count in histogram, and
+// omega0 = count of histogram below threshold.
+int OtsuStats(const int* histogram, int* H_out, int* omega0_out);
     
-            // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
+      // Creates a report of the error rate. The report_level controls the detail
+  // that is reported to stderr via tprintf:
+  // 0   -> no output.
+  // >=1 -> bottom-line error rate.
+  // >=3 -> font-level error rate.
+  // boosting_mode determines the return value. It selects which (un-weighted)
+  // error rate to return.
+  // The fontinfo_table from MasterTrainer provides the names of fonts.
+  // The it determines the current subset of the training samples.
+  // If not nullptr, the top-choice unichar error rate is saved in unichar_error.
+  // If not nullptr, the report string is saved in fonts_report.
+  // (Ignoring report_level).
+  double ReportErrors(int report_level, CountTypes boosting_mode,
+                      const FontInfoTable& fontinfo_table,
+                      const SampleIterator& it,
+                      double* unichar_error,
+                      STRING* fonts_report);
+    
+    // Setup the map for the given indexed_features that have been indexed by
+// feature_map.
+void IntFeatureDist::Set(const GenericVector<int>& indexed_features,
+                          int canonical_count, bool value) {
+  total_feature_weight_ = canonical_count;
+  for (int i = 0; i < indexed_features.size(); ++i) {
+    const int f = indexed_features[i];
+    features_[f] = value;
+    for (int dir = -kNumOffsetMaps; dir <= kNumOffsetMaps; ++dir) {
+      if (dir == 0) continue;
+      const int mapped_f = feature_map_->OffsetFeature(f, dir);
+      if (mapped_f >= 0) {
+        features_delta_one_[mapped_f] = value;
+        for (int dir2 = -kNumOffsetMaps; dir2 <= kNumOffsetMaps; ++dir2) {
+          if (dir2 == 0) continue;
+          const int mapped_f2 = feature_map_->OffsetFeature(mapped_f, dir2);
+          if (mapped_f2 >= 0)
+            features_delta_two_[mapped_f2] = value;
         }
-    
-    IMGUI_IMPL_API bool     ImGui_ImplDX9_Init(IDirect3DDevice9* device);
-IMGUI_IMPL_API void     ImGui_ImplDX9_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplDX9_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data);
-    
-    
-    {  /*
-   * The fields we need here are just m_mask and m_table.  This would leave 4
-   * byte padding hole, though, which some users (e.g. IndexedStringMap) might
-   * have a use for, so we expose it as a slot for our users.
-   */
-  uint32_t  m_mask;
-  ExtraType m_extra;  // not ours
-  Elm*      m_table;
-};
-    
-    
-    {  ActRecState() {}
-  void pushFunc(const NormalizedInstruction& ni);
-  void pop();
-  const Func* knownFunc();
-};
-    
-      /**
-   * Get this node's parent.
-   */
-  const Hdf parent() const;
-  Hdf parent();
-    
-      printFrameHdr(fd, frame_num);
-  demangle(fd, funcname);
-  printStr(fd, ' at ');
-  write_path(fd, filename);
-  printStr(fd, ':');
-  printInt(fd, frame.lineno);
-  printStr(fd, '\n');
-    
-    // Get a huge page from NUMA node `node`, and return the mapped address
-// specified by `addr` or nullptr on failure.  If `addr` is nullptr, the system
-// will choose a proper address.  If the address range [addr, addr+1G) already
-// contains address in the process address space, nullptr is returned and the
-// mapping won't be changed.  If `node` is -1, any NUMA node is OK.
-void* mmap_1g(void* addr, int node, bool map_fixed);
-    
-    namespace HPHP {
-///////////////////////////////////////////////////////////////////////////////
+      }
     }
-    
-    void cgFloor(IRLS& env, const IRInstruction* inst) {
-  implRound<RoundDirection::floor>(vmain(env), env, inst);
-}
-void cgCeil(IRLS& env, const IRInstruction* inst) {
-  implRound<RoundDirection::ceil>(vmain(env), env, inst);
-}
-    
-    #pragma once
-    
-    void TestServer::RunServer() {
-  std::string out, err;
-  auto const portConfig = '-vServer.Port=' +
-    folly::to<std::string>(s_server_port);
-  auto const adminConfig = '-vAdminServer.Port=' +
-    folly::to<std::string>(s_admin_port);
-  auto const rpcConfig = '-vSatellites.rpc.Port=' +
-    folly::to<std::string>(s_rpc_port);
-  auto const fd = folly::to<std::string>(inherit_fd);
-  auto option = inherit_fd >= 0
-    ? '--port-fd=' + fd
-    : '-vServer.TakeoverFilename=' + std::string(s_filename);
-  auto serverType = std::string('-vServer.Type=') + m_serverType;
-  auto pidFile = std::string('-vPidFile=') + s_pidfile;
-  auto repoFile = std::string('-vRepo.Central.Path=') + s_repoFile;
-  auto logFile = std::string('-vLog.File=') + s_logFile;
-    }
-    
-    class GraphSegmentorTest : public testing::Test {
- protected:
-  void SetUp() {
-    edges_ = new Edge[10];
-    edges_[0].w = 6.f;
-    edges_[0].a = 1;
-    edges_[0].b = 2;
-    edges_[1].w = 1.f;
-    edges_[1].a = 1;
-    edges_[1].b = 3;
-    edges_[2].w = 5.f;
-    edges_[2].a = 1;
-    edges_[2].b = 4;
-    edges_[3].w = 5.f;
-    edges_[3].a = 3;
-    edges_[3].b = 2;
-    edges_[4].w = 5.f;
-    edges_[4].a = 3;
-    edges_[4].b = 4;
-    edges_[5].w = 3.f;
-    edges_[5].a = 5;
-    edges_[5].b = 2;
-    edges_[6].w = 6.f;
-    edges_[6].a = 3;
-    edges_[6].b = 5;
-    edges_[7].w = 4.f;
-    edges_[7].a = 3;
-    edges_[7].b = 0;
-    edges_[8].w = 2.f;
-    edges_[8].a = 4;
-    edges_[8].b = 0;
-    edges_[9].w = 6.f;
-    edges_[9].a = 5;
-    edges_[9].b = 0;
   }
+}
+    
+    
+    {	ImageLoader::get_recognized_extensions(p_extensions);
+}
+    
+    		Ref<StyleBox> grabber;
+		if (drag.active)
+			grabber = get_stylebox('grabber_pressed');
+		else if (highlight == HIGHLIGHT_RANGE)
+			grabber = get_stylebox('grabber_highlight');
+		else
+			grabber = get_stylebox('grabber');
+    
+    #include 'editor/editor_node.h'
+#include 'editor/editor_plugin.h'
+#include 'scene/2d/collision_polygon_2d.h'
+#include 'scene/2d/particles_2d.h'
+#include 'scene/gui/box_container.h'
+#include 'scene/gui/file_dialog.h'
+    
+    
+    {		return (uint32_t(Math::fast_ftoi(sRed)) & 0x1FF) | ((uint32_t(Math::fast_ftoi(sGreen)) & 0x1FF) << 9) | ((uint32_t(Math::fast_ftoi(sBlue)) & 0x1FF) << 18) | ((uint32_t(Math::fast_ftoi(exps)) & 0x1F) << 27);
+	}
+    
+    	struct BVHCmpY {
     }
     
+    	bool is_ref() const;
+	_FORCE_INLINE_ bool is_num() const { return type == INT || type == REAL; };
+	_FORCE_INLINE_ bool is_array() const { return type >= ARRAY; };
+	bool is_shared() const;
+	bool is_zero() const;
+	bool is_one() const;
     
-    {
-    {
-    {}  // namespace io
-}  // namespace cyber
-}  // namespace apollo
-
     
-    TEST(NaviSpeedTsGraph, ErrorTest) {}
+    {	o->set(property, arr);
+}
     
-    const std::string& Scenario::Name() const { return name_; }
+    void ChannelArguments::SetPointer(const grpc::string& key, void* value) {
+  static const grpc_arg_pointer_vtable vtable = {
+      &PointerVtableMembers::Copy, &PointerVtableMembers::Destroy,
+      &PointerVtableMembers::Compare};
+  SetPointerWithVtable(key, value, &vtable);
+}
+    
+    #include <grpc/grpc_security.h>
+#include 'src/core/lib/channel/channel_args.h'
+    
+    #include <grpc/support/port_platform.h>
     
     
     { private:
-  bool is_receiving_ = false;
-  bool is_sending_finish_ = false;
-  CanAgent *other_agent_ = nullptr;
-  TestCanParam *param_ptr_ = nullptr;
-  std::unique_ptr<std::thread> thread_recv_;
-  std::unique_ptr<std::thread> thread_send_;
+  char* name_;
 };
+    
+      padded = gpr_leftpad('foo', ' ', 1);
+  GPR_ASSERT(0 == strcmp('foo', padded));
+  gpr_free(padded);
+    
+    static grpc::internal::GrpcLibraryInitializer g_gli_initializer;
+ChannelCredentials::ChannelCredentials() { g_gli_initializer.summon(); }
+    
+    #include <grpc/grpc.h>
+#include <grpc/support/log.h>
+#include <grpc/support/time.h>
+#include <grpcpp/channel.h>
+#include <grpcpp/client_context.h>
+#include <grpcpp/create_channel.h>
+#include <grpcpp/server.h>
+#include <grpcpp/server_builder.h>
+#include <grpcpp/server_context.h>
+    
+      void CompareService(const grpc::string& service) {
+    const protobuf::ServiceDescriptor* service_desc =
+        desc_pool_->FindServiceByName(service);
+    const protobuf::ServiceDescriptor* ref_service_desc =
+        ref_desc_pool_->FindServiceByName(service);
+    EXPECT_TRUE(service_desc != nullptr);
+    EXPECT_TRUE(ref_service_desc != nullptr);
+    EXPECT_EQ(service_desc->DebugString(), ref_service_desc->DebugString());
+    }
+    
+        std::unique_ptr<DHTTokenTracker> tokenTracker;
+    
+    #endif // D_DHT_ROUTING_TABLE_DESERIALIZER_H
+
+    
+    void DHTTaskQueueImpl::addImmediateTask(const std::shared_ptr<DHTTask>& task)
+{
+  immediateTaskQueue_.addTask(task);
+}
+    
+    #include 'DHTTaskQueue.h'
+#include 'DHTTaskExecutor.h'
+    
+    DHTUnknownMessage::~DHTUnknownMessage() { delete[] data_; }
+    
+        void* sp = (void*) ((char*) stack_ + stack_size_);
+#ifdef USE_VALGRIND
+    valgrind_stack_id = VALGRIND_STACK_REGISTER(sp, stack_);
+#endif
+    ctx_ = make_fcontext(sp, stack_size_, (void (*)(intptr_t))&context_func);
+    
+            for (int i = 0; i < 100; ++i)
+        {
+            std::string addr3 = System::gethostbyname('ipv6.sjtu.edu.cn', AF_INET);
+            std::string addr4 = System::gethostbyname('ipv6.sjtu.edu.cn', AF_INET6);
+    }
+    
+    namespace swoole { namespace coroutine {
+//-------------------------------------------------------------------------------
+class Channel
+{
+public:
+    enum opcode
+    {
+        PRODUCER = 1,
+        CONSUMER = 2,
+    };
+    }
+    }
+    }
+    
+    #include 'swoole.h'
+#include <string>
+    
+    
+    {    ASSERT_GT(cid, 0);
+    ASSERT_EQ(cid, _cid);
+}
+    
+            /**
+         * Less or equal comparison operator.
+         * @param point Point<T> to be compared.
+         * @result Whether the instance satisfies the condition with respect to point.
+         */
+        inline bool operator<=(const Point<T>& point) const
+        {
+            return area() <= point.area();
+        }
+    
+        // Constant parameters
+    const auto FACE_CCN_DECREASE_FACTOR = 8.f;
+    const std::string FACE_PROTOTXT{'face/pose_deploy.prototxt'};
+    const std::string FACE_TRAINED_MODEL{'face/pose_iter_116000.caffemodel'};
+    
+    
+    // Constant parameters
+    const auto HAND_CCN_DECREASE_FACTOR = 8.f;
+    const std::string HAND_PROTOTXT{'hand/pose_deploy.prototxt'};
+    const std::string HAND_TRAINED_MODEL{'hand/pose_iter_102000.caffemodel'};
+    
+      void disconnect() override;
+    
+    void BulkOperations::Manager::getAffectedKeys() {
+  if (!hasOperation()) return;
+    }
+    
+      virtual void getAffectedKeys(std::function<void(QVariant, QString)> callback);
+    
+    #ifndef RDM_VERSION
+#include '../version.h'
+#endif
+    
+    void ValueEditor::EmbeddedFormattersManager::loadFormatters(QJSValue callback) {
+  m_python->importModule_sync('formatters');
+  m_python->call('formatters.get_formatters_list', QVariantList(), callback);
+}
+    
+     public:
+  enum Roles { name = Qt::UserRole + 1, version, description, cmd };
+    
+      // Dialogs
+  void requestBulkOperation(
+      QSharedPointer<RedisClient::Connection> connection, int dbIndex,
+      BulkOperations::Manager::Operation op, QRegExp keyPattern,
+      BulkOperations::AbstractOperation::OperationCallback callback);
