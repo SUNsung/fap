@@ -1,175 +1,280 @@
 
         
-        
-@login_required(redirect_field_name='redirect_to')
-def login_protected_view_changed_redirect(request):
-    'A simple view that is login protected with a custom redirect field set'
-    t = Template('This is a login protected test. Username is {{ user.username }}.', name='Login Template')
-    c = Context({'user': request.user})
-    return HttpResponse(t.render(c))
+            Defines all the global objects that are proxies to the current
+    active context.
+    
+    import click
+import pytest
+from _pytest.monkeypatch import notset
+from click.testing import CliRunner
     
     
-class AdminField:
-    def __init__(self, form, field, is_first):
-        self.field = form[field]  # A django.forms.BoundField instance
-        self.is_first = is_first  # Whether this field is first on the line
-        self.is_checkbox = isinstance(self.field.field.widget, forms.CheckboxInput)
-        self.is_readonly = False
+def test_session_lifetime():
+    app = flask.Flask(__name__)
+    app.config['PERMANENT_SESSION_LIFETIME'] = 42
+    assert app.permanent_session_lifetime.seconds == 42
     
+        app = flask.Flask(__name__, instance_path=str(modules_tmpdir))
+    assert app.instance_path == str(modules_tmpdir)
     
-class Holder4Admin(admin.ModelAdmin):
-    inlines = [Inner4StackedInline, Inner4TabularInline]
+            # Trigger the localization machinery if needed.
+        self.localize = localize
+        if self.localize:
+            widget.is_localized = True
     
+    from django.db.models.fields import DecimalField, FloatField, IntegerField
+from django.db.models.functions import Cast
     
-class AnonymousUser:
-    id = None
-    pk = None
-    username = ''
-    is_staff = False
-    is_active = False
-    is_superuser = False
-    _groups = EmptyManager(Group)
-    _user_permissions = EmptyManager(Permission)
+            if ds:
+            self.ptr = ds
+            self.driver = Driver(ds_driver)
+        else:
+            # Raise an exception if the returned pointer is NULL
+            raise GDALException('Invalid data source file '%s'' % ds_input)
     
-        def test_filtered_aggregate_on_annotate(self):
-        pages_annotate = Sum('book__pages', filter=Q(book__rating__gt=3))
-        age_agg = Sum('age', filter=Q(total_pages__gte=400))
-        aggregated = Author.objects.annotate(total_pages=pages_annotate).aggregate(summed_age=age_agg)
-        self.assertEqual(aggregated, {'summed_age': 140})
-    
-    
-@unittest.skipUnless(HAS_POSTGRES, 'The psycopg2 driver is needed for these tests')
-class TestPostGISVersionCheck(unittest.TestCase):
-    '''
-    The PostGIS version check parses correctly the version numbers
-    '''
-    
-        def test_gin_fastupdate(self):
-        index_name = 'integer_array_gin_fastupdate'
-        index = GinIndex(fields=['field'], name=index_name, fastupdate=False)
-        with connection.schema_editor() as editor:
-            editor.add_index(IntegerArrayModel, index)
-        constraints = self.get_constraints(IntegerArrayModel._meta.db_table)
-        self.assertEqual(constraints[index_name]['type'], 'gin')
-        self.assertEqual(constraints[index_name]['options'], ['fastupdate=off'])
-        with connection.schema_editor() as editor:
-            editor.remove_index(IntegerArrayModel, index)
-        self.assertNotIn(index_name, self.get_constraints(IntegerArrayModel._meta.db_table))
-    
-    
-# For more information, see the OGR C API source code:
-#  https://www.gdal.org/ogr__api_8h.html
-#
-# The OGR_F_* routines are relevant here.
-class Feature(GDALBase):
-    '''
-    This class that wraps an OGR Feature, needs to be instantiated
-    from a Layer object.
-    '''
-    destructor = capi.destroy_feature
-    
-        def _name_in_configuration_exists(self, name: str) -> bool:
-        '''Return True if name exists in configuration.'''
-        if name in smhi_locations(self.hass):
-            return True
-        return False
-    
-            assert result['type'] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
-        assert result['title'] == '192.168.1.100'
-        assert result['data'] == {
-            CONF_IP_ADDRESS: '192.168.1.100',
-            CONF_PASSWORD: 'password',
-            CONF_PORT: 8080,
-            CONF_SSL: True,
-            CONF_SCAN_INTERVAL: 60,
-        }
+        @property
+    def name(self):
+        '''
+        Return description/name string for this driver.
+        '''
+        return force_str(rcapi.get_driver_description(self.ptr))
 
     
-        try:
-        await hass.async_add_job(auth.login)
-        return await result
-    except AuthorizationError as err:
-        if err.response.status_code == 401:
-            raise config_flow.CodeInvalid()
-        raise config_flow.NestAuthError('Unknown error: {} ({})'.format(
-            err, err.response.status_code))
+        @property
+    def layer_name(self):
+        'Return the name of the layer for the feature.'
+        name = capi.get_feat_name(self._layer._ldefn)
+        return force_str(name, self.encoding, strings_only=True)
+    
+            elif state == 'nodes_present':
+            changed, result_lb = self.ensure_lbpool_nodes_present(
+                alias=loadbalancer_alias,
+                location=loadbalancer_location,
+                name=loadbalancer_name,
+                port=loadbalancer_port,
+                nodes=loadbalancer_nodes)
+    
+        # Roundup the capacity to mimic Infinibox behaviour
+    if size:
+        physical_capacity = Capacity(size).roundup(6 * 64 * KiB)
+        if pool.get_physical_capacity() != physical_capacity:
+            if not module.check_mode:
+                pool.update_physical_capacity(physical_capacity)
+            changed = True
+    
+        mybalancer = Balancer(module.params['balancer_vhost'],
+                          module.params['balancer_url_suffix'],
+                          module=module,
+                          tls=module.params['tls'])
+    
+    
+def main():
+    module = AnsibleModule(
+        argument_spec=dict(
+            config=dict(required=False),
+            name=dict(required=True),
+            password=dict(required=False, no_log=True),
+            state=dict(required=False, choices=['present', 'absent'], default='present'),
+            enabled=dict(required=False, type='bool'),
+            token=dict(required=False, no_log=True),
+            url=dict(required=False, default='http://localhost:8080'),
+            user=dict(required=False)
+        ),
+        mutually_exclusive=[
+            ['password', 'token'],
+            ['config', 'enabled'],
+        ],
+        supports_check_mode=True,
+    )
+    
+        ONEVIEW_VALIDATE_ETAG_ARGS = dict(validate_etag=dict(type='bool', default=True))
+    
+            for name, value in self.module.params['attributes'].items():
+            if name not in attrs:
+                attrs[name] = []
+    
+            if channel in channels_by_tag:
+            target = channels_by_tag[channel]
+        else:
+            module.fail_json(msg='Channel '%s' not found. Available channels: '%s'' % (channel, '', ''.join(channels_by_tag.keys())))
+    
+        data = asarray(arr)
+    if iscomplexobj(data):
+        raise ValueError('Cannot convert a complex-valued array.')
+    shape = list(data.shape)
+    valid = len(shape) == 2 or ((len(shape) == 3) and
+                                ((3 in shape) or (4 in shape)))
+    if not valid:
+        raise ValueError(''arr' does not have a suitable array shape for '
+                         'any mode.')
+    if len(shape) == 2:
+        shape = (shape[1], shape[0])  # columns show up first
+        if mode == 'F':
+            data32 = data.astype(numpy.float32)
+            image = Image.frombytes(mode, shape, data32.tostring())
+            return image
+        if mode in [None, 'L', 'P']:
+            bytedata = bytescale(data, high=high, low=low,
+                                 cmin=cmin, cmax=cmax)
+            image = Image.frombytes('L', shape, bytedata.tostring())
+            if pal is not None:
+                image.putpalette(asarray(pal, dtype=uint8).tostring())
+                # Becomes a mode='P' automagically.
+            elif mode == 'P':  # default gray-scale
+                pal = (arange(0, 256, 1, dtype=uint8)[:, newaxis] *
+                       ones((3,), dtype=uint8)[newaxis, :])
+                image.putpalette(asarray(pal, dtype=uint8).tostring())
+            return image
+        if mode == '1':  # high input gives threshold for 1
+            bytedata = (data > high)
+            image = Image.frombytes('1', shape, bytedata.tostring())
+            return image
+        if cmin is None:
+            cmin = amin(ravel(data))
+        if cmax is None:
+            cmax = amax(ravel(data))
+        data = (data*1.0 - cmin)*(high - low)/(cmax - cmin) + low
+        if mode == 'I':
+            data32 = data.astype(numpy.uint32)
+            image = Image.frombytes(mode, shape, data32.tostring())
+        else:
+            raise ValueError(_errstr)
+        return image
+    
+        See also
+    --------
+    DictVectorizer : vectorizes string-valued features using a hash table.
+    sklearn.preprocessing.OneHotEncoder : handles nominal/categorical features.
+    '''
+    
+    
+def plot_batch_errors(all_errors, n_features, all_batch_sizes, data):
+    plt.figure()
+    plot_results(all_batch_sizes, all_errors['pca'], label='PCA')
+    plot_results(all_batch_sizes, all_errors['ipca'], label='IncrementalPCA')
+    plt.legend(loc='lower left')
+    plt.suptitle('Algorithm error vs. batch_size for n_components %i\n \
+                 LFW, size %i x %i' % (
+                 n_features, data.shape[0], data.shape[1]))
+    plt.xlabel('Batch size')
+    plt.ylabel('Mean absolute error')
+    
+    
+def rbf_kernels(X, n_jobs):
+    return pairwise_kernels(X, metric='rbf', n_jobs=n_jobs, gamma=0.1)
+    
+    plt.figure('scikit-learn Ward's method benchmark results')
+plt.imshow(np.log(ratio), aspect='auto', origin='lower')
+plt.colorbar()
+plt.contour(ratio, levels=[1, ], colors='k')
+plt.yticks(range(len(n_features)), n_features.astype(np.int))
+plt.ylabel('N features')
+plt.xticks(range(len(n_samples)), n_samples.astype(np.int))
+plt.xlabel('N samples')
+plt.title('Scikit's time, in units of scipy time (log)')
+plt.show()
 
     
-        assert await async_setup_component(hass, automation.DOMAIN, {
-        automation.DOMAIN: {
-            'trigger': {
-                'platform': 'event',
-                'event_type': 'test_event'
-            },
-            'condition': {
-                'condition': 'zone',
-                'entity_id': 'test.entity',
-                'zone': 'zone.test',
-            },
-            'action': {
-                'service': 'test.automation',
-            }
-        }
-    })
+    exercise_dir = os.path.dirname(__file__)
+if exercise_dir == '':
+    exercise_dir = '.'
     
-        mock_hap.return_value.async_reset.return_value = mock_coro(True)
-    assert await hmipc.async_unload_entry(hass, entry)
-    assert len(mock_hap.return_value.async_reset.mock_calls) == 1
-    assert hass.data[hmipc.DOMAIN] == {}
+    from sklearn.datasets import make_checkerboard
+from sklearn.datasets import samples_generator as sg
+from sklearn.cluster.bicluster import SpectralBiclustering
+from sklearn.metrics import consensus_score
+    
+                plt.subplots_adjust(bottom=0, top=.89, wspace=0,
+                                left=0, right=1)
+            plt.suptitle('n_cluster=%i, connectivity=%r' %
+                         (n_clusters, connectivity is not None), size=17)
+    
+    These images how similar features are merged together using
+feature agglomeration.
+'''
+print(__doc__)
+    
+    ## All tokens go to the parser (unless skip() is called in that rule)
+# on a particular 'channel'.  The parser tunes to a particular channel
+# so that whitespace etc... can go to the parser on a 'hidden' channel.
+DEFAULT_CHANNEL = 0
+    
+            if isinstance(index, Token):
+            # index is a Token, grap the stream index from it
+            index = index.index
+    
+            # Loop through each training image for the current person
+        for img_path in image_files_in_folder(os.path.join(train_dir, class_dir)):
+            image = face_recognition.load_image_file(img_path)
+            face_bounding_boxes = face_recognition.face_locations(image)
+    
+    # Load the jpg file into a numpy array
+image = face_recognition.load_image_file('biden.jpg')
+    
+            if True in result:
+            [print_result(image_to_check, name, distance, show_distance) for is_match, name, distance in zip(result, known_names, distances) if is_match]
+        else:
+            print_result(image_to_check, 'unknown_person', None, show_distance)
+    
+    # The training data would be all the face encodings from all the known images and the labels are their names
+encodings = []
+names = []
+    
+    while True:
+    print('Capturing image.')
+    # 以numpy array的数据结构从picamera摄像头中获取一帧图片
+    camera.capture(output, format='rgb')
+    
+        # 载入用户上传的图片
+    img = face_recognition.load_image_file(file_stream)
+    # 为用户上传的图片中的人脸编码
+    unknown_face_encodings = face_recognition.face_encodings(img)
+    
+        def set_normal_term(self):
+        ''' Resets to normal terminal.  On Windows this is a no-op. '''
+        if os.name == 'nt' or self.is_gui:
+            pass
+        else:
+            termios.tcsetattr(self.file_desc, termios.TCSAFLUSH, self.old_term)
+    
+        @staticmethod
+    def get_backend(backend):
+        ''' Return the cv2 DNN backend '''
+        if backend == 'OPENCL':
+            logger.info('Using OpenCL backend. If the process runs, you can safely ignore any of '
+                        'the failure messages.')
+        retval = getattr(cv2.dnn, 'DNN_TARGET_{}'.format(backend))  # pylint: disable=no-member
+        return retval
+    
+                       <option_name> should always be lower text.
+                   <metadata> dictionary requirements are listed below.
+    
+            logger.trace('Blending box')
+        mask = np.expand_dims(self.mask, axis=-1)
+        new_face = np.clip(np.concatenate((new_face, mask), axis=-1), 0.0, 1.0)
+        logger.trace('Blended box')
+        return new_face
 
     
-    
-def import_nccl_ops():
-    '''Import NCCL ops.'''
-    # There is no need to load NCCL ops since the
-    # NCCL dependency is built into the Caffe2 gpu lib
-    pass
-    
-                try:
-                # Under some conditions (e.g., dynamic memory optimization)
-                # it is possible that the network frees some blobs when they are
-                # no longer needed. Handle this case...
-                output_shape = workspace.FetchBlob(output_name).shape
-            except BaseException:
-                output_shape = '<unknown>'
-    
-            # fetch per level probability
-        cls_prob = cls_probs[cnt]
-        box_pred = box_preds[cnt]
-        cls_prob = cls_prob.reshape((
-            cls_prob.shape[0], A, int(cls_prob.shape[1] / A),
-            cls_prob.shape[2], cls_prob.shape[3]))
-        box_pred = box_pred.reshape((
-            box_pred.shape[0], A, 4, box_pred.shape[2], box_pred.shape[3]))
-        cnt += 1
-    
-    '''Python implementation of the PASCAL VOC devkit's AP evaluation code.'''
-    
-        def minibatch_loader_thread(self):
-        '''Load mini-batches and put them onto the mini-batch queue.'''
-        with self.coordinator.stop_on_exception():
-            while not self.coordinator.should_stop():
-                blobs = self.get_next_minibatch()
-                # Blobs must be queued in the order specified by
-                # self.get_output_names
-                ordered_blobs = OrderedDict()
-                for key in self.get_output_names():
-                    assert blobs[key].dtype in (np.int32, np.float32), \
-                        'Blob {} of dtype {} must have dtype of ' \
-                        'np.int32 or np.float32'.format(key, blobs[key].dtype)
-                    ordered_blobs[key] = blobs[key]
-                coordinated_put(
-                    self.coordinator, self._minibatch_queue, ordered_blobs
-                )
-        logger.info('Stopping mini-batch loading thread')
+        def get_save_args(self):
+        ''' Return the save parameters for the file format '''
+        filetype = self.config['format']
+        args = list()
+        if filetype == 'jpg' and self.config['jpg_quality'] > 0:
+            args = (cv2.IMWRITE_JPEG_QUALITY,  # pylint: disable=no-member
+                    self.config['jpg_quality'])
+        if filetype == 'png' and self.config['png_compress_level'] > -1:
+            args = (cv2.IMWRITE_PNG_COMPRESSION,  # pylint: disable=no-member
+                    self.config['png_compress_level'])
+        logger.debug(args)
+        return args
     
     
-def log_json_stats(stats, sort_keys=True):
-    # hack to control precision of top-level floats
-    stats = {
-        k: '{:.6f}'.format(v) if isinstance(v, float) else v
-        for k, v in stats.items()
-    }
-    print('json_stats: {:s}'.format(json.dumps(stats, sort_keys=sort_keys)))
-    
-            'License :: OSI Approved :: MIT License',
+class Writer(Output):
+    ''' Images output writer using cv2 '''
+    def __init__(self, output_folder, **kwargs):
+        super().__init__(output_folder, **kwargs)
+        self.check_transparency_format()
+        # Correct format namings for writing to byte stream
+        self.format_dict = dict(jpg='JPEG', jp2='JPEG 2000', tif='TIFF')
+        self.kwargs = self.get_save_kwargs()
