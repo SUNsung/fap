@@ -1,93 +1,121 @@
 
         
-          test 'rails routes with namespaced controller search key' do
-    app_file 'config/routes.rb', <<-RUBY
-      Rails.application.routes.draw do
-        namespace :admin do
-          resource :post
-          resource :user_permission
+            # The path used after resending confirmation instructions.
+    def after_resending_confirmation_instructions_path_for(resource_name)
+      is_navigational_format? ? new_session_path(resource_name) : '/'
+    end
+    
+      def serialize_options(resource)
+    methods = resource_class.authentication_keys.dup
+    methods = methods.keys if methods.is_a?(Hash)
+    methods << :password if resource.respond_to?(:password)
+    { methods: methods, only: [:password] }
+  end
+    
+        if resource.errors.empty?
+      set_flash_message! :notice, :unlocked
+      respond_with_navigational(resource){ redirect_to after_unlock_path_for(resource) }
+    else
+      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
+    end
+  end
+    
+        def email_changed(record, opts={})
+      devise_mail(record, :email_changed, opts)
+    end
+    
+    class TestController < ApplicationController
+  include Rails.application.routes.url_helpers
+    
+                bypass_sign_in(user)
+          DEPRECATION
+          warden.session_serializer.store(resource, scope)
+        elsif warden.user(scope) == resource && !options.delete(:force)
+          # Do nothing. User already signed in and we are not forcing it.
+          true
+        else
+          warden.set_user(resource, options.merge!(scope: scope))
         end
       end
-    RUBY
     
-    multitask :default => [:test, :features]
+            routes.each do |module_name, actions|
+          [:path, :url].each do |path_or_url|
+            actions.each do |action|
+              action = action ? '#{action}_' : ''
+              method = :'#{action}#{module_name}_#{path_or_url}'
     
-          def feature_element_timing_key(feature_element)
-        '\'#{feature_element.name}\' (#{feature_element.location})'
+          def initialize_from_record(record)
+        @scope_name = Devise::Mapping.find_scope!(record)
+        @resource   = instance_variable_set('@#{devise_mapping.name}', record)
       end
     
-        def no_subcommand(args)
-      unless args.empty? ||
-          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
-        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
-                          Run `jekyll help` to find out more.'
-        abort
+          module ClassMethods
+        # Create the cookie key using the record id and remember_token
+        def serialize_into_cookie(record)
+          [record.to_key, record.rememberable_value, Time.now.utc.to_f.to_s]
+        end
+    
+              # Parse the options and return if we don't have any target.
+          argv = parse_options(opts)
+          return if !argv
+    
+    describe VagrantPlugins::SyncedFolderRSync::DefaultUnixCap do
+  include_context 'unit'
+    
+        it 'should not error destroying a non-existent box' do
+      # Get the subject so that it is instantiated
+      box = subject
+    
+      subject { described_class }
+    
+          provider_cls
+    end
+    
+          it 'should not expand the relative host directory' do
+        expect(docker_yml).to receive(:write).with(%r{my_volume_key})
       end
     end
     
-      # Eager load code on boot. This eager loads most of Rails and
-  # your application in memory, allowing both thread web servers
-  # and those relying on copy on write to perform better.
-  # Rake tasks automatically ignore this option for performance.
-  config.eager_load = true
+        # Start a new handling thread
+    self.listener_threads << framework.threads.spawn('BindTcpHandlerListener-#{lport}', false) {
+      client = nil
+    }
     
-      # Raise exceptions instead of rendering exception templates.
-  config.action_dispatch.show_exceptions = false
+      def initialize(info = {})
+    super(merge_info(info,
+      'Name'          => 'Unix Command Shell, Reverse TCP (/dev/tcp)',
+      'Description'   => %q{
+        Creates an interactive shell via bash's builtin /dev/tcp.
+    }
     
-      # Node Settings
-  option ['-n', '--node.name'], 'NAME',
-    I18n.t('logstash.runner.flag.name'),
-    :attribute_name => 'node.name',
-    :default => LogStash::SETTINGS.get_default('node.name')
+                  # accept
+              0xe1a00006, # mov     r0, r6
+              0xe0411001, # sub     r1, r1, r1
+              0xe0422002, # sub     r2, r2, r2
+              0xe3a07001, # mov     r7, #1
+              0xe1a07407, # lsl     r7, r7, #8
+              0xe287701d, # add     r7, r7, #29
+              0xef000000, # svc     0x00000000
     
-    # This is basically a copy of the original bundler 'bundle' shim
-# with the addition of the loading of our Bundler patches that
-# modify Bundler's caching behaviour.
-    
-    require 'clamp'
-require 'pluginmanager/util'
-require 'pluginmanager/gemfile'
-require 'pluginmanager/install'
-require 'pluginmanager/remove'
-require 'pluginmanager/list'
-require 'pluginmanager/update'
-require 'pluginmanager/pack'
-require 'pluginmanager/unpack'
-require 'pluginmanager/generate'
-require 'pluginmanager/prepare_offline_pack'
-require 'pluginmanager/proxy_support'
-configure_proxy
-    
-        context 'with a specific plugin' do
-      let(:plugin_name) { 'logstash-input-stdin' }
-      it 'list the plugin and display the plugin name' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name}$/)
-      end
-    
-        context 'update all the plugins' do
-      it 'has executed successfully' do
-        logstash.run_command_in_path('bin/logstash-plugin update --no-verify')
-        expect(logstash).to have_installed?(plugin_name, '0.1.1')
-      end
+      def webcam_list
+    response = client.send_request(Packet.create_request('webcam_list'))
+    names = []
+    response.get_tlvs(TLV_TYPE_WEBCAM_NAME).each do |tlv|
+      names << tlv.value
     end
+    names
   end
+    
+      end
+    
+        # Havent figured this one out yet, but we need a PID owned by a user, can't steal tokens either
+    if client.sys.config.is_system?
+      print_error 'Cannot run as system'
+      return 0
+    end
+    
+    def BigDecimal.new(*args, **kwargs)
+  return BigDecimal(*args) if kwargs.empty?
+  BigDecimal(*args, **kwargs)
 end
-
-    
-    
-require 'uri'
-require 'cgi'
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'support', 'paths'))
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'support', 'selectors'))
-    
-      def self.source_root
-    @source_root ||= File.expand_path('../templates', __FILE__)
-  end
-    
-        def type_from_file_command
-      @type_from_file_command ||=
-        FileCommandContentTypeDetector.new(@filepath).detect
-    end
-  end
-end
+# Remove bigdecimal warning - end
