@@ -1,151 +1,172 @@
 
         
-              command.args.each do |arg|
-        arg_value = arg.value
-        if arg.value_type.to_s.to_sym == :string_closure
-          closure = proc { |string_value| closure_argument_value = string_value }
-          arg_value = closure
-        end
-        parameter_map[arg.name.to_sym] = arg_value
+            expect(tight_hashes).to eq(loose_hashes)
+  end
+    
+        it 'should import branch from ssh url' do
+      Discourse::Utils.expects(:execute_command).with({
+        'GIT_SSH_COMMAND' => 'ssh -i #{@ssh_folder}/id_rsa -o StrictHostKeyChecking=no'
+      }, 'git', 'clone', '--single-branch', '-b', branch, ssh_url, @temp_folder)
+    
+        unless @topic.topic_allowed_users.where(user_id: @user.id).exists?
+      unless @topic.topic_allowed_groups.where('group_id IN (
+                                              SELECT group_id FROM group_users where user_id = ?
+                                           )', @user.id).exists?
+        @topic.topic_allowed_users.create!(user_id: @user.id)
       end
-    
-          @launch_event_sent = true
-      builder = AnalyticsEventBuilder.new(
-        p_hash: launch_context.p_hash,
-        session_id: session_id,
-        action_name: nil,
-        fastlane_client_language: launch_context.fastlane_client_language
-      )
-    
-            expect(result).to eq('git tag -am #{message.shellescape} --force #{tag.shellescape}')
-      end
-    
-        # wrap in double quotes if contains space
-    if str =~ /\s/
-      # double quotes have to be doubled if will be quoted
-      str.gsub!(''', '''')
-      return ''' + str + '''
-    else
-      return str
     end
   end
-  module_function :shellescape
+    
+          put '/admin/groups/bulk.json', params: {
+        group_id: group.id, users: [user.username.upcase, user2.email, 'doesnt_exist']
+      }
+    
+        self.serialized_private_key = OpenSSL::PKey::RSA.generate(key_size).to_s if serialized_private_key.blank?
+    
+      def update_order
+    params[:ordered_aspect_ids].each_with_index do |id, i|
+      current_user.aspects.find(id).update_attributes(order_id: i)
+    end
+    head :no_content
+  end
+    
+      def new
+    respond_to do |format|
+      format.mobile { render layout: false }
+    end
+  end
+    
+        if message.save
+      logger.info 'event=create type=message user=#{current_user.diaspora_handle} status=success ' \
+                  'message=#{message.id} chars=#{params[:message][:text].length}'
+      Diaspora::Federation::Dispatcher.defer_dispatch(current_user, message)
+    else
+      flash[:error] = I18n.t('conversations.new_conversation.fail')
+    end
+    redirect_to conversations_path(:conversation_id => conversation.id)
+  end
 end
 
     
-        # Returns the specified or detected guest type name.
-    #
-    # @return [Symbol]
-    def name
-      capability_host_chain[0][0]
-    end
-    
-            # Execute a command on the remote machine. The exact semantics
-        # of this method are up to the implementor, but in general the
-        # users of this class will expect this to be a shell.
-        #
-        # This method gives you no way to write data back to the remote
-        # machine, so only execute commands that don't expect input.
-        #
-        # @param [String] command Command to execute.
-        # @yield [type, data] Realtime output of the command being executed.
-        # @yieldparam [String] type Type of the output. This can be
-        #   `:stdout`, `:stderr`, etc. The exact types are up to the
-        #   implementor.
-        # @yieldparam [String] data Data for the given output.
-        # @return [Integer] Exit code of the command.
-        def execute(command, opts=nil)
-        end
-    
-            # Configures the given list of networks on the virtual machine.
-        #
-        # The networks parameter will be an array of hashes where the hashes
-        # represent the configuration of a network interface. The structure
-        # of the hash will be roughly the following:
-        #
-        # {
-        #   type:      :static,
-        #   ip:        '192.168.33.10',
-        #   netmask:   '255.255.255.0',
-        #   interface: 1
-        # }
-        #
-        def configure_networks(networks)
-          raise BaseError, _key: :unsupported_configure_networks
-        end
-    
-            protected
-    
-            # This contains all the command plugins by name, and returns
-        # the command class and options. The command class is wrapped
-        # in a Proc so that it can be lazy loaded.
-        #
-        # @return [Registry<Symbol, Array<Proc, Hash>>]
-        attr_reader :commands
-    
-        # Returns an array populated with the keys of this object.
-    #
-    # @return [Array]
-    def keys
-      @items.keys
-    end
-    
-    get '/' do
-  stats = Sidekiq::Stats.new
-  @failed = stats.failed
-  @processed = stats.processed
-  @messages = $redis.lrange('sinkiq-example-messages', 0, -1)
-  erb :index
-end
-    
-    # Use this to fill in an entire form with data from a table. Example:
-#
-#   When I fill in the following:
-#     | Account Number | 5002       |
-#     | Expiry date    | 2009-11-01 |
-#     | Note           | Nice guy   |
-#     | Wants Email?   |            |
-#
-# TODO: Add support for checkbox, select og option
-# based on naming conventions.
-#
-When /^(?:|I )fill in the following:$/ do |fields|
-  fields.rows_hash.each do |name, value|
-    When %{I fill in '#{name}' with '#{value}'}
-  end
-end
-    
-    module RailsCommandHelpers
-  def framework_version?(version_string)
-    framework_version =~ /^#{version_string}/
+        it { expect(self_class_node.is_a?(described_class)).to be(true) }
   end
     
-      def migration_file_name
-    '#{migration_name}.rb'
-  end
+        context 'in a method calling `super` with arguments' do
+      context 'when a method argument is unused' do
+        it 'registers an offense' do
+          message = 'Unused method argument - `foo`. If it's necessary, use ' \
+                      '`_` or `_foo` as an argument name to indicate that ' \
+                      'it won't be used. You can also write as ' \
+                      '`some_method(*)` if you want the method to accept any ' \
+                      'arguments but don't care about them.'
     
-        def type_from_file_contents
-      type_from_mime_magic || type_from_file_command
-    rescue Errno::ENOENT => e
-      Paperclip.log('Error while determining content type: #{e}')
-      SENSIBLE_DEFAULT
-    end
-    
-        private
-    
-          it { expect(parsed_json.keys).to include('url') }
-      it { expect(parsed_json.keys).to include('thumb') }
-      it { expect(parsed_json['url']).to be_nil }
-      it { expect(parsed_json['thumb'].keys).to include('url') }
-      it { expect(parsed_json['thumb']['url']).to be_nil }
-    
-    When /^I save the datamapper record$/ do
-  @instance.save
-end
-    
-          def check_content_type_blacklist!(new_file)
-        content_type = new_file.content_type
-        if content_type_blacklist && blacklisted_content_type?(content_type)
-          raise CarrierWave::IntegrityError, I18n.translate(:'errors.messages.content_type_blacklist_error', content_type: content_type)
-        end
+            rhs
       end
+    end
+  end
+end
+
+    
+          def sidebar
+        if @sidebar.nil?
+          if page = @page.sidebar
+            @sidebar = page.text_data
+          else
+            @sidebar = false
+          end
+        end
+        @sidebar
+      end
+    
+      it 'renders a podcast index if there is a podcast with the slug successfully' do
+    expect(get: '/#{podcast.slug}').to route_to(
+      controller: 'stories',
+      action: 'index',
+      username: podcast.slug,
+    )
+  end
+    
+        it 'works successfully' do
+      article = create(:article, user: user)
+      get '#{article.path}/manage'
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include('Manage Your Post')
+    end
+    
+      def self.buff!(article_id, text, buffer_profile_id_code, social_service_name = 'twitter', tag_id = nil)
+    buffer_response = send_to_buffer(text, buffer_profile_id_code)
+    create(
+      article_id: article_id,
+      tag_id: tag_id,
+      body_text: text,
+      buffer_profile_id_code: buffer_profile_id_code,
+      social_service_name: social_service_name,
+      buffer_response: buffer_response,
+      status: 'sent_direct',
+    )
+  end
+    
+        obj = Helpers.new('HTTP_ACCEPT_LANGUAGE' => 'fr-FR,fr;q=0.8,en-US;q=0.6,en;q=0.4,ru;q=0.2')
+    assert_equal 'fr', obj.locale
+    
+    describe Sidekiq::Manager do
+  before do
+    Sidekiq.redis {|c| c.flushdb }
+  end
+    
+    describe 'job scheduling' do
+  describe 'middleware' do
+    class SomeScheduledWorker
+      include Sidekiq::Worker
+      sidekiq_options :queue => :custom_queue
+      def perform(x)
+      end
+    end
+    
+        assert_raises InlineError do
+      InlineWorker.perform_async(false)
+    end
+  end
+    
+      [jekyllPid, compassPid].each { |pid| Process.wait(pid) }
+end
+    
+    class SinatraStaticServer < Sinatra::Base
+    
+          rtn = ''
+      (context.environments.first['site'][@array_name] || []).each do |file|
+        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
+          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
+        end
+    
+          unless file.file?
+        return 'File #{file} could not be found'
+      end
+    
+      # Summary is used on the Archive pages to return the first block of content from a post.
+  def summary(input)
+    if input.index(/\n\n/)
+      input.split(/\n\n/)[0]
+    else
+      input
+    end
+  end
+    
+      class RenderPartialTag < Liquid::Tag
+    include OctopressFilters
+    def initialize(tag_name, markup, tokens)
+      @file = nil
+      @raw = false
+      if markup =~ /^(\S+)\s?(\w+)?/
+        @file = $1.strip
+        @raw = $2 == 'raw'
+      end
+      super
+    end
+    
+        def initialize(tag_name, markup, tokens)
+      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
+      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
+      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
+      super
+    end
