@@ -1,74 +1,77 @@
 
         
-        
-class Message(object):
-    
-            (2016-01, url0), 2
-        (2016-01, url1), 1
-        '''
-        yield key, sum(values)
-    
-        def __init__(self, pages, data_store, reverse_index_queue, doc_index_queue):
-        self.pages = pages
-        self.data_store = data_store
-        self.reverse_index_queue = reverse_index_queue
-        self.doc_index_queue = doc_index_queue
+        from mrjob.job import MRJob
     
     
-if __name__ == '__main__':
-    main()
-
+class PollErrorTest(unittest.TestCase):
+    '''Tests for acme.errors.PollError.'''
     
-        with io.open(outfile, 'w', encoding='utf-8') as outf:
-        outf.write(out)
+    # Add any Sphinx extension module names here, as strings. They can be
+# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
+# ones.
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.todo',
+    'sphinx.ext.coverage',
+    'sphinx.ext.viewcode',
+]
     
-        infile, outfile = args
+            self.assertTrue(self.addr_default.conflicts(self.addr))
+        self.assertTrue(self.addr_default.conflicts(self.addr1))
+        self.assertTrue(self.addr_default.conflicts(self.addr_defined))
     
-                        if not split_option[-1].startswith('-'):  # metavar
-                        option = ' '.join(split_option[:-1] + ['*%s*' % split_option[-1]])
+                        self.assertTrue(mock_eab_from_data.called)
     
-    
-if __name__ == '__main__':
-    unittest.main()
-
-    
-        def test_proxy_http(self):
-        params = self._check_params(['primary_proxy', 'primary_server_ip'])
-        if params is None:
-            return
-        ydl = FakeYDL({
-            'proxy': params['primary_proxy']
-        })
-        self.assertEqual(
-            ydl.urlopen('http://yt-dl.org/ip').read().decode('utf-8'),
-            params['primary_server_ip'])
-    
-      * dynamodb
-'''
+        def cleanup(self):
+        self._stop_nginx()
+        super(IntegrationTestsContext, self).cleanup()
     
     
-@parametrize_extensions
-@parametrize_filename
-@parametrize_script
-def test_match(ext, tar_error, filename, unquoted, quoted, script, fixed):
-    tar_error(unquoted.format(ext))
-    assert match(Command(script.format(filename.format(ext)), ''))
+@pytest.mark.parametrize('certname_pattern, params, context', [
+    ('nginx.{0}.wtf', ['run'], {'default_server': True}),
+    ('nginx2.{0}.wtf', ['--preferred-challenges', 'http'], {'default_server': True}),
+    # Overlapping location block and server-block-level return 301
+    ('nginx3.{0}.wtf', ['--preferred-challenges', 'http'], {'default_server': True}),
+    # No matching server block; default_server exists
+    ('nginx4.{0}.wtf', ['--preferred-challenges', 'http'], {'default_server': True}),
+    # No matching server block; default_server does not exist
+    ('nginx5.{0}.wtf', ['--preferred-challenges', 'http'], {'default_server': False}),
+    # Multiple domains, mix of matching and not
+    ('nginx6.{0}.wtf,nginx7.{0}.wtf', ['--preferred-challenges', 'http'], {'default_server': False}),
+], indirect=['context'])
+def test_certificate_deployment(certname_pattern, params, context):
+    # type: (str, list, nginx_context.IntegrationTestsContext) -> None
+    '''
+    Test various scenarios to deploy a certificate to nginx using certbot.
+    '''
+    domains = certname_pattern.format(context.worker_id)
+    command = ['--domains', domains]
+    command.extend(params)
+    context.certbot_test_nginx(command)
     
+        command = [
+        'certbot',
+        '--server', directory_url,
+        '--no-verify-ssl',
+        '--http-01-port', str(http_01_port),
+        '--https-port', str(tls_alpn_01_port),
+        '--manual-public-ip-logging-ok',
+        '--config-dir', config_dir,
+        '--work-dir', os.path.join(workspace, 'work'),
+        '--logs-dir', os.path.join(workspace, 'logs'),
+        '--non-interactive',
+        '--no-redirect',
+        '--agree-tos',
+        '--register-unsafely-without-email',
+        '--debug',
+        '-vv'
+    ]
     
-def get_github_url(app, view, path):
-    github_fmt = 'https://github.com/{}/{}/{}/{}{}'
-    return (
-        github_fmt.format(app.config.edit_on_github_project, view,
-                          app.config.edit_on_github_branch,
-                          app.config.edit_on_github_src_path, path))
+            if threads != 'default':
+            expr.set_numexpr_threads(threads)
+        if not use_numexpr:
+            expr.set_use_numexpr(False)
     
-    from homeassistant.components.http.const import KEY_REAL_IP
-    
-        complete_apps = ['tagstore']
-
-    
-    
-@instrumented_task(name='sentry.tasks.send_ping')
-def send_ping():
-    options.set('sentry:last_worker_ping', time())
-    options.set('sentry:last_worker_version', sentry.VERSION)
+        def time_pandas_dtype(self, dtype):
+        pandas_dtype(dtype)
