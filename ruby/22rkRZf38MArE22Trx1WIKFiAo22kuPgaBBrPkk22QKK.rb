@@ -1,190 +1,158 @@
 
         
-          def test_numeric_fields_with_scale
-    m = NumericData.new(
-      bank_balance: 1586.43122334,
-      big_bank_balance: BigDecimal('234000567.952344'),
-      world_population: 2**62,
-      my_house_population: 3
-    )
-    assert m.save
+            let!(:bob_formatting_agent) {
+      agents(:bob_formatting_agent).tap { |agent|
+        # Make this valid
+        agent.options['instructions']['foo'] = 'bar'
+        agent.save!
+      }
+    }
     
-        %w(SPATIAL FULLTEXT UNIQUE).each do |type|
-      expected = 'CREATE #{type} INDEX `index_people_on_last_name`  ON `people` (`last_name`) '
-      assert_equal expected, add_index(:people, :last_name, type: type)
-    end
-    
-      # Specifies the header that your server uses for sending files.
-  # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
-  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
-    
-            def ref
-          @symbol
-        end
-        alias to_sym ref
-    
-        def purge_tombstone(grace_period)
-    end
-    
-          if message_template == :email_reject_post_too_short
-        template_args[:count] = SiteSetting.min_post_length
-      end
-    
-      def update_user_counts
-    return if @opts[:import_mode]
-    
-        if request.put?
-      params[:reviewable_priorities].each do |id, priority|
-        if !priority.nil? && Reviewable.priorities.has_value?(priority.to_i)
-          # For now, the score bonus is equal to the priority. In the future we might want
-          # to calculate it a different way.
-          PostActionType.where(id: id).update_all(
-            reviewable_priority: priority.to_i,
-            score_bonus: priority.to_f
-          )
-        end
-      end
-    end
-    
-      protected
-    
-          path_name = url_method(params.slice(:category, :parent_category))
-      canonical_url '#{Discourse.base_url_no_prefix}#{public_send(path_name, *(params.slice(:parent_category, :category, :tag_id).values.map { |t| t.force_encoding('UTF-8') }))}'
-    
-    module Gitlab
-  module CryptoHelper
-    extend self
-    
-      describe '#can_resend_invite?' do
-    context 'when group_member is invited' do
+        describe '#agents_dot' do
       before do
-        expect(group_member).to receive(:invite?).and_return(true)
-      end
+        @agents = [
+          @foo = Agents::DotFoo.new(name: 'foo').tap { |agent|
+            agent.user = users(:bob)
+            agent.save!
+          },
     
-            def diff_stats_collection
-          strong_memoize(:diff_stats) do
-            # There are scenarios where we don't need to request Diff Stats,
-            # when caching for instance.
-            next unless @include_stats
-            next unless diff_refs
+    end
+
     
-      def serialize_options(resource)
-    methods = resource_class.authentication_keys.dup
-    methods = methods.keys if methods.is_a?(Hash)
-    methods << :password if resource.respond_to?(:password)
-    { methods: methods, only: [:password] }
-  end
-    
-      # Helper for use after calling send_*_instructions methods on a resource.
-  # If we are in paranoid mode, we always act as if the resource was valid
-  # and instructions were sent.
-  def successfully_sent?(resource)
-    notice = if Devise.paranoid
-      resource.errors.clear
-      :send_paranoid_instructions
-    elsif resource.errors.empty?
-      :send_instructions
+      describe '.seed' do
+    it 'imports a set of agents to get the user going when they are first created' do
+      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
     end
     
-                bypass_sign_in(user)
-          DEPRECATION
-          warden.session_serializer.store(resource, scope)
-        elsif warden.user(scope) == resource && !options.delete(:force)
-          # Do nothing. User already signed in and we are not forcing it.
-          true
-        else
-          warden.set_user(resource, options.merge!(scope: scope))
+        it 'does not output links to other agents outside of the incoming set' do
+      Link.create!(:source_id => agents(:jane_weather_agent).id, :receiver_id => agents(:jane_website_agent).id)
+      Link.create!(:source_id => agents(:jane_website_agent).id, :receiver_id => agents(:jane_rain_notifier_agent).id)
+    
+      let :new_extract do
+    {
+      'url' => { 'css' => '#comic img', 'value' => '@src' },
+      'title' => { 'css' => '#comic img', 'value' => '@alt' },
+      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
+    }
+  end
+    
+        it 'cleans up old logs when there are more than log_length' do
+      stub(AgentLog).log_length { 4 }
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 1')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 2')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 3')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 4')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 4')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 1')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 5')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 5')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 2')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 6')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 6')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 3')
+    end
+    
+        it 'should generate the correct last checkpoint url' do
+      @checker.options['path'] = 'last_checkpoint/usps/9361289878905919630610'
+      expect(@checker.send(:event_url)).to eq('https://api.aftership.com/v4/last_checkpoint/usps/9361289878905919630610')
+    end
+  end
+    
+        @a.rw = 'W'
+    
+        refute @co.suppressed?
+  end
+    
+      def header
+    <<-'HEADER'
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#, fuzzy
+msgid ''
+msgstr ''
+'Project-Id-Version: PACKAGE VERSEION\n'
+'Report-Msgid-Bugs-To:\n'
+'PO-Revision-Date: YEAR-MO_DA HO:MI+ZONE\n'
+'Last-Translator: FULL NAME <EMAIL@ADDRESS>\n'
+'Language-Team: LANGUAGE <LL@li.org>\n'
+'Language:\n'
+'MIME-Version: 1.0\n'
+'Content-Type: text/plain; charset=CHARSET\n'
+'Content-Transfer-Encoding: 8bit\n'
+'Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n'
+    HEADER
+  end
+    
+      def test_references_multiple
+    options = {:references => [['lib/rdoc.rb', 29], ['lib/rdoc/i18n.rb', 9]]}
+    assert_equal <<-'ENTRY', entry('Hello', options).to_s
+#: lib/rdoc.rb:29
+#: lib/rdoc/i18n.rb:9
+msgid 'Hello'
+msgstr ''
+    ENTRY
+  end
+    
+      def test_module_extended
+    m1 = @xref_data.add_module RDoc::NormalModule, 'Mod1'
+    m1_m3 = m1.add_module RDoc::NormalModule, 'Mod3'
+    m1_m2 = m1.add_module RDoc::NormalModule, 'Mod2'
+    m1_m2_m3 = m1_m2.add_module RDoc::NormalModule, 'Mod3'
+    m1_m2_m3_m4 = m1_m2_m3.add_module RDoc::NormalModule, 'Mod4'
+    m1_m2_m4 = m1_m2.add_module RDoc::NormalModule, 'Mod4'
+    m1_m2_k0 = m1_m2.add_class RDoc::NormalClass, 'Klass0'
+    m1_m2_k0_m4 = m1_m2_k0.add_module RDoc::NormalModule, 'Mod4'
+    #m1_m2_k0_m4_m5 = m1_m2_k0_m4.add_module RDoc::NormalModule, 'Mod5'
+    m1_m2_k0_m4_m6 = m1_m2_k0_m4.add_module RDoc::NormalModule, 'Mod6'
+    m1_m2_k0_m5 = m1_m2_k0.add_module RDoc::NormalModule, 'Mod5'
+    
+    Then(/^the current symlink points to that specific release$/) do
+  specific_release_path = TestApp.releases_path.join(@rollback_release)
+    
+          def load_built_in_scm
+        require 'capistrano/scm/#{scm_name}'
+        scm_class = Object.const_get(built_in_scm_plugin_class_name)
+        # We use :load_immediately because we are initializing the SCM plugin
+        # late in the load process and therefore can't use the standard
+        # load:defaults technique.
+        install_plugin(scm_class, load_immediately: true)
+      end
+    
+          def primary
+        self if fetch(:primary)
+      end
+    
+          def roles_for(names)
+        options = extract_options(names)
+        s = Filter.new(:role, names).filter(servers_by_key.values)
+        s.select { |server| server.select?(options) }
+      end
+    
+          # Decorate Variables#set to add validation behavior.
+      def set(key, value=nil, &block)
+        assert_value_or_block_not_both(value, block)
+    
+          extend Tmuxinator::WemuxSupport if wemux?
+    end
+    
+          @name = first_key.to_s.shellescape unless first_key.nil?
+      @yaml = window_yaml.values.first
+      @project = project
+      @index = index
+      @commands = build_commands(tmux_window_command_prefix, @yaml)
+    end
+    
+    require 'tmuxinator'
+require 'factory_bot'
+    
+            it 'returns two panes in an Array' do
+          expect(window.panes).to match [
+            a_pane.with(index: 0).and_commands('vim'),
+            a_pane.with(index: 1).and_commands(command1, command2)
+          ]
         end
       end
-    
-    version = ['', 'ext/etc/'].find do |dir|
-  begin
-    break File.open(File.expand_path('../#{dir}/etc.c', __FILE__)) do |f|
-      f.gets '\n#define RUBY_ETC_VERSION '
-      f.gets[/'(.+)'/, 1]
-    end
-  rescue
-    next
-  end
-end
-    
-      def test_untainted_numeric
-    bug8945 = '[ruby-core:57346] [Bug #8945] Numerics never be tainted'
-    b = RbConfig::LIMITS['FIXNUM_MAX'] + 1
-    tainted = [0, 1.0, 1.72723e-77, b].select do |x|
-      Marshal.load(Marshal.dump(x).taint).tainted?
-    end
-    assert_empty(tainted.map {|x| [x, x.class]}, bug8945)
-  end
-    
-      describe 'in the middle of the stream' do
-    before :each do
-      @gz = Zlib::GzipReader.new(@io)
-      @gz.read 5
-    end
-    
-          it 'makes eof? false' do
-        @gz.ungetc 'ŷ'
-        @gz.eof?.should be_false
-      end
-    end
-    
-        @inflator.inflate(@zeros) do |chunk|
-      @chunks << chunk
-      break
-    end
-    
-    Then(/^directories in :linked_dirs are created in shared$/) do
-  TestApp.linked_dirs.each do |dir|
-    run_vagrant_command(test_dir_exists(TestApp.shared_path.join(dir)))
-  end
-end
-    
-      context 'when redirected routes' do
-    include RSpec::Rails::RequestExampleGroup
-    
-      def user_is_author?
-    if record.instance_of?(Article)
-      record.user_id == user.id
-    else
-      record.pluck(:user_id).uniq == [user.id]
     end
   end
-    
-          exit!('Project #{existing} doesn't exist!') \
-        unless Tmuxinator::Config.exists?(name: existing)
-    
-              after(:all) do
-            puts @session
-            Kernel.system 'tmux kill-session -t #{@session}'
-          end
-    
-        def build_panes(panes_yml)
-      return if panes_yml.nil?
-    
-        allow(window).to receive(:project).and_return project
-    allow(window).to receive(:index).and_return 0
-  end
-    
-      describe '::parse_settings' do
-    let(:args) { ['one', 'two=three'] }
-    
-        def rvm?
-      yaml['rvm']
-    end
-    
-      describe '#render' do
-    it 'renders the template' do
-      expect(File).to receive(:read).at_least(:once) { 'wemux ls 2>/dev/null' }
-    
-          def xdg?
-        File.directory?(xdg)
-      end
-    
-          it 'returns the flattened command' do
-        expect(window.commands).to eq [
-          'tmux send-keys -t test:1 git\\ fetch C-m',
-          'tmux send-keys -t test:1 git\\ status C-m'
-        ]
-      end
-    end
