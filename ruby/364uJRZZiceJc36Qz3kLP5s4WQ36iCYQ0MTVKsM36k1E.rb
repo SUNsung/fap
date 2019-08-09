@@ -1,172 +1,161 @@
-  subject(:finder) { described_class.new(project, 'files/', '.html', categories) }
-    
-      sidekiq_options retry: 3
-    
-          context 'and user can update_project_member' do
-        before do
-          allow(presenter).to receive(:can?).with(user, :update_project_member, presenter).and_return(true)
-        end
-    
-      it 'calls Gitlab::Diff::File#unfold_diff_lines with correct position' do
-    position = instance_double(Gitlab::Diff::Position, file_path: 'README')
-    readme_file = instance_double(Gitlab::Diff::File, file_path: 'README')
-    other_file = instance_double(Gitlab::Diff::File, file_path: 'foo.rb')
-    nil_path_file = instance_double(Gitlab::Diff::File, file_path: nil)
-    
-            css('.entry-detail[id$='instance-method']').each do |node|
-          name = node.at_css('.signature > strong').content.strip
-          name.prepend '#{self.name}#' unless slug.end_with?('toplevel')
-          id = node['id'] = node['id'].remove(/<.+?>/)
-          entries << [name, id] unless entries.last && entries.last[0] == name
-        end
-    
-        def merge(hash)
-      return super unless hash.is_a? Hash
-      dup.merge!(hash)
-    end
-    
-            root_page? ? root : other
-        doc
-      end
-    
-          it 'should return false' do
-        expect(subject.rsync_chown_support?(machine)).to be_falsey
-      end
-    end
-    
-        let(:cmd) { 'find /vagrant -path /vagrant/.vagrant -prune -o '!' -type l -a '(' ! -user vagrant -or ! -group vagrant ')' -exec chown vagrant:vagrant '{}' +' }
-    let(:no_exclude_cmd) { 'find /vagrant '!' -type l -a '(' ! -user vagrant -or ! -group vagrant ')' -exec chown vagrant:vagrant '{}' +' }
-    
-        it 'should not set the update parameter' do
-      expect(subject).to receive(:internal_install) do |info, update, opts|
-        expect(update).to be_nil
-      end
-      subject.install_local(plugin_path)
-    end
-    
-            def create(params, **opts, &block)
-          # NOTE: Use the direct machine name as we don't
-          # need to worry about uniqueness with compose
-          name    = machine.name.to_s
-          image   = params.fetch(:image)
-          links   = Array(params.fetch(:links, [])).map do |link|
-            case link
-            when Array
-              link
-            else
-              link.to_s.split(':')
-            end
-          end
-          ports   = Array(params[:ports])
-          volumes = Array(params[:volumes]).map do |v|
-            v = v.to_s
-            host, guest = v.split(':', 2)
-            if v.include?(':') && (Vagrant::Util::Platform.windows? || Vagrant::Util::Platform.wsl?)
-              host = Vagrant::Util::Platform.windows_path(host)
-              # NOTE: Docker does not support UNC style paths (which also
-              # means that there's no long path support). Hopefully this
-              # will be fixed someday and the gsub below can be removed.
-              host.gsub!(/^[^A-Za-z]+/, '')
-            end
-            # if host path is a volume key, don't expand it.
-            # if both exist (a path and a key) show warning and move on
-            # otherwise assume it's a realative path and expand the host path
-            compose_config = get_composition
-            if compose_config['volumes'] && compose_config['volumes'].keys.include?(host)
-              if File.directory?(@machine.env.cwd.join(host).to_s)
-                @machine.env.ui.warn(I18n.t('docker_provider.volume_path_not_expanded',
-                                           host: host))
-              end
-            else
-              @logger.debug('Path expanding #{host} to current Vagrant working dir instead of docker-compose config file directory')
-              host = @machine.env.cwd.join(host).to_s
-            end
-            '#{host}:#{guest}'
-          end
-          cmd     = Array(params.fetch(:cmd))
-          env     = Hash[*params.fetch(:env).flatten.map(&:to_s)]
-          expose  = Array(params[:expose])
-          @logger.debug('Creating container `#{name}`')
-          begin
-            update_args = [:apply]
-            update_args.push(:detach) if params[:detach]
-            update_args << block
-            update_composition(*update_args) do |composition|
-              services = composition['services'] ||= {}
-              services[name] ||= {}
-              if params[:extra_args].is_a?(Hash)
-                services[name].merge!(
-                  Hash[
-                    params[:extra_args].map{ |k, v|
-                      [k.to_s, v]
-                    }
-                  ]
-                )
-              end
-              services[name].merge!(
-                'environment' => env,
-                'expose' => expose,
-                'ports' => ports,
-                'volumes' => volumes,
-                'links' => links,
-                'command' => cmd
-              )
-              services[name]['image'] = image if image
-              services[name]['hostname'] = params[:hostname] if params[:hostname]
-              services[name]['privileged'] = true if params[:privileged]
-              services[name]['pty'] = true if params[:pty]
-            end
-          rescue => error
-            @logger.error('Failed to create container `#{name}`: #{error.class} - #{error}')
-            update_composition do |composition|
-              composition['services'].delete(name)
-            end
-            raise
-          end
-          get_container_id(name)
-        end
-    
-      def processed?
-    redis.exists('move_in_progress:#{@account.id}')
-  end
-    
-        old_account.update!(uri: 'https://example.org/alice', domain: 'example.org', protocol: :activitypub, inbox_url: 'https://example.org/inbox')
-    new_account.update!(uri: 'https://example.com/alice', domain: 'example.com', protocol: :activitypub, inbox_url: 'https://example.com/inbox', also_known_as: [old_account.uri])
-    
-          it 'processes payload with actor if valid signature exists' do
-        payload['signature'] = { 'type' => 'RsaSignature2017' }
-    
-      def refresh_poll
-    ActivityPub::FetchRemotePollService.new.call(@poll, current_account) if user_signed_in? && @poll.possibly_stale?
+
+        
+        class BugTest < Minitest::Test
+  def test_stuff
+    assert 'zomg'.present?
+    refute ''.present?
   end
 end
 
     
-            def on_send(node)
-          heredoc_arg = extract_heredoc_argument(node)
-          return unless heredoc_arg
+      def test_touching_an_attribute_updates_timestamp_with_given_time
+    previously_updated_at = @developer.updated_at
+    previously_created_at = @developer.created_at
+    new_time = Time.utc(2015, 2, 16, 4, 54, 0)
+    @developer.touch(:created_at, time: new_time)
     
-            # Returns true if running with --auto-correct would remove the braces
-        # of the last argument.
-        def braces_will_be_removed?(args)
-          brace_config = config.for_cop('Style/BracesAroundHashParameters')
-          return false unless brace_config.fetch('Enabled')
-          return false if brace_config['AutoCorrect'] == false
+    class Mysql2ActiveSchemaTest < ActiveRecord::Mysql2TestCase
+  include ConnectionHelper
     
-          def on_send(node)
-        rhs = extract_rhs(node)
+    require 'action_mailbox'
     
-            def check_space_style_inside_pipes(args, opening_pipe, closing_pipe)
-          check_opening_pipe_space(args, opening_pipe)
-          check_closing_pipe_space(args, closing_pipe)
-        end
+        # Obtain destination path.
+    #
+    # dest - The String path to the destination dir.
+    #
+    # Returns destination file path.
+    def destination(dest)
+      dest = @site.in_dest_dir(dest)
+      @site.in_dest_dir(dest, Jekyll::URL.unescape_path(url))
+    end
     
-      it 'registers an offense for guard clause not followed by empty line' do
-    expect_offense(<<~RUBY)
-      def foo
-        return if need_return?
-        ^^^^^^^^^^^^^^^^^^^^^^ Add empty line after guard clause.
-        foobar
+        should 'render fenced code blocks with syntax highlighting' do
+      result = nokogiri_fragment(@markdown.convert(<<~MARKDOWN))
+        ~~~ruby
+        puts 'Hello World'
+        ~~~
+      MARKDOWN
+      div_highlight = '>div.highlight'
+      selector = 'div.highlighter-rouge#{div_highlight}>pre.highlight>code'
+      refute(result.css(selector).empty?, result.to_html)
+    end
+    
+    # Just a slash
+Benchmark.ips do |x|
+  path = '/'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
+end
+    
+      </body>
+</html>
+HTML
+CONTENT_NOT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+    
+        unless %w[HEAD GET].include?(request.method)
+      vprint_error('Ignoring #{request.method} request')
+      return
+    end
+    
+      #
+  # Generates a URI with a given checksum and optionally with an embedded UUID if
+  # the desired length can accommodate it.
+  #
+  # @param mode [Symbol] The type of checksum to generate (:connect, :init_native, :init_python, :init_java)
+  # @param len [Integer] The length of the URI not including the leading slash, optionally nil for random
+  # @return [String] A URI with a leading slash that hashes to the checksum, with an optional UUID
+  #
+  def generate_uri_uuid_mode(mode, len = nil, uuid: nil)
+    sum = uri_checksum_lookup(mode)
+    
+        print_good('Persistent Script written to #{temprexe}')
+    @clean_up_rc << 'rm #{temprexe.gsub('\\', '\\\\\\\\')}\n'
+    temprexe
+  end
+    
+      # Under Phusion Passenger smart spawning, we need to reopen all IO streams
+  # after workers have forked.
+  #
+  # The rolling file appender uses shared file locks to ensure that only one
+  # process will roll the log file. Each process writing to the file must have
+  # its own open file descriptor for `flock` to function properly. Reopening
+  # the file descriptors after forking ensures that each worker has a unique
+  # file descriptor.
+  if defined? PhusionPassenger
+    PhusionPassenger.on_event(:starting_worker_process) do |forked|
+      Logging.reopen if forked
+    end
+  end
+end
+    
+      def down
+    remove_index :share_visibilities, name: :shareable_and_user_id
+    add_index :share_visibilities, %i(shareable_id shareable_type user_id), name: :shareable_and_user_id
+  end
+    
+    def await_condition &condition
+  start_time = Time.zone.now
+  until condition.call
+    return false if (Time.zone.now - start_time) > Capybara.default_max_wait_time
+    sleep 0.05
+  end
+  true
+end
+
+    
+          sign_in alice, scope: :user
+    end
+    
+          it 'doesn't post' do
+        expect(alice).not_to receive(:like!)
+        post :create, params: like_hash
+        expect(response.code).to eq('422')
       end
-    RUBY
+    end
+    
+        describe 'special case for start sharing notifications' do
+      it 'should not provide a contacts menu for standard notifications' do
+        FactoryGirl.create(:notification, :recipient => alice, :target => @post)
+        get :index, params: {per_page: 5}
+        expect(Nokogiri(response.body).css('.aspect_membership')).to be_empty
+      end
+    
+    end
+
+    
+      def update
+    if @ip_pool.update(safe_params)
+      redirect_to_with_json [:edit, @ip_pool], :notice => 'IP Pool has been updated.'
+    else
+      render_form_errors 'edit', @ip_pool
+    end
+  end
+    
+      def toggle_ssl
+    @track_domain.update(:ssl_enabled => !@track_domain.ssl_enabled)
+    redirect_to_with_json [organization, @server, :track_domains], :notice => 'SSL settings for #{@track_domain.full_name} updated successfully.'
+  end
+    
+      def verify
+    if request.post?
+      if params[:code].to_s.strip == current_user.email_verification_token.to_s || (Rails.env.development? && params[:code].to_s.strip == '123456')
+        current_user.verify!
+        redirect_to_with_json [:return_to, root_path], :notice => 'Thanks - your e-mail address has been verified successfully.'
+      else
+        flash_now :alert, 'The code you've entered isn't correct. Please check and try again.'
+      end
+    end
   end
