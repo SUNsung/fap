@@ -1,85 +1,223 @@
 
         
-            # Informational.
-    100: ('continue',),
-    101: ('switching_protocols',),
-    102: ('processing',),
-    103: ('checkpoint',),
-    122: ('uri_too_long', 'request_uri_too_long'),
-    200: ('ok', 'okay', 'all_ok', 'all_okay', 'all_good', '\\o/', '✓'),
-    201: ('created',),
-    202: ('accepted',),
-    203: ('non_authoritative_info', 'non_authoritative_information'),
-    204: ('no_content',),
-    205: ('reset_content', 'reset'),
-    206: ('partial_content', 'partial'),
-    207: ('multi_status', 'multiple_status', 'multi_stati', 'multiple_stati'),
-    208: ('already_reported',),
-    226: ('im_used',),
+            def process_options(self, args, opts):
+        ScrapyCommand.process_options(self, args, opts)
+        try:
+            opts.spargs = arglist_to_dict(opts.spargs)
+        except ValueError:
+            raise UsageError('Invalid -a value, use -a NAME=VALUE', print_help=False)
+        if opts.output:
+            if opts.output == '-':
+                self.settings.set('FEED_URI', 'stdout:', priority='cmdline')
+            else:
+                self.settings.set('FEED_URI', opts.output, priority='cmdline')
+            feed_exporters = without_none_values(self.settings.getwithbase('FEED_EXPORTERS'))
+            valid_output_formats = feed_exporters.keys()
+            if not opts.output_format:
+                opts.output_format = os.path.splitext(opts.output)[1].replace('.', '')
+            if opts.output_format not in valid_output_formats:
+                raise UsageError('Unrecognized output format '%s', set one'
+                                 ' using the '-t' switch or as a file extension'
+                                 ' from the supported list %s' % (opts.output_format,
+                                                                  tuple(valid_output_formats)))
+            self.settings.set('FEED_FORMAT', opts.output_format, priority='cmdline')
+    
+        def syntax(self):
+        return '[options]'
+    
+        if len(sys.argv) > 1:
+        ip = sys.argv[1]
+    else:
+        ip = '46.134.208.94'
+        ip = '2001:ee0:3203:a::12'
+        print('Usage: check_ip.py [ip] [top_domain] [wait_time=0]')
+    print('test ip:%s' % ip)
+    
+    # begin[licence]
+#
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licence]
     
     
-class SSLError(ConnectionError):
-    '''An SSL error occurred.'''
+def get_params_dict():
+    '''以字典形式获取所有 trainable 参数'''
+    param_dict = dict()
+    for var in tf.trainable_variables():
+        param_dict[var.name] = {'shape': list(map(int, var.shape)),
+                                'number': int(reduce(mul, var.shape, 1))}
+    return param_dict
     
-        def __init__(self, data=None, **kwargs):
-        self._store = OrderedDict()
-        if data is None:
-            data = {}
-        self.update(data, **kwargs)
+        @certbot_util.patch_get_utility()
+    def test_select_cancel(self, mock_util):
+        mock_util().checklist.return_value = (display_util.CANCEL, 'whatever')
+        vhs = select_vhost_multiple([self.vhosts[2], self.vhosts[3]])
+        self.assertFalse(vhs)
+    
+            mz = self.dns.managedZones()  # managedZones | pylint: disable=no-member
+        for zone_name in zone_dns_name_guesses:
+            try:
+                request = mz.list(project=self.project_id, dnsName=zone_name + '.')
+                response = request.execute()
+                zones = response['managedZones']
+            except googleapiclient_errors.Error as e:
+                raise errors.PluginError('Encountered error finding managed zone: {0}'
+                                         .format(e))
+    
+        def test_find_domain(self):
+        # _query_soa | pylint: disable=protected-access
+        self.rfc2136_client._query_soa = mock.MagicMock(side_effect=[False, False, True])
+    
+        def _start_nginx(self, default_server):
+        self.nginx_config = config.construct_nginx_config(
+            self.nginx_root, self.webroot, self.http_01_port, self.tls_alpn_01_port,
+            self.other_port, default_server, wtf_prefix=self.worker_id)
+        with open(self.nginx_config_path, 'w') as file:
+            file.write(self.nginx_config)
+    
+            responses.add(
+            method=responses.POST,
+            url='http://example.slack.com/response_url',
+            body='{'ok': true}',
+            status=200,
+            content_type='application/json',
+        )
     
     
-    {        Generic:                   '#000000',        # class: 'g'
-        Generic.Deleted:           '#a40000',        # class: 'gd'
-        Generic.Emph:              'italic #000000', # class: 'ge'
-        Generic.Error:             '#ef2929',        # class: 'gr'
-        Generic.Heading:           'bold #000080',   # class: 'gh'
-        Generic.Inserted:          '#00A000',        # class: 'gi'
-        Generic.Output:            '#888',           # class: 'go'
-        Generic.Prompt:            '#745334',        # class: 'gp'
-        Generic.Strong:            'bold #000000',   # class: 'gs'
-        Generic.Subheading:        'bold #800080',   # class: 'gu'
-        Generic.Traceback:         'bold #a40000',   # class: 'gt'
-    }
+@implements_to_string
+class Problem(object):
+    
+            return [
+            Problem(
+                message,
+                url=absolute_uri('/manage/queue/'),
+            ),
+        ]
 
     
-            :param name: a string containing name of cookie
-        :param domain: (optional) string containing domain of cookie
-        :param path: (optional) string containing path of cookie
-        :raises KeyError: if cookie is not found
-        :raises CookieConflictError: if there are multiple cookies
-            that match name and optionally domain and path
-        :return: cookie.value
-        '''
-        toReturn = None
-        for cookie in iter(self):
-            if cookie.name == name:
-                if domain is None or cookie.domain == domain:
-                    if path is None or cookie.path == path:
-                        if toReturn is not None:  # if there are multiple cookies that meet passed in criteria
-                            raise CookieConflictError('There are multiple cookies with name, %r' % (name))
-                        toReturn = cookie.value  # we will eventually return this as long as no cookie conflict
+            for job in job_list:
+            logger.debug('Sending scheduled job %s with payload %r', job.name, job.payload)
+            app.send_task(job.name, kwargs=job.payload)
+            job.delete()
+
     
-            # u_tilde(u~): context to question attended query vectors
-        u_tilde = tf.matmul(softmax(S), u)  # [N, T, d]
     
-        Examples:
-        l2_regularizer = l2(0.01)
-        tf.get_variable(..., regularizer=l2_regularizer, ...)
+def _GetRequiredNamespaceImport( completion ):
+  if ( 'extra_data' not in completion
+       or 'required_namespace_import' not in completion[ 'extra_data' ] ):
+    return None
+  return completion[ 'extra_data' ][ 'required_namespace_import' ]
+    
+    
+  def NullCharactersInExtraInfoAndDocString_test( self ):
+    self._Check( '0', {
+      'insertion_text':  'INSERTION TEXT',
+      'menu_text':       'MENU TEXT',
+      'extra_menu_info': 'EXTRA MENU INFO',
+      'kind':            'K',
+      'detailed_info':   'DETAILED\x00INFO',
+      'extra_data': {
+        'doc_string': 'DOC\x00STRING'
+      },
+    }, {
+      'word'     : 'INSERTION TEXT',
+      'abbr'     : 'MENU TEXT',
+      'menu'     : 'EXTRA MENU INFO',
+      'kind'     : 'k',
+      'info'     : 'DETAILEDINFO\nDOCSTRING',
+      'equal'    : 1,
+      'dup'      : 1,
+      'empty'    : 1,
+      'user_data': '0',
+    } )
+    
+      def ServerResponse( *args ):
+    return {
+      'completions': [ {
+        'insertion_text': 'insertion_text',
+        'menu_text': 'menu_text',
+        'extra_menu_info': 'extra_menu_info',
+        'detailed_info': 'detailed_info',
+        'kind': 'kind',
+        'extra_data': {
+           'doc_string': 'doc_string'
+        }
+      } ],
+      'completion_start_column': 3,
+      'errors': [ {
+        'exception': {
+           'TYPE': 'Exception'
+        },
+        'message': 'message',
+        'traceback': 'traceback'
+      } ]
+    }
+    
+      _assert_accepts( f, { 'text' : 'This is an IMPORTANT taco',
+                        'kind' : 'WARNING' } )
+  _assert_rejects( f, { 'text' : 'This taco will NOT be shown',
+                        'kind' : 'ERROR' } )
+    
+        # Parse and validate the field names.  Validation serves two purposes,
+    # generating informative error messages and preventing template injection attacks.
+    if isinstance(field_names, basestring):
+        field_names = field_names.replace(',', ' ').split() # names separated by whitespace and/or commas
+    field_names = tuple(map(str, field_names))
+    for name in (typename,) + field_names:
+        if not all(c.isalnum() or c=='_' for c in name):
+            raise ValueError('Type names and field names can only contain alphanumeric characters and underscores: %r' % name)
+        if _iskeyword(name):
+            raise ValueError('Type names and field names cannot be a keyword: %r' % name)
+        if name[0].isdigit():
+            raise ValueError('Type names and field names cannot start with a number: %r' % name)
+    seen_names = set()
+    for name in field_names:
+        if name.startswith('_'):
+            raise ValueError('Field names cannot start with an underscore: %r' % name)
+        if name in seen_names:
+            raise ValueError('Encountered duplicate field name: %r' % name)
+        seen_names.add(name)
+    
+        Args:
+        pending_work_items: A dict mapping work ids to _WorkItems e.g.
+            {5: <_WorkItem...>, 6: <_WorkItem...>, ...}
+        work_ids: A queue.Queue of work ids e.g. Queue([5, 6, ...]). Work ids
+            are consumed and the corresponding _WorkItems from
+            pending_work_items are transformed into _CallItems and put in
+            call_queue.
+        call_queue: A multiprocessing.Queue that will be filled with _CallItems
+            derived from _WorkItems.
     '''
-    
-        class Meta:
-        app_label = 'sentry'
-        db_table = 'sentry_identityprovider'
-        unique_together = (('type', 'external_id'),)
-    
-    from .base import Problem, StatusCheck
-    
-            # Adding index on 'EventTag', fields ['project_id', 'key', 'value']
-        db.create_index(u'tagstore_eventtag', ['project_id', 'key_id', 'value_id'])
-    
-            # Adding unique constraint on 'TagValue', fields ['project_id', '_key', 'value']
-        db.create_unique(u'tagstore_tagvalue', ['project_id', 'key_id', 'value'])
-    
-            # Changing field 'TagValue.project_id'
-        db.alter_column(u'tagstore_tagvalue', 'project_id', self.gf(
-            'sentry.db.models.fields.bounded.BoundedBigIntegerField')())
+    while True:
+        if call_queue.full():
+            return
+        try:
+            work_id = work_ids.get(block=False)
+        except queue.Empty:
+            return
+        else:
+            work_item = pending_work_items[work_id]
