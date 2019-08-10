@@ -1,248 +1,321 @@
 
         
-            bst_uint newsize = std::max(bst_uint(lower_.size()), bst_uint(std::max(leftid, rightid) + 1u));
+                res->first.func = disk_info.mapping;
+        res->first.func_version = disk_info.mapping_version_info.original_reql_version;
+        res->first.multi = disk_info.multi;
+        res->first.geo = disk_info.geo;
     
-    #include <cstdint>
-#include <rabit/c_api.h>
-#include <xgboost/c_api.h>
-#include <xgboost/base.h>
-#include <xgboost/logging.h>
-#include './xgboost4j.h'
-#include <cstring>
-#include <vector>
-#include <string>
+                auto it = sindexes.begin();
+            auto jt = mirror.begin();
     
-      const MetaInfo& Info() const override;
+    template <$for j, [[typename T$j]]>
+internal::ValueArray$i<$for j, [[T$j]]> Values($for j, [[T$j v$j]]) {
+  return internal::ValueArray$i<$for j, [[T$j]]>($for j, [[v$j]]);
+}
     
-      // Loop over the batches and count the records
-  int64_t batch_count = 0;
-  int64_t row_count = 0;
-  for (const auto &batch : dmat->GetRowBatches()) {
-    batch_count++;
-    row_count += batch.Size();
-  }
-  EXPECT_GE(batch_count, 2);
-  EXPECT_EQ(row_count, dmat->Info().num_row_);
+    #endif  // GTEST_OS_WINDOWS
     
-    // objectives
-#include '../src/objective/objective.cc'
-#include '../src/objective/regression_obj.cc'
-#include '../src/objective/multiclass_obj.cc'
-#include '../src/objective/rank_obj.cc'
-#include '../src/objective/hinge.cc'
+    GTEST_DECLARE_string_(internal_run_death_test);
     
-    TEST(Transform, DeclareUnifiedTest(Basic)) {
-  const size_t size {256};
-  std::vector<bst_float> h_in(size);
-  std::vector<bst_float> h_out(size);
-  InitializeRange(h_in.begin(), h_in.end());
-  std::vector<bst_float> h_sol(size);
-  InitializeRange(h_sol.begin(), h_sol.end());
+    
+    {  GTEST_DISALLOW_ASSIGN_(NativeArray);
+};
+    
+      // Many linked_ptr operations may change p.link_ for some linked_ptr
+  // variable p in the same circle as this object.  Therefore we need
+  // to prevent two such operations from occurring concurrently.
+  //
+  // Note that different types of linked_ptr objects can coexist in a
+  // circle (e.g. linked_ptr<Base>, linked_ptr<Derived1>, and
+  // linked_ptr<Derived2>).  Therefore we must use a single mutex to
+  // protect all linked_ptr objects.  This can create serious
+  // contention in production code, but is acceptable in a testing
+  // framework.
+    
+    namespace mxnet {
+namespace profiler {
+    }
     }
     
-    
-    {  // thread temp data
-  // used to hold temporal sketch
-  std::vector<std::vector<SketchEntry> > thread_sketch_;
-  // used to hold statistics
-  std::vector<std::vector<SKStats> > thread_stats_;
-  // node statistics
-  std::vector<SKStats> node_stats_;
-  // summary array
-  std::vector<WXQSketch::SummaryContainer> summary_array_;
-  // reducer for summary
-  rabit::Reducer<SKStats, SKStats::Reduce> stats_reducer_;
-  // reducer for summary
-  rabit::SerializeReducer<WXQSketch::SummaryContainer> sketch_reducer_;
-  // per node, per feature sketch
-  std::vector<common::WXQuantileSketch<bst_float, bst_float> > sketchs_;
-};
+    void GPUPooledStorageManager::Free(Storage::Handle handle) {
+  // Do nothing if dptr is nullptr. Otherwise, nullptr may be reused
+  // which can cause illegal memory access error.
+  if (handle.dptr == nullptr) return;
+    }
     
     
     {
-    {XGBOOST_REGISTER_TREE_UPDATER(TreeRefresher, 'refresh')
-.describe('Refresher that refreshes the weight and statistics according to data.')
-.set_body([]() {
-    return new TreeRefresher();
-  });
-}  // namespace tree
-}  // namespace xgboost
-
-    
-      bool PartialMerge(const Slice& /*key*/, const Slice& left_operand,
-                    const Slice& right_operand, std::string* new_value,
-                    Logger* /*logger*/) const override {
-    if (left_operand.compare(right_operand) >= 0) {
-      new_value->assign(left_operand.data(), left_operand.size());
-    } else {
-      new_value->assign(right_operand.data(), right_operand.size());
-    }
-    return true;
-  }
-    
-    std::shared_ptr<TransactionDBCondVar>
-TransactionDBMutexFactoryImpl::AllocateCondVar() {
-  return std::shared_ptr<TransactionDBCondVar>(new TransactionDBCondVarImpl());
-}
-    
-      // When an actor (column family) requests a stop token, all writes will be
-  // stopped until the stop token is released (deleted)
-  std::unique_ptr<WriteControllerToken> GetStopToken();
-  // When an actor (column family) requests a delay token, total delay for all
-  // writes to the DB will be controlled under the delayed write rate. Every
-  // write needs to call GetDelay() with number of bytes writing to the DB,
-  // which returns number of microseconds to sleep.
-  std::unique_ptr<WriteControllerToken> GetDelayToken(
-      uint64_t delayed_write_rate);
-  // When an actor (column family) requests a moderate token, compaction
-  // threads will be increased
-  std::unique_ptr<WriteControllerToken> GetCompactionPressureToken();
-    
-    int main() {
-  // open DB
-  Options options;
-  options.create_if_missing = true;
-  DB* db;
-  Status s = DB::Open(options, kDBPath, &db);
-  assert(s.ok());
-    }
-    
-      int ret = system('rm -rf /tmp/rocksmergetest');
-  if (ret != 0) {
-    fprintf(stderr, 'Error deleting /tmp/rocksmergetest, code: %d\n', ret);
-    return ret;
-  }
-  rocksdb::Options options;
-  options.create_if_missing = true;
-  options.merge_operator.reset(new MyMerge);
-  options.compaction_filter = &filter;
-  status = rocksdb::DB::Open(options, '/tmp/rocksmergetest', &raw_db);
-  assert(status.ok());
-  std::unique_ptr<rocksdb::DB> db(raw_db);
-    
-      // Return stats as map of {string, double} per-tier
-  //
-  // Persistent cache can be initialized as a tier of caches. The stats are per
-  // tire top-down
-  virtual StatsType Stats() = 0;
+    {}  // namespace storage
+}  // namespace mxnet
     
     
-    { protected:
-  virtual ~Snapshot();
-};
-    
-    #pragma once
-// lua headers
-extern 'C' {
-#include <lauxlib.h>
-#include <lua.h>
-#include <lualib.h>
-}
-    
-    TEST_F(PacksTests, test_restriction_population) {
-  // Require that all potential restrictions are populated before being checked.
-  auto doc = getExamplePacksConfig();
-  const auto& packs = doc.doc()['packs'];
-  Pack fpack('fake_pack', packs['restricted_pack']);
-    }
-    
-    enum class DatabaseError {
-  // Unknown error, currently unused
-  Unknown = 1,
-  DbIsNotOpen = 2,
-  InvalidPath = 3,
-  FailToDestroyDB = 4,
-  FailToOpenDatabase = 5,
-  FailToReadData = 6,
-  FailToWriteData = 7,
-  KeyNotFound = 8,
-  DomainNotFound = 9,
-  // Corruption or other unrecoverable error after DB can't be longer used
-  // Database should be closed, destroyed and opened again
-  // If this error was received during data access, then application
-  // is likely to die soon
-  // See message and/or underlying error for details
-  Panic = 10,
-};
-    
-    ExpectedSuccess<RocksdbMigrationError> migrateRocksDBDatabase(
-    const std::string& path);
-    
-    Status LoggerPlugin::call(const PluginRequest& request,
-                          PluginResponse& response) {
-  std::vector<StatusLogLine> intermediate_logs;
-  if (request.count('string') > 0) {
-    return this->logString(request.at('string'));
-  } else if (request.count('snapshot') > 0) {
-    return this->logSnapshot(request.at('snapshot'));
-  } else if (request.count('init') > 0) {
-    deserializeIntermediateLog(request, intermediate_logs);
-    this->setProcessName(request.at('init'));
-    this->init(this->name(), intermediate_logs);
-    return Status(0);
-  } else if (request.count('status') > 0) {
-    deserializeIntermediateLog(request, intermediate_logs);
-    return this->logStatus(intermediate_logs);
-  } else if (request.count('event') > 0) {
-    return this->logEvent(request.at('event'));
-  } else if (request.count('action') && request.at('action') == 'features') {
-    size_t features = 0;
-    features |= (usesLogStatus()) ? LOGGER_FEATURE_LOGSTATUS : 0;
-    features |= (usesLogEvent()) ? LOGGER_FEATURE_LOGEVENT : 0;
-    return Status(static_cast<int>(features));
-  } else {
-    return Status(1, 'Unsupported call to logger plugin');
-  }
-}
-    
-    /**
- * @brief Logger plugin feature bits for complicated loggers.
- *
- * Logger plugins may opt-in to additional features like explicitly handling
- * Glog status events or requesting event subscribers to forward each event
- * directly to the logger. This enumeration tracks, and corresponds to, each
- * of the feature methods defined in a logger plugin.
- *
- * A specific registry call action can be used to retrieve an overloaded Status
- * object containing all of the opt-in features.
+/*!
+ * \brief deformable_im2col 2D cpu version.
+ * DO NOT call this function directly.
+ * Use the wrapper function im2col() instead.
  */
-enum LoggerFeatures {
-  LOGGER_FEATURE_BLANK = 0,
-  LOGGER_FEATURE_LOGSTATUS = 1,
-  LOGGER_FEATURE_LOGEVENT = 2,
-};
+template <typename DType>
+inline void deformable_im2col_cpu(const DType* data_im,
+                                  const DType* data_offset,
+                                  const index_t channels,
+                                  const index_t height, const index_t width,
+                                  const index_t kernel_h, const index_t kernel_w,
+                                  const index_t pad_h, const index_t pad_w,
+                                  const index_t stride_h, const index_t stride_w,
+                                  const index_t dilation_h, const index_t dilation_w,
+                                  const index_t deformable_group,
+                                  const index_t height_col, const index_t width_col,
+                                  DType* data_col) {
+  const index_t channel_size = height * width;
+  const index_t offset_size = 2 * kernel_h * kernel_w * height_col * width_col;
+  const index_t channel_per_group = channels / deformable_group;
+  for (index_t channel = 0; channel < channels; channel++, data_im += channel_size) {
+    if (channel % channel_per_group == 0 && channel != 0) {
+      data_offset += offset_size;
+    }
+    for (index_t i = 0; i < kernel_h; i++) {
+      for (index_t j = 0; j < kernel_w; j++) {
+        index_t input_row = -pad_h + i * dilation_h;
+        for (index_t h_col = 0; h_col < height_col; h_col++) {
+          index_t input_col = -pad_w + j * dilation_w;
+          for (index_t w_col = 0; w_col < width_col; w_col++) {
+            index_t offset_h_ptr = ((2 * (i * kernel_w + j)) *
+              height_col + h_col) * width_col + w_col;
+            index_t offset_w_ptr = offset_h_ptr + height_col * width_col;
+            DType im_row = input_row + data_offset[offset_h_ptr];
+            DType im_col = input_col + data_offset[offset_w_ptr];
+            if (im_row >= 0 && im_col >= 0 && im_row < height && im_col < width) {
+              *(data_col++) = im2col_bilinear_cpu(data_im, height, width, im_row, im_col);
+            } else {
+              *(data_col++) = 0;
+            }
+            input_col += stride_w;
+          }
+          input_row += stride_h;
+        }
+      }
+    }
+  }
+}
     
+      auto user_src_iter_memory = null_memory_;
+  if (L == 1) {
+    user_src_iter_memory = (*concat_iter_memory)[layer_index];
+  } else {
+    user_src_iter_memory = (*concat_iter_memory)[L + layer_index];
+    std::vector<void*> src_l_data;
+    std::vector<mkldnn::memory::dims> src_l_dim;
+    for (int l = 0; l < L; l++) {
+      src_l_data.push_back(reinterpret_cast<DType *>
+          ((*concat_iter_memory)[l + layer_index].get_data_handle()));
+      src_l_dim.push_back({1, 1, nstates, N, H});
+    }
+    ConcatData(mkldnn::memory::format::ldsnc, mkldnn::memory::format::ldsnc, src_l_dim,
+        {L, 1, nstates, N, H}, mkldnn_dtype, 0, src_l_data, user_src_iter_memory);
+  }
+  (*hcx_memory)[layer_index].set_data_handle(user_src_iter_memory.get_data_handle());
     
-    {} // namespace osquery
-
-    
-      /**
-   * @brief Bind this plugin to an external plugin reference.
-   *
-   * Allow a specialized plugin type to act when an external plugin is
-   * registered (e.g., a TablePlugin will attach the table name).
-   *
-   * @param name The broadcasted name of the plugin.
-   * @param info The routing info for the owning extension.
-   */
-  static Status addExternal(const std::string& name,
-                            const PluginResponse& info) {
-    (void)name;
-    (void)info;
-    return Status::success();
+      // limit inference to part of the graph
+  uint32_t node_start = 0, node_end = idx.num_nodes();
+  if (ret.attrs.count('node_range')) {
+    const auto& range = ret.GetAttr<std::pair<uint32_t, uint32_t> >('node_range');
+    node_start = range.first;
+    node_end = range.second;
+    CHECK_GE(node_start, 0);
+    CHECK_LE(node_end, idx.num_nodes());
+    ret.attrs.erase('node_range');
+  }
+  uint32_t entry_start = 0, entry_end = idx.num_node_entries();
+  if (ret.attrs.count('entry_range')) {
+    const auto& range = ret.GetAttr<std::pair<uint32_t, uint32_t> >('entry_range');
+    entry_start = range.first;
+    entry_end = range.second;
+    CHECK_GE(entry_start, 0);
+    CHECK_LE(entry_end, idx.num_node_entries());
+    ret.attrs.erase('entry_range');
+  }
+  // populate the node attribute vector
+  if (dispatch_mode_name != nullptr) {
+    if (ret.attrs.count(dispatch_mode_name) != 0) {
+      dispatch_modes = ret.MoveCopyAttr<NodeAttrVector>(dispatch_mode_name);
+    } else {
+      LOG(FATAL) << 'Node attribute ' << dispatch_mode_name << ' does not exist in the graph';
+    }
   }
     
-    GTEST_TEST(InMemoryDatabaseTest, test_destroy) {
-  auto db = std::make_unique<InMemoryDatabase>('test');
-  ASSERT_FALSE(db->open().isError());
-  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'key', 10).isError());
-  db->close();
-  // In memory db should be destroyed on close
-  // but we want to test that destroy is not failing for no reason
-  auto result = db->destroyDB();
-  EXPECT_TRUE(result);
-  ASSERT_FALSE(db->open().isError());
-  auto get_result = db->getInt32(kPersistentSettings, 'key');
-  EXPECT_FALSE(get_result);
-  EXPECT_EQ(get_result.getError(), DatabaseError::KeyNotFound);
+      index_products[ndim] = 1;
+    
+    MXNET_REGISTER_IO_ITER(CaffeDataIter)
+.describe('Create MxNet iterator for a Caffe data layer.')
+.add_arguments(CaffeDataParam::__FIELDS__())
+.add_arguments(PrefetcherParam::__FIELDS__())
+.set_body([]() {
+    return new CaffeDataIterWrapper();
+});
+    
+        float DecayCoefficient()
+    {
+        float f = 1.f;
+        switch (m_adjustLearningRateAtBeginningType)
+        {
+        case AdjustLearningRateAtBeginning::None:
+            break;
+        case AdjustLearningRateAtBeginning::Linearly:
+            f = min(f, max(0.f, (float)(m_adjustCoefficient + (1 - m_adjustCoefficient) / m_adjustMBNumber * m_parameterSyncCounter)));
+            break;
+        case AdjustLearningRateAtBeginning::Staircase:
+            f = min(f, max(0.f, (float)(m_adjustCoefficient * (m_parameterSyncCounter / m_adjustMBNumber + 1))));
+            break;
+        default:
+            break;
+        }
+        return f;
+    }
+    
+    template <>
+std::shared_ptr<IDistGradAggregator<half>> GetSimpleDistGradAggregator<half>(
+    const MPIWrapperPtr& mpi,
+    bool useAsyncAggregation,
+    int deviceId,
+    int syncStatsTrace,
+    size_t packThresholdSizeInBytes,
+    bool useFP16AllReduce)
+{
+    if (Globals::UseV2Aggregator())
+        return std::make_shared<V2SimpleDistGradAggregator<half>>(
+            mpi,
+            useAsyncAggregation,
+            deviceId,
+            syncStatsTrace,
+            ::CNTK::MPICommunicator(packThresholdSizeInBytes, useFP16AllReduce));
+    else
+        RuntimeError('SGD - half not supported when useV2Aggregator is false!');
 }
+    
+    void DHTRoutingTableSerializer::setNodes(
+    const std::vector<std::shared_ptr<DHTNode>>& nodes)
+{
+  nodes_ = nodes;
+}
+    
+      void addTask(const std::shared_ptr<DHTTask>& task) { queue_.push_back(task); }
+    
+    void DHTTaskQueueImpl::executeTask()
+{
+  A2_LOG_DEBUG('Updating periodicTaskQueue1');
+  periodicTaskQueue1_.update();
+  A2_LOG_DEBUG('Updating periodicTaskQueue2');
+  periodicTaskQueue2_.update();
+  A2_LOG_DEBUG('Updating immediateTaskQueue');
+  immediateTaskQueue_.update();
+}
+    
+    DHTTokenTracker::DHTTokenTracker()
+{
+  util::generateRandomData(secret_[0], SECRET_SIZE);
+  memcpy(secret_[1], secret_[0], SECRET_SIZE);
+}
+    
+    
+    {} // namespace aria2
+
+    
+      void GetTwoEllipsePoints(const double position_x, const double position_y,
+                           const double direction_x, const double direction_y,
+                           const double ellipse_len_x,
+                           const double ellipse_len_y,
+                           apollo::common::TrajectoryPoint* ellipse_point_1,
+                           apollo::common::TrajectoryPoint* ellipse_point_2);
+    
+      // 2. orientation
+  Eigen::Quaterniond q =
+      Eigen::AngleAxisd(ins->euler_angles().z() - 90 * DEG_TO_RAD_LOCAL,
+                        Eigen::Vector3d::UnitZ()) *
+      Eigen::AngleAxisd(-ins->euler_angles().y(), Eigen::Vector3d::UnitX()) *
+      Eigen::AngleAxisd(ins->euler_angles().x(), Eigen::Vector3d::UnitY());
+    
+    #include 'modules/tools/visualizer/main_window.h'
+    
+    
+    {  double normalized_y_diff =
+      y_diff * y_diff / params.diff_std_dev_ / params.diff_std_dev_;
+  double y_similarity = 1 - ChiSquaredCdf1TableFun(normalized_y_diff);
+  y_similarity = BoundedScalePositiveProbability(
+      y_similarity, params.bounded_scale_positive_max_p_,
+      params.bounded_scale_positive_min_p_);
+  return y_similarity;
+}
+double ComputeRadarCameraHSimilarity(
+    const SensorObjectConstPtr& radar, const SensorObjectConstPtr& camera,
+    const double size_y,
+    const std::vector<Eigen::Vector2d>& radar_box2d_vertices,
+    const HSimilarityParams& params) {
+  const double camera_height = camera->GetBaseObject()->size(2);
+  double height_similarity = params.initial_similarity_;
+  if (camera_height > FLT_EPSILON) {
+    double min_height_diff = std::numeric_limits<double>::max();
+    for (size_t i = 0; i < 4; ++i) {
+      double img_car_height = std::abs(radar_box2d_vertices[i + 4].y() -
+                                       radar_box2d_vertices[i].y());
+      min_height_diff =
+          std::min(std::abs(img_car_height - size_y), min_height_diff);
+    }
+    min_height_diff /= size_y;
+    double normalized_min_height_diff = min_height_diff * min_height_diff /
+                                        params.diff_std_dev_ /
+                                        params.diff_std_dev_;
+    height_similarity = 1 - ChiSquaredCdf1TableFun(normalized_min_height_diff);
+    height_similarity = ScalePositiveProbability(height_similarity,
+                                                 params.scale_positive_max_p_,
+                                                 params.scale_positive_th_p_);
+  }
+  return height_similarity;
+}
+double ComputeRadarCameraWSimilarity(
+    const SensorObjectConstPtr& radar, const double width, const double size_x,
+    const std::vector<Eigen::Vector2d>& radar_box2d_vertices,
+    const WSimilarityParams& params) {
+  std::vector<double> radar_box2d_xs = {
+      radar_box2d_vertices[0].x(), radar_box2d_vertices[1].x(),
+      radar_box2d_vertices[2].x(), radar_box2d_vertices[3].x()};
+  for (double& x : radar_box2d_xs) {
+    x = Bound(x, width, 0.0);
+  }
+  auto min_max_xs =
+      std::minmax_element(radar_box2d_xs.begin(), radar_box2d_xs.end());
+  double radar_box2d_width = *min_max_xs.second - *min_max_xs.first;
+  double width_diff = std::abs(radar_box2d_width - size_x) / size_x;
+  double normalized_width_diff =
+      width_diff * width_diff / params.diff_std_dev_ / params.diff_std_dev_;
+  double width_similarity = 1 - ChiSquaredCdf1TableFun(normalized_width_diff);
+  width_similarity = BoundedScalePositiveProbability(
+      width_similarity, params.bounded_scale_positive_max_p_,
+      params.bounded_scale_positive_min_p_);
+  return width_similarity;
+}
+double ComputeRadarCameraLocSimilarity(const Eigen::Vector3d& radar_ct,
+                                       const SensorObjectConstPtr& camera,
+                                       const Eigen::Matrix4d& world2camera_pose,
+                                       const LocSimilarityParams& params) {
+  Eigen::Vector3d camera_ct = camera->GetBaseObject()->center;
+  Eigen::Vector3d camera_ct_c =
+      (world2camera_pose * camera_ct.homogeneous()).head(3);
+  double ct_diff = (radar_ct - camera_ct).norm();
+  ct_diff = ct_diff / camera_ct_c.z();
+  double ct_similarity = WelshVarLossFun(ct_diff, params.welsh_loss_thresh_,
+                                         params.welsh_loss_scale_);
+  ct_similarity = ScalePositiveProbability(
+      ct_similarity, params.scale_positive_max_p_, params.scale_positive_th_p_);
+  return ct_similarity;
+}
+    
+    
+    {  return DstManager::Instance()->IsAppAdded(name_) &&
+         DstManager::Instance()->IsAppAdded(toic_name_);
+}
+    
+      // @brief: update track data without object
+  // @params [in]: timestamp
+  // @params [in/out]: history track data
+  void UpdateTrackDataWithoutObject(double timestamp,
+                                    MlfTrackDataPtr track_data);
