@@ -1,119 +1,104 @@
 
         
-            def parse_html(html)
-      warn '#{self.class.name} is re-parsing the document' unless ENV['RACK_ENV'] == 'test'
-      super
-    end
-    
-        def as_json
-      { name: name, path: path, type: type }
-    end
-  end
-end
-
-    
-          module ClassMethods
-        def redirections
-          @redirections
-        end
-    
-            doc
+            # Returns source file path.
+    def path
+      # Static file is from a collection inside custom collections directory
+      if !@collection.nil? && !@site.config['collections_dir'].empty?
+        File.join(*[@base, @site.config['collections_dir'], @dir, @name].compact)
+      else
+        File.join(*[@base, @dir, @name].compact)
       end
+    end
+    
+        should 'acceptable limit post is 0' do
+      clear_dest
+      assert(
+        fixture_site('limit_posts' => 0),
+        'Couldn't create a site with limit_posts=0.'
+      )
     end
   end
 end
 
     
-          # Returns the delta between this element's delimiter and the argument's.
-      #
-      # @note Pairs with different delimiter styles return a delta of 0
-      #
-      # @return [Integer] the delta between the two delimiters
-      def delimiter_delta(other)
-        HashElementDelta.new(self, other).delimiter_delta
-      end
+            @config.delete('highlighter')
+        @config['kramdown'].delete('syntax_highlighter')
+        markdown = Converters::Markdown.new(Utils.deep_merge_hashes(@config, override))
+        result = nokogiri_fragment(markdown.convert(<<~MARKDOWN))
+          ~~~ruby
+          puts 'Hello World'
+          ~~~
+        MARKDOWN
     
-              ignored_end_pos = if ignored_loc.respond_to?(:heredoc_body)
-                              ignored_loc.heredoc_end.end_pos
-                            else
-                              ignored_loc.expression.end_pos
-                            end
-          ignored_end_pos >= node.source_range.end_pos
-        end
-      end
+    DATA = {'foo'=>'bar', 'alpha'=>{'beta'=>'gamma'}, 'lipsum'=>['lorem', 'ipsum', 'dolor']}
     
-          def main_sidebar_classes
-        if cookies['sidebar-minimized'] == 'true'
-          'col-3 col-md-2 sidebar'
-        else
-          'p-0 col-3 col-md-2 sidebar'
-        end
-      end
-    
-              if @order.update_from_params(params, permitted_checkout_attributes, request.headers.env)
-            if current_api_user.has_spree_role?('admin') && user_id.present?
-              @order.associate_user!(Spree.user_class.find(user_id))
-            end
-    
-                respond_with(@order, default_template: :show, status: 201)
-          else
-            @order = Spree::Order.create!(user: current_api_user, store: current_store)
-            if Cart::Update.call(order: @order, params: order_params).success?
-              respond_with(@order, default_template: :show, status: 201)
-            else
-              invalid_resource!(@order)
-            end
+            # rubocop:disable Metrics/AbcSize
+        def process(args, opts)
+          if !args || args.empty?
+            raise Jekyll::Errors::InvalidThemeName, 'You must specify a theme name.'
           end
-        end
     
-                result = complete_service.call(order: spree_current_order)
+          s = noninterned_name
+      assert_nothing_raised(NameError, bug10985) {m = c.public_method(s.to_sym)}
+      assert_raise_with_message(NoMethodError, /#{s}/) {m.call}
     
-          @@stock_location_attributes = [
-        :id, :name, :address1, :address2, :city, :state_id, :state_name,
-        :country_id, :zipcode, :phone, :active
-      ]
     
-    # Create two output packages!
-output_packages = []
-output_packages << pleaserun.convert(FPM::Package::RPM)
-output_packages << pleaserun.convert(FPM::Package::Deb)
+class ScanError < StandardError; end
     
-        # Provide any template values as methods on the package.
-    if template_scripts?
-      template_value_list.each do |key, value|
-        (class << output; self; end).send(:define_method, key) { value }
-      end
+      before :each do
+    @data = 'firstline\nsecondline\n\nforthline'
+    @zip = [31, 139, 8, 0, 244, 125, 128, 88, 2, 255, 75, 203, 44, 42, 46, 201,
+            201, 204, 75, 229, 42, 78, 77, 206, 207, 75, 1, 51, 185, 210,242,
+            139, 74, 50, 64, 76, 0, 180, 54, 61, 111, 31, 0, 0, 0].pack('C*')
+    
+      namespace :package do
+    GEMS_AND_ROOT_DIRECTORIES.each do |gem, directory|
+      desc 'Build #{gem} packages'
+      task gem => %w[.gem .tar.gz].map { |e| package(gem, e) }
     end
     
-        File.expand_path(output_path).tap do |path|
-      ::Dir.chdir(build_path) do
-        safesystem(*([tar_cmd,
-                      compression_option,
-                      '-cf',
-                      path] + data_tar_flags + \
-                      ::Dir.entries('.').reject{|entry| entry =~ /^\.{1,2}$/ }))
+        # we assume that the first file that requires 'sinatra' is the
+    # app_file. all other path related options are calculated based
+    # on this path by default.
+    set :app_file, caller_files.first || $0
+    
+    task :gemspec => 'rack-protection.gemspec'
+task :default => :spec
+task :test    => :spec
+
+    
+          def self.random_token
+        SecureRandom.base64(TOKEN_LENGTH)
+      end
+    
+          def call(env)
+        status, headers, body = @app.call(env)
+        header = options[:report_only] ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'
+        headers[header] ||= csp_policy if html? headers
+        [status, headers, body]
       end
     end
-  end # def output
+  end
+end
+
     
-        php_bin = attributes[:pear_php_bin] || '/usr/bin/php'
-    logger.info('Setting php_bin', :php_bin => php_bin)
-    safesystem('pear', '-c', config, 'config-set', 'php_bin', php_bin)
+          get '/', {}, 'HTTP_COOKIE' => '_session=EVIL_SESSION_TOKEN; _session=SESSION_TOKEN'
+      expect(last_response).not_to be_ok
+    end
+  end
+end
+
     
-      def initialize(package_name, opts = {}, &block)
-    @options = OpenStruct.new(:name => package_name.to_s)
-    @source, @target = opts.values_at(:source, :target).map(&:to_s)
-    @directory = File.expand_path(opts[:directory].to_s)
+            def on_send(node)
+          return unless node.arguments? && node.parenthesized?
     
-    module FPM
-  module Issues
-    module TarWriter
-      # See https://github.com/rubygems/rubygems/issues/1608
-      def self.has_issue_1608?
-        name, prefix = nil,nil
-        io = StringIO.new
-        ::Gem::Package::TarWriter.new(io) do |tw|
-          name, prefix = tw.split_name('/123456789'*9 + '/1234567890') # abs name 101 chars long
-        end
-        return prefix.empty?
+            context 'when explicitly specified as toplevel constant' do
+          let(:source) { '1.is_a?(::#{klass})' }
+    
+    
+    {      # Checks whether the `block` literal is delimited by curly braces.
+      #
+      # @return [Boolean] whether the `block` literal is enclosed in braces
+      def braces?
+        loc.end&.is?('}')
       end
