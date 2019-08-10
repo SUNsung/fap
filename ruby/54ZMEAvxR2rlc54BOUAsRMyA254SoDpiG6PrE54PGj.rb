@@ -1,138 +1,95 @@
 
         
-              command_return = ActionCommandReturn.new(
-        return_value: action_return,
-        return_value_type: action_return_type,
-        closure_argument_value: closure_argument_value
-      )
+            desc 'Get the text for a specific license' do
+      detail 'This feature was introduced in GitLab 8.7.'
+      success ::API::Entities::License
+    end
+    params do
+      requires :name, type: String, desc: 'The name of the template'
+    end
+    get 'templates/licenses/:name', requirements: { name: /[\w\.-]+/ } do
+      template = TemplateFinder.build(:licenses, nil, name: params[:name]).execute
     
-              it '--log-path option is present' do
-            result = Fastlane::FastFile.new.parse('lane :test do
-                carthage(command: '#{command}', log_path: 'bla.log')
-              end').runner.execute(:test)
-            expect(result).to eq('carthage build --log-path bla.log')
-          end
-        end
+          def initialize(query, filter_opts = {}, &block)
+        @raw_query = query.dup
+        @filters = []
+        @filter_options = { default_parser: :downcase.to_proc }.merge(filter_opts)
     
-          it 'handles the extensions parameter with no elements correctly' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          ensure_no_debug_code(text: 'pry', path: '.', extensions: [])
-        end').runner.execute(:test)
-        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}'')
+            it { expect(presenter.can_approve?).to eq(false) }
       end
-    
-          it 'works with all parameters' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            oclint(
-              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
-              select_regex: /.*/,
-              exclude_regex: /Test.m/,
-              report_type: 'pmd',
-              report_path: 'report_path.xml',
-              max_priority_1: 10,
-              max_priority_2: 20,
-              max_priority_3: 30,
-              thresholds: ['LONG_LINE=200', 'LONG_METHOD=200'],
-              enable_rules: ['DoubleNegative', 'DeadCode'],
-              disable_rules: ['GotoStatement', 'ShortVariableName'],
-              list_enabled_rules: true,
-              enable_clang_static_analyzer: true,
-              enable_global_analysis: true,
-              allow_duplicated_violations: true
-            )
-          end').runner.execute(:test)
-    
-        def ensure_generic_type_passes_validation(value)
-      if @skip_type_validation
-        return
-      end
-    
-    # The * turns the array into a parameter list
-# This is using the form of exec which takes a variable parameter list, e.g. `exec(command, param1, param2, ...)`
-# We need to use that, because otherwise invocations like
-# `spaceauth -u user@fastlane.tools` would recognize '-u user@fastlane.tools' as a single parameter and throw errors
-exec(*exec_arr)
-
-    
-        def insert_after(index, *names)
-      insert assert_index(index) + 1, *names
     end
     
-          def get_type
-        if slug.start_with?('guide/')
-          'Guide'
-        elsif slug.start_with?('cookbook/')
-          'Cookbook'
-        elsif slug == 'glossary'
-          'Guide'
-        else
-          type = at_css('.nav-title.is-selected').content.strip
-          type.remove! ' Reference'
-          type << ': #{mod}' if mod
-          type
+            delegate :count, :size, :real_size, to: :diff_files
+    
+      # Time interval you can reset your password with a reset password key.
+  # Don't put a too small interval or your users won't have the time to
+  # change their passwords.
+  config.reset_password_within = 2.days
+    
+        membership = contact.aspect_memberships.where(aspect_id: aspect.id).first
+    
+            it 'creates sessions' do
+          get '/'
+          refute_nil   last_request.env['rack.session']
+          refute_empty last_request.env['rack.session'].options
+          assert_equal :all, last_request.env['rack.session'].options[:domain]
         end
       end
     
-          # Remembers the given resource by setting up a cookie
-      def remember_me(resource)
-        return if request.env['devise.skip_storage']
-        scope = Devise::Mapping.find_scope!(resource)
-        resource.remember_me!
-        cookies.signed[remember_key(resource, scope)] = remember_cookie_values(resource)
+      describe 'bulk' do
+    after do
+      Sidekiq::Queue.new.clear
+    end
+    it 'can push a large set of jobs at once' do
+      jids = Sidekiq::Client.push_bulk('class' => QueuedWorker, 'args' => (1..1_000).to_a.map { |x| Array(x) })
+      assert_equal 1_000, jids.size
+    end
+    it 'can push a large set of jobs at once using a String class' do
+      jids = Sidekiq::Client.push_bulk('class' => 'QueuedWorker', 'args' => (1..1_000).to_a.map { |x| Array(x) })
+      assert_equal 1_000, jids.size
+    end
+    it 'returns the jids for the jobs' do
+      Sidekiq::Client.push_bulk('class' => 'QueuedWorker', 'args' => (1..2).to_a.map { |x| Array(x) }).each do |jid|
+        assert_match(/[0-9a-f]{12}/, jid)
       end
-    
-          def _devise_route_context
-        @_devise_route_context ||= send(Devise.available_router_name)
-      end
+    end
+    it 'handles no jobs' do
+      result = Sidekiq::Client.push_bulk('class' => 'QueuedWorker', 'args' => [])
+      assert_equal 0, result.size
     end
   end
-end
-
     
-            # Removes reset_password token
-        def clear_reset_password_token
-          self.reset_password_token = nil
-          self.reset_password_sent_at = nil
-        end
+        def initialize(params={})
+      @thehash = default.merge(params)
+    end
     
-            Devise::Models.config(self, :remember_for, :extend_remember_period, :rememberable_options, :expire_all_remember_me_on_sign_out)
+      def options
+    { :concurrency => 3, :queues => ['default'] }
+  end
+    
+        it 'reconnects if connection is flagged as readonly' do
+      counts = []
+      Sidekiq.redis do |c|
+        counts << c.info['total_connections_received'].to_i
+        raise Redis::CommandError, 'READONLY You can't write against a replica.' if counts.size == 1
       end
+      assert_equal 2, counts.size
+      assert_equal counts[0] + 1, counts[1]
     end
   end
-end
-
     
-            # Returns the internal data associated with this plugin. This
-        # should NOT be called by the general public.
-        #
-        # @return [Hash]
-        def self.data
-          @data ||= {}
-        end
-    
-            # This returns all the registered guests.
-        #
-        # @return [Hash]
-        def hosts
-          Registry.new.tap do |result|
-            @registered.each do |plugin|
-              result.merge!(plugin.components.hosts)
-            end
-          end
-        end
-    
-      def test_font_helper_with_suffix_question
-    assert_match %r(url\(['']?/assets/.*eot\?.*['']?\)), @css
+      class SpecificJidWorker
+    include Sidekiq::Worker
+    sidekiq_class_attribute :count
+    self.count = 0
+    def perform(worker_jid)
+      return unless worker_jid == self.jid
+      self.class.count += 1
+    end
   end
     
-    Liquid::Template.register_tag('img', Jekyll::ImageTag)
-
-    
-        def render(context)
-      includes_dir = File.join(context.registers[:site].source, '_includes')
-    
-        def post_render(post)
-      OctopressFilters::post_filter(post)
-    end
+      def perform(start)
+    now = Time.now.to_f
+    puts 'Latency: #{now - start} sec'
   end
 end
