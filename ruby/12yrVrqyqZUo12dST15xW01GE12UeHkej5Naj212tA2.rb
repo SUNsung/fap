@@ -1,53 +1,55 @@
 
         
-          p.action do |args, _|
-    if args.empty?
-      Jekyll.logger.error 'A subcommand is required.'
-      puts p
-      abort
-    else
-      subcommand = args.first
-      unless p.has_command? subcommand
-        Jekyll.logger.abort_with 'fatal: 'jekyll #{args.first}' could not' \
-          ' be found. You may need to install the jekyll-#{args.first} gem' \
-          ' or a related gem to be able to use this subcommand.'
-      end
+            GLOBAL_TEMPLATE_TYPES = {
+      gitignores: {
+        gitlab_version: 8.8
+      },
+      gitlab_ci_ymls: {
+        gitlab_version: 8.9
+      },
+      dockerfiles: {
+        gitlab_version: 8.15
+      }
+    }.freeze
+    
+      subject(:finder) { described_class.new(project, 'files/', '.html', categories) }
+    
+    # This class finds files in a repository by name and content
+# the result is joined and sorted by file name
+module Gitlab
+  class FileFinder
+    attr_reader :project, :ref
+    
+      def self.ungetc(c)
+    @@buf.unshift(c)
+  end
+    
+    describe 'GzipReader#rewind' do
+    
+        def default
+      {
+      }
     end
   end
+    
+        it 'shows empty retries' do
+      r = Sidekiq::RetrySet.new
+      assert_equal 0, r.size
+    end
+    
+        assert_equal dead_set.find_job('123123').value, serialized_job
+  end
+    
+    describe Sidekiq::ExceptionHandler do
+  describe 'with mock logger' do
+    before do
+      @old_logger = Sidekiq.logger
+      @str_logger = StringIO.new
+      Sidekiq.logger = Logger.new(@str_logger)
+    end
+    
+      def perform
+  end
 end
-
     
-    module Jekyll
-  module Cucumber
-    class Formatter
-      attr_accessor :indent, :runtime
-      include ::Cucumber::Formatter::Console
-      include ::Cucumber::Formatter::Io
-      include FileUtils
-    
-        def no_subcommand(args)
-      unless args.empty? ||
-          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
-        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
-                          Run `jekyll help` to find out more.'
-        abort
-      end
-    end
-    
-          attr_accessor :page, :layout, :content, :paginator
-      attr_accessor :highlighter_prefix, :highlighter_suffix
-    
-        def pause
-      stop!
-      @paused = true
-    end
-    
-          expect(script_srcs).to include(*%w[symbol_underscore symbol_dash string_underscore symbol_underscore])
-    end
-    
-        Discourse.plugins.each(&:notify_before_auth)
-    
-        def build_theme_extension(raw)
-      {}.tap do |extension|
-        raw.split('|').each do |entry|
-          directive, source = entry.split(':', 2).map(&:strip)
+    __END__
