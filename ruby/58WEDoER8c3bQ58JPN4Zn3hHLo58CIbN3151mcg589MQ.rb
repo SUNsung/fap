@@ -1,97 +1,153 @@
 
         
-              it 'updates an existing user' do
-        visit edit_admin_user_path(users(:bob))
-        check 'Admin'
-        click_on 'Update User'
-        expect(page).to have_text('User 'bob' was successfully updated.')
-        visit edit_admin_user_path(users(:bob))
-        expect(page).to have_checked_field('Admin')
-      end
-    
-      describe '#scenario_label' do
-    it 'creates a scenario label with the scenario name' do
-      expect(scenario_label(scenario)).to eq(
-        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Scene</span>'
-      )
-    end
-    
-            _existing_scenerio
-      end
-    
-          agent_runner.stop
-    end
-  end
-end
-    
-      describe '#working?' do
-    it 'should not be working until the first event was received' do
-      expect(@checker).not_to be_working
-      @checker.last_receive_at = Time.now
-      expect(@checker).to be_working
-    end
+          def test_recreate_mysql_database_with_encoding
+    create_database(:luca, charset: 'latin1')
+    assert_equal 'CREATE DATABASE `luca` DEFAULT CHARACTER SET `latin1`', recreate_database(:luca, charset: 'latin1')
   end
     
-        it 'mutes notifications' do
-      expect(user.account.muting_notifications?(other_account)).to be true
-    end
-    
-      before { allow(controller).to receive(:doorkeeper_token) { token } }
-    
-      def test_image_helper
-    assert_match %r(url\(['']?/assets/apple-touch-icon-144-precomposed.*png['']?\)), @css
-  end
-    
-          def ==(other)
-        self.class == other.class &&
-            spec == other.spec &&
-            used_by_non_library_targets_only? == other.used_by_non_library_targets_only?
+        initializer 'action_mailbox.config' do
+      config.after_initialize do |app|
+        ActionMailbox.logger = app.config.action_mailbox.logger || Rails.logger
+        ActionMailbox.incinerate = app.config.action_mailbox.incinerate.nil? ? true : app.config.action_mailbox.incinerate
+        ActionMailbox.incinerate_after = app.config.action_mailbox.incinerate_after || 30.days
+        ActionMailbox.queues = app.config.action_mailbox.queues || {}
+        ActionMailbox.ingress = app.config.action_mailbox.ingress
       end
     end
   end
 end
 
     
-          # Prints an info to the user. The info is always displayed.
-      # It respects the current indentation level only in verbose
-      # mode.
-      #
-      # Any title printed in the optional block is treated as a message.
-      #
-      # @param [String] message
-      #        The message to print.
-      #
-      def info(message)
-        indentation = config.verbose? ? self.indentation_level : 0
-        indented = wrap_string(message, indentation)
-        puts(indented)
+    require 'isolation/abstract_unit'
     
-          module_function
-    
-            # Returns true if running with --auto-correct would remove the braces
-        # of the last argument.
-        def braces_will_be_removed?(args)
-          brace_config = config.for_cop('Style/BracesAroundHashParameters')
-          return false unless brace_config.fetch('Enabled')
-          return false if brace_config['AutoCorrect'] == false
-    
-          def interpret_string_escapes(string)
-        StringInterpreter.interpret(string)
+      test 'rails routes with controller search key' do
+    app_file 'config/routes.rb', <<-RUBY
+      Rails.application.routes.draw do
+        get '/cart', to: 'cart#show'
+        get '/basketball', to: 'basketball#index'
+        get '/user_permission', to: 'user_permission#index'
       end
+    RUBY
     
-            context 'without parentheses' do
-          it 'changes for to each' do
-            new_source = autocorrect_source(<<~RUBY)
-              def func
-                for n in 1...value do
-                  puts n
-                end
-              end
-            RUBY
+    module ActionView
+  class Template #:nodoc:
+    class Types
+      class Type
+        SET = Struct.new(:symbols).new([ :html, :text, :js, :css, :xml, :json ])
     
-          # Checks whether the method is a predicate method.
-      #
-      # @return [Boolean] whether the method is a predicate method
-      def predicate_method?
-        method_name.to_s.end_with?('?')
+        cmd_args = nil
+    cmd_func = nil
+    arguments = []
+    
+        # Similarly, when we seperate large payloads into chunks to avoid the
+    # 998-byte problem mentioned above, we have to make sure that the first
+    # character of each chunk is an alpha character.  This simple algorithm
+    # will create a broken string in the case of 99 consecutive digits,
+    # slashes, and plusses in the base64 encoding, but the likelihood of
+    # that is low enough that I don't care.
+    i = 900;
+    while i < b64.length
+      while (b64[i].chr =~ %r{[0-9/+]})
+        i += 1
       end
+      b64.insert(i,'.')
+      i += 900
+    end
+    
+      def initialize(info = {})
+    super(merge_info(info,
+      'Name'          => 'Unix Command Shell, Reverse TCP (/dev/tcp)',
+      'Description'   => %q{
+        Creates an interactive shell via bash's builtin /dev/tcp.
+    }
+    
+            ; perform the call to accept...
+        xor r8, r8             ; we set length for the sockaddr struct to zero
+        xor rdx, rdx           ; we dont set the optional sockaddr param
+        mov rcx, rdi           ; listening socket
+        mov r10d, #{Rex::Text.block_api_hash('ws2_32.dll', 'accept')}
+        call rbp               ; accept( s, 0, 0 );
+    
+      # Generate a Payload UUID
+  def generate_payload_uuid
+    
+    GEMFILE_EXTENSIONS = [
+    '.local',
+    ''
+]
+    
+        if valid
+    
+        # LinkHeader
+    ret = [
+      0x4c, 0x00, 0x00, 0x00, # HeaderSize, must be 0x0000004C
+      0x01, 0x14, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, # LinkCLSID, must be 00021401-0000-0000-C000-000000000046
+      0x81, 0x00, 0x00, 0x00, # LinkFlags (HasLinkTargetIDList | IsUnicode)
+      0x00, 0x00, 0x00, 0x00, # FileAttributes
+      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, # CreationTime
+      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, # AccessTime
+      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, # WriteTime
+      0x00, 0x00, 0x00, 0x00, # FileSize
+      0x00, 0x00, 0x00, 0x00, # IconIndex
+      0x00, 0x00, 0x00, 0x00, # ShowCommand
+      0x00, 0x00, # HotKey
+      0x00, 0x00, # Reserved1
+      0x00, 0x00, 0x00, 0x00, # Reserved2
+      0x00, 0x00, 0x00, 0x00  # Reserved3
+    ].pack('C*')
+    
+        # Report proxy creds
+    if session.db_record
+      source_id = session.db_record.id
+    else
+      source_id = nil
+    end
+    
+      def run
+    # Make sure we meet the requirements before running the script
+    unless session.type == 'meterpreter' || have_powershell?
+      print_error 'Incompatible Environment'
+      return 0
+    end
+    
+            return nil
+      end
+    end
+  end
+end end end
+
+    
+        def user_feedback_string_for(action, platform, machines, options={})
+      experimental_string = options['experimental'] ? 'experimental' : 'non experimental'
+      message  = '#{action} all #{experimental_string} VM's defined in acceptance/Vagrantfile'
+      '#{message} for #{platform}: #{machines}' if !platform.nil?
+    end
+    
+    describe FPM::Package::CPAN, :if => have_cpanm do
+  subject { FPM::Package::CPAN.new }
+    
+        self.name = [attributes[:npm_package_name_prefix], name].join('-')
+    self.version = info.fetch('version', '0.0.0')
+    
+      def build!(params)
+    # TODO(sissel): Support these somehow, perhaps with execs and files.
+    self.scripts.each do |name, path|
+      case name
+        when 'pre-install'
+        when 'post-install'
+        when 'pre-uninstall'
+        when 'post-uninstall'
+      end # case name
+    end # self.scripts.each
+    
+          # TODO(sissel): preinstall/postinstall
+      # strip @prefix, since BASEDIR will set prefix via the pkginfo file
+      IO.popen('pkgproto #{staging_path}/#{@prefix}=').each_line do |line|
+        type, klass, path, mode, user, group = line.split
+    
+        def initialize(index, project, tab, *commands)
+      @commands = commands
+      @index = index
+      @project = project
+      @tab = tab
+    end
