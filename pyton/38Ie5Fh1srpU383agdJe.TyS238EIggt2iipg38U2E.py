@@ -1,103 +1,97 @@
 
         
-            def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer)
-        ]
+            def score(self):
+        total_value = 0
+        for card in self.cards:
+            total_value += card.value
+        return total_value
     
-        def getChild(self, request, name):
-        return self
+        def reducer(self, key, values):
+        '''Sum values for each key.
     
-        # Max concurrency is limited by global CONCURRENT_REQUESTS setting
-    max_concurrent_requests = 8
-    # Requests per second goal
-    qps = None # same as: 1 / download_delay
-    download_delay = None
-    # time in seconds to delay server responses
-    latency = None
-    # number of slots to create
-    slots = 1
     
-            if opts.pidfile:
-            with open(opts.pidfile, 'w') as f:
-                f.write(str(os.getpid()) + os.linesep)
+class Budget(object):
     
-    class Command(ScrapyCommand):
+            Emit key value pairs of the form:
     
-    from . import Contract
     
-            # extract cookies from Set-Cookie and drop invalid/expired cookies
-        cookiejarkey = request.meta.get('cookiejar')
-        jar = self.jars[cookiejarkey]
-        jar.extract_cookies(response, request)
-        self._debug_set_cookie(response, spider)
+class Graph(object):
     
-            # put all lines in the file into a Python list
-        strings = f.readlines()
-        
-        # above line leaves trailing newline characters; strip them out
-        strings = [x.strip(u'\n') for x in strings]
-        
-        # remove empty-lines and comments
-        strings = [x for x in strings if x and not x.startswith(u'#')]
-        
-        # insert empty string since all are being removed
-        strings.insert(0, u'')
+        def remove(self, key):
+        hash_index = self._hash_function(key)
+        for index, item in enumerate(self.table[hash_index]):
+            if item.key == key:
+                del self.table[hash_index][index]
+                return
+        raise KeyError('Key not found')
+
     
-            # test coding cookie
-        for encoding in ('iso-8859-15', 'utf-8'):
-            with open(filename, 'w', encoding=encoding) as fp:
-                print('# coding: %s' % encoding, file=fp)
-                print('print('euro:\u20ac')', file=fp)
-            with tokenize_open(filename) as fp:
-                self.assertEqual(fp.encoding, encoding)
-                self.assertEqual(fp.mode, 'r')
-    
-        def test_named_expression_invalid_11(self):
-        code = '''spam(a=1, b := 2)'''
-    
-        def xpath(self, id):
-        '''Process an XPATH command (optional server extension) Arguments:
-        - id: Message id of article
-        Returns:
-        resp: server response if successful
-        path: directory path to article
+            Accessing a node updates its position to the front of the LRU list.
         '''
-        warnings.warn('The XPATH extension is not actively used',
-                      DeprecationWarning, 2)
-    
-        queue = c_queue
-    
-        The returned instance will have attributes args, returncode, stdout and
-    stderr. By default, stdout and stderr are not captured, and those attributes
-    will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them.
-    
-            messages = []
-        self.loop.set_exception_handler(lambda loop, ctx: messages.append(ctx))
-    
-                ret[i, :] = i_label, i_score
-    
-        def test_object(queue):
-        pool = ObjectPool(queue, True)
-        print('Inside func: {}'.format(pool.item))
+        node = self.lookup[query]
+        if node is None:
+            return None
+        self.linked_list.move_to_front(node)
+        return node.results
     
     
-def main():
-    ui = Ui()
-    ui.get_product_list()
-    ui.get_product_information('cheese')
-    ui.get_product_information('eggs')
-    ui.get_product_information('milk')
-    ui.get_product_information('arepas')
+class PagesDataStore(object):
     
-        graphic.add(graphic1)
-    graphic.add(graphic2)
     
+class FootNoteForm(forms.ModelForm):
+    extra_field = forms.CharField()
+    
+        def test_redirect_HEAD(self):
+        'Default is a temporary redirect'
+        response = RedirectView.as_view(url='/bar/')(self.rf.head('/foo/'))
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/bar/')
+    
+        def _wrapper(self, *args, **kwargs):
+        # bound_method has the signature that 'decorator' expects i.e. no
+        # 'self' argument, but it's a closure over self so it can call
+        # 'func'. Also, wrap method.__get__() in a function because new
+        # attributes can't be set on bound method objects, only on functions.
+        bound_method = partial(method.__get__(self, type(self)))
+        for dec in decorators:
+            bound_method = dec(bound_method)
+        return bound_method(*args, **kwargs)
+    
+     When instantiating a DataSource object, use the filename of a
+ GDAL-supported data source.  For example, a SHP file or a
+ TIGER/Line file from the government.
+    
+            # Instantiate target spatial reference system
+        target_srs = SpatialReference(srid)
+    
+    
+def get_derivatives_helper(loss):
+    '''Return get_gradients() and get_hessians() functions for a given loss.
     '''
-*What is this pattern about?
-The Decorator pattern is used to dynamically add a new feature to an
-object without changing its implementation. It differs from
-inheritance because the new feature is added only to that particular
-object, not to the entire subclass.
+    
+    
+def _sparse_min_max(X, axis):
+        return (_sparse_min_or_max(X, axis, np.minimum),
+                _sparse_min_or_max(X, axis, np.maximum))
+    
+            print('benchmarking scikit-learn: ')
+        scikit_results.append(bench(ScikitLasso, X, Y, X_test, Y_test, coef_))
+        print('benchmarking glmnet: ')
+        glmnet_results.append(bench(GlmnetLasso, X, Y, X_test, Y_test, coef_))
+    
+            start = time.time()
+        func(X, n_jobs=1)
+        one_core.append(time.time() - start)
+    
+                tstart = time()
+            clf.fit(X_train, y_train)
+            sgd_results[i, j, 0] = mean_squared_error(clf.predict(X_test),
+                                                      y_test)
+            sgd_results[i, j, 1] = time() - tstart
+    
+    import numpy as np
+from sklearn.covariance import EllipticEnvelope
+from sklearn.svm import OneClassSVM
+import matplotlib.pyplot as plt
+import matplotlib.font_manager
+from sklearn.datasets import load_boston
