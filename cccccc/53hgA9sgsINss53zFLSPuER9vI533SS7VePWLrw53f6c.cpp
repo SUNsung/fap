@@ -1,122 +1,187 @@
 
         
-        template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8>
-internal::ValueArray8<T1, T2, T3, T4, T5, T6, T7, T8> Values(T1 v1, T2 v2,
-    T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8) {
-  return internal::ValueArray8<T1, T2, T3, T4, T5, T6, T7, T8>(v1, v2, v3, v4,
-      v5, v6, v7, v8);
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+#ifndef TENSORFLOW_LITE_TESTING_SPLIT_H_
+#define TENSORFLOW_LITE_TESTING_SPLIT_H_
+    
+    template <typename T>
+__global__ void DynamicStitchKernel(const int32 slice_size,
+                                    const int32 output_size,
+                                    GpuDeviceArrayStruct<int32> input_indices,
+                                    GpuDeviceArrayStruct<const T*> input_ptrs,
+                                    T* output) {
+  int32* data_indices = GetGpuDeviceArrayOnDevice(&input_indices);
+  const T** data_ptrs = GetGpuDeviceArrayOnDevice(&input_ptrs);
+  GPU_1D_KERNEL_LOOP(output_index, output_size) {
+    const int32 slice_id = output_index / slice_size;
+    const int32 slice_offset = output_index % slice_size;
+    const int32 input_index = data_indices[slice_id];
+    if (input_index != -1) {
+      output[output_index] = ldg(data_ptrs[input_index] + slice_offset);
+    }
+  }
 }
     
-    // Finally, you can use INSTANTIATE_TEST_CASE_P to instantiate the test
-// case with any set of parameters you want. Google Test defines a number
-// of functions for generating test parameters. They return what we call
-// (surprise!) parameter generators. Here is a  summary of them, which
-// are all in the testing namespace:
-//
-//
-//  Range(begin, end [, step]) - Yields values {begin, begin+step,
-//                               begin+step+step, ...}. The values do not
-//                               include end. step defaults to 1.
-//  Values(v1, v2, ..., vN)    - Yields values {v1, v2, ..., vN}.
-//  ValuesIn(container)        - Yields values from a C-style array, an STL
-//  ValuesIn(begin,end)          container, or an iterator range [begin, end).
-//  Bool()                     - Yields sequence {false, true}.
-//  Combine(g1, g2, ..., gN)   - Yields all combinations (the Cartesian product
-//                               for the math savvy) of the values generated
-//                               by the N generators.
-//
-// For more details, see comments at the definitions of these functions below
-// in this file.
-//
-// The following statement will instantiate tests from the FooTest test case
-// each with parameter values 'meeny', 'miny', and 'moe'.
+    #include 'tensorflow/core/framework/register_types.h'
+#include 'tensorflow/core/framework/tensor_types.h'
+#include 'tensorflow/core/framework/type_traits.h'
+#include 'tensorflow/core/kernels/eye_functor.h'
+#include 'tensorflow/core/util/gpu_kernel_helper.h'
     
-    // FilePath - a class for file and directory pathname manipulation which
-// handles platform-specific conventions (like the pathname separator).
-// Used for helper functions for naming files in a directory for xml output.
-// Except for Set methods, all methods are const or static, which provides an
-// 'immutable value object' -- useful for peace of mind.
-// A FilePath with a value ending in a path separator ('like/this/') represents
-// a directory, otherwise it is assumed to represent a file. In either case,
-// it may or may not represent an actual file or directory in the file system.
-// Names are NOT checked for syntax correctness -- no checking for illegal
-// characters, malformed paths, etc.
+    TEST(TfliteInferenceStage, IncorrectModelPath) {
+  EvaluationStageConfig config = GetTfliteInferenceStageConfig();
+  config.mutable_specification()
+      ->mutable_tflite_inference_params()
+      ->set_model_file_path('xyz.tflite');
+  TfliteInferenceStage stage(config);
+  EXPECT_EQ(stage.Init(), kTfLiteError);
+}
+    
+    namespace tensorflow {
+namespace functor {
+    }
+    }
+    
+    #define DEFINE_GPU_SPECS_INDEX(T, Index)    \
+  DEFINE_GPU_SPECS_INDEX_NDIM(T, Index, 0); \
+  DEFINE_GPU_SPECS_INDEX_NDIM(T, Index, 1); \
+  DEFINE_GPU_SPECS_INDEX_NDIM(T, Index, 2); \
+  DEFINE_GPU_SPECS_INDEX_NDIM(T, Index, 3); \
+  DEFINE_GPU_SPECS_INDEX_NDIM(T, Index, 4); \
+  DEFINE_GPU_SPECS_INDEX_NDIM(T, Index, 5); \
+  DEFINE_GPU_SPECS_INDEX_NDIM(T, Index, 6); \
+  DEFINE_GPU_SPECS_INDEX_NDIM(T, Index, 7);
     
     
-    {    linked_ptr_internal const* p = ptr;
-    while (p->next_ != ptr) p = p->next_;
-    p->next_ = this;
-    next_ = ptr;
-  }
+    {}  // namespace xla
     
-      // Creates an ANSI string from the given wide string, allocating
-  // memory using new. The caller is responsible for deleting the return
-  // value using delete[]. Returns the ANSI string, or NULL if the
-  // input is NULL.
-  //
-  // The returned string is created using the ANSI codepage (CP_ACP) to
-  // match the behaviour of the ANSI versions of Win32 calls and the
-  // C runtime.
-  static const char* Utf16ToAnsi(LPCWSTR utf16_str);
-#endif
+              while (sample < limit_sample) {
+            const auto rand = dist(&gen_copy);
+            const int size = rand.size();
+            // NOTE(ringwalt): These loops seem to only generate packed AVX
+            // instructions for float32.
+            for (int i = 0; i < size; i++) {
+              z[i] = rand[i] * diff + normMin;
+            }
+            for (int i = 0; i < size; i++) {
+              g[i] = (plusFactor - z[i] * z[i]) / T(2.0);
+            }
+    }
     
+    namespace tensorflow {
+namespace functor {
+    }
+    }
     
-    {  template <class Tuple>
-  static GTEST_BY_REF_(GTEST_TUPLE_ELEMENT_(6, Tuple))
-  ConstField(const Tuple& t) { return t.f6_; }
-};
+    #ifdef CV_DOXYGEN
     
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36, typename T37, typename T38, typename T39, typename T40,
-    typename T41>
-struct Types41 {
-  typedef T1 Head;
-  typedef Types40<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
-      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
-      T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41> Tail;
-};
+                if (src_row < 0)
+                src_row = 0;
+            if (src_row2 >= (ptrdiff_t)ssize.height)
+                src_row2 = ssize.height-1;
     
     
-    {  // Disables compiler warning 'assignment operator could not be generated.'
-  void operator=(const PreCalculatedPrimeTable& rhs);
-};
-    
-    std::unique_ptr<php::Unit> parse_unit(php::Program& prog,
-                                      std::unique_ptr<UnitEmitter> ue);
+    {    }
     
     
     {
-    {}}
+    {        std::vector<cv::Mat> outs(3);
+        for (int i = 0; i < 3; i++) {
+            outs[i] = out(cv::Rect(0, i*out_sz.height, out_sz.width, out_sz.height));
+        }
+        cv::split(resized_mat, outs);
+    }
+};
     
-    //////////////////////////////////////////////////////////////////////
-// Label
-//////////////////////////////////////////////////////////////////////
+        //! the default constructor
+    AutoBuffer();
+    //! constructor taking the real buffer size
+    explicit AutoBuffer(size_t _size);
     
-    #endif // HPHP_FILE_STREAM_WRAPPER_H
-
-    
-    req::ptr<File>
-GlobStreamWrapper::open(const String& filename, const String& /*mode*/,
-                        int /*options*/,
-                        const req::ptr<StreamContext>& /*context*/) {
-  // Can't open a glob as a file, it's meant to be opened as a directory
+    // ... and writer
+class TiffEncoder CV_FINAL : public BaseImageEncoder
+{
+public:
+    TiffEncoder();
+    virtual ~TiffEncoder() CV_OVERRIDE;
     }
     
-    #endif // incl_HPHP_OUTPUT_FILE_H_
-
+    void icvCvt_BGR2RGB_8u_C3R( const uchar* bgr, int bgr_step,
+                            uchar* rgb, int rgb_step, Size size );
+#define icvCvt_RGB2BGR_8u_C3R icvCvt_BGR2RGB_8u_C3R
+void icvCvt_BGR2RGB_16u_C3R( const ushort* bgr, int bgr_step,
+                             ushort* rgb, int rgb_step, Size size );
+#define icvCvt_RGB2BGR_16u_C3R icvCvt_BGR2RGB_16u_C3R
     
-    ///////////////////////////////////////////////////////////////////////////////
+    #include 'db/db_impl.h'
+#include 'leveldb/cache.h'
+#include 'leveldb/db.h'
+#include 'util/testharness.h'
+#include 'util/testutil.h'
     
+      // Return the latest node with a key < key.
+  // Return head_ if there is no such node.
+  Node* FindLessThan(const Key& key) const;
     
-    {}
-
+      // Returns true iff some level needs a compaction.
+  bool NeedsCompaction() const {
+    Version* v = current_;
+    return (v->compaction_score_ >= 1) || (v->file_to_compact_ != nullptr);
+  }
     
+      // Returns an estimate of the current (uncompressed) size of the block
+  // we are building.
+  size_t CurrentSizeEstimate() const;
     
-    {}  // namespace URL
+    class FilterPolicy;
+    
+    void TableBuilder::WriteRawBlock(const Slice& block_contents,
+                                 CompressionType type, BlockHandle* handle) {
+  Rep* r = rep_;
+  handle->set_offset(r->offset);
+  handle->set_size(block_contents.size());
+  r->status = r->file->Append(block_contents);
+  if (r->status.ok()) {
+    char trailer[kBlockTrailerSize];
+    trailer[0] = type;
+    uint32_t crc = crc32c::Value(block_contents.data(), block_contents.size());
+    crc = crc32c::Extend(crc, trailer, 1);  // Extend crc to cover block type
+    EncodeFixed32(trailer + 1, crc32c::Mask(crc));
+    r->status = r->file->Append(Slice(trailer, kBlockTrailerSize));
+    if (r->status.ok()) {
+      r->offset += block_contents.size() + kBlockTrailerSize;
+    }
+  }
+}
+    
+    char* Arena::AllocateAligned(size_t bytes) {
+  const int align = (sizeof(void*) > 8) ? sizeof(void*) : 8;
+  static_assert((align & (align - 1)) == 0,
+                'Pointer size should be a power of 2');
+  size_t current_mod = reinterpret_cast<uintptr_t>(alloc_ptr_) & (align - 1);
+  size_t slop = (current_mod == 0 ? 0 : align - current_mod);
+  size_t needed = bytes + slop;
+  char* result;
+  if (needed <= alloc_bytes_remaining_) {
+    result = alloc_ptr_ + slop;
+    alloc_ptr_ += needed;
+    alloc_bytes_remaining_ -= needed;
+  } else {
+    // AllocateFallback always returned aligned memory
+    result = AllocateFallback(bytes);
+  }
+  assert((reinterpret_cast<uintptr_t>(result) & (align - 1)) == 0);
+  return result;
+}
