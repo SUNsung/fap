@@ -1,130 +1,214 @@
 
         
-        namespace base {
-class DictionaryValue;
-class ListValue;
-}
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    class NwAppCloseAllWindowsFunction : public UIThreadExtensionFunction {
- public:
-  NwAppCloseAllWindowsFunction() {}
+    namespace xla {
+namespace gpu {
+    }
     }
     
-    class NwObjCallObjectMethodAsyncFunction : public UIThreadExtensionFunction {
- public:
-  NwObjCallObjectMethodAsyncFunction();
-    }
+        http://www.apache.org/licenses/LICENSE-2.0
     
-      private:
-    ~NwScreenDisplayObserver() override;
-    // gfx::DisplayObserver implementation.
-    void OnDisplayMetricsChanged(const display::Display& display, uint32_t changed_metrics) override;
-    void OnDisplayAdded(const display::Display& new_display) override;
-    void OnDisplayRemoved(const display::Display& old_display) override;
+        http://www.apache.org/licenses/LICENSE-2.0
     
-      // implement nw.Screen.isMonitorStarted()
-  class NwScreenIsMonitorStartedFunction : public NWSyncExtensionFunction {
-  public:
-    NwScreenIsMonitorStartedFunction();
-    bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
+    class GpuExecutable;
     
-    void CensusClientCallData::OnDoneRecvTrailingMetadataCb(void* user_data,
-                                                        grpc_error* error) {
-  grpc_call_element* elem = reinterpret_cast<grpc_call_element*>(user_data);
-  CensusClientCallData* calld =
-      reinterpret_cast<CensusClientCallData*>(elem->call_data);
-  GPR_ASSERT(calld != nullptr);
-  if (error == GRPC_ERROR_NONE) {
-    GPR_ASSERT(calld->recv_trailing_metadata_ != nullptr);
-    FilterTrailingMetadata(calld->recv_trailing_metadata_,
-                           &calld->elapsed_time_);
+      const int lda = side_ == se::blas::Side::kLeft ? m_ : n_;
+  const int ldb = m_;
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    
+    {
+    {    // We measure the time of one execution of the while body computation. The
+    // while body may be executed more than once, the last measurement 'wins'.
+    profiler.StartHloComputation();
+    VLOG(3) << 'Executing body computation';
+    // Invoke thunk sequence for while 'body' computation, and pass on
+    // 'profiler' to measure the timing of the thunks in 'body_thunk_sequence_'.
+    TF_RETURN_IF_ERROR(body_thunk_sequence_->ExecuteOnStream(params));
+    profiler.FinishHloComputation(hlo_instruction()->while_body());
   }
-  GRPC_CLOSURE_RUN(calld->initial_on_done_recv_trailing_metadata_,
-                   GRPC_ERROR_REF(error));
+  return Status::OK();
 }
     
-    // Deserialize incoming server stats. Returns the number of bytes deserialized.
-size_t ServerStatsDeserialize(const char* buf, size_t buf_size,
-                              uint64_t* server_elapsed_time);
     
-    ::opencensus::stats::MeasureInt64 RpcServerSentMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcServerSentBytesPerRpc();
-::opencensus::stats::MeasureInt64 RpcServerReceivedMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcServerReceivedBytesPerRpc();
-::opencensus::stats::MeasureDouble RpcServerServerLatency();
-::opencensus::stats::MeasureInt64 RpcServerCompletedRpcs();
-    
-    // TODO: This may not be needed. Check to see if opencensus requires
-// a trailing server response.
-// RpcServerStatsEncoding encapsulates the logic for encoding and decoding of
-// rpc server stats messages. Rpc server stats consists of a uint64_t time
-// value (server latency in nanoseconds).
-class RpcServerStatsEncoding {
- public:
-  // Size of encoded RPC server stats.
-  static constexpr size_t kRpcServerStatsSize = 10;
-  // Error value.
-  static constexpr size_t kEncodeDecodeFailure = 0;
-    }
-    
-    void ProtoServerReflection::FillFileDescriptorResponse(
-    const protobuf::FileDescriptor* file_desc,
-    ServerReflectionResponse* response,
-    std::unordered_set<grpc::string>* seen_files) {
-  if (seen_files->find(file_desc->name()) != seen_files->end()) {
-    return;
+    {
+    {
+    {    // Here, 5 is a empirical factor of cost_per_unit.
+    auto worker_threads = *(context->device()->tensorflow_cpu_worker_threads());
+    Shard(worker_threads.num_threads, worker_threads.workers, size, 5,
+          subDiagPart);
+    return Status::OK();
   }
-  seen_files->insert(file_desc->name());
-    }
+};
+}  // namespace functor
     
-    #ifdef GPR_APPLE
+    class binary_blob_t;
     
-    #if !defined(GPR_LINUX) && !defined(GPR_WINDOWS) && !defined(GPR_APPLE)
-    
-    namespace grpc {
-    }
-    
-    void DHTReplaceNodeTask::onReceived(const DHTPingReplyMessage* message)
-{
-  A2_LOG_INFO(fmt('ReplaceNode: Ping reply received from %s.',
-                  message->getRemoteNode()->toString().c_str()));
-  setFinished(true);
-}
-    
-    
-    {} // namespace aria2
-
-    
-    void DHTRoutingTable::dropNode(const std::shared_ptr<DHTNode>& node)
-{
-  getBucketFor(node)->dropNode(node);
-}
-/*
-  void DHTRoutingTable::moveBucketHead(const std::shared_ptr<DHTNode>& node)
-  {
-  getBucketFor(node)->moveToHead(node);
-  }
-*/
-void DHTRoutingTable::moveBucketTail(const std::shared_ptr<DHTNode>& node)
-{
-  getBucketFor(node)->moveToTail(node);
-}
-    
-    
-    {} // namespace aria2
+    #endif  // RDB_PROTOCOL_STORE_HPP_
 
     
     
-    {  size_t getQueueSize() const { return queue_.size(); }
+    {  std::string pathname_;
+};  // class FilePath
+    
+      // Creates a UTF-16 wide string from the given ANSI string, allocating
+  // memory using new. The caller is responsible for deleting the return
+  // value using delete[]. Returns the wide string, or NULL if the
+  // input is NULL.
+  //
+  // The wide string is created using the ANSI codepage (CP_ACP) to
+  // match the behaviour of the ANSI versions of Win32 calls and the
+  // C runtime.
+  static LPCWSTR AnsiToUtf16(const char* c_str);
+    
+    template <class ElemType>
+shared_ptr<ComputationNode<ElemType>> ComputationNetworkBuilder<ElemType>::AveragePooling(const ComputationNodePtr inputValues,
+                                                                                          const size_t windowWidth, const size_t windowHeight, const size_t horizontalSubsample, const size_t verticalSubsample, ImageLayoutKind imageLayoutKind,
+                                                                                          const std::wstring nodeName)
+{
+    return net.AddNodeToNetAndAttachInputs(New<AveragePoolingNode<ElemType>>(net.GetDeviceId(), nodeName, windowWidth, windowHeight, horizontalSubsample, verticalSubsample, imageLayoutKind), { inputValues });
+}
+    
+    // NDLBuilderImpl
+// TODO JC Refactor eligible methods and members into abstract base class.
+template <typename ElemType>
+class NDLBuilderImpl
+{
+public:
+    NDLBuilderImpl(DEVICEID_TYPE deviceId, unsigned long randomSeedOffset = 0)
+    {
+        m_computationNetwork = make_shared<ComputationNetwork>(deviceId);
+        m_computationNetwork->SetRandomSeedOffset(randomSeedOffset);
+        m_nodeEvaluator = new NDLNodeEvaluatorImpl<ElemType>(m_computationNetwork);
+    }
+    }
+    
+        shared_ptr<SGD<ElemType>> optimizer;
+    if (config.Exists(L'optimizer'))
+    {
+        optimizer = CreateObject<SGD<ElemType>>(config, L'optimizer');
+    }
+    else // legacy CNTK config syntax: needs a record called 'SGD'
+    {
+        const ConfigRecordType& configSGD(config(L'SGD'));
+        optimizer = make_shared<SGD<ElemType>>(configSGD);
+    }
+    
+        // subgraph eval/output/criteria
+    fstream << L'subgraph {\n';
+    fstream << L'\t\t rank=sink ; ';
+    line.clear();
+    for (const auto& x : m_criterionNodes)
+        line = line + msra::strfun::wstrprintf(L'\'%ls\' ', x->GetName().c_str());
+    for (const auto& x : m_outputNodes)
+        line = line + msra::strfun::wstrprintf(L'\'%ls\' ', x->GetName().c_str());
+    for (const auto& x : m_evaluationNodes)
+        line = line + msra::strfun::wstrprintf(L'\'%ls\' ', x->GetName().c_str());
+    }
+    
+    class ComputationNetwork :
+    public ScriptableObjects::Object,
+    public ScriptableObjects::HasToString,
+    public ScriptableObjects::CustomConfigRecord
+{
+public:
+    typedef shared_ptr<ComputationNetwork> ComputationNetworkPtr;
+    }
+    
+      /// Try if the configuration has started an auto-refresh thread.
+  bool started_thread_{false};
+    
+      const std::string kConfigTestNonBlacklistQuery{'pack_unrestricted_pack_process_heartbeat'};
+    
+    #include <gtest/gtest.h>
+    
+    #include <map>
+#include <string>
+    
+    Expected<int32_t, DatabaseError> Database::getInt32Or(
+    const std::string& domain,
+    const std::string& key,
+    const int32_t default_value) {
+  auto result = getInt32(domain, key);
+  if (!result && result.getError() == DatabaseError::KeyNotFound) {
+    return default_value;
+  }
+  return result;
+}
+    
+    ExpectedSuccess<DatabaseError> RocksdbDatabase::putRawBytesInternal(
+    Handle* handle, const std::string& key, const std::string& value) {
+  auto status = db_->Put(default_write_options_, handle, key, value);
+  if (!status.ok()) {
+    return createError(DatabaseError::FailToWriteData) << status.ToString();
+  }
+  return Success();
+}
+    
+     private:
+  rocksdb::Options getOptions();
+  std::vector<rocksdb::ColumnFamilyDescriptor> createDefaultColumnFamilies(
+      const rocksdb::Options& options);
+  ExpectedSuccess<DatabaseError> openInternal(
+      const rocksdb::Options& options, const boost::filesystem::path& path);
+  Expected<std::string, DatabaseError> getRawBytesInternal(
+      Handle* handle, const std::string& key);
+  ExpectedSuccess<DatabaseError> putRawBytesInternal(Handle* handle,
+                                                     const std::string& key,
+                                                     const std::string& value);
+  ExpectedSuccess<DatabaseError> checkDbConnection();
+  Expected<std::shared_ptr<Handle>, DatabaseError> getHandle(
+      const std::string& domain);
+    
+    
+    {    if (drop_src_data) {
+      VLOG(1) << 'Destroying db at path: ' << src_path;
+      rocksdb::DestroyDB(src_path, rocksdb::Options());
+    }
+    drop_src_data = true;
+    src_path = dst_path;
+    dst_path = randomOutputPath();
+  }
+    
+    #include <map>
+#include <string>
+#include <vector>
+    
+        if (serv.gs->start == 0)
+    {
+        swWarn('server is not running');
+        return retval;
+    }
+    
+    enum
+{
+    EVENT_onStart = 1u << 1,
+    EVENT_onShutdown = 1u << 2,
+    EVENT_onWorkerStart = 1u << 3,
+    EVENT_onWorkerStop = 1u << 4,
+    EVENT_onConnect = 1u << 5,
+    EVENT_onReceive = 1u << 6,
+    EVENT_onPacket = 1u << 7,
+    EVENT_onClose = 1u << 8,
+    EVENT_onTask = 1u << 9,
+    EVENT_onFinish = 1u << 10,
+    EVENT_onPipeMessage = 1u << 11,
 };
     
-      virtual std::shared_ptr<DHTTask>
-  createPeerAnnounceTask(const unsigned char* infoHash) CXX11_OVERRIDE;
-    
-    const std::string DHTUnknownMessage::UNKNOWN('unknown');
-    
-        // add values
-    auto res1 = object.emplace('three', 3);
-    null.emplace('A', 'a');
-    null.emplace('B', 'b');
+    typedef struct
+{
+    std::thread *thread;
+    swPipe pipe;
+} ThreadObject;
