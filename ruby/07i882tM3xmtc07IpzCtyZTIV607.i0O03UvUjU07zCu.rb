@@ -1,79 +1,150 @@
 
         
-          def test_inspect_instance
-    topic = topics(:first)
-    assert_equal %(#<Topic id: 1, title: 'The First Topic', author_name: 'David', author_email_address: 'david@loudthinking.com', written_on: '#{topic.written_on.to_s(:db)}', bonus_time: '#{topic.bonus_time.to_s(:db)}', last_read: '#{topic.last_read.to_s(:db)}', content: 'Have a nice day', important: nil, approved: false, replies_count: 1, unique_replies_count: 0, parent_id: nil, parent_title: nil, type: nil, group: nil, created_at: '#{topic.created_at.to_s(:db)}', updated_at: '#{topic.updated_at.to_s(:db)}'>), topic.inspect
-  end
-    
-      git_source(:github) { |repo| 'https://github.com/#{repo}.git' }
-    
-          def password
-        Rails.application.credentials.dig(:action_mailbox, :ingress_password) || ENV['RAILS_INBOUND_EMAIL_PASSWORD']
+            def skip_up_to_date?(screenshot)
+      if !screenshot.outdated? && Frameit.config[:resume]
+        UI.message('Skipping framing of screenshot #{screenshot.path} because its framed file seems up-to-date.')
+        return true
       end
+      false
+    end
+    
+              disabled_services_object = self.service_object
+          disabled_services.each do |k, v|
+            disabled_services_object.__hash__[k] = true
+            disabled_services_object.send('#{k}=', v)
+          end
+          Produce::Service.disable(disabled_services_object, nil) unless disabled_services.empty?
+        end
+      end
+    
+            UI.success('Successfully exported CSV to #{file}')
+      end
+    end
+    
+              @client = Faraday.new(hostname, options) do |c|
+            c.response(:json, content_type: /\bjson$/)
+            c.response(:xml, content_type: /\bxml$/)
+            c.response(:plist, content_type: /\bplist$/)
+            c.use(FaradayMiddleware::RelsMiddleware)
+            c.adapter(Faraday.default_adapter)
+            c.headers['Authorization'] = 'Bearer #{token.text}'
+    
+          #
+      # Helpers
+      #
+    
+          #
+      # Helpers
+      #
+    
+          module DeviceClass
+        APPLE_WATCH = 'APPLE_WATCH'
+        IPAD = 'IPAD'
+        IPHONE = 'IPHONE'
+        IPOD = 'IPOD'
+        APPLE_TV = 'APPLE_TV'
+        MAC = 'MAC'
+      end
+    
+            # @return [Array<String>] The list of the UUIDs of the
+        #         user targets integrated by this umbrella
+        #         target.  They can be used to find the
+        #         targets opening the project They can be used
+        #         to find the targets opening the project with
+        #         Xcodeproj.
+        #
+        def user_target_uuids
+          user_targets.map(&:uuid)
+        end
+      end
+    end
   end
 end
 
     
-        config.action_mailbox = ActiveSupport::OrderedOptions.new
-    config.action_mailbox.incinerate = true
-    config.action_mailbox.incinerate_after = 30.days
+                spec_names = specs.map do |spec|
+              spec.root? ? '.root' : spec.name.split('/')[1..-1].join('_')
+            end.sort
+            if spec_names.empty?
+              omit_common_specs ? '.common' : nil
+            else
+              if omit_common_specs
+                spec_names.unshift('.common')
+              elsif omit_default_specs
+                spec_names.unshift('.default')
+              end
+              spec_names.reduce('') do |acc, name|
+                '#{acc}#{acc.empty? || name[0] == '.' ? '' : '-'}#{name}'
+              end
+            end
+          end
+        end
     
-      url = File.dirname(url)
-  url == FORWARD_SLASH ? url : '#{url}/'
-end
+        it 'escapes double quotes properly for module map contents' do
+      path = temporary_directory + 'BananaLib.modulemap'
+      @pod_target.stubs(:umbrella_header_path).returns(Pathname.new('BananaLibWith'Quotes'-umbrella.h'))
+      @pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
+      gen = Generator::ModuleMap.new(@pod_target)
+      gen.save_as(path)
+      path.read.should == <<-EOS.strip_heredoc
+        framework module BananaLib {
+          umbrella header 'BananaLibWith\\'Quotes\\'-umbrella.h'
+    }
     
-    module Jekyll
-  module Commands
-    class NewTheme < Jekyll::Command
-      class << self
-        def init_with_program(prog)
-          prog.command(:'new-theme') do |c|
-            c.syntax 'new-theme NAME'
-            c.description 'Creates a new Jekyll theme scaffold'
-            c.option 'code_of_conduct', \
-                     '-c', '--code-of-conduct', \
-                     'Include a Code of Conduct. (defaults to false)'
+            it 'can be used as hash keys' do
+          k0 = PodVariant.new(@specs, [], [], @platform, false)
+          v0 = stub('Value at index 0')
+          k1 = PodVariant.new(@specs, [], [], @platform, true)
+          v1 = stub('Value at index 1')
+          hash = { k0 => v0, k1 => v1 }
+          hash[k0].should == v0
+          hash[k1].should == v1
+        end
     
-              find_every_method_call_by_name(body_node, :depends_on).each do |method|
-            key, value = destructure_hash(parameters(method).first)
-            next if key.nil? || value.nil?
-            next unless match = regex_match_group(value, /^(lua|perl|python|ruby)(\d*)/)
+              it 'does not require a host target, if there is no user project (manual integration)' do
+            @target.stubs(:user_project).returns(nil)
+            @target.stubs(:user_target_uuids).returns([])
+            @target.requires_host_target?.should == false
+          end
     
-    module Utils
-  class Bottles
-    class << self
-      undef tag
-    
-        return false if args[:before] && OS::Mac.version >= args[:before]
-    
-        it 'raises an error when duplicate resources are defined' do
-      subject.resource('foo') { url 'foo-1.0' }
-      expect {
-        subject.resource('foo') { url 'foo-1.0' }
-      }.to raise_error(DuplicateResourceError)
+        def initialize
+      @mutex = Mutex.new
+      # We need a threadsafe class here because we may perform
+      # get/set operations concurrently despite the fact we don't use
+      # the special atomic methods. That may not be apparent from this file,
+      # but it is the case that we can call lookups from multiple threads,
+      # when multiple pipelines are in play, and that a lookup may modify the registry.
+      @registry = java.util.concurrent.ConcurrentHashMap.new
+      @java_plugins = java.util.concurrent.ConcurrentHashMap.new
+      @hooks = HooksRegistry.new
     end
     
-        private
+    module LogStash
+  module PluginManager
+  end
+end
     
-    require 'logstash/agent'
-require 'logstash/config/defaults'
-require 'logstash/patches/clamp'
-require 'logstash/settings'
-require 'logstash/version'
-require 'logstash/plugins'
-require 'logstash/modules/util'
-require 'logstash/bootstrap_check/default_config'
-require 'logstash/bootstrap_check/persisted_queue_config'
-require 'set'
+        desc 'Halt all VM's involved in the acceptance test round'
+    task :halt, :platform do |t, args|
+      config   = PlatformConfig.new
+      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
+      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
     
-    class LogStash::PluginManager::Update < LogStash::PluginManager::Command
-  REJECTED_OPTIONS = [:path, :git, :github]
-  # These are local gems used by LS and needs to be filtered out of other plugin gems
-  NON_PLUGIN_LOCAL_GEMS = ['logstash-core', 'logstash-core-plugin-api']
+              it 'successfully install the plugin' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install logstash-filter-qatest')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-qatest')
+          end
     
-        context 'with a specific plugin' do
-      let(:plugin_name) { 'logstash-input-stdin' }
-      it 'list the plugin and display the plugin name' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name}$/)
+          it 'list the plugin with his version' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose #{plugin_name}')
+        expect(result).to run_successfully_and_output(/^#{plugin_name} \(\d+\.\d+.\d+\)/)
       end
+    end
+  end
+end
+
+    
+              found_code = http_codes.find do |http_code|
+            (http_code[0].to_i == env[Grape::Env::API_ENDPOINT].status) && http_code[2].respond_to?(:represent)
+          end if env[Grape::Env::API_ENDPOINT].request
