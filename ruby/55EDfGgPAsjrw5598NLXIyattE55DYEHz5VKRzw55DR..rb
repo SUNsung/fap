@@ -1,228 +1,200 @@
 
         
-          describe '#list_files_for' do
-    it 'returns the full path of the found files' do
-      result = finder.list_files_for('files/html')
-    
-      def perform(project_id, user_id)
-    project = Project.find(project_id)
-    user = User.find(user_id)
-    
-        delegate :repository, to: :project
-    
-            @filters << filter
-      end
-    
-        before do
-      entity.parent = group
+            def aes256_gcm_encrypt(value)
+      encrypted_token = Encryptor.encrypt(AES256_GCM_OPTIONS.merge(value: value))
+      Base64.strict_encode64(encrypted_token)
     end
-  end
-end
-
     
-        allow(subject).to receive(:diff_files) { [readme_file, other_file, nil_path_file] }
-    expect(readme_file).to receive(:unfold_diff_lines).with(position)
+    describe ProjectMemberPresenter do
+  let(:user) { double(:user) }
+  let(:project) { double(:project) }
+  let(:project_member) { double(:project_member, source: project) }
+  let(:presenter) { described_class.new(project_member, current_user: user) }
     
-          def lines
-        lines = []
-        @diff.diff.split('\n')[2..-1].each_with_index do |line, line_index|
-          lines << { :line  => line,
-                     :class => line_class(line),
-                     :ldln  => left_diff_line_number(0, line),
-                     :rdln  => right_diff_line_number(0, line) }
-        end if @diff
-        lines
-      end
+        def chronic_duration_attr_writer(virtual_attribute, source_attribute, parameters = {})
+      chronic_duration_attr_reader(virtual_attribute, source_attribute)
     
-          def versions
-        i = @versions.size + 1
-        @versions.map do |v|
-          i -= 1
-          { :id        => v.id,
-            :id7       => v.id[0..6],
-            :num       => i,
-            :author    => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
-            :message   => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
-            :date      => v.authored_date.strftime('%B %d, %Y'),
-            :gravatar  => Digest::MD5.hexdigest(v.author.email.strip.downcase),
-            :identicon => self._identicon_code(v.author.email),
-            :date_full => v.authored_date,
-            :files     => v.stats.files.map { |f,*rest|
-              page_path = extract_renamed_path_destination(f)
-              page_path = remove_page_extentions(page_path)
-              { :file => f,
-                :link => '#{page_path}/#{v.id}'
-              }
-            }
-          }
-        end
-      end
-    
-          def header_format
-        has_header && @header.format.to_s
-      end
-    
-    context 'Precious::Views::LatestChanges' do
-  include Rack::Test::Methods
-  
-  def app
-    Precious::App
-  end
-  
-  setup do
-    @path = cloned_testpath('examples/lotr.git')
-    @wiki = Gollum::Wiki.new(@path)
-    Precious::App.set(:gollum_path, @path)
-    Precious::App.set(:wiki_options, {:latest_changes_count => 10})
-  end
-    
-            def image_params
-          params.require(:image).permit(permitted_image_attributes)
-        end
-    
-            private
-    
-            def create
-          authorize! :create, Property
-          @property = Spree::Property.new(property_params)
-          if @property.save
-            respond_with(@property, status: 201, default_template: :show)
-          else
-            invalid_resource!(@property)
+              # Already exists
+          expect(weather_agent_diff.agent).to eq(agents(:bob_weather_agent))
+          valid_parsed_weather_agent_data.each do |key, value|
+            next if key == :type
+            expect(weather_agent_diff.send(key).current).to eq(agents(:bob_weather_agent).send(key))
           end
-        end
     
-              state = @states.last
-          respond_with(@states) if stale?(state)
-        end
+          expect(exporter.as_json[:links]).to eq([{ :source => guid_order(agent_list, :jane_weather_agent), :receiver => guid_order(agent_list, :jane_rain_notifier_agent) }])
+    end
     
-            def stock_location
-          render 'spree/api/v1/shared/stock_location_required', status: 422 and return unless params[:stock_location_id]
-          @stock_location ||= StockLocation.accessible_by(current_ability, :show).find(params[:stock_location_id])
-        end
+        it 'work with set FAILED_JOBS_TO_KEEP env variable' do
+      expect { @scheduler.send(:cleanup_failed_jobs!) }.to change(Delayed::Job, :count).by(-1)
+      expect { @scheduler.send(:cleanup_failed_jobs!) }.to change(Delayed::Job, :count).by(0)
+      expect(@keep.id).to eq(Delayed::Job.order(:failed_at)[0].id)
+    end
     
-            def stock_location_params
-          params.require(:stock_location).permit(permitted_stock_location_attributes)
-        end
-      end
+      describe '#complete_project_id' do
+    it 'should return a array of hashes' do
+      expect(@checker.complete_project_id).to eq [{text: 'test (1234)', id: 1234}, {text: 'test1 (1235)', id: 1235}]
     end
   end
-end
-
     
-            def show
-          @stock_movement = scope.find(params[:id])
-          respond_with(@stock_movement)
-        end
-    
-            def variant_includes
-          [{ option_values: :option_type }, :product, :default_price, :images, { stock_items: :stock_location }]
-        end
-      end
-    end
-  end
-end
-
-    
-            def show
-          respond_with(zone)
-        end
-    
-                private
-    
-          it 'should have the custom version' do
-        pending('Ruby 1.x and 2.0.x are unsupported for Snap because it lacks Psych::safe_load') if is_old_ruby
-        insist { input.version } == 'custom-version'
-      end
-    
-        # Override package settings if they are not the default flag values
-    # the below proc essentially does:
-    #
-    # if someflag != default_someflag
-    #   input.someflag = someflag
-    # end
-    set = proc do |object, attribute|
-      # if the package's attribute is currently nil *or* the flag setting for this
-      # attribute is non-default, use the value.
-      if object.send(attribute).nil? || send(attribute) != send('default_#{attribute}')
-        logger.info('Setting from flags: #{attribute}=#{send(attribute)}')
-        object.send('#{attribute}=', send(attribute))
-      end
-    end
-    set.call(input, :architecture)
-    set.call(input, :category)
-    set.call(input, :description)
-    set.call(input, :epoch)
-    set.call(input, :iteration)
-    set.call(input, :license)
-    set.call(input, :maintainer)
-    set.call(input, :name)
-    set.call(input, :url)
-    set.call(input, :vendor)
-    set.call(input, :version)
-    
-        if path.nil?
-      return @staging_path
-    else
-      return File.join(@staging_path, path)
-    end
-  end # def staging_path
-    
-      def compression_option
-    case self.attributes[:pacman_compression]
-      when nil, 'xz'
-        return '--xz'
-      when 'none'
-        return ''
-      when 'gz'
-        return '-z'
-      when 'bzip2'
-        return '-j'
+        # The path used after confirmation.
+    def after_confirmation_path_for(resource_name, resource)
+      if signed_in?(resource_name)
+        signed_in_root_path(resource)
       else
-        return '--xz'
-      end
-  end
-    
-        if File.exists?(params[:output])
-      # TODO(sissel): Allow folks to choose output?
-      logger.error('Puppet module directory '#{params[:output]}' already ' \
-                    'exists. Delete it or choose another output (-p flag)')
-    end
-    
-        unless safesystem(*args)
-      raise 'Command failed while creating payload tar: #{args}'
-    end
-    payload_tar
-  end
-    
-        def name
-      project.name
-    end
-    
-        attr_reader :commands, :index, :name, :project
-    
-        context 'attach is false in yaml' do
-      before { project.yaml['attach'] = false }
-      it 'returns false' do
-        expect(project.attach?).to be_falsey
+        new_session_path(resource_name)
       end
     end
     
-      def is_pane
-    @actual.is_a? Tmuxinator::Pane
+        if resource.errors.empty?
+      set_flash_message! :notice, :unlocked
+      respond_with_navigational(resource){ redirect_to after_unlock_path_for(resource) }
+    else
+      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
+    end
+  end
+    
+    # Each time a record is set we check whether its session has already timed out
+# or not, based on last request time. If so, the record is logged out and
+# redirected to the sign in page. Also, each time the request comes and the
+# record is set, we set the last request time inside its scoped session to
+# verify timeout in the following request.
+Warden::Manager.after_set_user do |record, warden, options|
+  scope = options[:scope]
+  env   = warden.request.env
+    
+          def mailer_from(mapping)
+        mailer_sender(mapping, :from)
+      end
+    
+        # Creates configuration values for Devise and for the given module.
+    #
+    #   Devise::Models.config(Devise::Models::DatabaseAuthenticatable, :stretches)
+    #
+    # The line above creates:
+    #
+    #   1) An accessor called Devise.stretches, which value is used by default;
+    #
+    #   2) Some class methods for your model Model.stretches and Model.stretches=
+    #      which have higher priority than Devise.stretches;
+    #
+    #   3) And an instance method stretches.
+    #
+    # To add the class methods you need to have a module ClassMethods defined
+    # inside the given class.
+    #
+    def self.config(mod, *accessors) #:nodoc:
+      class << mod; attr_accessor :available_configs; end
+      mod.available_configs = accessors
+    
+            if Devise.activerecord51?
+          def clear_reset_password_token?
+            encrypted_password_changed = respond_to?(:will_save_change_to_encrypted_password?) && will_save_change_to_encrypted_password?
+            authentication_keys_changed = self.class.authentication_keys.any? do |attribute|
+              respond_to?('will_save_change_to_#{attribute}?') && send('will_save_change_to_#{attribute}?')
+            end
+    
+        def check_https_availability
+      return unless download
+    
+                problem 'xcodebuild should be passed an explicit 'SYMROOT''
+          end
+    
+            it 'returns false if all are higher' do
+          setup_java_with_version '1.8.0_5'
+          expect(subject).not_to be_satisfied
+        end
+      end
+    
+        expect do
+      described_class.run('local-transmission', 'local-caffeine')
+    end.to output('#{transmission_location}\n#{caffeine_location}\n').to_stdout
+  end
+    
+        def quarantine
+      return if @quarantine.nil?
+      return unless Quarantine.available?
+    
+          if privs.include?('SeDebugPrivilege')
+        print_good('Got SeDebugPrivilege.')
+      else
+        print_warning('Unable to get SeDebugPrivilege.')
+      end
+    end
+  end
+end
+    
+      def run
+    res = send_request_raw(
+        'uri' => normalize_uri(target_uri.path.to_s),
+        'method' => 'GET',
+    )
+    model = check_response_fingerprint(res, Exploit::CheckCode::Detected)
+    if model != Exploit::CheckCode::Detected
+      devices = devices_list[model.to_sym]
+      devices = devices_list['ALL'.to_sym] if devices.nil? && datastore['ForceAttempt']
+      if devices != nil
+        print_good('Detected device:#{devices[:name]} #{devices[:model]}')
+        devices[:values].each { |value|
+          cookie = 'C#{value[0]}=#{'B'*value[1]}\x00'
+          res = send_request_raw(
+              'uri' => normalize_uri(target_uri.path.to_s),
+              'method' => 'GET',
+              'headers' => headers.merge('Cookie' => cookie)
+          )
+          if res != nil and res.code <= 302
+            print_good('Good response, please check host, authentication should be disabled')
+            break
+          else
+            print_error('Bad response')
+          end
+        }
+      else
+        print_error('No matching values for fingerprint #{model}')
+      end
+    else
+      print_error('Unknown device')
+    end
   end
 end
 
     
-      'echo '#{standard_options.join('\n')}''
-end
-
+    # Pseudo-modules
+require 'msf/core/handler'
     
-      describe '#render' do
-    it 'renders the template' do
-      expect(File).to receive(:read).at_least(:once) { 'wemux ls 2>/dev/null' }
+        # Create a directory for the logs
+    logs = if log_path
+             ::File.join(log_path, 'logs', 'persistence', Rex::FileUtils.clean_path(host + filenameinfo))
+           else
+             ::File.join(Msf::Config.log_directory, 'persistence', Rex::FileUtils.clean_path(host + filenameinfo))
+           end
     
-            expect(described_class.directories).to eq \
-          ['XDG', 'HOME']
-      end
+        membership = contact.aspect_memberships.where(aspect_id: aspect.id).first
+    
+          a = $count
+      p.start
+      sleep(0.05)
+      p.terminate
+      p.kill(true)
+    
+    def config_tag(config, key, tag=nil, classname=nil)
+  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
+  tag       ||= 'div'
+  classname ||= key.sub(/_/, '-').sub(/\./, '-')
+  output      = '<#{tag} class='#{classname}''
+    
+          get_web_content(redirected_url)
     end
+    
+        def render(context)
+      includes_dir = File.join(context.registers[:site].source, '_includes')
+    
+      # Improved version of Liquid's truncatewords:
+  # - Uses typographically correct ellipsis (…) insted of '...'
+  def truncatewords(input, length)
+    truncate = input.split(' ')
+    if truncate.length > length
+      truncate[0..length-1].join(' ').strip + ' &hellip;'
+    else
+      input
+    end
+  end
