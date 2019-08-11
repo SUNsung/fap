@@ -1,268 +1,354 @@
 
         
-        bool CheckCommandLineArguments(int argc, base::CommandLine::CharType** argv);
+        /** A parsed pkh(P) descriptor. */
+class PKHDescriptor final : public DescriptorImpl
+{
+protected:
+    std::vector<CScript> MakeScripts(const std::vector<CPubKey>& keys, const CScript*, FlatSigningProvider& out) const override
+    {
+        CKeyID id = keys[0].GetID();
+        out.pubkeys.emplace(id, keys[0]);
+        return Singleton(GetScriptForDestination(PKHash(id)));
+    }
+public:
+    PKHDescriptor(std::unique_ptr<PubkeyProvider> prov) : DescriptorImpl(Singleton(std::move(prov)), {}, 'pkh') {}
+};
     
-    
-    {  // Otherwise do the restart after all windows have been closed.
-  WindowList::AddObserver(this);
-  WindowList::CloseAllWindows();
-}
-    
-    #include 'base/time/time.h'
-#include 'base/values.h'
-#include 'content/public/browser/browser_context.h'
-#include 'content/public/browser/browser_task_traits.h'
-#include 'content/public/browser/browser_thread.h'
-#include 'content/public/browser/storage_partition.h'
-#include 'gin/dictionary.h'
-#include 'gin/object_template_builder.h'
-#include 'net/cookies/canonical_cookie.h'
-#include 'net/cookies/cookie_store.h'
-#include 'net/cookies/cookie_util.h'
-#include 'net/url_request/url_request_context.h'
-#include 'net/url_request/url_request_context_getter.h'
-#include 'shell/browser/atom_browser_context.h'
-#include 'shell/browser/cookie_change_notifier.h'
-#include 'shell/common/native_mate_converters/callback.h'
-#include 'shell/common/native_mate_converters/gurl_converter.h'
-#include 'shell/common/native_mate_converters/value_converter.h'
-    
-    class DownloadItem : public mate::TrackableObject<DownloadItem>,
-                     public download::DownloadItem::Observer {
- public:
-  static mate::Handle<DownloadItem> Create(v8::Isolate* isolate,
-                                           download::DownloadItem* item);
+    /** A hasher class for RIPEMD-160. */
+class CRIPEMD160
+{
+private:
+    uint32_t s[5];
+    unsigned char buf[64];
+    uint64_t bytes;
     }
     
-    void InAppPurchase::OnTransactionsUpdated(
-    const std::vector<in_app_purchase::Transaction>& transactions) {
-  Emit('transactions-updated', transactions);
-}
-#endif
+    Status DumpTable(Env* env, const std::string& fname, WritableFile* dst) {
+  uint64_t file_size;
+  RandomAccessFile* file = NULL;
+  Table* table = NULL;
+  Status s = env->GetFileSize(fname, &file_size);
+  if (s.ok()) {
+    s = env->NewRandomAccessFile(fname, &file);
+  }
+  if (s.ok()) {
+    // We use the default comparator, which may or may not match the
+    // comparator used in this database. However this should not cause
+    // problems since we only use Table operations that do not require
+    // any comparisons.  In particular, we do not call Seek or Prev.
+    s = Table::Open(Options(), file, file_size, &table);
+  }
+  if (!s.ok()) {
+    delete table;
+    delete file;
+    return s;
+  }
+    }
     
-    
-    {}  // namespace
-    
-    
-    {
-    {      if (!F.shouldOptimize()) {
-        LLVM_DEBUG(llvm::dbgs() << '  anchor a no optimization function: '
-                                << F.getName() << '\n');
-        ensureAlive(&F);
-      }
+      void ResetDBState(ResetMethod reset_method) {
+    switch (reset_method) {
+      case RESET_DROP_UNSYNCED_DATA:
+        ASSERT_OK(env_->DropUnsyncedFileData());
+        break;
+      case RESET_DELETE_UNSYNCED_FILES:
+        ASSERT_OK(env_->DeleteFilesCreatedAfterLastDirSync());
+        break;
+      default:
+        assert(false);
     }
   }
     
-    TEST(Converter, UnknownType) {
-  using namespace caffe2::testing;
-  caffe2::NetDef net;
-  NetMutator(&net)
-      .newOp('NeverSeen', {'X'}, {'X'})
-      .setDeviceOptionName('device_' + c10::to_string(rand() % 2));
-  auto nn = caffe2::convertToNNModule(net);
-  auto new_netdef = caffe2::convertToCaffe2Proto(nn);
-}
-    
-    namespace caffe2 {
-    }
-    
-        template<typename T>
-    Point<T> Point<T>::operator-(const T value) const
-    {
-        try
-        {
-            return Point<T>{T(x - value), T(y - value)};
-        }
-        catch (const std::exception& e)
-        {
-            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
-            return Point<T>{};
-        }
-    }
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-            const size_t lo = (*it_data) & 0x0F;
-        result += detail::to_wchar(lo);
-    
-    #include <map>
-#include 'thread/lock.h'
-#include 'socket/unix_socket.h'
-    
-        for (std::map<SOCKET, int>::iterator it = m_filter_map.begin(); it != m_filter_map.end(); ++it) {
-        maxsocket = maxsocket == INVALID_SOCKET ? it->first : maxsocket;
-        maxsocket = it->first > maxsocket ? it->first : maxsocket;
-    }
-    
-            if (NULL == p) {
-		ASSERT2(p, '_len=%' PRIu64 ', m_nMallocUnitSize=%' PRIu64 ', nMallocSize=%' PRIu64', m_nCapacity=%' PRIu64,
-				(uint64_t)_len, (uint64_t)malloc_unitsize_, (uint64_t)mallocsize, (uint64_t)capacity_);
-    }
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
+    // Return the name of the current file.  This file contains the name
+// of the current manifest file.  The result will be prefixed with
+// 'dbname'.
+extern std::string CurrentFileName(const std::string& dbname);
     
     
-    {    char_ =  env_->GetStringUTFChars(jstr_, NULL);
-}
-    
-    void operator delete[](void* _p, size_t /*_size*/) {
-    if (!_p)
-        return;
-    }
+//-----------------------------------------------------------------------------
+//
+//	class EnvmapAttribute
+//
+//-----------------------------------------------------------------------------
     
     
-int getaddrinfo_with_timeout(const char *node, const char *service, const struct addrinfo *hints, struct addrinfo **res, bool& _is_timeout, unsigned long long _timeout_msec) {
-    xverbose_function();
-    //Check param
+//
+// Decode using a the 'One-Shift' strategy for decoding, with a 
+// small-ish table to accelerate decoding of short codes.
+//
+// If possible, try looking up codes into the acceleration table.
+// This has a few benifits - there's no search involved; We don't
+// need an additional lookup to map id to symbol; we don't need
+// a full 64-bits (so less refilling). 
+//
     
-    ScopedLock lock(sg_mutex);
+        IMF_EXPORT
+    Iterator                    find (const std::string &name);
+    IMF_EXPORT
+    ConstIterator               find (const std::string &name) const;
     
-    
-    Thread thread(&__WorkerFunc, node);
-    int start_ret = thread.start();
-    
-    if (start_ret != 0) {
-        xerror2(TSF'start the thread fail, host:%_', node);
-        return kRetCodeInternalStateError;
-    }
-    
-    DnsItem dns_item;
-    dns_item.threadid = thread.tid();
-    dns_item.node = node;
-    dns_item.service = service;
-    dns_item.hints = hints;
-    dns_item.res = res;
-    dns_item.status = kGetADDRNotBegin;
-    sg_dnsitem_vec.push_back(dns_item);
-    
-    
-    uint64_t time_end = gettickcount() + (uint64_t)_timeout_msec;
-    
-    while (true) {
-        uint64_t time_cur = gettickcount();
-        uint64_t time_wait = time_end > time_cur ? time_end - time_cur : 0;
-        
-        int wait_ret = sg_condition.wait(lock, (long)time_wait);
-        
-        std::vector<DnsItem>::iterator it = sg_dnsitem_vec.begin();
-        
-        for (; it != sg_dnsitem_vec.end(); ++it) {
-            if (dns_item.threadid == it->threadid)
-                break;
-        }
-        
-        xassert2(it != sg_dnsitem_vec.end());
-        
-        if (it != sg_dnsitem_vec.end()){
-            
-            if (ETIMEDOUT == wait_ret) {
-                it->status = kGetADDRTimeout;
-            }
-            
-            if (kGetADDRNotBegin== it->status || kGetADDRDoing == it->status) {
-                continue;
-            }
-            
-            if (kGetADDRSuc == it->status) {
-                if (it->EqualParameter(dns_item)) {
-                    sg_dnsitem_vec.erase(it);
-                    return 0;
-                } else {
-                    std::vector<DnsItem>::iterator iter = sg_dnsitem_vec.begin();
-                    int i = 0;
-                    for (; iter != sg_dnsitem_vec.end(); ++iter) {
-                        xerror2(TSF'sg_dnsitem_vec[%_]:%_', i++, iter->ToString());
-                    }
-                    xassert2(false, TSF'dns_item:%_', dns_item.ToString());
-                    return kRetCodeParamNotMatch;
-                }
-            }
-            
-            if (kGetADDRTimeout == it->status ) {
-                xinfo2(TSF 'dns get ip status:kGetADDRTimeout item:%_', it->ToString());
-                sg_dnsitem_vec.erase(it);
-                _is_timeout = true;
-                return kRetCodeGetADDRTimeout;
-            } else if (kGetADDRFail == it->status) {
-                xinfo2(TSF 'dns get ip status:kGetADDRFail item:%_', it->ToString());
-                int ret_code = it->error_code;
-                sg_dnsitem_vec.erase(it);
-                return ret_code;
-            }
-            
-            xassert2(false, TSF'%_', it->status);
-            
-            
-            sg_dnsitem_vec.erase(it);
-        }
-        return kRetCodeDnsItemNotFound;
-    }
-    
-    return kRetCodeInternalStateError;
-}
-
-    
-    namespace weex {
-PlatformBridgeInMultiProcess* PlatformBridgeInMultiProcess::g_instance = NULL;
-    }
-    
-    
-    {
-    { private:
-  PlatformBridgeInMultiProcess();
-  virtual ~PlatformBridgeInMultiProcess();
-  static PlatformBridgeInMultiProcess* g_instance;
-  DISALLOW_COPY_AND_ASSIGN(PlatformBridgeInMultiProcess);
-};
-}  // namespace weex
-    
+    class GenericInputFile
+{
     public:
-    typedef JSGlobalObject Base;
-    std::vector<INIT_FRAMEWORK_PARAMS *> m_initFrameworkParams;
-    std::string id = '';
-    TimerQueue* timeQueue = nullptr;
-    static WeexGlobalObject* create(VM& vm, Structure* structure)
-    {
-        WeexGlobalObject* object = new (NotNull, allocateCell<WeexGlobalObject>(vm.heap)) WeexGlobalObject(vm, structure);
-        //object->finishCreation(vm);
-        return object;
+        IMF_EXPORT
+        virtual ~GenericInputFile() {}
     }
     
-    static intptr_t g_RequestHandler_create = 0;
-static base::android::ScopedLocalJavaRef<jobject>
-    Java_RequestHandler_create(JNIEnv* env) {
-  /* Must call RegisterNativesImpl()  */
-  //CHECK_CLAZZ(env, RequestHandler_clazz(env),
-  //    RequestHandler_clazz(env), NULL);
-  jmethodID method_id =
-      base::android::GetMethod(
-      env, RequestHandler_clazz(env),
-      base::android::STATIC_METHOD,
-      'create',
-    }
     
-    #ifndef WEEXV8_WEEXOBJECTHOLDER_H
-#define WEEXV8_WEEXOBJECTHOLDER_H
-    
-    ExeJsTask *ExeJsTask::clone() {
-    ExeJsTask *task = new ExeJsTask(instanceId, this->exeJsArgs->params);
-    for (int i = 0; i < this->extraArgs.size(); ++i) {
-        task->addExtraArg(this->extraArgs[i]);
-    }
-    return task;
+    {    OPENEXR_IMF_INTERNAL_NAMESPACE::Xdr::write <OPENEXR_IMF_INTERNAL_NAMESPACE::StreamIO> (os, version);
 }
-
     
-    InitFrameworkTask::InitFrameworkTask(const String &instanceId, const String &script,
-                                     std::vector<INIT_FRAMEWORK_PARAMS *> &params) : WeexTask(instanceId) {
+    //-----------------------------------------------------------------------------
+//
+//	Low-level file input and output for OpenEXR.
+//
+//-----------------------------------------------------------------------------
+    
+    
+void
+InputFile::rawPixelDataToBuffer (int scanLine,
+                                 char *pixelData,
+                                 int &pixelDataSize) const
+{
+    try
+    {
+        if (_data->dsFile)
+        {
+            throw IEX_NAMESPACE::ArgExc ('Tried to read a raw scanline '
+                                         'from a deep image.');
+        }
+        
+        else if (_data->isTiled)
+        {
+            throw IEX_NAMESPACE::ArgExc ('Tried to read a raw scanline '
+                                         'from a tiled image.');
+        }
+        
+        _data->sFile->rawPixelDataToBuffer(scanLine, pixelData, pixelDataSize);
+    }
+    catch (IEX_NAMESPACE::BaseExc &e)
+    {
+        REPLACE_EXC (e, 'Error reading pixel data from image '
+                     'file \'' << fileName() << '\'. ' << e.what());
+        throw;
+    }
+}
+    
+    
+OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_EXIT
+    
+    class ClientChannelStressTest {
+ public:
+  void Run() {
+    Start();
+    // Keep updating resolution for the test duration.
+    gpr_log(GPR_INFO, 'Start updating resolution.');
+    const auto wait_duration =
+        std::chrono::milliseconds(kResolutionUpdateIntervalMs);
+    std::vector<AddressData> addresses;
+    auto start_time = std::chrono::steady_clock::now();
+    while (true) {
+      if (std::chrono::duration_cast<std::chrono::seconds>(
+              std::chrono::steady_clock::now() - start_time)
+              .count() > kTestDurationSec) {
+        break;
+      }
+      // Generate a random subset of balancers.
+      addresses.clear();
+      for (const auto& balancer_server : balancer_servers_) {
+        // Select each address with probability of 0.8.
+        if (std::rand() % 10 < 8) {
+          addresses.emplace_back(AddressData{balancer_server.port_, true, ''});
+        }
+      }
+      std::shuffle(addresses.begin(), addresses.end(),
+                   std::mt19937(std::random_device()()));
+      SetNextResolution(addresses);
+      std::this_thread::sleep_for(wait_duration);
+    }
+    gpr_log(GPR_INFO, 'Finish updating resolution.');
+    Shutdown();
+  }
     }
     
-    #ifndef WEEXV8_INITFRAMEWORKTASK_H
-#define WEEXV8_INITFRAMEWORKTASK_H
+      void SendRequest() {
+    EchoRequest request;
+    EchoResponse response;
+    request.set_message('Hello');
+    ClientContext context;
+    GPR_ASSERT(!shutdown_);
+    Status s = stub_->Echo(&context, request, &response);
+    GPR_ASSERT(shutdown_);
+  }
     
-    #include 'android/jsengine/task/weex_task.h'
+    static void iomgr_platform_flush(void) { grpc_iocp_flush(); }
+    
+    #include <grpc/support/port_platform.h>
+    
+    #ifndef GRPCPP_CREATE_CHANNEL_H
+#define GRPCPP_CREATE_CHANNEL_H
+    
+    // Add a second service with one async method.
+TEST_F(HybridEnd2endTest, GenericEchoAsyncRequestStream_AsyncDupService) {
+  typedef EchoTestService::WithAsyncMethod_RequestStream<
+      EchoTestService::WithGenericMethod_Echo<TestServiceImpl>>
+      SType;
+  SType service;
+  AsyncGenericService generic_service;
+  duplicate::EchoTestService::AsyncService dup_service;
+  SetUpServer(&service, &dup_service, &generic_service, nullptr);
+  ResetStub();
+  std::thread generic_handler_thread(HandleGenericCall, &generic_service,
+                                     cqs_[0].get());
+  std::thread request_stream_handler_thread(HandleClientStreaming<SType>,
+                                            &service, cqs_[1].get());
+  std::thread echo_handler_thread(
+      HandleEcho<duplicate::EchoTestService::AsyncService>, &dup_service,
+      cqs_[2].get(), true);
+  TestAllMethods();
+  SendEchoToDupService();
+  generic_handler_thread.join();
+  request_stream_handler_thread.join();
+  echo_handler_thread.join();
+}
+    
+    
+    { protected:
+  std::unique_ptr<Server> server_;
+  std::unique_ptr<grpc::testing::EchoTestService::Stub> stub_;
+  std::unique_ptr<ProtoReflectionDescriptorDatabase> desc_db_;
+  std::unique_ptr<protobuf::DescriptorPool> desc_pool_;
+  std::unordered_set<string> known_files_;
+  std::unordered_set<string> known_types_;
+  const protobuf::DescriptorPool* ref_desc_pool_;
+  int port_;
+  reflection::ProtoServerReflectionPlugin plugin_;
+};
+    
+        // Main loop
+    while (!glfwWindowShouldClose(window))
+    {
+        // Poll and handle events (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        glfwPollEvents();
+    }
+    
+            // Get the function pointer (required for any extensions)
+        auto vkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(g_Instance, 'vkCreateDebugReportCallbackEXT');
+        IM_ASSERT(vkCreateDebugReportCallbackEXT != NULL);
+    
+        // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsClassic();
+    
+            // Start the Dear ImGui frame
+        ImGui_ImplOpenGL2_NewFrame();
+        ImGui_ImplSDL2_NewFrame(window);
+        ImGui::NewFrame();
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        // Copy and convert all vertices into a single contiguous buffer, convert colors to DX9 default format.
+    // FIXME-OPT: This is a waste of resource, the ideal is to use imconfig.h and
+    //  1) to avoid repacking colors:   #define IMGUI_USE_BGRA_PACKED_COLOR
+    //  2) to avoid repacking vertices: #define IMGUI_OVERRIDE_DRAWVERT_STRUCT_LAYOUT struct ImDrawVert { ImVec2 pos; float z; ImU32 col; ImVec2 uv; }
+    CUSTOMVERTEX* vtx_dst;
+    ImDrawIdx* idx_dst;
+    if (g_pVB->Lock(0, (UINT)(draw_data->TotalVtxCount * sizeof(CUSTOMVERTEX)), (void**)&vtx_dst, D3DLOCK_DISCARD) < 0)
+        return;
+    if (g_pIB->Lock(0, (UINT)(draw_data->TotalIdxCount * sizeof(ImDrawIdx)), (void**)&idx_dst, D3DLOCK_DISCARD) < 0)
+        return;
+    for (int n = 0; n < draw_data->CmdListsCount; n++)
+    {
+        const ImDrawList* cmd_list = draw_data->CmdLists[n];
+        const ImDrawVert* vtx_src = cmd_list->VtxBuffer.Data;
+        for (int i = 0; i < cmd_list->VtxBuffer.Size; i++)
+        {
+            vtx_dst->pos[0] = vtx_src->pos.x;
+            vtx_dst->pos[1] = vtx_src->pos.y;
+            vtx_dst->pos[2] = 0.0f;
+            vtx_dst->col = (vtx_src->col & 0xFF00FF00) | ((vtx_src->col & 0xFF0000) >> 16) | ((vtx_src->col & 0xFF) << 16);     // RGBA --> ARGB for DirectX9
+            vtx_dst->uv[0] = vtx_src->uv.x;
+            vtx_dst->uv[1] = vtx_src->uv.y;
+            vtx_dst++;
+            vtx_src++;
+        }
+        memcpy(idx_dst, cmd_list->IdxBuffer.Data, cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx));
+        idx_dst += cmd_list->IdxBuffer.Size;
+    }
+    g_pVB->Unlock();
+    g_pIB->Unlock();
+    g_pd3dDevice->SetStreamSource(0, g_pVB, 0, sizeof(CUSTOMVERTEX));
+    g_pd3dDevice->SetIndices(g_pIB);
+    g_pd3dDevice->SetFVF(D3DFVF_CUSTOMVERTEX);
+    
+      /*
+   * @brief A helper function to perform a start to finish carve
+   *
+   * This function walks through the carve, compress, and exfil functions
+   * in one fell swoop. Use of this class should largely happen through
+   * this function.
+   */
+  void start() override;
+    
+    void restoreScheduleBlacklist(std::map<std::string, size_t>& blacklist) {
+  std::string content;
+  getDatabaseValue(kPersistentSettings, kFailedQueries, content);
+  auto blacklist_pairs = osquery::split(content, ':');
+  if (blacklist_pairs.size() == 0 || blacklist_pairs.size() % 2 != 0) {
+    // Nothing in the blacklist, or malformed data.
+    return;
+  }
+    }
+    
+      /**
+   * @brief Hash a source's config data
+   *
+   * @param source is the place where the config content came from
+   * @param content is the content of the config data for a given source
+   * @return false if the source did not change, otherwise true
+   */
+  bool hashSource(const std::string& source, const std::string& content);
+    
+      const std::string& getName() const {
+    return name_;
+  }
+    
+     private:
+  bool is_open_ = false;
+    
+    
+    {  name_ = name;
+}
+    
+      /**
+   * @brief Bind this plugin to an external plugin reference.
+   *
+   * Allow a specialized plugin type to act when an external plugin is
+   * registered (e.g., a TablePlugin will attach the table name).
+   *
+   * @param name The broadcasted name of the plugin.
+   * @param info The routing info for the owning extension.
+   */
+  static Status addExternal(const std::string& name,
+                            const PluginResponse& info) {
+    (void)name;
+    (void)info;
+    return Status::success();
+  }
+    
+      if (doc.HasMember('removed')) {
+    auto status = deserializeQueryData(doc['removed'], dr.removed);
+    if (!status.ok()) {
+      return status;
+    }
+  }
