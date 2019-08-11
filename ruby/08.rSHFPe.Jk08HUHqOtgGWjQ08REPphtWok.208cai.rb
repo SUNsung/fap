@@ -1,47 +1,58 @@
 
         
-            if rbenv_prefix = prefix_from_bin('rbenv')
-      prefixes << rbenv_prefix
-    end
+            register_options(
+      [
+        Opt::LPORT(4444),
+        OptAddress.new('RHOST', [false, 'The target address', '']),
+      ], Msf::Handler::BindTcp)
     
-        def tmux_layout_command
-      '#{project.tmux} select-layout -t #{tmux_window_target} #{layout}'
-    end
-    
-      chain :with_commands do |*expected|
-    @commands = expected
+      if dirs.length < 1
+    $stderr.puts 'Usage: #{File.basename(__FILE__)} <directory or file>'
+    @exit_status = 1
+    exit(@exit_status)
   end
-  alias_method :and_commands, :with_commands
     
-          # Sorted list of all .yml files, including duplicates
-      def configs
-        directories.map do |directory|
-          Dir['#{directory}/**/*.yml'].map do |path|
-            path.gsub('#{directory}/', '').gsub('.yml', '')
-          end
-        end.flatten.sort
+      #
+  # Return the spacing between the uri and the version
+  #
+  def set_uri_version_spacer
+    len = opts['pad_uri_version_count'].to_i
+    set = ' '
+    buf = ''
+    
+      #
+  # Gets cookies from the Set-Cookie header in a format to be used
+  # in the 'cookie' send_request field
+  #
+  def get_cookies
+    cookies = ''
+    if (self.headers.include?('Set-Cookie'))
+      set_cookies = self.headers['Set-Cookie']
+      key_vals = set_cookies.scan(/\s?([^, ;]+?)=([^, ;]*?)[;,]/)
+      key_vals.each do |k, v|
+        # Dont downcase actual cookie name as may be case sensitive
+        name = k.downcase
+        next if name == 'path'
+        next if name == 'expires'
+        next if name == 'domain'
+        next if name == 'max-age'
+        cookies << '#{k}=#{v}; '
       end
-    
-        context 'only $XDG_CONFIG_HOME/tmuxinator exists' do
-      it 'is #xdg' do
-        allow(described_class).to receive(:environment?).and_return false
-        allow(described_class).to receive(:xdg?).and_return true
-        allow(described_class).to receive(:home?).and_return false
-    
-      before do
-    allow(project).to receive_messages(
-      tmux: 'tmux',
-      name: 'test',
-      base_index: 1,
-      pane_base_index: 0,
-      root: '/project/tmuxinator',
-      root?: true
-    )
-  end
-    
-      describe '#local' do
-    before do
-      allow(Tmuxinator::Config).to receive_messages(validate: project)
-      allow(Tmuxinator::Config).to receive_messages(version: 1.9)
-      allow(Kernel).to receive(:exec)
     end
+    
+                decrypted
+          end
+    
+              # Encodes the pvno field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_pvno
+            bn = OpenSSL::BN.new(pvno.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+              # Rex::Proto::Kerberos::Model::AuthorizationData decoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def decode(input)
+            raise ::NotImplementedError, 'Authorization Data decoding not supported'
+          end
