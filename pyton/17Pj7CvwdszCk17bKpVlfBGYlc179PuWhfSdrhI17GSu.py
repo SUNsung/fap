@@ -1,153 +1,186 @@
 
         
-            def escalate_call(self):
-        self.call.level = Rank.DIRECTOR
-        self._escalate_call()
+        
+class WeaknessForm(forms.ModelForm):
+    extra_field = forms.CharField()
+    
+        def _rmrf(self, dname):
+        if os.path.commonprefix([self.test_dir, os.path.abspath(dname)]) != self.test_dir:
+            return
+        shutil.rmtree(dname)
+
+    
+            def _decorator(view_func):
+            @wraps(view_func)
+            def _wrapped_view(request, *args, **kwargs):
+                if hasattr(middleware, 'process_request'):
+                    result = middleware.process_request(request)
+                    if result is not None:
+                        return result
+                if hasattr(middleware, 'process_view'):
+                    result = middleware.process_view(request, view_func, args, kwargs)
+                    if result is not None:
+                        return result
+                try:
+                    response = view_func(request, *args, **kwargs)
+                except Exception as e:
+                    if hasattr(middleware, 'process_exception'):
+                        result = middleware.process_exception(request, e)
+                        if result is not None:
+                            return result
+                    raise
+                if hasattr(response, 'render') and callable(response.render):
+                    if hasattr(middleware, 'process_template_response'):
+                        response = middleware.process_template_response(request, response)
+                    # Defer running of process_response until after the template
+                    # has been rendered:
+                    if hasattr(middleware, 'process_response'):
+                        def callback(response):
+                            return middleware.process_response(request, response)
+                        response.add_post_render_callback(callback)
+                else:
+                    if hasattr(middleware, 'process_response'):
+                        return middleware.process_response(request, response)
+                return response
+            return _wrapped_view
+        return _decorator
+    return _make_decorator
+    
+              # We can also increment through all of the fields
+          #  attached to this feature.
+          for field in feature:
+              # Get the name of the field (e.g. 'description')
+              nm = field.name
+    
+        @property
+    def layer_name(self):
+        'Return the name of the layer for the feature.'
+        name = capi.get_feat_name(self._layer._ldefn)
+        return force_str(name, self.encoding, strings_only=True)
+    
+        # #### Layer properties ####
+    @property
+    def extent(self):
+        'Return the extent (an Envelope) of this layer.'
+        env = OGREnvelope()
+        capi.get_extent(self.ptr, byref(env), 1)
+        return Envelope(env)
+    
+            self.output.write(SUMMARY.format(
+            downloaded=humanize_bytes(actually_downloaded),
+            total=(self.status.total_size
+                   and humanize_bytes(self.status.total_size)),
+            speed=humanize_bytes(speed),
+            time=time_taken,
+        ))
+        self.output.flush()
+
     
     
-try:
-    if int(pkg_resources.get_distribution('pip').version.split('.')[0]) < 6:
-        print('pip older than 6.0 not supported, please upgrade pip with:\n\n'
-              '    pip install -U pip')
-        sys.exit(-1)
-except pkg_resources.DistributionNotFound:
-    pass
+# bdist_wheel
+extras_require = {
+    # http://wheel.readthedocs.io/en/latest/#defining-conditional-dependencies
+    'python_version == '3.0' or python_version == '3.1'': ['argparse>=1.2.1'],
+    ':sys_platform == 'win32'': ['colorama>=0.2.4'],
+}
     
-        def test_get_aliases(self, shell):
-        assert shell.get_aliases() == {'fish_config': 'fish_config',
-                                       'fuck': 'fuck',
-                                       'funced': 'funced',
-                                       'funcsave': 'funcsave',
-                                       'history': 'history',
-                                       'll': 'll',
-                                       'math': 'math',
-                                       'popd': 'popd',
-                                       'pushd': 'pushd',
-                                       'ruby': 'ruby',
-                                       'g': 'git',
-                                       'fish_key_reader': '/usr/bin/fish_key_reader',
-                                       'alias_with_equal_sign': 'echo'}
-        assert shell.get_aliases() == {'func1': 'func1', 'func2': 'func2'}
+        kwargs = {
+        'stream': True,
+        'method': args.method.lower(),
+        'url': args.url,
+        'headers': headers,
+        'data': data,
+        'verify': {
+            'yes': True,
+            'true': True,
+            'no': False,
+            'false': False,
+        }.get(args.verify.lower(), args.verify),
+        'cert': cert,
+        'timeout': args.timeout,
+        'auth': args.auth,
+        'proxies': {p.key: p.value for p in args.proxy},
+        'files': args.files,
+        'allow_redirects': args.follow,
+        'params': args.params,
+    }
     
-        def test_get_history(self, history_lines, shell):
-        history_lines(['ls', 'rm'])
-        # We don't know what to do in generic shell with history lines,
-        # so just ignore them:
-        assert list(shell.get_history()) == []
+        @property
+    def body(self):
+        body = self._orig.body
+        if isinstance(body, str):
+            # Happens with JSON/form request data parsed from the command line.
+            body = body.encode('utf8')
+        return body or b''
+
     
-        @memoize
-    def get_aliases(self):
-        raw_aliases = os.environ.get('TF_SHELL_ALIASES', '').split('\n')
-        return dict(self._parse_alias(alias)
-                    for alias in raw_aliases if alias and '=' in alias)
-    
-    
-@pytest.fixture(autouse=True)
-def Popen(mocker):
-    mock = mocker.patch('thefuck.rules.pyenv_no_such_command.Popen')
-    mock.return_value.stdout.readlines.return_value = (
-        b'--version\nactivate\ncommands\ncompletions\ndeactivate\nexec_\n'
-        b'global\nhelp\nhooks\ninit\ninstall\nlocal\nprefix_\n'
-        b'realpath.dylib\nrehash\nroot\nshell\nshims\nuninstall\nversion_\n'
-        b'version-file\nversion-file-read\nversion-file-write\nversion-name_\n'
-        b'version-origin\nversions\nvirtualenv\nvirtualenv-delete_\n'
-        b'virtualenv-init\nvirtualenv-prefix\nvirtualenvs_\n'
-        b'virtualenvwrapper\nvirtualenvwrapper_lazy\nwhence\nwhich_\n'
-    ).split()
-    return mock
+        def process_body(self, chunk):
+        if not isinstance(chunk, str):
+            # Text when a converter has been used,
+            # otherwise it will always be bytes.
+            chunk = chunk.decode(self.msg.encoding, 'replace')
+        chunk = self.formatting.format_body(content=chunk, mime=self.mime)
+        return chunk.encode(self.output_encoding, 'replace')
     
     
-def _get_operations(app):
-    proc = subprocess.Popen([app, '--help'],
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE)
-    lines = proc.stdout.readlines()
-    
-    
-class BalancerMember(object):
-    ''' Apache 2.4 mod_proxy LB balancer member.
-    attributes:
-        read-only:
-            host -> member host (string),
-            management_url -> member management url (string),
-            protocol -> member protocol (string)
-            port -> member port (string),
-            path -> member location (string),
-            balancer_url -> url of this member's parent balancer (string),
-            attributes -> whole member attributes (dictionary)
-            module -> ansible module instance (AnsibleModule object).
-        writable:
-            status -> status of the member (dictionary)
+def test_default_headers_case_insensitive(httpbin):
     '''
-    
-    import traceback
-    
-        :raises ModuleError
+    <https://github.com/jakubroztocil/httpie/issues/644>
     '''
-    layman = init_layman()
+    r = http(
+        '--debug',
+        '--print=H',
+        httpbin.url + '/post',
+        'CONTENT-TYPE:application/json-patch+json',
+        'a=b',
+    )
+    assert 'CONTENT-TYPE: application/json-patch+json' in r
+    assert 'Content-Type' not in r
+    
+    Finally, for the last data set, it is hard to say that one sample is more
+abnormal than another sample as they are uniformly distributed in a
+hypercube. Except for the :class:`sklearn.svm.OneClassSVM` which overfits a
+little, all estimators present decent solutions for this situation. In such a
+case, it would be wise to look more closely at the scores of abnormality of
+the samples as a good estimator should assign similar scores to all the
+samples.
+    
+        loss = _LOSSES['binary_crossentropy']()
+    for y_train in (np.zeros(shape=100), np.ones(shape=100)):
+        y_train = y_train.astype(np.float64)
+        baseline_prediction = loss.get_baseline_prediction(y_train, 1)
+        assert_all_finite(baseline_prediction)
+        assert np.allclose(loss.inverse_link_function(baseline_prediction),
+                           y_train[0])
+    
+        # TASK: Build a vectorizer / classifier pipeline that filters out tokens
+    # that are too rare or too frequent
+    
+        # TASK: Build a grid search to find out whether unigrams or bigrams are
+    # more useful.
+    # Fit the pipeline on the training set using grid search for the parameters
+    parameters = {
+        'vect__ngram_range': [(1, 1), (1, 2)],
+    }
+    grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1)
+    grid_search.fit(docs_train, y_train)
     
     
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-    
-        if command is None:
-        module.fail_json(msg=missing_required_lib('pyghmi'), exception=PYGHMI_IMP_ERR)
+plt.show()
+
     
     
-DOCUMENTATION = '''
----
-module: github_release
-short_description: Interact with GitHub Releases
-description:
-    - Fetch metadata about GitHub Releases
-version_added: 2.2
-options:
-    token:
-        description:
-            - GitHub Personal Access Token for authenticating. Mutually exclusive with C(password).
-    user:
-        description:
-            - The GitHub account that owns the repository
-        required: true
-    password:
-        description:
-            - The GitHub account password for the user. Mutually exclusive with C(token).
-        version_added: '2.4'
-    repo:
-        description:
-            - Repository name
-        required: true
-    action:
-        description:
-            - Action to perform
-        required: true
-        choices: [ 'latest_release', 'create_release' ]
-    tag:
-        description:
-            - Tag name when creating a release. Required when using action is set to C(create_release).
-        version_added: 2.4
-    target:
-        description:
-            - Target of release when creating a release
-        version_added: 2.4
-    name:
-        description:
-            - Name of release when creating a release
-        version_added: 2.4
-    body:
-        description:
-            - Description of the release when creating a release
-        version_added: 2.4
-    draft:
-        description:
-            - Sets if the release is a draft or not. (boolean)
-        type: 'bool'
-        default: 'no'
-        version_added: 2.4
-    prerelease:
-        description:
-            - Sets if the release is a prerelease or not. (boolean)
-        type: bool
-        default: 'no'
-        version_added: 2.4
+# Plot the distances
+for index, metric in enumerate(['cosine', 'euclidean', 'cityblock']):
+    avg_dist = np.zeros((n_clusters, n_clusters))
+    plt.figure(figsize=(5, 4.5))
+    for i in range(n_clusters):
+        for j in range(n_clusters):
+            avg_dist[i, j] = pairwise_distances(X[y == i], X[y == j],
+                                                metric=metric).mean()
+    avg_dist /= avg_dist.max()
+    for i in range(n_clusters):
+        for j in range(n_clusters):
+            plt.text(i, j, '%5.3f' % avg_dist[i, j],
+                     verticalalignment='center',
+                     horizontalalignment='center')
