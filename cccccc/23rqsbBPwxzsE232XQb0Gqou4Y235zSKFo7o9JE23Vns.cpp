@@ -1,156 +1,175 @@
 
         
-        // Author: kenton@google.com (Kenton Varda)
-    
-    
-    {
-    {
-    {
-    {}  // namespace
-}  // namespace strings
-}  // namespace protobuf
-}  // namespace google
-
-    
-    TEST(StructurallyValidTest, InvalidUTF8String) {
-  const string invalid_str('abcd\xA0\xB0\xA0\xB0\xA0\xB0 - xyz789');
-  EXPECT_FALSE(IsStructurallyValidUTF8(invalid_str.data(),
-                                       invalid_str.size()));
-  // Additional check for pointer alignment
-  for (int i = 1; i < 8; ++i) {
-    EXPECT_FALSE(IsStructurallyValidUTF8(invalid_str.data() + i,
-                                         invalid_str.size() - i));
-  }
-}
-    
-    int main(int argc, char *argv[]) {
-  if (argc % 2 == 0 || argc == 1) {
-    std::cerr << 'Usage: [input_files] [output_file_names] where ' <<
-        'input_files are one to one mapping to output_file_names.' <<
-        std::endl;
-    return 1;
-  }
-    }
-    
-     public:
-  static void StripFile(const FileDescriptor* old_file,
-                        FileDescriptorProto *file) {
-    for (int i = file->mutable_message_type()->size() - 1; i >= 0; i--) {
-      if (IsMessageSet(old_file->message_type(i))) {
-        file->mutable_message_type()->DeleteSubrange(i, 1);
-        continue;
-      }
-      StripMessage(old_file->message_type(i), file->mutable_message_type(i));
-    }
-    for (int i = file->mutable_extension()->size() - 1; i >= 0; i--) {
-      auto field = old_file->extension(i);
-      if (field->type() == FieldDescriptor::TYPE_GROUP ||
-          IsMessageSet(field->message_type()) ||
-          IsMessageSet(field->containing_type())) {
-        file->mutable_extension()->DeleteSubrange(i, 1);
-      }
-    }
-  }
-    
-      {
-    // Read the existing address book.
-    fstream input(argv[1], ios::in | ios::binary);
-    if (!input) {
-      cout << argv[1] << ': File not found.  Creating a new file.' << endl;
-    } else if (!address_book.ParseFromIstream(&input)) {
-      cerr << 'Failed to parse address book.' << endl;
-      return -1;
-    }
-  }
-    
-      EnumGenerator(const EnumGenerator&) = delete;
-  EnumGenerator& operator=(const EnumGenerator&) = delete;
-    
-    #include <mxnet/io.h>
-#include <mxnet/base.h>
-#include <mxnet/ndarray.h>
-#include <dmlc/logging.h>
-#include <dmlc/threadediter.h>
-#include <dmlc/optional.h>
-#include <mshadow/tensor.h>
-#include <climits>
-#include <utility>
-#include <string>
-#include <vector>
-#include <queue>
-#include <algorithm>
-#include './inst_vector.h'
-#include './image_iter_common.h'
-    
-    template<typename xpu>
-void Quantize2BitKernelLaunch(mshadow::Stream<xpu> *s, const std::vector<mxnet::TBlob> &inputs,
-                              const float threshold) {
-  mxnet::op::mxnet_op::Kernel<quantize_2bit, xpu>
-    ::Launch(s,
-            inputs[2].Size(),         // compressed array size
-            inputs[0].Size(),         // original size
-            inputs[2].dptr<float>(),  // compressed array
-            inputs[0].dptr<float>(),  // original array
-            inputs[1].dptr<float>(),  // residual array
-            -1 *threshold,            // negative threshold
-            threshold);               // positive threshold
-}
-    
-    
-    {
-    {
-    {  /*!
-   * \brief denotes threshold used for quantization and dequantization
-   * Must be a positive value. All positive gradients will be thresholded to `threshold_` and
-   * all negative gradients will be thresholded to -1*`threshold_`
-   */
-  float threshold_ = 0;
+        
+    { private:
+  double total_weight;         // no of elements or sum of weights.
+  double sigx;                 // sum of x
+  double sigy;                 // sum of y
+  double sigxx;                // sum x squared
+  double sigxy;                // sum of xy
+  double sigyy;                // sum y squared
 };
-}  // namespace kvstore
-}  // namespace mxnet
-#endif  // MXNET_KVSTORE_GRADIENT_COMPRESSION_H_
-
     
-    /*!
- *  Copyright (c) 2018 by Contributors
- * \file transformer.cc
- * \brief CPU implementation of the operators used in Transformer
- */
-#include <mxnet/base.h>
-#include './transformer-inl.h'
-#include '../tensor/elemwise_unary_op.h'
+      // Connects this and other, discarding any existing connections.
+  void Connect(DoublePtr* other) {
+    other->Disconnect();
+    Disconnect();
+    other->other_end_ = this;
+    other_end_ = other;
+  }
+  // Disconnects this and other, making OtherEnd() return nullptr for both.
+  void Disconnect() {
+    if (other_end_ != nullptr) {
+      other_end_->other_end_ = nullptr;
+      other_end_ = nullptr;
+    }
+  }
+  // Returns the pointer to the other end of the double pointer.
+  DoublePtr* OtherEnd() const {
+    return other_end_;
+  }
     
-    TEST(ProtocolDataTest, CheckSum) {
-  const uint8_t INPUT[] = {0x00, 0x12, 0x00, 0x13, 0x00, 0xF3, 0x00, 0x00};
-  const uint8_t result =
-      ProtocolData<apollo::canbus::ChassisDetail>::CalculateCheckSum(INPUT, 8);
-  EXPECT_EQ(0xE7, result);
+      // Main worker method that retrieves the next number in the sequence.
+  // Returns kInvalidVal if called more than N times after object initialization
+  int GetVal() {
+    const int kInvalidVal = -1;
+    const int kMaxNaturalNumberValue = 1 << num_bits_;
+    if (next_num_ >= kMaxNaturalNumberValue)
+      return kInvalidVal;
+    int n = next_num_;
+    }
+    
+    IntFeatureDist::IntFeatureDist()
+  : size_(0), total_feature_weight_(0.0),
+    feature_map_(nullptr), features_(nullptr),
+    features_delta_one_(nullptr), features_delta_two_(nullptr) {
 }
     
+      // Compute the distance between the given feature vector and the last
+  // Set feature vector.
+  double FeatureDistance(const GenericVector<int>& features) const;
+  double DebugFeatureDistance(const GenericVector<int>& features) const;
     
-    {  int ret = x;
-  return ret;
+      // Check for input iterator errors
+  if (!iter->status().ok()) {
+    s = iter->status();
+  }
+    
+      VersionEdit edit;
+  for (int i = 0; i < 4; i++) {
+    TestEncodeDecode(edit);
+    edit.AddFile(3, kBig + 300 + i, kBig + 400 + i,
+                 InternalKey('foo', kBig + 500 + i, kTypeValue),
+                 InternalKey('zoo', kBig + 600 + i, kTypeDeletion));
+    edit.DeleteFile(4, kBig + 700 + i);
+    edit.SetCompactPointer(i, InternalKey('x', kBig + 900 + i, kTypeValue));
+  }
+    
+    static std::string PrintContents(WriteBatch* b) {
+  InternalKeyComparator cmp(BytewiseComparator());
+  MemTable* mem = new MemTable(cmp);
+  mem->Ref();
+  std::string state;
+  Status s = WriteBatchInternal::InsertInto(b, mem);
+  int count = 0;
+  Iterator* iter = mem->NewIterator();
+  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
+    ParsedInternalKey ikey;
+    ASSERT_TRUE(ParseInternalKey(iter->key(), &ikey));
+    switch (ikey.type) {
+      case kTypeValue:
+        state.append('Put(');
+        state.append(ikey.user_key.ToString());
+        state.append(', ');
+        state.append(iter->value().ToString());
+        state.append(')');
+        count++;
+        break;
+      case kTypeDeletion:
+        state.append('Delete(');
+        state.append(ikey.user_key.ToString());
+        state.append(')');
+        count++;
+        break;
+    }
+    state.append('@');
+    state.append(NumberToString(ikey.sequence));
+  }
+  delete iter;
+  if (!s.ok()) {
+    state.append('ParseError()');
+  } else if (count != WriteBatchInternal::Count(b)) {
+    state.append('CountMismatch()');
+  }
+  mem->Unref();
+  return state;
 }
     
-      MatrixXd offset_golden(10, 1);
-  offset_golden << 0, 0, -80, 0, -160, 0, -240, 0, 0, 0;
-    
-      Byte t1(bytes + 1);
-  int32_t t = t1.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
-    
-    Brakerpt6c::Brakerpt6c() {}
-const int32_t Brakerpt6c::ID = 0x6C;
+    #include <string>
     
     
-    {  bool ret = x;
-  return ret;
+    { private:
+  std::condition_variable cv_;
+  Mutex* const mu_;
+};
+    
+    void FilterBlockBuilder::StartBlock(uint64_t block_offset) {
+  uint64_t filter_index = (block_offset / kFilterBase);
+  assert(filter_index >= filter_offsets_.size());
+  while (filter_index > filter_offsets_.size()) {
+    GenerateFilter();
+  }
 }
     
-    namespace apollo {
-namespace canbus {
-namespace gem {
+                    fstream.GetMarker(FileMarker::fileMarkerBeginSection, L'BMomentumAsTimeConstant');
+                fstream >> m_blockMomentumAsTimeConstantPerWorker;
+                fstream.GetMarker(FileMarker::fileMarkerEndSection, L'EMomentumAsTimeConstant');
+    
+        // SetMacroDefinitionsAllowed - allow macro definitions
+    // macroAllowed - can macros be defined in this script?
+    void SetMacroDefinitionsAllowed(bool macroAllowed)
+    {
+        m_noDefinitions = !macroAllowed;
     }
-    }
-    }
+    
+            virtual void BeginBackprop() override {}
+        virtual void BackpropTo(const size_t inputIndex, const FrameRange&) override
+        {
+            NOT_IMPLEMENTED;
+        } // ugh, call Backprop() instead
+        virtual void EndBackprop() override {}
+    
+    
+template <class ElemType>
+std::shared_ptr<IDistGradAggregator<ElemType>> GetSimpleDistGradAggregator(
+    const MPIWrapperPtr& mpi,
+    bool useAsyncAggregation,
+    int deviceId,
+    int syncStatsTrace,
+    size_t packThresholdSizeInBytes,
+    bool useFP16AllReduce)
+{
+    if (Globals::UseV2Aggregator())
+        return std::make_shared<V2SimpleDistGradAggregator<ElemType>>(
+            mpi,
+            useAsyncAggregation,
+            deviceId,
+            syncStatsTrace,
+            ::CNTK::MPICommunicator(packThresholdSizeInBytes, useFP16AllReduce));
+    else
+        return std::make_shared<SimpleDistGradAggregator<ElemType>>(
+            mpi,
+            useAsyncAggregation,
+            deviceId,
+            syncStatsTrace,
+            packThresholdSizeInBytes);
+}
+    
+                // If the current node did not process any samples, the gradients should be zero'd
+            for (size_t i = 0; i < gradients.size(); ++i)
+                gradients[i]->SetValue(0);
+    
+        // [2,2,2] * [1,2,3]^T etc.
+    std::vector<float> expected{ 6, 0, 28 };
+    auto buf = outputBuffer[0].m_buffer;
+    BOOST_CHECK_EQUAL_COLLECTIONS(buf.begin(), buf.end(), expected.begin(), expected.end());
