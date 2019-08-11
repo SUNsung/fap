@@ -1,275 +1,470 @@
 
         
-        #include <Python.h>
+        
+    {
+    {}  // namespace gpu
+}  // namespace xla
     
+      Status ExecuteOnStream(const ExecuteParams& params) override;
     
-    {  // Cache some descriptors, used to convert keys and values.
-  const FieldDescriptor* key_field_descriptor;
-  const FieldDescriptor* value_field_descriptor;
-  // We bump this whenever we perform a mutation, to invalidate existing
-  // iterators.
-  uint64 version;
-};
-    
-      // The Python MessageFactory used to create the class. It is needed to resolve
-  // fields descriptors, including extensions fields; its C++ MessageFactory is
-  // used to instantiate submessages.
-  // This reference must stay alive until all message pointers are destructed.
-  PyMessageFactory* py_message_factory;
-    
-    static PyObject* ToStr(PyObject* pself) {
-  ScopedPyObjectPtr full_slice(PySlice_New(NULL, NULL, NULL));
-  if (full_slice == NULL) {
-    return NULL;
-  }
-  ScopedPyObjectPtr list(Subscript(
-      reinterpret_cast<RepeatedCompositeContainer*>(pself), full_slice.get()));
-  if (list == NULL) {
-    return NULL;
-  }
-  return PyObject_Repr(list.get());
-}
-    
-    static int AssSubscript(PyObject* pself, PyObject* slice, PyObject* value) {
-  RepeatedScalarContainer* self =
-      reinterpret_cast<RepeatedScalarContainer*>(pself);
-    }
-    
-    #if PY_MAJOR_VERSION >= 3
-  #define PyInt_FromLong PyLong_FromLong
-#endif
+    #include 'absl/memory/memory.h'
+#include 'tensorflow/compiler/xla/service/gpu/hlo_execution_profiler.h'
+#include 'tensorflow/compiler/xla/util.h'
+#include 'tensorflow/core/lib/core/errors.h'
     
     
     {
+    {}  // namespace gpu
+}  // namespace xla
+    
+    Status MemzeroThunk::ExecuteOnStream(const ExecuteParams& params) {
+  se::DeviceMemoryBase dest_data =
+      params.buffer_allocations->GetDeviceAddress(dest_);
+  auto op_profiler =
+      params.profiler->MakeScopedInstructionProfiler(hlo_instruction());
+  params.stream->ThenMemZero(&dest_data, dest_data.size());
+  return Status::OK();
+}
+    
+      Status ExecuteOnStream(const ExecuteParams& params) override;
+    
+    #include 'tensorflow/compiler/xla/service/gpu/outfeed_thunk.h'
+#include 'tensorflow/compiler/xla/literal.h'
+#include 'tensorflow/compiler/xla/service/gpu/hlo_execution_profiler.h'
+#include 'tensorflow/compiler/xla/service/gpu/outfeed_manager.h'
+#include 'tensorflow/compiler/xla/util.h'
+#include 'tensorflow/core/platform/stream_executor_no_cuda.h'
+    
+    namespace xla {
+namespace gpu {
+    }
+    }
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    
     {
-    {}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-
+    {}  // namespace gpu
+}  // namespace xla
     
-    #include <map>
-#include <set>
-#include <string>
-#include <google/protobuf/compiler/cpp/cpp_options.h>
-#include <google/protobuf/descriptor.h>
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-    TEST_F(CppMetadataTest, CapturesEnumNames) {
-  FileDescriptorProto file;
-  GeneratedCodeInfo info;
-  std::string pb_h;
-  atu::AddFile('test.proto', kSmallTestFile);
-  EXPECT_TRUE(
-      CaptureMetadata('test.proto', &file, &pb_h, &info, NULL, NULL, NULL));
-  EXPECT_EQ('Enum', file.enum_type(0).name());
-  std::vector<int> enum_path;
-  enum_path.push_back(FileDescriptorProto::kEnumTypeFieldNumber);
-  enum_path.push_back(0);
-  const GeneratedCodeInfo::Annotation* enum_annotation =
-      atu::FindAnnotationOnPath(info, 'test.proto', enum_path);
-  EXPECT_TRUE(NULL != enum_annotation);
-  EXPECT_TRUE(atu::AnnotationMatchesSubstring(pb_h, enum_annotation, 'Enum'));
+    class TensorScatterAddOp : public XlaOpKernel {
+ public:
+  explicit TensorScatterAddOp(OpKernelConstruction* context)
+      : XlaOpKernel(context) {}
+    }
+    
+    Promise::~Promise() {}
+    
+      static bool FromV8(v8::Isolate* isolate,
+                     v8::Local<v8::Value> val,
+                     ScopedPersistent<T>* out) {
+    v8::Local<T> converted;
+    if (!Converter<v8::Local<T>>::FromV8(isolate, val, &converted))
+      return false;
+    }
+    
+      static void FirstWeakCallback(
+      const v8::WeakCallbackInfo<WrappableBase>& data);
+  static void SecondWeakCallback(
+      const v8::WeakCallbackInfo<WrappableBase>& data);
+    
+    void GlobalMenuBarRegistrarX11::OnProxyCreated(GObject* source,
+                                               GAsyncResult* result) {
+  GError* error = nullptr;
+  GDBusProxy* proxy = g_dbus_proxy_new_for_bus_finish(result, &error);
+  if (error) {
+    g_error_free(error);
+    return;
+  }
+    }
+    
+      if (_stricmp(info->szDll, 'iojs.exe') != 0 &&
+      _stricmp(info->szDll, 'node.exe') != 0)
+    return NULL;
+    
+    // Generate destructors.
+#include 'ipc/struct_destructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
+    
+    class Base {
+ public:
+  Base(int id,
+       const base::WeakPtr<ObjectManager>& manager,
+       const base::DictionaryValue& option,
+       const std::string& extension_id);
+  virtual ~Base();
+    }
+    
+      scoped_ptr<base::Value> value_args(
+      converter->FromV8Value(args, isolate->GetCurrentContext()));
+  if (!value_args.get() ||
+      !value_args->IsType(base::Value::TYPE_LIST))
+    return isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate,
+        'Unable to convert 'args' passed to CallObjectMethod')));
+    
+    #include 'base/strings/string_piece.h'
+#include 'v8/include/v8.h'
+    
+    EventListener::~EventListener() {
+  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
+    delete i->second;
+  }
 }
     
     
-    {  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(EnumGenerator);
+    {protected:
+  BaseEvent(){}
+  virtual ~BaseEvent(){}
 };
     
+    #include 'base/values.h'
+#include 'components/zoom/zoom_controller.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/public/browser/web_contents.h'
+#include 'content/public/common/page_zoom.h'
+#include 'ui/views/controls/menu/menu_runner.h'
     
-  std::vector<std::string> all_files;
-  std::vector<std::string> all_annotations;
+    bool MenuDelegate::IsCommandIdEnabled(int command_id) const {
+  if (command_id < 0)
+    return false;
+    }
     
-    inline TypedValue ExecutionContext::invokeFunc(
-  const CallCtx& ctx,
-  const Variant& args_
-) {
-  return invokeFunc(ctx.func, args_, ctx.this_, ctx.cls, nullptr,
-                    ctx.invName, InvokeNormal, ctx.dynamic);
+    void Menu::Remove(MenuItem* menu_item, int pos) {
+  if (pos < 0 || pos >= (int)menu_items_.size()) return;
+    }
+    
+    
+    {
+    {    // build keyboard code
+    ui::DomCode domCode = ui::KeycodeConverter::CodeStringToDomCode(keyName.c_str());
+    retval = ui::DomCodeToUsLayoutKeyboardCode(domCode);
+  }
+  return retval;
 }
     
-    void CmdVariable::PrintVariable(DebuggerClient &client, const String& varName) {
-  CmdVariable cmd;
-  auto charCount = client.getDebuggerClientShortPrintCharCount();
-  cmd.m_frame = client.getFrame();
-  auto rcmd = client.xend<CmdVariable>(&cmd);
-    }
     
-    void* SparseHeap::resizeBig(void* ptr, size_t new_size,
-                            MemoryUsageStats& stats) {
-  auto old = static_cast<HeapObject*>(ptr);
-  auto old_cap = m_bigs.get(old);
-#ifdef USE_JEMALLOC
-  auto const flags =
-    (RuntimeOption::EvalBigAllocUseLocalArena ? local_arena_flags : 0);
-  auto const newNode = static_cast<HeapObject*>(
-    rallocx(ptr, new_size, flags)
-  );
-  auto new_cap = sallocx(newNode, flags);
-#else
-  auto const newNode = static_cast<HeapObject*>(
-    safe_realloc(ptr, new_size)
-  );
-  auto new_cap = malloc_usable_size(newNode);
-  if (new_cap % kSmallSizeAlign != 0) {
-    // adjust to satisfy RadixMap (see justification in allocBig())
-    new_cap += kSmallSizeAlign - new_cap % kSmallSizeAlign;
-  }
-#endif
-  if (newNode != old || new_cap != old_cap) {
-    m_bigs.erase(old);
-    m_bigs.insert(newNode, new_cap);
-  }
-  stats.mm_udebt -= new_cap - old_cap;
-  stats.malloc_cap += new_cap - old_cap;
-  return newNode;
+    {  return RespondNow(NoArguments());
 }
     
-      static void EnsureInitFile(const char* file) {
-    if (out && out != stderr) return;
+          std::string decoded_str;
+      if (!base::Base64Decode(content, &decoded_str)) {
+        error_ = 'Bad base64 string';
+        return false;
+      }
+    
+    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
+ public:
+  NwMenuGetNSStringWithFixupFunction(){}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    
+ protected:
+  ~NwMenuGetNSStringWithFixupFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
+};
+    
+    int orientation_and_script_detection(STRING& filename,
+                                     OSResults*,
+                                     tesseract::Tesseract*);
+    
+    
+    {  int delta = this - prev;
+  int32_t n = prev->n_ + 1;
+  int32_t sig_x = prev->sig_x_ + delta;
+  int64_t sig_xsq = prev->sig_xsq_ + delta * delta;
+  int64_t cost = (sig_xsq - sig_x * sig_x / n) / n;
+  cost += prev->total_cost_;
+  UpdateIfBetter(cost, prev->total_steps_ + 1, prev, n, sig_x, sig_xsq);
+  return cost;
+}
+    
+    class LLSQ {
+ public:
+  LLSQ() {  // constructor
+    clear();  // set to zeros
+  }
+  void clear();  // initialize
     }
     
-      static tv_rval NvGetStr(const ArrayData*, const StringData*) {
-    return nullptr;
-  }
-  static constexpr auto NvTryGetStr = &NvGetStr;
+      // Creates a report of the error rate. The report_level controls the detail
+  // that is reported to stderr via tprintf:
+  // 0   -> no output.
+  // >=1 -> bottom-line error rate.
+  // >=3 -> font-level error rate.
+  // boosting_mode determines the return value. It selects which (un-weighted)
+  // error rate to return.
+  // The fontinfo_table from MasterTrainer provides the names of fonts.
+  // The it determines the current subset of the training samples.
+  // If not nullptr, the top-choice unichar error rate is saved in unichar_error.
+  // If not nullptr, the report string is saved in fonts_report.
+  // (Ignoring report_level).
+  double ReportErrors(int report_level, CountTypes boosting_mode,
+                      const FontInfoTable& fontinfo_table,
+                      const SampleIterator& it,
+                      double* unichar_error,
+                      STRING* fonts_report);
     
-      const double ellipse_point_1_x = roots.first;
-  const double ellipse_point_2_x = roots.second;
+      // Setup the map for the given indexed_features that have been indexed by
+  // feature_map. After use, use Set(..., false) to reset to the initial state
+  // as this is faster than calling Init for sparse spaces.
+  void Set(const GenericVector<int>& indexed_features,
+           int canonical_count, bool value);
     
-      void GetQuadraticCoefficients(const double position_x,
-                                const double position_y,
-                                const double direction_x,
-                                const double direction_y,
-                                const double ellipse_len_1,
-                                const double ellipse_len_2,
-                                std::vector<double>* coefficients);
     
-    bool NewtonM2Parser::HandleBestPos(const novatel::BestPos* pos,
-                                   uint16_t gps_week, uint32_t gps_millisecs) {
-  gnss_.mutable_position()->set_lon(pos->longitude);
-  gnss_.mutable_position()->set_lat(pos->latitude);
-  gnss_.mutable_position()->set_height(pos->height_msl + pos->undulation);
-  gnss_.mutable_position_std_dev()->set_x(pos->longitude_std_dev);
-  gnss_.mutable_position_std_dev()->set_y(pos->latitude_std_dev);
-  gnss_.mutable_position_std_dev()->set_z(pos->height_std_dev);
-  gnss_.set_num_sats(pos->num_sats_in_solution);
-  if (solution_status_ != pos->solution_status) {
-    solution_status_ = pos->solution_status;
-    AINFO << 'Solution status: ' << static_cast<int>(solution_status_);
-  }
-  if (position_type_ != pos->position_type) {
-    position_type_ = pos->position_type;
-    AINFO << 'Position type: ' << static_cast<int>(position_type_);
-  }
-  gnss_.set_solution_status(static_cast<uint32_t>(pos->solution_status));
-  if (pos->solution_status == novatel::SolutionStatus::SOL_COMPUTED) {
-    gnss_.set_position_type(static_cast<uint32_t>(pos->position_type));
-    switch (pos->position_type) {
-      case novatel::SolutionType::SINGLE:
-      case novatel::SolutionType::INS_PSRSP:
-        gnss_.set_type(apollo::drivers::gnss::Gnss::SINGLE);
-        break;
-      case novatel::SolutionType::PSRDIFF:
-      case novatel::SolutionType::WAAS:
-      case novatel::SolutionType::INS_SBAS:
-        gnss_.set_type(apollo::drivers::gnss::Gnss::PSRDIFF);
-        break;
-      case novatel::SolutionType::FLOATCONV:
-      case novatel::SolutionType::L1_FLOAT:
-      case novatel::SolutionType::IONOFREE_FLOAT:
-      case novatel::SolutionType::NARROW_FLOAT:
-      case novatel::SolutionType::RTK_DIRECT_INS:
-      case novatel::SolutionType::INS_RTKFLOAT:
-        gnss_.set_type(apollo::drivers::gnss::Gnss::RTK_FLOAT);
-        break;
-      case novatel::SolutionType::WIDELANE:
-      case novatel::SolutionType::NARROWLANE:
-      case novatel::SolutionType::L1_INT:
-      case novatel::SolutionType::WIDE_INT:
-      case novatel::SolutionType::NARROW_INT:
-      case novatel::SolutionType::INS_RTKFIXED:
-        gnss_.set_type(apollo::drivers::gnss::Gnss::RTK_INTEGER);
-        break;
-      case novatel::SolutionType::OMNISTAR:
-      case novatel::SolutionType::INS_OMNISTAR:
-      case novatel::SolutionType::INS_OMNISTAR_HP:
-      case novatel::SolutionType::INS_OMNISTAR_XP:
-      case novatel::SolutionType::OMNISTAR_HP:
-      case novatel::SolutionType::OMNISTAR_XP:
-      case novatel::SolutionType::PPP_CONVERGING:
-      case novatel::SolutionType::PPP:
-      case novatel::SolutionType::INS_PPP_CONVERGING:
-      case novatel::SolutionType::INS_PPP:
-        gnss_.set_type(apollo::drivers::gnss::Gnss::PPP);
-        break;
-      case novatel::SolutionType::PROPOGATED:
-        gnss_.set_type(apollo::drivers::gnss::Gnss::PROPAGATED);
-        break;
-      default:
-        gnss_.set_type(apollo::drivers::gnss::Gnss::INVALID);
+    {}  // namespace caffe
+    
+    INSTANTIATE_CLASS(InnerProductLayer);
+REGISTER_LAYER_CLASS(InnerProduct);
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    void convert_dataset(const char* image_filename, const char* label_filename,
+        const char* db_filename) {
+  // Open files
+  std::ifstream image_file(image_filename, std::ios::in | std::ios::binary);
+  std::ifstream label_file(label_filename, std::ios::in | std::ios::binary);
+  CHECK(image_file) << 'Unable to open file ' << image_filename;
+  CHECK(label_file) << 'Unable to open file ' << label_filename;
+  // Read the magic and the meta data
+  uint32_t magic;
+  uint32_t num_items;
+  uint32_t num_labels;
+  uint32_t rows;
+  uint32_t cols;
     }
+    
+    // A simple macro to mark codes that are not implemented, so that when the code
+// is executed we will see a fatal log.
+#define NOT_IMPLEMENTED LOG(FATAL) << 'Not Implemented Yet'
+    
+    	// move until end of comment reached
+	while (count) {
+		if (*P == '>')
+			--count;
+		else if (*P == '<')
+			++count;
+    }
+    
+    
+    {
+    {			current_material_library = l.replace('mtllib', '').strip_edges();
+			if (!material_map.has(current_material_library)) {
+				Map<String, Ref<SpatialMaterial> > lib;
+				Error err = _parse_material_library(current_material_library, lib, r_missing_deps);
+				if (err == ERR_CANT_OPEN) {
+					String dir = p_path.get_base_dir();
+					err = _parse_material_library(dir.plus_file(current_material_library), lib, r_missing_deps);
+				}
+				if (err == OK) {
+					material_map[current_material_library] = lib;
+				}
+			}
+		}
+	}
+    
+    		case Vector3::AXIS_X: {
+			SortArray<BVH *, BVHCmpX> sort_x;
+			sort_x.nth_element(0, p_size, p_size / 2, &p_bb[p_from]);
+			//sort_x.sort(&p_bb[p_from],p_size);
+		} break;
+		case Vector3::AXIS_Y: {
+			SortArray<BVH *, BVHCmpY> sort_y;
+			sort_y.nth_element(0, p_size, p_size / 2, &p_bb[p_from]);
+			//sort_y.sort(&p_bb[p_from],p_size);
+		} break;
+		case Vector3::AXIS_Z: {
+			SortArray<BVH *, BVHCmpZ> sort_z;
+			sort_z.nth_element(0, p_size, p_size / 2, &p_bb[p_from]);
+			//sort_z.sort(&p_bb[p_from],p_size);
+    }
+    
+    			// We have to recompute the center of mass
+			center_of_mass_local.zero();
+    
+    
+    {	ClassDB::bind_method('_menu_option', &CPUParticlesEditor::_menu_option);
+}
+    
+    	struct BVHCmpX {
+    }
+    
+    #endif
+    
+    void ArrayPropertyEdit::_notif_change() {
+	_change_notify();
+}
+void ArrayPropertyEdit::_notif_changev(const String &p_v) {
+    }
+    
+    inline size_t GetRNNReserveSpaceSize(int num_layer,
+                                     int direction,
+                                     int seq_length,
+                                     int batch_size,
+                                     int hidden_size,
+                                     int mode) {
+  size_t size = 0;
+  switch (mode) {
+    case rnn_enum::kLstm:
+      size = direction * seq_length * batch_size * hidden_size * (num_layer * 7 - 1);
+      break;
+    case rnn_enum::kGru:
+      size = seq_length * batch_size * hidden_size * direction * (num_layer * 9 - 1) +
+          batch_size * hidden_size * direction * 9 + hidden_size * seq_length * 6 +
+          seq_length * batch_size * 7 * hidden_size * direction;
+      break;
+    case rnn_enum::kRnnRelu:
+    case rnn_enum::kRnnTanh:
+      size = seq_length * batch_size * hidden_size * direction * (num_layer * 6 - 1) +
+          batch_size * hidden_size * direction * 3 + hidden_size * seq_length * 2 +
+          seq_length * batch_size * 2 * hidden_size * direction;
+      break;
+    default:
+      LOG(FATAL) << 'unknown RNN mode ' << mode;
+      break;
+  }
+  return size;
+}
+    
+    /*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * 'License'); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * 'AS IS' BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+    
+      const Context &ctx = handle.ctx;
+  auto&& device = storage_managers_.at(ctx.dev_type);
+  std::shared_ptr<storage::StorageManager> manager = device.Get(
+      ctx.real_dev_id(), []() {
+        LOG(FATAL) <<  'Cannot Free space to a device you have not allocated';
+        return nullptr;
+      });
+    
+        for (index_t col_c = (offset_c / 2); col_c < channel_per_group; col_c += col_step) {
+      const index_t col_pos = ((col_c * height_col) + h) * width_col + w;
+      const index_t bp_dir = offset_c % 2;
+    }
+    
+    
+    {
+    {    MXNET_ASSIGN_REQ_SWITCH(req[0], req_type, {
+      Kernel<IndexArrayKernel<req_type>, cpu>::Launch(stream, in_data.Size(),
+          out_data.dptr<int64_t>(), naxes, workspace.dptr_);
+    });
   } else {
-    gnss_.set_type(apollo::drivers::gnss::Gnss::INVALID);
-    gnss_.set_position_type(0);
+    MXNET_ASSIGN_REQ_SWITCH(req[0], req_type, {
+      Kernel<IndexArrayDefaultKernel<req_type>, cpu>::Launch(stream, in_data.Size(),
+          out_data.dptr<int64_t>(), ndim, inshape.data());
+    });
   }
-  if (pos->datum_id != novatel::DatumId::WGS84) {
-    AERROR_EVERY(5) << 'Unexpected Datum Id: '
-                    << static_cast<int>(pos->datum_id);
+}
+    
+    
+    {  DMLC_DECLARE_PARAMETER(CaffeDataParam) {
+    DMLC_DECLARE_FIELD(prototxt).set_default('layer{}')
+      .describe('Caffe's layer parameter');
+    DMLC_DECLARE_FIELD(flat).set_default(false)
+      .describe('Augmentation Param: Whether to flat the data into 1D.');
+    DMLC_DECLARE_FIELD(num_examples).set_lower_bound(1).set_default(10000)
+      .describe('Number of examples in the epoch.');
   }
+};
+    
+    // specialize define for Layer Parameter
+template<>
+class FieldEntry<caffe::LayerParameter>
+    : public FieldEntryBase<FieldEntry<caffe::LayerParameter>, caffe::LayerParameter> {
+ public:
+  // parent class
+  typedef FieldEntryBase<FieldEntry<caffe::LayerParameter>, caffe::LayerParameter> Parent;
     }
     
-      void Update(const std::string &data) {
-    Update(reinterpret_cast<const uint8_t *>(data.data()), data.size());
-  }
-    
-      // @brief: initialize new track data and push new object to cache
-  // @params [in/out]: new track data
-  // @params [in/out]: new object
-  void InitializeTrack(MlfTrackDataPtr new_track_data,
-                       TrackedObjectPtr new_object);
-    
-    /*
- * Class:     org_rocksdb_CompactionOptions
- * Method:    outputFileSizeLimit
- * Signature: (J)J
+    /**
+ * This structure contains per-service-context state related to the oplog.
  */
-jlong Java_org_rocksdb_CompactionOptions_outputFileSizeLimit(
-    JNIEnv*, jclass, jlong jhandle) {
-  auto* compact_opts =
-      reinterpret_cast<rocksdb::CompactionOptions*>(jhandle);
-  return static_cast<jlong>(
-      compact_opts->output_file_size_limit);
+class LocalOplogInfo {
+public:
+    static LocalOplogInfo* get(ServiceContext& service);
+    static LocalOplogInfo* get(ServiceContext* service);
+    static LocalOplogInfo* get(OperationContext* opCtx);
+    }
+    
+        size_t getNumOps() const {
+        return _writes.size();
+    }
+    
+    TemporaryKVRecordStore::~TemporaryKVRecordStore() {
+    invariant(_recordStoreHasBeenDeleted);
 }
     
-    /*
- * Class:     org_rocksdb_EnvOptions
- * Method:    fallocateWithKeepSize
- * Signature: (J)Z
- */
-jboolean Java_org_rocksdb_EnvOptions_fallocateWithKeepSize(
-    JNIEnv*, jobject, jlong jhandle) {
-  return ENV_OPTIONS_GET(jhandle, fallocate_with_keep_size);
+    using namespace mongo;
+    
+        virtual ~CountBase() {
+        dbtests::WriteContextForTests ctx(&_opCtx, ns());
+        _client.dropCollection(ns());
+    }
+    
+    #include 'remtrans.h'
+#include 'unicode/unifilt.h'
+    
+    
+int32_t SelectFormat::findSubMessage(const MessagePattern& pattern, int32_t partIndex,
+                                     const UnicodeString& keyword, UErrorCode& ec) {
+    if (U_FAILURE(ec)) {
+        return 0;
+    }
+    UnicodeString other(FALSE, SELECT_KEYWORD_OTHER, 5);
+    int32_t count = pattern.countParts();
+    int32_t msgStart=0;
+    // Iterate over (ARG_SELECTOR, message) pairs until ARG_LIMIT or end of select-only pattern.
+    do {
+        const MessagePattern::Part& part=pattern.getPart(partIndex++);
+        const UMessagePatternPartType type=part.getType();
+        if(type==UMSGPAT_PART_TYPE_ARG_LIMIT) {
+            break;
+        }
+        // part is an ARG_SELECTOR followed by a message
+        if(pattern.partSubstringMatches(part, keyword)) {
+            // keyword matches
+            return partIndex;
+        } else if(msgStart==0 && pattern.partSubstringMatches(part, other)) {
+            msgStart=partIndex;
+        }
+        partIndex=pattern.getLimitPartIndex(partIndex);
+    } while(++partIndex<count);
+    return msgStart;
 }
     
-    /*
- * Class:     org_rocksdb_IngestExternalFileOptions
- * Method:    setMoveFiles
- * Signature: (JZ)V
- */
-void Java_org_rocksdb_IngestExternalFileOptions_setMoveFiles(
-    JNIEnv*, jobject, jlong jhandle, jboolean jmove_files) {
-  auto* options =
-      reinterpret_cast<rocksdb::IngestExternalFileOptions*>(jhandle);
-  options->move_files = static_cast<bool>(jmove_files);
-}
+    #ifndef __SHARED_DATEFORMATSYMBOLS_H__
+#define __SHARED_DATEFORMATSYMBOLS_H__
     
-    /*
- * Class:     org_rocksdb_SstFileManager
- * Method:    getDeleteRateBytesPerSecond
- * Signature: (J)J
- */
-jlong Java_org_rocksdb_SstFileManager_getDeleteRateBytesPerSecond(
-    JNIEnv* /*env*/, jobject /*jobj*/, jlong jhandle) {
-  auto* sptr_sst_file_manager =
-      reinterpret_cast<std::shared_ptr<rocksdb::SstFileManager>*>(jhandle);
-  return sptr_sst_file_manager->get()->GetDeleteRateBytesPerSecond();
-}
+        //! \brief Return type of the functor
+    typedef Event result_type;
+    
+            void track(Array<float>& poseKeypoints, Array<long long>& poseIds, const cv::Mat& cvMatInput);
