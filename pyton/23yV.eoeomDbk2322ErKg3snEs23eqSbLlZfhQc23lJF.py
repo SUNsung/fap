@@ -1,139 +1,136 @@
 
         
-                '''
-        assert all(hasattr(type(self), attr) for attr in kwargs.keys())
-        self.__dict__.update(**kwargs)
+                status, long_video_id, key = params[2], params[5], params[6]
+        status = remove_start(status, 'PRODUCT_')
     
-        if req_b and resp:
-        # Request/Response separator.
-        output.append([b'\n\n'])
+                    for caption in asset.get('caption_metadata', []):
+                    caption_url = caption.get('source_url')
+                    if not caption_url:
+                        continue
+                    subtitles.setdefault(caption.get('language', 'en'), []).append({
+                        'url': caption_url,
+                        'ext': determine_ext(caption_url, 'vtt'),
+                    })
+            elif asset.get('type') == 'image':
+                asset_location = asset.get('location')
+                if not asset_location:
+                    continue
+                thumbnails.append({
+                    'url': asset_location,
+                    'width': int_or_none(asset.get('width')),
+                    'height': int_or_none(asset.get('height')),
+                })
+        self._sort_formats(formats)
     
-            def get_auth(self, username=None, password=None):
-            assert username is None
-            assert password is None
-            assert self.raw_auth == BASIC_AUTH_HEADER_VALUE
-            return basic_auth(self.raw_auth)
+    import sys
+import os
+import textwrap
     
-        def test_implicit_GET_with_headers(self, httpbin):
-        r = http(httpbin.url + '/headers', 'Foo:bar')
-        assert HTTP_OK in r
-        assert r.json['headers']['Foo'] == 'bar'
+        def test_youporn(self):
+        self._assert_restricted(
+            'http://www.youporn.com/watch/505835/sex-ed-is-it-safe-to-masturbate-daily/',
+            '505835.mp4', 2, old_age=25)
     
-    
-def test_unicode_json_item(httpbin):
-    r = http('--json', 'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
-    assert HTTP_OK in r
-    assert r.json['json'] == {'test': UNICODE}
-    
-    
-class CaseInsensitiveDict(MutableMapping):
-    '''A case-insensitive ``dict``-like object.
-    
-        def copy(self):
-        '''Return a copy of this RequestsCookieJar.'''
-        new_cj = RequestsCookieJar()
-        new_cj.set_policy(self.get_policy())
-        new_cj.update(self)
-        return new_cj
-    
-        if implementation == 'CPython':
-        implementation_version = platform.python_version()
-    elif implementation == 'PyPy':
-        implementation_version = '%s.%s.%s' % (sys.pypy_version_info.major,
-                                               sys.pypy_version_info.minor,
-                                               sys.pypy_version_info.micro)
-        if sys.pypy_version_info.releaselevel != 'final':
-            implementation_version = ''.join([
-                implementation_version, sys.pypy_version_info.releaselevel
-            ])
-    elif implementation == 'Jython':
-        implementation_version = platform.python_version()  # Complete Guess
-    elif implementation == 'IronPython':
-        implementation_version = platform.python_version()  # Complete Guess
-    else:
-        implementation_version = 'Unknown'
-    
-            # Verify we receive an Authorization header in response, then
-        # challenge again.
-        request_content = consume_socket_content(sock, timeout=0.5)
-        assert expected_digest in request_content
-        sock.send(text_401)
-    
-                assert r.status_code == 200
-            assert r.text == u'roflol'
-            assert r.headers['Content-Length'] == '6'
-    
-            http_error_msg = ''
-        if isinstance(self.reason, bytes):
-            # We attempt to decode utf-8 first because some servers
-            # choose to localize their reason strings. If the string
-            # isn't utf-8, we fall back to iso-8859-1 for all other
-            # encodings. (See PR #3538)
-            try:
-                reason = self.reason.decode('utf-8')
-            except UnicodeDecodeError:
-                reason = self.reason.decode('iso-8859-1')
+            return [package.split()[0] for package in packages]
+    except subprocess.CalledProcessError as err:
+        if err.returncode == 1 and err.output == '':
+            return []
         else:
-            reason = self.reason
+            raise err
     
-        def get_redirect_target(self, resp):
-        '''Receives a Response. Returns a redirect URI or ``None``'''
-        # Due to the nature of how requests processes redirects this method will
-        # be called at least once upon the original response and at least twice
-        # on each subsequent redirect response (if any).
-        # If a custom mixin is used to handle this logic, it may be advantageous
-        # to cache the redirect location onto the response object as a private
-        # attribute.
-        if resp.is_redirect:
-            location = resp.headers['location']
-            # Currently the underlying http module on py3 decode headers
-            # in latin1, but empirical evidence suggests that latin1 is very
-            # rarely used with non-ASCII characters in HTTP headers.
-            # It is more likely to get UTF8 header rather than latin1.
-            # This causes incorrect handling of UTF8 encoded location headers.
-            # To solve this, we re-encode the location in latin1.
-            if is_py3:
-                location = location.encode('latin1')
-            return to_native_string(location, 'utf8')
-        return None
+        @pytest.mark.parametrize('key, value', [
+        ('TF_OVERRIDDEN_ALIASES', 'cut,git,sed'),  # legacy
+        ('THEFUCK_OVERRIDDEN_ALIASES', 'cut,git,sed'),
+        ('THEFUCK_OVERRIDDEN_ALIASES', 'cut, git, sed'),
+        ('THEFUCK_OVERRIDDEN_ALIASES', ' cut,\tgit,sed\n'),
+        ('THEFUCK_OVERRIDDEN_ALIASES', '\ncut,\n\ngit,\tsed\r')])
+    def test_get_overridden_aliases(self, shell, os_environ, key, value):
+        os_environ[key] = value
+        overridden = shell._get_overridden_aliases()
+        assert set(overridden) == {'cd', 'cut', 'git', 'grep',
+                                   'ls', 'man', 'open', 'sed'}
     
-        :param url: URL for the new :class:`Request` object.
-    :param params: (optional) Dictionary, list of tuples or bytes to send
-        in the query string for the :class:`Request`.
-    :param \*\*kwargs: Optional arguments that ``request`` takes.
-    :return: :class:`Response <Response>` object
-    :rtype: requests.Response
+        @pytest.mark.parametrize('side_effect, expected_version, call_args', [
+        ([b'''Major  Minor  Build  Revision
+-----  -----  -----  --------
+5      1      17763  316     \n'''], 'PowerShell 5.1.17763.316', ['powershell.exe']),
+        ([IOError, b'PowerShell 6.1.2\n'], 'PowerShell 6.1.2', ['powershell.exe', 'pwsh'])])
+    def test_info(self, side_effect, expected_version, call_args, shell, Popen):
+        Popen.return_value.stdout.read.side_effect = side_effect
+        assert shell.info() == expected_version
+        assert Popen.call_count == len(call_args)
+        assert all([Popen.call_args_list[i][0][0][0] == call_arg for i, call_arg in enumerate(call_args)])
+    
+        assert not match(Command(script, output))
+    
+        # Load image file and find face locations
+    X_img = face_recognition.load_image_file(X_img_path)
+    X_face_locations = face_recognition.face_locations(X_img)
+    
+        face_names = []
+    for face_encoding in face_encodings:
+        # See if the face is a match for the known face(s)
+        match = face_recognition.compare_faces(known_faces, face_encoding, tolerance=0.50)
+    
+    # Load a sample picture and learn how to recognize it.
+print('Loading known face image(s)')
+obama_image = face_recognition.load_image_file('obama_small.jpg')
+obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
+    
+            # empty numpy list
+        faces_to_compare = np.array([])
+    
+    # Load the jpg file into a numpy array
+image = face_recognition.load_image_file('biden.jpg')
+    
+        # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
+    rgb_frame = frame[:, :, ::-1]
+    
+    # Find all facial features in all the faces in the image
+face_landmarks_list = face_recognition.face_landmarks(image)
+    
+        # 获得所有人脸的位置以及它们的编码
+    face_locations = face_recognition.face_locations(output)
+    print('Found {} faces in image.'.format(len(face_locations)))
+    face_encodings = face_recognition.face_encodings(output, face_locations)
+    
+    Request receiver in simple form keeps a reference to a single successor.
+As a variation some receivers may be capable of sending requests out
+in several directions, forming a `tree of responsibility`.
+    
+    
+def main():
     '''
-    
-    :copyright: (c) 2010-2017 by the Sentry Team, see AUTHORS for more details.
-:license: BSD, see LICENSE for more details.
-'''
-    
-            # Removing index on 'EventTag', fields ['project_id', 'key', 'value']
-        db.delete_index(u'tagstore_eventtag', ['project_id', 'key_id', 'value_id'])
-    
-            # Changing field 'EventTag.project_id'
-        db.alter_column(u'tagstore_eventtag', 'project_id', self.gf(
-            'sentry.db.models.fields.bounded.BoundedBigIntegerField')())
-    
-        class Meta:
-        app_label = 'tagstore'
-        unique_together = (('project_id', 'event_id', 'key', 'value'), )
-        index_together = (
-            ('project_id', 'key', 'value'),
-            ('group_id', 'key', 'value'),
-        )
-    
-        results = []
-    for plugin in plugins.for_project(project, version=1):
-        if isinstance(plugin, NotificationPlugin):
-            results.append(plugin)
+    >>> molly = User('Molly')
+    >>> mark = User('Mark')
+    >>> ethan = User('Ethan')
     
     
-@instrumented_task(name='sentry.tasks.clear_expired_resolutions',
-                   time_limit=15, soft_time_limit=10)
-def clear_expired_resolutions(release_id):
+def on_sale_discount(order):
+    return order.price * 0.25 + 20
+    
+    *TL;DR
+Defines the skeleton of a base algorithm, deferring definition of exact
+steps to subclasses.
+    
+    
+if __name__ == '__main__':
+    rm1 = Borg()
+    rm2 = Borg()
+    
+    *What does this example do?
+In this example queue.Queue is used to create the pool (wrapped in a
+custom ObjectPool object to use with the with statement), and it is
+populated with strings.
+As we can see, the first string object put in 'yam' is USED by the
+with statement. But because it is released back into the pool
+afterwards it is reused by the explicit call to sample_queue.get().
+Same thing happens with 'sam', when the ObjectPool created insided the
+function is deleted (by the GC) and the object is returned.
+    
     '''
-    This should be fired when ``release_id`` is created, and will indicate to
-    the system that any pending resolutions older than the given release can now
-    be safely transitioned to resolved.
+Reference: https://en.wikipedia.org/wiki/Delegation_pattern
+Author: https://github.com/IuryAlves
+    
+        def __init__(self):
+        self.business_logic = BusinessLogic()
