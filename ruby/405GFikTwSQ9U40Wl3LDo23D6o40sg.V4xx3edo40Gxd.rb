@@ -1,186 +1,145 @@
 
         
-            it 'defauls foreground and background colors' do
-      scenario.tag_fg_color = nil
-      scenario.tag_bg_color = nil
-      expect(style_colors(scenario)).to eq('color:#FFFFFF;background-color:#5BC0DE')
-    end
-  end
-    
-      describe '#value_at' do
-    it 'returns the value at a JSON path' do
-      expect(Utils.value_at({ :foo => { :bar => :baz }}.to_json, 'foo.bar')).to eq('baz')
-      expect(Utils.value_at({ :foo => { :bar => { :bing => 2 } }}, 'foo.bar.bing')).to eq(2)
-      expect(Utils.value_at({ :foo => { :bar => { :bing => 2 } }}, 'foo.bar[?(@.bing == 2)].bing')).to eq(2)
-    end
-    
-      let :valid_options do
-    {
-      'name' => 'XKCD',
-      'expected_update_period_in_days' => '2',
-      'type' => 'html',
-      'url' => '{{ url | default: 'http://xkcd.com/' }}',
-      'mode' => 'on_change',
-      'extract' => old_extract,
-      'template' => old_template
-    }
-  end
-    
-        it 'returns true if installed' do
-      expect(machine.communicate).to receive(:test).
-        with(command, sudo: true).and_return(true)
-      subject.chef_installed(machine, 'chef_solo', version)
-    end
-    
-        context 'with a box name accidentally set as a URL' do
-      it 'displays a warning to the user' do
-        box_path = iso_env.box2_file(:virtualbox)
-        port = 9999
-    
-          # Returns the SSH info for accessing the Container.
-      def ssh_info
-        # If the container isn't running, we can't SSH into it
-        return nil if state.id != :running
-    
-        it 'should handle forks gracefully', :skip_windows do
-      # Doesn't need to be tested on Windows since Windows doesn't
-      # support fork(1)
-      allow(machine).to receive(:action) do |action, opts|
-        pid = fork
-        if !pid
-          # Child process
-          exit
-        end
-    
-            # Success, exit status 0
-        0
-      end
-    end
+        class BugTest < Minitest::Test
+  def test_stuff
+    assert 'zomg'.present?
+    refute ''.present?
   end
 end
 
     
-        Feature5079 = '[ruby-core:38404]'
-    
-    testdata( File.dirname($0) + '/scandata', ARGV ).each do |file|
-  $stderr.print File.basename(file) + ': '
-  begin
-    ok = File.read(file)
-    s = Racc::GrammarFileScanner.new( ok )
-    sym, (val, _lineno) = s.scan
-    if printonly then
-      $stderr.puts
-      $stderr.puts val
-      next
-    end
-    
-        assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.sin('0') }
-    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.cos('0') }
-    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.tan('0') }
-    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.sinh('0') }
-    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.cosh('0') }
-    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.tanh('0') }
-    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.asin('0') }
-    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.atan('0') }
-    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.asinh('0') }
-    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.acosh('0') }
-    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.atanh('0') }
-  end
-    
-        gz.rewind
-    gz.pos.should == 0
-    gz.lineno.should == 0
-  end
-    
-    describe 'GzipWriter#write' do
-  before :each do
-    @data = '12345abcde'
-    @zip = [31, 139, 8, 0, 44, 220, 209, 71, 0, 3, 51, 52, 50, 54, 49, 77,
-            76, 74, 78, 73, 5, 0, 157, 5, 0, 36, 10, 0, 0, 0].pack('C*')
-    @io = StringIO.new ''.b
-  end
-    
-        @inflator.inflate(@zeros) do |chunk|
-      @chunks << chunk
-      break
-    end
-    
-      desc 'update main and version in bower.json'
-  task :generate do
-    require 'bootstrap-sass'
-    Dir.chdir Bootstrap.gem_path do
-      spec       = JSON.parse(File.read 'bower.json')
-    
-      # Disable Rails's static asset server (Apache or nginx will already do this).
-  if config.respond_to?(:serve_static_files)
-    # rails >= 4.2
-    config.serve_static_files = true
-  elsif config.respond_to?(:serve_static_assets)
-    # rails < 4.2
-    config.serve_static_assets = true
-  end
-    
-      # The test environment is used exclusively to run your application's
-  # test suite. You never need to work with it otherwise. Remember that
-  # your test database is 'scratch space' for the test suite and is wiped
-  # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
-    
-      gem.licenses      = ['MIT']
-    
-        def load_imports
-      if options.show_tasks && Rake::Task.task_defined?('load:defaults')
-        invoke 'load:defaults'
-        set(:stage, '')
-        Dir[deploy_config_path].each { |f| add_import f }
+          def test_invert_drop_join_table
+        block = Proc.new { }
+        create_join_table = @recorder.inverse_of :drop_join_table, [:musics, :artists, table_name: :catalog], &block
+        assert_equal [:create_join_table, [:musics, :artists, table_name: :catalog], block], create_join_table
       end
     
-        def add_cmdline_filter(type, values)
-      cmdline_filters << Filter.new(type, values)
-    end
+          # 2FA: Request security code to trusted phone
+      stub_request(:put, 'https://idmsa.apple.com/appleauth/auth/verify/phone').
+        with(body: '{\'phoneNumber\':{\'id\':1},\'mode\':\'sms\'}').
+        to_return(status: 200, body: '', headers: {})
     
-        def URIEncodePair(cc1, cc2, result, index)
-      u = ((cc1 >> 6) & 0xF) + 1;
-      w = (cc1 >> 2) & 0xF;
-      x = cc1 & 3;
-      y = (cc2 >> 6) & 0xF;
-      z = cc2 & 63;
-      octets = Array.new(4);
-      octets[0] = (u >> 2) + 240;
-      octets[1] = (((u & 3) << 4) | w) + 128;
-      octets[2] = ((x << 4) | y) + 128;
-      octets[3] = z + 128;
-      return URIEncodeOctets(octets, result, index);
-    end
+            all_tvos = devices.map do |device|
+          device = device.downcase
+          device.include?('apple tv')
+        end
+        # Return true if all devices are iOS devices
+        return true unless all_tvos.include?(false)
     
-          # Extracts title from page if present.
-      #
-      def page_header_from_content(content)
-        doc   = build_document(content)
-        title = find_header_node(doc).inner_text.strip
-        title = nil if title.empty?
-        title
+          def xcodebuild_log_path(device_type: nil, language: nil, locale: nil)
+        name_components = [Snapshot.project.app_name, Snapshot.config[:scheme]]
+    
+              # It is valid to have the same name for multiple devices
+          device = client.create_device!(name, udid, mac: mac)
+    
+              # Raise a custom exception, as the the normal one is useless for the user
+          UI.user_error!('A build error occurred, this is usually related to code signing. Take a look at the error above')
+        end
       end
     
-    $contexts = []
+          # Some providers have a lot (> 100) entries, which makes browsing them unwieldy.
+      # Any present in the list below will have an extra set of types added, breaking the pages out into the different
+      # products they offer.
+      LARGE_PROVIDERS = {
+        'aws'     => true,
+        'azurerm' => true,
+        'google'  => true,
+      }
     
-    # external
-require 'github/markup'
-require 'sanitize'
+            at_css('h1').content = 'Apache Cordova' if root_page?
     
-      context 'given a distribution without a META.* file' do
-    it 'should package IPC::Session' do
-      pending('Disabled on travis-ci because it always fails, and there is no way to debug it?') if is_travis
+          def get_name
+        name = context[:html_title]
+        name.remove! 'SQLite Query Language: '
+        name.remove! %r{\.\z}
+        name = at_css('#document_title').content if name == 'No Title'
+        name
+      end
     
-        args = [ '-B', build_path('build-info'), '-c', build_path('comment'), '-d', build_path('description'), '-f', build_path('packlist'), '-I', '/opt/local', '-p', staging_path,  '-U', '#{cwd}/#{name}-#{self.version}-#{iteration}.tgz' ]
-    safesystem('pkg_create', *args)
+            def initialize(machine, config)
+          super
     
-      def create_scripts
-    if script?(:after_install)
-      File.write(File.join(fpm_meta_path, 'after_install'), script(:after_install))
+    describe VagrantPlugins::Chef::Cap::FreeBSD::ChefInstalled do
+  include_context 'unit'
+    
+            expect(box_collection).to receive(:add).with(any_args) { |path, name, version, **opts|
+          expect(checksum(path)).to eq(checksum(box_path))
+          expect(name).to eq('foo')
+          expect(version).to eq('0')
+          expect(opts[:metadata_url]).to be_nil
+          true
+        }.and_return(box)
+    
+    module VagrantPlugins
+  module DockerProvider
+    class Provider < Vagrant.plugin('2', :provider)
+      @@host_vm_mutex = Mutex.new
+    
+          trigger = trigger_run.after_triggers.first
+      shell_config = trigger.run_remote
+      on_error = trigger.on_error
+      exit_codes = trigger.exit_codes
+    
+        it 'searches current PATH if original PATH did not result in valid executable' do
+      expect(Vagrant::Util::Which).to receive(:which).with('ssh', original_path: true).and_return(nil)
+      expect(Vagrant::Util::Which).to receive(:which).with('ssh').and_return('valid-return')
+      allow(Vagrant::Util::SafeExec).to receive(:exec).and_return(nil)
+      described_class.exec(ssh_info)
     end
+    
+      if rss_url && rss_url.length > 0
+    blogs.push(Struct::Blog.new(name, web_url, rss_url))
+  else
+    unavailable.push(Struct::Blog.new(name, web_url, rss_url))
+  end
+end
+    
+    module LogStash
+  module PluginManager
+  end
+end
+    
+          explicit_plugins_specs = explicitly_declared_plugins_specs
+    
+              it 'successfully install the plugin' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install #{gem_path_on_vagrant}')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-dns')
+          end
+        end
+    
+        context 'without a specific plugin' do
+      it 'display a list of plugins' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list')
+        expect(result.stdout.split('\n').size).to be > 1
+      end
+    
+        after :each do
+      logstash.uninstall
+    end
+    
+      def send_sinatra_file(path, &missing_file_block)
+    file_path = File.join(File.dirname(__FILE__), 'public',  path)
+    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
+    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
   end
     
-    # TODO(sissel): Add dependency checking support.
-# IIRC this has to be done as a 'checkinstall' step.
-class FPM::Package::Solaris < FPM::Package
+    Liquid::Template.register_tag('blockquote', Jekyll::Blockquote)
+
+    
+      # Condenses multiple spaces and tabs into a single space
+  def condense_spaces(input)
+    input.gsub(/\s{2,}/, ' ')
+  end
+    
+      class RenderPartialTag < Liquid::Tag
+    include OctopressFilters
+    def initialize(tag_name, markup, tokens)
+      @file = nil
+      @raw = false
+      if markup =~ /^(\S+)\s?(\w+)?/
+        @file = $1.strip
+        @raw = $2 == 'raw'
+      end
+      super
+    end
