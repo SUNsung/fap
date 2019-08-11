@@ -1,126 +1,113 @@
 
         
-        
-@implements_to_string
-class DebugFilesKeyError(KeyError, AssertionError):
-    '''Raised from request.files during debugging.  The idea is that it can
-    provide a better error message than just a generic KeyError/BadRequest.
-    '''
+        from sklearn.svm.bounds import l1_min_c
+from sklearn.svm import LinearSVC
+from sklearn.linear_model.logistic import LogisticRegression
     
-    This typically means that you attempted to use functionality that needed
-to interface with the current application object in some way. To solve
-this, set up an application context with app.app_context().  See the
-documentation for more information.\
-'''
+        def get_hessians(y_true, raw_predictions):
+        # create gradients and hessians array, update inplace, and return
+        gradients = np.empty_like(raw_predictions, dtype=G_H_DTYPE)
+        hessians = np.empty_like(raw_predictions, dtype=G_H_DTYPE)
+        loss.update_gradients_and_hessians(gradients, hessians, y_true,
+                                           raw_predictions)
     
-        def get_cookie_samesite(self, app):
-        '''Return ``'Strict'`` or ``'Lax'`` if the cookie should use the
-        ``SameSite`` attribute. This currently just returns the value of
-        the :data:`SESSION_COOKIE_SAMESITE` setting.
-        '''
-        return app.config['SESSION_COOKIE_SAMESITE']
+    from sklearn import datasets
+from sklearn.utils import shuffle
+from sklearn.metrics import mean_squared_error
+from sklearn.svm.classes import NuSVR
+from sklearn.ensemble.gradient_boosting import GradientBoostingRegressor
+from sklearn.linear_model.stochastic_gradient import SGDClassifier
+from sklearn.metrics import hamming_loss
     
+        title = match1(html, r'&title=([^&]+)')
     
-def make_test_environ_builder(*args, **kwargs):
-    '''Create a :class:`flask.testing.EnvironBuilder`.
-    
-        bp.add_app_template_test(is_boolean)
-    app.register_blueprint(bp, url_prefix='/py')
-    assert 'is_boolean' in app.jinja_env.tests.keys()
-    assert app.jinja_env.tests['is_boolean'] == is_boolean
-    assert app.jinja_env.tests['is_boolean'](False)
-    
-            def to_python(self, value):
-            return Foo(value)
-    
-    
-@utils.memoize
-def get_pkgfile(command):
-    ''' Gets the packages that provide the given command using `pkgfile`.
-    
-        def test_app_alias(self, shell):
-        assert 'function fuck' in shell.app_alias('fuck')
-        assert 'function FUCK' in shell.app_alias('FUCK')
-        assert 'thefuck' in shell.app_alias('fuck')
-        assert 'TF_SHELL=fish' in shell.app_alias('fuck')
-        assert 'TF_ALIAS=fuck PYTHONIOENCODING' in shell.app_alias('fuck')
-        assert 'PYTHONIOENCODING=utf-8 thefuck' in shell.app_alias('fuck')
-        assert ARGUMENT_PLACEHOLDER in shell.app_alias('fuck')
-    
-    
-class TestGeneric(object):
-    @pytest.fixture
-    def shell(self):
-        return Generic()
-    
-    
-class UninstallError(PipenvException):
-    def __init__(self, package, command, return_values, return_code, **kwargs):
-        extra = [
-            '{0} {1}'.format(
-                crayons.blue('Attempted to run command: '),
-                crayons.yellow('$ {0!r}'.format(command), bold=True
-            )
-        )]
-        extra.extend([crayons.blue(line.strip()) for line in return_values.splitlines()])
-        if isinstance(package, (tuple, list, set)):
-            package = ' '.join(package)
-        message = '{0!s} {1!s}...'.format(
-            crayons.normal('Failed to uninstall package(s)'),
-            crayons.yellow('{0}!s'.format(package), bold=True)
-        )
-        self.exit_code = return_code
-        PipenvException.__init__(self, message=message, extra=extra)
-        self.extra = extra
-    
-    __all__ = [
-    DocumentError.__name__,
-    SchemaError.__name__,
-    TypeDefinition.__name__,
-    Validator.__name__,
-    'schema_registry',
-    'rules_set_registry',
-]
+    site = Infoq()
+download = site.download_by_url
+download_playlist = site.download_by_url
 
     
-    # groups
-ERROR_GROUP = ErrorDefinition(0x80, None)
-MAPPING_SCHEMA = ErrorDefinition(0x81, 'schema')
-SEQUENCE_SCHEMA = ErrorDefinition(0x82, 'schema')
-# TODO remove KEYSCHEMA AND VALUESCHEMA with next major release
-KEYSRULES = KEYSCHEMA = ErrorDefinition(0x83, 'keysrules')
-VALUESRULES = VALUESCHEMA = ErrorDefinition(0x84, 'valuesrules')
-BAD_ITEMS = ErrorDefinition(0x8F, 'items')
+    import mock
     
-            :param schema: The schema-definition to expand.
-        :return: The expanded schema-definition.
-        '''
     
-    from click_completion.core import completion_configuration, get_code, install, shells, resolve_ctx, get_choices, \
-    startswith, Shell
-from click_completion.lib import get_auto_shell
-from click_completion.patch import patch as _patch
+class JWSTest(unittest.TestCase):
+    '''Tests for acme.jws.JWS.'''
     
-            :param filename: The pathname to the file to be signed.
-        :param signer: The identifier of the signer of the file.
-        :param sign_password: The passphrase for the signer's
-                              private key used for signing.
-        :param keystore: The path to a directory which contains the keys
-                         used in verification. If not specified, the
-                         instance's ``gpg_home`` attribute is used instead.
-        :return: The signing command as a list suitable to be
-                 passed to :class:`subprocess.Popen`.
-        '''
-        cmd = [self.gpg, '--status-fd', '2', '--no-tty']
-        if keystore is None:
-            keystore = self.gpg_home
-        if keystore:
-            cmd.extend(['--homedir', keystore])
-        if sign_password is not None:
-            cmd.extend(['--batch', '--passphrase-fd', '0'])
-        td = tempfile.mkdtemp()
-        sf = os.path.join(td, os.path.basename(filename) + '.asc')
-        cmd.extend(['--detach-sign', '--armor', '--local-user',
-                    signer, '--output', sf, filename])
-        logger.debug('invoking: %s', ' '.join(cmd))
-        return cmd, sf
+            self.assertEqual(None, self._call(self.vhosts))
+    
+            self.addr1 = Addr.fromstring('127.0.0.1')
+        self.addr2 = Addr.fromstring('127.0.0.1:*')
+    
+            try:
+            response = dns.query.udp(request, self.server, port=self.port)
+            rcode = response.rcode()
+    
+    
+  def EmptyInsertionText_test( self ):
+    self._Check( 0, {
+      'insertion_text':  '',
+      'menu_text':       'MENU TEXT',
+      'extra_menu_info': 'EXTRA MENU INFO',
+      'kind':            'K',
+      'detailed_info':   'DETAILED INFO',
+      'extra_data': {
+        'doc_string':    'DOC STRING',
+      },
+    }, {
+      'word'     : '',
+      'abbr'     : 'MENU TEXT',
+      'menu'     : 'EXTRA MENU INFO',
+      'kind'     : 'k',
+      'info'     : 'DETAILED INFO\nDOC STRING',
+      'equal'    : 1,
+      'dup'      : 1,
+      'empty'    : 1,
+      'user_data': '0',
+    } )
+
+    
+    
+  def _HandleBasicResponse( self ):
+    vimsupport.PostVimMessage( self._response, warning = False )
+    
+    
+  def _DiagnosticsCount( self, predicate ):
+    count = 0
+    for diags in itervalues( self._line_to_diags ):
+      count += sum( 1 for d in diags if predicate( d ) )
+    return count
+    
+    
+  def Start( self ):
+    request_data = BuildRequestData()
+    request_data.update( { 'filetypes': self.filetypes } )
+    self._response = self.PostDataToHandler( request_data,
+                                             'semantic_completion_available' )
+    
+    
+  def Poll( self, diagnostics_handler ):
+    '''This should be called regularly to check for new messages in this buffer.
+    Returns True if Poll should be called again in a while. Returns False when
+    the completer or server indicated that further polling should not be done
+    for the requested file.'''
+    
+      with CurrentWorkingDirectory( unicode_dir ):
+    with MockVimBuffers( [ current_buffer ], [ current_buffer ] ):
+      with MockCompletionRequest( ServerResponse ):
+        ycm.SendCompletionRequest()
+        ok_( ycm.CompletionRequestReady() )
+        assert_that(
+          ycm.GetCompletionResponse(),
+          has_entries( {
+            'completions': empty(),
+            'completion_start_column': 1
+          } )
+        )
+    
+    
+def RegexMultiList_test():
+  opts = _JavaFilter( { 'regex' : [ 'taco', 'burrito' ] } )
+  f = _CreateFilterForTypes( opts, [ 'java' ] )
+    
+    class Error(Exception):
+    '''Base class for all future-related exceptions.'''
+    pass
