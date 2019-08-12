@@ -1,152 +1,67 @@
 
         
-        
-    {  for (auto &rel : sym.Relations) {
-    if (!rel.group.empty())
-      return rel.group;
-    if (rel.decl)
-      return findGroupNameForDecl(rel.decl);
-  }
-  llvm_unreachable('did not find group name for reference');
+        void AutoUpdater::SetFeedURL(mate::Arguments* args) {
+  auto_updater::AutoUpdater::SetFeedURL(args);
 }
     
-      /// This class provides a non-trivial .cxx_construct or .cxx_destruct
-  /// implementation.
-  HasCXXStructors      = 0x00004,
+    NODE_LINKED_MODULE_CONTEXT_AWARE(atom_browser_debugger, Initialize)
+
     
-    class DiagnosticConsumer;
-class DiagnosticEngine;
+      AcceleratorCallbackMap accelerator_callback_map_;
     
-    // Author: kenton@google.com (Kenton Varda)
-    
-    
-    {  // Compare
-  util::MessageDifferencer differencer;
-  differencer.set_message_field_comparison(
-      util::MessageDifferencer::EQUIVALENT);
-  differencer.set_scope(util::MessageDifferencer::PARTIAL);
-  EXPECT_FALSE(differencer.Compare(msg1, msg2));
-}
-    
-    TEST(ByteSourceTest, CopyToStringByteSink) {
-  StringPiece data('Hello world!');
-  MockByteSource source(data, 3);
-  string str;
-  StringByteSink sink(&str);
-  source.CopyTo(&sink, data.size());
-  EXPECT_EQ(data, str);
-}
-    
-    Status::Status() : error_code_(error::OK) {
-}
-    
-    #include <errno.h>
-#include <memory>
-    
-    #include <google/protobuf/stubs/common.h>
-#include <gtest/gtest.h>
-    
-    namespace google {
-namespace protobuf {
-namespace internal {
-namespace {
-    }
-    }
-    }
-    }
+    #include 'base/compiler_specific.h'
+#include 'native_mate/handle.h'
+#include 'shell/browser/api/trackable_object.h'
+#include 'shell/browser/lib/power_observer.h'
+#include 'ui/base/idle/idle.h'
     
     
-    {
-    {    reflection->MutableUnknownFields(message)->Clear();
-  }
- private:
-  virtual bool ShouldBeClear(const FieldDescriptor *field) = 0;
-};
+    {}  // namespace electron
     
-      // Sets up the DENORM to execute a non-linear transformation based on
-  // preserving an even distribution of stroke edges. The transformation
-  // operates only within the given box, scaling input coords within the box
-  // non-linearly to a box of target_width by target_height, with all other
-  // coords being clipped to the box edge. As with SetupNormalization above,
-  // final_xshift and final_yshift are applied after scaling, and the bottom-
-  // left of box is used as a pre-scaling origin.
-  // x_coords is a collection of the x-coords of vertical edges for each
-  // y-coord starting at box.bottom().
-  // y_coords is a collection of the y-coords of horizontal edges for each
-  // x-coord starting at box.left().
-  // Eg x_coords[0] is a collection of the x-coords of edges at y=bottom.
-  // Eg x_coords[1] is a collection of the x-coords of edges at y=bottom + 1.
-  // The second-level vectors must all be sorted in ascending order.
-  void SetupNonLinear(const DENORM* predecessor, const TBOX& box,
-                      float target_width, float target_height,
-                      float final_xshift, float final_yshift,
-                      const GenericVector<GenericVector<int> >& x_coords,
-                      const GenericVector<GenericVector<int> >& y_coords);
+      // Array holding scores for each orientation id [0,3].
+  // Orientation ids [0..3] map to [0, 270, 180, 90] degree orientations of the
+  // page respectively, where the values refer to the amount of clockwise
+  // rotation to be applied to the page for the text to be upright and readable.
+  float orientations[4];
+  // Script confidence scores for each of 4 possible orientations.
+  float scripts_na[4][kMaxNumberOfScripts];
     
-    bool ParagraphModel::Comparable(const ParagraphModel &other) const {
-  if (justification_ != other.justification_)
-    return false;
-  if (justification_ == JUSTIFICATION_CENTER ||
-      justification_ == JUSTIFICATION_UNKNOWN)
-    return true;
-  int tolerance = (tolerance_ + other.tolerance_) / 4;
-  return NearlyEqual(margin_ + first_indent_,
-                     other.margin_ + other.first_indent_, tolerance) &&
-         NearlyEqual(margin_ + body_indent_,
-                     other.margin_ + other.body_indent_, tolerance);
-}
+    #endif  // TESSERACT_CCSTRUCT_OCRPARA_H_
+
     
-      tesseract::ParagraphJustification justification() const {
-    return justification_;
-  }
-  int margin() const { return margin_; }
-  int first_indent() const { return first_indent_; }
-  int body_indent() const { return body_indent_; }
-  int tolerance() const { return tolerance_; }
-  bool is_flush() const {
-    return (justification_ == tesseract::JUSTIFICATION_LEFT ||
-            justification_ == tesseract::JUSTIFICATION_RIGHT) &&
-        abs(first_indent_ - body_indent_) <= tolerance_;
-  }
+      /* Initial reject modes (pre NN_ACCEPT) */
+  R_POOR_MATCH,         // TEMP Ray's original heuristic (Not used)
+  R_NOT_TESS_ACCEPTED,  // TEMP Tess didn't accept WERD
+  R_CONTAINS_BLANKS,    // TEMP Tess failed on other chs in WERD
+  R_BAD_PERMUTER,       // POTENTIAL Bad permuter for WERD
     
-    // AMBIG_TABLE[i] stores a set of ambiguities whose
-// wrong ngram starts with unichar id i.
-using UnicharAmbigsVector = GenericVector<AmbigSpec_LIST *>;
-    
-    // A smart pointer class that implements a double-ended pointer. Each end
-// points to the other end. The copy constructor and operator= have MOVE
-// semantics, meaning that the relationship with the other end moves to the
-// destination of the copy, leaving the source unattached.
-// For this reason both the copy constructor and the operator= take a non-const
-// reference argument, and the const reference versions cannot be used.
-// DoublePtr is useful to incorporate into structures that are part of a
-// collection such as GenericVector or STL containers, where reallocs can
-// relocate the members. DoublePtr is also useful in a GenericHeap, where it
-// can correctly maintain the pointer to an element of the heap despite it
-// getting moved around on the heap.
-class DoublePtr {
+    // A useful base class to facilitate the common operation of sorting a vector
+// of owned pointer data using a separate key. This class owns its data pointer,
+// deleting it when it has finished with it, and providing copy constructor and
+// operator= that have move semantics so that the data does not get copied and
+// only a single instance of KDPtrPair holds a specific data pointer.
+template <typename Key, typename Data>
+class KDPtrPair {
  public:
-  DoublePtr() : other_end_(nullptr) {}
-  // Copy constructor steals the partner off src and is therefore a non
-  // const reference arg.
-  // Copying a const DoublePtr generates a compiler error.
-  DoublePtr(DoublePtr& src) {
-    other_end_ = src.other_end_;
-    if (other_end_ != nullptr) {
-      other_end_->other_end_ = this;
-      src.other_end_ = nullptr;
-    }
+  KDPtrPair() : data_(nullptr) {}
+  KDPtrPair(Key k, Data* d) : data_(d), key_(k) {}
+  // Copy constructor steals the pointer from src and nulls it in src, thereby
+  // moving the (single) ownership of the data.
+  KDPtrPair(KDPtrPair& src) : data_(src.data_), key_(src.key_) {
+    src.data_ = nullptr;
   }
-  // Operator= steals the partner off src, and therefore needs src to be a non-
-  // const reference.
-  // Assigning from a const DoublePtr generates a compiler error.
-  void operator=(DoublePtr& src) {
-    Disconnect();
-    other_end_ = src.other_end_;
-    if (other_end_ != nullptr) {
-      other_end_->other_end_ = this;
-      src.other_end_ = nullptr;
-    }
+  // Destructor deletes data, assuming it is the sole owner.
+  ~KDPtrPair() {
+    delete this->data_;
+    this->data_ = nullptr;
+  }
+  // Operator= steals the pointer from src and nulls it in src, thereby
+  // moving the (single) ownership of the data.
+  void operator=(KDPtrPair& src) {
+    delete this->data_;
+    this->data_ = src.data_;
+    src.data_ = nullptr;
+    this->key_ = src.key_;
   }
     }
     
@@ -176,153 +91,203 @@ class DoublePtr {
   int num_bits_;
 };
     
-    	return 'Image';
-}
-void ResourceImporterImage::get_recognized_extensions(List<String> *p_extensions) const {
     
-    	switch (p_idx) {
-		case MENU_GENERATE_VISIBILITY_RECT: {
-			float gen_time = particles->get_lifetime();
-			if (gen_time < 1.0)
-				generate_seconds->set_value(1.0);
-			else
-				generate_seconds->set_value(trunc(gen_time) + 1.0);
-			generate_visibility_rect->popup_centered_minsize();
-		} break;
-		case MENU_LOAD_EMISSION_MASK: {
+    {
+    {
+    {      case AlignContext::Dead:
+        if (bytes > 2) {
+          a.ud2();
+          bytes -= 2;
+        }
+        if (bytes > 0) {
+          a.emitInt3s(bytes);
+        }
+        return;
     }
-    }
-    
-    	void _process_packet(int p_from, const uint8_t *p_packet, int p_packet_len);
-	void _process_simplify_path(int p_from, const uint8_t *p_packet, int p_packet_len);
-	void _process_confirm_path(int p_from, const uint8_t *p_packet, int p_packet_len);
-	Node *_process_get_node(int p_from, const uint8_t *p_packet, int p_packet_len);
-	void _process_rpc(Node *p_node, const StringName &p_name, int p_from, const uint8_t *p_packet, int p_packet_len, int p_offset);
-	void _process_rset(Node *p_node, const StringName &p_name, int p_from, const uint8_t *p_packet, int p_packet_len, int p_offset);
-	void _process_raw(int p_from, const uint8_t *p_packet, int p_packet_len);
-    
-    
-    {	void create(const PoolVector<Vector3> &p_faces);
-	TriangleMesh();
+    not_reached();
+  }
 };
     
-    	// some core type enums to convert to
-	operator Margin() const;
-	operator Orientation() const;
     
-        DUPNUM(n2, num_one);
-    
-    //-----------------------------------------------------------------------------
-//
-//  FUNCTION: rootrat
-//
-//  PARAMETERS: y prat representation of number to take the root of
-//              n prat representation of the root to take.
-//
-//  RETURN: bth root of a in rat form.
-//
-//  EXPLANATION: This is now a stub function to powrat().
-//
-//-----------------------------------------------------------------------------
-    
-    void _readconstants(void);
-    
-    INarratorAnnouncementHost ^ NarratorAnnouncementHostFactory::GetHostProducer()
-{
-    for (INarratorAnnouncementHost ^ host : NarratorAnnouncementHostFactory::s_hosts)
     {
-        if (host->IsHostAvailable())
-        {
-            return host;
+    {      decref_local(v);
+      next_local(v);
+      v << cmpq{ local, last, sf };
+      return sf;
+    });
+  }, true);
+    
+    struct X64Assembler final : public X64AssemblerBase {
+public:
+  explicit X64Assembler(CodeBlock& cb) : X64AssemblerBase(cb) {}
+    }
+    
+      DispReg operator+(intptr_t x) const {
+    return DispReg(base, disp + x);
+  }
+    
+    
+    {
+    {
+    {
+    {              line_end = limit = (char *)lookup_trailing_spaces(buf, buf_len);
+              line_end_len = buf_len - (size_t)(limit - buf);
+              state = 0;
+            }
+            break;
+          }
+          break;
+        case 1:
+          /* we need to determine if the enclosure is
+           * 'real' or is it escaped */
+          switch (state) {
+          case 1: /* escaped */
+            bptr++;
+            state = 0;
+            break;
+          case 2: /* embedded enclosure ? let's check it */
+            if (*bptr != enclosure_char) {
+              /* real enclosure */
+              memcpy(tptr, hunk_begin, bptr - hunk_begin - 1);
+              tptr += (bptr - hunk_begin - 1);
+              hunk_begin = bptr;
+              goto quit_loop_2;
+            }
+            memcpy(tptr, hunk_begin, bptr - hunk_begin);
+            tptr += (bptr - hunk_begin);
+            bptr++;
+            hunk_begin = bptr;
+            state = 0;
+            break;
+          default:
+            if (*bptr == enclosure_char) {
+              state = 2;
+            } else if (*bptr == escape_char) {
+              state = 1;
+            }
+            bptr++;
+            break;
+          }
+          break;
         }
-    }
-    }
+        inc_len = (bptr < limit ? 1 : 0);
+      }
     
-    // Declaration of the NotificationHost class.
-// This class announces NarratorAnnouncements using the RaiseNotification API
-// available in RS3.
     
-    // Skip x if floor(x/10) is even, use range skips. Requires that keys are
-// zero-padded to length 10.
-class SkipEvenFilter : public CompactionFilter {
- public:
-  Decision FilterV2(int /*level*/, const Slice& key, ValueType /*value_type*/,
-                    const Slice& /*existing_value*/, std::string* /*new_value*/,
-                    std::string* skip_until) const override {
-    cfilter_count++;
-    int i = std::stoi(key.ToString());
-    if (i / 10 % 2 == 0) {
-      char key_str[100];
-      snprintf(key_str, sizeof(key_str), '%010d', i / 10 * 10 + 10);
-      *skip_until = key_str;
-      ++cfilter_skips;
-      return Decision::kRemoveAndSkipUntil;
-    }
-    return Decision::kKeep;
+///////////////////////////////////////////////////////////////////////////////
+    
+    req::ptr<File>
+PhpStreamWrapper::open(const String& filename, const String& mode,
+                       int options, const req::ptr<StreamContext>& context) {
+  if (strncasecmp(filename.c_str(), 'php://', 6)) {
+    return nullptr;
   }
     }
     
-    
-    {  {
-    SetPerfLevel(kEnableCount);
-    get_perf_context()->Reset();
-    int c = 0;
-    std::unique_ptr<Iterator> iter(db_->NewIterator(ReadOptions()));
-    iter->Seek(Key(kMaxKey - 100));
-    while (iter->Valid() && iter->key().compare(Key(kMaxKey + 100)) < 0) {
-      iter->Next();
-    }
-    ASSERT_EQ(c, 0);
-    ASSERT_LT(get_perf_context()->internal_delete_skipped_count, 30u);
-    ASSERT_LT(get_perf_context()->internal_key_skipped_count, 30u);
-    SetPerfLevel(kDisable);
-  }
+    Pipe::Pipe() {
 }
+    
+    #endif
+
+    
+    Scanner::Scanner(std::istream &stream, int type,
+                 const char *fileName /* = '' */,
+                 bool sha1 /* = false */)
+    : m_filename(fileName), m_source(nullptr), m_len(0), m_pos(0),
+      m_state(Start), m_type(type), m_yyscanner(nullptr), m_token(nullptr),
+      m_loc(nullptr), m_lastToken(-1), m_isHHFile(0), m_lookaheadLtDepth(0) {
+  m_stream = &stream;
+  m_streamOwner = false;
+  if (sha1) computeSha1();
+  init();
+}
+    
+    /*
+ * Used to maintain a mapping from the bytecode to its corresponding x86.
+ */
+struct TransBCMapping {
+  SHA1   sha1;
+  Offset bcStart;
+  TCA    aStart;
+  TCA    acoldStart;
+  TCA    afrozenStart;
+};
+    
+    #include <cstddef>
+    
+      if (trec->kind == TransKind::LivePrologue ||
+      trec->kind == TransKind::ProfPrologue ||
+      trec->kind == TransKind::OptPrologue) {
+    return {true, ExtOpFuncPrologue};
+  }
+  if (isTraceletGuard(addr, trec)) {
+    return {true, ExtOpTraceletGuard};
+  }
+    
+    #include <boost/operators.hpp>
+    
+      Reopen(options);
+    
+    TEST_F(DBTestXactLogIterator, TransactionLogIteratorBlobs) {
+  Options options = OptionsForLogIterTest();
+  DestroyAndReopen(options);
+  CreateAndReopenWithCF({'pikachu'}, options);
+  {
+    WriteBatch batch;
+    batch.Put(handles_[1], 'key1', DummyString(1024));
+    batch.Put(handles_[0], 'key2', DummyString(1024));
+    batch.PutLogData(Slice('blob1'));
+    batch.Put(handles_[1], 'key3', DummyString(1024));
+    batch.PutLogData(Slice('blob2'));
+    batch.Delete(handles_[0], 'key2');
+    dbfull()->Write(WriteOptions(), &batch);
+    ReopenWithColumnFamilies({'default', 'pikachu'}, options);
+  }
+    }
+    
+    #ifndef ROCKSDB_LITE
+    
+      bool PartialMerge(const Slice& /*key*/, const Slice& left_operand,
+                    const Slice& right_operand, std::string* new_value,
+                    Logger* /*logger*/) const override {
+    if (left_operand.compare(right_operand) >= 0) {
+      new_value->assign(left_operand.data(), left_operand.size());
+    } else {
+      new_value->assign(right_operand.data(), right_operand.size());
+    }
+    return true;
+  }
+    
+    Status WriteBatchBase::Merge(const SliceParts& key, const SliceParts& value) {
+  std::string key_buf, value_buf;
+  Slice key_slice(key, &key_buf);
+  Slice value_slice(value, &value_buf);
+    }
     
     #include 'rocksdb/status.h'
     
-    int main() {
-  Options options;
-  options.create_if_missing = true;
-  // Disable RocksDB background compaction.
-  options.compaction_style = kCompactionStyleNone;
-  // Small slowdown and stop trigger for experimental purpose.
-  options.level0_slowdown_writes_trigger = 3;
-  options.level0_stop_writes_trigger = 5;
-  options.IncreaseParallelism(5);
-  options.listeners.emplace_back(new FullCompactor(options));
-    }
+    
+    {  return 0;
+}
+
     
       ////////////////////////////////////////////////////////
   //
-  // Simple OptimisticTransaction Example ('Read Committed')
+  // 'Repeatable Read' (Snapshot Isolation) Example
+  //   -- Using a single Snapshot
   //
   ////////////////////////////////////////////////////////
     
-      // Initialize pointer options for each column family
-  for (size_t i = 0; i < loaded_cf_descs.size(); ++i) {
-    auto* loaded_bbt_opt = reinterpret_cast<BlockBasedTableOptions*>(
-        loaded_cf_descs[0].options.table_factory->GetOptions());
-    // Expect the same as BlockBasedTableOptions will be loaded form file.
-    assert(loaded_bbt_opt->block_size == bbt_opts.block_size);
-    // However, block_cache needs to be manually initialized as documented
-    // in rocksdb/utilities/options_util.h.
-    loaded_bbt_opt->block_cache = cache;
+     private:
+  void Init(
+      const std::string& lua_script,
+      const std::vector<std::shared_ptr<RocksLuaCustomLibrary>>& libraries) {
+    if (lua_state_) {
+      luaL_openlibs(lua_state_);
+      for (const auto& library : libraries) {
+        luaL_openlib(lua_state_, library->Name(), library->Lib(), 0);
+        library->CustomSetup(lua_state_);
+      }
+      luaL_dostring(lua_state_, lua_script.c_str());
+    }
   }
-  // In addition, as pointer options are initialized with default value,
-  // we need to properly initialized all the pointer options if non-defalut
-  // values are used before calling DB::Open().
-  assert(loaded_cf_descs[0].options.compaction_filter == nullptr);
-  loaded_cf_descs[0].options.compaction_filter = compaction_filter.get();
-    
-      // Insert to page cache
-  //
-  // page_key   Identifier to identify a page uniquely across restarts
-  // data       Page data
-  // size       Size of the page
-  virtual Status Insert(const Slice& key, const char* data,
-                        const size_t size) = 0;
-    
-      // If true, the database will be created if it is missing.
-  // Default: false
-  bool create_if_missing;
