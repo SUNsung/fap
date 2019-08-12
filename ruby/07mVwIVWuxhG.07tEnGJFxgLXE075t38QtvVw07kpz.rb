@@ -1,220 +1,137 @@
 
         
-            # Represents the schema of an SQL table in an abstract way. This class
-    # provides methods for manipulating the schema representation.
-    #
-    # Inside migration files, the +t+ object in {create_table}[rdoc-ref:SchemaStatements#create_table]
-    # is actually of this type:
-    #
-    #   class SomeMigration < ActiveRecord::Migration[5.0]
-    #     def up
-    #       create_table :foo do |t|
-    #         puts t.class  # => 'ActiveRecord::ConnectionAdapters::TableDefinition'
-    #       end
-    #     end
-    #
-    #     def down
-    #       ...
-    #     end
-    #   end
-    #
-    class TableDefinition
-      include ColumnMethods
+        class ReportService < BaseService
+  include Payloadable
     
-      private
-    def post_to_foos(as:)
-      with_routing do |routes|
-        routes.draw do
-          ActiveSupport::Deprecation.silence do
-            post ':action' => FooController
-          end
-        end
-    
-        def to_json(options = {})
-      super except: [:c, :e]
-    end
-  end
-  class CsvRenderable
-    def to_csv
-      'c,s,v'
-    end
-  end
-  class TestController < ActionController::Base
-    def render_simon_says
-      render simon: 'foo'
-    end
-    
-            new_appendix = new_appendix.sub('.', '') if new_appendix.start_with?('.')
-        major = version_match[:major].to_i
-        minor = version_match[:minor].to_i || 0
-        patch = version_match[:patch].to_i || 0
-    
-      context '.find' do
-    it 'finds a build by a build_id' do
-      mock_client_response(:get_build) do
-        {
-          id: 456,
-          bundleId: 'com.foo.bar',
-          trainVersion: '1.0'
-        }
-      end
-    
-        # This is a duplicate method of fastlane_core/fastlane_core.rb#fastlane_user_dir
-    def fastlane_user_dir
-      path = File.expand_path(File.join(Dir.home, '.fastlane'))
-      FileUtils.mkdir_p(path) unless File.directory?(path)
-      return path
-    end
-    
-        describe '#in_house?' do
-      it 'returns false for normal accounts' do
-        expect(subject.in_house?).to eq(false)
-      end
-    
-          stub_request(:post, 'https://developer.apple.com/services-account/QH65B2/account/mac/identifiers/addWebsitePushId.action').
-        with(body: { 'name' => 'Fastlane Website Push', 'identifier' => 'web.com.fastlane.example', 'teamId' => 'XXXXXXXXXX' }).
-        to_return(status: 200, body: adp_read_fixture_file('addWebsitePushId.action.json'), headers: { 'Content-Type' => 'application/json' })
-    
-          def self.upload_dsym(params, path)
-        UI.message('Uploading '#{path}'...')
-        command = []
-        command << File.expand_path(params[:binary_path]).shellescape
-        if params[:gsp_path]
-          command << '-gsp #{params[:gsp_path].shellescape}'
-        elsif params[:api_token]
-          command << '-a #{params[:api_token]}'
-        end
-        command << '-p #{params[:platform] == 'appletvos' ? 'tvos' : params[:platform]}'
-        command << File.expand_path(path).shellescape
-        begin
-          command_to_execute = command.join(' ')
-          UI.verbose('upload_dsym using command: #{command_to_execute}')
-          Actions.sh(command_to_execute, log: false)
-        rescue => ex
-          UI.error(ex.to_s) # it fails, however we don't want to fail everything just for this
-        end
-      end
-    
-          #####################################################
-      # @!group Documentation
-      #####################################################
-    
-      # Version of your assets, change this if you want to expire all your assets.
-  config.assets.version = '1.0'
-    
-      # Node Settings
-  option ['-n', '--node.name'], 'NAME',
-    I18n.t('logstash.runner.flag.name'),
-    :attribute_name => 'node.name',
-    :default => LogStash::SETTINGS.get_default('node.name')
-    
-          packet_gem.pack
-    
-    describe LogStash::Config::PipelineConfig do
-  let(:source) { LogStash::Config::Source::Local }
-  let(:pipeline_id) { :main }
-  let(:ordered_config_parts) do
-    [
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/1', 0, 0, 'input { generator1 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/2', 0, 0,  'input { generator2 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/3', 0, 0, 'input { generator3 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/4', 0, 0, 'input { generator4 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/5', 0, 0, 'input { generator5 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/6', 0, 0, 'input { generator6 }'),
-      org.logstash.common.SourceWithMetadata.new('string', 'config_string', 0, 0, 'input { generator1 }'),
-    ]
+      def inboxes
+    # Deliver the status to all followers.
+    # If the status is a reply to another local status, also forward it to that
+    # status' authors' followers.
+    @inboxes ||= if @status.reply? && @status.thread.account.local? && @status.distributable?
+                   @account.followers.or(@status.thread.account.followers).inboxes
+                 else
+                   @account.followers.inboxes
+                 end
   end
     
-      describe 'on #{logstash.hostname}' do
-    context 'with a direct internet connection' do
-      context 'when the plugin exist' do
-        context 'from a local `.GEM` file' do
-          let(:gem_name) { 'logstash-filter-qatest-0.1.1.gem' }
-          let(:gem_path_on_vagrant) { '/tmp/#{gem_name}' }
-          before(:each) do
-            logstash.download('https://rubygems.org/gems/#{gem_name}', gem_path_on_vagrant)
-          end
+    class ActivityPub::UpdateDistributionWorker
+  include Sidekiq::Worker
+  include Payloadable
     
-        context 'without a specific plugin' do
-      it 'display a list of plugins' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list')
-        expect(result.stdout.split('\n').size).to be > 1
-      end
+      describe 'GET #show' do
+    it 'returns http success' do
+      get :show
+      expect(response).to have_http_status(200)
+    end
+  end
     
-            selected = if options[:match_path].is_a? Regexp
-                     request.fullpath =~ options[:match_path]
-                   elsif options[:match_path]
-                     request.fullpath.starts_with?('#{spree.admin_path}#{options[:match_path]}')
-                   else
-                     args.include?(controller.controller_name.to_sym)
-                   end
+            expect_any_instance_of(ActivityPub::LinkedDataSignature).to receive(:verify_account!).and_return(actor)
+        expect(ActivityPub::Activity).to receive(:factory).with(instance_of(Hash), actor, instance_of(Hash))
     
-            def show
-          authorize! :admin, ReturnAuthorization
-          @return_authorization = order.return_authorizations.accessible_by(current_ability, :show).find(params[:id])
-          respond_with(@return_authorization)
-        end
+      spec.files         = %w[
+    LICENSE.txt
+    README.md
+    ext/etc/constdefs.h
+    ext/etc/etc.c
+    ext/etc/extconf.rb
+    ext/etc/mkconstants.rb
+    stub/etc.rb
+    test/etc/test_etc.rb
+  ]
+  spec.bindir        = 'exe'
+  spec.require_paths = ['lib']
+  spec.extensions    = %w{ext/etc/extconf.rb}
     
-              count_on_hand = 0
-          if params[:stock_item].key?(:count_on_hand)
-            count_on_hand = params[:stock_item][:count_on_hand].to_i
-          end
-    
-            def index
-          authorize! :index, StockMovement
-          @stock_movements = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
-          respond_with(@stock_movements)
-        end
-    
-              @users = @users.result.page(params[:page]).per(params[:per_page])
-          expires_in 15.minutes, public: true
-          headers['Surrogate-Control'] = 'max-age=#{15.minutes}'
-          respond_with(@users)
-        end
-    
-      # The version of this package (the upstream version)
-  attr_accessor :version
-    
-        pkgdata = {
-      'arch' => architecture,
-      'name' => name,
-      'version' => pkg_version,
-      'comment' => description,
-      'desc' => description,
-      'origin' => pkg_origin,
-      'maintainer' => maintainer,
-      'www' => url,
-      # prefix is required, but it doesn't seem to matter
-      'prefix' => '/',
-    }
-    
-        if info.include?('repository')
-      self.url = info['repository']['url']
-    else
-      self.url = 'https://npmjs.org/package/#{self.name}'
+        def test_execopt_redirect_path
+      name = noninterned_name.intern
+      assert_raise(TypeError) {
+        system('.', [] => [name, 0])
+      }
+      assert_not_pinneddown(name)
     end
     
-        # Remove the stuff we don't want
-    delete_these = ['.depdb', '.depdblock', '.filemap', '.lock', '.channel', 'cache', 'temp', 'download', '.channels', '.registry']
-    Find.find(staging_path) do |path|
-      if File.file?(path)
-        logger.info('replacing staging_path in file', :replace_in => path, :staging_path => staging_path)
-        begin
-          content = File.read(path).gsub(/#{Regexp.escape(staging_path)}/, '')
-          File.write(path, content)
-        rescue ArgumentError => e
-          logger.warn('error replacing staging_path in file', :replace_in => path, :error => e)
-        end
-      end
-      FileUtils.rm_r(path) if delete_these.include?(File.basename(path))
+        assert_in_delta CMath.sinh(2).i, CMath.sin(2i)
+    assert_in_delta CMath.cosh(2),   CMath.cos(2i)
+    assert_in_delta CMath.tanh(2).i, CMath.tan(2i)
+    
+    end
+
+    
+      it 'invokes seek method on the associated IO object' do
+    # first, prepare the mock object:
+    (obj = mock('io')).should_receive(:get_io).any_number_of_times.and_return(@io)
+    def obj.read(args); get_io.read(args); end
+    def obj.seek(pos, whence = 0)
+      ScratchPad.record :seek
+      get_io.seek(pos, whence)
     end
     
-          File.open(File.join(builddir, 'manifests', manifest), 'w') do |f|
-        logger.info('manifest: #{f.path}')
-        template = template(File.join('puppet', '#{manifest}.erb'))
-        ::Dir.chdir(fileroot) do
-          f.puts template.result(binding)
+        ScratchPad.recorded.should == ['firstline\n', 'secondline\n', '\n', 'forthline']
+  end
+    
+        quarantine! do # https://bugs.ruby-lang.org/issues/13675
+      describe 'with nil' do
+        it 'does not append anything to the stream' do
+          @gz.ungetbyte nil
+          @gz.read.should == ''
         end
+    
+        describe 'with a multi-byte character' do
+      it 'inserts the character into the stream' do
+        @gz.ungetc 'ŷ'
+        @gz.read.should == 'ŷabcde'
+      end
+    
+      it 'each chunk should have the same prefix' do
+    @chunks.all? { |chunk| chunk =~ /\A0+\z/ }.should be_true
+  end
+    
+        def URIEncodeSingle(cc, result, index)
+      x = (cc >> 12) & 0xF;
+      y = (cc >> 6) & 63;
+      z = cc & 63;
+      octets = Array.new(3);
+      if (cc <= 0x007F)
+        octets[0] = cc;
+      elsif (cc <= 0x07FF)
+        octets[0] = y + 192;
+        octets[1] = z + 128;
+      else
+        octets[0] = x + 224;
+        octets[1] = y + 128;
+        octets[2] = z + 128;
+      end
+      return URIEncodeOctets(octets, result, index);
+    end
+    
+          def next_link
       end
     end
-  end # def generate_specfile
+  end
+end
+
+    
+          def author
+        first = page.last_version
+        return DEFAULT_AUTHOR unless first
+        first.author.name.respond_to?(:force_encoding) ? first.author.name.force_encoding('UTF-8') : first.author.name
+      end
+    
+    $contexts = []
+    
+    context 'Precious::Views::Page' do
+  setup do
+    examples = testpath 'examples'
+    @path    = File.join(examples, 'test.git')
+    FileUtils.cp_r File.join(examples, 'empty.git'), @path, :remove_destination => true
+    @wiki = Gollum::Wiki.new(@path)
+  end
+    
+    # Read command line options into `options` hash
+begin
+  opts.parse!
+rescue OptionParser::InvalidOption
+  puts 'gollum: #{$!.message}'
+  puts 'gollum: try 'gollum --help' for more information'
+  exit
+end
