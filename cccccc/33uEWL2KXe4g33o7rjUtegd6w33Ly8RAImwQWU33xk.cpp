@@ -1,285 +1,393 @@
 
         
-          /// Returns true if this function is dead, but kept in the module's zombie list.
-  bool isZombie() const { return Zombie; }
+            std::string ToString() const final
+    {
+        std::string ret;
+        ToStringHelper(nullptr, ret, false);
+        return AddChecksum(ret);
+    }
+    
+        void setModel(WalletModel *model);
+    void setAddress_SM(const QString &address);
+    void setAddress_VM(const QString &address);
     
     
-    {private:
-  /// Map counters to ASTNodes and set them up for profiling the function.
-  void assignRegionCounters();
+    {    Lock& lock;
+    Lock templock;
 };
     
-    /// A mapping from each dynamically-dispatchable method of a class to the
-/// SILFunction that implements the method for that class.
-/// Note that dead methods are completely removed from the vtable.
-class SILVTable : public llvm::ilist_node<SILVTable>,
-                  public SILAllocated<SILVTable> {
-public:
-  // TODO: Entry should include substitutions needed to invoke an overridden
-  // generic base class method.
-  struct Entry {
-    enum Kind : uint8_t {
-      /// The vtable entry is for a method defined directly in this class.
-      Normal,
-      /// The vtable entry is inherited from the superclass.
-      Inherited,
-      /// The vtable entry is inherited from the superclass, and overridden
-      /// in this class.
-      Override,
-    };
-    }
-    }
     
-        auto header = KeyPathComponentHeader
-      ::forStructComponentWithUnresolvedFieldOffset(/*isLet*/ false);
-    fields.addInt32(header.getData());
-    fields.addInt32(elementOffset.getValue());
-    break;
-    
-    #include 'Initialization.h'
-#include 'LValue.h'
-#include 'RValue.h'
-#include 'SILGen.h'
-#include 'SILGenDynamicCast.h'
-#include 'Scope.h'
-#include 'SwitchEnumBuilder.h'
-#include 'swift/AST/ASTMangler.h'
-#include 'swift/AST/GenericEnvironment.h'
-#include 'swift/AST/Module.h'
-#include 'swift/AST/NameLookup.h'
-#include 'swift/AST/ProtocolConformance.h'
-#include 'swift/Basic/ProfileCounter.h'
-#include 'swift/SIL/FormalLinkage.h'
-#include 'swift/SIL/PrettyStackTrace.h'
-#include 'swift/SIL/SILArgument.h'
-#include 'swift/SIL/SILDebuggerClient.h'
-#include 'swift/SIL/SILType.h'
-#include 'swift/SIL/TypeLowering.h'
-#include 'llvm/ADT/SmallString.h'
-#include <iterator>
-    
-    llvm::Expected<CustomAttr *>
-AttachedFunctionBuilderRequest::evaluate(Evaluator &evaluator,
-                                         ValueDecl *decl) const {
-  ASTContext &ctx = decl->getASTContext();
-  auto dc = decl->getDeclContext();
-  for (auto attr : decl->getAttrs().getAttributes<CustomAttr>()) {
-    auto mutableAttr = const_cast<CustomAttr *>(attr);
-    // Figure out which nominal declaration this custom attribute refers to.
-    auto nominal = evaluateOrDefault(ctx.evaluator,
-                                     CustomAttrNominalRequest{mutableAttr, dc},
-                                     nullptr);
-    }
-    }
-    
-          // We should already have enough type information to know the offset
-      // of this capture in the context.
-      unsigned CaptureOffset = Builder.getFieldOffset(Index);
-    
-    template <class ElemType>
-shared_ptr<ComputationNode<ElemType>> ComputationNetworkBuilder<ElemType>::Negate(const ComputationNodePtr a, const std::wstring nodeName)
-{
-    return net.AddNodeToNetAndAttachInputs(New<NegateNode<ElemType>>(net.GetDeviceId(), nodeName), { a });
+    {    /* d = (a0*2) * a3 */
+    'leaq (%%r10,%%r10,1),%%rax\n'
+    'mulq %%r13\n'
+    'movq %%rax,%%rbx\n'
+    'movq %%rdx,%%rcx\n'
+    /* d += (a1*2) * a2 */
+    'leaq (%%r11,%%r11,1),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c = a4 * a4 */
+    'movq %%r14,%%rax\n'
+    'mulq %%r14\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += (c & M) * R */
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* t3 (tmp1) = d & M */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    'movq %%rsi,%q1\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* a4 *= 2 */
+    'addq %%r14,%%r14\n'
+    /* d += a0 * a4 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d+= (a1*2) * a3 */
+    'leaq (%%r11,%%r11,1),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += a2 * a2 */
+    'movq %%r12,%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += c * R */
+    'movq %%r8,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* t4 = d & M (%%rsi) */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* tx = t4 >> 48 (tmp3) */
+    'movq %%rsi,%%rax\n'
+    'shrq $48,%%rax\n'
+    'movq %%rax,%q3\n'
+    /* t4 &= (M >> 4) (tmp2) */
+    'movq $0xffffffffffff,%%rax\n'
+    'andq %%rax,%%rsi\n'
+    'movq %%rsi,%q2\n'
+    /* c = a0 * a0 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r10\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += a1 * a4 */
+    'movq %%r11,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += (a2*2) * a3 */
+    'leaq (%%r12,%%r12,1),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* u0 = d & M (%%rsi) */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* u0 = (u0 << 4) | tx (%%rsi) */
+    'shlq $4,%%rsi\n'
+    'movq %q3,%%rax\n'
+    'orq %%rax,%%rsi\n'
+    /* c += u0 * (R >> 4) */
+    'movq $0x1000003d1,%%rax\n'
+    'mulq %%rsi\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[0] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,0(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* a0 *= 2 */
+    'addq %%r10,%%r10\n'
+    /* c += a0 * a1 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a2 * a4 */
+    'movq %%r12,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += a3 * a3 */
+    'movq %%r13,%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c += (d & M) * R */
+    'movq %%rbx,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* r[1] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,8(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a0 * a2 (last use of %%r10) */
+    'movq %%r10,%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* fetch t3 (%%r10, overwrites a0),t4 (%%rsi) */
+    'movq %q2,%%rsi\n'
+    'movq %q1,%%r10\n'
+    /* c += a1 * a1 */
+    'movq %%r11,%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a3 * a4 */
+    'movq %%r13,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c += (d & M) * R */
+    'movq %%rbx,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 (%%rbx only) */
+    'shrdq $52,%%rcx,%%rbx\n'
+    /* r[2] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,16(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += t3 */
+    'addq %%r10,%%r8\n'
+    /* c += d * R */
+    'movq %%rbx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[3] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,24(%%rdi)\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* c += t4 (%%r8 only) */
+    'addq %%rsi,%%r8\n'
+    /* r[4] = c */
+    'movq %%r8,32(%%rdi)\n'
+: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
+: 'D'(r)
+: '%rax', '%rbx', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
+);
 }
     
-    
-    {    // some std::string helpers useful for ToString() operations of nested structures
-    // TODO: move these out from this header into some more general place (I had to move them here because otherwise CNTKEval failed to compile)
-    static std::wstring IndentString(std::wstring s, size_t indent)
-    {
-        const std::wstring prefix(indent, L' ');
-        size_t pos = 0;
-        for (;;)
-        {
-            s.insert(pos, prefix);
-            pos = s.find(L'\n', pos + 2);
-            if (pos == std::wstring::npos)
-                return s;
-            pos++;
-        }
-    }
-    static std::wstring NestString(std::wstring s, wchar_t open, bool newline, wchar_t close)
-    {
-        std::wstring result = IndentString(s, 2);
-        if (newline) // have a new line after the open symbol
-            result = L' \n' + result + L'\n ';
-        else
-            result.append(L'  ');
-        result.front() = open;
-        result.back() = close;
-        return result;
-    }
-};
-    
-            // parameters at the last model aggregation point
-        std::map<std::wstring, std::shared_ptr<Matrix<ElemType>>> m_prevParameters;
-        std::map<std::wstring, std::shared_ptr<Matrix<ElemType>>> m_blockLevelSmoothedGradient;
-    
-        // write a DBN matrix object, optionally applying a function
-    auto PutMatrixConverted = [&](const Matrix<ElemType> * m, size_t maxelem, const char * name, float(*f)(float))
-    {
-        PutTag('BMAT');
-        PutString(name);
-        size_t numRows = m->GetNumRows();
-        size_t numCols = m->GetNumCols();
+    /* Tests several edge cases. */
+void test_ecdsa_recovery_edge_cases(void) {
+    const unsigned char msg32[32] = {
+        'T', 'h', 'i', 's', ' ', 'i', 's', ' ',
+        'a', ' ', 'v', 'e', 'r', 'y', ' ', 's',
+        'e', 'c', 'r', 'e', 't', ' ', 'm', 'e',
+        's', 's', 'a', 'g', 'e', '.', '.', '.'
+    };
+    const unsigned char sig64[64] = {
+        /* Generated by signing the above message with nonce 'This is the nonce we will use...'
+         * and secret key 0 (which is not valid), resulting in recid 0. */
+        0x67, 0xCB, 0x28, 0x5F, 0x9C, 0xD1, 0x94, 0xE8,
+        0x40, 0xD6, 0x29, 0x39, 0x7A, 0xF5, 0x56, 0x96,
+        0x62, 0xFD, 0xE4, 0x46, 0x49, 0x99, 0x59, 0x63,
+        0x17, 0x9A, 0x7D, 0xD1, 0x7B, 0xD2, 0x35, 0x32,
+        0x4B, 0x1B, 0x7D, 0xF3, 0x4C, 0xE1, 0xF6, 0x8E,
+        0x69, 0x4F, 0xF6, 0xF1, 0x1A, 0xC7, 0x51, 0xDD,
+        0x7D, 0xD7, 0x3E, 0x38, 0x7E, 0xE4, 0xFC, 0x86,
+        0x6E, 0x1B, 0xE8, 0xEC, 0xC7, 0xDD, 0x95, 0x57
+    };
+    secp256k1_pubkey pubkey;
+    /* signature (r,s) = (4,4), which can be recovered with all 4 recids. */
+    const unsigned char sigb64[64] = {
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04,
+    };
+    secp256k1_pubkey pubkeyb;
+    secp256k1_ecdsa_recoverable_signature rsig;
+    secp256k1_ecdsa_signature sig;
+    int recid;
     }
     
+        BOOST_CHECK(v.setObject());
+    BOOST_CHECK(v.isObject());
+    BOOST_CHECK_EQUAL(v.size(), 0);
+    BOOST_CHECK_EQUAL(v.getType(), UniValue::VOBJ);
+    BOOST_CHECK(v.empty());
     
-    {#ifdef COMING_SOON
-    ComputationNodePtr CRF(const ComputationNodePtr label, const ComputationNodePtr postDepScore, const ComputationNodePtr transition_score, const std::wstring nodeName = L'');
+    class InternalKey;
+    
+      // Set default fraction and margin.
+  comparator_.SetDefaultFractionAndMargin(0.01, 0.0);
+    
+      // Swap the first time.
+  reflection_tester.SwapMapsViaReflection(&message);
+    
+    TEST(MovableMessageTest, MoveSameArena) {
+  Arena arena;
+    }
+    
+      uint8 expected_data[] = {
+      0x5,
+      // All as is (00 op)
+      0x1,  0x0A, 0x0,
+      // Underscore, upper + 9 (10 op)
+      0x3,  0xCA, 0x0,
+      //  Upper + 3 (10 op), underscore, upper + 5 (10 op)
+      0x2,  0x44, 0xC6, 0x0,
+      // All Upper for 4 (11 op), underscore, underscore, upper + 5 (10 op),
+      // underscore, lower + 0 (01 op)
+      0x4,  0x64, 0x80, 0xC5, 0xA1, 0x0,
+      // 2 byte key: as is + 3 (00 op), underscore, lower + 4 (01 op),
+      //   underscore, lower + 3 (01 op), underscore, lower + 1 (01 op),
+      //   underscore, lower + 30 (01 op), as is + 30 (00 op), as is + 13 (00
+      //   op),
+      //   underscore, as is + 3 (00 op)
+      0xE8, 0x07, 0x04, 0xA5, 0xA4, 0xA2, 0xBF, 0x1F, 0x0E, 0x84, 0x0,
+  };
+  string expected((const char*)expected_data, sizeof(expected_data));
+    
+    void MapLiteTestUtil::ExpectMapFieldsSet(const unittest::TestMapLite& message) {
+  MapTestUtilImpl::ExpectMapFieldsSet<unittest::MapEnumLite,
+                                      unittest::MAP_ENUM_BAR_LITE,
+                                      unittest::MAP_ENUM_BAZ_LITE>(message);
+}
+    
+    Status& Status::operator=(const Status& other) {
+  error_code_ = other.error_code_;
+  error_message_ = other.error_message_;
+  return *this;
+}
+    
+        for (int i = 0; i < dataset.payload_size(); i++) {
+      message->ParseFromString(dataset.payload(i));
+      GogoDataStripper stripper;
+      stripper.StripMessage(message);
+      dataset.set_payload(i, message->SerializeAsString());
+    }
+    
+        if ((m_base.value.size() > MAX_STRLEN) || (m_hasExponent && m_exponent.value.size() > MAX_STRLEN))
+    {
+        return wstring();
+    }
+    
+    // To be called when either the radix or num width changes. You can use -1 in either of these values to mean
+// dont change that.
+void CCalcEngine::SetRadixTypeAndNumWidth(RADIX_TYPE radixtype, NUM_WIDTH numwidth)
+{
+    // When in integer mode, the number is represented in 2's complement form. When a bit width is changing, we can
+    // change the number representation back to sign, abs num form in ratpak. Soon when display sees this, it will
+    // convert to 2's complement form, but this time all high bits will be propagated. Eg. -127, in byte mode is
+    // represented as 1000,0001. This puts it back as sign=-1, 01111111 . But DisplayNum will see this and convert it
+    // back to 1111,1111,1000,0001 when in Word mode.
+    if (m_fIntegerMode)
+    {
+        uint64_t w64Bits = m_currentVal.ToUInt64_t();
+        bool fMsb = (w64Bits >> (m_dwWordBitWidth - 1)) & 1; // make sure you use the old width
+    }
+    }
+    
+    #include 'pch.h'
+#include 'NarratorAnnouncementHostFactory.h'
+#include 'NotificationHost.h'
+#include 'LiveRegionHost.h'
+    
+        //clear history task
+    int efd = task_notify_pipe->getFd(task_notify_pipe, 0);
+    while (read(efd, &notify, sizeof(notify)) > 0)
+        ;
+    
+    
+    {
+    {protected:
+    coroutine_context_t ctx_;
+    coroutine_context_t swap_ctx_;
+    coroutine_func_t fn_;
+    char* stack_;
+    uint32_t stack_size_;
+#ifdef SW_CONTEXT_PROTECT_STACK_PAGE
+    uint32_t protect_page_;
 #endif
-    ComputationNodePtr Abs(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr Acos(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr Asin(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr Asinh(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr Atan(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr Atanh(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr Less(const ComputationNodePtr a, const ComputationNodePtr b, const std::wstring nodeName = L'');
-    ComputationNodePtr Equal(const ComputationNodePtr a, const ComputationNodePtr b, const std::wstring nodeName = L'');
-    ComputationNodePtr Greater(const ComputationNodePtr a, const ComputationNodePtr b, const std::wstring nodeName = L'');
-    ComputationNodePtr GreaterEqual(const ComputationNodePtr a, const ComputationNodePtr b, const std::wstring nodeName = L'');
-    ComputationNodePtr NotEqual(const ComputationNodePtr a, const ComputationNodePtr b, const std::wstring nodeName = L'');
-    ComputationNodePtr LessEqual(const ComputationNodePtr a, const ComputationNodePtr b, const std::wstring nodeName = L'');
-    ComputationNodePtr ClassCrossEntropyWithSoftmax(const ComputationNodePtr label, const ComputationNodePtr prediction, const ComputationNodePtr input_weight, const ComputationNodePtr cls_log_post_prob, const std::wstring nodeName = L'');
-    ComputationNodePtr Clip(const ComputationNodePtr a, const ComputationNodePtr b, const ComputationNodePtr c, const std::wstring nodeName = L'');
-    ComputationNodePtr Cos(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr CosDistance(const ComputationNodePtr a, const ComputationNodePtr b, const std::wstring nodeName = L'');
-    ComputationNodePtr Cosh(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr CrossEntropy(const ComputationNodePtr label, const ComputationNodePtr prediction, const std::wstring nodeName = L'');
-    ComputationNodePtr CrossEntropyWithSoftmax(const ComputationNodePtr label, const ComputationNodePtr prediction, const std::wstring nodeName = L'');
-    ComputationNodePtr ForwardBackward(const ComputationNodePtr graph, const ComputationNodePtr features, int blankTokenId, int delayConstraint, const std::wstring nodeName = L'');
-    ComputationNodePtr DiagTimes(const ComputationNodePtr a, const ComputationNodePtr b, const std::wstring nodeName = L'');
-    ComputationNodePtr Diagonal(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr Dropout(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr DummyCriterion(const ComputationNodePtr objectives, const ComputationNodePtr derivatives, const ComputationNodePtr prediction, const std::wstring nodeName = L'');
-    ComputationNodePtr EditDistanceError(const ComputationNodePtr a, const ComputationNodePtr b, float subPen, float delPen, float insPen, bool squashInputs, vector<size_t> tokensToIgnore, const std::wstring nodeName = L'');
-    ComputationNodePtr StopGradient(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr ElementTimes(const ComputationNodePtr a, const ComputationNodePtr b, const std::wstring nodeName = L'');
-    ComputationNodePtr DynamicAxis(const ComputationNodePtr a, const std::wstring& nodeName = L'');
-    ComputationNodePtr ClassificationError(const ComputationNodePtr a, const ComputationNodePtr b, const std::wstring nodeName = L'');
-    ComputationNodePtr Exp(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr Floor(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr FutureValue(const ComputationNodePtr a, const float initHiddenActivity, const size_t row_size, size_t timeStep, const std::wstring nodeName = L'');
-#ifdef COMING_SOON
-    ComputationNodePtr GMMLogLikelihood(const ComputationNodePtr unnormedPrior, const ComputationNodePtr mean, const ComputationNodePtr logStddev, const ComputationNodePtr feature, const std::wstring nodeName = L'');
+#ifdef USE_VALGRIND
+    uint32_t valgrind_stack_id;
 #endif
-    ComputationNodePtr Hardmax(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr If(const ComputationNodePtr a, const ComputationNodePtr b, const ComputationNodePtr c, const std::wstring nodeName = L'');
-    ComputationNodePtr InvStdDev(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr LambdaRank(const ComputationNodePtr gain, const ComputationNodePtr prediction, const ComputationNodePtr queryId, const std::wstring nodeName = L'');
-    ComputationNodePtr NDCG1Eval(const ComputationNodePtr gain, const ComputationNodePtr prediction, const ComputationNodePtr queryId, const std::wstring nodeName = L'');
-    ComputationNodePtr KhatriRaoProduct(const ComputationNodePtr a, const ComputationNodePtr b, const std::wstring nodeName = L'');
-    ComputationNodePtr Log(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr LogPlus(const ComputationNodePtr a, const ComputationNodePtr b, const std::wstring nodeName = L'');
-    ComputationNodePtr LogSoftmax(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr Logistic(const ComputationNodePtr a, const ComputationNodePtr b, const ComputationNodePtr c, const std::wstring nodeName = L'');
-    ComputationNodePtr Logistic(const ComputationNodePtr a, const ComputationNodePtr b, const std::wstring nodeName = L'');
-    ComputationNodePtr LookupTable(const ComputationNodePtr dictionary, const ComputationNodePtr input, const std::wstring nodeName = L'');
-    ComputationNodePtr MatrixL1Reg(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr MatrixL2Reg(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr Mean(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr Minus(const ComputationNodePtr a, const ComputationNodePtr b, const std::wstring nodeName = L'');
-    ComputationNodePtr Negate(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr NoiseContrastiveEstimation(const ComputationNodePtr label, const ComputationNodePtr prediction, const ComputationNodePtr input_weight, const ComputationNodePtr input_bias, const std::wstring nodeName = L'', NCEEvalMode mode = NCEEvalMode::None);
-    ComputationNodePtr Pass(const ComputationNodePtr a, const std::wstring& nodeName = L'');
-    ComputationNodePtr LabelsToGraph(const ComputationNodePtr a, const std::wstring& nodeName = L'');
-    ComputationNodePtr PastValue(const ComputationNodePtr a, const float initHiddenActivity, const size_t row_size, size_t timeStep, const std::wstring nodeName = L'');
-    ComputationNodePtr PerDimMeanVarDeNormalization(const ComputationNodePtr feature, const ComputationNodePtr mean, const ComputationNodePtr InvStdDev, const std::wstring nodeName = L'');
-    ComputationNodePtr PerDimMeanVarNormalization(const ComputationNodePtr feature, const ComputationNodePtr mean, const ComputationNodePtr InvStdDev, const std::wstring nodeName = L'');
-    ComputationNodePtr Plus(const ComputationNodePtr a, const ComputationNodePtr b, const std::wstring nodeName = L'');
-    ComputationNodePtr Reciprocal(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr RandomSample(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr RandomSampleInclusionFrequency(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr RectifiedLinear(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr Reshape(const ComputationNodePtr a, const TensorShape& imageLayout, const std::wstring nodeName = L'');
-    ComputationNodePtr RowRepeat(const ComputationNodePtr a, const size_t num_repeat, const std::wstring nodeName = L'');
-    ComputationNodePtr RowSlice(const ComputationNodePtr a, const size_t start_index, const size_t num_rows, const std::wstring nodeName = L'');
-    ComputationNodePtr RowStack(const std::vector<ComputationNodePtr> pinputs, const std::wstring nodeName = L'');
-#ifdef COMING_SOON
-    ComputationNodePtr SequenceDecoder(const ComputationNodePtr label, const ComputationNodePtr prediction, const ComputationNodePtr pairscore, const std::wstring nodeName = L'');
-#endif
-    ComputationNodePtr SequenceWithSoftmax(const ComputationNodePtr label, const ComputationNodePtr prediction, const ComputationNodePtr loglikelihood, const std::wstring nodeName = L'');
-    ComputationNodePtr LatticeSequenceWithSoftmax(const ComputationNodePtr label, const ComputationNodePtr prediction, const ComputationNodePtr loglikelihood, const ComputationNodePtr lattice, const std::wstring& symListPath, const std::wstring& phonePath, const std::wstring& stateListPath, const std::wstring& transProbPath, const std::wstring& LatticeSequenceWithSoftmax, float hSmoothingWeight, float frameDropThresh, bool doReferenceAlign, bool seqGammarUsesMBR, float seqGammarAMF, float seqGammarLMF, float seqGammarBMMIFactor, float seqGammarWordPen, const std::wstring nodeName = L'');
-    ComputationNodePtr Sigmoid(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr Sin(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr Sinh(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr Softmax(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr Sqrt(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr SquareError(const ComputationNodePtr a, const ComputationNodePtr b, const std::wstring nodeName = L'');
-    ComputationNodePtr Sum(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr Tan(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr Tanh(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr StraightThrough(const ComputationNodePtr a, const std::wstring nodeName = L'');
-    ComputationNodePtr Times(const ComputationNodePtr a, const ComputationNodePtr b, size_t outputRank = 1, const std::wstring nodeName = L'');
-    ComputationNodePtr TransposeDimensions(const ComputationNodePtr matrix, int dim1, int dim2, const std::wstring nodeName = L'');
-    ComputationNodePtr TransposeTimes(const ComputationNodePtr a, const ComputationNodePtr b, const std::wstring nodeName = L'');
-    ComputationNodePtr QuantizedTimes(const ComputationNodePtr a, const ComputationNodePtr b, size_t bitSmoothingA = 1, size_t bitSmoothingB = 1, size_t outputRank = 1, const std::wstring nodeName = L'');
-#if 1 // legacy
-    ComputationNodePtr LegacyReshape(const ComputationNodePtr a, const size_t num_rows, const TensorShape& imageLayout, const std::wstring nodeName = L'');
-#endif
+    void *private_data_;
+    bool end_;
 };
-    
-    
-    {    void WaitAsyncBuffer() override { }
-};
-    
-        // Threshold size in bytes for single gradient to do packing
-    size_t m_packThresholdSizeInBytes;
-    
-      virtual ~DHTResponseMessage();
-    
-      Time serializedTime_;
-    
-    #endif // D_DHT_TASK_EXECUTOR_H
+//namespace end
+}
 
     
-      DHTTaskExecutor immediateTaskQueue_;
-    
-      Status NewDirectory(const std::string& dir,
-                      std::unique_ptr<Directory>* result) override {
-    auto status_and_enc_path = EncodePathWithNewBasename(dir);
-    if (!status_and_enc_path.first.ok()) {
-      return status_and_enc_path.first;
+    bool zend::include(std::string file)
+{
+    zend_file_handle file_handle;
+    int ret = php_stream_open_for_zend_ex(file.c_str(), &file_handle, USE_PATH | STREAM_OPEN_FOR_INCLUDE);
+    if (ret != SUCCESS)
+    {
+        return false;
     }
-    return EnvWrapper::NewDirectory(status_and_enc_path.second, result);
-  }
+    }
     
-    /*
- * Class:     org_rocksdb_CompactionOptions
- * Method:    setCompression
- * Signature: (JB)V
- */
-void Java_org_rocksdb_CompactionOptions_setCompression(
-    JNIEnv*, jclass, jlong jhandle, jbyte jcompression_type_value) {
-  auto* compact_opts =
-      reinterpret_cast<rocksdb::CompactionOptions*>(jhandle);
-  compact_opts->compression =
-      rocksdb::CompressionTypeJni::toCppCompressionType(
-          jcompression_type_value);
-}
+            for (int i = 0; i < 100; ++i)
+        {
+            std::string addr3 = System::gethostbyname('ipv6.sjtu.edu.cn', AF_INET);
+            std::string addr4 = System::gethostbyname('ipv6.sjtu.edu.cn', AF_INET6);
+    }
     
-    /*
- * Class:     org_rocksdb_ColumnFamilyOptions
- * Method:    setCompressionPerLevel
- * Signature: (J[B)V
- */
-void Java_org_rocksdb_ColumnFamilyOptions_setCompressionPerLevel(
-    JNIEnv* env, jobject, jlong jhandle, jbyteArray jcompressionLevels) {
-  auto* options = reinterpret_cast<rocksdb::ColumnFamilyOptions*>(jhandle);
-  auto uptr_compression_levels =
-      rocksdb_compression_vector_helper(env, jcompressionLevels);
-  if (!uptr_compression_levels) {
-    // exception occurred
-    return;
-  }
-  options->compression_per_level = *(uptr_compression_levels.get());
-}
+        swHashMap_del(hm, (char *) SW_STRL('willdel'));
+    swHashMap_update(hm, (char *) SW_STRL('willupadte'), (void *) (9999 * 5555));
     
-      jbyte* value = new jbyte[jval_len];
-  env->GetByteArrayRegion(jval, jval_off, jval_len, value);
-  if (env->ExceptionCheck()) {
-    // exception thrown: ArrayIndexOutOfBoundsException
-    delete[] value;
-    delete[] key;
-    return false;
-  }
+        unlink(sock1_path);
+    unlink(sock2_path);
+    
+        for (long i = 0; i < N; i++)
+    {
+        ASSERT_EQ(swThreadPool_dispatch(&pool, (void*) &result, sizeof(result)), SW_OK);
+    }
+    
+        sigemptyset(&curset);
+    sigprocmask(SIG_BLOCK, NULL, &curset);
+    ret = sigismember(&curset,SIGUSR1);
+    ASSERT_EQ(ret, 0);
