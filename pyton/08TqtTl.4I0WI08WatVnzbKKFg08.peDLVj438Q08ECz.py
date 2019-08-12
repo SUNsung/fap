@@ -1,204 +1,138 @@
 
         
-        # define outlier/anomaly detection methods to be compared
-anomaly_algorithms = [
-    ('Robust covariance', EllipticEnvelope(contamination=outliers_fraction)),
-    ('One-Class SVM', svm.OneClassSVM(nu=outliers_fraction, kernel='rbf',
-                                      gamma=0.1)),
-    ('Isolation Forest', IsolationForest(contamination=outliers_fraction,
-                                         random_state=42)),
-    ('Local Outlier Factor', LocalOutlierFactor(
-        n_neighbors=35, contamination=outliers_fraction))]
+                atexit.register(self._db.close)
     
-        n : int
-        Index of the column of X to be swapped.
-    '''
-    if m < 0:
-        m += X.shape[1]
-    if n < 0:
-        n += X.shape[1]
-    if isinstance(X, sp.csc_matrix):
-        inplace_swap_row_csr(X, m, n)
-    elif isinstance(X, sp.csr_matrix):
-        inplace_swap_row_csc(X, m, n)
-    else:
-        _raise_typeerror(X)
+    import pytest
+from thefuck.shells import Generic
     
-    In both cases, only 10% of the features are informative.
+    
+@for_app('pyenv')
+def get_new_command(command):
+    broken = re.findall(r'pyenv: no such command `([^']*)'', command.output)[0]
+    matched = [replace_argument(command.script, broken, common_typo)
+               for common_typo in COMMON_TYPOS.get(broken, [])]
+    matched.extend(replace_command(command, broken, get_pyenv_commands()))
+    return matched
+
+    
+    (c) 2016, Aaron Christianson
+http://github.com/ninjaaron/fast-entry_points
 '''
-import numpy as np
-import gc
-from time import time
-from sklearn.datasets.samples_generator import make_regression
+from setuptools.command import easy_install
+import re
+TEMPLATE = r'''\
+# -*- coding: utf-8 -*-
+# EASY-INSTALL-ENTRY-SCRIPT: '{3}','{4}','{5}'
+__requires__ = '{3}'
+import re
+import sys
     
-        n_samples = 2000
-    list_n_features = np.linspace(500, 3000, 5).astype(np.int)
-    lasso_results, lars_lasso_results = compute_bench(alpha, [n_samples],
-                                           list_n_features, precompute=False)
-    plt.subplot(212)
-    plt.plot(list_n_features, lasso_results, 'b-', label='Lasso')
-    plt.plot(list_n_features, lars_lasso_results, 'r-', label='LassoLars')
-    plt.title('%d samples, alpha=%s' % (n_samples, alpha))
-    plt.legend(loc='upper left')
-    plt.xlabel('number of features')
-    plt.ylabel('Time (s)')
-    plt.axis('tight')
-    plt.show()
+    
+class FilePathField(ChoiceField):
+    def __init__(self, path, *, match=None, recursive=False, allow_files=True,
+                 allow_folders=False, **kwargs):
+        self.path, self.match, self.recursive = path, match, recursive
+        self.allow_files, self.allow_folders = allow_files, allow_folders
+        super().__init__(choices=(), **kwargs)
+    
+    
+site.register(TitleCollection, inlines=[TitleInline])
+# Test bug #12561 and #12778
+# only ModelAdmin media
+site.register(Holder, HolderAdmin, inlines=[InnerInline])
+# ModelAdmin and Inline media
+site.register(Holder2, HolderAdmin, inlines=[InnerInline2, InnerInline2Tabular])
+# only Inline media
+site.register(Holder3, inlines=[InnerInline3])
+    
+        class Meta:
+        verbose_name = _('user')
+        verbose_name_plural = _('users')
+        abstract = True
+    
+        def _resolve_output_field(self):
+        source_fields = self.get_source_fields()
+        if any(isinstance(s, DecimalField) for s in source_fields):
+            return DecimalField()
+        if any(isinstance(s, IntegerField) for s in source_fields):
+            return FloatField()
+        return super()._resolve_output_field() if source_fields else FloatField()
 
     
-    plot(euclidean_distances)
-plot(rbf_kernels)
-plt.show()
-
-    
-    
-def _get_git_revision():
     try:
-        revision = subprocess.check_output(REVISION_CMD.split()).strip()
-    except (subprocess.CalledProcessError, OSError):
-        print('Failed to execute git to get revision')
-        return None
-    return revision.decode('utf-8')
+    from django.contrib.gis.db.backends.postgis.operations import PostGISOperations
+    HAS_POSTGRES = True
+except ImportError:
+    HAS_POSTGRES = False
     
-        # TASK: print the mean and std for each candidate along with the parameter
-    # settings for all the candidates explored by grid search.
-    n_candidates = len(grid_search.cv_results_['params'])
-    for i in range(n_candidates):
-        print(i, 'params - %s; mean - %0.2f; std - %0.2f'
-                 % (grid_search.cv_results_['params'][i],
-                    grid_search.cv_results_['mean_test_score'][i],
-                    grid_search.cv_results_['std_test_score'][i]))
+        def test_gist_parameters(self):
+        index_name = 'integer_array_gist_buffering'
+        index = GistIndex(fields=['field'], name=index_name, buffering=True, fillfactor=80)
+        with connection.schema_editor() as editor:
+            editor.add_index(CharFieldModel, index)
+        constraints = self.get_constraints(CharFieldModel._meta.db_table)
+        self.assertEqual(constraints[index_name]['type'], GistIndex.suffix)
+        self.assertEqual(constraints[index_name]['options'], ['buffering=on', 'fillfactor=80'])
+        with connection.schema_editor() as editor:
+            editor.remove_index(CharFieldModel, index)
+        self.assertNotIn(index_name, self.get_constraints(CharFieldModel._meta.db_table))
     
-    Demonstrate how model complexity influences both prediction accuracy and
-computational performance.
+        def as_datetime(self):
+        'Retrieve the Field's value as a tuple of date & time components.'
+        if not self.is_set:
+            return None
+        yy, mm, dd, hh, mn, ss, tz = [c_int() for i in range(7)]
+        status = capi.get_field_as_datetime(
+            self._feat.ptr, self._index, byref(yy), byref(mm), byref(dd),
+            byref(hh), byref(mn), byref(ss), byref(tz))
+        if status:
+            return (yy, mm, dd, hh, mn, ss, tz)
+        else:
+            raise GDALException('Unable to retrieve date & time information from the field.')
     
-    We selected two sets of two variables from the Boston housing data set
-as an illustration of what kind of analysis can be done with several
-outlier detection tools. For the purpose of visualization, we are working
-with two-dimensional examples, but one should be aware that things are
-not so trivial in high-dimension, as it will be pointed out.
+        if isinstance(password, str):
+        password = password.encode('latin1')
     
-    model = SpectralBiclustering(n_clusters=n_clusters, method='log',
-                             random_state=0)
-model.fit(data)
-score = consensus_score(model.biclusters_,
-                        (rows[:, row_idx], columns[:, col_idx]))
+        def initialize_options(self):
+        TestCommand.initialize_options(self)
+        try:
+            from multiprocessing import cpu_count
+            self.pytest_args = ['-n', str(cpu_count()), '--boxed']
+        except (ImportError, NotImplementedError):
+            self.pytest_args = ['-n', '1', '--boxed']
     
-        strings = []
-    with open(filepath, 'r') as f:
+        def test_nonhttp_schemes_dont_check_URLs(self):
+        test_urls = (
+            'data:image/gif;base64,R0lGODlhAQABAHAAACH5BAUAAAAALAAAAAABAAEAAAICRAEAOw==',
+            'file:///etc/passwd',
+            'magnet:?xt=urn:btih:be08f00302bc2d1d3cfa3af02024fa647a271431',
+        )
+        for test_url in test_urls:
+            req = requests.Request('GET', test_url)
+            preq = req.prepare()
+            assert test_url == preq.url
     
-    def youku_acfun_proxy(vid, sign, ref):
-    endpoint = 'http://player.acfun.cn/flash_data?vid={}&ct=85&ev=3&sign={}&time={}'
-    url = endpoint.format(vid, sign, str(int(time.time() * 1000)))
-    json_data = json.loads(get_content(url, headers=dict(referer=ref)))['data']
-    enc_text = base64.b64decode(json_data)
-    dec_text = rc4(b'8bdc7e1a', enc_text).decode('utf8')
-    youku_json = json.loads(dec_text)
+    if is_py2:
+    from urllib import (
+        quote, unquote, quote_plus, unquote_plus, urlencode, getproxies,
+        proxy_bypass, proxy_bypass_environment, getproxies_environment)
+    from urlparse import urlparse, urlunparse, urljoin, urlsplit, urldefrag
+    from urllib2 import parse_http_list
+    import cookielib
+    from Cookie import Morsel
+    from StringIO import StringIO
+    from collections import Callable, Mapping, MutableMapping, OrderedDict
     
-        description = proj_info['description'],
-    keywords = proj_info['keywords'],
+            # it had actual content (not checking for SOCKS protocol for now)
+        assert len(fake_proxy.handler_results[0]) > 0
     
-    def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url)
-    title = r1(r'<title>(.*)</title>', html)
-    assert title
-    id = r1(r'flvid\s*=\s*(\d+)', html)
-    assert id
-    baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
+        def test_valid(self):
+        assert address_in_network('192.168.1.1', '192.168.1.0/24')
     
-            for i in link_list:
-            self.stream_types.append({'id': str(i[0])})
-            self.streams[i[0]] = {'url': i[1]}
-    
-            if not title:
-            self.title = vid
-    
-    from ..common import get_content, r1, match1, playlist_not_supported
-from ..extractor import VideoExtractor
-    
-    	html = get_html(url)
-	contentid = r1(r'<meta name='contentid' scheme='DMINSTR2' content='([^']+)' />', html)
-	vid = r1(r''demand_ehow_videoid':'([^']+)'', html)
-	assert vid
-    
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-    
-    
-def compute_bbox_regression_targets(entry):
-    '''Compute bounding-box regression targets for an image.'''
-    # Indices of ground-truth ROIs
-    rois = entry['boxes']
-    overlaps = entry['max_overlaps']
-    labels = entry['max_classes']
-    gt_inds = np.where((entry['gt_classes'] > 0) & (entry['is_crowd'] == 0))[0]
-    # Targets has format (class, tx, ty, tw, th)
-    targets = np.zeros((rois.shape[0], 5), dtype=np.float32)
-    if len(gt_inds) == 0:
-        # Bail if the image has no ground-truth ROIs
-        return targets
-    
-    
-def _generate_anchors(base_size, scales, aspect_ratios):
-    '''Generate anchor (reference) windows by enumerating aspect ratios X
-    scales wrt a reference (0, 0, base_size - 1, base_size - 1) window.
-    '''
-    anchor = np.array([1, 1, base_size, base_size], dtype=np.float) - 1
-    anchors = _ratio_enum(anchor, aspect_ratios)
-    anchors = np.vstack(
-        [_scale_enum(anchors[i, :], scales) for i in range(anchors.shape[0])]
-    )
-    return anchors
-    
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-    
-            # data for select_smooth_l1 loss
-        num_classes = cfg.MODEL.NUM_CLASSES - 1
-        inds_4d = np.where(_labels > 0)
-        M = len(inds_4d)
-        _roi_bbox_targets = np.zeros((0, 4))
-        _roi_fg_bbox_locs = np.zeros((0, 4))
-        if M > 0:
-            im_inds, y, x = inds_4d[0], inds_4d[2], inds_4d[3]
-            _roi_bbox_targets = np.zeros((len(im_inds), 4))
-            _roi_fg_bbox_locs = np.zeros((len(im_inds), 4))
-            lbls = _labels[im_inds, :, y, x]
-            for i, lbl in enumerate(lbls):
-                l = lbl[0] - 1
-                if not cfg.RETINANET.CLASS_SPECIFIC_BBOX:
-                    l = 0
-                assert l >= 0 and l < num_classes, 'label out of the range'
-                _roi_bbox_targets[i, :] = _bbox_targets[:, :, y[i], x[i]]
-                _roi_fg_bbox_locs[i, :] = np.array([[0, l, y[i], x[i]]])
-        blobs_out.append(
-            dict(
-                retnet_cls_labels=_labels[:, :, 0:h, 0:w].astype(np.int32),
-                retnet_roi_bbox_targets=_roi_bbox_targets.astype(np.float32),
-                retnet_roi_fg_bbox_locs=_roi_fg_bbox_locs.astype(np.float32),
-            ))
-    out_num_fg = np.array([num_fg + 1.0], dtype=np.float32)
-    out_num_bg = (
-        np.array([num_bg + 1.0]) * (cfg.MODEL.NUM_CLASSES - 1) +
-        out_num_fg * (cfg.MODEL.NUM_CLASSES - 2))
-    return blobs_out, out_num_fg, out_num_bg
-
-    
-        def time_cache_readonly(self):
-        self.obj.prop
-    
-            print('Test: Enqueue on empty stack')
-        print('Test: Enqueue on non-empty stack')
-        print('Test: Multiple enqueue in a row')
-        num_items = 3
-        for i in range(0, num_items):
-            queue.enqueue(i)
-    
-            print('Test: Pop on no elements')
-        assert_equal(stacks.pop(), None)
-    
-            print('Success: test_end_to_end')
+            #: The amount of time elapsed between sending the request
+        #: and the arrival of the response (as a timedelta).
+        #: This property specifically measures the time taken between sending
+        #: the first byte of the request and finishing parsing the headers. It
+        #: is therefore unaffected by consuming the response content or the
+        #: value of the ``stream`` keyword argument.
+        self.elapsed = datetime.timedelta(0)
