@@ -1,185 +1,175 @@
 
         
-        
-class Command(ScrapyCommand):
+        from __future__ import absolute_import, division, print_function
+__metaclass__ = type
     
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('--spider', dest='spider',
-            help='use this spider')
-        parser.add_option('--headers', dest='headers', action='store_true', \
-            help='print response HTTP headers instead of body')
-        parser.add_option('--no-redirect', dest='no_redirect', action='store_true', \
-            default=False, help='do not handle HTTP 3xx status codes and print response as-is')
-    
-        class ScrapyClientContextFactory(ClientContextFactory):
-        'A SSL context factory which is more permissive against SSL bugs.'
-        # see https://github.com/scrapy/scrapy/issues/82
-        # and https://github.com/scrapy/scrapy/issues/26
-        # and https://github.com/scrapy/scrapy/issues/981
-    
-        if twisted_version < (17, 0, 0):
-        from twisted.internet._sslverify import _maybeSetHostNameIndication
-        set_tlsext_host_name = _maybeSetHostNameIndication
-    else:
-        def set_tlsext_host_name(connection, hostNameBytes):
-            connection.set_tlsext_host_name(hostNameBytes)
-    
-        def gotHeaders(self, headers):
-        self.headers_time = time()
-        self.response_headers = headers
-    
-        def test_hash_effectiveness(self):
-        n = 13
-        hashvalues = set()
-        addhashvalue = hashvalues.add
-        elemmasks = [(i+1, 1<<i) for i in range(n)]
-        for i in range(2**n):
-            addhashvalue(hash(frozenset([e for e, m in elemmasks if m&i])))
-        self.assertEqual(len(hashvalues), 2**n)
+        def _get_servers_from_clc(self, server_ids, message):
+        '''
+        Gets list of servers form CLC api
+        '''
+        try:
+            return self.clc.v2.Servers(server_ids).servers
+        except CLCException as exception:
+            self.module.fail_json(msg=message + ': %s' % exception)
     
     
-class PyPicklerHookTests(AbstractHookTests):
-    class CustomPyPicklerClass(pickle._Pickler,
-                               AbstractCustomPicklerClass):
-        pass
-    pickler_class = CustomPyPicklerClass
+DOCUMENTATION = '''
+---
+module: apache2_mod_proxy
+author: Olivier Boukili (@oboukili)
+version_added: '2.2'
+short_description: Set and/or get members' attributes of an Apache httpd 2.4 mod_proxy balancer pool
+description:
+  - Set and/or get members' attributes of an Apache httpd 2.4 mod_proxy balancer
+    pool, using HTTP POST and GET requests. The httpd mod_proxy balancer-member
+    status page has to be enabled and accessible, as this module relies on parsing
+    this page. This module supports ansible check_mode, and requires BeautifulSoup
+    python module.
+options:
+  balancer_url_suffix:
+    description:
+      - Suffix of the balancer pool url required to access the balancer pool
+        status page (e.g. balancer_vhost[:port]/balancer_url_suffix).
+    default: /balancer-manager/
+  balancer_vhost:
+    description:
+      - (ipv4|ipv6|fqdn):port of the Apache httpd 2.4 mod_proxy balancer pool.
+    required: true
+  member_host:
+    description:
+      - (ipv4|ipv6|fqdn) of the balancer member to get or to set attributes to.
+        Port number is autodetected and should not be specified here.
+        If undefined, apache2_mod_proxy module will return a members list of
+        dictionaries of all the current balancer pool members' attributes.
+  state:
+    description:
+      - Desired state of the member host.
+        (absent|disabled),drained,hot_standby,ignore_errors can be
+        simultaneously invoked by separating them with a comma (e.g. state=drained,ignore_errors).
+    choices: ['present', 'absent', 'enabled', 'disabled', 'drained', 'hot_standby', 'ignore_errors']
+  tls:
+    description:
+      - Use https to access balancer management page.
+    type: bool
+    default: 'no'
+  validate_certs:
+    description:
+      - Validate ssl/tls certificates.
+    type: bool
+    default: 'yes'
+'''
     
-            compile_opts = extra_preargs or []
-        compile_opts.append('/c')
-        if debug:
-            compile_opts.extend(self.compile_options_debug)
+    
+DOCUMENTATION = '''
+---
+module: jenkins_job
+short_description: Manage jenkins jobs
+description:
+    - Manage Jenkins jobs by using Jenkins REST API.
+requirements:
+  - 'python-jenkins >= 0.4.12'
+  - 'lxml >= 3.3.3'
+version_added: '2.2'
+author: 'Sergio Millan Rodriguez (@sermilrod)'
+options:
+  config:
+    description:
+      - config in XML format.
+      - Required if job does not yet exist.
+      - Mutually exclusive with C(enabled).
+      - Considered if C(state=present).
+    required: false
+  enabled:
+    description:
+      - Whether the job should be enabled or disabled.
+      - Mutually exclusive with C(config).
+      - Considered if C(state=present).
+    type: bool
+    required: false
+  name:
+    description:
+      - Name of the Jenkins job.
+    required: true
+  password:
+    description:
+      - Password to authenticate with the Jenkins server.
+    required: false
+  state:
+    description:
+      - Attribute that specifies if the job has to be created or deleted.
+    required: false
+    default: present
+    choices: ['present', 'absent']
+  token:
+    description:
+      - API token used to authenticate alternatively to password.
+    required: false
+  url:
+    description:
+      - URL where the Jenkins server is accessible.
+    required: false
+    default: http://localhost:8080
+  user:
+    description:
+       - User to authenticate with the Jenkins server.
+    required: false
+'''
+    
+            severity_list = filter(lambda x: x.name == issue_severity, project.list_severities())
+        if len(severity_list) != 1:
+            return (False, changed, 'Unable to find severity %s for project %s' % (issue_severity, project_name), {})
+        severity_id = severity_list[0].id
+    
+    
+def main():
+    module = AnsibleModule(
+        argument_spec=gen_specs(
+            attributes=dict(default={}, type='dict'),
+            objectClass=dict(type='raw'),
+            params=dict(type='dict'),
+            state=dict(default='present', choices=['present', 'absent']),
+        ),
+        supports_check_mode=True,
+    )
+    
+                if state == 'present':
+                if solo:
+                    obsolete_records = [r for r in all_records if
+                                        r.hostname == record.hostname
+                                        and r.type == record.type
+                                        and not r.destination == record.destination]
+    
+    - name: Send matrix notification with user_id and password
+  matrix:
+    msg_plain: '**hello world**'
+    msg_html: '<b>hello world</b>'
+    room_id: '!12345678:server.tld'
+    hs_url: 'https://matrix.org'
+    user_id: 'ansible_notification_bot'
+    password: '{{ matrix_auth_password }}'
+'''
+    
+        # Send push notification
+    try:
+        if push_type == 'link':
+            target.push_link(title, url, body)
         else:
-            compile_opts.extend(self.compile_options)
+            target.push_note(title, body)
+        module.exit_json(changed=False, msg='OK')
+    except PushError as e:
+        module.fail_json(msg='An error occurred, Pushbullet's response: %s' % str(e))
     
-    _INSTALL_SCHEMES = {
-    'posix_prefix': {
-        'stdlib': '{installed_base}/lib/python{py_version_short}',
-        'platstdlib': '{platbase}/lib/python{py_version_short}',
-        'purelib': '{base}/lib/python{py_version_short}/site-packages',
-        'platlib': '{platbase}/lib/python{py_version_short}/site-packages',
-        'include':
-            '{installed_base}/include/python{py_version_short}{abiflags}',
-        'platinclude':
-            '{installed_platbase}/include/python{py_version_short}{abiflags}',
-        'scripts': '{base}/bin',
-        'data': '{base}',
-        },
-    'posix_home': {
-        'stdlib': '{installed_base}/lib/python',
-        'platstdlib': '{base}/lib/python',
-        'purelib': '{base}/lib/python',
-        'platlib': '{base}/lib/python',
-        'include': '{installed_base}/include/python',
-        'platinclude': '{installed_base}/include/python',
-        'scripts': '{base}/bin',
-        'data': '{base}',
-        },
-    'nt': {
-        'stdlib': '{installed_base}/Lib',
-        'platstdlib': '{base}/Lib',
-        'purelib': '{base}/Lib/site-packages',
-        'platlib': '{base}/Lib/site-packages',
-        'include': '{installed_base}/Include',
-        'platinclude': '{installed_base}/Include',
-        'scripts': '{base}/Scripts',
-        'data': '{base}',
-        },
-    # NOTE: When modifying 'purelib' scheme, update site._get_path() too.
-    'nt_user': {
-        'stdlib': '{userbase}/Python{py_version_nodot}',
-        'platstdlib': '{userbase}/Python{py_version_nodot}',
-        'purelib': '{userbase}/Python{py_version_nodot}/site-packages',
-        'platlib': '{userbase}/Python{py_version_nodot}/site-packages',
-        'include': '{userbase}/Python{py_version_nodot}/Include',
-        'scripts': '{userbase}/Python{py_version_nodot}/Scripts',
-        'data': '{userbase}',
-        },
-    'posix_user': {
-        'stdlib': '{userbase}/lib/python{py_version_short}',
-        'platstdlib': '{userbase}/lib/python{py_version_short}',
-        'purelib': '{userbase}/lib/python{py_version_short}/site-packages',
-        'platlib': '{userbase}/lib/python{py_version_short}/site-packages',
-        'include': '{userbase}/include/python{py_version_short}',
-        'scripts': '{userbase}/bin',
-        'data': '{userbase}',
-        },
-    'osx_framework_user': {
-        'stdlib': '{userbase}/lib/python',
-        'platstdlib': '{userbase}/lib/python',
-        'purelib': '{userbase}/lib/python/site-packages',
-        'platlib': '{userbase}/lib/python/site-packages',
-        'include': '{userbase}/include',
-        'scripts': '{userbase}/bin',
-        'data': '{userbase}',
-        },
-    }
+            current = ipmi_cmd.get_power()
+        if current['powerstate'] != state:
+            response = {'powerstate': state} if module.check_mode else ipmi_cmd.set_power(state, wait=timeout)
+            changed = True
+        else:
+            response = current
+            changed = False
     
-        def test_collections_protocols_allowed(self):
-        @runtime_checkable
-        class Custom(collections.abc.Iterable, Protocol):
-            def close(self): ...
-    
-        Note: This does not raise TimeoutError! Futures that aren't done
-    when the timeout occurs are returned in the second set.
-    '''
-    if futures.isfuture(fs) or coroutines.iscoroutine(fs):
-        raise TypeError(f'expect a list of futures, not {type(fs).__name__}')
-    if not fs:
-        raise ValueError('Set of coroutines/Futures is empty.')
-    if return_when not in (FIRST_COMPLETED, FIRST_EXCEPTION, ALL_COMPLETED):
-        raise ValueError(f'Invalid return_when value: {return_when}')
-    
-            class B:
-            pass
-        with self.assertRaises(TypeError):
-            type('A', (B,), {'__slots__': '__dict__'})
-        with self.assertRaises(TypeError):
-            type('A', (B,), {'__slots__': '__weakref__'})
-    
-        @unittest.expectedFailure
-    #See http://bugs.python.org/issue13907
-    @test.support.cpython_only
-    def test_set_of_sets_reprs(self):
-        # This test creates a complex arrangement of frozensets and
-        # compares the pretty-printed repr against a string hard-coded in
-        # the test.  The hard-coded repr depends on the sort order of
-        # frozensets.
-        #
-        # However, as the docs point out: 'Since sets only define
-        # partial ordering (subset relationships), the output of the
-        # list.sort() method is undefined for lists of sets.'
-        #
-        # In a nutshell, the test assumes frozenset({0}) will always
-        # sort before frozenset({1}), but:
-        #
-        # >>> frozenset({0}) < frozenset({1})
-        # False
-        # >>> frozenset({1}) < frozenset({0})
-        # False
-        #
-        # Consequently, this test is fragile and
-        # implementation-dependent.  Small changes to Python's sort
-        # algorithm cause the test to fail when it should pass.
-        # XXX Or changes to the dictionary implmentation...
-    
-    
-    def proxyauth(self, user):
-        '''Assume authentication as 'user'.
-    
-        def _getline(self, strip_crlf=True):
-        '''Internal: return one line from the server, stripping _CRLF.
-        Raise EOFError if the connection is closed.
-        Returns a bytes object.'''
-        line = self.file.readline(_MAXLINE +1)
-        if len(line) > _MAXLINE:
-            raise NNTPDataError('line too long')
-        if self.debugging > 1:
-            print('*get*', repr(line))
-        if not line: raise EOFError
-        if strip_crlf:
-            if line[-2:] == _CRLF:
-                line = line[:-2]
-            elif line[-1:] in _CRLF:
-                line = line[:-1]
-        return line
+    latest_release:
+    description: Version of the latest release
+    type: str
+    returned: success
+    sample: 1.1.0
+'''
