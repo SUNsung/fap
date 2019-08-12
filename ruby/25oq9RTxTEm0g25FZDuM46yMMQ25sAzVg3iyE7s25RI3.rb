@@ -1,179 +1,202 @@
-      def test_missing_helper_error_has_the_right_path
-        e = assert_raise(AbstractController::Helpers::MissingHelperError) { AbstractInvalidHelpers.helper(:missing) }
-        assert_equal 'helpers/missing_helper.rb', e.path
+
+        
+              def test_invert_drop_table
+        block = Proc.new { }
+        create_table = @recorder.inverse_of :drop_table, [:people_reminders, id: false], &block
+        assert_equal [:create_table, [:people_reminders, id: false], block], create_table
+      end
+    
+        toy = klass.first
+    time = 3.days.ago
+    toy.update_columns(updated_at: time)
+    
+      def test_validate_with_bang_and_context
+    assert_raise(ActiveRecord::RecordInvalid) do
+      WrongReply.new.validate!(:special_case)
+    end
+    r = WrongReply.new(title: 'Valid title', author_name: 'secret', content: 'Good')
+    assert r.validate!(:special_case)
+  end
+    
+          def ingress_name
+        self.class.name.remove(/\AActionMailbox::Ingresses::/, /::InboundEmailsController\z/).underscore.to_sym
+      end
+    
+        attr_reader :filters
+    
+        self.initial_paths = []
+    self.options = {}
+    self.stubs = {}
+    
+        def self.subscribe_to(notifier)
+      attach_to(namespace, new, notifier)
+    end
+    
+    RSpec.describe Api::V1::PollsController, type: :controller do
+  render_views
+    
+      # Tell browsers whether to use the native HTML5 validations (novalidate form option).
+  # These validations are enabled in SimpleForm's internal config but disabled by default
+  # in this configuration, which is recommended due to some quirks from different browsers.
+  # To stop SimpleForm from generating the novalidate option, enabling the HTML5 validations,
+  # change this configuration to true.
+  config.browser_validations = false
+    
+        save!
+  end
+    
+          it 'ensures recipient is not following sender' do
+        expect(recipient.following?(sender)).to be false
       end
     end
   end
 end
 
     
-          if @report_note.save
-        if params[:create_and_resolve]
-          @report.resolve!(current_account)
-          log_action :resolve, @report
-    
-      def show
-    @status = status_finder.status
-    render json: @status, serializer: OEmbedSerializer, width: maxwidth_or_default, height: maxheight_or_default
+    # create and write to opml file
+xml = Builder::XmlMarkup.new(indent: 2)
+xml.instruct! :xml, version: '1.0', encoding: 'UTF-8'
+xml.tag!('opml', version: '1.0') do
+  # head
+  xml.tag!('head') do
+    xml.title TITLE
   end
     
-      def rate_limit_limit
-    api_throttle_data[:limit].to_s
-  end
+          def unlocked_pods
+        @unlocked_pods ||= begin
+          pods = []
+          UI.titled_section('Analyzing dependencies') do
+            pods = Installer::Analyzer.new(config.sandbox, config.podfile).
+              analyze(:outdated).
+              specs_by_target.values.flatten.uniq
+          end
+          pods
+        end
+      end
     
-      UPDATE_SIGN_IN_HOURS = 24
-    
-      UPDATE_SIGN_IN_HOURS = 24
-    
-      def set_body_classes
-    @body_classes = 'modal-layout'
+          def ==(other)
+        self.class == other.class &&
+            spec == other.spec &&
+            used_by_non_library_targets_only? == other.used_by_non_library_targets_only?
+      end
+    end
   end
 end
 
     
-          # The body of the method definition.
-      #
-      # @note this can be either a `begin` node, if the method body contains
-      #       multiple expressions, or any other node, if it contains a single
-      #       expression.
-      #
-      # @return [Node] the body of the method definition
-      def body
-        node_parts[0]
-      end
+      autoload :AggregateTarget,           'cocoapods/target/aggregate_target'
+  autoload :Command,                   'cocoapods/command'
+  autoload :Deintegrator,              'cocoapods_deintegrate'
+  autoload :Executable,                'cocoapods/executable'
+  autoload :ExternalSources,           'cocoapods/external_sources'
+  autoload :Installer,                 'cocoapods/installer'
+  autoload :HooksManager,              'cocoapods/hooks_manager'
+  autoload :PodTarget,                 'cocoapods/target/pod_target'
+  autoload :Project,                   'cocoapods/project'
+  autoload :Resolver,                  'cocoapods/resolver'
+  autoload :Sandbox,                   'cocoapods/sandbox'
+  autoload :Target,                    'cocoapods/target'
+  autoload :Validator,                 'cocoapods/validator'
     
-    module RuboCop
-  module Cop
-    module Lint
-      #
-      # This cop emulates the following Ruby warnings in Ruby 2.6.
-      #
-      # % cat example.rb
-      # ERB.new('hi', nil, '-', '@output_buffer')
-      # % ruby -rerb example.rb
-      # example.rb:1: warning: Passing safe_level with the 2nd argument of
-      # ERB.new is deprecated. Do not use it, and specify other arguments as
-      # keyword arguments.
-      # example.rb:1: warning: Passing trim_mode with the 3rd argument of
-      # ERB.new is deprecated. Use keyword argument like
-      # ERB.new(str, trim_mode:...) instead.
-      # example.rb:1: warning: Passing eoutvar with the 4th argument of ERB.new
-      # is deprecated. Use keyword argument like ERB.new(str, eoutvar: ...)
-      # instead.
-      #
-      # Now non-keyword arguments other than first one are softly deprecated
-      # and will be removed when Ruby 2.5 becomes EOL.
-      # `ERB.new` with non-keyword arguments is deprecated since ERB 2.2.0.
-      # Use `:trim_mode` and `:eoutvar` keyword arguments to `ERB.new`.
-      # This cop identifies places where `ERB.new(str, trim_mode, eoutvar)` can
-      # be replaced by `ERB.new(str, :trim_mode: trim_mode, eoutvar: eoutvar)`.
-      #
-      # @example
-      #   # Target codes supports Ruby 2.6 and higher only
-      #   # bad
-      #   ERB.new(str, nil, '-', '@output_buffer')
-      #
-      #   # good
-      #   ERB.new(str, trim_mode: '-', eoutvar: '@output_buffer')
-      #
-      #   # Target codes supports Ruby 2.5 and lower only
-      #   # good
-      #   ERB.new(str, nil, '-', '@output_buffer')
-      #
-      #   # Target codes supports Ruby 2.6, 2.5 and lower
-      #   # bad
-      #   ERB.new(str, nil, '-', '@output_buffer')
-      #
-      #   # good
-      #   # Ruby standard library style
-      #   # https://github.com/ruby/ruby/commit/3406c5d
-      #   if ERB.instance_method(:initialize).parameters.assoc(:key) # Ruby 2.6+
-      #     ERB.new(str, trim_mode: '-', eoutvar: '@output_buffer')
-      #   else
-      #     ERB.new(str, nil, '-', '@output_buffer')
-      #   end
-      #
-      #   # good
-      #   # Use `RUBY_VERSION` style
-      #   if RUBY_VERSION >= '2.6'
-      #     ERB.new(str, trim_mode: '-', eoutvar: '@output_buffer')
-      #   else
-      #     ERB.new(str, nil, '-', '@output_buffer')
-      #   end
-      #
-      class ErbNewArguments < Cop
-        extend TargetRubyVersion
+            # @return [Array<Platform>] The list of all platforms this project supports.
+        #
+        attr_reader :platforms
     
-        config.cache_store = :null_store
-  end
-    
-      expansion(:status) {
-    {
-      :status => o.status,
-      :last_delivery_attempt => o.last_delivery_attempt ? o.last_delivery_attempt.to_f : nil,
-      :held => o.held == 1 ? true : false,
-      :hold_expiry => o.hold_expiry ? o.hold_expiry.to_f : nil
-    }
-  }
-    
+        it 'should show link to new pod guide after creation' do
+      @sut.any_instance.stubs(:clone_template)
+      @sut.any_instance.stubs(:configure_template)
+      output = run_command('lib', 'create', 'TestPod')
+      output.should.include? 'https://guides.cocoapods.org/making/making-a-cocoapod'
     end
+    
+            # Initialize a new instance
+        #
+        # @param [TargetDefinition] target_definition @see #target_definition
+        # @param [Xcodeproj::Project] project @see #project
+        # @param [Array<String>] project_target_uuids @see #project_target_uuids
+        # @param [Hash{String=>Symbol}] build_configurations @see #build_configurations
+        # @param [Platform] platform @see #platform
+        # @param [Array<String>] archs @see #archs
+        #
+        def initialize(target_definition, project, project_target_uuids, build_configurations, platform, archs)
+          @target_definition = target_definition
+          @project = project
+          @project_target_uuids = project_target_uuids
+          @build_configurations = build_configurations
+          @platform = platform
+          @archs = archs
+          @client_root = project.project_dir.realpath
+        end
+      end
+    end
+  end
+end
 
     
-      def index
-    @credentials = @server.credentials.order(:name).to_a
-  end
+            # @return [Hash{Source => Array<Specification>}] the specifications grouped by spec repo source.
+        #
+        attr_reader :specs_by_source
     
-      def verify
-    if @domain.verified?
-      redirect_to [organization, @server, :domains], :alert => '#{@domain.name} has already been verified.'
-      return
+            if obj && obj.errors[method].present?
+          errors = safe_join(obj.errors[method], '<br />'.html_safe)
+          content_tag(:span, errors, class: 'formError')
+        else
+          ''
+        end
+      end
+    
+        def reset
+      preferences.each do |name, _value|
+        set_preference name, preference_default(name)
+      end
     end
     
-      def new
-    @ip_pool_rule = @server ? @server.ip_pool_rules.build : organization.ip_pool_rules.build
-  end
+    module Spree
+  class ReturnItem::EligibilityValidator::Default < Spree::ReturnItem::EligibilityValidator::BaseValidator
+    class_attribute :permitted_eligibility_validators
+    self.permitted_eligibility_validators = [
+      ReturnItem::EligibilityValidator::OrderCompleted,
+      ReturnItem::EligibilityValidator::TimeSincePurchase,
+      ReturnItem::EligibilityValidator::RMARequired,
+      ReturnItem::EligibilityValidator::InventoryShipped,
+      ReturnItem::EligibilityValidator::NoReimbursements
+    ]
     
-      before_action :admin_required
-  before_action { params[:id] && @ip_pool = IPPool.find_by_uuid!(params[:id]) }
-    
-      private
-    
-      def index
-    @track_domains = @server.track_domains.order(:name).to_a
-  end
-    
-      def make_owner
-    if @user.is_a?(User)
-      organization.make_owner(@user)
-      redirect_to_with_json [organization, :users], :notice => '#{@user.name} is now the owner of this organization.'
-    else
-      raise Postal::Error, 'User must be a User not a UserInvite to make owner'
+      describe '#exchange_shipments' do
+    it 'returns the exchange inventory unit's shipment' do
+      inventory_unit = build(:inventory_unit)
+      subject.exchange_inventory_units << inventory_unit
+      expect(subject.exchange_shipments).to include inventory_unit.shipment
     end
   end
     
-      def destroy
-    @webhook.destroy
-    redirect_to_with_json [organization, @server, :webhooks]
-  end
+            def create
+          authorize! :create, Spree::OptionValue
+          @option_value = scope.new(option_value_params)
+          if @option_value.save
+            render :show, status: 201
+          else
+            invalid_resource!(@option_value)
+          end
+        end
     
-      it 'should accept the prompt with a response when there is a default' do
-    @session.accept_prompt with: 'the response' do
-      @session.click_link('Open defaulted prompt')
+    ENV['REDIS_URL'] ||= 'redis://localhost/15'
+    
+        assert_equal obj.attribute, Psych.load(Psych.dump(obj)).attribute
+  end
+end
+
+    
+      it 'supports custom middleware' do
+    chain = Sidekiq::Middleware::Chain.new
+    chain.add CustomMiddleware, 1, []
+    
+          assert SomeScheduledWorker.perform_in(TimeDuck.new, 'samwise')
+      assert_equal 6, ss.size
     end
-    expect(@session).to have_xpath('//a[@id='open-prompt-with-default' and @response='the response']')
-  end
     
-      it 'should find the ancestor element using the given locator' do
-    el = @session.find(:css, '#first_image')
-    expect(el.ancestor('//p')).to have_text('Lorem ipsum dolor')
-    expect(el.ancestor('//a')[:'aria-label']).to eq('Go to simple')
-  end
-    
-      it 'casts to string' do
-    expect(@session.find_link(:foo).text).to eq('ullamco')
-  end
-    
-      it 'should be false for disabled buttons if disabled: false' do
-    expect(@session).to have_no_button('Disabled button', disabled: false)
+      def perform(start)
+    now = Time.now.to_f
+    puts 'Latency: #{now - start} sec'
   end
 end
