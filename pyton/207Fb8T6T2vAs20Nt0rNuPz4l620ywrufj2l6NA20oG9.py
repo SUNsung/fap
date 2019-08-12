@@ -1,234 +1,184 @@
 
         
-            def errors(self):
-        return mark_safe(
-            '\n'.join(
-                self.form[f].errors.as_ul() for f in self.fields if f not in self.readonly_fields
-            ).strip('\n')
-        )
+        
+def archlinux_env():
+    if utils.which('yay'):
+        pacman = 'yay'
+    elif utils.which('yaourt'):
+        pacman = 'yaourt'
+    elif utils.which('pacman'):
+        pacman = 'sudo pacman'
+    else:
+        return False, None
     
-            # Type-based geometries.
-        # TODO: Support 'M' extension.
-        if f.dim == 3:
-            geom_type = f.geom_type + 'Z'
+    version = sys.version_info[:2]
+if version < (2, 7):
+    print('thefuck requires Python version 2.7 or later' +
+          ' ({}.{} detected).'.format(*version))
+    sys.exit(-1)
+elif (3, 0) < version < (3, 4):
+    print('thefuck requires Python version 3.4 or later' +
+          ' ({}.{} detected).'.format(*version))
+    sys.exit(-1)
+    
+        @pytest.fixture(autouse=True)
+    def shell_aliases(self):
+        os.environ['TF_SHELL_ALIASES'] = (
+            'alias fuck=\'eval $(thefuck $(fc -ln -1))\'\n'
+            'alias l=\'ls -CF\'\n'
+            'alias la=\'ls -A\'\n'
+            'alias ll=\'ls -alF\'')
+    
+    
+@cache('~/.config/fish/config.fish')
+def _get_aliases(overridden):
+    aliases = {}
+    proc = Popen(['fish', '-ic', 'alias'], stdout=PIPE, stderr=DEVNULL)
+    alias_out = proc.stdout.read().decode('utf-8').strip()
+    if not alias_out:
+        return aliases
+    for alias in alias_out.split('\n'):
+        for separator in (' ', '='):
+            split_alias = alias.replace('alias ', '', 1).split(separator, 1)
+            if len(split_alias) == 2:
+                name, value = split_alias
+                break
         else:
-            geom_type = f.geom_type
-        if f.geography:
-            if f.srid != 4326:
-                raise NotSupportedError('PostGIS only supports geography columns with an SRID of 4326.')
-    
-        def check_supported(self, schema_editor):
-        if self.autosummarize and not schema_editor.connection.features.has_brin_autosummarize:
-            raise NotSupportedError('BRIN option autosummarize requires PostgreSQL 10+.')
+            continue
+        if name not in overridden:
+            aliases[name] = value
+    return aliases
     
     
-# OFTDate, OFTTime, OFTDateTime fields.
-class OFTDate(Field):
-    @property
-    def value(self):
-        'Return a Python `date` object for the OFTDate field.'
-        try:
-            yy, mm, dd, hh, mn, ss, tz = self.as_datetime()
-            return date(yy.value, mm.value, dd.value)
-        except (TypeError, ValueError, GDALException):
-            return None
+@pytest.mark.parametrize('command', [
+    Command('az providers', misspelled_command),
+    Command('az provider lis', misspelled_subcommand)])
+def test_match(command):
+    assert match(command)
     
-        def _make_feature(self, feat_id):
+                if not res or not res.ok:
+                xlog.debug('ip:%s fail', ip)
+                continue
+    
+    
+IPv4 = CheckNetwork('IPv4')
+IPv4.urls = [
+            'https://www.microsoft.com',
+            'https://www.apple.com',
+            'https://code.jquery.com',
+            'https://cdn.bootcss.com',
+            'https://cdnjs.cloudflare.com']
+IPv4.triger_check_network()
+    
+    # Predefined token types
+EOR_TOKEN_TYPE = 1
+    
+    # begin[licence]
+#
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licensc]
+    
+    class EarlyExitException(RecognitionException):
+    '''@brief The recognizer did not match anything for a (..)+ loop.'''
+    
+            @param channel Skip tokens on any channel but this one; this is how we
+            skip whitespace...
+            
         '''
-        Helper routine for __getitem__ that constructs a Feature from the given
-        Feature ID.  If the OGR Layer does not support random-access reading,
-        then each feature of the layer will be incremented through until the
-        a Feature is found matching the given feature ID.
-        '''
-        if self._random_read:
-            # If the Layer supports random reading, return.
-            try:
-                return Feature(capi.get_feature(self.ptr, feat_id), self)
-            except GDALException:
-                pass
-        else:
-            # Random access isn't supported, have to increment through
-            # each feature until the given feature ID is encountered.
-            for feat in self:
-                if feat.fid == feat_id:
-                    return feat
-        # Should have returned a Feature, raise an IndexError.
-        raise IndexError('Invalid feature id: %s.' % feat_id)
+        
+        TokenStream.__init__(self)
+        
+        self.tokenSource = tokenSource
     
-            For empty bands (where all pixel values are nodata), all statistics
-        values are returned as None.
+        if 'message' in self._response:
+      return self._HandleMessageResponse()
     
-            with self.assertRaisesRegex(SyntaxError, 'cannot use named assignment with tuple'):
-            exec(code, {}, {})
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
-        def close(self):
-        '''Close the connection without assuming anything about it.'''
-        try:
-            file = self.file
-            self.file = None
-            if file is not None:
-                file.close()
-        finally:
-            sock = self.sock
-            self.sock = None
-            if sock is not None:
-                sock.close()
     
-    class PyQueueTest(QueueTest, unittest.TestCase):
-    queue = py_queue
+GENERIC_RESPONSE = {
+  'clang': {
+    'has_support': True,
+    'version': 'Clang version'
+  },
+  'completer': {
+    'items': [
+      {
+        'key': 'key',
+        'value': 'value'
+      }
+    ],
+    'name': 'Completer name',
+    'servers': [
+      {
+        'address': '127.0.0.1',
+        'executable': '/path/to/executable',
+        'extras': [
+          {
+            'key': 'key',
+            'value': 'value'
+          }
+        ],
+        'is_running': True,
+        'logfiles': [
+          '/path/to/stdout/logfile',
+          '/path/to/stderr/logfile'
+        ],
+        'name': 'Server name',
+        'pid': 12345,
+        'port': 1234
+      }
+    ]
+  },
+  'extra_conf': {
+    'is_loaded': False,
+    'path': '/path/to/extra/conf'
+  },
+  'python': {
+    'executable': '/path/to/python/interpreter',
+    'version': 'Python version'
+  }
+}
     
-            # RFC 2387
-        'related': (
-            (0, 1, None),
-            (2,),
-            (1, 2),
-            textwrap.dedent('''\
-                To: foo@example.com
-                MIME-Version: 1.0
-                Content-Type: multipart/related; boundary='==='; type=text/html
-    
-        def __init__(self, raw, buffer_size=DEFAULT_BUFFER_SIZE):
-        '''Create a new buffered reader using the given readable raw IO object.
-        '''
-        if not raw.readable():
-            raise OSError(''raw' argument must be readable.')
-    
-    try:
-    xrange
-except NameError:
-    xrange = range
-    
-        logging.warning('Starting fetch with simple client')
-    simple_client = SimpleAsyncHTTPClient()
-    simple_client.fetch('http://localhost:%d/' % options.port,
-                        callback=callback)
-    IOLoop.current().start()
-    
-        def new_future_import(self, old):
-        new = FromImport('__future__',
-                         [Name('absolute_import', prefix=' '), Comma(),
-                          Name('division', prefix=' '), Comma(),
-                          Name('print_function', prefix=' ')])
-        if old is not None:
-            new.prefix = old.prefix
-        return new
-    
-    The command-line wrapper and Application debug modes can be used together.
-This combination is encouraged as the wrapper catches syntax errors and
-other import-time failures, while debug mode catches changes once
-the server has started.
-    
-    '''
-Copyright (c) 2006-2019 sqlmap developers (http://sqlmap.org/)
-See the file 'LICENSE' for copying permission
-'''
-    
-    from lib.core.agent import agent
-from lib.core.common import arrayizeValue
-from lib.core.common import Backend
-from lib.core.common import filterPairValues
-from lib.core.common import getLimitRange
-from lib.core.common import isAdminFromPrivileges
-from lib.core.common import isInferenceAvailable
-from lib.core.common import isNoneValue
-from lib.core.common import isNullValue
-from lib.core.common import isNumPosStrValue
-from lib.core.common import isTechniqueAvailable
-from lib.core.common import parsePasswordHash
-from lib.core.common import readInput
-from lib.core.common import unArrayizeValue
-from lib.core.compat import xrange
-from lib.core.convert import encodeHex
-from lib.core.convert import getUnicode
-from lib.core.data import conf
-from lib.core.data import kb
-from lib.core.data import logger
-from lib.core.data import queries
-from lib.core.dicts import DB2_PRIVS
-from lib.core.dicts import FIREBIRD_PRIVS
-from lib.core.dicts import INFORMIX_PRIVS
-from lib.core.dicts import MYSQL_PRIVS
-from lib.core.dicts import PGSQL_PRIVS
-from lib.core.enums import CHARSET_TYPE
-from lib.core.enums import DBMS
-from lib.core.enums import EXPECTED
-from lib.core.enums import PAYLOAD
-from lib.core.exception import SqlmapNoneDataException
-from lib.core.exception import SqlmapUserQuitException
-from lib.core.threads import getCurrentThreadData
-from lib.request import inject
-from lib.utils.hash import attackCachedUsersPasswords
-from lib.utils.hash import storeHashesToFile
-from lib.utils.pivotdumptable import pivotDumpTable
-from thirdparty.six.moves import zip as _zip
-    
-    def configFileParser(configFile):
-    '''
-    Parse configuration file and save settings into the configuration
-    advanced dictionary.
-    '''
-    
-        def getHostname(self):
-        warnMsg = 'on Microsoft Access it is not possible to enumerate the hostname'
-        logger.warn(warnMsg)
-    
-        def getStatements(self):
-        warnMsg = 'on DB2 it is not possible to enumerate the SQL statements'
-        logger.warn(warnMsg)
-    
-    '''
-Copyright (c) 2006-2019 sqlmap developers (http://sqlmap.org/)
-See the file 'LICENSE' for copying permission
-'''
-    
-    import pytest
-import os
-import ctypes
-from pathlib import Path
-from spacy import util
-from spacy import prefer_gpu, require_gpu
-from spacy.compat import symlink_to, symlink_remove, path2str, is_windows
-from spacy._ml import PrecomputableAffine
-from subprocess import CalledProcessError
-    
-        DOCS: https://spacy.io/api/top-level#displacy.render
-    USAGE: https://spacy.io/usage/visualizers
-    '''
-    factories = {
-        'dep': (DependencyRenderer, parse_deps),
-        'ent': (EntityRenderer, parse_ents),
-    }
-    if style not in factories:
-        raise ValueError(Errors.E087.format(style=style))
-    if isinstance(docs, (Doc, Span, dict)):
-        docs = [docs]
-    docs = [obj if not isinstance(obj, Span) else obj.as_doc() for obj in docs]
-    if not all(isinstance(obj, (Doc, Span, dict)) for obj in docs):
-        raise ValueError(Errors.E096)
-    renderer, converter = factories[style]
-    renderer = renderer(options=options)
-    parsed = [converter(doc, options) for doc in docs] if not manual else docs
-    _html['parsed'] = renderer.render(parsed, page=page, minify=minify).strip()
-    html = _html['parsed']
-    if RENDER_WRAPPER is not None:
-        html = RENDER_WRAPPER(html)
-    if jupyter or (jupyter is None and is_in_jupyter()):
-        # return HTML rendered by IPython display()
-        from IPython.core.display import display, HTML
-    
-    import spacy
-import spacy.util
-from spacy.tokens import Token, Doc
-from spacy.gold import GoldParse
-from spacy.syntax.nonproj import projectivize
-from collections import defaultdict, Counter
-from timeit import default_timer as timer
-from spacy.matcher import Matcher
-    
-        # save model to output directory
-    if output_dir is not None:
-        output_dir = Path(output_dir)
-        if not output_dir.exists():
-            output_dir.mkdir()
-        nlp.to_disk(output_dir)
-        print('Saved model to', output_dir)
+      post_vim_message.assert_has_exact_calls( [
+    call( 'On the first day of Christmas, my VimScript gave to me',
+          warning=False,
+          truncate=True ),
+    call( 'A test file in a Command-T', warning=False, truncate=True ),
+    call( 'On the second day of Christmas, my VimScript gave to me',
+          warning=False,
+          truncate=True ),
+    call( 'Two popup menus, and a test file in a Command-T',
+          warning=False,
+          truncate=True ),
+  ] )
