@@ -1,83 +1,110 @@
 
         
-          Args:
-    model: The currently trained path-based model.
-    session: The current TensorFlow session.
-    instances: The current set instances.
-    labels: The current set labels.
-    set_name: The current set name (train/validation/test).
-    classes: The class label names.
+            BLACKJACK = 21
     
-        distribution = session.run(p_distributions,
-                               feed_dict={
-                                   p_path_embedding: np.reshape(
-                                       curr_path_vector,
-                                       [1, model.lstm_output_dim])})
+        def test_how_to_configure(self, shell):
+        assert shell.how_to_configure() is None
     
-        Args:
-      nexamples: The number of examples to batch up.
-      batch_size: The size of the batch.
-    Returns:
-      2-dim tensor as described above.
-    '''
-    bmrem = batch_size - (nexamples % batch_size)
-    bmrem_examples = []
-    if bmrem < batch_size:
-      #bmrem_examples = np.zeros(bmrem, dtype=np.int32)
-      ridxs = np.random.permutation(nexamples)[0:bmrem].astype(np.int32)
-      bmrem_examples = np.sort(ridxs)
-    example_idxs = range(nexamples) + list(bmrem_examples)
-    example_idxs_e_x_edivb = np.reshape(example_idxs, [-1, batch_size])
-    return example_idxs_e_x_edivb, bmrem
+    import pytest
+from thefuck.shells import Powershell
     
-    def plot_time_series(vals_bxtxn, bidx=None, n_to_plot=np.inf, scale=1.0,
-                     color='r', title=None):
+        def test_info(self, shell, Popen):
+        Popen.return_value.stdout.read.side_effect = [
+            b'tcsh 6.20.00 (Astron) 2016-11-24 (unknown-unknown-bsd44) \n']
+        assert shell.info() == 'Tcsh 6.20.00'
+        assert Popen.call_args[0][0] == ['tcsh', '--version']
+    
+        assert not match(Command(script, output))
     
     
-def normalize_rates(data_e, E, S):
-  # Normalization, made more complex because of the P matrices.
-  # Normalize by min and max in each channel.  This normalization will
-  # cause offset differences between identical rnn runs, but different
-  # t hits.
-  for e in range(E):
-    r_sxt = data_e[e]
-    for i in range(S):
-      rmin = np.min(r_sxt[i,:])
-      rmax = np.max(r_sxt[i,:])
-      assert rmax - rmin != 0, 'Something wrong'
-      r_sxt[i,:] = (r_sxt[i,:] - rmin)/(rmax-rmin)
-    data_e[e] = r_sxt
-  return data_e
-    
-        ## Discriminator Variables/Savers.
-    if FLAGS.discriminator_model == 'rnn_nas':
-      dis_variable_maps = variable_mapping.rnn_nas(hparams, model='dis')
-      dis_init_saver = tf.train.Saver(var_list=dis_variable_maps)
-      init_savers['dis_init_saver'] = dis_init_saver
+@pytest.fixture(autouse=True)
+def Popen(mocker):
+    mock = mocker.patch('thefuck.rules.pyenv_no_such_command.Popen')
+    mock.return_value.stdout.readlines.return_value = (
+        b'--version\nactivate\ncommands\ncompletions\ndeactivate\nexec_\n'
+        b'global\nhelp\nhooks\ninit\ninstall\nlocal\nprefix_\n'
+        b'realpath.dylib\nrehash\nroot\nshell\nshims\nuninstall\nversion_\n'
+        b'version-file\nversion-file-read\nversion-file-write\nversion-name_\n'
+        b'version-origin\nversions\nvirtualenv\nvirtualenv-delete_\n'
+        b'virtualenv-init\nvirtualenv-prefix\nvirtualenvs_\n'
+        b'virtualenvwrapper\nvirtualenvwrapper_lazy\nwhence\nwhich_\n'
+    ).split()
+    return mock
     
     
-@pytest.mark.functional
-def test_select_command_with_arrows(proc, TIMEOUT):
-    select_command_with_arrows(proc, TIMEOUT)
+def _get_operations(app):
+    proc = subprocess.Popen([app, '--help'],
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE)
+    lines = proc.stdout.readlines()
+    
+            # Removing index on 'EventTag', fields ['group_id', 'key', 'value']
+        db.delete_index(u'tagstore_eventtag', ['group_id', 'key_id', 'value_id'])
+    
+            # Changing field 'GroupTagKey.group_id'
+        db.alter_column(u'tagstore_grouptagkey', 'group_id', self.gf(
+            'sentry.db.models.fields.bounded.BoundedBigIntegerField')())
+    
+        # list of integers
+    result = s.iloc[[0, 2, 3, 4, 5]]
+    expected = s.reindex(s.index[[0, 2, 3, 4, 5]])
+    assert_series_equal(result, expected)
     
     
-@pytest.mark.parametrize('before, after', [
-    ('brew install sshfs',
-     'brew cask install osxfuse && brew install sshfs')])
-def test_get_new_command(before, after):
-    command = Command(before, output)
-    assert get_new_command(command) == after
-
+def rand_(left, right):
+    return operator.and_(right, left)
     
-            Did you mean `build`?
-'''
     
-      tokenizer = tokenization.FullTokenizer(
-      vocab_file=FLAGS.vocab_file, do_lower_case=FLAGS.do_lower_case)
     
-        output_tokens = []
-    for token in whitespace_tokenize(text):
-      chars = list(token)
-      if len(chars) > self.max_input_chars_per_word:
-        output_tokens.append(self.unk_token)
-        continue
+    
+def list_of_tuples(arr):
+    return [(i, -i) for i in arr]
+    
+        def test_unsubscribe_without_arn_should_error(self):
+        sns = sns_listener.ProxyListenerSNS()
+        error = sns.forward_request('POST', '/', 'Action=Unsubscribe', '')
+        self.assertTrue(error is not None)
+        self.assertEqual(error.status_code, 400)
+    
+            ddb_deserializer = TypeDeserializer()
+        if ddb.get('OldImage'):
+            result['old_image'] = ddb_deserializer.deserialize({'M': ddb.get('OldImage')})
+        if ddb.get('NewImage'):
+            result['new_image'] = ddb_deserializer.deserialize({'M': ddb.get('NewImage')})
+    
+        # get domain status
+    status = es_client.describe_elasticsearch_domain(DomainName=TEST_DOMAIN_NAME)
+    assert_equal(status['DomainStatus']['DomainName'], TEST_DOMAIN_NAME)
+    assert_true(status['DomainStatus']['Created'])
+    assert_false(status['DomainStatus']['Processing'])
+    assert_false(status['DomainStatus']['Deleted'])
+    assert_equal(status['DomainStatus']['Endpoint'], aws_stack.get_elasticsearch_endpoint())
+    assert_true(status['DomainStatus']['EBSOptions']['EBSEnabled'])
+    
+        def test_multiple_strong_etag_not_match(self):
+        computed_etag = ''xyzzy''
+        etags = ''xyzzy1', 'xyzzy2''
+        self.check_url(
+            '/cache/' + computed_etag, method='GET',
+            headers=[('If-None-Match', etags)],
+            expected_status=200)
+    
+    
+@gen.coroutine
+def c1():
+    for i in range(10):
+        yield c2()
+    
+    # os.execv is broken on Windows and can't properly parse command line
+# arguments and executable name if they contain whitespaces. subprocess
+# fixes that behavior.
+_has_execv = sys.platform != 'win32'
+    
+        def make_current(self) -> None:
+        if not self.is_current:
+            try:
+                self.old_asyncio = asyncio.get_event_loop()
+            except (RuntimeError, AssertionError):
+                self.old_asyncio = None  # type: ignore
+            self.is_current = True
+        asyncio.set_event_loop(self.asyncio_loop)
