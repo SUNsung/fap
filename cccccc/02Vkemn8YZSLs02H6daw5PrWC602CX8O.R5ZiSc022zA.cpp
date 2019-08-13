@@ -1,265 +1,363 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+        #ifndef TESSERACT_CCMAIN_PARAGRAPHS_H_
+#define TESSERACT_CCMAIN_PARAGRAPHS_H_
     
-        http://www.apache.org/licenses/LICENSE-2.0
+    #ifndef TESSERACT_CCUTIL_KDPAIR_H_
+#define TESSERACT_CCUTIL_KDPAIR_H_
     
+    struct INT_FX_RESULT_STRUCT {
+  int32_t Length;                  // total length of all outlines
+  int16_t Xmean, Ymean;            // center of mass of all outlines
+  int16_t Rx, Ry;                  // radius of gyration
+  int16_t NumBL, NumCN;            // number of features extracted
+  int16_t Width;                   // Width of blob in BLN coords.
+  uint8_t YBottom;                 // Bottom of blob in BLN coords.
+  uint8_t YTop;                    // Top of blob in BLN coords.
+};
     
-    {
-    {}  // namespace functor
-}  // namespace tensorflow
-    
-    
-    {  return kTfLiteOk;
+    // Classifies the given [training] sample, writing to results.
+// See ShapeClassifier for a full description.
+int TessClassifier::UnicharClassifySample(
+    const TrainingSample& sample, Pix* page_pix, int debug,
+    UNICHAR_ID keep_this, GenericVector<UnicharRating>* results) {
+  const int old_matcher_level = classify_->matcher_debug_level;
+  const int old_matcher_flags = classify_->matcher_debug_flags;
+  const int old_classify_level = classify_->classify_debug_level;
+  if (debug) {
+    // Explicitly set values of various control parameters to generate debug
+    // output if required, restoring the old values after classifying.
+    classify_->matcher_debug_level.set_value(2);
+    classify_->matcher_debug_flags.set_value(25);
+    classify_->classify_debug_level.set_value(3);
+  }
+  classify_->CharNormTrainingSample(pruner_only_, keep_this, sample, results);
+  if (debug) {
+    classify_->matcher_debug_level.set_value(old_matcher_level);
+    classify_->matcher_debug_flags.set_value(old_matcher_flags);
+    classify_->classify_debug_level.set_value(old_classify_level);
+  }
+  return results->size();
 }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+      // add entry to fontFileIDs list
+  if (fontFileIDLen >= fontFileIDSize) {
+    fontFileIDSize += 64;
+    fontFileIDs = (Ref *)greallocn(fontFileIDs, fontFileIDSize, sizeof(Ref));
+  }
+  fontFileIDs[fontFileIDLen++] = *id;
     
-    // Advertises our menu bars to Unity.
-//
-// GlobalMenuBarX11 is responsible for managing the DbusmenuServer for each
-// XID. We need a separate object to own the dbus channel to
-// com.canonical.AppMenu.Registrar and to register/unregister the mapping
-// between a XID and the DbusmenuServer instance we are offering.
-class GlobalMenuBarRegistrarX11 {
- public:
-  static GlobalMenuBarRegistrarX11* GetInstance();
-    }
+      //----- miscellaneous
+  void setOffset(double x, double y)
+    { tx0 = x; ty0 = y; }
+  void setScale(double x, double y)
+    { xScale0 = x; yScale0 = y; }
+  void setRotate(int rotateA)
+    { rotate0 = rotateA; }
+  void setClip(double llx, double lly, double urx, double ury)
+    { clipLLX0 = llx; clipLLY0 = lly; clipURX0 = urx; clipURY0 = ury; }
+  void setUnderlayCbk(void (*cbk)(PSOutputDev *psOut, void *data),
+		      void *data)
+    { underlayCbk = cbk; underlayCbkData = data; }
+  void setOverlayCbk(void (*cbk)(PSOutputDev *psOut, void *data),
+		     void *data)
+    { overlayCbk = cbk; overlayCbkData = data; }
+  void setDisplayText(GBool display) { displayText = display; }
     
-    std::string V8TypeAsString(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  if (value.IsEmpty())
-    return '<empty handle>';
-  v8::MaybeLocal<v8::String> details =
-      value->ToDetailString(isolate->GetCurrentContext());
-  std::string result;
-  if (!details.IsEmpty())
-    ConvertFromV8(isolate, details.ToLocalChecked(), &result);
-  return result;
+    
+    {  return gTrue;
 }
     
-      ~ScopedPersistent() { reset(); }
+    #include 'goo/gtypes.h'
     
-      // Retrieve the v8 wrapper object cooresponding to this object.
-  v8::Local<v8::Object> GetWrapper() const;
-  v8::MaybeLocal<v8::Object> GetWrapper(v8::Isolate* isolate) const;
+      // duration
+  pageDict->lookupNF('Dur', &tmp);
+  if (!(tmp.isNum() || tmp.isNull())) {
+    error(-1, 'Page duration object (page %d) is wrong type (%s)',
+	  num, tmp.getTypeName());
+  } else if (tmp.isNum()) {
+    duration = tmp.getNum();
+  }
+  tmp.free();
     
-    // static
-GlobalMenuBarRegistrarX11* GlobalMenuBarRegistrarX11::GetInstance() {
-  return base::Singleton<GlobalMenuBarRegistrarX11>::get();
-}
+    private:
+  struct Interval {
+    Interval(Object *dict, int baseA);
+    ~Interval();
+    GooString *prefix;
+    enum NumberStyle {
+      None,
+      Arabic,
+      LowercaseRoman,
+      UppercaseRoman,
+      UppercaseLatin,
+      LowercaseLatin
+    } style;
+    int first, base, length;
+  };
     
-    namespace electron {
-    }
+    //------------------------------------------------------------------------
+// PageTransition
+//------------------------------------------------------------------------
     
-      // add two new params for better error handling
-  errorObject
-      ->Set(context, mate::StringToV8(isolate(), 'code'),
-            v8::Integer::New(isolate(), code))
-      .Check();
-  errorObject
-      ->Set(context, mate::StringToV8(isolate(), 'domain'),
-            mate::StringToV8(isolate(), domain))
-      .Check();
-    
-    namespace winrt::Microsoft::Terminal::Settings::implementation
+    void PopplerCache::put(PopplerCacheKey *key, PopplerCacheItem *item)
 {
-    KeyChord::KeyChord(bool ctrl, bool alt, bool shift, int32_t vkey) :
-        _modifiers{ (ctrl ? Settings::KeyModifiers::Ctrl : Settings::KeyModifiers::None) |
-                    (alt ? Settings::KeyModifiers::Alt : Settings::KeyModifiers::None) |
-                    (shift ? Settings::KeyModifiers::Shift : Settings::KeyModifiers::None) },
-        _vkey{ vkey }
+  int movingStartIndex = lastValidCacheIndex + 1;
+  if (lastValidCacheIndex == cacheSize - 1) {
+    delete keys[lastValidCacheIndex];
+    delete items[lastValidCacheIndex];
+    movingStartIndex = cacheSize - 1;
+  } else {
+    lastValidCacheIndex++;
+  }
+  for (int i = movingStartIndex; i > 0; i--) {
+    keys[i] = keys[i - 1];
+    items[i] = items[i - 1];
+  }
+  keys[0] = key;
+  items[0] = item;
+}
+    
+    //========================================================================
+//
+// Modified under the Poppler project - http://poppler.freedesktop.org
+//
+// All changes made under the Poppler project to this file are licensed
+// under GPL version 2 or later
+//
+// Copyright (C) 2009 Carlos Garcia Campos <carlosgc@gnome.org>
+// Copyright (C) 2010 Albert Astals Cid <aacid@kde.org>
+// Copyright (C) 2011 William Bader <williambader@hotmail.com>
+//
+// To see a description of the changes please see the Changelog file that
+// came with your tarball or type make ChangeLog if you are building from git
+//
+//========================================================================
+    
+      //
+  // parse Media Play Parameters
+  if (obj->dictLookup('P', &tmp2)->isDict()) { // media play parameters
+    Object params;
+    if (tmp2.dictLookup('MH', &params)->isDict()) {
+      MH.parseMediaPlayParameters(&params);
+    }
+    params.free();
+    if (tmp2.dictLookup('BE', &params)->isDict()) {
+      BE.parseMediaPlayParameters(&params);
+    }
+    params.free();
+  } else if (hasClip) {
+    error (-1, 'Invalid Media Rendition');
+    ok = gFalse;
+  }
+  tmp2.free();
+    
+    //========================================================================
+//
+// Modified under the Poppler project - http://poppler.freedesktop.org
+//
+// All changes made under the Poppler project to this file are licensed
+// under GPL version 2 or later
+//
+// Copyright (C) 2010 Albert Astals Cid <aacid@kde.org>
+//
+// To see a description of the changes please see the Changelog file that
+// came with your tarball or type make ChangeLog if you are building from git
+//
+//========================================================================
+    
+    //------------------------------------------------------------------------
+// SecurityHandler
+//------------------------------------------------------------------------
+    
+    class GooString;
+class Object;
+class Stream;
+    
+        imgData.imgStr = new ImageStream(str, width,
+				     colorMap->getNumPixelComps(),
+				     colorMap->getBits());
+    imgData.imgStr->reset();
+    imgData.colorMap = colorMap;
+    imgData.mask = maskBitmap;
+    imgData.colorMode = colorMode;
+    imgData.width = width;
+    imgData.height = height;
+    imgData.y = 0;
+    
+    
+    {  std::lock_guard<std::mutex> lock(Storage::Get()->GetMutex(Context::kGPU));
+  size_t size = RoundAllocSize(handle.size);
+  auto&& reuse_pool = memory_pool_[size];
+  reuse_pool.push_back(handle.dptr);
+}
+    
+    /*!
+ * Copyright (c) 2015 by Contributors
+ * \file storage_manager.h
+ * \brief Storage manager.
+ */
+    
+    - **data**: *(batch_size, channel, height, width)*
+- **offset**: *(batch_size, num_deformable_group * kernel[0] * kernel[1] * 2, height, width)*
+- **weight**: *(num_filter, channel, kernel[0], kernel[1])*
+- **bias**: *(num_filter,)*
+- **out**: *(batch_size, num_filter, out_height, out_width)*.
+    
+    
+template <typename DType>
+static void MKLDNNRNNForwardUnidi(bool state_outputs,
+                                  const int L,
+                                  const int T,
+                                  const int N,
+                                  const int I,
+                                  const int H,
+                                  DType* x_ptr,
+                                  mkldnn::memory *user_src_layer_memory,
+                                  DType* hx_ptr,
+                                  DType* cx_ptr,
+                                  DType* w_ptr,
+                                  DType* b_ptr,
+                                  DType* y_ptr,
+                                  DType* hy_ptr,
+                                  DType* cy_ptr,
+                                  std::vector<mkldnn::memory> *concat_weight_memory,
+                                  std::vector<mkldnn::memory> *concat_iter_memory,
+                                  std::vector<mkldnn::memory> *x_memory,
+                                  std::vector<mkldnn::memory> *hcx_memory,
+                                  std::vector<mkldnn::memory> *wx_memory,
+                                  std::vector<mkldnn::memory> *wh_memory,
+                                  std::vector<mkldnn::memory> *bias_memory,
+                                  std::vector<mkldnn::memory> *y_memory,
+                                  std::vector<mkldnn::memory> *hcy_memory,
+                                  std::vector<primitive> *rnn_forward_prim,
+                                  int layer_index,
+                                  bool *has_cache,
+                                  int dtype,
+                                  bool is_train,
+                                  int mode) {
+  int ngates = 0, nstates = 0;
+  algorithm nalgorithm = GetMKLDNNRNNAlgo(mode, &ngates, &nstates);
+  mkldnn::memory::data_type mkldnn_dtype = get_mkldnn_type(dtype);
+  const int cell_size = N * H;
+  const int single_cell_size = N * H;
+  const int single_b_size = ngates * H;
+  int w_size = (I + H) * H * ngates;
+  const int omp_threads = mxnet::engine::OpenMP::Get()->GetRecommendedOMPThreadCount();
+  auto cpu_engine = CpuEngine::Get()->get_engine();
+  auto null_memory_ = null_memory(cpu_engine);
+  int offset1 = 0, offset2 = 0;
+  bool initialized = *has_cache;
+    }
+    
+      if (ret.attrs.count(input_name) != 0) {
+    const AttrVector& shape_args = ret.GetAttr<AttrVector>(input_name);
+    CHECK_LE(shape_args.size(), idx.input_nodes().size())
+        << 'More provided ' << attr_name << 's than number of arguments.';
+    for (size_t i = 0; i < shape_args.size(); ++i) {
+      rshape[idx.entry_id(idx.input_nodes()[i], 0)] = shape_args[i];
+    }
+  }
+    
+    /**
+ * \brief The class sets caffe's mode before doing forward/backward
+ * \tparam xpu The device that the op will be executed on.
+ */
+class CaffeMode {
+ public:
+  template<typename xpu> static void SetMode();
+};
+    
+    /*!
+ * Copyright (c) 2016 by Contributors
+ * \file caffe_fieldentry.h
+ * \brief Implement FieldEntry<caffe::LayerParameter>
+ * \author Haoran Wang
+ */
+#ifndef PLUGIN_CAFFE_CAFFE_FIELDENTRY_H_
+#define PLUGIN_CAFFE_CAFFE_FIELDENTRY_H_
+    
+    namespace aria2 {
+    }
+    
+      static void clearData6();
+    
+    void DHTRoutingTable::getBuckets(
+    std::vector<std::shared_ptr<DHTBucket>>& buckets) const
+{
+  dht::enumerateBucket(buckets, root_.get());
+}
+    
+    namespace aria2 {
+    }
+    
+      virtual void startup() = 0;
+    
+    void DHTTaskExecutor::update()
+{
+  execTasks_.erase(std::remove_if(execTasks_.begin(), execTasks_.end(),
+                                  std::mem_fn(&DHTTask::finished)),
+                   execTasks_.end());
+  int r;
+  if (static_cast<size_t>(numConcurrent_) > execTasks_.size()) {
+    r = numConcurrent_ - execTasks_.size();
+  }
+  else {
+    r = 0;
+  }
+  while (r && !queue_.empty()) {
+    std::shared_ptr<DHTTask> task = queue_.front();
+    queue_.pop_front();
+    task->startup();
+    if (!task->finished()) {
+      execTasks_.push_back(task);
+      --r;
+    }
+  }
+  A2_LOG_DEBUG(fmt('Executing %u Task(s). Queue has %u task(s).',
+                   static_cast<unsigned int>(getExecutingTaskSize()),
+                   static_cast<unsigned int>(getQueueSize())));
+}
+    
+        void UserPostProcessing::doSomething(cv::Mat& output, const cv::Mat& input)
     {
-    }
-    }
-    
-        rassert(end - cur >= static_cast<int64_t>(value_size), 'Superblock metainfo data is corrupted: walked past the end off the buffer');
-    if (end - cur < static_cast<int64_t>(value_size)) {
-        goto check_failed;
-    }
-    value_ptr = cur;
-    cur += value_size;
-    
-    ql::grouped_t<ql::stream_t> read_row_via_sindex(
-        store_t *store,
-        const sindex_name_t &sindex_name,
-        int sindex_value) {
-    cond_t dummy_interruptor;
-    read_token_t token;
-    store->new_read_token(&token);
-    }
-    
-    // EXPECT_DEATH_IF_SUPPORTED(statement, regex) and
-// ASSERT_DEATH_IF_SUPPORTED(statement, regex) expand to real death tests if
-// death tests are supported; otherwise they just issue a warning.  This is
-// useful when you are combining death test assertions with normal test
-// assertions in one test.
-#if GTEST_HAS_DEATH_TEST
-# define EXPECT_DEATH_IF_SUPPORTED(statement, regex) \
-    EXPECT_DEATH(statement, regex)
-# define ASSERT_DEATH_IF_SUPPORTED(statement, regex) \
-    ASSERT_DEATH(statement, regex)
-#else
-# define EXPECT_DEATH_IF_SUPPORTED(statement, regex) \
-    GTEST_UNSUPPORTED_DEATH_TEST_(statement, regex, )
-# define ASSERT_DEATH_IF_SUPPORTED(statement, regex) \
-    GTEST_UNSUPPORTED_DEATH_TEST_(statement, regex, return)
-#endif
-    
-      // Streams a pointer value to this object.
-  //
-  // This function is an overload of the previous one.  When you
-  // stream a pointer to a Message, this definition will be used as it
-  // is more specialized.  (The C++ Standard, section
-  // [temp.func.order].)  If you stream a non-pointer, then the
-  // previous definition will be used.
-  //
-  // The reason for this overload is that streaming a NULL pointer to
-  // ostream is undefined behavior.  Depending on the compiler, you
-  // may get '0', '(nil)', '(null)', or an access violation.  To
-  // ensure consistent result across compilers, we always treat NULL
-  // as '(null)'.
-  template <typename T>
-  inline Message& operator <<(T* const& pointer) {  // NOLINT
-    if (pointer == NULL) {
-      *ss_ << '(null)';
-    } else {
-      *ss_ << pointer;
-    }
-    return *this;
-  }
-#endif  // GTEST_OS_SYMBIAN
-    
-      // Gets the outcome of the test part.
-  Type type() const { return type_; }
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35>
-struct Types35 {
-  typedef T1 Head;
-  typedef Types34<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
-      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
-      T30, T31, T32, T33, T34, T35> Tail;
-};
-    
-      void SetSendMessage(ByteBuffer* buf, const void** msg,
-                      bool* fail_send_message,
-                      std::function<Status(const void*)> serializer) {
-    send_message_ = buf;
-    orig_send_message_ = msg;
-    fail_send_message_ = fail_send_message;
-    serializer_ = serializer;
-  }
-    
-      // Unimplemented is left unimplemented to test the returned error.
-  bool signal_client() {
-    std::unique_lock<std::mutex> lock(mu_);
-    return signal_client_;
-  }
-    
-    #include <atomic>
-#include <memory>
-#include <mutex>
-#include <random>
-#include <sstream>
-#include <thread>
-    
-    static void create_sockets(SOCKET sv[2]) {
-  SOCKET svr_sock = INVALID_SOCKET;
-  SOCKET lst_sock = INVALID_SOCKET;
-  SOCKET cli_sock = INVALID_SOCKET;
-  SOCKADDR_IN addr;
-  int addr_len = sizeof(addr);
-    }
-    
-    #endif  // GRPCPP_CREATE_CHANNEL_H
-
-    
-    
-    { protected:
-  std::unique_ptr<Server> server_;
-  std::unique_ptr<grpc::testing::EchoTestService::Stub> stub_;
-  std::unique_ptr<ProtoReflectionDescriptorDatabase> desc_db_;
-  std::unique_ptr<protobuf::DescriptorPool> desc_pool_;
-  std::unordered_set<string> known_files_;
-  std::unordered_set<string> known_types_;
-  const protobuf::DescriptorPool* ref_desc_pool_;
-  int port_;
-  reflection::ProtoServerReflectionPlugin plugin_;
-};
-    
-    
-    {    // By default ImGuiFreeType will use IM_ALLOC()/IM_FREE().
-    // However, as FreeType does lots of allocations we provide a way for the user to redirect it to a separate memory heap if desired:
-    IMGUI_API void SetAllocatorFunctions(void* (*alloc_func)(size_t sz, void* user_data), void (*free_func)(void* ptr, void* user_data), void* user_data = NULL);
-}
-
-    
-            D3D12_TEXTURE_COPY_LOCATION dstLocation = {};
-        dstLocation.pResource = pTexture;
-        dstLocation.Type = D3D12_TEXTURE_COPY_TYPE_SUBRESOURCE_INDEX;
-        dstLocation.SubresourceIndex = 0;
-    
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
-    
-        // Setup Platform/Renderer bindings
-    ImGui_ImplSDL2_InitForD3D(window);
-    ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
-    
-            // 3. Show another simple window.
-        if (show_another_window)
+        try
         {
-            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
+            // Random operation on data
+            cv::bitwise_not(input, output);
         }
-    
-      bool reached_threshold(int rc, int hc) const noexcept {
-    return rc >= kThreshold && rc >= kMultiplier * hc;
-  }
-    
-    namespace folly {
+        catch (const std::exception& e)
+        {
+            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
+        }
     }
     
-      /*
-   * A simple implementation using two queues.
-   * All writer threads enqueue into one queue while the I/O thread is
-   * processing the other.
-   *
-   * We could potentially also provide an implementation using folly::MPMCQueue
-   * in the future, which may improve contention under very high write loads.
-   */
-  struct Data {
-    std::array<std::vector<std::string>, 2> queues;
-    uint32_t flags{0};
-    uint64_t ioThreadCounter{0};
-    size_t maxBufferBytes{kDefaultMaxBufferSize};
-    size_t currentBufferSize{0};
-    size_t numDiscarded{0};
-    std::thread ioThread;
-    }
+            Rectangle<T>& operator/=(const T value);
     
-    template <class Alloc>
-void Arena<Alloc>::Block::deallocate(Alloc& alloc) {
-  this->~Block();
-  std::allocator_traits<Alloc>::deallocate(alloc, this, 1);
-}
+    #ifdef USE_3D_ADAM_MODEL
+    #include <adam/totalmodel.h>
+#endif
+#include <openpose/core/common.hpp>
+#include <openpose/gui/enumClasses.hpp>
+#include <openpose/gui/gui.hpp>
+    
+        public:
+        PersonIdExtractor(const float confidenceThreshold = 0.1f, const float inlierRatioThreshold = 0.5f,
+                          const float distanceThreshold = 30.f, const int numberFramesToDeletePerson = 10);
+    
+        template<typename T>
+    void Rectangle<T>::recenter(const T newWidth, const T newHeight)
+    {
+        try
+        {
+            const auto centerPoint = center();
+            x = centerPoint.x - T(newWidth / 2.f);
+            y = centerPoint.y - T(newHeight / 2.f);
+            width = newWidth;
+            height = newHeight;
+        }
+        catch (const std::exception& e)
+        {
+            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
+        }
+    }
