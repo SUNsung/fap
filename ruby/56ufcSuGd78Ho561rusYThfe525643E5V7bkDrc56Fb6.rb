@@ -1,32 +1,61 @@
 
         
-          def force?
-    flag? '--force'
+                # On Windows, we have to set a default chmod flag to avoid permission issues
+        if Vagrant::Util::Platform.windows? && !args.any? { |arg| arg.start_with?('--chmod=') }
+          # Ensures that all non-masked bits get enabled
+          args << '--chmod=ugo=rwX'
+    
+      let(:iso_env) do
+    # We have to create a Vagrantfile so there is a root path
+    env = isolated_environment
+    env.vagrantfile('')
+    env.create_vagrant_env
   end
     
-          # Find a bottle built for a previous version of macOS.
-      def find_older_compatible_tag(tag)
-        begin
-          tag_version = MacOS::Version.from_symbol(tag)
-        rescue ArgumentError
-          return
-        end
+      after do
+    ENV['VAGRANT_HOME'] = @vh
+    FileUtils.rm_rf(@tmpdir)
+  end
     
-              find_every_method_call_by_name(body_node, :system).each do |method|
-            next unless match = regex_match_group(parameters(method).first, /^(env|export)(\s+)?/)
+    puts '\nUnable to find an RSS feed for the following blogs:'
+puts '==================================================='
+unavailable.each do |b|
+  puts '#{b.name} | #{b.web_url}'
+end
+puts '==================================================='
+
     
-              find_method_with_args(body_node, :system, 'cargo', 'build') do
-            problem 'use \'cargo\', \'install\', \'--root\', prefix, \'--path\', \'.\''
-          end
-        end
-      end
+    class Converter
+  extend Forwardable
+  include Network
+  include LessConversion
+  include JsConversion
+  include FontsConversion
+    
+      class SendPublic < Base
+    def perform(*_args)
+      # don't federate in cucumber
     end
-    module FormulaAuditStrict
-      class Text < FormulaCop
-        def audit_formula(_node, _class_node, _parent_class_node, body_node)
-          find_method_with_args(body_node, :go_resource) do
-            problem '`go_resource`s are deprecated. Please ask upstream to implement Go vendoring'
-          end
+  end
+    
+        it 'generates a jasmine fixture', :fixture => true do
+      contact = alice.contact_for(bob.person)
+      aspect = alice.aspects.create(:name => 'people')
+      contact.aspects << aspect
+      contact.save
+      get :new, params: {person_id: bob.person.id}
+      save_fixture(html_for('body'), 'status_message_new')
+    end
+  end
+end
+
+    
+        describe 'other streams' do
+      it 'redirects to the login page' do
+        %i[activity followed_tags liked mentioned multi].each do |stream_path|
+          get stream_path
+          expect(response).to be_redirect
+          expect(response).to redirect_to new_user_session_path
         end
       end
     end
@@ -34,126 +63,36 @@
 end
 
     
-          allow(OS).to receive(:mac?).and_return(true)
-      allow(OS::Mac).to receive(:version).and_return(OS::Mac::Version.new(sierra_os_version))
+        it 'should use the given template URL' do
+      template_url = 'https://github.com/custom/template.git'
+      @sut.any_instance.expects(:git!).with(['clone', template_url, 'TestPod']).once
+      run_command('lib', 'create', 'TestPod', '--template-url=#{template_url}')
     end
     
-          remaining + non_options
-    end
-    
-    describe Cask::Cmd::Cache, :cask do
-  let(:local_transmission) {
-    Cask::CaskLoader.load(cask_path('local-transmission'))
-  }
-    
-          unless system curl_executable, '--silent', '--fail', '--output', '/dev/null', package_url
-        package_blob = <<~JSON
-          {'name': '#{bintray_package}',
-           'public_download_numbers': true,
-           'public_stats': true}
-        JSON
-        curl '--silent', '--fail', '--user', '#{bintray_user}:#{bintray_key}',
-             '--header', 'Content-Type: application/json',
-             '--data', package_blob, bintray_repo_url
-        puts
+          # Init a new Indenter
+      #
+      # @param [IO] io @see io
+      #
+      def initialize(io = nil)
+        @io = io
+        @indent = ' ' * UI.indentation_level
       end
     
-      def version(val = nil)
-    @version ||= begin
-      version = detect_version(val)
-      version.null? ? nil : version
+          it 'shows the git URL (when an upstream is not configured)' do
+        output = run_command('repo', 'list')
+        output.should.include? '- URL:  https://github.com/apiaryio/Specs'
+      end
     end
   end
+end
+
     
-        def log_http_get_files(files, from, cached = false)
-      return if files.empty?
-      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
-      end
-    end
-    
-      # Code is not reloaded between requests.
-  config.cache_classes = true
-    
-      # Show full error reports and disable caching.
-  config.consider_all_requests_local       = true
-  config.action_controller.perform_caching = false
-    
-    LogStash::Bundler.setup!
-    
-        def initialize(plugins_to_package, target)
-      @plugins_to_package = Array(plugins_to_package)
-      @target = target
-    
-          PluginManager.ui.info('Install successful')
-    rescue ::Bundler::BundlerError => e
-      raise PluginManager::InstallError.new(e), 'An error occurred went installing plugins'
-    ensure
-      FileUtils.rm_rf(uncompressed_path) if uncompressed_path && Dir.exist?(uncompressed_path)
-    end
-    
-        puts('Updating #{filtered_plugins.collect(&:name).join(', ')}') unless filtered_plugins.empty?
-    
-              it 'successfully install the plugin' do
-            command = logstash.run_command_in_path('bin/logstash-plugin install #{gem_path_on_vagrant}')
-            expect(command).to install_successfully
-            expect(logstash).to have_installed?('logstash-filter-dns')
-          end
-        end
-    
-        def shipping_eq_billing_address?
-      bill_address == ship_address
-    end
-    
-          def gateway_error(error)
-        text = if error.is_a? ActiveMerchant::Billing::Response
-                 error.params['message'] || error.params['response_reason_text'] || error.message
-               elsif error.is_a? ActiveMerchant::ConnectionError
-                 Spree.t(:unable_to_connect_to_gateway)
-               else
-                 error.to_s
-               end
-        logger.error(Spree.t(:gateway_error))
-        logger.error('  #{error.to_yaml}')
-        raise Core::GatewayError, text
-      end
-    
-      def self.check_unused_translations
-    self.used_translations ||= []
-    self.unused_translation_messages = []
-    self.unused_translations = []
-    load_translations(translations)
-    translation_diff = unused_translations - used_translations
-    translation_diff.each do |translation|
-      Spree.unused_translation_messages << '#{translation} (#{I18n.locale})'
-    end
-  end
-    
-            def create
-          authorize! :create, Image
-          @image = scope.images.new(image_params)
-          if @image.save
-            respond_with(@image, status: 201, default_template: :show)
-          else
-            invalid_resource!(@image)
-          end
-        end
-    
-            def create
-          authorize! :create, Spree::OptionType
-          @option_type = Spree::OptionType.new(option_type_params)
-          if @option_type.save
-            render :show, status: 201
-          else
-            invalid_resource!(@option_type)
-          end
-        end
-    
-            def product_property_params
-          params.require(:product_property).permit(permitted_product_properties_attributes)
+            # @return [Bool] Whether the sandbox is in synch with the lockfile.
+        #
+        def sandbox_needs_install?
+          state = sandbox_state
+          needing_install = state.added.length + state.changed.length + state.deleted.length
+          needing_install > 0
         end
       end
     end
@@ -161,12 +100,73 @@ end
 end
 
     
-            def create
-          authorize! :create, Property
-          @property = Spree::Property.new(property_params)
-          if @property.save
-            respond_with(@property, status: 201, default_template: :show)
-          else
-            invalid_resource!(@property)
-          end
-        end
+    RSpec.describe FlareTag do
+  let(:user) { create(:user) }
+  let(:article) { create(:article, user_id: user.id) }
+    
+          it 'creates an ApiSecret for the user' do
+        expect { post '/users/api_secrets', params: { api_secret: valid_params } }.
+          to change { user.api_secrets.count }.by 1
+      end
+    
+      describe 'DELETE /chat_channel_memberships/:id' do
+    before do
+      user.add_role(:super_admin)
+      post '/chat_channel_memberships', params: {
+        chat_channel_membership: { user_id: second_user.id, chat_channel_id: chat_channel.id }
+      }
+    end
+    
+        context 'when :username param is given and belongs to an organization' do
+      include_context 'when user/organization articles exist'
+      before { get '/feed', params: { username: organization.slug } }
+    
+      def main_tweet!
+    BufferUpdate.buff!(@article.id, twitter_buffer_text, ApplicationConfig['BUFFER_TWITTER_ID'], 'twitter', nil)
+    @article.update(last_buffered: Time.current)
+  end
+    
+      def self.send_to_buffer(text, buffer_profile_id_code)
+    client = Buffer::Client.new(ApplicationConfig['BUFFER_ACCESS_TOKEN'])
+    client.create_update(
+      body: {
+        text:
+        text,
+        profile_ids: [
+          buffer_profile_id_code,
+        ]
+      },
+    )
+  end
+    
+        # returns the formatted full price for the variant, if at least one variant price differs from product price
+    def variant_full_price(variant)
+      product = variant.product
+      unless product.variants.active(current_currency).all? { |v| v.price == product.price }
+        Spree::Money.new(variant.price, currency: current_currency).to_html
+      end
+    end
+    
+          after_transition do |payment, transition|
+        payment.state_changes.create!(
+          previous_state: transition.from,
+          next_state: transition.to,
+          name: 'payment'
+        )
+      end
+    end
+    
+        def set(*args)
+      options = args.extract_options!
+      options.each do |name, value|
+        set_preference name, value
+      end
+    
+                if s[:shipped_at].present?
+              shipment.shipped_at = s[:shipped_at]
+              shipment.state      = 'shipped'
+            end
+    
+          def must_specify_api_key
+        render 'spree/api/errors/must_specify_api_key', status: 401
+      end
