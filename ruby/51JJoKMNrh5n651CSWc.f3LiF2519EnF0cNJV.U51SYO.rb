@@ -1,112 +1,171 @@
 
         
-          def connect_person_to_aspect(aspecting_person_id)
-    @person = Person.find(aspecting_person_id)
-    if @contact = current_user.contact_for(@person)
-      @contact.aspect_memberships.create(aspect: @aspect)
+            it 'creates a scenario label with the given text' do
+      expect(scenario_label(scenario, 'Other')).to eq(
+        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Other</span>'
+      )
+    end
+  end
+    
+      describe '#filename' do
+    it 'strips special characters' do
+      expect(AgentsExporter.new(:name => 'ƏfooƐƕƺbar').filename).to eq('foo-bar.json')
+    end
+    
+      after :each do
+    @scheduler.shutdown(:wait)
+    
+            return a.casecmp(b) if a_length == 1 && b_length == 1
+        return 1 if a_length == 1
+        return -1 if b_length == 1
+    
+        def base_url
+      context[:base_url]
+    end
+    
+        def parse_as_document
+      document = Nokogiri::HTML.parse @content, nil, 'UTF-8'
+      @title = document.at_css('title').try(:content)
+      document
+    end
+    
+        def path
+      @path ||= url.path
+    end
+    
+        def with_filters(*filters)
+      stack = FilterStack.new
+      stack.push(*filters)
+      pipeline.instance_variable_set :@filters, stack.to_a.freeze
+      yield
+    ensure
+      @pipeline = nil
+    end
+    
+          def root
+        css('.nav-index-group').each do |node|
+          if heading = node.at_css('.nav-index-group-heading')
+            heading.name = 'h2'
+          end
+          node.parent.before(node.children)
+        end
+    
+        if resource.errors.empty?
+      set_flash_message! :notice, :unlocked
+      respond_with_navigational(resource){ redirect_to after_unlock_path_for(resource) }
     else
-      @contact = current_user.share_with(@person, @aspect)
-      @contact.aspect_memberships.first
+      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
     end
   end
     
-    class ContactsController < ApplicationController
-  before_action :authenticate_user!
+        def reset_password_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :reset_password_instructions, opts)
+    end
     
-        respond_to do |format|
-      format.html do
-        render 'invitations/new', layout: false
+          accessors.each do |accessor|
+        mod.class_eval <<-METHOD, __FILE__, __LINE__ + 1
+          def #{accessor}
+            if defined?(@#{accessor})
+              @#{accessor}
+            elsif superclass.respond_to?(:#{accessor})
+              superclass.#{accessor}
+            else
+              Devise.#{accessor}
+            end
+          end
+    
+      THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+=end
+    
+          def before
+        @versions[0][0..6]
       end
-    end
-  end
     
-          it 'should have the custom version' do
-        pending('Ruby 1.x and 2.0.x are unsupported for Snap because it lacks Psych::safe_load') if is_old_ruby
-        insist { input.version } == 'custom-version'
+          def escaped_name
+        CGI.escape(@name)
       end
     
-    # Add a script to run after install (should be in the current directory):
-package.scripts[:after_install] = 'my_after_install_script.sh'
+          def editable
+        @editable
+      end
     
-        # Reference
-    # http://www.debian.org/doc/manuals/maint-guide/first.en.html
-    # http://wiki.debian.org/DeveloperConfiguration
-    # https://github.com/jordansissel/fpm/issues/37
-    if ENV.include?('DEBEMAIL') and ENV.include?('DEBFULLNAME')
-      # Use DEBEMAIL and DEBFULLNAME as the default maintainer if available.
-      @maintainer = '#{ENV['DEBFULLNAME']} <#{ENV['DEBEMAIL']}>'
-    else
-      # TODO(sissel): Maybe support using 'git config' for a default as well?
-      # git config --get user.name, etc can be useful.
-      #
-      # Otherwise default to user@currenthost
-      @maintainer = '<#{ENV['USER']}@#{Socket.gethostname}>'
-    end
-    
-        pkginfo = ''
-    
-        safesystem(*install_args)
-    
-        # Evaluate dependencies.
-    if !attributes[:no_auto_depends?]
-	    pkgdepend_gen = safesystemout('pkgdepend', 'generate',  '-md', '#{staging_path}',  manifest_fn)
-      File.write(build_path('#{name}.p5m.3'), pkgdepend_gen)
-    
-        File.write(build_path('packlist'), files.sort.join('\n'))
-    
-      def self.source_root
-    @source_root ||= File.expand_path('../templates', __FILE__)
+      def app
+    Precious::App
   end
+end
     
-    Capybara.javascript_driver = :javascript_test
+      # replace name version and date
+  replace_header(head, :name)
+  replace_header(head, :version)
+  replace_header(head, :date)
+  #comment this out if your rubyforge_project has a different name
+  replace_header(head, :rubyforge_project)
     
-        expect(addresses[0]['street']).to eq('CDG')
-    expect(addresses[0]['city']).to eq('Paris')
-    expect(addresses[0]['country']).to eq('France')
-    
-      it 'should find the ancestor element using the given locator' do
-    el = @session.find(:css, '#first_image')
-    expect(el.ancestor('//p')).to have_text('Lorem ipsum dolor')
-    expect(el.ancestor('//a')[:'aria-label']).to eq('Go to simple')
-  end
-    
-        it 'raises if passed an invalid value' do
-      expect { @session.find_link(download: 37) }.to raise_error ArgumentError
+        def initialize(dir, existing, attempted, message = nil)
+      @dir            = dir
+      @existing_path  = existing
+      @attempted_path = attempted
+      super(message || 'Cannot write #{@dir}/#{@attempted_path}, found #{@dir}/#{@existing_path}.')
     end
   end
 end
-
     
-        def install_path
-      @install_path ||= if options[:path]
-          Pathname.new(File.join(options[:path], 'bourbon'))
-        else
-          Pathname.new('bourbon')
-        end
+          assert_equal [true], q.map(&:delete)
+      assert_equal 0, q.size
     end
     
-      context 'called with null values' do
-    it 'writes rules for other three' do
-      ruleset = 'border-top-width: 11px; ' +
-                'border-right-width: 12px; ' +
-                'border-left-width: 13px;'
-      bad_rule = 'border-bottom-width: null;'
-    
-          expect('.all-text-inputs-active').to have_ruleset(ruleset)
+    describe Sidekiq::ExceptionHandler do
+  describe 'with mock logger' do
+    before do
+      @old_logger = Sidekiq.logger
+      @str_logger = StringIO.new
+      Sidekiq.logger = Logger.new(@str_logger)
     end
+    
+      it 'logs large payloads' do
+    output = capture_logging(Logger::WARN) do
+      SomeClass.delay.doit('a' * 8192)
+    end
+    assert_match(/#{SomeClass}.doit job argument is/, output)
   end
     
-            def success?
-          @errors.nil? || @errors.empty?
-        end
+      it 'correctly prepends middleware' do
+    chain = Sidekiq::Middleware::Chain.new
+    chain_entries = chain.entries
+    chain.add CustomMiddleware
+    chain.prepend YetAnotherCustomMiddleware
+    assert_equal YetAnotherCustomMiddleware, chain_entries.first.klass
+    assert_equal CustomMiddleware, chain_entries.last.klass
+  end
     
-        sv.send(:install_main_process_signal_handlers)
-    Net::HTTP.get URI.parse('http://0.0.0.0:24447/api/plugins.flushBuffers')
-    info_msg = '[info]: force flushing buffered events' + '\n'
+          e = assert_raises ArgumentError do
+        Sidekiq.on(:startp)
+      end
+      assert_match(/Invalid event name/, e.message)
+      e = assert_raises ArgumentError do
+        Sidekiq.on('startup')
+      end
+      assert_match(/Symbols only/, e.message)
+      Sidekiq.on(:startup) do
+        1 + 1
+      end
     
-    module Fluent
-  module Plugin
-    class SyslogParser < Parser
-      Plugin.register_parser('syslog', self)
-    
-          @opt_parser.banner = 'Usage: fluent-binlog-reader #{self.class.to_s.split('::').last.downcase} [options] file'
+          it 'must be supplied with :type or :coerce' do
+        expect do
+          subject.params do
+            requires :ints, coerce_with: JSON
+          end
+        end.to raise_error(ArgumentError)
+      end
+    end
