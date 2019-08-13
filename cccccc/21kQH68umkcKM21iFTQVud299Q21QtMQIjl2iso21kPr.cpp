@@ -1,190 +1,258 @@
 
         
-        inline void
-FastHufDecoder::refill
-    (Int64 &buffer,
-     int numBits,                       // number of bits to refill
-     Int64 &bufferBack,                 // the next 64-bits, to refill from
-     int &bufferBackNumBits,            // number of bits left in bufferBack
-     const unsigned char *&currByte,    // current byte in the bitstream
-     int &currBitsLeft)                 // number of bits left in the bitsream
-{
-    // 
-    // Refill bits into the bottom of buffer, from the top of bufferBack.
-    // Always top up buffer to be completely full.
-    //
+          // Set trust values for certificate.
+  // |trust_bits| should be a bit field of TRUST* values from NSSCertDatabase.
+  // Returns true on success or false on failure.
+  bool SetCertTrust(CERTCertificate* cert,
+                    net::CertType type,
+                    net::NSSCertDatabase::TrustBits trust_bits);
+    
+    JavascriptEnvironment::~JavascriptEnvironment() = default;
+    
+    void Initialize(v8::Local<v8::Object> exports,
+                v8::Local<v8::Value> unused,
+                v8::Local<v8::Context> context,
+                void* priv) {
+  mate::Dictionary dict(context->GetIsolate(), exports);
+  dict.SetMethod('createArchive', &Archive::Create);
+  dict.SetMethod('initAsarSupport', &InitAsarSupport);
+}
+    
+    bool CertificateManagerModel::ImportCACerts(
+    const net::ScopedCERTCertificateList& certificates,
+    net::NSSCertDatabase::TrustBits trust_bits,
+    net::NSSCertDatabase::ImportCertFailureList* not_imported) {
+  return cert_db_->ImportCACerts(certificates, trust_bits, not_imported);
+}
+    
+      template <typename T>
+  bool GetNext(T* out) {
+    if (next_ >= info_->Length()) {
+      insufficient_arguments_ = true;
+      return false;
+    }
+    v8::Local<v8::Value> val = (*info_)[next_];
+    bool success = ConvertFromV8(isolate_, val, out);
+    if (success)
+      next_++;
+    return success;
+  }
+    
+    // Like Dictionary, but stores object in persistent handle so you can keep it
+// safely on heap.
+class PersistentDictionary : public Dictionary {
+ public:
+  PersistentDictionary();
+  PersistentDictionary(v8::Isolate* isolate, v8::Local<v8::Object> object);
+  PersistentDictionary(const PersistentDictionary& other);
+  ~PersistentDictionary() override;
     }
     
-    // file handling classes
-class OutputFile;
-class TiledInputFile;
-class ScanLineInputFile;
-class InputFile;
-class TiledOutputFile;
-class DeepScanLineInputFile;
-class DeepScanLineOutputFile;
-class DeepTiledInputFile;
-class DeepTiledOutputFile;
-class AcesInputFile;
-class AcesOutputFile;
-class TiledInputPart;
-class TiledInputFile;
-class TileOffsets;
+      static Promise Create(v8::Isolate* isolate);
+  static Promise Create();
     
-        bool                xTileCoords;
-    bool                yTileCoords;
-    
-        OPENEXR_IMF_INTERNAL_NAMESPACE::Xdr::read <OPENEXR_IMF_INTERNAL_NAMESPACE::StreamIO> (is, magic);
-    OPENEXR_IMF_INTERNAL_NAMESPACE::Xdr::read <OPENEXR_IMF_INTERNAL_NAMESPACE::StreamIO> (is, version);
-    
-    #include 'ImfNamespace.h'
-    
-        template <class T> T*	findTypedAttribute (const std::string &name);
-    template <class T> const T*	findTypedAttribute (const std::string &name)
-								       const;
-    
-    //-------------------------------------------------------------------
-// class InputPart:
-//
-// Same interface as InputFile. Please refer to InputFile.
-//-------------------------------------------------------------------
-    
-            Rational operator-() const;
-        Rational& operator+=(Rational const& rhs);
-        Rational& operator-=(Rational const& rhs);
-        Rational& operator*=(Rational const& rhs);
-        Rational& operator/=(Rational const& rhs);
-        Rational& operator%=(Rational const& rhs);
-    
-        wstringstream groupedStream{};
-    uint32_t groupingSize = 0;
-    
-    
-    {        return;
+    // A v8::Persistent handle to a V8 value which destroys and clears the
+// underlying handle on destruction.
+template <typename T>
+class ScopedPersistent {
+ public:
+  ScopedPersistent() : isolate_(v8::Isolate::GetCurrent()) {}
     }
     
-    #include <array>
-#include <string>
-#include <string_view>
-#include <unordered_map>
+     private:
+  friend struct internal::Destroyable;
     
-    enum eANGLE_TYPE
-{
-    ANGLE_DEG, // Calculate trig using 360 degrees per revolution
-    ANGLE_RAD, // Calculate trig using 2 pi  radians per revolution
-    ANGLE_GRAD // Calculate trig using 400 gradients per revolution
-    }
+    #include 'base/bind.h'
+#include 'base/debug/leak_annotations.h'
+#include 'base/logging.h'
+#include 'content/public/browser/browser_thread.h'
+#include 'shell/browser/ui/views/global_menu_bar_x11.h'
     
-    void CCalcEngine::SettingsChanged()
-{
-    wchar_t lastDec = m_decimalSeparator;
-    wstring decStr = m_resourceProvider->GetCEngineString(L'sDecimal');
-    m_decimalSeparator = decStr.empty() ? DEFAULT_DEC_SEPARATOR : decStr.at(0);
-    // Until it can be removed, continue to set ratpak decimal here
-    SetDecimalSeparator(m_decimalSeparator);
-    }
+        typedef decltype(check<C>(0)) type;
     
-    static stb_uchar *stb__out;
-static FILE      *stb__outfile;
-static stb_uint   stb__outbytes;
+        cvSVD( (CvMat*)&F, &W, &U, &V, CV_SVD_U_T + CV_SVD_V_T );
+    W.data.db[8] = 0.;
+    cvGEMM( &U, &W, 1, 0, 0, &W, CV_GEMM_A_T );
+    cvMatMul( &W, &V, &F );
     
-    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
-// **Prefer using the code in imgui_impl_opengl3.cpp**
-// This code is mostly provided as a reference to learn how ImGui integration works, because it is shorter to read.
-// If your code is using GL3+ context or any semi modern OpenGL calls, using this is likely to make everything more
-// complicated, will require your code to reset every single OpenGL attributes to their initial state, and might
-// confuse your GPU driver.
-// The GL2 code is unable to reset attributes or even call e.g. 'glUseProgram(0)' because they don't exist in that API.
+            if (inputs_arr.depth() == CV_16S)
+        {
+            forward_fallback(inputs_arr, outputs_arr, internals_arr);
+            return;
+        }
     
-            ImGui::Text('This is some useful text.');                     // Display some text (you can use a format strings too)
-        ImGui::Checkbox('Demo Window', &show_demo_window);            // Edit bools storing our window open/close state
-        ImGui::Checkbox('Another Window', &show_another_window);
+        size_t srcTotal = total(srcShape);
+    size_t dstTotal = total(dstShape);
+    CV_Assert(dstTotal != 0);
     
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
     
-            D3D12_RESOURCE_BARRIER barrier = {};
-        barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-        barrier.Flags                  = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-        barrier.Transition.pResource   = g_mainRenderTargetResource[backBufferIdx];
-        barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-        barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
-        barrier.Transition.StateAfter  = D3D12_RESOURCE_STATE_RENDER_TARGET;
-    
-        // Create Vulkan Instance
-    {
-        VkInstanceCreateInfo create_info = {};
-        create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-        create_info.enabledExtensionCount = extensions_count;
-        create_info.ppEnabledExtensionNames = extensions;
-    }
-    
-        // Rendering
-    ImGui::Render();
-    ImGuiIO& io = ImGui::GetIO();
-    glViewport(0, 0, (GLsizei)io.DisplaySize.x, (GLsizei)io.DisplaySize.y);
-    glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-    glClear(GL_COLOR_BUFFER_BIT);
-    //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound, but prefer using the GL3+ code.
-    ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-    
-        // Decide GL+GLSL versions
-#if __APPLE__
-    // GL 3.2 Core + GLSL 150
-    const char* glsl_version = '#version 150';
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG); // Always required on Mac
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+// Default command line args
+vector<String> img_names;
+bool preview = false;
+bool try_cuda = false;
+double work_megapix = 0.6;
+double seam_megapix = 0.1;
+double compose_megapix = -1;
+float conf_thresh = 1.f;
+#ifdef HAVE_OPENCV_XFEATURES2D
+string features_type = 'surf';
 #else
-    // GL 3.0 + GLSL 130
-    const char* glsl_version = '#version 130';
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+string features_type = 'orb';
 #endif
+string matcher_type = 'homography';
+string estimator_type = 'homography';
+string ba_cost_func = 'ray';
+string ba_refine_mask = 'xxxxx';
+bool do_wave_correct = true;
+WaveCorrectKind wave_correct = detail::WAVE_CORRECT_HORIZ;
+bool save_graph = false;
+std::string save_graph_to;
+string warp_type = 'spherical';
+int expos_comp_type = ExposureCompensator::GAIN_BLOCKS;
+int expos_comp_nr_feeds = 1;
+int expos_comp_nr_filtering = 2;
+int expos_comp_block_size = 32;
+float match_conf = 0.3f;
+string seam_find_type = 'gc_color';
+int blend_type = Blender::MULTI_BAND;
+int timelapse_type = Timelapser::AS_IS;
+float blend_strength = 5;
+string result_name = 'result.jpg';
+bool timelapse = false;
+int range_width = -1;
     
+            vector<uchar> inliers;
+        Mat aff_est = estimateAffinePartial2D(fpts, tpts, inliers, method);
     
-    {        err = vkDeviceWaitIdle(g_Device);
-        check_vk_result(err);
-        ImGui_ImplVulkan_DestroyFontUploadObjects();
+        try
+    {
+        lograt(&prat, RATIONAL_PRECISION);
+    }
+    catch (uint32_t error)
+    {
+        destroyrat(prat);
+        throw(error);
+    }
+    
+            bool IsZero() const;
+    
+                bool IsEnUsDigit(const wchar_t digit) const
+            {
+                if (digit >= L'0' && digit <= L'9')
+                {
+                    return true;
+                }
+                return false;
+            }
+    
+    //
+// App.xaml.cpp
+// Implementation of the App class.
+//
+    
+    int CHistoryCollector::AddCommand(_In_ const std::shared_ptr<IExpressionCommand>& spCommand)
+{
+    if (m_spCommands == nullptr)
+    {
+        m_spCommands = std::make_shared<CalculatorVector<std::shared_ptr<IExpressionCommand>>>();
+    }
+    }
+    
+    namespace CalcEngine
+{
+    Number::Number() noexcept
+        : Number(1, 0, { 0 })
+    {
+    }
+    }
+    
+    TEST(Tree, DumpJson) {
+  auto tree = ConstructTree();
+  FeatureMap fmap;
+  auto str = tree.DumpModel(fmap, true, 'json');
+  size_t n_leaves = 0;
+  size_t iter = 0;
+  while ((iter = str.find('leaf', iter + 1)) != std::string::npos) {
+    n_leaves++;
+  }
+  ASSERT_EQ(n_leaves, 4);
     }
     
     
-    {  // converting into the hardware velodyne ref (negative yaml and degrees)
-  // adding 0.5 performs a centered double to int conversion
-  config_.set_min_angle(100 * (2 * M_PI - tmp_min_angle) * 180 / M_PI + 0.5);
-  config_.set_max_angle(100 * (2 * M_PI - tmp_max_angle) * 180 / M_PI + 0.5);
-  if (config_.min_angle() == config_.max_angle()) {
-    // avoid returning empty cloud if min_angle = max_angle
-    config_.set_min_angle(0);
-    config_.set_max_angle(36000);
+    {
+    {}  // namespace common
+}  // namespace xgboost
+    
+    SparsePageWriter::~SparsePageWriter() {
+  for (auto& queue : qworkers_) {
+    // use nullptr to signal termination.
+    std::shared_ptr<SparsePage> sig(nullptr);
+    queue.Push(std::move(sig));
+  }
+  for (auto& thread : workers_) {
+    thread->join();
   }
 }
     
-    TEST_F(GraphSegmentorTest, test_edge_comparison) {
-  EXPECT_LT(edges_[1], edges_[0]);
-  EXPECT_FALSE(edges_[3] < edges_[4]);
-  EXPECT_FALSE(edges_[6] < edges_[7]);
+      /**
+  * \brief Column sampler constructor.
+  * \note This constructor synchronizes the RNG seed across processes.
+  */
+  ColumnSampler() {
+    uint32_t seed = common::GlobalRandom()();
+    rabit::Broadcast(&seed, sizeof(seed), 0);
+    rng_.seed(seed);
+  }
+    
+      /**
+   * @brief Returns the process's ID
+   *
+   * Returns the associated process' process ID (on POSIX, pid() and
+   * nativeHandle() do not differ).
+   *
+   * NOTE: In most situations, this should ideally not be used on Windows when
+   * dealing with tracking process lifetimes.
+   */
+  int pid() const;
+    
+    #pragma once
+    
+        files_to_carve_dir_ = working_dir_ / 'files_to_carve';
+    fs::create_directories(files_to_carve_dir_);
+    
+    void Schedule::remove(const std::string& pack, const std::string& source) {
+  auto new_end = std::remove_if(
+      packs_.begin(), packs_.end(), [pack, source](const PackRef& p) {
+        if (p->getName() == pack &&
+            (p->getSource() == source || source == '')) {
+          Config::get().removeFiles(source + FLAGS_pack_delimiter +
+                                    p->getName());
+          return true;
+        }
+        return false;
+      });
+  packs_.erase(new_end, packs_.end());
 }
     
-      integer_param_map_.clear();
-  string_param_map_.clear();
-  double_param_map_.clear();
-  float_param_map_.clear();
-  bool_param_map_.clear();
-  array_integer_param_map_.clear();
-  array_string_param_map_.clear();
-  array_double_param_map_.clear();
-  array_float_param_map_.clear();
-  array_bool_param_map_.clear();
-    
-    #include 'modules/planning/traffic_rules/traffic_rule.h'
+    boost::filesystem::path const& getTestConfigDirectory();
     
     
-    {
-    {}  // namespace prediction
-}  // namespace apollo
+    {} // namespace osquery
+
+    
+    Expected<std::string, DatabaseError> RocksdbDatabase::getString(
+    const std::string& domain, const std::string& key) {
+  auto result = getRawBytes(domain, key);
+  if (result) {
+    std::string result_str = result.take();
+    if (BOOST_UNLIKELY(validateInt32StorageBuffer(result_str))) {
+      auto type_error = createError(RocksdbError::UnexpectedValueType)
+                        << 'Fetching string as integer';
+      LOG(ERROR) << type_error.getMessage().c_str();
+      assert(false);
+      return createError(DatabaseError::KeyNotFound, std::move(type_error));
+    }
+    return result_str;
+  }
+  return result.takeError();
+}
