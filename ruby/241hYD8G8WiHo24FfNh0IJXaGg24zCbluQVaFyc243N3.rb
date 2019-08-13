@@ -1,143 +1,246 @@
 
         
-            should 'print a nice list of static files' do
-      time_regexp = '\\d+:\\d+'
-      #
-      # adding a pipe character at the beginning preserves formatting with newlines
-      expected_output = Regexp.new <<~OUTPUT
-        | - /css/screen.css last edited at #{time_regexp} with extname .css
-          - /pgp.key last edited at #{time_regexp} with extname .key
-          - /products.yml last edited at #{time_regexp} with extname .yml
-          - /symlink-test/symlinked-dir/screen.css last edited at #{time_regexp} with extname .css
-      OUTPUT
-      assert_match expected_output, File.read(dest_dir('static_files.html'))
-    end
-  end
+            it 'can be searched' do
+      override_translation('en', 'wat', 'Overwritten value')
+      expect(I18n.search('wat')).to include('wat' => 'Overwritten value')
+      expect(I18n.search('Overwritten')).to include('wat' => 'Overwritten value')
     
-              @highlighter = begin
-            if @config.key?('enable_coderay') && @config['enable_coderay']
-              Jekyll::Deprecator.deprecation_message(
-                'You are using 'enable_coderay', ' \
-                'use syntax_highlighter: coderay in your configuration file.'
-              )
+        whisper = post.post_type == Post.types[:whisper]
+    increase_posts_count = !post.topic&.private_message? || post.post_type != Post.types[:small_action]
+    post.post_number ||= Topic.next_post_number(post.topic_id,
+      reply: post.reply_to_post_number.present?,
+      whisper: whisper,
+      post: increase_posts_count)
     
-            warden.logout(scope)
-        warden.clear_strategies_cache!(scope: scope)
-        instance_variable_set(:'@current_#{scope}', nil)
-    
-          # Update password saving the record and clearing token. Returns true if
-      # the passwords are valid and the record was saved, false otherwise.
-      def reset_password(new_password, new_password_confirmation)
-        if new_password.present?
-          self.password = new_password
-          self.password_confirmation = new_password_confirmation
-          save
-        else
-          errors.add(:password, :blank)
-          false
-        end
-      end
-    
-      def remove_duplicates
-    where = 'WHERE s1.user_id = s2.user_id AND s1.shareable_id = s2.shareable_id AND '\
-      's1.shareable_type = s2.shareable_type AND s1.id > s2.id'
-    if AppConfig.postgres?
-      execute('DELETE FROM share_visibilities AS s1 USING share_visibilities AS s2 #{where}')
+        new_tag_name = DiscourseTagging.clean_tag(params[:tag][:id])
+    tag.name = new_tag_name
+    if tag.save
+      StaffActionLogger.new(current_user).log_custom('renamed_tag', previous_value: params[:tag_id], new_value: new_tag_name)
+      render json: { tag: { id: new_tag_name } }
     else
-      execute('DELETE s1 FROM share_visibilities s1, share_visibilities s2 #{where}')
+      render_json_error tag.errors.full_messages
+    end
+  end
+    
+        def free_bytes
+      nil
     end
   end
 end
 
     
-        shared_examples 'on a visible post' do
-      it 'creates the participation' do
-        post :create, params: {post_id: @post.id}
-        expect(alice.participations.where(:target_id => @post.id)).to exist
-        expect(response.code).to eq('201')
+          it 'removes the file from s3 on multisite' do
+        test_multisite_connection('default') do
+          upload = build_upload
+          store.expects(:get_depth_for).with(upload.id).returns(0)
+          s3_helper.expects(:s3_bucket).returns(s3_bucket).at_least_once
+          upload.update!(url: '//s3-upload-bucket.s3.dualstack.us-west-1.amazonaws.com/uploads/default/original/1X/#{upload.sha1}.png')
+          s3_object = stub
+    
+          json = JSON.parse(response.body)
+      expect(response.status).to eq(200)
+      expect(json['staff_action_logs'].length).to eq(1)
+      expect(json['staff_action_logs'][0]['new_value']).to eq('value 1')
+    end
+    
+          expect(list[:de_AT]).to eq([:de_AT, :de, :en])
+      expect(list[:de]).to eq([:de, :en])
+      expect(list[:en]).to eq([:en])
+    end
+    
+      before(:each) do
+    SiteSetting.enable_s3_uploads = true
+    SiteSetting.s3_access_key_id = 'abc'
+    SiteSetting.s3_secret_access_key = 'def'
+    
+          def tag
+        MacOS.cat
       end
     end
     
-    module VagrantHelpers
-  extend self
+    require 'utils/bottles'
     
-          attr_reader :key, :default, :options
+      attr_reader :name, :resource, :prefix, :cellar, :rebuild
     
-      option ['--cloud.id'], 'CLOUD_ID',
-    I18n.t('logstash.runner.flag.cloud_id'),
-    :attribute_name => 'cloud.id'
-    
-    require 'bootstrap/environment'
-    
-    def cloned_testpath(path)
-  repo   = File.expand_path(testpath(path))
-  path   = File.dirname(repo)
-  cloned = File.join(path, self.class.name)
-  FileUtils.rm_rf(cloned)
-  Dir.chdir(path) do
-    %x{git clone #{File.basename(repo)} #{self.class.name} 2>/dev/null}
-  end
-  cloned
-end
-    
-      teardown do
-    FileUtils.rm_rf(@path)
+          if @quarantine
+        Quarantine.cask!(cask: @cask, download_path: @downloaded_path)
+      else
+        Quarantine.release!(download_path: @downloaded_path)
+      end
+    end
   end
 end
 
     
-        # Title is based on file name when h1_title is false.
-    actual = @view.title
-    assert_equal 'H1', title
-  end
-end
-
+    module OS
+  module Mac
+    class Version < ::Version
+      SYMBOLS = {
+        catalina:    '10.15',
+        mojave:      '10.14',
+        high_sierra: '10.13',
+        sierra:      '10.12',
+        el_capitan:  '10.11',
+        yosemite:    '10.10',
+        mavericks:   '10.9',
+      }.freeze
     
-            def create
-          authorize! :create, Spree.user_class
-          @user = Spree.user_class.new(user_params)
-          if @user.save
-            respond_with(@user, status: 201, default_template: :show)
-          else
-            invalid_resource!(@user)
-          end
+          verify_has_sha if require_sha? && !force?
+      download
+      verify
+    end
+    
+      class PatchResource < Resource
+    attr_reader :patch_files
+    
+      before :each do
+    @data = '12345abcde'
+    @zip = [31, 139, 8, 0, 44, 220, 209, 71, 0, 3, 51, 52, 50, 54, 49, 77,
+            76, 74, 78, 73, 5, 0, 157, 5, 0, 36, 10, 0, 0, 0].pack('C*')
+    @io = StringIO.new @zip
+  end
+    
+      it 'resets the position of the stream pointer to data previously read' do
+    gz = Zlib::GzipReader.new @io
+    first_read = gz.read
+    gz.rewind
+    first_read.should == gz.read
+  end
+    
+            get '/pipelines' do
+          opts = {:graph => as_boolean(params.fetch('graph', false)),
+                  :vertices => as_boolean(params.fetch('vertices', false))}
+          payload = node.pipelines(opts)
+          halt(404) if payload.empty?
+          respond_with(:pipelines => payload )
         end
     
-    if ENV['COVERAGE']
-  require 'simplecov'
-  SimpleCov.start do
-    add_filter '/test/'
-    add_filter '/myapp/'
+          if queue_type == 'persisted'
+        queue_path = [:stats, :pipelines, pipeline_id, :queue]
+        events = metric_store.get_shallow(*queue_path, :events).value
+        queue_size_in_bytes = metric_store.get_shallow(*queue_path, :capacity, :queue_size_in_bytes).value
+        max_queue_size_in_bytes = metric_store.get_shallow(*queue_path, :capacity, :max_queue_size_in_bytes).value
+      end
+    
+        def fetch_node_stats(agent, stats)
+      @global_stats.merge({
+        'http_address' => stats.get_shallow(:http_address).value,
+        'ephemeral_id' => agent.ephemeral_id
+      })
+    end
+  end
+end; end; end
+
+    
+        let(:default_jars_location)    { File.join('vendor', 'jar-dependencies') }
+    let(:default_runtime_location) { File.join(default_jars_location,'runtime-jars','*.jar') }
+    let(:default_test_location)    { File.join(default_jars_location,'test-jars','*.jar') }
+    
+          describe 'a simple plugin' do
+        let(:plugin_source) { 'generator {}' }
+    
+    if $0 == __FILE__
+  begin
+    LogStash::PluginManager::Main.run('bin/logstash-plugin', ARGV)
+  rescue LogStash::PluginManager::Error => e
+    $stderr.puts(e.message)
+    exit(1)
+  end
+end
+
+    
+      it 'returns the merged `ConfigPart#config_string`' do
+    expect(subject.config_string).to eq(ordered_config_parts.collect(&:text).join('\n'))
+  end
+    
+          def find_product(id)
+        @product = product_scope.friendly.distinct(false).find(id.to_s)
+      rescue ActiveRecord::RecordNotFound
+        @product = product_scope.find_by(id: id)
+        not_found unless @product
+      end
+    
+            def purchase
+          perform_payment_action(:purchase)
+        end
+    
+            def index
+          @product_properties = @product.product_properties.accessible_by(current_ability).
+                                ransack(params[:q]).result.
+                                page(params[:page]).per(params[:per_page])
+          respond_with(@product_properties)
+        end
+    
+    class TestWebHelpers < Minitest::Test
+  class Helpers
+    include Sidekiq::WebHelpers
+    
+        class Mgr
+      attr_reader :latest_error
+      attr_reader :mutex
+      attr_reader :cond
+      def initialize
+        @mutex = ::Mutex.new
+        @cond = ::ConditionVariable.new
+      end
+      def processor_died(inst, err)
+        @latest_error = err
+        @mutex.synchronize do
+          @cond.signal
+        end
+      end
+      def processor_stopped(inst)
+        @mutex.synchronize do
+          @cond.signal
+        end
+      end
+      def options
+        { :concurrency => 3, :queues => ['default'] }
+      end
+    end
+    
+      it 'should remove dead jobs older than Sidekiq::DeadSet.timeout' do
+    Sidekiq::DeadSet.stub(:timeout, 10) do
+      Time.stub(:now, Time.now - 11) do
+        dead_set.kill(Sidekiq.dump_json(jid: '000103', class: 'MyWorker3', args: [])) # the oldest
+      end
+    
+    @@ layout
+<html>
+  <head>
+    <title>Sinatra + Sidekiq</title>
+    <body>
+      <%= yield %>
+    </body>
+</html>
+    
+        it 'joins array using ;' do
+      expect(project.send('hook_#{hook_name}')).
+        to eq('echo 'on hook'; echo 'another command here'')
+    end
   end
 end
     
-          it 'displays the correct output' do
-        mock_stats = OpenStruct.new(
-          processed: 420710,
-          failed: 12,
-          workers_size: 34,
-          enqueued: 56,
-          retry_size: 78,
-          scheduled_size: 90,
-          dead_size: 666
-        )
-        Sidekiq::Stats.stub(:new, mock_stats) do
-          assert_includes output, 'Processed: 420,710'
-          assert_includes output, 'Failed: 12'
-          assert_includes output, 'Busy: 34'
-          assert_includes output, 'Enqueued: 56'
-          assert_includes output, 'Retries: 78'
-          assert_includes output, 'Scheduled: 90'
-          assert_includes output, 'Dead: 666'
-        end
-      end
-    end
+      chain :with do |attrs|
+    @expected_attrs = attrs
+  end
     
-            assert_equal 0, Sidekiq::Queue.new('queue_1').size
-        assert_equal 1, Sidekiq::Queue.new('queue_2').size
-        assert_equal 0, Sidekiq::Queue.new('queue_5').size
-        assert_equal 1, Sidekiq::Queue.new('queue_6').size
-      ensure
-        Sidekiq.client_middleware.remove MyStopper
+          # $TMUXINATOR_CONFIG (and create directory) or ''.
+      def environment
+        environment = ENV['TMUXINATOR_CONFIG']
+        return '' if environment.to_s.empty? # variable is unset (nil) or blank
+        FileUtils::mkdir_p(environment) unless File.directory?(environment)
+        environment
+      end
+    
+        context 'defaulting to xdg with parent directory(s) that do not exist' do
+      it 'creates parent directories if required' do
+        allow(described_class).to receive(:environment?).and_return false
+        allow(described_class).to receive(:xdg?).and_return false
+        allow(described_class).to receive(:home?).and_return false
+    
+          it 'returns false' do
+        expect(described_class.editor?).to be_falsey
       end
     end
+  end
