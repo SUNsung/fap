@@ -1,137 +1,193 @@
 
         
-          def test_pretty_print_new
-    topic = Topic.new
-    actual = +''
-    PP.pp(topic, StringIO.new(actual))
-    expected = <<~PRETTY
-      #<Topic:0xXXXXXX
-       id: nil,
-       title: nil,
-       author_name: nil,
-       author_email_address: 'test@test.com',
-       written_on: nil,
-       bonus_time: nil,
-       last_read: nil,
-       content: nil,
-       important: nil,
-       approved: true,
-       replies_count: 0,
-       unique_replies_count: 0,
-       parent_id: nil,
-       parent_title: nil,
-       type: nil,
-       group: nil,
-       created_at: nil,
-       updated_at: nil>
-    PRETTY
-    assert actual.start_with?(expected.split('XXXXXX').first)
-    assert actual.end_with?(expected.split('XXXXXX').last)
+          def after_omniauth_failure_path_for(scope)
+    new_session_path(scope)
   end
     
-    require 'cases/helper'
-require 'models/numeric_data'
-    
-    class BugTest < Minitest::Test
-  def test_stuff
-    assert 'zomg'.present?
-    refute ''.present?
-  end
-end
-
-    
-          if ActiveRecord::Base.connection.supports_comments?
-        def test_invert_change_column_comment
-          assert_raises(ActiveRecord::IrreversibleMigration) do
-            @recorder.inverse_of :change_column_comment, [:table, :column, 'comment']
-          end
-        end
-    
-        %w(SPATIAL FULLTEXT UNIQUE).each do |type|
-      expected = 'ALTER TABLE `people` ADD #{type} INDEX `index_people_on_last_name`  (`last_name`)'
-      assert_sql(expected) do
-        ActiveRecord::Base.connection.change_table(:people, bulk: true) do |t|
-          t.index :last_name, type: type
+    module Devise
+  module Controllers
+    # Create url helpers to be used with resource/scope configuration. Acts as
+    # proxies to the generated routes created by devise.
+    # Resource param can be a string or symbol, a class, or an instance object.
+    # Example using a :user resource:
+    #
+    #   new_session_path(:user)      => new_user_session_path
+    #   session_path(:user)          => user_session_path
+    #   destroy_session_path(:user)  => destroy_user_session_path
+    #
+    #   new_password_path(:user)     => new_user_password_path
+    #   password_path(:user)         => user_password_path
+    #   edit_password_path(:user)    => edit_user_password_path
+    #
+    #   new_confirmation_path(:user) => new_user_confirmation_path
+    #   confirmation_path(:user)     => user_confirmation_path
+    #
+    # Those helpers are included by default to ActionController::Base.
+    #
+    # In case you want to add such helpers to another class, you can do
+    # that as long as this new class includes both url_helpers and
+    # mounted_helpers. Example:
+    #
+    #     include Rails.application.routes.url_helpers
+    #     include Rails.application.routes.mounted_helpers
+    #
+    module UrlHelpers
+      def self.remove_helpers!
+        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
+          remove_method method
         end
       end
+    
+        # Creates configuration values for Devise and for the given module.
+    #
+    #   Devise::Models.config(Devise::Models::DatabaseAuthenticatable, :stretches)
+    #
+    # The line above creates:
+    #
+    #   1) An accessor called Devise.stretches, which value is used by default;
+    #
+    #   2) Some class methods for your model Model.stretches and Model.stretches=
+    #      which have higher priority than Devise.stretches;
+    #
+    #   3) And an instance method stretches.
+    #
+    # To add the class methods you need to have a module ClassMethods defined
+    # inside the given class.
+    #
+    def self.config(mod, *accessors) #:nodoc:
+      class << mod; attr_accessor :available_configs; end
+      mod.available_configs = accessors
+    
+          module ClassMethods
+        # Attempt to find a user by password reset token. If a user is found, return it
+        # If a user is not found, return nil
+        def with_reset_password_token(token)
+          reset_password_token = Devise.token_generator.digest(self, :reset_password_token, token)
+          to_adapter.find_first(reset_password_token: reset_password_token)
+        end
+    
+              record = to_adapter.get(id)
+          record if record && record.remember_me?(token, generated_at)
+        end
+    
+        if (exploit_config and exploit_config['active_timeout'])
+      ctimeout = exploit_config['active_timeout'].to_i
     end
     
-        # Returns the front matter defaults defined for the file's URL and/or type
-    # as defined in _config.yml.
-    def defaults
-      @defaults ||= @site.frontmatter_defaults.all url, type
+            ; perform the call to WSAStartup...
+        mov rdx, r13           ; second param is a pointer to this stuct
+        push 0x0101            ;
+        pop rcx                ; set the param for the version requested
+        mov r10d, #{Rex::Text.block_api_hash('ws2_32.dll', 'WSAStartup')}
+        call rbp               ; WSAStartup( 0x0101, &WSAData );
+    
+      private
+    
+      public class Exploit {
+      public Exploit(){
+          try {
+              Payload.main(null);
+          } catch (Exception e) { }
+    }
+    }
+    
     end
-    
-        should 'hide unpublished posts' do
-      published = Dir[dest_dir('publish_test/2008/02/02/*.html')].map \
-        { |f| File.basename(f) }
-      assert_equal 1, published.size
-      assert_equal 'published.html', published.first
-    end
-    
-          # `Site#documents` cannot be memoized so that `Site#docs_to_write` can access the
-      # latest state of the attribute.
-      #
-      # Since this method will be called after `Site#pre_render` hook, the `Site#documents`
-      # array shouldn't thereafter change and can therefore be safely memoized to prevent
-      # additional computation of `Site#documents`.
-      def documents
-        @documents ||= @obj.documents
-      end
-    
-    def name
-  'jekyll'
-end
-    
-      # Generate digests for assets URLs.
-  config.assets.digest = true
-    
-      def setup
-    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
-    success = Dir.chdir DUMMY_PATH do
-      silence_stdout_if !ENV['VERBOSE'] do
-        system 'node', 'manifest.js', tmp_dir
-      end
-    end
-    assert success, 'Node.js Mincer compilation failed'
-    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
-    css_name = manifest['assets']['application.css']
-    @css = File.read('#{tmp_dir}/#{css_name}')
-  end
-end
 
     
-        # we assume that the first file that requires 'sinatra' is the
-    # app_file. all other path related options are calculated based
-    # on this path by default.
-    set :app_file, caller_files.first || $0
+      LogSource = 'core'
+end
     
-      # insert data
-  fields.each do |field, values|
-    updated = '  s.#{field} = ['
-    updated << values.map { |v| '\n    %p' % v }.join(',')
-    updated << '\n  ]'
-    content.sub!(/  s\.#{field} = \[\n(    .*\n)*  \]/, updated)
+        prev_data_service = @current_data_service
+    @current_data_service = data_service
+    # reset the previous data service's active flag if it is remote
+    # to ensure checks are performed the next time it is set
+    if !prev_data_service.nil? && !prev_data_service.is_local?
+      prev_data_service.active = false
+    end
   end
     
-            assert_equal 0, Sidekiq::Queue.new('queue_1').size
-        assert_equal 1, Sidekiq::Queue.new('queue_2').size
-        assert_equal 0, Sidekiq::Queue.new('queue_5').size
-        assert_equal 1, Sidekiq::Queue.new('queue_6').size
-      ensure
-        Sidekiq.client_middleware.remove MyStopper
+    require 'msf/core/post/windows/services'
+require 'msf/core/post/windows/powershell'
+require 'msf/core/exploit/powershell/dot_net'
+    
+        print_good('Account Found:')
+    line_num = 0
+    
+        begin
+      net_com_opts[:harness] = ::File.read(datastore['SOURCE_FILE'])
+      script = dot_net_compiler(net_com_opts)
+      if datastore['Powershell::Post::dry_run']
+        print_good 'Compiler code:\n#{script}'
+        return
+      end
+    rescue => e
+      print_error e
+      return
+    end
+    
+        def assign_attributes(values)
+      values.each do |k, v|
+        public_send('#{k}=', v)
       end
     end
     
-      describe 'lifecycle events' do
-    it 'handles invalid input' do
-      Sidekiq.options[:lifecycle_events][:startup].clear
-    
-        it 'disables testing in a block' do
-      Sidekiq::Testing.fake!
-      assert Sidekiq::Testing.fake?
-    
-      def perform(msg='lulz you forgot a msg!')
-    $redis.lpush('sinkiq-example-messages', msg)
+    class HomeController < ApplicationController
+  def show
+    partial_dir = Rails.root.join('app', 'views', 'home')
+    if user_signed_in?
+      redirect_to stream_path
+    elsif request.format == :mobile
+      if partial_dir.join('_show.mobile.haml').exist? ||
+         partial_dir.join('_show.mobile.erb').exist? ||
+         partial_dir.join('_show.haml').exist?
+        render :show
+      else
+        redirect_to user_session_path
+      end
+    elsif partial_dir.join('_show.html.haml').exist? ||
+          partial_dir.join('_show.html.erb').exist? ||
+          partial_dir.join('_show.haml').exist?
+      render :show
+    elsif Role.admins.any?
+      render :default
+    else
+      redirect_to podmin_path
+    end
   end
-end
+    
+          respond_to do |format|
+        format.json { render :json => { :guid => note.id, :unread => note.unread } }
+      end
+    
+          def left_diff_line_number(id, line)
+        if line =~ /^@@/
+          m, li                  = *line.match(/\-(\d+)/)
+          @left_diff_line_number = li.to_i
+          @current_line_number   = @left_diff_line_number
+          ret                    = '...'
+        elsif line[0] == ?-
+          ret                    = @left_diff_line_number.to_s
+          @left_diff_line_number += 1
+          @current_line_number   = @left_diff_line_number - 1
+        elsif line[0] == ?+
+          ret = ' '
+        else
+          ret                    = @left_diff_line_number.to_s
+          @left_diff_line_number += 1
+          @current_line_number   = @left_diff_line_number - 1
+        end
+        ret
+      end
+    
+          def is_edit_page
+        false
+      end
+    
+        assert_no_match /Edit Page/,             last_response.body, ''Edit Page' link not blocked in compare template'
+    assert_no_match /Revert Changes/,        last_response.body, ''Revert Changes' link not blocked in compare template'
+  end
+    
+        @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+    @view.instance_variable_set :@content, page.formatted_data
+    @view.instance_variable_set :@h1_title, false
