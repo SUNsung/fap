@@ -1,108 +1,168 @@
 
         
-            BLACKJACK = 21
+            def __init__(self, key, value, sep, orig):
+        self.key = key
+        self.value = value
+        self.sep = sep
+        self.orig = orig
     
-        MOTORCYCLE = 0
-    COMPACT = 1
-    LARGE = 2
+        elif args.form and not args.files:
+        # If sending files, `requests` will set
+        # the `Content-Type` for us.
+        default_headers['Content-Type'] = FORM_CONTENT_TYPE
+    return default_headers
     
-        @contextmanager
-    def session_transaction(self, *args, **kwargs):
-        '''When used in combination with a ``with`` statement this opens a
-        session transaction.  This can be used to modify the session that
-        the test client uses.  Once the ``with`` block is left the session is
-        stored back.
-    
-        If you want to replace the response object used you can subclass this and
-    set :attr:`~flask.Flask.response_class` to your subclass.
-    
-        res = client.get('/')
-    assert res.status_code == 200
-    assert res.data == b''
-    assert called == ['request', 'app']
-    
-            if not any(os.path.isfile('%s/certutil' % x) for x in os.environ['PATH'].split(os.pathsep)):
-            xlog.info('please install *libnss3-tools* package to import GoAgent root ca')
-            return False
+    from httpie.utils import repr_dict_nice
     
     
-class MismatchedNotSetException(MismatchedSetException):
-    '''@brief Used for remote debugger deserialization'''
-    
-    def __str__(self):
-        return 'MismatchedNotSetException(%r!=%r)' % (
-            self.getUnexpectedType(), self.expecting
-            )
-    __repr__ = __str__
-    
-            where x in T* and alpha, beta in V*; T is set of terminals and
-        V is the set of terminals and nonterminals.  In other words,
-        FOLLOW(r) is the set of all tokens that can possibly follow
-        references to r in *any* sentential form (context).  At
-        runtime, however, we know precisely which context applies as
-        we have the call chain.  We may compute the exact (rather
-        than covering superset) set of following tokens.
+class HTTPMessage(object):
+    '''Abstract class for HTTP messages.'''
     
     
-    def rewind(self, marker=None):
-        '''
-        Reset the stream so that next call to index would return marker.
-        The marker will usually be index() but it doesn't have to be.  It's
-        just a marker to indicate what state the stream was in.  This is
-        essentially calling release() and seek().  If there are markers
-        created after this marker argument, this routine must unroll them
-        like a stack.  Assume the state the stream was in when this marker
-        was created.
+class PrettyStream(EncodedStream):
+    '''In addition to :class:`EncodedStream` behaviour, this stream applies
+    content processing.
     
-    def baomihua_download_by_id(id, title=None, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html('http://play.baomihua.com/getvideourl.aspx?flvid=%s&devicetype=phone_app' % id)
-    host = r1(r'host=([^&]*)', html)
-    assert host
-    type = r1(r'videofiletype=([^&]*)', html)
-    assert type
-    vid = r1(r'&stream_name=([^&]*)', html)
-    assert vid
-    dir_str = r1(r'&dir=([^&]*)', html).strip()
-    url = 'http://%s/%s/%s.%s' % (host, dir_str, vid, type)
-    _, ext, size = url_info(url)
-    print_info(site_info, title, type, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir, merge = merge)
+        # Auth
+    def get_auth_plugins(self):
+        return [plugin for plugin in self if issubclass(plugin, AuthPlugin)]
     
-    import json
-import re
-    
-        if re.match(r'https?://movie', url):
-        title = match1(html, 'name='description' content='([^']+)')
-        tid = match1(url, 'trailer/(\d+)')
-        real_url = 'https://movie.douban.com/trailer/video_url?tid=%s' % tid
-        type, ext, size = url_info(real_url)
-    
-                    moz_ec_name = search_dict(sym_to_name, 'mozEcName')
-                push = search_dict(sym_to_name, 'push')
-                patt = '{}\.{}\('(.+?)'\)'.format(moz_ec_name, push)
-                ec_list = re.findall(patt, code)
-                [magic_list.append(sym_to_name[ec]) for ec in ec_list]
-        return magic_list
+        class Plugin(AuthPlugin):
+        auth_type = 'test-prompt-false'
+        prompt_password = False
     
     
-def show_prediction_labels_on_image(img_path, predictions):
+def test_default_options(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http(httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['form'] == {'foo': 'bar'}
+    
+    error_msg = None
+    
+    
+def test_follow_redirect_output_options(httpbin):
+    r = http('--check-status',
+             '--follow',
+             '--all',
+             '--print=h',
+             '--history-print=H',
+             httpbin.url + '/redirect/2')
+    assert r.count('GET /') == 2
+    assert 'HTTP/1.1 302 FOUND' not in r
+    assert HTTP_OK in r
+    
+    #: Python 3.x?
+is_py3 = (_ver[0] == 3)
+    
+        Requests does not use the dict interface internally; it's just for
+    compatibility with external client code. All requests code should work
+    out of the box with externally provided instances of ``CookieJar``, e.g.
+    ``LWPCookieJar`` and ``FileCookieJar``.
+    
     '''
-    Shows the face recognition results visually.
+requests.hooks
+~~~~~~~~~~~~~~
     
-        pool = context.Pool(processes=processes)
+            assert server.handler_results[0] == b''
     
-        function_parameters = zip(
-        images_to_check,
-        itertools.repeat(known_names),
-        itertools.repeat(known_face_encodings),
-        itertools.repeat(tolerance),
-        itertools.repeat(show_distance)
-    )
+        def test_encode_override(self):
+        self.assertEqual('y', self.field.encode('y'))
     
-            img_b1 = api.load_image_file(os.path.join(os.path.dirname(__file__), 'test_images', 'biden.jpg'))
+        def test_repr(self):
+        self.assertEqual(repr(self.addr2), 'certbot_apache.obj.Addr(('127.0.0.1', '443'))')
     
-    # 你需要在sudo raspi-config中把camera功能打开
-camera = picamera.PiCamera()
-camera.resolution = (320, 240)
-output = np.empty((240, 320, 3), dtype=np.uint8)
+        def _call(self):
+        from certbot.client import determine_user_agent
+        return determine_user_agent(self.config)
+    
+    
+class IntegrationTestsContext(certbot_context.IntegrationTestsContext):
+    '''General fixture describing a certbot-nginx integration tests context'''
+    def __init__(self, request):
+        super(IntegrationTestsContext, self).__init__(request)
+    
+        lineage = domains.split(',')[0]
+    server_cert = ssl.get_server_certificate(('localhost', context.tls_alpn_01_port))
+    with open(os.path.join(context.workspace, 'conf/live/{0}/cert.pem'.format(lineage)), 'r') as file:
+        certbot_cert = file.read()
+    
+    
+  def Response( self ):
+    return self._response
+    
+        if not self._response_future.done():
+      # Nothing yet...
+      return True
+    
+    from ycm.tests.test_utils import ( CurrentWorkingDirectory, ExtendedMock,
+                                   MockVimModule, MockVimBuffers, VimBuffer )
+MockVimModule()
+    
+    
+def MultipleFilterTypesTypeTest_test():
+    
+      def run( self ):
+    if not self.future.set_running_or_notify_cancel():
+      return
+    
+        Returns:
+        A named 2-tuple of sets. The first set, named 'done', contains the
+        futures that completed (is finished or cancelled) before the wait
+        completed. The second set, named 'not_done', contains uncompleted
+        futures.
+    '''
+    with _AcquireFutures(fs):
+        done = set(f for f in fs
+                   if f._state in [CANCELLED_AND_NOTIFIED, FINISHED])
+        not_done = set(fs) - done
+    
+    def upload_chunk_file(core, fileDir, fileSymbol, fileSize,
+        file_, chunk, chunks, uploadMediaRequest):
+    url = core.loginInfo.get('fileUrl', core.loginInfo['url']) + \
+        '/webwxuploadmedia?f=json'
+    # save it on server
+    cookiesList = {name:data for name,data in core.s.cookies.items()}
+    fileType = mimetypes.guess_type(fileDir)[0] or 'application/octet-stream'
+    fileName = utils.quote(os.path.basename(fileDir))
+    files = OrderedDict([
+        ('id', (None, 'WU_FILE_0')),
+        ('name', (None, fileName)),
+        ('type', (None, fileType)),
+        ('lastModifiedDate', (None, time.strftime('%a %b %d %Y %H:%M:%S GMT+0800 (CST)'))),
+        ('size', (None, str(fileSize))),
+        ('chunks', (None, None)),
+        ('chunk', (None, None)),
+        ('mediatype', (None, fileSymbol)),
+        ('uploadmediarequest', (None, uploadMediaRequest)),
+        ('webwx_data_ticket', (None, cookiesList['webwx_data_ticket'])),
+        ('pass_ticket', (None, core.loginInfo['pass_ticket'])),
+        ('filename' , (fileName, file_.read(524288), 'application/octet-stream'))])
+    if chunks == 1:
+        del files['chunk']; del files['chunks']
+    else:
+        files['chunk'], files['chunks'] = (None, str(chunk)), (None, str(chunks))
+    headers = { 'User-Agent' : config.USER_AGENT }
+    return core.s.post(url, files=files, headers=headers, timeout=config.TIMEOUT)
+    
+        def test_create_sns_message_body(self):
+        action = {
+            'Message': ['msg']
+        }
+        result_str = sns_listener.create_sns_message_body(self.subscriber, action)
+        result = json.loads(result_str)
+        try:
+            uuid.UUID(result.pop('MessageId'))
+        except KeyError:
+            assert False, 'MessageId missing in SNS response message body'
+        except ValueError:
+            assert False, 'SNS response MessageId not a valid UUID'
+        assert_equal(result, {'Message': 'msg', 'Type': 'Notification', 'TopicArn': 'arn'})
+    
+            expected_result = {'AliasArn': lambda_api.func_arn(self.FUNCTION_NAME) + ':' + self.ALIAS_NAME,
+                           'FunctionVersion': '1', 'Description': '', 'Name': self.ALIAS_NAME}
+        self.assertDictEqual(expected_result, result)
+    
+    
+class ApiGatewayPathsTest (unittest.TestCase):
