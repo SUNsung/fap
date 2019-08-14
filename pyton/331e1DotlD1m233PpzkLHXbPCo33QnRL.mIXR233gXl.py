@@ -1,109 +1,198 @@
 
         
-            return replace_command(command, pgr, get_pkgfile(pgr))
-    
-        def test_get_aliases(self, shell):
-        assert shell.get_aliases() == {'fish_config': 'fish_config',
-                                       'fuck': 'fuck',
-                                       'funced': 'funced',
-                                       'funcsave': 'funcsave',
-                                       'history': 'history',
-                                       'll': 'll',
-                                       'math': 'math',
-                                       'popd': 'popd',
-                                       'pushd': 'pushd',
-                                       'ruby': 'ruby',
-                                       'g': 'git',
-                                       'fish_key_reader': '/usr/bin/fish_key_reader',
-                                       'alias_with_equal_sign': 'echo'}
-        assert shell.get_aliases() == {'func1': 'func1', 'func2': 'func2'}
-    
-        def test_get_version_error(self, shell, Popen):
-        Popen.return_value.stdout.read.side_effect = RuntimeError
-        with pytest.raises(RuntimeError):
-            shell._get_version()
-        assert Popen.call_args[0][0] == ['powershell.exe', '$PSVersionTable.PSVersion']
-
-    
-        def test_app_alias_variables_correctly_set(self, shell):
-        alias = shell.app_alias('fuck')
-        assert 'fuck () {' in alias
-        assert 'TF_SHELL=zsh' in alias
-        assert 'TF_ALIAS=fuck' in alias
-        assert 'PYTHONIOENCODING=utf-8' in alias
-        assert 'TF_SHELL_ALIASES=$(alias)' in alias
-    }
-    
-        def _parse_alias(self, alias):
-        name, value = alias.replace('alias ', '', 1).split('=', 1)
-        if value[0] == value[-1] == ''' or value[0] == value[-1] == ''':
-            value = value[1:-1]
-        return name, value
-    
-    
-def _get_used_executables(command):
-    for script in get_valid_history_without_current(command):
-        yield script.split(' ')[0]
-    
-    COMMON_TYPOS = {
-    'list': ['versions', 'install --list'],
-    'remove': ['uninstall'],
-}
-    
-    
-@pytest.mark.parametrize('command, result', [
-    (Command('az providers list', misspelled_command), ['az provider list']),
-    (Command('az provider lis', misspelled_subcommand), ['az provider list'])
-])
-def test_get_new_command(command, result):
-    assert get_new_command(command) == result
-
-    
-    
-@sudo_support
-def get_new_command(command):
-    invalid_operation = command.output.split()[-1]
-    operations = _get_operations(command.script_parts[0])
-    return replace_command(command, invalid_operation, operations)
-
-    
-        # The font size ('10pt', '11pt' or '12pt').
-    #'pointsize': '10pt',
-    
-            # Draw a label with a name below the face
-        text_width, text_height = draw.textsize(name)
-        draw.rectangle(((left, bottom - text_height - 10), (right, bottom)), fill=(0, 0, 255), outline=(0, 0, 255))
-        draw.text((left + 6, bottom - text_height - 5), name, fill=(255, 255, 255, 255))
-    
-        function_parameters = zip(
-        images_to_check,
-        itertools.repeat(model),
-    )
-    
-        # Every 128 frames (the default batch size), batch process the list of frames to find faces
-    if len(frames) == 128:
-        batch_of_face_locations = face_recognition.batch_face_locations(frames, number_of_times_to_upsample=0)
-    
-    
-    # Display the results
-    for (top, right, bottom, left), name in zip(face_locations, face_names):
-        # Scale back up face locations since the frame we detected in was scaled to 1/4 size
-        top *= 4
-        right *= 4
-        bottom *= 4
-        left *= 4
-    
-    predictor_68_point_model = face_recognition_models.pose_predictor_model_location()
-pose_predictor_68_point = dlib.shape_predictor(predictor_68_point_model)
-    
-        #Parsing the arguments
-    parser = argparse.ArgumentParser()
-    parser.add_argument('dir_path', help = 'Path to tldr 'pages' directory')
-    parser.add_argument('-c', choices=['solarized-light', 'solarized-dark'], help='Color scheme of the PDF')
-    args = parser.parse_args()
-    
-    loc = args.dir_path
-    if args.c == 'solarized-light' or args.c == 'solarized-dark':
-        colorscheme = args.c
         
-    main(loc, colorscheme)
+class Fieldset:
+    def __init__(self, form, name=None, readonly_fields=(), fields=(), classes=(),
+                 description=None, model_admin=None):
+        self.form = form
+        self.name, self.fields = name, fields
+        self.classes = ' '.join(classes)
+        self.description = description
+        self.model_admin = model_admin
+        self.readonly_fields = readonly_fields
+    
+    
+class StringConverter:
+    regex = '[^/]+'
+    
+        def test_gin_index(self):
+        # Ensure the table is there and doesn't have an index.
+        self.assertNotIn('field', self.get_constraints(IntegerArrayModel._meta.db_table))
+        # Add the index
+        index_name = 'integer_array_model_field_gin'
+        index = GinIndex(fields=['field'], name=index_name)
+        with connection.schema_editor() as editor:
+            editor.add_index(IntegerArrayModel, index)
+        constraints = self.get_constraints(IntegerArrayModel._meta.db_table)
+        # Check gin index was added
+        self.assertEqual(constraints[index_name]['type'], GinIndex.suffix)
+        # Drop the index
+        with connection.schema_editor() as editor:
+            editor.remove_index(IntegerArrayModel, index)
+        self.assertNotIn(index_name, self.get_constraints(IntegerArrayModel._meta.db_table))
+    
+        @property
+    def layer_name(self):
+        'Return the name of the layer for the feature.'
+        name = capi.get_feat_name(self._layer._ldefn)
+        return force_str(name, self.encoding, strings_only=True)
+    
+            For raster formats using Persistent Auxiliary Metadata (PAM) services,
+        the statistics might be cached in an auxiliary file.
+        '''
+        # Prepare array with arguments for capi function
+        smin, smax, smean, sstd = c_double(), c_double(), c_double(), c_double()
+        stats_args = [
+            self._ptr, c_int(approximate), byref(smin), byref(smax),
+            byref(smean), byref(sstd), c_void_p(), c_void_p(),
+        ]
+    
+        volname='Python %s'%(getFullVersion())
+    cmd = ('hdiutil create -format UDRW -volname %s -srcfolder %s -size 100m %s'%(
+            shellQuote(volname),
+            shellQuote(os.path.join(WORKDIR, 'installer')),
+            shellQuote(imagepath + '.tmp.dmg' )))
+    for i in range(5):
+        fd = os.popen(cmd, 'r')
+        data = fd.read()
+        xit = fd.close()
+        if not xit:
+            break
+        sys.stdout.write(data)
+        print(' -- retrying hdiutil create')
+        time.sleep(5)
+    else:
+        raise RuntimeError('command failed: %s'%(cmd,))
+    
+        def __init__(self, raise_on_events=None, exc_type=RuntimeError):
+        self.raise_on_events = raise_on_events or ()
+        self.exc_type = exc_type
+        self.seen = []
+        self.closed = False
+    
+        def test_get_source(self):
+        # Verify the source code is returned as a string.
+        # If an OSError is raised by get_data then raise ImportError.
+        expected_source = self.loader.source.decode('utf-8')
+        self.assertEqual(self.loader.get_source(self.name), expected_source)
+        def raise_OSError(path):
+            raise OSError
+        self.loader.get_data = raise_OSError
+        with self.assertRaises(ImportError) as cm:
+            self.loader.get_source(self.name)
+        self.assertEqual(cm.exception.name, self.name)
+    
+        # No need to report 'unknown' information...
+    platform = platform.replace('unknown', '')
+    
+            def enum_types(mimedb):
+            i = 0
+            while True:
+                try:
+                    ctype = _winreg.EnumKey(mimedb, i)
+                except OSError:
+                    break
+                else:
+                    if '\0' not in ctype:
+                        yield ctype
+                i += 1
+    
+    
+if __name__ == '__main__':
+    unittest.main()
+
+    
+        def date(self):
+        '''Process the DATE command.
+        Returns:
+        - resp: server response if successful
+        - date: datetime object
+        '''
+        resp = self._shortcmd('DATE')
+        if not resp.startswith('111'):
+            raise NNTPReplyError(resp)
+        elem = resp.split()
+        if len(elem) != 2:
+            raise NNTPDataError(resp)
+        date = elem[1]
+        if len(date) != 14:
+            raise NNTPDataError(resp)
+        return resp, _parse_datetime(date, None)
+    
+        def user(self, user):
+        '''Send user name, return response
+    
+        def _qsize(self):
+        return len(self.queue)
+    
+        def message_as_clear(self, body_parts, attachments, parts, msg):
+        m = self._str_msg(msg)
+        m.clear()
+        self.assertEqual(len(m), 0)
+        self.assertEqual(list(m.items()), [])
+        self.assertIsNone(m.get_payload())
+        self.assertEqual(list(m.iter_parts()), [])
+    
+            class B2(self.basetype):
+            def __init__(me, *args, **kwargs):
+                if self.basetype is not bytes:
+                    self.basetype.__init__(me, *args, **kwargs)
+                me.foo = 'bar'
+    
+        def test_reentrant_write_buffered(self):
+        self.check_reentrant_write(b'xy', mode='wb')
+    
+    class ExtensionTests(unittest.TestCase):
+    def CheckScriptStringSql(self):
+        con = sqlite.connect(':memory:')
+        cur = con.cursor()
+        cur.executescript('''
+            -- bla bla
+            /* a stupid comment */
+            create table a(i);
+            insert into a(i) values (5);
+            ''')
+        cur.execute('select i from a')
+        res = cur.fetchone()[0]
+        self.assertEqual(res, 5)
+    
+        def callback(response):
+        response.rethrow()
+        assert len(response.body) == (options.num_chunks * options.chunk_size)
+        logging.warning('fetch completed in %s seconds', response.request_time)
+        IOLoop.current().stop()
+    
+    
+# copied from fix_tuple_params.py
+def is_docstring(stmt):
+    return isinstance(stmt, pytree.Node) and stmt.children[0].type == token.STRING
+    
+        kwargs['testRunner'] = test_runner_factory(orig_stderr)
+    try:
+        tornado.testing.main(**kwargs)
+    finally:
+        # The tests should run clean; consider it a failure if they
+        # logged anything at info level or above.
+        if (
+            log_counter.info_count > 0
+            or log_counter.warning_count > 0
+            or log_counter.error_count > 0
+            or counting_stderr.byte_count > 0
+        ):
+            logging.error(
+                'logged %d infos, %d warnings, %d errors, and %d bytes to stderr',
+                log_counter.info_count,
+                log_counter.warning_count,
+                log_counter.error_count,
+                counting_stderr.byte_count,
+            )
+            sys.exit(1)
+    
+        def _handle_events(self, fd: int, events: int) -> None:
+        read_fd = pycares.ARES_SOCKET_BAD
+        write_fd = pycares.ARES_SOCKET_BAD
+        if events & IOLoop.READ:
+            read_fd = fd
+        if events & IOLoop.WRITE:
+            write_fd = fd
+        self.channel.process_fd(read_fd, write_fd)
