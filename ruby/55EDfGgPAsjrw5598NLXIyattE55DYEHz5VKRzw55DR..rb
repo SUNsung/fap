@@ -1,62 +1,53 @@
 
         
-        def codepoints_to_unicode(codepoints)
-  if codepoints.include?(' ')
-    codepoints.split(' ').map(&:hex).pack('U*')
-  else
-    [codepoints.hex].pack('U')
-  end
-end
+          describe '#resource' do
+    it 'defines a resource' do
+      subject.resource('foo') { url 'foo-1.0' }
+      expect(subject).to have_defined_resource('foo')
+    end
     
-        let(:follow)  { double(account: account, errors: errors) }
-    let(:errors)  { double(add: nil) }
-    let(:account) { double(nil?: _nil, local?: local, following_count: 0, followers_count: 0) }
-    let(:_nil)    { true }
-    let(:local)   { false }
-    
-      def eligible_users
-    User.emailable
-        .where('current_sign_in_at < ?', (FREQUENCY + SIGN_IN_OFFSET).ago)
-        .where('last_emailed_at IS NULL OR last_emailed_at < ?', FREQUENCY.ago)
-  end
-end
-
-    
-          it 'sends email' do
-        is_expected.to change(ActionMailer::Base.deliveries, :count).by(1)
+        def downloader
+      @downloader ||= begin
+        strategy = DownloadStrategyDetector.detect(cask.url.to_s, cask.url.using)
+        strategy.new(cask.url.to_s, cask.token, cask.version, cache: Cache.path, **cask.url.specs)
       end
     end
     
-            let(:object_json) do
-          {
-            id: 'https://example.com/actor#bar',
-            type: 'Note',
-            content: 'Lorem ipsum',
-            to: 'http://example.com/followers',
-            attributedTo: 'https://example.com/actor',
-          }
-        end
+        def run
+      command_name, *args = detect_command_and_arguments(*@args)
+      command = if help?
+        args.unshift(command_name) unless command_name.nil?
+        'help'
+      else
+        self.class.lookup_command(command_name)
+      end
     
-    SimpleForm.setup do |config|
-  # Wrappers are used by the form builder to generate a
-  # complete input. You can remove any component from the
-  # wrapper, change the order or even add your own to the
-  # stack. The options given below are used to wrap the
-  # whole input.
-  config.wrappers :default, class: :input, hint_class: :field_with_hint, error_class: :field_with_errors do |b|
-    ## Extensions enabled by default
-    # Any of these extensions can be disabled for a
-    # given input by passing: `f.input EXTENSION_NAME => false`.
-    # You can make any of these extensions optional by
-    # renaming `b.use` to `b.optional`.
+          def upload_dest
+        @upload_dest
+      end
     
-    # create and write to opml file
-xml = Builder::XmlMarkup.new(indent: 2)
-xml.instruct! :xml, version: '1.0', encoding: 'UTF-8'
-xml.tag!('opml', version: '1.0') do
-  # head
-  xml.tag!('head') do
-    xml.title TITLE
+          def use_identicon
+        @wiki.user_icons == 'identicon'
+      end
+    
+      test 'clean path with double leading slash' do
+    assert_equal '/Mordor', clean_path('//Mordor')
+  end
+end
+    
+      test 'extract destination file name in case of path renaming' do
+    view = Precious::Views::LatestChanges.new
+    assert_equal 'newname.md', view.extract_renamed_path_destination('oldname.md => newname.md')
+    assert_equal 'newDirectoryName/fileName.md', view.extract_renamed_path_destination('{oldDirectoryName => newDirectoryName}/fileName.md')
   end
     
-        template = (@article.decorate.cached_tag_list_array & SHE_CODED_TAGS).any? ? 'shecoded' : 'article'
+      test 'transliteration' do
+    # we transliterate only when adapter is grit
+    return if defined?(Gollum::GIT_ADAPTER) && Gollum::GIT_ADAPTER != 'grit'
+    
+          expect(instance.render).to match %r{wemux.ls.2>\/dev\/null}
+    end
+  end
+    
+      orig_stdout = $stdout
+  orig_stderr = $stderr
