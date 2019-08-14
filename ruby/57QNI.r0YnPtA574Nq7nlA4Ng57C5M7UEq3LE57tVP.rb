@@ -1,134 +1,140 @@
 
         
-            def resource_params
-      params.require(:email_domain_block).permit(:domain)
+              # Check for mixed tab/spaces. Upgrade this to an error() soon.
+      if (ln.length > 1) and (ln =~ /^([\t ]*)/) and ($1.match(/\x20\x09|\x09\x20/))
+        warn('Space-Tab mixed indent: #{ln.inspect}', idx)
+      end
+    
+        xml_header = %Q|<?xml version='1.0' encoding='UTF-8'?>
+\t<c:contact c:Version='1' xmlns:c='http://schemas.microsoft.com/Contact' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:MSP2P='http://schemas.microsoft.com/Contact/Extended/MSP2P'>
+\t<c:CreationDate>2019-04-10T20:19:26Z</c:CreationDate><c:Extended xsi:nil='true'/>
+\t|
+    
+      #
+  # Flushes all header pairs.
+  #
+  def reset
+    self.cmd_string = ''
+    self.clear
+    self.dcase_hash.clear
+  end
+    
+    
+      # If we found the resource handler for this resource, call its
+      # procedure.
+      if (p[1] == true)
+        Rex::ThreadFactory.spawn('HTTPServerRequestHandler', false) {
+          handler.on_request(cli, request)
+        }
+      else
+        handler.on_request(cli, request)
+      end
+    else
+      elog('Failed to find handler for resource: #{request.resource}',
+        LogSource)
+    
+      def ring_time
+    (self.ring_finish || Time.now).to_i - self.ring_start.to_i
+  end
+    
+              # Encodes the msg_type field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_msg_type
+            bn = OpenSSL::BN.new(msg_type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+    Then(/^the specified stage files are created$/) do
+  qa = TestApp.test_app_path.join('config/deploy/qa.rb')
+  production = TestApp.test_app_path.join('config/deploy/production.rb')
+  expect(File.exist?(qa)).to be true
+  expect(File.exist?(production)).to be true
+end
+    
+          def warn_set_scm_is_deprecated
+        $stderr.puts(<<-MESSAGE)
+[Deprecation Notice] `set :scm, #{scm_name.inspect}` is deprecated.
+To ensure your project is compatible with future versions of Capistrano,
+remove the :scm setting and instead add these lines to your Capfile after
+`require 'capistrano/deploy'`:
+    
+          def escaped_name
+        CGI.escape(@name)
+      end
+    
+      test 'clean path without leading slash' do
+    assert_equal '/Mordor', clean_path('Mordor')
+  end
+    
+    # internal
+require File.expand_path('../gollum/uri_encode_component', __FILE__)
+    
+    require 'gollum'
+require 'gollum/views/layout'
+require 'gollum/views/editable'
+require 'gollum/views/has_page'
+    
+        it 'returns nil if an except is provided' do
+      valid_article = create(:article, tags: 'explainlikeimfive')
+      expect(described_class.new(valid_article, 'explainlikeimfive').tag).to eq(nil)
+    end
+    
+      describe 'POST /users/api_secrets' do
+    context 'when create succeeds' do
+      let(:valid_params) { { description: 'My Test 3rd Party App' } }
+    
+    RSpec.describe 'all routes', type: :routing do
+  let(:podcast)     { create(:podcast) }
+  let(:user)        { create(:user) }
+    
+        private
+    
+                if response.cvv_result
+              self.cvv_response_code = response.cvv_result['code']
+              self.cvv_response_message = response.cvv_result['message']
+            end
+          end
+          send('#{success_state}!')
+        else
+          send(failure_state)
+          gateway_error(response)
+        end
+      end
+    
+        def method_missing(method, *args)
+      name = method.to_s.delete('=')
+      if has_preference? name
+        if method.to_s =~ /=$/
+          set_preference(name, args.first)
+        else
+          get_preference name
+        end
+      else
+        super
+      end
     end
   end
 end
 
     
-            if params[:create_and_unresolve]
-          @report.unresolve!
-          log_action :reopen, @report
-        end
-    
-      # Answers if the response is a redirection one.
-  #
-  # @return [Boolean] true if the response is a redirection, false otherwise.
-  def redirect?
-    [301, 302, 303, 307, 308].include?(code)
-  end
-    
-    
-IAX_SUBTYPE_NEW     = 1
-IAX_SUBTYPE_PING    = 2
-IAX_SUBTYPE_PONG    = 3
-IAX_SUBTYPE_ANSWER  = 4
-IAX_SUBTYPE_ACK     = 4
-IAX_SUBTYPE_HANGUP  = 5
-IAX_SUBTYPE_REJECT  = 6
-IAX_SUBTYPE_ACCEPT  = 7
-IAX_SUBTYPE_AUTHREQ = 8
-IAX_SUBTYPE_AUTHREP = 9
-IAX_SUBTYPE_INVAL   = 10
-IAX_SUBTYPE_LAGRQ   = 11
-IAX_SUBTYPE_LAGRP   = 12
-IAX_SUBTYPE_REGREQ  = 13
-IAX_SUBTYPE_REGAUTH = 14
-IAX_SUBTYPE_REGACK  = 15
-IAX_SUBTYPE_REGREJ  = 16
-IAX_SUBTYPE_REGREL  = 17
-IAX_SUBTYPE_VNAK    = 18
-    
-    module Rex
-  module Proto
-    module Kerberos
-      module CredentialCache
-        # This class provides a representation of credential times stored in the Kerberos Credential Cache.
-        class Time < Element
-          # @!attribute auth_time
-          #   @return [Integer]
-          attr_accessor :auth_time
-          # @!attribute start_time
-          #   @return [Integer]
-          attr_accessor :start_time
-          # @!attribute end_time
-          #   @return [Integer]
-          attr_accessor :end_time
-          # @!attribute renew_till
-          #   @return [Integer]
-          attr_accessor :renew_till
-    
-              # Encodes the authenticator field
-          #
-          # @return [String]
-          def encode_authenticator
-            authenticator.encode
-          end
-        end
-      end
-    end
-  end
-end
-    
-              # Decodes the nonce field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_nonce(input)
-            input.value[0].value.to_i
-          end
-    
-              # Decodes a Rex::Proto::Kerberos::Model::EncryptedData
-          #
-          # @param input [String, OpenSSL::ASN1::Sequence] the input to decode from
-          # @return [self]
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode(input)
-            case input
-            when String
-              decode_string(input)
-            when OpenSSL::ASN1::Sequence
-              decode_asn1(input)
-            else
-              raise ::RuntimeError, 'Failed to decode EncryptedData Name, invalid input'
-            end
-    
-    Given(/^file '(.*?)' does not exist in shared path$/) do |file|
-  file_shared_path = TestApp.shared_path.join(file)
-  run_vagrant_command('mkdir -p #{TestApp.shared_path}')
-  run_vagrant_command('touch #{file_shared_path} && rm #{file_shared_path}')
-end
-    
-        def any?(key)
-      value = fetch(key)
-      if value && value.respond_to?(:any?)
-        begin
-          return value.any?
-        rescue ArgumentError # rubocop:disable Lint/HandleExceptions
-          # Gracefully ignore values whose `any?` method doesn't accept 0 args
-        end
+          return_items.group_by(&:exchange_variant).map do |variant, variant_return_items|
+        variant_inventory_units = variant_return_items.map(&:exchange_inventory_units).flatten
+        line_item = Spree::LineItem.create!(variant: variant, quantity: variant_return_items.count, order: order)
+        variant_inventory_units.each { |i| i.update!(line_item_id: line_item.id, order_id: order.id) }
       end
     
-    class ConfigTag < Liquid::Tag
-  def initialize(tag_name, options, tokens)
-    super
-    options = options.split(' ').map {|i| i.strip }
-    @key = options.slice!(0)
-    @tag = nil
-    @classname = nil
-    options.each do |option|
-      @tag = $1 if option =~ /tag:(\S+)/ 
-      @classname = $1 if option =~ /classname:(\S+)/
-    end
-  end
+            def show
+          authorize! :show, @order, order_token
+          @address = find_address
+          respond_with(@address)
+        end
     
-        def render(context)
-      if @img
-        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
-      else
-        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
-      end
-    end
-  end
-end
+            def inventory_unit
+          @inventory_unit ||= InventoryUnit.accessible_by(current_ability, :show).find(params[:id])
+        end
+    
+            def destroy
+          @option_value = scope.accessible_by(current_ability, :destroy).find(params[:id])
+          @option_value.destroy
+          render plain: nil, status: 204
+        end
