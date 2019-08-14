@@ -1,55 +1,147 @@
 
         
-        This script loads the ```s2s.h5``` model saved by [lstm_seq2seq.py
-](/examples/lstm_seq2seq/) and generates sequences from it. It assumes
-that no changes have been made (for example: ```latent_dim``` is unchanged,
-and the input data and model architecture are unchanged).
+                if self.max_depth is not None and depth == self.max_depth:
+            self._finalize_leaf(left_child_node)
+            self._finalize_leaf(right_child_node)
+            return left_child_node, right_child_node
+    
+            print('benchmarking scikit-learn: ')
+        scikit_results.append(bench(ScikitLasso, X, Y, X_test, Y_test, coef_))
+        print('benchmarking glmnet: ')
+        glmnet_results.append(bench(GlmnetLasso, X, Y, X_test, Y_test, coef_))
     
     
-def _runner(init, shape, target_mean=None, target_std=None,
-            target_max=None, target_min=None):
-    variable = K.variable(init(shape))
-    output = K.get_value(variable)
-    lim = 3e-2
-    if target_std is not None:
-        assert abs(output.std() - target_std) < lim
-    if target_mean is not None:
-        assert abs(output.mean() - target_mean) < lim
-    if target_max is not None:
-        assert abs(output.max() - target_max) < lim
-    if target_min is not None:
-        assert abs(output.min() - target_min) < lim
-    
-        # Compute quantities required for feature-wise normalization
-    # (std, mean, and principal components if ZCA whitening is applied).
-    datagen.fit(x_train)
+def compute_bench(alpha, n_samples, n_features, precompute):
+    lasso_results = []
+    lars_lasso_results = []
     
     
-if __name__ == '__main__':
-    pytest.main([__file__])
-
+def plot_feature_errors(all_errors, batch_size, all_components, data):
+    plt.figure()
+    plot_results(all_components, all_errors['pca'], label='PCA')
+    plot_results(all_components, all_errors['ipca'],
+                 label='IncrementalPCA, bsize=%i' % batch_size)
+    plt.legend(loc='lower left')
+    plt.suptitle('Algorithm error vs. n_components\n'
+                 'LFW, size %i x %i' % data.shape)
+    plt.xlabel('Number of components (out of max %i)' % data.shape[1])
+    plt.ylabel('Mean absolute error')
     
-        def _call_end_hook(self, mode):
-        '''Helper function for on_{train|test|predict}_end methods.'''
-        if mode == _TRAIN:
-            self.on_train_end()
-        elif mode == _TEST:
-            self.on_test_end()
-        else:
-            self.on_predict_end()
+            start = time.time()
+        func(X, n_jobs=-1)
+        multi_core.append(time.time() - start)
     
-        @interfaces.legacy_gaussiannoise_support
-    def __init__(self, stddev, **kwargs):
-        super(GaussianNoise, self).__init__(**kwargs)
-        self.supports_masking = True
-        self.stddev = stddev
+        print('============================================')
+    print('Warning: this is going to take a looong time')
+    print('============================================')
     
-            # Arguments
-            chars: Characters that can appear in the input.
-        '''
-        self.chars = sorted(set(chars))
-        self.char_indices = dict((c, i) for i, c in enumerate(self.chars))
-        self.indices_char = dict((i, c) for i, c in enumerate(self.chars))
+        # TASK: Build a grid search to find out whether unigrams or bigrams are
+    # more useful.
+    # Fit the pipeline on the training set using grid search for the parameters
+    
+        # TASK: print the mean and std for each candidate along with the parameter
+    # settings for all the candidates explored by grid search.
+    n_candidates = len(grid_search.cv_results_['params'])
+    for i in range(n_candidates):
+        print(i, 'params - %s; mean - %0.2f; std - %0.2f'
+                 % (grid_search.cv_results_['params'][i],
+                    grid_search.cv_results_['mean_test_score'][i],
+                    grid_search.cv_results_['std_test_score'][i]))
+    
+    This example demonstrates how to generate a checkerboard dataset and
+bicluster it using the Spectral Biclustering algorithm.
+    
+    agglo = cluster.FeatureAgglomeration(connectivity=connectivity,
+                                     n_clusters=32)
+    
+    n_clusters = 5
+np.random.seed(0)
+    
+    import numpy as np
+import matplotlib.pyplot as plt
+    
+        def test_repr(self):
+        if self.repr is not None:
+            self.assertEqual(repr(self.set), self.repr)
+    
+    def fk(
+    **k  # type: K
+):
+    pass
+    
+    
+class SMTP:
+    '''This class manages a connection to an SMTP or ESMTP server.
+    SMTP Objects:
+        SMTP objects have the following attributes:
+            helo_resp
+                This is the message given by the server in response to the
+                most recent HELO command.
+    
+        def test_bad_file_actions(self):
+        args = self.NOOP_PROGRAM
+        with self.assertRaises(TypeError):
+            self.spawn_func(args[0], args, os.environ,
+                            file_actions=[None])
+        with self.assertRaises(TypeError):
+            self.spawn_func(args[0], args, os.environ,
+                            file_actions=[()])
+        with self.assertRaises(TypeError):
+            self.spawn_func(args[0], args, os.environ,
+                            file_actions=[(None,)])
+        with self.assertRaises(TypeError):
+            self.spawn_func(args[0], args, os.environ,
+                            file_actions=[(12345,)])
+        with self.assertRaises(TypeError):
+            self.spawn_func(args[0], args, os.environ,
+                            file_actions=[(os.POSIX_SPAWN_CLOSE,)])
+        with self.assertRaises(TypeError):
+            self.spawn_func(args[0], args, os.environ,
+                            file_actions=[(os.POSIX_SPAWN_CLOSE, 1, 2)])
+        with self.assertRaises(TypeError):
+            self.spawn_func(args[0], args, os.environ,
+                            file_actions=[(os.POSIX_SPAWN_CLOSE, None)])
+        with self.assertRaises(ValueError):
+            self.spawn_func(args[0], args, os.environ,
+                            file_actions=[(os.POSIX_SPAWN_OPEN,
+                                           3, __file__ + '\0',
+                                           os.O_RDONLY, 0)])
+    
+    def _python_exit():
+    global _shutdown
+    with _global_shutdown_lock:
+        _shutdown = True
+    items = list(_threads_queues.items())
+    for t, q in items:
+        q.put(None)
+    for t, q in items:
+        t.join()
+    
+    
+def parametric_relu(x, channel_shared=False, alpha_init=constant(0.), name='parametric_relu', reuse=None):
+    '''参数化 ReLU
+    
+                # Input shape: [128, 5, 32]
+            x = tf.constant(np.arange(10240, dtype=np.float32).reshape([128, 16, 5]))
+    
+    注意 x 经过 Highway 之后维度应该保持不变
+    
+    
+'''预定义好的正则化器
+'''
+l1_regularizer = L1L2Regularizer(l1=0.01)
+    
+    # 构建 FastText 模型
+sentences = [['Hello', 'World', '!'], ['I', 'am', 'huay', '.']]
+min_ngrams, max_ngrams = 2, 4  # ngrams 范围
+model = FastText(sentences, size=5, min_count=1, min_n=min_ngrams, max_n=max_ngrams)
+    
+        def flush_queue(self, q_name):
+        ''' Empty out a specific queue '''
+        logger.debug('QueueManager flushing: '%s'', q_name)
+        queue = self.queues[q_name]
+        while not queue.empty():
+            queue.get(True, 1)
     
     
 _HELPTEXT = (
@@ -59,208 +151,32 @@ _HELPTEXT = (
     'histograms between the source and destination faces.'
 )
     
-        The following variables should be defined:
-        _HELPTEXT: A string describing what this plugin does
-        _DEFAULTS: A dictionary containing the options, defaults and meta information. The
-                   dictionary should be defined as:
-                       {<option_name>: {<metadata>}}
+    args = parser.parse_args()
     
-        # MASK MANIPULATIONS
-    def erode(self, mask):
-        ''' Erode/dilate mask if requested '''
-        kernel = self.get_erosion_kernel(mask)
-        if self.config['erosion'] > 0:
-            logger.trace('Eroding mask')
-            mask = cv2.erode(mask, kernel, iterations=1)  # pylint: disable=no-member
-        else:
-            logger.trace('Dilating mask')
-            mask = cv2.dilate(mask, kernel, iterations=1)  # pylint: disable=no-member
-        return mask
+    default_encoding = sys.getfilesystemencoding()
     
-                       <option_name> should always be lower text.
-                   <metadata> dictionary requirements are listed below.
+    print('-'*40)
+print(' 搜索模式')
+print('-'*40)
     
-        def run(self, new_face):
-        ''' Perform selected adjustment on face '''
-        logger.trace('Performing scaling adjustment')
-        # Remove Mask for processing
-        reinsert_mask = False
-        if new_face.shape[2] == 4:
-            reinsert_mask = True
-            final_mask = new_face[:, :, -1]
-            new_face = new_face[:, :, :3]
-        new_face = self.process(new_face)
-        new_face = np.clip(new_face, 0.0, 1.0)
-        if reinsert_mask and new_face.shape[2] != 4:
-            # Reinsert Mask
-            new_face = np.concatenate((new_face, np.expand_dims(final_mask, axis=-1)), -1)
-        logger.trace('Performed scaling adjustment')
-        return new_face
-
+    cat abc.txt | python jiebacmd.py | sort | uniq -c | sort -nr -k1 | head -100
     
+    file_name = args[0]
     
-_DEFAULTS = {
-    'method': {
-        'default': 'unsharp_mask',
-        'info': 'The type of sharpening to use:'
-                '\n\t box: Fastest, but weakest method. Uses a box filter to assess edges.'
-                '\n\t gaussian: Slower, but better than box. Uses a gaussian filter to assess '
-                'edges.'
-                '\n\t unsharp-mask: Slowest, but most tweakable. Uses the unsharp-mask method '
-                'to assess edges.',
-        'datatype': str,
-        'rounding': None,
-        'min_max': None,
-        'choices': ['box', 'gaussian', 'unsharp_mask'],
-        'gui_radio': True,
-        'fixed': True,
-    },
-    'amount': {
-        'default': 150,
-        'info': 'Percentage that controls the magnitude of each overshoot (how much darker '
-                'and how much lighter the edge borders become).\nThis can also be thought of '
-                'as how much contrast is added at the edges. It does not affect the width of '
-                'the edge rims.',
-        'datatype': int,
-        'rounding': 1,
-        'min_max': (100, 500),
-        'choices': [],
-        'gui_radio': False,
-        'fixed': True,
-    },
-    'radius': {
-        'default': 0.3,
-        'info': 'Affects the size of the edges to be enhanced or how wide the edge rims '
-                'become, so a smaller radius enhances smaller-scale detail.\nRadius is set as '
-                'a percentage of the final frame width and rounded to the nearest pixel. E.g '
-                'for a 1280 width frame, a 0.6 percenatage will give a radius of 8px.\nHigher '
-                'radius values can cause halos at the edges, a detectable faint light rim '
-                'around objects. Fine detail needs a smaller radius. \nRadius and amount '
-                'interact; reducing one allows more of the other.',
-        'datatype': float,
-        'rounding': 1,
-        'min_max': (0.1, 5.0),
-        'choices': [],
-        'gui_radio': False,
-        'fixed': True,
-    },
-    'threshold': {
-        'default': 5.0,
-        'info': '[unsharp_mask only] Controls the minimal brightness change that will be '
-                'sharpened or how far apart adjacent tonal values have to be before the '
-                'filter does anything.\nThis lack of action is important to prevent smooth '
-                'areas from becoming speckled. The threshold setting can be used to sharpen '
-                'more pronounced edges, while leaving subtler edges untouched. \nLow values '
-                'should sharpen more because fewer areas are excluded. \nHigher threshold '
-                'values exclude areas of lower contrast.',
-        'datatype': float,
-        'rounding': 1,
-        'min_max': (1.0, 10.0),
-        'choices': [],
-        'gui_radio': False,
-        'fixed': True,
-    },
-}
-
+    log_f = open('1.log','w')
+log_f.write(' / '.join(map(str, words)))
     
-        The following variables should be defined:
-        _HELPTEXT: A string describing what this plugin does
-        _DEFAULTS: A dictionary containing the options, defaults and meta information. The
-                   dictionary should be defined as:
-                       {<option_name>: {<metadata>}}
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
-        The following keys are expected for the _DEFAULTS <metadata> dict:
-        datatype:  [required] A python type class. This limits the type of data that can be
-                   provided in the .ini file and ensures that the value is returned in the
-                   correct type to faceswap. Valid datatypes are: <class 'int'>, <class 'float'>,
-                   <class 'str'>, <class 'bool'>.
-        default:   [required] The default value for this option.
-        info:      [required] A string describing what this option does.
-        choices:   [optional] If this option's datatype is of <class 'str'> then valid
-                   selections can be defined here. This validates the option and also enables
-                   a combobox / radio option in the GUI.
-        gui_radio: [optional] If <choices> are defined, this indicates that the GUI should use
-                   radio buttons rather than a combobox to display this option.
-        min_max:   [partial] For <class 'int'> and <class 'float'> datatypes this is required
-                   otherwise it is ignored. Should be a tuple of min and max accepted values.
-                   This is used for controlling the GUI slider range. Values are not enforced.
-        rounding:  [partial] For <class 'int'> and <class 'float'> datatypes this is
-                   required otherwise it is ignored. Used for the GUI slider. For floats, this
-                   is the number of decimal places to display. For ints this is the step size.
-        fixed:     [optional] [train only]. Training configurations are fixed when the model is
-                   created, and then reloaded from the state file. Marking an item as fixed=False
-                   indicates that this value can be changed for existing models, and will override
-                   the value saved in the state file with the updated value in config. If not
-                   provided this will default to True.
-'''
-    
-    
-_DEFAULTS = {
-    'coverage': {
-        'default': 62.5,
-        'info': 'How much of the extracted image to train on. Generally the model is optimized'
-                '\nto the default value. Sensible values to use are:'
-                '\n\t62.5%% spans from eyebrow to eyebrow.'
-                '\n\t75.0%% spans from temple to temple.'
-                '\n\t87.5%% spans from ear to ear.'
-                '\n\t100.0%% is a mugshot.',
-        'datatype': float,
-        'rounding': 1,
-        'min_max': (62.5, 100.0),
-        'choices': [],
-        'gui_radio': False,
-        'fixed': True,
-    },
-}
-
-    
-        dynamodb = aws_stack.connect_to_resource('dynamodb')
-    # create table with stream forwarding config
-    aws_stack.create_dynamodb_table(TEST_TABLE_NAME, partition_key=PARTITION_KEY)
-    table = dynamodb.Table(TEST_TABLE_NAME)
-    
-        def test_extract_path_params(self):
-        params = apigateway_listener.extract_path_params('/foo/bar', '/foo/{param1}')
-        self.assertEqual(params, {'param1': 'bar'})
-    
-    TEST_STREAM_NAME = 'firehose_test_' + short_uid()
-TEST_TAG_1 = {'Key': 'MyTag', 'Value': 'TestValue'}
-TEST_TAG_2 = {'Key': 'AnotherTag', 'Value': 'AnotherValue'}
-TEST_TAGS = [TEST_TAG_1, TEST_TAG_2]
-    
-            # create state machine
-        role_arn = aws_stack.role_arn('sfn_role')
-        definition = clone(STATE_MACHINE_DEF)
-        lambda_arn_1 = aws_stack.lambda_function_arn(TEST_LAMBDA_NAME_1)
-        lambda_arn_2 = aws_stack.lambda_function_arn(TEST_LAMBDA_NAME_2)
-        definition['States']['step1']['Resource'] = lambda_arn_1
-        definition['States']['step2']['Resource'] = lambda_arn_2
-        definition = json.dumps(definition)
-        result = self.sfn_client.create_state_machine(
-            name=STATE_MACHINE_NAME, definition=definition, roleArn=role_arn)
-    
-    
-def as_tuple(ireq):
-    '''
-    Pulls out the (name: str, version:str, extras:(str)) tuple from the pinned InstallRequirement.
-    '''
-    if not is_pinned_requirement(ireq):
-        raise TypeError('Expected a pinned InstallRequirement, got {}'.format(ireq))
-    
-    from cerberus.validator import DocumentError, Validator
-from cerberus.schema import rules_set_registry, schema_registry, SchemaError
-from cerberus.utils import TypeDefinition
-    
-        def _check_with_bulk_schema(self, field, value):
-        # resolve schema registry reference
-        if isinstance(value, _str_type):
-            if value in self.known_rules_set_refs:
-                return
-            else:
-                self.known_rules_set_refs.add(value)
-            definition = self.target_validator.rules_set_registry.get(value)
-            if definition is None:
-                self._error(field, 'Rules set definition %s not found.' % value)
-                return
-            else:
-                value = definition
+        try:
+      result = self.fn( *self.args, **self.kwargs )
+    except BaseException:
+      e = sys.exc_info()[ 1 ]
+      self.future.set_exception( e )
+    else:
+      self.future.set_result( result )
