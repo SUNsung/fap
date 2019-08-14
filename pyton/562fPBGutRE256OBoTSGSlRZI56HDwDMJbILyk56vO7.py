@@ -1,239 +1,288 @@
 
         
+                series = source.get('format')
+        season_number = int_or_none(self._search_regex(
+            r'staffel-(\d+)', url, 'season number', default=None))
+        episode_number = int_or_none(self._search_regex(
+            r'episode-(\d+)', url, 'episode number', default=None))
+    
+            subheading = video.get('subheading')
+        if subheading:
+            title += ' - %s' % subheading
+    
+                    for caption in asset.get('caption_metadata', []):
+                    caption_url = caption.get('source_url')
+                    if not caption_url:
+                        continue
+                    subtitles.setdefault(caption.get('language', 'en'), []).append({
+                        'url': caption_url,
+                        'ext': determine_ext(caption_url, 'vtt'),
+                    })
+            elif asset.get('type') == 'image':
+                asset_location = asset.get('location')
+                if not asset_location:
+                    continue
+                thumbnails.append({
+                    'url': asset_location,
+                    'width': int_or_none(asset.get('width')),
+                    'height': int_or_none(asset.get('height')),
+                })
+        self._sort_formats(formats)
+    
+    secret_msg = b'Secret message goes here'
+    
+        # Get the version from youtube_dl/version.py without importing the package
+    exec(compile(open('youtube_dl/version.py').read(),
+                 'youtube_dl/version.py', 'exec'))
+    
+        def test_cache(self):
+        ydl = FakeYDL({
+            'cachedir': self.test_dir,
+        })
+        c = Cache(ydl)
+        obj = {'x': 1, 'y': ['ä', '\\a', True]}
+        self.assertEqual(c.load('test_cache', 'k.'), None)
+        c.store('test_cache', 'k.', obj)
+        self.assertEqual(c.load('test_cache', 'k2'), None)
+        self.assertFalse(_is_empty(self.test_dir))
+        self.assertEqual(c.load('test_cache', 'k.'), obj)
+        self.assertEqual(c.load('test_cache', 'y'), None)
+        self.assertEqual(c.load('test_cache2', 'k.'), None)
+        c.remove()
+        self.assertFalse(os.path.exists(self.test_dir))
+        self.assertEqual(c.load('test_cache', 'k.'), None)
+    
+        def test_guess_when_method_set_but_invalid_and_item_exists(self):
+        self.parser.args = argparse.Namespace()
+        self.parser.args.method = 'http://example.com/'
+        self.parser.args.url = 'new_item=a'
+        self.parser.args.items = [
+            KeyValue(
+                key='old_item', value='b', sep='=', orig='old_item=b')
+        ]
+        self.parser.args.ignore_stdin = False
+    
+        Exceptions are propagated.
+    
+    
+PACKAGES = [
+    'httpie',
+    'Pygments',
+    'requests',
+    'certifi',
+    'urllib3',
+    'idna',
+    'chardet',
+    'PySocks',
+]
+    
         '''
-    The approach taken is explained below. I decided to do it simply.
-    Initially I was considering parsing the data into some sort of
-    structure and then generating an appropriate README. I am still
-    considering doing it - but for now this should work. The only issue
-    I see is that it only sorts the entries at the lowest level, and that
-    the order of the top-level contents do not match the order of the actual
-    entries.
+    is_windows = is_windows
+    config_dir = DEFAULT_CONFIG_DIR
+    stdin = sys.stdin
+    stdin_isatty = stdin.isatty()
+    stdin_encoding = None
+    stdout = sys.stdout
+    stdout_isatty = stdout.isatty()
+    stdout_encoding = None
+    stderr = sys.stderr
+    stderr_isatty = stderr.isatty()
+    colors = 256
+    if not is_windows:
+        if curses:
+            try:
+                curses.setupterm()
+                colors = curses.tigetnum('colors')
+            except curses.error:
+                pass
+    else:
+        # noinspection PyUnresolvedReferences
+        import colorama.initialise
+        stdout = colorama.initialise.wrap_stream(
+            stdout, convert=None, strip=None,
+            autoreset=True, wrap=True
+        )
+        stderr = colorama.initialise.wrap_stream(
+            stderr, convert=None, strip=None,
+            autoreset=True, wrap=True
+        )
+        del colorama
     
-        def __init__(self, value, suit):
-        super(BlackJackCard, self).__init__(value, suit)
+        @property
+    def content_type(self):
+        '''Return the message content type.'''
+        ct = self._orig.headers.get('Content-Type', '')
+        if not isinstance(ct, str):
+            ct = ct.decode('utf8')
+        return ct
     
-        def reducer(self, key, values):
-        '''Sum values for each key.
-    
-        def __init__(self, object_list, per_page, orphans=0,
-                 allow_empty_first_page=True):
-        self.object_list = object_list
-        self._check_object_list_is_ordered()
-        self.per_page = int(per_page)
-        self.orphans = int(orphans)
-        self.allow_empty_first_page = allow_empty_first_page
-    
-        def has_changed(self, initial, data):
-        if self.disabled:
-            return False
-        if initial is None:
-            initial = []
-        if data is None:
-            data = []
-        if len(initial) != len(data):
-            return True
-        initial_set = {str(value) for value in initial}
-        data_set = {str(value) for value in data}
-        return data_set != initial_set
-    
-        def to_python(self, value):
-        return int(value)
-    
-        gis_operators = {
-        'bbcontains': PostGISOperator(op='~', raster=True),
-        'bboverlaps': PostGISOperator(op='&&', geography=True, raster=True),
-        'contained': PostGISOperator(op='@', raster=True),
-        'overlaps_left': PostGISOperator(op='&<', raster=BILATERAL),
-        'overlaps_right': PostGISOperator(op='&>', raster=BILATERAL),
-        'overlaps_below': PostGISOperator(op='&<|'),
-        'overlaps_above': PostGISOperator(op='|&>'),
-        'left': PostGISOperator(op='<<'),
-        'right': PostGISOperator(op='>>'),
-        'strictly_below': PostGISOperator(op='<<|'),
-        'strictly_above': PostGISOperator(op='|>>'),
-        'same_as': PostGISOperator(op='~=', raster=BILATERAL),
-        'exact': PostGISOperator(op='~=', raster=BILATERAL),  # alias of same_as
-        'contains': PostGISOperator(func='ST_Contains', raster=BILATERAL),
-        'contains_properly': PostGISOperator(func='ST_ContainsProperly', raster=BILATERAL),
-        'coveredby': PostGISOperator(func='ST_CoveredBy', geography=True, raster=BILATERAL),
-        'covers': PostGISOperator(func='ST_Covers', geography=True, raster=BILATERAL),
-        'crosses': PostGISOperator(func='ST_Crosses'),
-        'disjoint': PostGISOperator(func='ST_Disjoint', raster=BILATERAL),
-        'equals': PostGISOperator(func='ST_Equals'),
-        'intersects': PostGISOperator(func='ST_Intersects', geography=True, raster=BILATERAL),
-        'overlaps': PostGISOperator(func='ST_Overlaps', raster=BILATERAL),
-        'relate': PostGISOperator(func='ST_Relate'),
-        'touches': PostGISOperator(func='ST_Touches', raster=BILATERAL),
-        'within': PostGISOperator(func='ST_Within', raster=BILATERAL),
-        'dwithin': PostGISOperator(func='ST_DWithin', geography=True, raster=BILATERAL),
-    }
-    
-        def as_string(self):
-        'Retrieve the Field's value as a string.'
-        if not self.is_set:
-            return None
-        string = capi.get_field_as_string(self._feat.ptr, self._index)
-        return force_str(string, encoding=self._feat.encoding, strings_only=True)
-    
-        def reset_appid(self):
-        # called by web_control
-        with self.lock:
-            self.working_appid_list = list()
-            for appid in self.config.GAE_APPIDS:
-                if not appid:
-                    self.config.GAE_APPIDS.remove(appid)
-                    continue
-                self.working_appid_list.append(appid)
-            self.not_exist_appids = []
-            self.out_of_quota_appids = []
-        self.last_reset_time = time.time()
-    
-                else:
-                i = op.execute(buf) # execute operation and skip
+        Assumes `from __future__ import division`.
     
     
-def monitor_pr_status(pr_data):
-    print('Waiting for CI to complete...')
-    last_commit = pr_data.get_commits().reversed[0]
-    while True:
-        status = last_commit.get_combined_status()
-        if status.state == 'pending' or status.state == 'failure':
-            summary = {
-                'pending': 0,
-                'success': 0,
-                'failure': 0,
-                'error': 0,
-            }
-            for detail in status.statuses:
-                if detail.context == 'dco-signed':
-                    # dco-signed check breaks on merge remote-tracking ; ignore it
-                    continue
-                if detail.state in summary:
-                    summary[detail.state] += 1
-            print(
-                '{pending} pending, {success} successes, {failure} failures, '
-                '{error} errors'.format(**summary)
-            )
-            if summary['failure'] > 0 or summary['error'] > 0:
-                raise ScriptError('CI failures detected!')
-            elif summary['pending'] == 0 and summary['success'] > 0:
-                # This check assumes at least 1 non-DCO CI check to avoid race conditions.
-                # If testing on a repo without CI, use --skip-ci-check to avoid looping eternally
-                return True
-            time.sleep(30)
-        elif status.state == 'success':
-            print('{} successes: all clear!'.format(status.total_count))
-            return True
+with codecs.open(JSON_FILE_PATH, encoding='utf8') as f:
+    JSON_FILE_CONTENT = f.read()
     
     
-def serialize_ns_time_value(value):
-    result = (value, 'ns')
-    table = [
-        (1000., 'us'),
-        (1000., 'ms'),
-        (1000., 's'),
-        (60., 'm'),
-        (60., 'h')
+@pytest.mark.parametrize('follow_flag', ['--follow', '-F'])
+def test_follow_without_all_redirects_hidden(httpbin, follow_flag):
+    r = http(follow_flag, httpbin.url + '/redirect/2')
+    assert r.count('HTTP/1.1') == 1
+    assert HTTP_OK in r
+    
+                ret[i, :] = i_label, i_score
+    
+    
+def selu(x):
+    '''缩放型指数线性单元'''
+    alpha = 1.6732632423543772848170429916717
+    scale = 1.0507009873554804934193349852946
+    o = tf.nn.elu(x)
+    return scale * tf.where(x > 0, o, alpha * o)
+
+    
+    References:
+    https://github.com/philipperemy/keras-attention-mechanism
+'''
+    
+        return o
+    
+            # u_tilde(u~): context to question attended query vectors
+        u_tilde = tf.matmul(softmax(S), u)  # [N, T, d]
+    
+    SPLIT_LINE = '-----------'
+    
+    
+class RFC3339Field(jose.Field):
+    '''RFC3339 field encoder/decoder.
+    
+        def test_get_sni_addr(self):
+        from certbot_apache.obj import Addr
+        self.assertEqual(
+            self.addr.get_sni_addr('443'), Addr.fromstring('*:443'))
+        self.assertEqual(
+            self.addr.get_sni_addr('225'), Addr.fromstring('*:225'))
+        self.assertEqual(
+            self.addr1.get_sni_addr('443'), Addr.fromstring('127.0.0.1'))
+    
+    
+class IntegrationTestsContext(certbot_context.IntegrationTestsContext):
+    '''General fixture describing a certbot-nginx integration tests context'''
+    def __init__(self, request):
+        super(IntegrationTestsContext, self).__init__(request)
+    
+        command = [
+        'certbot',
+        '--server', directory_url,
+        '--no-verify-ssl',
+        '--http-01-port', str(http_01_port),
+        '--https-port', str(tls_alpn_01_port),
+        '--manual-public-ip-logging-ok',
+        '--config-dir', config_dir,
+        '--work-dir', os.path.join(workspace, 'work'),
+        '--logs-dir', os.path.join(workspace, 'logs'),
+        '--non-interactive',
+        '--no-redirect',
+        '--agree-tos',
+        '--register-unsafely-without-email',
+        '--debug',
+        '-vv'
     ]
-    for stage in table:
-        tmp = value / stage[0]
-        if tmp == int(value / stage[0]):
-            value = tmp
-            result = (int(value), stage[1])
+    
+    # Windows
+if os.name == 'nt':
+    import msvcrt  # pylint: disable=import-error
+    
+        # incorporate derivatives flowing through the checkpointed nodes
+    checkpoints_sorted_lists = tf_toposort(checkpoints, within_ops=fwd_ops)
+    for ts in checkpoints_sorted_lists[::-1]:
+        debug_print('Processing list {}'.format(ts))
+        checkpoints_other = [r for r in checkpoints if r not in ts]
+        checkpoints_disconnected_other = [checkpoints_disconnected[r] for r in checkpoints_other]
+    
+            r_jaw = (self.landmarks[0:9], self.landmarks[17:18])
+        l_jaw = (self.landmarks[8:17], self.landmarks[26:27])
+        r_cheek = (self.landmarks[17:20], self.landmarks[8:9])
+        l_cheek = (self.landmarks[24:27], self.landmarks[8:9])
+        nose_ridge = (self.landmarks[19:25], self.landmarks[8:9],)
+        r_eye = (self.landmarks[17:22],
+                 self.landmarks[27:28],
+                 self.landmarks[31:36],
+                 self.landmarks[8:9])
+        l_eye = (self.landmarks[22:27],
+                 self.landmarks[27:28],
+                 self.landmarks[31:36],
+                 self.landmarks[8:9])
+        nose = (self.landmarks[27:31], self.landmarks[31:36])
+        parts = [r_jaw, l_jaw, r_cheek, l_cheek, nose_ridge, r_eye, l_eye, nose]
+    
+        def load_module(self, filename, module_path, plugin_type):
+        ''' Load the defaults module and add defaults '''
+        logger.debug('Adding defaults: (filename: %s, module_path: %s, plugin_type: %s',
+                     filename, module_path, plugin_type)
+        module = os.path.splitext(filename)[0]
+        section = '.'.join((plugin_type, module.replace('_defaults', '')))
+        logger.debug('Importing defaults module: %s.%s', module_path, module)
+        mod = import_module('{}.{}'.format(module_path, module))
+        self.add_section(title=section, info=mod._HELPTEXT)  # pylint:disable=protected-access
+        for key, val in mod._DEFAULTS.items():  # pylint:disable=protected-access
+            self.add_item(section=section, title=key, **val)
+        logger.debug('Added defaults: %s', section)
+
+    
+        def set_config(self, configfile, config):
+        ''' Set the config to either global config or passed in config '''
+        section = '.'.join(self.__module__.split('.')[-2:])
+        if config is None:
+            retval = get_config(section, configfile)
         else:
-            break
-    return '{0}{1}'.format(*result)
+            config.section = section
+            retval = config.config_dict
+            config.section = None
+        logger.debug('Config: %s', retval)
+        return retval
     
+            mask = BlurMask(self.config['type'],
+                        mask,
+                        self.config['radius'],
+                        self.config['passes']).blurred
+        logger.debug('Built box mask. Shape: %s', mask.shape)
+        return mask
     
-def serialize_restart_spec(restart_spec):
-    if not restart_spec:
-        return ''
-    parts = [restart_spec['Name']]
-    if restart_spec['MaximumRetryCount']:
-        parts.append(six.text_type(restart_spec['MaximumRetryCount']))
-    return ':'.join(parts)
-    
-    
-def parse_seconds_float(value):
-    return timeparse(value or '')
-    
-        def test_get_project(self):
-        base_dir = 'tests/fixtures/longer-filename-composefile'
-        project = get_project(base_dir)
-        assert project.name == 'longer-filename-composefile'
-        assert project.client
-        assert project.services
-    
-    
-def get_digest_from_pull(events):
-    digest = None
-    for event in events:
-        status = event.get('status')
-        if not status or 'Digest' not in status:
-            continue
+        def set_config(self, configfile, config):
+        ''' Set the config to either global config or passed in config '''
+        section = '.'.join(self.__module__.split('.')[-2:])
+        if config is None:
+            logger.debug('Loading base config')
+            retval = get_config(section, configfile=configfile)
         else:
-            digest = status.split(':', 1)[1].strip()
-    return digest
+            logger.debug('Loading passed in config')
+            config.section = section
+            retval = config.config_dict
+            config.section = None
+        logger.debug('Config: %s', retval)
+        return retval
     
-            text = '就吃饭'
-        with mktempfile(encoding='utf-8') as tf:
-            progress_stream.write_to_stream(text, tf)
-            tf.seek(0)
-            assert tf.read() == text
+        Defaults files should be named <plugin_name>_defaults.py
+    Any items placed into this file will automatically get added to the relevant config .ini files
+    within the faceswap/config folder.
     
-    COMPOSEFILE_V3_0 = ComposeVersion('3.0')
-COMPOSEFILE_V3_1 = ComposeVersion('3.1')
-COMPOSEFILE_V3_2 = ComposeVersion('3.2')
-COMPOSEFILE_V3_3 = ComposeVersion('3.3')
-COMPOSEFILE_V3_4 = ComposeVersion('3.4')
-COMPOSEFILE_V3_5 = ComposeVersion('3.5')
-COMPOSEFILE_V3_6 = ComposeVersion('3.6')
-COMPOSEFILE_V3_7 = ComposeVersion('3.7')
+        The following variables should be defined:
+        _HELPTEXT: A string describing what this plugin does
+        _DEFAULTS: A dictionary containing the options, defaults and meta information. The
+                   dictionary should be defined as:
+                       {<option_name>: {<metadata>}}
     
-            Supported filenames: %s
-        ''' % ', '.join(supported_filenames))
-    
-        def __getitem__(self, key):
-        try:
-            return super(Environment, self).__getitem__(key)
-        except KeyError:
-            if IS_WINDOWS_PLATFORM:
-                try:
-                    return super(Environment, self).__getitem__(key.upper())
-                except KeyError:
-                    pass
-            if not self.silent and key not in self.missing_keys:
-                log.warning(
-                    'The {} variable is not set. Defaulting to a blank string.'
-                    .format(key)
-                )
-                self.missing_keys.append(key)
-    
-            for network, netdefs in self.prioritized_networks.items():
-            if network in connected_networks:
-                if short_id_alias_exists(container, network):
-                    continue
-                self.client.disconnect_container_from_network(container.id, network)
-    
-            def build_container_event(event):
-            container_attrs = event['Actor']['Attributes']
-            time = datetime.datetime.fromtimestamp(event['time'])
-            time = time.replace(
-                microsecond=microseconds_from_time_nano(event['timeNano'])
-            )
-    
-            # Scenario: _request call returns not found error
-        _response.get.return_value = TRANSACTION_NOT_FOUND
-        self.assertRaises(AuthorizationHoldNotFound, capture_authorization_hold,
-                          self.customer_id, self.payment_profile_id,
-                          self.amount, self.transaction_id)
-    
-        # IE<8 allows backslash escapes in place of pretty much any char
-    def test_escape_function_obfuscation(self):
-        testcase = u'*{color: expression\\28 alert\\28 1 \\29 \\29 }'
-        self.assertInvalid(testcase)
-    
-    class TestPermissionSet(PermissionSet):
-    info = dict(x={}, y={})
-    
-    import unittest
+        def get_save_kwargs(self):
+        ''' Return the save parameters for the file format '''
+        filetype = self.config['format']
+        kwargs = dict()
+        if filetype in ('gif', 'jpg', 'png'):
+            kwargs['optimize'] = self.config['optimize']
+        if filetype == 'gif':
+            kwargs['interlace'] = self.config['gif_interlace']
+        if filetype == 'png':
+            kwargs['compress_level'] = self.config['png_compress_level']
+        if filetype == 'tif':
+            kwargs['compression'] = self.config['tif_compression']
+        logger.debug(kwargs)
+        return kwargs
