@@ -1,180 +1,160 @@
 
         
-                      accept = if current_value.respond_to?(:call)
-                current_value.call(item)
-              else
-                Array(current_value).map(&:to_s).include?(value.to_s)
-              end
-    
-        def assert_index(index)
-      i = index.is_a?(Integer) ? index : @filters.index(filter_const(index))
-      raise 'No such filter to insert: #{index}' unless i
-      i
+              it 'returns http success' do
+        expect(response).to have_http_status(200)
+      end
     end
+    
+            let(:object_json) do
+          {
+            id: 'https://example.com/actor#bar',
+            type: 'Note',
+            content: 'Lorem ipsum',
+            to: 'http://example.com/followers',
+            attributedTo: 'https://example.com/actor',
+          }
+        end
+    
+      def forward_to_origin!
+    ActivityPub::DeliveryWorker.perform_async(
+      payload,
+      some_local_account.id,
+      @target_account.inbox_url
+    )
+  end
+    
+        ActivityPub::DeliveryWorker.push_bulk(inboxes) do |inbox_url|
+      [payload, @status.account_id, inbox_url]
+    end
+  rescue ActiveRecord::RecordNotFound
+    true
+  end
+    
+          it 'does not process payload if no signature exists' do
+        expect_any_instance_of(ActivityPub::LinkedDataSignature).to receive(:verify_account!).and_return(nil)
+        expect(ActivityPub::Activity).not_to receive(:factory)
+    
+        context 'if compliant?' do
+      let(:compliant) { true }
+    
+    version = ['', 'ext/etc/'].find do |dir|
+  begin
+    break File.open(File.expand_path('../#{dir}/etc.c', __FILE__)) do |f|
+      f.gets '\n#define RUBY_ETC_VERSION '
+      f.gets[/'(.+)'/, 1]
+    end
+  rescue
+    next
   end
 end
-
     
-        def as_json
-      @pages
+            assert_match(regexp, ivar)
+      end
     end
-    
-        def base_url
-      @base_url ||= URL.parse self.class.base_url
-    end
-    
-            private
-    
-          INDEX = Set.new
-    
-    # This is the version that ships with OS X 10.10, so be sure we test against it.
-# At the same time, the 1.7.7 version won't install cleanly on Ruby > 2.2,
-# so we use a fork that makes a trivial change to a macro invocation.
-gem 'json', :git => 'https://github.com/segiddins/json.git', :branch => 'seg-1.7.7-ruby-2.2'
-    
-    module Pod
-  class Command
-    class Env < Command
-      self.summary = 'Display pod environment'
-      self.description = 'Display pod environment.'
-    
-      test 'clean path with double leading slash' do
-    assert_equal '/Mordor', clean_path('//Mordor')
   end
+    
+        assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.sin('0') }
+    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.cos('0') }
+    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.tan('0') }
+    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.sinh('0') }
+    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.cosh('0') }
+    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.tanh('0') }
+    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.asin('0') }
+    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.atan('0') }
+    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.asinh('0') }
+    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.acosh('0') }
+    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.atanh('0') }
+  end
+    
+            it 'does not decrement pos' do
+          @gz.ungetbyte nil
+          @gz.pos.should == 10
+        end
+    
+      it 'writes some compressed data' do
+    Zlib::GzipWriter.wrap @io do |gzio|
+      gzio.write @data
+    end
+    
+    describe 'Zlib::Inflate#finish' do
+    
+      at_exit { Application.run! if $!.nil? && Application.run? }
 end
     
-      test 'transliteration' do
-    # we transliterate only when adapter is grit
-    return if defined?(Gollum::GIT_ADAPTER) && Gollum::GIT_ADAPTER != 'grit'
+    desc 'generate gemspec'
+task 'rack-protection.gemspec' do
+  require 'rack/protection/version'
+  content = File.binread 'rack-protection.gemspec'
     
-              def find_spree_current_order
-            Spree::Api::Dependencies.storefront_current_order_finder.constantize.new.execute(
-              store: spree_current_store,
-              user: spree_current_user,
-              token: order_token,
-              currency: current_currency
-            )
+          def accepts?(env)
+        raise NotImplementedError, '#{self.class} implementation pending'
+      end
+    
+          def empty_cookie(host, path)
+        {:value => '', :domain => host, :path => path, :expires => Time.at(0)}
+      end
+    
+          def escape(object)
+        case object
+        when Hash   then escape_hash(object)
+        when Array  then object.map { |o| escape(o) }
+        when String then escape_string(object)
+        when Tempfile then object
+        else nil
+        end
+      end
+    
+        it 'sets a session authenticity token if one does not exist' do
+      session = {}
+      allow(Rack::Protection::AuthenticityToken).to receive(:random_token).and_return(token)
+      allow_any_instance_of(Rack::Protection::AuthenticityToken).to receive(:mask_token).and_return(masked_token)
+      Rack::Protection::AuthenticityToken.token(session)
+      expect(session[:csrf]).to eq(token)
+    end
+  end
+    
+          def preference_field_tag(name, value, options)
+        case options[:type]
+        when :integer
+          text_field_tag(name, value, preference_field_options(options))
+        when :boolean
+          hidden_field_tag(name, 0, id: '#{name}_hidden') +
+            check_box_tag(name, 1, value, preference_field_options(options))
+        when :string
+          text_field_tag(name, value, preference_field_options(options))
+        when :password
+          password_field_tag(name, value, preference_field_options(options))
+        when :text
+          text_area_tag(name, value, preference_field_options(options))
+        else
+          text_field_tag(name, value, preference_field_options(options))
+        end
+      end
+    
+    RSpec.configure do |config|
+  # Need to check here again because this is used in i18n_spec too.
+  if ENV['CHECK_TRANSLATIONS']
+    config.after :suite do
+      Spree.check_missing_translations
+      if Spree.missing_translation_messages.any?
+        puts '\nThere are missing translations within Spree:'
+        puts Spree.missing_translation_messages.sort
+        exit(1)
+      end
+    
+              context 'when the order does not have a tax zone' do
+            before { allow(order).to receive(:tax_zone).and_return nil }
+    
+              if error
+            unprocessable_entity('#{Spree.t(:shipment_transfer_errors_occured, scope: 'api')} \n#{error}')
+          else
+            @original_shipment.transfer_to_shipment(@variant, @quantity, @target_shipment)
+            render json: { success: true, message: Spree.t(:shipment_transfer_success) }, status: 201
           end
+        end
     
-                return if after_update_attributes
+      yield
     
-            # Takes besides the products attributes either an array of variants or
-        # an array of option types.
-        #
-        # By submitting an array of variants the option types will be created
-        # using the *name* key in options hash. e.g
-        #
-        #   product: {
-        #     ...
-        #     variants: {
-        #       price: 19.99,
-        #       sku: 'hey_you',
-        #       options: [
-        #         { name: 'size', value: 'small' },
-        #         { name: 'color', value: 'black' }
-        #       ]
-        #     }
-        #   }
-        #
-        # Or just pass in the option types hash:
-        #
-        #   product: {
-        #     ...
-        #     option_types: ['size', 'color']
-        #   }
-        #
-        # By passing the shipping category name you can fetch or create that
-        # shipping category on the fly. e.g.
-        #
-        #   product: {
-        #     ...
-        #     shipping_category: 'Free Shipping Items'
-        #   }
-        #
-        def new; end
-    
-                result = add_store_credit_service.call(
-              order: spree_current_order,
-              amount: params[:amount].try(:to_f)
-            )
-    
-          @@adjustment_attributes = [
-        :id, :source_type, :source_id, :adjustable_type, :adjustable_id,
-        :originator_type, :originator_id, :amount, :label, :mandatory,
-        :locked, :eligible, :created_at, :updated_at
-      ]
-    
-        build_path
-    # Dont' initialize staging_path just yet, do it lazily so subclass can get a word in.
-  end # def initialize
-    
-        temp_info = pkginfo_template_path
-    
-        # do channel-update if requested
-    if attributes[:pear_channel_update?]
-      channel = attributes[:pear_channel] || 'pear'
-      logger.info('Updating the channel', :channel => channel)
-      safesystem('pear', '-c', config, 'channel-update', channel)
-    end
-    
-        attributes[:pleaserun_name] ||= File.basename(command.first)
-    attributes[:prefix] ||= '/usr/share/pleaserun/#{attributes[:pleaserun_name]}'
-    
-        ::Dir.mkdir(File.join(builddir, 'manifests'))
-    manifests.each do |manifest|
-      dir = File.join(builddir, 'manifests', File.dirname(manifest))
-      logger.info('manifests targeting: #{dir}')
-      ::Dir.mkdir(dir) if !File.directory?(dir)
-    
-    # Use a zip as a package.
-#
-# This provides no metadata. Both input and output are supported.
-class FPM::Package::Zip < FPM::Package
-    
-        private
-    
-        def tmux_new_window_command
-      path = root? ? '#{Tmuxinator::Config.default_path_option} #{root}' : nil
-      '#{project.tmux} new-window #{path} -t #{tmux_window_target} #{tmux_window_name_option}'
-    end
-    
-      describe '#hook_on_project_start' do
-    it_should_behave_like 'a project hook' do
-      let(:hook_name) { 'on_project_start' }
-    end
-  end
-  describe '#hook_on_project_first_start' do
-    it_should_behave_like 'a project hook' do
-      let(:hook_name) { 'on_project_first_start' }
-    end
-  end
-  describe '#hook_on_project_restart' do
-    it_should_behave_like 'a project hook' do
-      let(:hook_name) { 'on_project_restart' }
-    end
-  end
-  describe '#hook_on_project_exit' do
-    it_should_behave_like 'a project hook' do
-      let(:hook_name) { 'on_project_exit' }
-    end
-  end
-  describe '#hook_on_project_stop' do
-    it_should_behave_like 'a project hook' do
-      let(:hook_name) { 'on_project_stop' }
-    end
-  end
-end
-
-    
-    FactoryBot.find_definitions
-    
-          it { is_expected.to be false }
-    end
-    
-        def start(name = nil, *args)
-      # project-config takes precedence over a named project in the case that
-      # both are provided.
-      if options['project-config']
-        args.unshift name if name
-        name = nil
+          def local_project
+        [LOCAL_DEFAULT].detect { |f| File.exist?(f) }
       end
