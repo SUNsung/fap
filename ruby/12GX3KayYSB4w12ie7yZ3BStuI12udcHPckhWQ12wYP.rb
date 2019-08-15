@@ -1,137 +1,171 @@
 
         
-              @site.reader.read_directories('symlink-test')
-      refute_equal [], @site.pages
-      refute_equal [], @site.static_files
-    end
-    
-      p.option 'source', '-s', '--source [DIR]', 'Source directory (defaults to ./)'
-  p.option 'destination', '-d', '--destination [DIR]',
-    'Destination directory (defaults to ./_site)'
-  p.option 'safe', '--safe', 'Safe mode (defaults to false)'
-  p.option 'plugins_dir', '-p', '--plugins PLUGINS_DIR1[,PLUGINS_DIR2[,...]]', Array,
-    'Plugins directory (defaults to ./_plugins)'
-  p.option 'layouts_dir', '--layouts DIR', String,
-    'Layouts directory (defaults to ./_layouts)'
-  p.option 'profile', '--profile', 'Generate a Liquid rendering profile'
-    
-            private
-    
-              stats = diff_stats_collection&.find_by_path(diff.new_path)
-    
-          subject.diff_files
-    end
-    
-            def fetch_service_account_token
-          Clusters::Gcp::Kubernetes::FetchKubernetesTokenService.new(
-            platform.kubeclient,
-            kubernetes_namespace.token_name,
-            kubernetes_namespace.namespace
-          ).execute
-        end
-      end
-    end
-  end
-end
-
-    
-      it 'requires a URL or file uplaod' do
-    visit new_scenario_imports_path
-    click_on 'Start Import'
-    expect(page).to have_text('Please provide either a Scenario JSON File or a Public Scenario URL.')
-  end
-    
-      describe '.seed' do
-    it 'imports a set of agents to get the user going when they are first created' do
-      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
-    end
-    
-      describe '#sort_tuples!' do
-    let(:tuples) {
-      time = Time.now
-      [
-        [2, 'a', time - 1],  # 0
-        [2, 'b', time - 1],  # 1
-        [1, 'b', time - 1],  # 2
-        [1, 'b', time],      # 3
-        [1, 'a', time],      # 4
-        [2, 'a', time + 1],  # 5
-        [2, 'a', time],      # 6
-      ]
-    }
-    
-      describe 'email' do
-    before do
-      ActionMailer::Base.deliveries.clear
-    
-        ActivityPub::DeliveryWorker.push_bulk(inboxes) do |inbox_url|
-      [signed_payload, @account.id, inbox_url]
-    end
-    
-      let(:user) { Fabricate(:user, filtered_languages: []) }
-    
-        def str_to_byte_pos(pos)
-      @s.string.slice(0, pos).bytesize
-    end
-  end
-end
-    
-        def log_http_get_file(url, cached = false)
-      s = '  #{'CACHED ' if cached}GET #{url}...'
-      if cached
-        puts dark green s
+            def add(entry)
+      if entry.is_a? Array
+        entry.each(&method(:add))
       else
-        puts dark cyan s
+        add_entry(entry) unless entry.root?
       end
     end
     
-      # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
+        def type=(value)
+      @type = value.try :strip
+    end
+    
+        def effective_path
+      @effective_path ||= effective_url.path
+    end
+  end
 end
 
     
-      describe 'predicates' do
-    context 'in root position' do
-      let(:pattern) { 'send_type?' }
-      let(:ruby) { '1.inc' }
+            css('.content', 'article', '.api-header', 'section', '.instance-member').each do |node|
+          node.before(node.children).remove
+        end
     
-              #{close}
-        RUBY
+            css('ul.methods', 'ul.properties', 'ul.events').add_class('defs').each do |node|
+          node.css('> li > h3').each do |h3|
+            next if h3.content.present?
+            h3.content = h3.next_element.content
+            h3.next_element.remove
+          end
+        end
+      end
+    end
+  end
+end
+
+    
+            css('h2:not([id]) a[id]:not([href])').each do |node|
+          node.parent['id'] = node['id']
+          node.before(node.children).remove
+        end
+    
+    class Devise::OmniauthCallbacksController < DeviseController
+  prepend_before_action { request.env['devise.skip_timeout'] = true }
+    
+        login_as User.create!(email: 'test@test.com', password: 'test123456', password_confirmation: 'test123456')
+    
+            users.any?
       end
     
-      context 'when a variable is assigned ' \
-          'in main body of begin with rescue but unreferenced' do
-    it 'registers an offense' do
-      expect_offense(<<~RUBY)
-        begin
-          do_something
-          foo = true
-          ^^^ Useless assignment to variable - `foo`.
-        rescue
-          do_anything
+        # Return modules for the mapping.
+    def modules
+      @modules ||= to.respond_to?(:devise_modules) ? to.devise_modules : []
+    end
+    
+          klass.devise_modules.each do |mod|
+        constant = const_get(mod.to_s.classify)
+    
+    # Exit cleanly from an early interrupt
+Signal.trap('INT') { exit 1 }
+    
+        def validate_plugins!
+      @plugins_to_package.each do |plugin_name|
+        if INVALID_PLUGINS_TO_EXPLICIT_PACK.any? { |invalid_name| plugin_name =~ invalid_name }
+          raise UnpackablePluginError, 'Cannot explicitly pack `#{plugin_name}` for offline installation'
         end
-      RUBY
+      end
+    end
+    
+      # retrieve only the latest spec for all locally installed plugins
+  # @return [Hash] result hash {plugin_name.downcase => plugin_spec}
+  def find_latest_gem_specs
+    LogStash::PluginManager.all_installed_plugins_gem_specs(gemfile).inject({}) do |result, spec|
+      previous = result[spec.name.downcase]
+      result[spec.name.downcase] = previous ? [previous, spec].max_by{|s| s.version} : spec
+      result
+    end
+  end
+end
+
+    
+        def user_feedback_string_for(action, platform, machines, options={})
+      experimental_string = options['experimental'] ? 'experimental' : 'non experimental'
+      message  = '#{action} all #{experimental_string} VM's defined in acceptance/Vagrantfile'
+      '#{message} for #{platform}: #{machines}' if !platform.nil?
+    end
+    
+        it 'allows local middleware modification' do
+      $called = false
+      mware = Class.new { def call(worker_klass,msg,q,r); $called = true; msg;end }
+      client = Sidekiq::Client.new
+      client.middleware do |chain|
+        chain.add mware
+      end
+      client.push('class' => 'Blah', 'args' => [1,2,3])
+    
+          assert_equal init_size, mgr.workers.size
+      refute mgr.workers.include?(processor)
+    ensure
+      mgr.workers.each {|p| p.terminate(true) }
     end
   end
     
-          def on_send(node)
-        rhs = extract_rhs(node)
+      it 'allows middleware to abruptly stop processing rest of chain' do
+    recorder = []
+    chain = Sidekiq::Middleware::Chain.new
+    chain.add NonYieldingMiddleware
+    chain.add CustomMiddleware, 1, recorder
     
-        def self.cache_root(config_store)
-      root = config_store.for('.').for_all_cops['CacheRootDirectory']
-      root ||= if ENV.key?('XDG_CACHE_HOME')
-                 # Include user ID in the path to make sure the user has write
-                 # access.
-                 File.join(ENV['XDG_CACHE_HOME'], Process.uid.to_s)
-               else
-                 File.join(ENV['HOME'], '.cache')
-               end
-      File.join(root, 'rubocop_cache')
+    desc 'Move sass to sass.old, install sass theme updates, replace sass/custom with sass.old/custom'
+task :update_style, :theme do |t, args|
+  theme = args.theme || 'classic'
+  if File.directory?('sass.old')
+    puts 'removed existing sass.old directory'
+    rm_r 'sass.old', :secure=>true
+  end
+  mv 'sass', 'sass.old'
+  puts '## Moved styles into sass.old/'
+  cp_r '#{themes_dir}/'+theme+'/sass/', 'sass', :remove_destination=>true
+  cp_r 'sass.old/custom/.', 'sass/custom/', :remove_destination=>true
+  puts '## Updated Sass ##'
+end
+    
+    run SinatraStaticServer
+
+    
+        def render(context)
+      output = super
+      types = {
+        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
+        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
+        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
+      }
+      if @videos.size > 0
+        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
+        @videos.each do |v|
+          video << '<source src='#{v}' #{types[File.extname(v)]}>'
+        end
+        video += '</video>'
+      else
+        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
+      end
     end
     
-          # Checks whether this `block` literal belongs to a lambda.
-      #
-      # @return [Boolean] whether the `block` literal belongs to a lambda
-      def lambda?
-        send_node.method?(:lambda)
-      end
+    Given /^I run a paperclip generator to add a paperclip '([^']*)' to the '([^']*)' model$/ do |attachment_name, model_name|
+  step %[I successfully run `rails generate paperclip #{model_name} #{attachment_name}`]
+end
+    
+      def migration_version
+    if Rails.version.start_with? '5'
+      '[#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]'
+    end
+  end
+end
+
+    
+        def type_from_file_contents
+      type_from_mime_magic || type_from_file_command
+    rescue Errno::ENOENT => e
+      Paperclip.log('Error while determining content type: #{e}')
+      SENSIBLE_DEFAULT
+    end
+    
+        # scale to the requested geometry and preserve the aspect ratio
+    def scale_to(new_geometry)
+      scale = [new_geometry.width.to_f / self.width.to_f , new_geometry.height.to_f / self.height.to_f].min
+      Paperclip::Geometry.new((self.width * scale).round, (self.height * scale).round)
+    end
+  end
+end
