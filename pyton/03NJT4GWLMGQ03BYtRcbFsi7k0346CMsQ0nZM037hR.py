@@ -1,173 +1,222 @@
 
         
-            @property
-    def content_type(self):
-        '''Return the message content type.'''
-        ct = self._orig.headers.get('Content-Type', '')
-        if not isinstance(ct, str):
-            ct = ct.decode('utf8')
-        return ct
+            def check_lib(self):
+        if not HAS_HEROKU:
+            self.module.fail_json(msg=missing_required_lib('heroku3'), exception=HEROKU_IMP_ERR)
     
-        def __iter__(self):
-        '''Return an iterator over `self.msg`.'''
-        if self.with_headers:
-            yield self.get_headers()
-            yield b'\r\n\r\n'
+        def _get_policies_for_datacenter(self, p):
+        '''
+        Get the Policies for a datacenter by calling the CLC API.
+        :param p: datacenter to get policies from
+        :return: policies in the datacenter
+        '''
+        response = {}
     
+        clc_group = ClcGroup(module)
+    clc_group.process_request()
     
-ENTRY_POINT_NAMES = [
-    'httpie.plugins.auth.v1',
-    'httpie.plugins.formatter.v1',
-    'httpie.plugins.converter.v1',
-    'httpie.plugins.transport.v1',
-]
-    
-    
-def test_follow_redirect_output_options(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=h',
-             '--history-print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 2
-    assert 'HTTP/1.1 302 FOUND' not in r
-    assert HTTP_OK in r
-    
-        return fn
-    
-    EXAMPLES = '''
+    DOCUMENTATION = '''
 ---
-# Simple example of listing all info for a function
-- name: List all for a specific function
-  lambda_facts:
-    query: all
-    function_name: myFunction
-  register: my_function_details
-# List all versions of a function
-- name: List function versions
-  lambda_facts:
-    query: versions
-    function_name: myFunction
-  register: my_function_versions
-# List all lambda function versions
-- name: List all function
-  lambda_facts:
-    query: all
-    max_items: 20
-- name: show Lambda facts
-  debug:
-    var: lambda_facts
+module: linode_v4
+short_description: Manage instances on the Linode cloud.
+description: Manage instances on the Linode cloud.
+version_added: '2.8'
+requirements:
+  - python >= 2.7
+  - linode_api4 >= 2.0.0
+author:
+  - Luke Murphy (@lwm)
+notes:
+  - No Linode resizing is currently implemented. This module will, in time,
+    replace the current Linode module which uses deprecated API bindings on the
+    Linode side.
+options:
+  region:
+    description:
+      - The region of the instance. This is a required parameter only when
+        creating Linode instances. See
+        U(https://developers.linode.com/api/v4#tag/Regions).
+    required: false
+    type: str
+  image:
+    description:
+      - The image of the instance. This is a required parameter only when
+        creating Linode instances. See
+        U(https://developers.linode.com/api/v4#tag/Images).
+    type: str
+    required: false
+  type:
+    description:
+      - The type of the instance. This is a required parameter only when
+        creating Linode instances. See
+        U(https://developers.linode.com/api/v4#tag/Linode-Types).
+    type: str
+    required: false
+  label:
+    description:
+      - The instance label. This label is used as the main determiner for
+        idempotence for the module and is therefore mandatory.
+    type: str
+    required: true
+  group:
+    description:
+       - The group that the instance should be marked under. Please note, that
+         group labelling is deprecated but still supported. The encouraged
+         method for marking instances is to use tags.
+    type: str
+    required: false
+  tags:
+    description:
+      - The tags that the instance should be marked under. See
+        U(https://developers.linode.com/api/v4#tag/Tags).
+    required: false
+    type: list
+  root_pass:
+    description:
+      - The password for the root user. If not specified, one will be
+        generated. This generated password will be available in the task
+        success JSON.
+    required: false
+    type: str
+  authorized_keys:
+    description:
+      - A list of SSH public key parts to deploy for the root user.
+    required: false
+    type: list
+  state:
+    description:
+      - The desired instance state.
+    type: str
+    choices:
+        - present
+        - absent
+    required: true
+  access_token:
+    description:
+      - The Linode API v4 access token. It may also be specified by exposing
+        the C(LINODE_ACCESS_TOKEN) environment variable. See
+        U(https://developers.linode.com/api/v4#section/Access-and-Authentication).
+    required: true
 '''
     
-        creds, params = get_google_cloud_credentials(module)
-    pubsub_client = pubsub.Client(project=params['project_id'], credentials=creds, use_gax=False)
-    pubsub_client.user_agent = 'ansible-pubsub-0.1'
     
-        eol = len(current_rules) - len(desired_rules)
-    if eol > 0:
-        for rule in current_rules[eol:]:
-            deletions.append(rule)
+@api_wrapper
+def update_pool(module, system, pool):
+    '''Update Pool'''
+    changed = False
     
-        deletions = 0
-    additions = 0
+            if device in devices_by_nickname:
+            target = devices_by_nickname[device]
+        else:
+            module.fail_json(msg='Device '%s' not found. Available devices: '%s'' % (device, '', ''.join(devices_by_nickname.keys())))
     
-    RETURN = '''
-stdout:
-  description: the set of responses from the commands
-  returned: always
-  type: list
-  sample: ['...', '...']
-stdout_lines:
-  description: The value of stdout split into a list
-  returned: always
-  type: list
-  sample: [['...', '...'], ['...'], ['...']]
-failed_conditions:
-  description: the conditionals that failed
-  returned: failed
-  type: list
-  sample: ['...', '...']
+            if 'error' in response:
+            module.fail_json(msg=response['error'])
+    
+        name = module.params['name']
+    port = module.params['port']
+    user = module.params['user']
+    password = module.params['password']
+    state = module.params['state']
+    timeout = module.params['timeout']
+    
+        if not HAS_GITHUB_API:
+        module.fail_json(msg=missing_required_lib('github3.py >= 1.0.0a3'),
+                         exception=GITHUB_IMP_ERR)
+    
+    log.basicConfig(format='%(message)s', level=log.INFO)
+    
+    
+def softsign(x):
+    '''
+    o = x / (1 + abs(x))
+    '''
+    return tf.nn.softsign(x)
+    
+    
+def clip_relu(x, max_value):
+    '''截断 ReLU
+    `o = min(max(0., x), max_value)`
+    '''
+    o = tf.nn.relu(x)
+    o = tf.minimum(o, max_value)
+    return o
+    
+    References：
+    [1509.01626] Character-level Convolutional Networks for Text Classification https://arxiv.org/abs/1509.01626
 '''
     
-        for n_components in [i.astype(int) for i in
-                         np.linspace(data.shape[1] // 10,
-                                     data.shape[1], num=4)]:
-        all_times = defaultdict(list)
-        all_errors = defaultdict(list)
-        pca = PCA(n_components=n_components)
-        rpca = PCA(n_components=n_components, svd_solver='randomized',
-                   random_state=1999)
-        results_dict = {k: benchmark(est, data) for k, est in [('pca', pca),
-                                                               ('rpca', rpca)]}
-    
-    Sentiment analysis can be casted as a binary text classification problem,
-that is fitting a linear classifier on features extracted from the text
-of the user messages so as to guess wether the opinion of the author is
-positive or negative.
-    
-    The dataset is the Boston Housing dataset (resp. 20 Newsgroups) for
-regression (resp. classification).
-    
-    The data is generated with the ``make_checkerboard`` function, then
-shuffled and passed to the Spectral Biclustering algorithm. The rows
-and columns of the shuffled matrix are rearranged to show the
-biclusters found by the algorithm.
-    
-    # Create a graph capturing local connectivity. Larger number of neighbors
-# will give more homogeneous clusters to the cost of computation
-# time. A very large number of neighbors gives more evenly distributed
-# cluster sizes, but may not impose the local manifold structure of
-# the data
-knn_graph = kneighbors_graph(X, 30, include_self=False)
-    
-            # catch warnings related to kneighbors_graph
-        with warnings.catch_warnings():
-            warnings.filterwarnings(
-                'ignore',
-                message='the number of connected components of the ' +
-                'connectivity matrix is [0-9]{1,2}' +
-                ' > 1. Completing it to avoid stopping the tree early.',
-                category=UserWarning)
-            algorithm.fit(X)
-    
-    # #############################################################################
-# Generate sample data
-centers = [[1, 1], [-1, -1], [1, -1]]
-X, _ = make_blobs(n_samples=10000, centers=centers, cluster_std=0.6)
-    
-        def draw_black_image(self):
-        ''' Change image to black at correct dimensions '''
-        logger.trace('Drawing black image')
-        height, width = self.image.shape[:2]
-        self.image = np.zeros((height, width, 3), np.uint8)
-    
-                if not bottleneck_ts:
-                raise Exception('unable to find bottleneck tensors! please provide checkpoint '
-                                'nodes manually, or use checkpoints='speed'.')
-    
-            self.status_message.set('Ready')
+    # 可以通过相同的方式获取每个单词以及任一个 n-gram 的向量
+print(model.wv['hello'])
+print(model.wv['<h'])
+'''
+[-0.03481839  0.00606661  0.02581969  0.00188777  0.0325358 ]
+[ 0.04481247 -0.1784363  -0.03192253  0.07162753  0.16744071]
+'''
+print()
     
     
-class Model(ModelBase):
-    ''' Improved Autoeencoder Model '''
-    def __init__(self, *args, **kwargs):
-        logger.debug('Initializing %s: (args: %s, kwargs: %s',
-                     self.__class__.__name__, args, kwargs)
-        kwargs['input_shape'] = (64, 64, 3)
-        kwargs['encoder_dim'] = 1024
-        super().__init__(*args, **kwargs)
-        logger.debug('Initialized %s', self.__class__.__name__)
+def write(values, path):
+    '''Write the specified values to a config file.
     
-        def sort_commands(self, category, classes):
-        ''' Format classes into command names and sort:
-            Specific workflow order for faceswap.
-            Alphabetical for all others '''
-        commands = sorted(self.format_command_name(command)
-                          for command in classes)
-        if category == 'faceswap':
-            ordered = ['extract', 'train', 'convert']
-            commands = ordered + [command for command in commands
-                                  if command not in ordered]
-        logger.debug(commands)
-        return commands
+        @mock.patch('certbot.client.enhancements')
+    def test_unsupported(self, mock_enhancements):
+        self.client.installer = mock.MagicMock()
+        self.client.installer.supported_enhancements.return_value = []
+    
+            if request.method != 'POST':
+            return render_to_response('sentry/auth-link-identity.html', request=request, context={
+                'organization': organization,
+                'provider': integration.get_provider(),
+            })
+    
+    from sentry.models import ProjectKey
+from sentry.web.helpers import render_to_response
+    
+            # Removing index on 'TagValue', fields ['project_id', '_key', 'last_seen']
+        db.delete_index(u'tagstore_tagvalue', ['project_id', 'key_id', 'last_seen'])
+    
+    
+@instrumented_task(name='sentry.tasks.clear_expired_resolutions',
+                   time_limit=15, soft_time_limit=10)
+def clear_expired_resolutions(release_id):
+    '''
+    This should be fired when ``release_id`` is created, and will indicate to
+    the system that any pending resolutions older than the given release can now
+    be safely transitioned to resolved.
+    
+        # remove (likely) unused platform associations
+    ProjectPlatform.objects.filter(
+        last_seen__lte=now - timedelta(days=90),
+    ).delete()
+
+    
+    if args.dict:
+    jieba.initialize(args.dict)
+else:
+    jieba.initialize()
+if args.user_dict:
+    jieba.load_userdict(args.user_dict)
+    
+    
+def ChineseAnalyzer(stoplist=STOP_WORDS, minsize=1, stemfn=stem, cachesize=50000):
+    return (ChineseTokenizer() | LowercaseFilter() |
+            StopFilter(stoplist=stoplist, minsize=minsize) |
+            StemFilter(stemfn=stemfn, ignore=None, cachesize=cachesize))
+
+    
+            for terms, w in cm.items():
+            g.addEdge(terms[0], terms[1], w)
+        nodes_rank = g.rank()
+        if withWeight:
+            tags = sorted(nodes_rank.items(), key=itemgetter(1), reverse=True)
+        else:
+            tags = sorted(nodes_rank, key=nodes_rank.__getitem__, reverse=True)
+    
+    seg_list = jieba.cut('我来到北京清华大学', cut_all=True)
+print('Full Mode: ' + '/ '.join(seg_list))  # 全模式
+    
+    USAGE = 'usage:    python extract_tags_idfpath.py [file name] -k [top k]'
+    
+    log_f = open('1.log','wb')
+log_f.write(words.encode('utf-8'))
