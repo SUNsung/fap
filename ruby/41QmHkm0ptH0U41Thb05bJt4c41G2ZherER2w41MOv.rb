@@ -1,127 +1,97 @@
 
         
-              it 'creates a new user' do
-        visit new_admin_user_path
-        fill_in 'Email', with: 'test@test.com'
-        fill_in 'Username', with: 'usertest'
-        fill_in 'Password', with: '12345678'
-        fill_in 'Password confirmation', with: '12345678'
-        click_on 'Create User'
-        expect(page).to have_text('User 'usertest' was successfully created.')
-        expect(page).to have_text('test@test.com')
-      end
-    
-      it 'imports a scenario that does not exist yet' do
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
-    click_on 'Start Import'
-    expect(page).to have_text('This scenario has a few agents to get you started. Feel free to change them or delete them as you see fit!')
-    expect(page).not_to have_text('This Scenario already exists in your system.')
-    check('I confirm that I want to import these Agents.')
-    click_on 'Finish Import'
-    expect(page).to have_text('Import successful!')
-  end
-    
-        it 'returns a label 'No' if any falsy value is given' do
-      [false, nil].each { |value|
-        label = yes_no(value)
-        expect(label).to be_html_safe
-        expect(Nokogiri(label).text).to eq 'No'
-      }
-    end
-  end
-    
-        describe '#agents_dot' do
-      before do
-        @agents = [
-          @foo = Agents::DotFoo.new(name: 'foo').tap { |agent|
-            agent.user = users(:bob)
-            agent.save!
-          },
-    
-        it 'for the afternoon' do
-      expect(@scheduler.send(:hour_to_schedule_name, 17)).to eq('5pm')
-    end
-  end
-    
-    describe LiquidMigrator do
-  describe 'converting JSONPath strings' do
-    it 'should work' do
-      expect(LiquidMigrator.convert_string('$.data', true)).to eq('{{data}}')
-      expect(LiquidMigrator.convert_string('$.data.test', true)).to eq('{{data.test}}')
-      expect(LiquidMigrator.convert_string('$first_title', true)).to eq('{{first_title}}')
-    end
-    
-      let :new_extract do
-    {
-      'url' => { 'css' => '#comic img', 'value' => '@src' },
-      'title' => { 'css' => '#comic img', 'value' => '@alt' },
-      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
+          desc 'Copy the Code of Conduct'
+  task :conduct do
+    front_matter = {
+      'redirect_from' => '/conduct/index.html',
+      'editable'      => false,
     }
+    siteify_file('CODE_OF_CONDUCT.markdown', front_matter)
   end
     
-        def links
-      context[:links]
+    # Test https://github.com/jekyll/jekyll/pull/6735#discussion_r165499868
+# ------------------------------------------------------------------------
+def check_with_regex(content)
+  !content.to_s.match?(%r!{[{%]!)
+end
+    }
+    }
+    
+    def graceful_require
+  Jekyll::External.require_with_graceful_fail('json')
+  JSON.pretty_generate(DATA)
+end
+    
+      </body>
+</html>
+HTML
+CONTENT_NOT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+    
+    module Jekyll
+  module Deprecator
+    extend self
+    
+          expect(result).to eq('files/html/500.html')
     end
     
-        private
+    # This class finds files in a repository by name and content
+# the result is joined and sorted by file name
+module Gitlab
+  class FileFinder
+    attr_reader :project, :ref
     
-    # This bin wrapper runs the `pod` command in a OS X sandbox. The reason for this
-# is to ensure that people can’t use malicious code from pod specifications.
-#
-# It does this by creating a ‘seatbelt’ profile on the fly and executing the
-# given command through `/usr/bin/sandbox-exec`. This profile format is an
-# undocumented format, which uses TinyScheme to implement its DSL.
-#
-# Even though it uses a undocumented format, it’s actually very self-explanatory.
-# Because we use a whitelist approach, `(deny default)`, any action that is
-# denied is logged to `/var/log/system.log`. So tailing that should provide
-# enough information on steps that need to be take to get something to work.
-#
-# For more information see:
-#
-# * https://github.com/CocoaPods/CocoaPods/issues/939
-# * http://reverse.put.as/wp-content/uploads/2011/08/The-Apple-Sandbox-BHDC2011-Slides.pdf
-# * http://reverse.put.as/wp-content/uploads/2011/08/The-Apple-Sandbox-BHDC2011-Paper.pdf
-# * https://github.com/s7ephen/OSX-Sandbox--Seatbelt--Profiles
-# * `$ man sandbox-exec`
-# * `$ ls /usr/share/sandbox`
+          def parse_filter(filter, input)
+        result = filter[:parser].call(input)
     
-            def run
-          print_version
-          signal_end_of_output
-          listen
+        it 'Gitlab::Diff::File is initialized with diff stats' do
+      subject = described_class.new(diffable, collection_default_args)
+    
+    require 'bootstrap/environment'
+    
+          packet_gem.pack
+    
+      # We compare the before the update and after the update
+  def display_updated_plugins(previous_gem_specs_map)
+    update_count = 0
+    find_latest_gem_specs.values.each do |spec|
+      name = spec.name.downcase
+      if previous_gem_specs_map.has_key?(name)
+        if spec.version != previous_gem_specs_map[name].version
+          puts('Updated #{spec.name} #{previous_gem_specs_map[name].version.to_s} to #{spec.version.to_s}')
+          update_count += 1
         end
+      else
+        puts('Installed #{spec.name} #{spec.version.to_s}')
+        update_count += 1
+      end
+    end
     
-            # Should be overriden if you have areas of your checkout that don't match
-        # up to a step within checkout_steps, such as a registration step
-        def skip_state_validation?
-          false
-        end
+        # converts line breaks in product description into <p> tags (for html display purposes)
+    def product_description(product)
+      description = if Spree::Config[:show_raw_product_description]
+                      product.description
+                    else
+                      product.description.to_s.gsub(/(.*?)\r?\n\r?\n/m, '<p>\1</p>')
+                    end
+      description.blank? ? Spree.t(:product_has_no_description) : description
+    end
     
-              @line_item = Spree::Dependencies.cart_add_item_service.constantize.call(order: order,
-                                                                                  variant: variant,
-                                                                                  quantity: params[:line_item][:quantity],
-                                                                                  options: line_item_params[:options]).value
-          if @line_item.errors.empty?
-            respond_with(@line_item, status: 201, default_template: :show)
-          else
-            invalid_resource!(@line_item)
-          end
-        end
+        scope :created_between, ->(start_date, end_date) { where(created_at: start_date..end_date) }
+    scope :completed_between, ->(start_date, end_date) { where(completed_at: start_date..end_date) }
+    scope :complete, -> { where.not(completed_at: nil) }
+    scope :incomplete, -> { where(completed_at: nil) }
     
-            def index
-          @products = if params[:ids]
-                        product_scope.where(id: params[:ids].split(',').flatten)
-                      else
-                        product_scope.ransack(params[:q]).result
-                      end
-    
-      puts '\n== Preparing database =='
-  system! 'bin/rails db:setup'
-    
-      # The test environment is used exclusively to run your application's
-  # test suite. You never need to work with it otherwise. Remember that
-  # your test database is 'scratch space' for the test suite and is wiped
-  # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
+        # see https://github.com/spree/spree/issues/981
+    def build_source
+      return unless new_record?
