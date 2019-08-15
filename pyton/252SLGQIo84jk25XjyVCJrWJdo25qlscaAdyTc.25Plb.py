@@ -1,245 +1,205 @@
 
         
-            def remove_user(self, user_id):
-        pass
+            if module.params['state'] == 'absent' and HAS_LLDP:
+        commands.append('protocol lldp')
+        commands.append('disable')
+    elif module.params['state'] == 'present' and not HAS_LLDP:
+        commands.append('protocol lldp')
+        commands.append('no disable')
     
     
-if __name__ == '__main__':
-    SpendingByCategory.run()
-
+DOCUMENTATION = '''
+---
+module: os_auth
+short_description: Retrieve an auth token
+version_added: '2.0'
+author: 'Monty Taylor (@emonty)'
+description:
+    - Retrieve an auth token from an OpenStack Cloud
+requirements:
+    - 'python >= 2.7'
+    - 'openstacksdk'
+options:
+  availability_zone:
+    description:
+      - Ignored. Present for backwards compatibility
+    required: false
+extends_documentation_fragment: openstack
+'''
+    
+                result['commands'] = commands
+            result['updates'] = commands
+    
+        if module.params['save']:
+        result['changed'] = True
+        if not module.check_mode:
+            cmd = {'command': 'copy running-config startup-config',
+                   'prompt': r'\[confirm yes/no\]:\s?$', 'answer': 'yes'}
+            run_commands(module, [cmd])
+            result['saved'] = True
+        else:
+            module.warn('Skipping command `copy running-config startup-config`'
+                        'due to check_mode.  Configuration not copied to '
+                        'non-volatile storage')
     
     
-class DefaultCategories(Enum):
+def run(module, result):
+    match = module.params['match']
+    replace = module.params['replace']
+    replace_config = replace == 'config'
+    path = module.params['parents']
+    comment = module.params['comment']
+    admin = module.params['admin']
+    check_mode = module.check_mode
     
+        warnings = list()
+    check_args(module, warnings)
+    result['warnings'] = warnings
     
-class SalesRanker(MRJob):
+        def test_module_fail_when_required_args_missing(self):
+        ''' required arguments are reported as errors '''
+        with pytest.raises(AnsibleFailJson) as exc:
+            set_module_args({})
+            asup_module()
+        print('Info: %s' % exc.value.args[0]['msg'])
     
-        def __init__(self):
-        self.people = {}  # key: person_id, value: person
+        def test_path_endswith_role_main_yml(self):
+        self.assertIn('main.yml', self._loader.path_dwim_relative(path='foo/bar/tasks/', dirname='/', source='main.yml'))
     
-    class Foo:
-    def f(self):
-        print('you called Foo.f()')
-    def g(self):
-        print('you called Foo.g()')
-    def _h(self):
-        print('you called Foo._h()')
+    - name: Remove a profile for a deleted account
+  win_user_profile:
+    name: ansible
+    state: absent
     
+        def process_appid_not_exist(self, appid, ip):
+        ret = self.check_api(ip, 'xxnet-1')
+        if ret and ret.ok:
+            self.set_appid_not_exist(appid)
+        else:
+            self.logger.warn('process_appid_not_exist, remove ip:%s', ip)
     
-def cityscapes_to_coco(cityscapes_id):
-    lookup = {
-        0: 0,  # ... background
-        1: 2,  # bicycle
-        2: 3,  # car
-        3: 1,  # person
-        4: 7,  # train
-        5: 8,  # truck
-        6: 4,  # motorcycle
-        7: 6,  # bus
-        8: -1,  # rider (-1 means rand init)
-    }
-    return lookup[cityscapes_id]
+            sha1 = get_linux_ca_sha1(nss_path)
+        ca_hash = CertUtil.ca_thumbprint.replace(':', '')
+        if sha1 == ca_hash:
+            xlog.info('Database $HOME/.pki/nssdb cert exist')
+            return
     
+        def _test_host(self, url):
+        try:
+            header = {
+                'user-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Safari/537.36',
+                'accept': 'application/json, text/javascript, */*; q=0.01',
+                'accept-encoding': 'gzip, deflate, sdch',
+                'accept-language': 'en-US,en;q=0.8,ja;q=0.6,zh-CN;q=0.4,zh;q=0.2',
+                'connection': 'keep-alive'
+                }
+            response = self.http_client.request('HEAD', url, header, '', read_payload=False)
+            if response:
+                return True
+        except Exception as e:
+            if __name__ == '__main__':
+                xlog.exception('test %s e:%r', url, e)
     
-def _scale_enum(anchor, scales):
-    '''Enumerate a set of anchors for each scale wrt an anchor.'''
-    w, h, x_ctr, y_ctr = _whctrs(anchor)
-    ws = w * scales
-    hs = h * scales
-    anchors = _mkanchors(ws, hs, x_ctr, y_ctr)
-    return anchors
-
-    
-    from detectron.core.config import cfg
-import detectron.utils.blob as blob_utils
-    
-    from detectron.datasets import json_dataset
-from detectron.datasets import roidb as roidb_utils
-from detectron.utils import blob as blob_utils
-import detectron.roi_data.fast_rcnn as fast_rcnn_roi_data
-    
-    
-def compute_targets(ex_rois, gt_rois, weights=(1.0, 1.0, 1.0, 1.0)):
-    '''Compute bounding-box regression targets for an image.'''
-    return box_utils.bbox_transform_inv(ex_rois, gt_rois, weights).astype(
-        np.float32, copy=False
-    )
-
-    
-        _distribute_rois_over_fpn_levels('rois')
-    if cfg.MODEL.MASK_ON:
-        _distribute_rois_over_fpn_levels('mask_rois')
-    if cfg.MODEL.KEYPOINTS_ON:
-        _distribute_rois_over_fpn_levels('keypoint_rois')
-
-    
-        sampled_fg_rois *= im_scale
-    repeated_batch_idx = batch_idx * blob_utils.ones(
-        (sampled_fg_rois.shape[0], 1)
-    )
-    sampled_fg_rois = np.hstack((repeated_batch_idx, sampled_fg_rois))
-    
-    
-def add_mask_rcnn_blobs(blobs, sampled_boxes, roidb, im_scale, batch_idx):
-    '''Add Mask R-CNN specific blobs to the input blob dictionary.'''
-    # Prepare the mask targets by associating one gt mask to each training roi
-    # that has a fg (non-bg) class label.
-    M = cfg.MRCNN.RESOLUTION
-    polys_gt_inds = np.where(
-        (roidb['gt_classes'] > 0) & (roidb['is_crowd'] == 0)
-    )[0]
-    polys_gt = [roidb['segms'][i] for i in polys_gt_inds]
-    boxes_from_polys = segm_utils.polys_to_boxes(polys_gt)
-    fg_inds = np.where(blobs['labels_int32'] > 0)[0]
-    roi_has_mask = blobs['labels_int32'].copy()
-    roi_has_mask[roi_has_mask > 0] = 1
-    
-    
-def get_minibatch_blob_names(is_training=True):
-    '''Return blob names in the order in which they are read by the data loader.
-    '''
-    # data blob: holds a batch of N images, each with 3 channels
-    blob_names = ['data']
-    if cfg.RPN.RPN_ON:
-        # RPN-only or end-to-end Faster R-CNN
-        blob_names += rpn_roi_data.get_rpn_blob_names(is_training=is_training)
-    elif cfg.RETINANET.RETINANET_ON:
-        blob_names += retinanet_roi_data.get_retinanet_blob_names(
-            is_training=is_training
-        )
+        data = response.content
+    response_headers = response.headers
+    if 'content-encoding' not in response_headers and len(response.content) < URLFETCH_DEFLATE_MAXSIZE and response_headers.get('content-type', '').startswith(('text/', 'application/json', 'application/javascript')):
+        if 'gzip' in accept_encoding:
+            response_headers['Content-Encoding'] = 'gzip'
+            compressobj = zlib.compressobj(zlib.Z_DEFAULT_COMPRESSION, zlib.DEFLATED, -zlib.MAX_WBITS, zlib.DEF_MEM_LEVEL, 0)
+            dataio = BytesIO()
+            dataio.write('\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff')
+            dataio.write(compressobj.compress(data))
+            dataio.write(compressobj.flush())
+            dataio.write(struct.pack('<LL', zlib.crc32(data) & 0xFFFFFFFFL, len(data) & 0xFFFFFFFFL))
+            data = dataio.getvalue()
+        elif 'deflate' in accept_encoding:
+            response_headers['Content-Encoding'] = 'deflate'
+            data = zlib.compress(data)[2:-4]
+    if data:
+         response_headers['Content-Length'] = str(len(data))
+    response_headers_data = zlib.compress('\n'.join('%s:%s' % (k.title(), v) for k, v in response_headers.items() if not k.startswith('x-google-')))[2:-4]
+    if 'rc4' not in options:
+        start_response('200 OK', [('Content-Type', __content_type__)])
+        yield struct.pack('!hh', int(response.status_code), len(response_headers_data))+response_headers_data
+        yield data
     else:
-        # Fast R-CNN like models trained on precomputed proposals
-        blob_names += fast_rcnn_roi_data.get_fast_rcnn_blob_names(
-            is_training=is_training
-        )
-    return blob_names
+        start_response('200 OK', [('Content-Type', __content_type__), ('X-GOA-Options', 'rc4')])
+        yield struct.pack('!hh', int(response.status_code), len(response_headers_data))
+        yield rc4crypt(response_headers_data, __password__)
+        yield rc4crypt(data, __password__)
     
+            # If the user took their time to link their slack account, we may no
+        # longer be able to respond, and we're not guaranteed able to post into
+        # the channel. Ignore Expired url errors.
+        #
+        # XXX(epurkhiser): Yes the error string has a space in it.
+        if not resp.get('ok') and resp.get('error') != 'Expired url':
+            logger.error('slack.link-notify.response-error', extra={'response': resp})
     
-class BufferFull(UnpackException):
-    pass
+        def __str__(self):
+        return self.message
     
+            # Removing index on 'GroupTagValue', fields ['project_id', '_key', '_value', 'last_seen']
+        db.delete_index(
+            u'tagstore_grouptagvalue', [
+                'project_id', 'key_id', 'value_id', 'last_seen'])
     
-def testUnsignedInt():
-    check(b'\x99\xcc\x00\xcc\x80\xcc\xff\xcd\x00\x00\xcd\x80\x00'
-          b'\xcd\xff\xff\xce\x00\x00\x00\x00\xce\x80\x00\x00\x00'
-          b'\xce\xff\xff\xff\xff',
-          (0,
-           128,
-           255,
-           0,
-           32768,
-           65535,
-           0,
-           2147483648,
-           4294967295, ), )
+            # Removing index on 'GroupTagValue', fields ['project_id', '_key', '_value', 'last_seen']
+        db.delete_index(
+            u'tagstore_grouptagvalue', [
+                'project_id', 'key_id', 'value_id', 'last_seen'])
     
+            # Changing field 'GroupTagKey.project_id'
+        db.alter_column(u'tagstore_grouptagkey', 'project_id', self.gf(
+            'sentry.db.models.fields.bounded.BoundedPositiveIntegerField')())
     
-@pytest.mark.parametrize('size,relative_to,resolved', [
-    ('1em', None, '12pt'),
-    ('1.0em', None, '12pt'),
-    ('1.25em', None, '15pt'),
-    ('1em', '16pt', '16pt'),
-    ('1.0em', '16pt', '16pt'),
-    ('1.25em', '16pt', '20pt'),
-    ('1rem', '16pt', '12pt'),
-    ('1.0rem', '16pt', '12pt'),
-    ('1.25rem', '16pt', '15pt'),
-    ('100%', None, '12pt'),
-    ('125%', None, '15pt'),
-    ('100%', '16pt', '16pt'),
-    ('125%', '16pt', '20pt'),
-    ('2ex', None, '12pt'),
-    ('2.0ex', None, '12pt'),
-    ('2.50ex', None, '15pt'),
-    ('inherit', '16pt', '16pt'),
+            # Changing field 'TagKey.environment_id'
+        db.alter_column(u'tagstore_tagkey', 'environment_id', self.gf(
+            'sentry.db.models.fields.bounded.BoundedBigIntegerField')(null=True))
     
-        ('border-top-style: solid; border-top-width: thin',
-     {'border': {'top': {'style': 'thin'}}}),
-    ('border-top-style: solid; border-top-width: 1pt',
-     {'border': {'top': {'style': 'thin'}}}),
-    ('border-top-style: solid',
-     {'border': {'top': {'style': 'medium'}}}),
-    ('border-top-style: solid; border-top-width: medium',
-     {'border': {'top': {'style': 'medium'}}}),
-    ('border-top-style: solid; border-top-width: 2pt',
-     {'border': {'top': {'style': 'medium'}}}),
-    ('border-top-style: solid; border-top-width: thick',
-     {'border': {'top': {'style': 'thick'}}}),
-    ('border-top-style: solid; border-top-width: 4pt',
-     {'border': {'top': {'style': 'thick'}}}),
+    from sentry.models import (Activity, GroupResolution, Release)
+from sentry.tasks.base import instrumented_task
     
-    import pandas.util._test_decorators as td
+        Note that internationalised parameters (e.g., title*) are
+    NOT percent-decoded.
     
+    parser = ArgumentParser(usage='%s -m jieba [options] filename' % sys.executable, description='Jieba command line interface.', epilog='If no filename specified, use STDIN instead.')
+parser.add_argument('-d', '--delimiter', metavar='DELIM', default=' / ',
+                    nargs='?', const=' ',
+                    help='use DELIM instead of ' / ' for word delimiter; or a space if it is used without DELIM')
+parser.add_argument('-p', '--pos', metavar='DELIM', nargs='?', const='_',
+                    help='enable POS tagging; if DELIM is specified, use DELIM instead of '_' for POS delimiter')
+parser.add_argument('-D', '--dict', help='use DICT as dictionary')
+parser.add_argument('-u', '--user-dict',
+                    help='use USER_DICT together with the default dictionary or DICT (if specified)')
+parser.add_argument('-a', '--cut-all',
+                    action='store_true', dest='cutall', default=False,
+                    help='full pattern cutting (ignored with POS tagging)')
+parser.add_argument('-n', '--no-hmm', dest='hmm', action='store_false',
+                    default=True, help='don't use the Hidden Markov Model')
+parser.add_argument('-q', '--quiet', action='store_true', default=False,
+                    help='don't print loading messages to stderr')
+parser.add_argument('-V', '--version', action='version',
+                    version='Jieba ' + jieba.__version__)
+parser.add_argument('filename', nargs='?', help='input file')
     
-def test_str8():
-    header = b'\xd9'
-    data = b'x' * 32
-    b = packb(data.decode(), use_bin_type=True)
-    assert len(b) == len(data) + 2
-    assert b[0:2] == header + b'\x20'
-    assert b[2:] == data
-    assert unpackb(b) == data
+    else:
+    text_type = str
+    string_types = (str,)
+    xrange = range
     
-      identifier_group = SyntaxGroup( 'Identifier' )
-  statement_group  = SyntaxGroup( 'Statement' )
-  type_group       = SyntaxGroup( 'Type' )
-  preproc_group    = SyntaxGroup( 'PreProc' )
+        def set_new_path(self, new_idf_path):
+        if self.path != new_idf_path:
+            self.path = new_idf_path
+            content = open(new_idf_path, 'rb').read().decode('utf-8')
+            self.idf_freq = {}
+            for line in content.splitlines():
+                word, freq = line.strip().split(' ')
+                self.idf_freq[word] = float(freq)
+            self.median_idf = sorted(
+                self.idf_freq.values())[len(self.idf_freq) // 2]
     
-    
-# TODO: In future, implement MockServerResponse and MockServerResponseException
-# for synchronous cases when such test cases are needed.
-
-    
-    class _WorkItem( object ):
-  def __init__( self, future, fn, args, kwargs ):
-    self.future = future
-    self.fn = fn
-    self.args = args
-    self.kwargs = kwargs
-    
-        with _AcquireFutures(fs):
-        finished = set(
-                f for f in fs
-                if f._state in [CANCELLED_AND_NOTIFIED, FINISHED])
-        pending = set(fs) - finished
-        waiter = _create_and_install_waiters(fs, _AS_COMPLETED)
-    
-    class ProcessPoolExecutor(_base.Executor):
-    def __init__(self, max_workers=None):
-        '''Initializes a new ProcessPoolExecutor instance.
-    
-    _threads_queues = weakref.WeakKeyDictionary()
-_shutdown = False
-    
-    
-class RandomizedSet:
-    def __init__(self):
-        self.nums = []
-        self.idxs = {}
-    
-    
-def helper(n, length):
-    if n == 0:
-        return ['']
-    if n == 1:
-        return ['1', '0', '8']
-    middles = helper(n-2, length)
-    result = []
-    for middle in middles:
-        if n != length:
-            result.append('0' + middle + '0')
-        result.append('8' + middle + '8')
-        result.append('1' + middle + '1')
-        result.append('9' + middle + '6')
-        result.append('6' + middle + '9')
-    return result
-    
-    Modification:
-We don't need to check all even numbers, we can make the sieve excluding even
-numbers and adding 2 to the primes list by default.
-    
-    
-def __test_time():
-    vector_length = 1024
-    vector_count = 1024
-    nozero_counut = 10
+    if opt.topK is None:
+    topK = 10
+else:
+    topK = int(opt.topK)
