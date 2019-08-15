@@ -1,51 +1,107 @@
 
         
-        module AbstractController
-  module Testing
-    class ControllerWithHelpers < AbstractController::Base
-      include AbstractController::Helpers
-      include AbstractController::Rendering
-      include ActionView::Rendering
+          def test_localized_template_has_correct_header_with_no_format_in_template_name
+    I18n.locale = :it
+    get :hello_world
+    assert_equal 'Ciao Mondo', @response.body
+    assert_equal 'text/html',  @response.media_type
+  end
+end
+
     
-          # Try to add the gems to the current gemfile and lock file, if successful
-      # both of them will be updated. This injector is similar to Bundler's own injector class
-      # minus the support for additionals source and doing local resolution only.
-      ::Bundler::LogstashInjector.inject!(pack)
+      def test_render_json
+    get :one
+    assert_response :success
+    assert_equal({ a: 'b' }.to_json, @response.body)
+    assert_equal 'application/json', @response.media_type
+  end
     
-    class LogStash::PluginManager::Update < LogStash::PluginManager::Command
-  REJECTED_OPTIONS = [:path, :git, :github]
-  # These are local gems used by LS and needs to be filtered out of other plugin gems
-  NON_PLUGIN_LOCAL_GEMS = ['logstash-core', 'logstash-core-plugin-api']
+      def test_variant_variant_not_set_and_without_implicit_rendering_from_browser
+    assert_raises(ActionController::MissingExactTemplate) do
+      get :variant_without_implicit_template_rendering
+    end
+  end
     
-          @@order_attributes = [
-        :id, :number, :item_total, :total, :ship_total, :state, :adjustment_total,
-        :user_id, :created_at, :updated_at, :completed_at, :payment_total,
-        :shipment_state, :payment_state, :email, :special_instructions, :channel,
-        :included_tax_total, :additional_tax_total, :display_included_tax_total,
-        :display_additional_tax_total, :tax_total, :currency, :considered_risky,
-        :canceler_id
-      ]
-    
-    ## -- Rsync Deploy config -- ##
-# Be sure your public key is listed in your server's ~/.ssh/authorized_keys file
-ssh_user       = 'user@domain.com'
-ssh_port       = '22'
-document_root  = '~/website.com/'
-rsync_delete   = false
-rsync_args     = ''  # Any extra arguments to pass to rsync
-deploy_default = 'rsync'
-    
-        def render(context)
-      if parts = @text.match(/([a-zA-Z\d]*) (.*)/)
-        gist, file = parts[1].strip, parts[2].strip
-      else
-        gist, file = @text.strip, ''
-      end
-      if gist.empty?
-        ''
-      else
-        script_url = script_url_for gist, file
-        code       = get_cached_gist(gist, file) || get_gist_from_web(gist, file)
-        html_output_for script_url, code
+          def with_symbol
+        render inline: 'I respond to bare_a: <%= respond_to?(:bare_a) %>'
       end
     end
+    
+      describe '#style_colors' do
+    it 'returns a css style-formated version of the scenario foreground and background colors' do
+      expect(style_colors(scenario)).to eq('color:#AAAAAA;background-color:#000000')
+    end
+    
+            it 'kills no long active workers' do
+          mock.instance_of(HuginnScheduler).run!
+          mock.instance_of(DelayedJobWorker).run!
+          @agent_runner.send(:run_workers)
+          AgentRunner.class_variable_set(:@@agents, [DelayedJobWorker])
+          mock.instance_of(HuginnScheduler).stop!
+          @agent_runner.send(:run_workers)
+        end
+      end
+    
+        it 'should not provide the since attribute on first run' do
+      expect(@checker.send(:query_parameters)).to eq({})
+    end
+    
+    describe Agents::BoxcarAgent do
+  before(:each) do
+  @valid_params = {
+                    'user_credentials' => 'access_token',
+                    'title' => 'Sample Title',
+                    'body' => 'Sample Body'
+                  }
+  @checker = Agents::BoxcarAgent.new(:name => 'boxcartest', :options => @valid_params)
+  @checker.user = users(:bob)
+  @checker.save!
+    
+        case smb_share.upcase
+    when 'ADMIN$'
+      path = 'System32\\WindowsPowerShell\\v1.0\\powershell.exe'
+    when 'C$'
+      path = 'Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe'
+    else
+      path = psh_path
+    end
+    
+      # Check for modules using the DEBUG datastore option
+  #
+  # @see https://github.com/rapid7/metasploit-framework/issues/3816
+  def check_use_datastore_debug
+    if @source =~ /datastore\[[''](?i)DEBUG(?-i)['']\]/
+      error('Please don\'t use the DEBUG datastore option in production, it has an special meaning and is used for development')
+    end
+  end
+    
+        if (opts['uri_full_url'])
+      url = opts['ssl'] ? 'https://' : 'http://'
+      url << opts['vhost']
+      url << ((opts['port'] == 80) ? '' : ':#{opts['port']}')
+      url << uri_str
+      url
+    else
+      uri_str
+    end
+  end
+    
+    Liquid::Template.register_tag('img', Jekyll::ImageTag)
+
+    
+            Dir.chdir(includes_dir) do
+          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
+          if choices.include?(file)
+            source = File.read(file)
+            partial = Liquid::Template.parse(source)
+            context.stack do
+              rtn = rtn + partial.render(context)
+            end
+          else
+            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
+          end
+        end
+      end
+      rtn
+    end
+  end
