@@ -1,156 +1,131 @@
 
         
-          def open_dry_run_modal(agent)
-    visit edit_agent_path(agent)
-    click_on('Dry Run')
-    expect(page).to have_text('Event to send')
-  end
-    
-        it 'in the future' do
-      expect(relative_distance_of_time_in_words(Time.now+5.minutes)).to eq('in 5m')
+                updated_podspec_content
+      end
     end
   end
 end
 
     
-        it 'creates a scenario label with the given text' do
-      expect(scenario_label(scenario, 'Other')).to eq(
-        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Other</span>'
-      )
-    end
-  end
-    
-            describe 'with control links' do
-          it 'creates the links' do
-            valid_parsed_data[:control_links] = [
-              { :controller => 1, :control_target => 0 }
-            ]
-    
-      describe '#recursively_interpolate_jsonpaths' do
-    it 'interpolates all string values in a structure' do
-      struct = {
-        :int => 5,
-        :string => 'this <escape $.works>',
-        :array => ['<works>', 'now', '<$.there.world>'],
-        :deep => {
-          :string => 'hello <there.world>',
-          :hello => :world
-        }
-      }
-      data = { :there => { :world => 'WORLD' }, :works => 'should work' }
-      expect(Utils.recursively_interpolate_jsonpaths(struct, data)).to eq({
-        :int => 5,
-        :string => 'this should+work',
-        :array => ['should work', 'now', 'WORLD'],
-        :deep => {
-          :string => 'hello WORLD',
-          :hello => :world
-        }
-      })
-    end
-  end
-    
-        it 'should raise error when response says unauthorized' do
-      stub(HTTParty).post { {'Response' => 'Not authorized'} }
-      expect { @checker.send_notification({}) }.to raise_error(StandardError, /Not authorized/)
-    end
-    
-        def confirmation_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :confirmation_instructions, opts)
-    end
-    
-          def self.generate_helpers!(routes=nil)
-        routes ||= begin
-          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
-          Devise::URL_HELPERS.slice(*mappings)
+          context 'with appendix' do
+        it 'returns the current version once parsed with appendix' do
+          test_content = 'spec.version = '1.3.2.4''
+          result = @version_podspec_file.parse(test_content)
+          expect(result).to eq('1.3.2.4')
+          expect(@version_podspec_file.version_value).to eq('1.3.2.4')
+          expect(@version_podspec_file.version_match[:major]).to eq('1')
+          expect(@version_podspec_file.version_match[:minor]).to eq('3')
+          expect(@version_podspec_file.version_match[:patch]).to eq('2')
+          expect(@version_podspec_file.version_match[:appendix]).to eq('.4')
         end
     
-        if record.timedout?(last_request_at) &&
-        !env['devise.skip_timeout'] &&
-        !proxy.remember_me_is_active?(record)
-      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
-      throw :warden, scope: scope, message: :timeout
+                if editor.should_skip?
+              UI.message('Skipping framing of screenshot #{screenshot.path}.  No title provided in your Framefile.json or title.strings.')
+            else
+              Helper.show_loading_indicator('Framing screenshot '#{full_path}'')
+              editor.frame!
+            end
+          rescue => ex
+            UI.error(ex.to_s)
+            UI.error('Backtrace:\n\t#{ex.backtrace.join('\n\t')}') if FastlaneCore::Globals.verbose?
+          end
+        end
+      else
+        UI.error('Could not find screenshots in current directory: '#{File.expand_path(path)}'')
+      end
     end
     
-            selected_modules.each do |m|
-          mod = Devise::Models.const_get(m.to_s.classify)
+        before do
+      mock_client_response(:get_build) do
+        {
+          id: 1,
+          bundleId: 'some-bundle-id',
+          appAdamId: 'some-app-id',
+          uploadDate: '2017-01-01T12:00:00.000+0000',
+          betaReviewInfo: {
+            contactFirstName: 'Dev',
+            contactLastName: 'Toolio',
+            contactEmail: 'dev-toolio@fabric.io'
+          },
+          exportCompliance: {
+            usesEncryption: true,
+            encryptionUpdated: false
+          },
+          testInfo: [
+            {
+              locale: 'en-US',
+              description: 'test info',
+              feedbackEmail: 'email@example.com',
+              whatsNew: 'this is new!'
+            }
+          ],
+          dSYMUrl: 'https://some_dsym_url.com',
+          includesSymbols: false,
+          buildSdk: '13A340',
+          fileName: 'AppName.ipa',
+          containsODR: false,
+          numberOfAssetPacks: 1
+        }
+      end
+    end
     
-          def timeout_in
-        self.class.timeout_in
+          def self.download_file(url)
+        uri = URI.parse(url)
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = (uri.scheme == 'https')
+        res = http.get(uri.request_uri)
+        res.body
       end
     
-      # Do not eager load code on boot. This avoids loading your whole application
-  # just for the purpose of running a single test. If you are using a tool that
-  # preloads Rails for running tests, you may have to set it to true.
-  config.eager_load = false
+          # @param current_path this is a path to either a dSYM or a zipped dSYM
+      #   this might also be either nested or not, we're flexible
+      def self.handle_dsym(params, current_path, max_worker_threads)
+        if current_path.end_with?('.dSYM')
+          upload_dsym(params, current_path)
+        elsif current_path.end_with?('.zip')
+          UI.message('Extracting '#{current_path}'...')
     
-          def has_sidebar
-        @sidebar = (@page.sidebar || false) if @sidebar.nil? && @page
-        !!@sidebar
+              # Store the number in the shared hash
+          Actions.lane_context[SharedValues::BUILD_NUMBER] = build_number
+        end
+        return build_number
+      rescue => ex
+        return false if params[:hide_error_when_versioning_disabled]
+        UI.error('Before being able to increment and read the version number from your Xcode project, you first need to setup your project properly. Please follow the guide at https://developer.apple.com/library/content/qa/qa1827/_index.html')
+        raise ex
       end
     
-        assert_no_match /Edit/, last_response.body, ''Edit' link not blocked in history template'
+            if Helper.ci? || Helper.test?
+          # The 'BUILD_URL' environment variable is set automatically by Jenkins in every build
+          jenkins_api_url = URI(ENV['BUILD_URL'] + 'api/json\?wrapper\=changes\&xpath\=//changeSet//comment')
+          begin
+            json = JSON.parse(Net::HTTP.get(jenkins_api_url))
+            json['changeSet']['items'].each do |item|
+              comment = params[:include_commit_body] ? item['comment'] : item['msg']
+              changelog << comment.strip + '\n'
+            end
+          rescue => ex
+            UI.error('Unable to read/parse changelog from jenkins: #{ex.message}')
+          end
+        end
     
-    opts = OptionParser.new do |opts|
-  # define program name (although this defaults to the name of the file, just in case...)
-  opts.program_name = 'gollum'
+          def check_ip_address
+        if @ip_address && Postal.config.smtp_server.log_exclude_ips && @ip_address =~ Regexp.new(Postal.config.smtp_server.log_exclude_ips)
+          @logging_enabled = false
+        end
+      end
     
-  # set basic info for the '--help' command (options will be appended automatically from the below definitions)
-  opts.banner = '
-  Gollum is a multi-format Wiki Engine/API/Frontend.
+                  # Parse the content of the message as appropriate
+              if queued_message.message.should_parse?
+                log '#{log_prefix} Parsing message content as it hasn't been parsed before'
+                queued_message.message.parse_content
+              end
     
-  Usage:
-      gollum [options] [git-repo]
-    
-  Arguments:
-      [git-repo]                     Path to the git repository being served. If not specified, current working directory is used.
-  
-  Notes:
-      Paths for all options are relative to <git-repo> unless absolute.
-      This message is only a basic description. For more information, please visit:
-          https://github.com/gollum/gollum
-  
-  OPTIONS'
-  
-  # define gollum options  
-  opts.separator ''
-  opts.separator '  Major:'
-  
-  opts.on('-h', '--host [HOST]', 'Specify the hostname or IP address to listen on. Default: '0.0.0.0'.') do |host|
-    options[:bind] = host
-  end
-  opts.on('-p', '--port [PORT]', 'Specify the port to bind Gollum with. Default: '4567'.') do |port|
-    begin
-      # don't use 'port.to_i' here... it doesn't raise errors which might result in a nice confusion later on
-      options[:port] = Integer(port)
-    rescue ArgumentError
-      puts 'Error: '#{port}' is not a valid port number.'
-      exit 1
+      before_action do
+    if params[:server_id]
+      @server = organization.servers.present.find_by_permalink!(params[:server_id])
+      params[:id] && @ip_pool_rule = @server.ip_pool_rules.find_by_uuid!(params[:id])
+    else
+      params[:id] && @ip_pool_rule = organization.ip_pool_rules.find_by_uuid!(params[:id])
     end
   end
-  opts.on('-c', '--config [FILE]', 'Specify path to the Gollum's configuration file.') do |file|
-    options[:config] = file
-  end
-  opts.on('-r', '--ref [REF]', 'Specify the branch to serve. Default: 'master'.') do |ref|
-    wiki_options[:ref] = ref
-  end
-  opts.on('-a', '--adapter [ADAPTER]', 'Launch Gollum using a specific git adapter. Default: 'grit'.') do |adapter|
-    Gollum::GIT_ADAPTER = adapter
-  end
-  opts.on('--bare', 'Declare '<git-repo>' to be bare. This is only necessary when using the grit adapter.') do
-    wiki_options[:repo_is_bare] = true
-  end
-  opts.on('-b', '--base-path [PATH]', 'Specify the leading portion of all Gollum URLs (path info). Default: '/'.',
-    'Example: setting this to '/wiki' will make the wiki accessible under 'http://localhost:4567/wiki/'.') do |base_path|
-      
-    # first trim a leading slash, if any
-    base_path.sub!(/^\/+/, '')
-    
-      end
-end
-
-    
-    # Set ruby to UTF-8 mode
-# This is required for Ruby 1.8.7 which gollum still supports.
-$KCODE = 'U' if RUBY_VERSION[0, 3] == '1.8'
