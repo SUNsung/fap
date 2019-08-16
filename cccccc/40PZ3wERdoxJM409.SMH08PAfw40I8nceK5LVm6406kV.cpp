@@ -1,117 +1,177 @@
 
         
-          CHROMEG_CALLBACK_1(GlobalMenuBarRegistrarX11,
-                     void,
-                     OnProxyCreated,
-                     GObject*,
-                     GAsyncResult*);
-  CHROMEG_CALLBACK_1(GlobalMenuBarRegistrarX11,
-                     void,
-                     OnNameOwnerChanged,
-                     GObject*,
-                     GParamSpec*);
+          std::mutex running_mutex_;
+  std::condition_variable running_cv_;
+  std::atomic<bool> running_;
     
-    Promise Promise::Create() {
-  return Promise::Create(v8::Isolate::GetCurrent());
+              const TensorShape& X = in[0];
+          int N = 0, C = 0, H = 0, W = 0;
+          switch (order) {
+            case StorageOrder::NCHW:
+              N = X.dims(0);
+              C = X.dims(1);
+              H = X.dims(2);
+              W = X.dims(3);
+              break;
+            case StorageOrder::NHWC:
+              N = X.dims(0);
+              H = X.dims(1);
+              W = X.dims(2);
+              C = X.dims(3);
+              break;
+            default:
+              CAFFE_THROW('Unknown storage order: ', order);
+          }
+    
+    // This structure captures all information needed about a text line for the
+// purposes of paragraph detection.  It is meant to be exceedingly light-weight
+// so that we can easily test paragraph detection independent of the rest of
+// Tesseract.
+class RowInfo {
+ public:
+  // Constant data derived from Tesseract output.
+  STRING text;        // the full UTF-8 text of the line.
+  bool ltr;           // whether the majority of the text is left-to-right
+                      // TODO(eger) make this more fine-grained.
+    }
+    
+    // Class to hold a Pixa collection of debug images with captions and save them
+// to a PDF file.
+class DebugPixa {
+ public:
+  // TODO(rays) add another constructor with size control.
+  DebugPixa() {
+    pixa_ = pixaCreate(0);
+    fonts_ = bmfCreate(nullptr, 14);
+  }
+  // If the filename_ has been set and there are any debug images, they are
+  // written to the set filename_.
+  ~DebugPixa() {
+    pixaDestroy(&pixa_);
+    bmfDestroy(&fonts_);
+  }
+    }
+    
+    namespace tesseract {
+    }
+    
+    bool ParagraphModel::Comparable(const ParagraphModel &other) const {
+  if (justification_ != other.justification_)
+    return false;
+  if (justification_ == JUSTIFICATION_CENTER ||
+      justification_ == JUSTIFICATION_UNKNOWN)
+    return true;
+  int tolerance = (tolerance_ + other.tolerance_) / 4;
+  return NearlyEqual(margin_ + first_indent_,
+                     other.margin_ + other.first_indent_, tolerance) &&
+         NearlyEqual(margin_ + body_indent_,
+                     other.margin_ + other.body_indent_, tolerance);
 }
     
-    #if defined(OS_WIN)
-#include <windows.h>
-#endif  // defined(OS_WIN)
+    #endif
+
     
+      // Classifies the given [training] sample, writing to results.
+  // If page_pix is not nullptr, the overriding function may call
+  // sample.GetSamplePix(padding, page_pix) to get an image of the sample
+  // padded (with real image data) by the given padding to extract features
+  // from the image of the character. Other members of TrainingSample:
+  // features(), micro_features(), cn_feature(), geo_feature() may be used
+  // to get the appropriate tesseract features.
+  // If debug is non-zero, then various degrees of classifier dependent debug
+  // information is provided.
+  // If keep_this (a UNICHAR_ID) is >= 0, then the results should always
+  // contain keep_this, and (if possible) anything of intermediate confidence.
+  // (Used for answering 'Why didn't it get that right?' questions.) It must
+  // be a UNICHAR_ID as the callers have no clue how to choose the best shape
+  // that may contain a desired answer.
+  // The return value is the number of classes saved in results.
+  // NOTE that overriding functions MUST clear and sort the results by
+  // descending rating unless the classifier is working with a team of such
+  // classifiers.
+  // NOTE: Neither overload of ClassifySample is pure, but at least one must
+  // be overridden by a classifier in order for it to do anything.
+  virtual int UnicharClassifySample(const TrainingSample& sample, Pix* page_pix,
+                                    int debug, UNICHAR_ID keep_this,
+                                    GenericVector<UnicharRating>* results);
     
-    {}  // namespace electron
+    				new_hilite = HIGHLIGHT_INCR;
     
-    #include <map>
+    	applied_force = Vector3();
+	applied_torque = Vector3();
+	first_integration = false;
     
-      int num_words;
-  TBOX lword_box;     // in normalized (horiz text rows) space
-  TBOX rword_box;     // in normalized (horiz text rows) space
+    #include 'cpu_particles_editor_plugin.h'
     
-      // Computes all the cross product distances of the points perpendicular to
-  // the given direction, ignoring distances outside of the give distance range,
-  // storing the actual (signed) cross products in distances_.
-  void ComputeConstrainedDistances(const FCOORD& direction,
-                                   double min_dist, double max_dist);
-    
-      bool is_list_item;
-    
-    // Computes the Otsu threshold(s) for the given histogram.
-// Also returns H = total count in histogram, and
-// omega0 = count of histogram below threshold.
-int OtsuStats(const int* histogram, int* H_out, int* omega0_out);
-    
-    #ifndef TESSERACT_CCUTIL_DOUBLEPTR_H_
-#define TESSERACT_CCUTIL_DOUBLEPTR_H_
-    
-    // Specialization for a pair of ints in increasing order.
-using IntKDPair = KDPairInc<int, int>;
-    
-      // Main worker method that retrieves the next number in the sequence.
-  // Returns kInvalidVal if called more than N times after object initialization
-  int GetVal() {
-    const int kInvalidVal = -1;
-    const int kMaxNaturalNumberValue = 1 << num_bits_;
-    if (next_num_ >= kMaxNaturalNumberValue)
-      return kInvalidVal;
-    int n = next_num_;
+    	struct BVH {
     }
     
-    // A UNICHARMAP stores unique unichars. Each of them is associated with one
-// UNICHAR_ID.
-class UNICHARMAP {
- public:
-    }
+    			last_is_slash = true;
+			has_slashes = true;
+		} else {
     
-    // Compute the distance between the given feature vector and the last
-// Set feature vector.
-double IntFeatureDist::DebugFeatureDistance(
-    const GenericVector<int>& features) const {
-  const int num_test_features = features.size();
-  const double denominator = total_feature_weight_ + num_test_features;
-  double misses = denominator;
-  for (int i = 0; i < num_test_features; ++i) {
-    const int index = features[i];
-    const double weight = 1.0;
-    INT_FEATURE_STRUCT f = feature_map_->InverseMapFeature(features[i]);
-    tprintf('Testing feature weight %g:', weight);
-    f.print();
-    if (features_[index]) {
-      // A perfect match.
-      misses -= 2.0 * weight;
-      tprintf('Perfect hit\n');
-    } else if (features_delta_one_[index]) {
-      misses -= 1.5 * weight;
-      tprintf('-1 hit\n');
-    } else if (features_delta_two_[index]) {
-      // A near miss.
-      misses -= 1.0 * weight;
-      tprintf('-2 hit\n');
-    } else {
-      tprintf('Total miss\n');
+      Status GetAbsolutePath(const std::string& db_path,
+                         std::string* output_path) override {
+    auto status_and_enc_path = EncodePath(db_path);
+    if (!status_and_enc_path.first.ok()) {
+      return status_and_enc_path.first;
     }
+    return EnvWrapper::GetAbsolutePath(status_and_enc_path.second, output_path);
   }
-  tprintf('Features present:');
-  for (int i = 0; i < size_; ++i) {
-    if (features_[i]) {
-      INT_FEATURE_STRUCT f = feature_map_->InverseMapFeature(i);
-      f.print();
-    }
+    
+    /*
+ * Class:     org_rocksdb_CompactionOptionsUniversal
+ * Method:    newCompactionOptionsUniversal
+ * Signature: ()J
+ */
+jlong Java_org_rocksdb_CompactionOptionsUniversal_newCompactionOptionsUniversal(
+    JNIEnv*, jclass) {
+  const auto* opt = new rocksdb::CompactionOptionsUniversal();
+  return reinterpret_cast<jlong>(opt);
+}
+    
+    #include 'portal.h'
+#include 'rocksdb/env.h'
+#include 'include/org_rocksdb_Env.h'
+#include 'include/org_rocksdb_HdfsEnv.h'
+#include 'include/org_rocksdb_RocksEnv.h'
+#include 'include/org_rocksdb_RocksMemEnv.h'
+#include 'include/org_rocksdb_TimedEnv.h'
+    
+      std::string value;
+  bool value_found = false;
+  bool keyMayExist;
+  if (cf_handle != nullptr) {
+    keyMayExist =
+        db->KeyMayExist(read_opt, cf_handle, key_slice, &value, &value_found);
+  } else {
+    keyMayExist = db->KeyMayExist(read_opt, key_slice, &value, &value_found);
   }
-  tprintf('\nMinus one features:');
-  for (int i = 0; i < size_; ++i) {
-    if (features_delta_one_[i]) {
-      INT_FEATURE_STRUCT f = feature_map_->InverseMapFeature(i);
-      f.print();
-    }
+    
+    std::function<bool(const rocksdb::TableProperties&)> TableFilterJniCallback::GetTableFilterFunction() {
+  return m_table_filter_function;
+}
+    
+    
+    {}  //namespace rocksdb
+    
+    #include 'rocksdb/trace_reader_writer.h'
+#include 'rocksjni/jnicallback.h'
+    
+    /*
+ * Class:     org_rocksdb_TransactionDB
+ * Method:    getTransactionByName
+ * Signature: (JLjava/lang/String;)J
+ */
+jlong Java_org_rocksdb_TransactionDB_getTransactionByName(
+    JNIEnv* env, jobject, jlong jhandle, jstring jname) {
+  auto* txn_db = reinterpret_cast<rocksdb::TransactionDB*>(jhandle);
+  const char* name = env->GetStringUTFChars(jname, nullptr);
+  if (name == nullptr) {
+    // exception thrown: OutOfMemoryError
+    return 0;
   }
-  tprintf('\nMinus two features:');
-  for (int i = 0; i < size_; ++i) {
-    if (features_delta_two_[i]) {
-      INT_FEATURE_STRUCT f = feature_map_->InverseMapFeature(i);
-      f.print();
-    }
-  }
-  tprintf('\n');
-  return misses / denominator;
+  rocksdb::Transaction* txn = txn_db->GetTransactionByName(name);
+  env->ReleaseStringUTFChars(jname, name);
+  return reinterpret_cast<jlong>(txn);
 }
