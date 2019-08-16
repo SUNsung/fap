@@ -1,186 +1,119 @@
 
         
-        describe ContentSecurityPolicy::Builder do
-  let(:builder) { described_class.new }
+        # Test https://github.com/jekyll/jekyll/pull/6735#discussion_r165499868
+# ------------------------------------------------------------------------
+def check_with_regex(content)
+  !content.to_s.match?(%r!{[{%]!)
+end
+    }
+    }
     
-        # Make extending these directives no-op, until core includes them in default CSP
-    TO_BE_EXTENDABLE = %i[
-      connect_src
-      default_src
-      font_src
-      form_action
-      frame_ancestors
-      frame_src
-      img_src
-      manifest_src
-      media_src
-      prefetch_src
-      style_src
-    ].freeze
+      p.option 'source', '-s', '--source [DIR]', 'Source directory (defaults to ./)'
+  p.option 'destination', '-d', '--destination [DIR]',
+    'Destination directory (defaults to ./_site)'
+  p.option 'safe', '--safe', 'Safe mode (defaults to false)'
+  p.option 'plugins_dir', '-p', '--plugins PLUGINS_DIR1[,PLUGINS_DIR2[,...]]', Array,
+    'Plugins directory (defaults to ./_plugins)'
+  p.option 'layouts_dir', '--layouts DIR', String,
+    'Layouts directory (defaults to ./_layouts)'
+  p.option 'profile', '--profile', 'Generate a Liquid rendering profile'
     
-    # == Schema Information
-#
-# Table name: user_stats
-#
-#  user_id                  :integer          not null, primary key
-#  topics_entered           :integer          default(0), not null
-#  time_read                :integer          default(0), not null
-#  days_visited             :integer          default(0), not null
-#  posts_read_count         :integer          default(0), not null
-#  likes_given              :integer          default(0), not null
-#  likes_received           :integer          default(0), not null
-#  topic_reply_count        :integer          default(0), not null
-#  new_since                :datetime         not null
-#  read_faq                 :datetime
-#  first_post_created_at    :datetime
-#  post_count               :integer          default(0), not null
-#  topic_count              :integer          default(0), not null
-#  bounce_score             :float            default(0.0), not null
-#  reset_bounce_score_after :datetime
-#  flags_agreed             :integer          default(0), not null
-#  flags_disagreed          :integer          default(0), not null
-#  flags_ignored            :integer          default(0), not null
-#  first_unread_at          :datetime         not null
-#
-
-    
-        if !custom_order.present?
-      if params[:query] == 'active'
-        order << 'COALESCE(users.last_seen_at, to_date('1970-01-01', 'YYYY-MM-DD')) DESC'
-      else
-        order << 'users.created_at DESC'
+              theme.create!
+          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
+                             ' is ready for you in #{theme.path.to_s.cyan}!'
+          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
+        end
+        # rubocop:enable Metrics/AbcSize
       end
-    
-          if @actions_requiring_special_handling.include?(action_name)
-        command_return = run_action_requiring_special_handling(
-          command: command,
-          parameter_map: parameter_map,
-          action_return_type: action_class_ref.return_type
-        )
-        return command_return
-      end
-    
-          it 'handles the exclude_dirs parameter with no elements correctly' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          ensure_no_debug_code(text: 'pry', path: '.', exclude_dirs: [])
-        end').runner.execute(:test)
-        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}'')
-      end
-    
-    def expect_correct_implementation_to_be_called(obj, method, os)
-  if method == :shellescape
-    # String.shellescape => CrossplatformShellwords.shellescape => ...
-    expect(obj).to receive(:shellescape).and_call_original
-    expect(CrossplatformShellwords).to receive(:shellescape).with(obj).and_call_original
-    if os == 'windows'
-      # WindowsShellwords.shellescape
-      expect(WindowsShellwords).to receive(:shellescape).with(obj).and_call_original
-      expect(Shellwords).not_to(receive(:escape))
-    else
-      # Shellswords.escape
-      expect(Shellwords).to receive(:escape).with(obj).and_call_original
-      expect(WindowsShellwords).not_to(receive(:shellescape))
     end
-  elsif method == :shelljoin
-    # Array.shelljoin => CrossplatformShellwords.shelljoin => CrossplatformShellwords.shellescape ...
-    expect(obj).to receive(:shelljoin).and_call_original
-    expect(CrossplatformShellwords).to receive(:shelljoin).with(obj).and_call_original
-    expect(CrossplatformShellwords).to receive(:shellescape).at_least(:once).and_call_original
   end
 end
 
     
-      # POST /resource/sign_in
-  def create
-    self.resource = warden.authenticate!(auth_options)
-    set_flash_message!(:notice, :signed_in)
-    sign_in(resource_name, resource)
-    yield resource if block_given?
-    respond_with resource, location: after_sign_in_path_for(resource)
-  end
-    
-        def confirmation_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :confirmation_instructions, opts)
-    end
-    
-          # Sign in a user that already was authenticated. This helper is useful for logging
-      # users in after sign up. All options given to sign_in is passed forward
-      # to the set_user method in warden.
-      # If you are using a custom warden strategy and the timeoutable module, you have to
-      # set `env['devise.skip_timeout'] = true` in the request to use this method, like we do
-      # in the sessions controller: https://github.com/plataformatec/devise/blob/master/app/controllers/devise/sessions_controller.rb#L7
-      #
-      # Examples:
-      #
-      #   sign_in :user, @user                      # sign_in(scope, resource)
-      #   sign_in @user                             # sign_in(resource)
-      #   sign_in @user, event: :authentication     # sign_in(resource, options)
-      #   sign_in @user, store: false               # sign_in(resource, options)
-      #
-      def sign_in(resource_or_scope, *args)
-        options  = args.extract_options!
-        scope    = Devise::Mapping.find_scope!(resource_or_scope)
-        resource = args.last || resource_or_scope
-    
-            if is_navigational_format?
-          session.delete(session_key)
-        else
-          session[session_key]
+            def log_error(error)
+          Jekyll.logger.error 'LiveReload experienced an error. ' \
+            'Run with --trace for more information.'
+          raise error
         end
       end
-    
-    # Each time a record is set we check whether its session has already timed out
-# or not, based on last request time. If so, the record is logged out and
-# redirected to the sign in page. Also, each time the request comes and the
-# record is set, we set the last request time inside its scoped session to
-# verify timeout in the following request.
-Warden::Manager.after_set_user do |record, warden, options|
-  scope = options[:scope]
-  env   = warden.request.env
-    
-            constant.required_fields(klass).each do |field|
-          failed_attributes << field unless instance.respond_to?(field)
-        end
-      end
-    
-      private
-    
-          mandatory(@command.args.any? || @command.inputs || @command.input_type == 'empty',
-                'No parameters given. You need to pass additional command ' \
-                'arguments so that I know what you want to build packages ' \
-                'from. For example, for '-s dir' you would pass a list of ' \
-                'files and directories. For '-s gem' you would pass a one' \
-                ' or more gems to package from. As a full example, this ' \
-                'will make an rpm of the 'json' rubygem: ' \
-                '`fpm -s gem -t rpm json`')
-    end # def validate
-    
-      def dependencies
-    bogus_regex = /[^\sA-Za-z0-9><=+._@-]/
-    # Actually modifies depencies if they are not right
-    bogus_dependencies = @dependencies.grep bogus_regex
-    if bogus_dependencies.any?
-      @dependencies.reject! { |a| a =~ bogus_regex }
-      logger.warn('Some of the dependencies looked like they weren't package ' \
-                  'names. Such dependency entries only serve to confuse arch. ' \
-                  'I am removing them.',
-                  :removed_dependencies => bogus_dependencies,
-                  :fixed_dependencies => @dependencies)
     end
-    return @dependencies
+  end
+end
+
+    
+      def delete_target_file?
+    return true if overwrite?
+    puts('File #{target_file} exist, do you want to overwrite it? (Y/N)')
+    ( 'y' == STDIN.gets.strip.downcase ? true : false)
   end
     
-      private
-  def input(command)
-    platforms = [
-      ::PleaseRun::Platform::Systemd.new('default'), # RHEL 7, Fedora 19+, Debian 8, Ubuntu 16.04
-      ::PleaseRun::Platform::Upstart.new('1.5'), # Recent Ubuntus
-      ::PleaseRun::Platform::Upstart.new('0.6.5'), # CentOS 6
-      ::PleaseRun::Platform::Launchd.new('10.9'), # OS X
-      ::PleaseRun::Platform::SYSV.new('lsb-3.1') # Ancient stuff
-    ]
-    pleaserun_attributes = [ 'chdir', 'user', 'group', 'umask', 'chroot', 'nice', 'limit_coredump',
-                             'limit_cputime', 'limit_data', 'limit_file_size', 'limit_locked_memory',
-                             'limit_open_files', 'limit_user_processes', 'limit_physical_memory', 'limit_stack_size',
-                             'log_directory', 'log_file_stderr', 'log_file_stdout']
+        def load_locale!
+      require 'i18n'
+      I18n.enforce_available_locales = true
+      I18n.load_path << LogStash::Environment.locales_path('en.yml')
+      I18n.reload!
+      fail 'No locale? This is a bug.' if I18n.available_locales.empty?
+    end
+    
+        class << self
+      def elastic_pack_base_uri
+        env_url = ENV['LOGSTASH_PACK_URL']
+        (env_url.nil? || env_url.empty?) ? DEFAULT_PACK_URL : env_url
+      end
+    
+        it 'allows #via to point to same Redi' do
+      conn = MiniTest::Mock.new
+      conn.expect(:multi, [0, 1])
+      sharded_pool = ConnectionPool.new(size: 1) { conn }
+      Sidekiq::Client.via(sharded_pool) do
+        Sidekiq::Client.via(sharded_pool) do
+          CWorker.perform_async(1,2,3)
+        end
+      end
+      conn.verify
+    end
+    
+        it 'logs the exception to Sidekiq.logger' do
+      Component.new.invoke_exception(:a => 1)
+      @str_logger.rewind
+      log = @str_logger.readlines
+      assert_match(/'a':1/, log[0], 'didn't include the context')
+      assert_match(/Something didn't work!/, log[1], 'didn't include the exception message')
+      assert_match(/test\/test_exception_handler.rb/, log[2], 'didn't include the backtrace')
+    end
+    
+          @retry = Sidekiq::RetrySet.new
+      @scheduled = Sidekiq::ScheduledSet.new
+      @poller = Sidekiq::Scheduled::Poller.new
+    end
+    
+        it 'disables testing in a block' do
+      Sidekiq::Testing.fake!
+      assert Sidekiq::Testing.fake?
+    
+      context 'called with null values' do
+    it 'writes rules for other three' do
+      ruleset = 'border-top-style: inset; ' +
+                'border-right-style: none; ' +
+                'border-left-style: double;'
+      bad_rule = 'border-bottom-style: null;'
+    
+      context 'called with arguments (1, $ratio: $golden-ratio)' do
+    it 'output the first value from the golden ratio scale' do
+      expect('.one-golden-ratio').to have_rule('font-size: 1.618em')
+    end
+  end
+    
+      context 'called with two sizes' do
+    it 'applies to alternating sides' do
+      ruleset = 'position: absolute; ' +
+                'top: 2px; ' +
+                'right: 3px; ' +
+                'bottom: 2px; ' +
+                'left: 3px;'
+    
+      context 'called with multiple prefixes' do
+    it 'applies the prefixes to the property' do
+      rule = '-moz-appearance: none; ' +
+             '-ms-appearance: none; ' +
+             'appearance: none;'
