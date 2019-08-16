@@ -1,106 +1,109 @@
 
         
-        #endif // BITCOIN_QT_NETWORKSTYLE_H
-
+            // Activate, show and raise the widget
+    void bringToFront(QWidget* w);
     
-    namespace Ui {
-    class OpenURIDialog;
+        QString getURI();
+    
+    SECP256K1_INLINE static void secp256k1_fe_mul_inner(uint64_t *r, const uint64_t *a, const uint64_t * SECP256K1_RESTRICT b) {
+/**
+ * Registers: rdx:rax = multiplication accumulator
+ *            r9:r8   = c
+ *            r15:rcx = d
+ *            r10-r14 = a0-a4
+ *            rbx     = b
+ *            rdi     = r
+ *            rsi     = a / t?
+ */
+  uint64_t tmp1, tmp2, tmp3;
+__asm__ __volatile__(
+    'movq 0(%%rsi),%%r10\n'
+    'movq 8(%%rsi),%%r11\n'
+    'movq 16(%%rsi),%%r12\n'
+    'movq 24(%%rsi),%%r13\n'
+    'movq 32(%%rsi),%%r14\n'
+    }
+    
+    
+    {    /* Serialize/parse compact and verify/recover. */
+    extra[0] = 0;
+    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[0], message, privkey, NULL, NULL) == 1);
+    CHECK(secp256k1_ecdsa_sign(ctx, &signature[0], message, privkey, NULL, NULL) == 1);
+    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[4], message, privkey, NULL, NULL) == 1);
+    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[1], message, privkey, NULL, extra) == 1);
+    extra[31] = 1;
+    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[2], message, privkey, NULL, extra) == 1);
+    extra[31] = 0;
+    extra[0] = 1;
+    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[3], message, privkey, NULL, extra) == 1);
+    CHECK(secp256k1_ecdsa_recoverable_signature_serialize_compact(ctx, sig, &recid, &rsignature[4]) == 1);
+    CHECK(secp256k1_ecdsa_recoverable_signature_convert(ctx, &signature[4], &rsignature[4]) == 1);
+    CHECK(memcmp(&signature[4], &signature[0], 64) == 0);
+    CHECK(secp256k1_ecdsa_verify(ctx, &signature[4], message, &pubkey) == 1);
+    memset(&rsignature[4], 0, sizeof(rsignature[4]));
+    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsignature[4], sig, recid) == 1);
+    CHECK(secp256k1_ecdsa_recoverable_signature_convert(ctx, &signature[4], &rsignature[4]) == 1);
+    CHECK(secp256k1_ecdsa_verify(ctx, &signature[4], message, &pubkey) == 1);
+    /* Parse compact (with recovery id) and recover. */
+    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsignature[4], sig, recid) == 1);
+    CHECK(secp256k1_ecdsa_recover(ctx, &recpubkey, &rsignature[4], message) == 1);
+    CHECK(memcmp(&pubkey, &recpubkey, sizeof(pubkey)) == 0);
+    /* Serialize/destroy/parse signature and verify again. */
+    CHECK(secp256k1_ecdsa_recoverable_signature_serialize_compact(ctx, sig, &recid, &rsignature[4]) == 1);
+    sig[secp256k1_rand_bits(6)] += 1 + secp256k1_rand_int(255);
+    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsignature[4], sig, recid) == 1);
+    CHECK(secp256k1_ecdsa_recoverable_signature_convert(ctx, &signature[4], &rsignature[4]) == 1);
+    CHECK(secp256k1_ecdsa_verify(ctx, &signature[4], message, &pubkey) == 0);
+    /* Recover again */
+    CHECK(secp256k1_ecdsa_recover(ctx, &recpubkey, &rsignature[4], message) == 0 ||
+          memcmp(&pubkey, &recpubkey, sizeof(pubkey)) != 0);
 }
     
-    private:
-    Ui::SignVerifyMessageDialog *ui;
-    WalletModel *model;
-    const PlatformStyle *platformStyle;
+        ;; load initial digest
+    mov	a,[4*0 + CTX]
+    mov	b,[4*1 + CTX]
+    mov	c,[4*2 + CTX]
+    mov	d,[4*3 + CTX]
+    mov	e,[4*4 + CTX]
+    mov	f,[4*5 + CTX]
+    mov	g,[4*6 + CTX]
+    mov	h,[4*7 + CTX]
     
     
-    {    CRIPEMD160();
-    CRIPEMD160& Write(const unsigned char* data, size_t len);
-    void Finalize(unsigned char hash[OUTPUT_SIZE]);
-    CRIPEMD160& Reset();
+    {  // Returns number of files renamed.
+  int RenameLDBToSST() {
+    std::vector<std::string> filenames;
+    ASSERT_OK(env_->GetChildren(dbname_, &filenames));
+    uint64_t number;
+    FileType type;
+    int files_renamed = 0;
+    for (size_t i = 0; i < filenames.size(); i++) {
+      if (ParseFileName(filenames[i], &number, &type) && type == kTableFile) {
+        const std::string from = TableFileName(dbname_, number);
+        const std::string to = SSTTableFileName(dbname_, number);
+        ASSERT_OK(env_->RenameFile(from, to));
+        files_renamed++;
+      }
+    }
+    return files_renamed;
+  }
 };
     
-    Status DumpDescriptor(Env* env, const std::string& fname, WritableFile* dst) {
-  return PrintLogContents(env, fname, VersionEditPrinter, dst);
+    void InternalKeyComparator::FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const {
+  // Attempt to shorten the user portion of the key
+  Slice user_start = ExtractUserKey(*start);
+  Slice user_limit = ExtractUserKey(limit);
+  std::string tmp(user_start.data(), user_start.size());
+  user_comparator_->FindShortestSeparator(&tmp, user_limit);
+  if (tmp.size() < user_start.size() &&
+      user_comparator_->Compare(user_start, tmp) < 0) {
+    // User key has become shorter physically, but larger logically.
+    // Tack on the earliest possible number to the shortened user key.
+    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
+    assert(this->Compare(*start, tmp) < 0);
+    assert(this->Compare(tmp, limit) < 0);
+    start->swap(tmp);
+  }
 }
-    
-    
-    {}  // namespace leveldb
-    
-    
-    {  // Changes *key to a short string >= *key.
-  // Simple comparator implementations may return with *key unchanged,
-  // i.e., an implementation of this method that does nothing is correct.
-  virtual void FindShortSuccessor(std::string* key) const = 0;
-};
-    
-      // Create a slice that refers to the contents of 's'
-  Slice(const std::string& s) : data_(s.data()), size_(s.size()) {}
-    
-    Status Footer::DecodeFrom(Slice* input) {
-  const char* magic_ptr = input->data() + kEncodedLength - 8;
-  const uint32_t magic_lo = DecodeFixed32(magic_ptr);
-  const uint32_t magic_hi = DecodeFixed32(magic_ptr + 4);
-  const uint64_t magic = ((static_cast<uint64_t>(magic_hi) << 32) |
-                          (static_cast<uint64_t>(magic_lo)));
-  if (magic != kTableMagicNumber) {
-    return Status::Corruption('not an sstable (bad magic number)');
-  }
-    }
-    
-      if (s.ok()) {
-    // We've successfully read the footer and the index block: we're
-    // ready to serve requests.
-    Block* index_block = new Block(index_block_contents);
-    Rep* rep = new Table::Rep;
-    rep->options = options;
-    rep->file = file;
-    rep->metaindex_handle = footer.metaindex_handle();
-    rep->index_block = index_block;
-    rep->cache_id = (options.block_cache ? options.block_cache->NewId() : 0);
-    rep->filter_data = nullptr;
-    rep->filter = nullptr;
-    *table = new Table(rep);
-    (*table)->ReadMeta(footer);
-  }
-    
-      rv_ = gnutls_init(&sslSession_, flags);
-#else  // GNUTLS_VERSION_NUMBER >= 0x030000
-  rv_ = gnutls_init(&sslSession_, tlsContext_->getSide() == TLS_CLIENT
-                                      ? GNUTLS_CLIENT
-                                      : GNUTLS_SERVER);
-#endif // GNUTLS_VERSION_NUMBER >= 0x030000
-  if (rv_ != GNUTLS_E_SUCCESS) {
-    return TLS_ERR_ERROR;
-  }
-#ifdef A2_DISABLE_OCSP
-  if (tlsContext_->getSide() == TLS_CLIENT) {
-    // Enable session ticket extension manually because of
-    // GNUTLS_NO_EXTENSIONS.
-    rv_ = gnutls_session_ticket_enable_client(sslSession_);
-    if (rv_ != GNUTLS_E_SUCCESS) {
-      return TLS_ERR_ERROR;
-    }
-  }
-#endif // A2_DISABLE_OCSP
-    
-    bool WinTLSContext::addTrustedCACertFile(const std::string& certfile)
-{
-  A2_LOG_WARN('TLS CA bundle files are not supported. '
-              'The system trust store will be used.');
-  return false;
-}
-    
-    void DHTReplaceNodeTask::onReceived(const DHTPingReplyMessage* message)
-{
-  A2_LOG_INFO(fmt('ReplaceNode: Ping reply received from %s.',
-                  message->getRemoteNode()->toString().c_str()));
-  setFinished(true);
-}
-    
-    namespace aria2 {
-    }
-    
-    
-    // ============
-    // string types
-    // ============
