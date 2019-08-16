@@ -1,122 +1,128 @@
 
         
-                  def hidden_field
-            hidden_name = @html_options[:name] || hidden_field_name
-            @template_object.hidden_field_tag(hidden_name, '', id: nil)
-          end
-    
-            private
-    
-              def datetime_selector(options, html_options)
-            datetime = options.fetch(:selected) { value || default_datetime(options) }
-            @auto_index ||= nil
-    
-                content
-          end
-        end
-    
-        def exists?(path, prefixes, *args)
-      find_all(path, prefixes, *args).any?
+              topics.each do |t|
+        t.posters = t.posters_summary(
+          avatar_lookup: avatar_lookup,
+          primary_group_lookup: primary_group_lookup,
+          translations: translations
+        )
+      end
     end
     
-          # token - The GitHub API token to use.
-      #
-      # per_page - The number of objects that should be displayed per page.
-      #
-      # parallel - When set to true hitting the rate limit will result in a
-      #            dedicated error being raised. When set to `false` we will
-      #            instead just `sleep()` until the rate limit is reset. Setting
-      #            this value to `true` for parallel importing is crucial as
-      #            otherwise hitting the rate limit will result in a thread
-      #            being blocked in a `sleep()` call for up to an hour.
-      def initialize(token, per_page: 100, parallel: true)
-        @octokit = Octokit::Client.new(
-          access_token: token,
-          per_page: per_page,
-          api_endpoint: api_endpoint
-        )
-    
-            def representation_class
-          Representation::DiffNote
+            if path.present?
+          path = '#{path}/' unless path.end_with?('/')
+          path = Regexp.quote(path)
         end
     
-          private
+        @s3_client.stub_responses(:put_object, -> (context) do
+      check_context(context)
     
-            # Returns a Hash that can be used to populate `notes.st_diff`, removing
-        # the need for requesting Git data for every diff note.
-        def diff_hash
-          {
-            diff: diff_hunk,
-            new_path: file_path,
-            old_path: file_path,
-    }
+        it 'works when default_locale is not English' do
+      SiteSetting.default_locale = :de
     
-              hash[:author] &&= Representation::User.from_json_hash(hash[:author])
+        h3('Configurable attributes') + to_table(header, content)
+  end
     
-      def maxheight_or_default
-    params[:maxheight].present? ? params[:maxheight].to_i : nil
+          it_behaves_like 'accepts', 'bar > 42'
+      it_behaves_like 'accepts', 'bar <= nil'
+      it_behaves_like 'accepts', 'a > 3 && 5 > a'
+      it_behaves_like 'offense', 'answer != 42'
+      it_behaves_like 'offense', 'foo == false'
+    end
   end
 end
 
     
-          def ask_question
-        $stdout.print question
-        $stdout.flush
+          # Checks whether the method is a predicate method.
+      #
+      # @return [Boolean] whether the method is a predicate method
+      def predicate_method?
+        method_name.to_s.end_with?('?')
       end
     
-    ##############
-# Deploying  #
-##############
+    describe FPM::Package::CPAN, :if => have_cpanm do
+  subject { FPM::Package::CPAN.new }
     
-        def initialize(tag_name, markup, tokens)
-      @by = nil
-      @source = nil
-      @title = nil
-      if markup =~ FullCiteWithTitle
-        @by = $1
-        @source = $2 + $3
-        @title = $4.titlecase.strip
-      elsif markup =~ FullCite
-        @by = $1
-        @source = $2 + $3
-      elsif markup =~ AuthorTitle
-        @by = $1
-        @title = $2.titlecase.strip
-      elsif markup =~ Author
-        @by = $1
+          it 'it should prefix requirements.txt' do
+        subject.input(example_dir)
+        insist { subject.dependencies.sort } == ['python-rtxt-dep1 > 0.1', 'python-rtxt-dep2 = 0.1', 'python-rtxt-dep4  ']
       end
-      super
+    
+          it 'should have the custom apps' do
+        pending('Ruby 1.x and 2.0.x are unsupported for Snap because it lacks Psych::safe_load') if is_old_ruby
+        insist { input.attributes[:snap_apps] } == []
+      end
+    
+      shared_examples_for :Mutator do |item|
+    context 'when set' do
+      let(:value) { 'whatever' }
+      it 'should return the set value' do
+        expect(subject.send('#{item}=', value)).to(be == value)
+      end
+    
+      config.vm.define 'debian7' do |debian7|
+    debian7.vm.box = 'puppetlabs/centos-7.0-64-puppet'
+  end
+    
+    require 'fpm'
+require 'tmpdir'
+require 'fpm/package/pleaserun'
+    
+          mandatory(@command.args.any? || @command.inputs || @command.input_type == 'empty',
+                'No parameters given. You need to pass additional command ' \
+                'arguments so that I know what you want to build packages ' \
+                'from. For example, for '-s dir' you would pass a list of ' \
+                'files and directories. For '-s gem' you would pass a one' \
+                ' or more gems to package from. As a full example, this ' \
+                'will make an rpm of the 'json' rubygem: ' \
+                '`fpm -s gem -t rpm json`')
+    end # def validate
+    
+      def edit_file(path)
+    editor = ENV['FPM_EDITOR'] || ENV['EDITOR'] || 'vi'
+    logger.info('Launching editor', :file => path)
+    command = '#{editor} #{Shellwords.escape(path)}'
+    system('#{editor} #{Shellwords.escape(path)}')
+    if !$?.success?
+      raise ProcessFailed.new(''#{editor}' failed (exit code ' \
+                              '#{$?.exitstatus}) Full command was: ' \
+                              '#{command}');
     end
     
-    def config_tag(config, key, tag=nil, classname=nil)
-  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
-  tag       ||= 'div'
-  classname ||= key.sub(/_/, '-').sub(/\./, '-')
-  output      = '<#{tag} class='#{classname}''
-    
-          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
-        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
-        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
-          @img['title']  = title
-          @img['alt']    = alt
-        else
-          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
-        end
-        @img['class'].gsub!(/'/, '') if @img['class']
-      end
-      super
+        # control tar.
+    begin
+      write_pkginfo(control_path)
+      write_control_scripts(control_path)
+      tar_path(control_path, controltar_path)
+    ensure
+      FileUtils.rm_r(control_path)
     end
     
-      class IncludeArrayTag < Liquid::Tag
-    Syntax = /(#{Liquid::QuotedFragment}+)/
-    def initialize(tag_name, markup, tokens)
-      if markup =~ Syntax
-        @array_name = $1
-      else
-        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
-      end
+        # Query details about our now-installed package.
+    # We do this by using 'npm ls' with json + long enabled to query details
+    # about the installed package.
+    npm_ls_out = safesystemout(attributes[:npm_bin], 'ls', '--json', '--long', *npm_flags)
+    npm_ls = JSON.parse(npm_ls_out)
+    name, info = npm_ls['dependencies'].first
     
-        def render(context)
-      file_dir = (context.registers[:site].source || 'source')
-      file_path = Pathname.new(file_dir).expand_path
-      file = file_path + @file
+      # Map of what scripts are named.
+  SCRIPT_MAP = {
+    :before_install     => 'preinstall',
+    :after_install      => 'postinstall',
+  } unless defined?(SCRIPT_MAP)
+    
+        # Cleanup
+    safesystem('mv', build_path('#{name}.p5p'), output_path)
+    
+        # Make one file. The installscript can unpack itself.
+    `cat #{install_script} #{payload} > #{output_path}`
+    FileUtils.chmod('+x', output_path)
+  end
+    
+      def architecture
+    case @architecture
+    when nil, 'native'
+      @architecture = %x{uname -p}.chomp
+    end
+    # 'all' is a valid arch according to
+    # http://www.bolthole.com/solaris/makeapackage.html
