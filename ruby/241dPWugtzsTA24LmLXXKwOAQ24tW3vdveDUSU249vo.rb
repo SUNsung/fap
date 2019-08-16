@@ -1,38 +1,90 @@
 
         
-          def test_marshal_load_version_1
-    tl = @store.add_file 'file.rb'
-    cm = tl.add_class RDoc::NormalClass, 'Klass'
-    section = cm.sections.first
+          def variant_with_format_and_custom_render
+    request.variant = :mobile
     
-      def test_flags_normal
-    options = {:flags => ['fuzzy']}
-    assert_equal <<-'ENTRY', entry('Hello', options).to_s
-#, fuzzy
-msgid 'Hello'
-msgstr ''
-    ENTRY
+            def ref
+          @symbol
+        end
+        alias to_sym ref
+    
+        if !(layout = page.data.layout).blank?
+      classes << 'layout-#{page.data.layout}'
+    end
+    
+      subject { described_class }
+    
+      before do
+    allow(machine).to receive(:communicate).and_return(communicator)
   end
     
-        expected =
-      doc(
-        para('{rdoc-image:path/to/image.jpg}[http://example.com]'))
-    
-        assert_equal %w[],          @as.each_name_of(0).to_a
-    assert_equal %w[],          @as.each_name_of(1).to_a
-    assert_equal %w[two],       @as.each_name_of(2).to_a
-    assert_equal %w[three],     @as.each_name_of(4).to_a
-    assert_equal %w[two three], @as.each_name_of(6).to_a
-  end
-    
-          def redirect(env)
-        request = Request.new(env)
-        warn env, 'attack prevented by #{self.class}'
-        [302, {'Content-Type' => 'text/html', 'Location' => request.path}, []]
+          # Check if this machine has a local box metadata file
+      # describing the existing guest. If so, load it and
+      # set the box name and version to allow the actual
+      # box in use to be discovered.
+      if data_path
+        meta_file = data_path.join('box_meta')
+        if meta_file.file?
+          box_meta = JSON.parse(meta_file.read)
+          config.vm.box = box_meta['name']
+          config.vm.box_version = box_meta['version']
+        end
       end
     
-            modes       = Array options[:escape]
-        @escaper    = options[:escaper]
-        @html       = modes.include? :html
-        @javascript = modes.include? :javascript
-        @url        = modes.include? :url
+          configure do |config|
+        config.vm.box = 'foo'
+        config.vm.provider 'foo' do |p|
+          p.value = 'rawr'
+        end
+      end
+    
+                # We can only do the things below if we do not fork, otherwise
+            # it'll hang the process.
+            if Process.pid == start_pid
+              # Let the user know that this process had an error early
+              # so that they see it while other things are happening.
+              machine.ui.error(I18n.t('vagrant.general.batch_notify_error'))
+            end
+          end
+    
+        it 'fails if it encounters an error' do
+      allow(machine.state).to receive(:id).and_return(:running)
+      allow(provision).to receive(:provision).and_raise('Nope!')
+      allow(VagrantPlugins::Shell::Provisioner).to receive(:new).
+        and_return(provision)
+    
+            expect(described_class.exec(ssh_info)).to eq(nil)
+        expect(Vagrant::Util::SafeExec).to have_received(:exec)
+          .with(ssh_path, 'vagrant@localhost', '-p', '2222', '-o', 'LogLevel=FATAL', '-o', 'StrictHostKeyChecking=no', '-o', 'UserKnownHostsFile=/dev/null', '-i', ssh_info[:private_key_path][0])
+      end
+    end
+    
+          # Invalid entry because that specific machine doesn't exist anymore.
+      entryB_env = isolated_environment
+      entryB_env.vagrantfile('')
+      entryB = new_entry('B')
+      entryB.vagrantfile_path = entryB_env.workdir
+      locked = iso_env.machine_index.set(entryB)
+      iso_env.machine_index.release(locked)
+    
+    desc 'generate documentation'
+task :doc => 'doc:all'
+    
+          prepare_package(explicit_plugins_specs, temp_path)
+      LogStash::Util::Zip.compress(temp_path, @target)
+    ensure
+      FileUtils.rm_rf(temp_path)
+    end
+    
+              it 'autocorrects' do
+            new_source = autocorrect_source(source)
+            expect(new_source).to eq('1.is_a?(Integer)')
+          end
+        end
+    
+          # Checks whether the `for` node has a `do` keyword.
+      #
+      # @return [Boolean] whether the `for` node has a `do` keyword
+      def do?
+        loc.begin&.is?('do')
+      end
