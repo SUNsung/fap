@@ -1,262 +1,207 @@
 
         
-          // Return to the UI thread to handle opening a new browser tab.
-  ui_task_runner_->PostTask(
-      FROM_HERE, base::BindOnce(&ProcessSingleton::LinuxWatcher::HandleMessage,
-                                parent_, current_dir, tokens, this));
-  fd_watch_controller_.reset();
+          PointerTy get() const & {
+    // Check for null.
+    if (Nullable && RelativeOffset == 0)
+      return nullptr;
     
-      // If we don't have any window then quitAndInstall immediately.
-  if (WindowList::IsEmpty()) {
-    auto_updater::AutoUpdater::QuitAndInstall();
-    return;
+    // The value is addressed relative to `this`.
+    uintptr_t absolute = detail::applyRelativeOffset(this, RelativeOffset);
+    return reinterpret_cast<PointerTy>(absolute);
   }
     
-    v8::Local<v8::Promise> StartTracing(
-    v8::Isolate* isolate,
-    const base::trace_event::TraceConfig& trace_config) {
-  electron::util::Promise promise(isolate);
-  v8::Local<v8::Promise> handle = promise.GetHandle();
-    }
-    
-    v8::Local<v8::Promise> Debugger::SendCommand(mate::Arguments* args) {
-  electron::util::Promise promise(isolate());
-  v8::Local<v8::Promise> handle = promise.GetHandle();
-    }
-    
-    
-    {}  // namespace electron
-    
-    #include <map>
-#include <string>
-#include <vector>
-    
-      v8::Local<v8::Promise> PurchaseProduct(const std::string& product_id,
-                                         mate::Arguments* args);
-    
-     protected:
-  void PopupAt(TopLevelWindow* window,
-               int x,
-               int y,
-               int positioning_item,
-               const base::Closure& callback) override;
-  void ClosePopupAt(int32_t window_id) override;
-    
-    
-    {}  // namespace api
-    
-        base::win::ShortcutProperties props;
-    base::string16 appID;
-    if (content::Shell::GetPackage()->root()->GetString('app-id', &appID) == false)
-      content::Shell::GetPackage()->root()->GetString(switches::kmName, &appID);
-    const std::wstring appName = base::UTF8ToWide(content::Shell::GetPackage()->GetName());
-    props.set_app_id(appID);
-    
-    #include 'base/logging.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/api_messages.h'
-#include 'content/public/renderer/render_view.h'
-#include 'content/public/renderer/render_thread.h'
-#include 'content/public/renderer/v8_value_converter.h'
-#include 'third_party/WebKit/public/web/WebView.h'
-#include 'third_party/WebKit/public/web/WebLocalFrame.h'
-#include 'ui/base/resource/resource_bundle.h'
-    
-    namespace nwapi {
-    }
-    
-    
-    {
-    {    if (zoom_controller) {
-      double zoom_factor = content::ZoomLevelToZoomFactor(zoom_controller->GetZoomLevel());
-      if (zoom_factor > content::kMaximumZoomFactor) {
-        zoom_factor = content::kMaximumZoomFactor;
-      }
-      if (zoom_factor < content::kMinimumZoomFactor) {
-        zoom_factor = content::kMinimumZoomFactor;
-      }
-      x *= zoom_factor;
-      y *= zoom_factor;
-    }
-    
-    Popup(x, y, rvh);
-  } else if (method == 'EnableShowEvent') {
-    arguments.GetBoolean(0, &enable_show_event_);
-  } else {
-    NOTREACHED() << 'Invalid call to Menu method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
-    
-      std::string type;
-    
-    void MenuItem::SetIcon(const std::string& icon) {
-  if (icon.empty()) {
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_), NULL); 
-  } else {
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_),
-                                  gtk_image_new_from_file(icon.c_str()));
-    gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(menu_item_),
-                                              TRUE);
-  }
-}
-    
-    void NwAppCloseAllWindowsFunction::DoJob(AppWindowRegistry* registry, std::string id) {
-  if (base::FeatureList::IsEnabled(::features::kNWNewWin)) {
-    chrome::CloseAllBrowsers();
-  }
-  AppWindowRegistry::AppWindowList windows =
-    registry->GetAppWindowsForApp(id);
-    }
-    
-    NwClipboardSetListSyncFunction::NwClipboardSetListSyncFunction() {
-}
-    
-      // Ensure nomnigraph can handle this change
-  auto nn = caffe2::convertToNNModule(net);
-  auto new_net = caffe2::convertToCaffe2Proto(nn);
-    
-      Fork() {
-    pid = fork();
-    if (pid < 0) {
-      throw std::system_error(errno, std::system_category(), 'fork');
-    }
+      constexpr ContextDescriptorFlags withVersion(uint8_t version) const {
+    return ContextDescriptorFlags((Value & 0xFFFF00FFu) | (version << 8u));
   }
     
-    OPERATOR_SCHEMA(Glu)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .SetDoc(R'DOC(
-Applies gated linear unit to the input Tensor X. The output Y is half the size
-of the input X, so if the shape of X is [d1, d2, ..., N] shape of Y will be
-[d1, d2, ..., dn/2] and Y(:dn-1, i) = GLU(X(:dn-1, i), X(:dn-1, i+N/2)) =
-X(dn-1, i) * sigmoid(X(dn-1, i+N/2))
-)DOC')
-    .Input(0, 'X', '1D input tensor')
-    .Output(0, 'Y', '1D output tensor');
     
-    namespace xgboost {
-namespace common {
-/*! \brief thread local entry for random. */
-struct RandomThreadLocalEntry {
-  /*! \brief the random engine instance. */
-  GlobalRandomEngine engine;
-};
-    }
-    }
-    
-    template <typename T>
-struct TestTransformRange {
-  void XGBOOST_DEVICE operator()(size_t _idx,
-                                 Span<bst_float> _out, Span<const bst_float> _in) {
-    _out[_idx] = _in[_idx];
+    {private:
+  void addNode(SourceFileDepGraphNode *n) {
+    n->setSequenceNumber(allNodes.size());
+    assert(allNodes.size() < 2 ==
+               (n->getKey().getKind() == NodeKind::sourceFileProvide) &&
+           'First two and only first two nodes should be sourceFileProvide '
+           'nodes.');
+    allNodes.push_back(n);
   }
 };
     
-      devices = GPUSet{0, 1};
-  ASSERT_TRUE(devices != GPUSet::Empty());
-  EXPECT_EQ(devices.Size(), 1);
     
-    namespace xgboost {
-namespace common {
-/*!
- * \brief Define mt19937 as default type Random Engine.
- */
-using RandomEngine = std::mt19937;
-    }
-    }
-    
-    template <typename T>
-void HostDeviceVector<T>::Shard(const GPUDistribution& distribution) const { }
-    
-    
-    {
-    {
-    {  inline void PutChar(char ch) {
-    out_buf += ch;
-    if (out_buf.length() >= kBufferSize) Flush();
-  }
-  inline void Flush(void) {
-    if (out_buf.length() != 0) {
-      fp->Write(&out_buf[0], out_buf.length());
-      out_buf.clear();
-    }
-  }
+    {  /// Produces a contextual type involving archetypes within the context of
+  /// the type.
+  Contextual,
 };
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_BASE64_H_
+    
+    class PrimarySpecificPaths {
+public:
+  /// The name of the main output file,
+  /// that is, the .o file for this input (or a file specified by -o).
+  /// If there is no such file, contains an empty string. If the output
+  /// is to be written to stdout, contains '-'.
+  std::string OutputFilename;
+    }
+    
+    public:
+  /// Does not take ownership of \p buffer. Does take ownership of (copy) a
+  /// string.
+  InputFile(StringRef name, bool isPrimary,
+            llvm::MemoryBuffer *buffer = nullptr,
+            StringRef outputFilename = StringRef())
+      : Filename(
+            convertBufferNameFromLLVM_getFileOrSTDIN_toSwiftConventions(name)),
+        IsPrimary(isPrimary), Buffer(buffer), PSPs(PrimarySpecificPaths()) {
+    assert(!name.empty());
+  }
+    
+    /// Checked dynamic cast to a foreign class type.
+///
+/// \param object The object to cast, or nil.
+/// \param targetType The type to which we are casting, which is known to be
+/// a foreign class type.
+///
+/// \returns the object if the cast succeeds, or null otherwise.
+SWIFT_RUNTIME_EXPORT
+const void *
+swift_dynamicCastForeignClass(const void *object,
+                              const ForeignClassMetadata *targetType);
+    
+    // Class to hold a Pixa collection of debug images with captions and save them
+// to a PDF file.
+class DebugPixa {
+ public:
+  // TODO(rays) add another constructor with size control.
+  DebugPixa() {
+    pixa_ = pixaCreate(0);
+    fonts_ = bmfCreate(nullptr, 14);
+  }
+  // If the filename_ has been set and there are any debug images, they are
+  // written to the set filename_.
+  ~DebugPixa() {
+    pixaDestroy(&pixa_);
+    bmfDestroy(&fonts_);
+  }
+    }
+    
+      // Delete all Added points.
+  void Clear();
+    
+    
+    {  int delta = this - prev;
+  int32_t n = prev->n_ + 1;
+  int32_t sig_x = prev->sig_x_ + delta;
+  int64_t sig_xsq = prev->sig_xsq_ + delta * delta;
+  int64_t cost = (sig_xsq - sig_x * sig_x / n) / n;
+  cost += prev->total_cost_;
+  UpdateIfBetter(cost, prev->total_steps_ + 1, prev, n, sig_x, sig_xsq);
+  return cost;
+}
+    
+      // Clear the UNICHARMAP. All previous data is lost.
+  void clear();
+    
+    /**----------------------------------------------------------------------------
+          Public Function Prototypes
+----------------------------------------------------------------------------**/
+void InitIntegerFX();
+    
+      // If we manage the given dawg, decrement its count,
+  // and possibly delete it if the count reaches zero.
+  // If dawg is unknown to us, return false.
+  bool FreeDawg(Dawg *dawg) {
+    return dawgs_.Free(dawg);
+  }
+    
+    
+    {
+    {        // No longer the first EQU.
+        m_bNoPrevEqu = false;
+    }
+    else if (!m_bError)
+    {
+        DisplayNum();
+    }
+}
+    
+    
+    {    return m_client->GetStringAsync(ratiosUri);
+}
 
     
-      case errSSLClosedGraceful:
-  case errSSLClosedNoNotify:
-    closeConnection();
-    return TLS_ERR_ERROR;
     
-    TLSContext* TLSContext::make(TLSSessionSide side, TLSVersion minVer)
+    {        return result;
+    }
+    
+    uint64_t rattoUi64(_In_ PRAT prat, uint32_t radix, int32_t precision)
 {
-  return new OpenSSLTLSContext(side, minVer);
+    PRAT pint = nullptr;
+    }
+    
+        spHistoryItem->historyItemVector.spTokens = tokens;
+    spHistoryItem->historyItemVector.spCommands = commands;
+    
+    
+    {    // exception out_of_range.401
+    try
+    {
+        // try to write at a nonexisting key
+        object.at('the fast') = 'il rapido';
+    }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+}
+
+    
+        // out_of_range.401
+    try
+    {
+        // try to use a an invalid array index
+        json::const_reference ref = j.at('/array/4'_json_pointer);
+    }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+    
+    /// Prefix used for the temp FS where carved files are stored
+const std::string kCarvePathPrefix = 'osquery_carve_';
+    
+    fs::path getConfDirPathImpl() {
+  char const* kEnvVarName = 'TEST_CONF_FILES_DIR';
+  auto const value_opt = osquery::getEnvVar(kEnvVarName);
+  EXPECT_TRUE(static_cast<bool>(value_opt))
+      << 'Env var ' << boost::io::quoted(kEnvVarName) << ' was not found, '
+      << ' looks like cxx_test argument 'env' is not set up.';
+  return fs::path(value_opt.get());
+}
+    
+    #include <boost/filesystem/path.hpp>
+    
+    ExpectedSuccess<DatabaseError> Database::putInt32(const std::string& domain,
+                                                  const std::string& key,
+                                                  const int32_t value) {
+  std::string buffer = std::to_string(value);
+  return putString(domain, key, buffer);
 }
     
     
-    {  int r = select(sockfd_ + 1, nullptr, &fds, nullptr, &tv);
-  int errNum = SOCKET_ERRNO;
-  if (r == 1) {
-    return true;
+    {  rocksdb::Options options = getOptions();
+  auto db_path = boost::filesystem::path(path_).make_preferred();
+  auto destroy_status = rocksdb::DestroyDB(db_path.string(), options);
+  if (!destroy_status.ok()) {
+    return createError(DatabaseError::FailToDestroyDB, 'Fail to destroy db: ')
+           << destroy_status.ToString();
   }
-  if (r == 0) {
-    // time out
-    return false;
-  }
-  if (errNum == A2_EINPROGRESS || errNum == A2_EINTR) {
-    return false;
-  }
-  throw DL_RETRY_EX(fmt(EX_SOCKET_CHECK_WRITABLE, errorMsg(errNum).c_str()));
-#endif   // !HAVE_POLL
+  return Success();
 }
     
-    bool WinTLSContext::addCredentialFile(const std::string& certfile,
-                                      const std::string& keyfile)
-{
-  std::stringstream ss;
-  BufferedFile(certfile.c_str(), 'rb').transfer(ss);
-  auto data = ss.str();
-  CRYPT_DATA_BLOB blob = {(DWORD)data.length(), (BYTE*)data.c_str()};
-  if (!::PFXIsPFXBlob(&blob)) {
-    A2_LOG_ERROR('Not a valid PKCS12 file');
-    return false;
+    void Plugin::setName(const std::string& name) {
+  if (!name_.empty() && name != name_) {
+    std::string error = 'Cannot rename plugin ' + name_ + ' to ' + name;
+    throw std::runtime_error(error);
   }
-  HCERTSTORE store =
-      ::PFXImportCertStore(&blob, L'', CRYPT_EXPORTABLE | CRYPT_USER_KEYSET);
-  if (!store_) {
-    store = ::PFXImportCertStore(&blob, nullptr,
-                                 CRYPT_EXPORTABLE | CRYPT_USER_KEYSET);
-  }
-  if (!store) {
-    A2_LOG_ERROR('Failed to import PKCS12 store');
-    return false;
-  }
-  auto ctx = ::CertEnumCertificatesInStore(store, nullptr);
-  if (!ctx) {
-    A2_LOG_ERROR('PKCS12 file does not contain certificates');
-    ::CertCloseStore(store, 0);
-    return false;
-  }
-  ::CertFreeCertificateContext(ctx);
     }
     
-      std::chrono::seconds timeout_;
-    
-    namespace aria2 {
-    }
-    
-      virtual std::unique_ptr<Dict> getResponse() = 0;
-    
-      std::vector<std::shared_ptr<DHTNode>> nodes_;
-    
-      void setLocalNode(const std::shared_ptr<DHTNode>& localNode);
-    
-    DHTTaskExecutor::~DHTTaskExecutor() = default;
-    
-    namespace aria2 {
-    }
+      /// The plugin may perform some tear down, release, not required.
+  virtual void tearDown() {}
