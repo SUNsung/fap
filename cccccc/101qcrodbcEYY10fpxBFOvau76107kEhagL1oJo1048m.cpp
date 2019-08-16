@@ -1,180 +1,200 @@
 
         
-        bool CheckCommandLineArguments(int argc, base::CommandLine::CharType** argv);
-    
-    #ifndef ATOM_APP_UV_TASK_RUNNER_H_
-#define ATOM_APP_UV_TASK_RUNNER_H_
-    
-    #endif  // ATOM_BROWSER_API_ATOM_API_NET_H_
-
-    
-      // Returns all objects in this class's weak map.
-  static std::vector<v8::Local<v8::Object>> GetAll(v8::Isolate* isolate) {
-    if (weak_map_)
-      return weak_map_->Values(isolate);
-    else
-      return std::vector<v8::Local<v8::Object>>();
-  }
-    
-    void AtomQuotaPermissionContext::RequestQuotaPermission(
-    const content::StorageQuotaParams& params,
-    int render_process_id,
-    const PermissionCallback& callback) {
-  callback.Run(response::QUOTA_PERMISSION_RESPONSE_ALLOW);
-}
-    
-    namespace auto_updater {
+        class AggregateStats {
+ public:
+  struct StatData {
+    /*!
+     * \brief Types that the console printer knows how to format
+     */
+    enum StatType {
+      kDuration = 1,
+      kCounter = 2,
+      kOther = 4
+    };
+    }
     }
     
+          // gradient w.r.t. weight, dWeight should accumulate across the batch and group
+      deformable_im2col(s, in_data[conv::kData].dptr<DType>() + n * input_dim_,
+                        in_data[conv::kOffset].dptr<DType>() + n * input_offset_dim_,
+                        in_data[conv::kData].shape_, col_buffer.shape_, param_.kernel,
+                        param_.pad, param_.stride, param_.dilate,
+                        param_.num_deformable_group, col_buffer.dptr<DType>());
     
-    {  DISALLOW_IMPLICIT_CONSTRUCTORS(AutoUpdater);
+    
+    {    static bool IsVariable(const nnvm::NodePtr& node) {
+      AGInfo& info = Get(node);
+      return info.grad_req != kNullOp && info.outputs.size() == 1
+             && info.out_grads.size() == 1;
+    }
+  };
+  /*! \brief whether operator recording is on. */
+  bool is_training() const {
+    return is_train_;
+  }
+  /*! \brief turn on or turn off operator recording for autograd. */
+  bool set_is_training(bool is_train) {
+      bool old = is_train_;
+      is_train_ = is_train;
+      return old;
+  }
+  /*! \brief whether operator recording is on. */
+  bool is_recording() const {
+    return is_recording_;
+  }
+  /*! \brief turn on or turn off operator recording for autograd. */
+  bool set_is_recording(bool is_recording) {
+      bool old = is_recording_;
+      is_recording_ = is_recording;
+      return old;
+  }
+  /*! brief whether numpy compatibility is on. */
+  bool is_np_shape() const {
+    return is_np_shape_;
+  }
+  /*! brief turn on or turn off numpy compatibility switch. */
+  bool set_is_np_shape(bool is_np_shape) {
+    bool old = is_np_shape_;
+    is_np_shape_ = is_np_shape;
+    return old;
+  }
+  /*! \brief to record operator, return corresponding node. */
+  void RecordOp(nnvm::NodeAttrs&& attrs,
+                const std::vector<NDArray*>& inputs,
+                const std::vector<NDArray*>& outputs,
+                const OpStatePtr& state = OpStatePtr(),
+                std::vector<bool>* p_save_inputs = nullptr,
+                std::vector<bool>* p_save_outputs = nullptr);
+  /*! \brief */
+  OpStatePtr Invoke(const Context& default_ctx,
+                    const nnvm::NodeAttrs& attrs,
+                    const std::vector<NDArray*>& inputs,
+                    const std::vector<NDArray*>& outputs);
+  /*! \brief */
+  OpStatePtr InvokeOp(const Context& ctx,
+                      const nnvm::NodeAttrs& attrs,
+                      const std::vector<NDArray*>& inputs,
+                      const std::vector<NDArray*>& outputs,
+                      const std::vector<OpReqType>& req,
+                      const DispatchMode dispatch_mode,
+                      OpStatePtr state = OpStatePtr());
+  /*! \brief mark variables for computing gradients. */
+  void MarkVariables(const std::vector<NDArray*>& variables,
+                     const std::vector<mx_uint>& grad_reqs,
+                     const std::vector<NDArray*>& gradients);
+  /*! \brief compute the gradient of outputs w.r.t variables. */
+  std::vector<NDArray*> Backward(const std::vector<NDArray*>& outputs,
+                                 const std::vector<NDArray*>& ograds,
+                                 const std::vector<NDArray*>& variables,
+                                 bool is_train, bool retain_graph,
+                                 bool create_graph);
+  /*! \return AutogradRuntime singleton */
+  static Imperative* Get();
+  /*! \brief Should op execution bulking be employed during inference. */
+  static bool PreferBulkExecInference() {
+    return dmlc::GetEnv('MXNET_EXEC_BULK_EXEC_INFERENCE', true);
+  }
+  /*! \brief Should op execution bulking be employed during training. */
+  static bool PreferBulkExecTrain() {
+    return dmlc::GetEnv('MXNET_EXEC_BULK_EXEC_TRAIN', true);
+  }
+  /*! \brief The max number of op nodes in a bulk during forward pass of training. */
+  static int BulkExecMaxNodeTrainFwd() {
+    return dmlc::GetEnv('MXNET_EXEC_BULK_EXEC_MAX_NODE_TRAIN_FWD',
+                        dmlc::GetEnv('MXNET_EXEC_BULK_EXEC_MAX_NODE_TRAIN', 15));
+  }
+  /*! \brief The max number of op nodes in a bulk during backward pass of training. */
+  static int BulkExecMaxNodeTrainBwd() {
+    return dmlc::GetEnv('MXNET_EXEC_BULK_EXEC_MAX_NODE_TRAIN_BWD',
+                        dmlc::GetEnv('MXNET_EXEC_BULK_EXEC_MAX_NODE_TRAIN', 15));
+  }
+    
+     public:
+  /*! \brief cuda kernel argument descriptor */
+  struct ArgType {
+    /*! \brief whether argument is NDArray */
+    bool is_ndarray;
+    /*! \brief whether argument is constant (input) */
+    bool is_const;
+    /*! \brief data type of argument */
+    mshadow::TypeFlag dtype;
+  };
+  /*! \brief Cuda kernel */
+  class Kernel {
+   public:
+    /*! \brief Launch the kernel */
+    void Launch(const Context& ctx, const std::vector<dmlc::any>& args,
+                uint32_t grid_dim_x, uint32_t grid_dim_y, uint32_t grid_dim_z,
+                uint32_t block_dim_x, uint32_t block_dim_y, uint32_t block_dim_z,
+                uint32_t shared_mem);
+    /*! \brief kernel interface signature */
+    const std::vector<ArgType>& signature() { return signature_; }
+    }
+    
+    template <typename Dtype>
+class LayerRegistry {
+ public:
+  static ::caffe::Layer<Dtype> * CreateLayer(const ::caffe::LayerParameter& param) {
+    ::caffe::shared_ptr< ::caffe::Layer<Dtype> > ptr =
+      ::caffe::LayerRegistry<Dtype>::CreateLayer(param);
+    // avoid caffe::layer destructor, which deletes the weights layer owns
+    new ::caffe::shared_ptr< ::caffe::Layer<Dtype> >(ptr);
+    return ptr.get();
+  }
 };
     
-    #if defined(OS_LINUX)
-#include 'atom/browser/lib/power_observer_linux.h'
-#else
-#include 'base/power_monitor/power_observer.h'
-#endif  // defined(OS_LINUX)
-    
-    namespace relauncher {
-    }
-    
-    
-    {
-    {      // Advance i to one before the end to balance i++ in loop.
-      i = end - 1;
-    } else if (arg[i] == ''') {
-      out.push_back('\\');
-      out.push_back(''');
-    } else {
-      out.push_back(arg[i]);
-    }
+      virtual void PrintDefaultValueString(std::ostream &os) const {  // NOLINT(*)
+    std::string s;
+    caffe::NetParameter np;
+    // Avoid wasting time making a copy -- just push in out default object's pointer
+    np.mutable_layer()->AddAllocated(const_cast<::caffe::LayerParameter *>(&default_value_));
+    google::protobuf::TextFormat::PrintToString(np, &s);
+    np.mutable_layer()->ReleaseLast();
+    os << '\'' << s << '\'';
   }
-  out.push_back(''');
     
-    
-    {}  // namespace atom
-    
-    namespace tesseract {
+    Graph DetectInplaceAddTo(Graph g) {
+  nnvm::StorageVector storage_id =
+      g.MoveCopyAttr<nnvm::StorageVector>('storage_id');
+  std::vector<int> storage_inplace_index =
+      g.MoveCopyAttr<std::vector<int> >('storage_inplace_index');
+  static const Op* ewise_plus_op = Op::Get('_grad_add');
+  auto& idx = g.indexed_graph();
+  // reference cont.
+  std::vector<int> ref_count(idx.num_node_entries(), 0);
+  std::vector<int> addto_entry(idx.num_node_entries(), 0);
+  std::vector<int> skip_plus_node(idx.num_nodes(), 0);
     }
     
-    struct Pix;
-struct TBLOB;
-struct TPOINT;
-    
-    bool ParagraphModel::Comparable(const ParagraphModel &other) const {
-  if (justification_ != other.justification_)
-    return false;
-  if (justification_ == JUSTIFICATION_CENTER ||
-      justification_ == JUSTIFICATION_UNKNOWN)
-    return true;
-  int tolerance = (tolerance_ + other.tolerance_) / 4;
-  return NearlyEqual(margin_ + first_indent_,
-                     other.margin_ + other.first_indent_, tolerance) &&
-         NearlyEqual(margin_ + body_indent_,
-                     other.margin_ + other.body_indent_, tolerance);
-}
-    
-      // Return whether this model is likely to agree with the other model on most
-  // paragraphs they are marked.
-  bool Comparable(const ParagraphModel &other) const;
-    
-    // Computes the Otsu threshold(s) for the given image rectangle, making one
-// for each channel. Each channel is always one byte per pixel.
-// Returns an array of threshold values and an array of hi_values, such
-// that a pixel value >threshold[channel] is considered foreground if
-// hi_values[channel] is 0 or background if 1. A hi_value of -1 indicates
-// that there is no apparent foreground. At least one hi_value will not be -1.
-// Delete thresholds and hi_values with delete [] after use.
-// The return value is the number of channels in the input image, being
-// the size of the output thresholds and hi_values arrays.
-int OtsuThreshold(Pix* src_pix, int left, int top, int width, int height,
-                  int** thresholds, int** hi_values);
-    
-    class WriteCallback {
- public:
-  virtual ~WriteCallback() {}
-    }
-    
-      if (bytes_left_ >= num_bytes) {
-    bytes_left_ -= num_bytes;
-    return 0;
+      uint32_t temp32;
+  uint64_t temp64;
+  // time
+  if (version == 2) {
+    READ_CHECK(fp, &temp32, sizeof(temp32));
+    serializedTime_.setTimeFromEpoch(ntohl(temp32));
+    // 4bytes reserved
+    readBytes(fp, buf, buf.size(), 4);
   }
-  // The frequency to get time inside DB mutex is less than one per refill
-  // interval.
-  auto time_now = NowMicrosMonotonic(env);
+  else {
+    READ_CHECK(fp, &temp64, sizeof(temp64));
+    serializedTime_.setTimeFromEpoch(ntoh64(temp64));
+  }
     
-      ////////////////////////////////////////////////////////
-  //
-  // 'Repeatable Read' (Snapshot Isolation) Example
-  //   -- Using a single Snapshot
-  //
-  ////////////////////////////////////////////////////////
-    
-    // PersistentCache
-//
-// Persistent cache interface for caching IO pages on a persistent medium. The
-// cache interface is specifically designed for persistent read cache.
-class PersistentCache {
- public:
-  typedef std::vector<std::map<std::string, double>> StatsType;
+    class DHTSetup {
+public:
+  DHTSetup();
     }
     
-      // Starts a new Transaction.
-  //
-  // Caller is responsible for deleting the returned transaction when no
-  // longer needed.
-  //
-  // If old_txn is not null, BeginTransaction will reuse this Transaction
-  // handle instead of allocating a new one.  This is an optimization to avoid
-  // extra allocations when repeatedly creating transactions.
-  virtual Transaction* BeginTransaction(
-      const WriteOptions& write_options,
-      const OptimisticTransactionOptions& txn_options =
-          OptimisticTransactionOptions(),
-      Transaction* old_txn = nullptr) = 0;
+      virtual void addPeriodicTask2(const std::shared_ptr<DHTTask>& task) = 0;
     
-    // TransactionDBMutex and TransactionDBCondVar APIs allows applications to
-// implement custom mutexes and condition variables to be used by a
-// TransactionDB when locking keys.
-//
-// To open a TransactionDB with a custom TransactionDBMutexFactory, set
-// TransactionDBOptions.custom_mutex_factory.
+      unsigned char secret_[2][SECRET_SIZE];
     
-    #include 'modules/drivers/canbus/can_client/esd/esd_can_client.h'
-    
-    double ClusterGeneralInfo701::longitude_vel(const std::uint8_t* bytes,
-                                            int32_t length) const {
-  Byte t0(bytes + 4);
-  uint32_t x = t0.get_byte(0, 8);
-    }
-    
-    
-    {  int ret = x;
-  return ret;
+    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
+                                             std::chrono::seconds interval)
+    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
+{
 }
     
-    /**
- * @file
- **/
-    
-    namespace apollo {
-namespace planning {
-    }
-    }
-    
-    // config detail: {'name': 'encoder_temperature', 'offset': -40.0,
-// 'precision': 1.0, 'len': 16, 'is_signed_var': True, 'physical_range':
-// '[-32808|32727]', 'bit': 7, 'type': 'int', 'order': 'motorola',
-// 'physical_unit': 'deg C'}
-int Brakemotorrpt271::encoder_temperature(const std::uint8_t* bytes,
-                                          int32_t length) const {
-  Byte t0(bytes + 0);
-  int32_t x = t0.get_byte(0, 8);
-    }
-    
-    
-    {  Horn_rpt_79::Output_valueType ret =
-      static_cast<Horn_rpt_79::Output_valueType>(x);
-  return ret;
-}
+        // print values
+    std::cout << object << '\n';
+    std::cout << null << '\n';
