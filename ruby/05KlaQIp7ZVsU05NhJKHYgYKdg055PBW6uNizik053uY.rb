@@ -1,170 +1,196 @@
 
         
-          respond_to :json
+          # ==> ORM configuration
+  # Load and configure the ORM. Supports :active_record (default) and
+  # :mongoid (bson_ext recommended) by default. Other ORMs may be
+  # available as additional gems.
+  require 'devise/orm/<%= options[:orm] %>'
     
-    RSpec.describe Api::V1::PollsController, type: :controller do
-  render_views
-    
-        if target_account.blocking?(@account) || target_account.domain_blocking?(@account.domain) || target_account.moved?
-      reject_follow_request!(target_account)
-      return
+        # The path used after confirmation.
+    def after_confirmation_path_for(resource_name, resource)
+      if signed_in?(resource_name)
+        signed_in_root_path(resource)
+      else
+        new_session_path(resource_name)
+      end
     end
     
-      def some_local_account
-    @some_local_account ||= Account.representative
+        def translation_scope
+      'devise.unlocks'
+    end
+end
+
+    
+        def unlock_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :unlock_instructions, opts)
+    end
+    
+      before_action :authenticate_user!
+    
+          # Stores the provided location to redirect the user after signing in.
+      # Useful in combination with the `stored_location_for` helper.
+      #
+      # Example:
+      #
+      #   store_location_for(:user, dashboard_path)
+      #   redirect_to user_facebook_omniauth_authorize_path
+      #
+      def store_location_for(resource_or_scope, location)
+        session_key = stored_location_key_for(resource_or_scope)
+        
+        path = extract_path_from_location(location)
+        session[session_key] = path if path
+      end
+    
+      def test_change_class_name
+    eval('class C3; def _dump(s); 'foo'; end; end')
+    m = Marshal.dump(C3.new)
+    assert_raise(TypeError) { Marshal.load(m) }
+    eval('C3 = nil')
+    assert_raise(TypeError) { Marshal.load(m) }
+  end
+    
+      def self.scroll_down(val)
+    return if val.zero?
+    scroll_rectangle = [0, val, get_screen_size.first, get_screen_size.last].pack('s4')
+    destination_origin = 0 # y * 65536 + x
+    fill = [' '.ord, 0].pack('SS')
+    @@ScrollConsoleScreenBuffer.call(@@hConsoleHandle, scroll_rectangle, nil, destination_origin, fill)
+  end
+    
+        ScratchPad.record []
+    gz.each_byte { |b| ScratchPad << b }
+    
+      before :each do
+    @data = '12345abcde'
+    @zip = [31, 139, 8, 0, 44, 220, 209, 71, 0, 3, 51, 52, 50, 54, 49, 77,
+            76, 74, 78, 73, 5, 0, 157, 5, 0, 36, 10, 0, 0, 0].pack('C*')
+    @io = StringIO.new @zip
+  end
+    
+      before :each do
+    @data = 'firstline\nsecondline\n\nforthline'
+    @zip = [31, 139, 8, 0, 244, 125, 128, 88, 2, 255, 75, 203, 44, 42, 46, 201,
+            201, 204, 75, 229, 42, 78, 77, 206, 207, 75, 1, 51, 185, 210,242,
+            139, 74, 50, 64, 76, 0, 180, 54, 61, 111, 31, 0, 0, 0].pack('C*')
+    
+        assert_equal obj.attribute, Psych.load(Psych.dump(obj)).attribute
   end
 end
 
     
-        if @poll.account.local?
-      distribute_poll!
-    else
-      deliver_votes!
-      queue_final_poll_check!
+        it 'allows angry developers to express their emotional constitution and remedies it' do
+      Sidekiq.❨╯°□°❩╯︵┻━┻
+      assert_equal 'Calm down, yo.\n', $stdout.string
     end
   end
     
-    class ActivityPub::DistributePollUpdateWorker
+      class DirectWorker
+    include Sidekiq::Worker
+    def perform(a, b)
+      a + b
+    end
+  end
+    
+    class TimedWorker
   include Sidekiq::Worker
-  include Payloadable
     
-            expect_any_instance_of(ActivityPub::LinkedDataSignature).to receive(:verify_account!).and_return(actor)
-        expect(ActivityPub::Activity).to receive(:factory).with(instance_of(Hash), actor, instance_of(Hash))
+    post '/msg' do
+  SinatraWorker.perform_async params[:msg]
+  redirect to('/')
+end
     
-          it 'does not create a block from sender to recipient' do
-        expect(sender.blocking?(recipient)).to be false
+    class SinatraStaticServer < Sinatra::Base
+    
+    Liquid::Template.register_tag('blockquote', Jekyll::Blockquote)
+
+    
+            Dir.chdir(includes_dir) do
+          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
+          if choices.include?(file)
+            source = File.read(file)
+            partial = Liquid::Template.parse(source)
+            context.stack do
+              rtn = rtn + partial.render(context)
+            end
+          else
+            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
+          end
+        end
       end
+      rtn
+    end
+  end
     
-        it 'generates the contacts_json fixture', :fixture => true do
-      json = bob.contacts.map { |c|
-               ContactPresenter.new(c, bob).full_hash_with_person
-             }.to_json
-      save_fixture(json, 'contacts_json')
+      class IncludeCodeTag < Liquid::Tag
+    def initialize(tag_name, markup, tokens)
+      @title = nil
+      @file = nil
+      if markup.strip =~ /\s*lang:(\S+)/i
+        @filetype = $1
+        markup = markup.strip.sub(/lang:\S+/i,'')
+      end
+      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
+        @title = $1 || nil
+        @file = $3
+      end
+      super
+    end
+    
+          Dir.chdir(file_path) do
+        contents = file.read
+        if contents =~ /\A-{3}.+[^\A]-{3}\n(.+)/m
+          contents = $1.lstrip
+        end
+        contents = pre_filter(contents)
+        if @raw
+          contents
+        else
+          partial = Liquid::Template.parse(contents)
+          context.stack do
+            partial.render(context)
+          end
+        end
+      end
     end
   end
 end
+    
+        def render(context)
+      output = super
+      types = {
+        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
+        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
+        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
+      }
+      if @videos.size > 0
+        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
+        @videos.each do |v|
+          video << '<source src='#{v}' #{types[File.extname(v)]}>'
+        end
+        video += '</video>'
+      else
+        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
+      end
+    end
+    
+    end
 
-    
-    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
-    
-      context 'with no user signed in' do
-    describe '#public' do
-      it 'succeeds' do
-        get :public
-        expect(response).to be_success
-      end
-    
-            false
-      end
-    
-          context 'with a node which meets only 1 requirement of []' do
-        let(:ruby) { '1' }
-    
-                do_something
-    
-      it 'does not register offense when guard clause is after single line ' \
-     'heredoc' do
-    expect_no_offenses(<<~RUBY)
-      def foo
-        raise ArgumentError, <<-MSG unless path
-          Must be called with mount point
-        MSG
-    
-            css_classes << 'selected' if selected
-    
-            it 'does not increase the count on hand' do
-          expect { subject }.not_to change { stock_item.reload.count_on_hand }
-        end
-      end
-    
-            def scope
-          @scope ||= if params[:option_type_id]
-                       Spree::OptionType.find(params[:option_type_id]).option_values.accessible_by(current_ability, :show)
-                     else
-                       Spree::OptionValue.accessible_by(current_ability, :show).load
-                     end
-        end
-    
-        it 'allows local middleware modification' do
-      $called = false
-      mware = Class.new { def call(worker_klass,msg,q,r); $called = true; msg;end }
-      client = Sidekiq::Client.new
-      client.middleware do |chain|
-        chain.add mware
-      end
-      client.push('class' => 'Blah', 'args' => [1,2,3])
-    
-        it 'can be memoized' do
-      q = Sidekiq::Queue.new('bar')
-      assert_equal 0, q.size
-      set = SetWorker.set(queue: :bar, foo: 'qaaz')
-      set.perform_async(1)
-      set.perform_async(1)
-      set.perform_async(1)
-      set.perform_async(1)
-      assert_equal 4, q.size
-      assert_equal 4, q.map{|j| j['jid'] }.uniq.size
-      set.perform_in(10, 1)
-    end
-    
-      def test_available_locales
-    obj = Helpers.new
-    expected = %w(
-      ar cs da de el en es fa fr he hi it ja
-      ko nb nl pl pt pt-br ru sv ta uk ur
-      zh-cn zh-tw
-    )
-    assert_equal expected, obj.available_locales.sort
-  end
-    
-    describe 'DeadSet' do
-  def dead_set
-    Sidekiq::DeadSet.new
-  end
-    
-      it 'allows delayed scheduling of AM mails' do
-    ss = Sidekiq::ScheduledSet.new
-    assert_equal 0, ss.size
-    UserMailer.delay_for(5.days).greetings(1, 2)
-    assert_equal 1, ss.size
-  end
-    
-      def options
-    { :concurrency => 3, :queues => ['default'] }
-  end
-    
-          q = Sidekiq::Queue.new('custom_queue')
-      qs = q.size
-      assert SomeScheduledWorker.perform_in(-300, 'mike')
-      assert_equal 3, ss.size
-      assert_equal qs+1, q.size
-    
-          refute Sidekiq::Testing.enabled?
-      refute Sidekiq::Testing.fake?
-    end
-    
-    
-  config.vm.define 'centos6' do |centos6|
-    centos6.vm.box = 'puppetlabs/centos-6.6-64-puppet'
-  end
-    
-          # Verify the types requested are valid
-      types = FPM::Package.types.keys.sort
-      @command.input_type.tap do |val|
-        next if val.nil?
-        mandatory(FPM::Package.types.include?(val),
-                  'Invalid input package -s flag) type #{val.inspect}. ' \
-                  'Expected one of: #{types.join(', ')}')
-      end
     
       private
-  def input(package)
-    # Notes:
-    # * npm respects PREFIX
-    settings = {
-      'cache' => build_path('npm_cache'),
-      'loglevel' => 'warn',
-      'global' => 'true'
-    }
+    
+      include WithinOrganization
+    
+      def create
+    login(User.authenticate(params[:email_address], params[:password]))
+    flash[:remember_login] = true
+    redirect_to_with_return_to root_path
+  rescue Postal::Errors::AuthenticationError => e
+    flash.now[:alert] = 'The credentials you've provided are incorrect. Please check and try again.'
+    render 'new'
+  end
+    
+      def safe_params
+    params.require(:smtp_endpoint).permit(:name, :hostname, :port, :ssl_mode)
+  end
