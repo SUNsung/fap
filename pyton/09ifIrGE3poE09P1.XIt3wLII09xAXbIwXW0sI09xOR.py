@@ -1,175 +1,252 @@
 
         
-        
-class SpendingByCategory(MRJob):
+        password = key + 16 * [0]
+new_key = aes_encrypt(password, key_expansion(password)) * (32 // 16)
+r = openssl_encode('aes-256-ctr', new_key, iv)
+print('aes_decrypt_text 32')
+print(repr(r))
+
     
-            (2016-01, url0), 1
-        (2016-01, url0), 1
-        (2016-01, url1), 1
-        '''
-        url = self.extract_url(line)
-        period = self.extract_year_month(line)
-        yield (period, url), 1
-    
-        def set(self, key, value):
-        hash_index = self._hash_function(key)
-        for item in self.table[hash_index]:
-            if item.key == key:
-                item.value = value
-                return
-        self.table[hash_index].append(Item(key, value))
+    with open('update/versions.json', 'w') as jsonf:
+    json.dump(versions_info, jsonf, indent=4, sort_keys=True)
+
     
     
-DOCUMENTATION = '''
----
-module: dellos10_config
-version_added: '2.2'
-author: 'Senthil Kumar Ganesan (@skg-net)'
-short_description: Manage Dell EMC Networking OS10 configuration sections
-description:
-  - OS10 configurations use a simple block indent file syntax
-    for segmenting configuration into sections.  This module provides
-    an implementation for working with OS10 configuration sections in
-    a deterministic way.
-extends_documentation_fragment: dellos10
-options:
-  lines:
-    description:
-      - The ordered set of commands that should be configured in the
-        section.  The commands must be the exact same commands as found
-        in the device running-config. Be sure to note the configuration
-        command syntax as some commands are automatically modified by the
-        device config parser. This argument is mutually exclusive with I(src).
-    aliases: ['commands']
-  parents:
-    description:
-      - The ordered set of parents that uniquely identify the section or hierarchy
-        the commands should be checked against.  If the parents argument
-        is omitted, the commands are checked against the set of top
-        level or global commands.
-  src:
-    description:
-      - Specifies the source path to the file that contains the configuration
-        or configuration template to load.  The path to the source file can
-        either be the full path on the Ansible control host or a relative
-        path from the playbook or role root directory. This argument is
-        mutually exclusive with I(lines).
-  before:
-    description:
-      - The ordered set of commands to push on to the command stack if
-        a change needs to be made.  This allows the playbook designer
-        the opportunity to perform configuration commands prior to pushing
-        any changes without affecting how the set of commands are matched
-        against the system.
-  after:
-    description:
-      - The ordered set of commands to append to the end of the command
-        stack if a change needs to be made.  Just like with I(before) this
-        allows the playbook designer to append a set of commands to be
-        executed after the command set.
-  match:
-    description:
-      - Instructs the module on the way to perform the matching of
-        the set of commands against the current device config.  If
-        match is set to I(line), commands are matched line by line.  If
-        match is set to I(strict), command lines are matched with respect
-        to position.  If match is set to I(exact), command lines
-        must be an equal match.  Finally, if match is set to I(none), the
-        module will not attempt to compare the source configuration with
-        the running configuration on the remote device.
-    default: line
-    choices: ['line', 'strict', 'exact', 'none']
-  replace:
-    description:
-      - Instructs the module on the way to perform the configuration
-        on the device.  If the replace argument is set to I(line) then
-        the modified lines are pushed to the device in configuration
-        mode.  If the replace argument is set to I(block) then the entire
-        command block is pushed to the device in configuration mode if any
-        line is not correct.
-    default: line
-    choices: ['line', 'block']
-  update:
-    description:
-      - The I(update) argument controls how the configuration statements
-        are processed on the remote device.  Valid choices for the I(update)
-        argument are I(merge) and I(check).  When you set this argument to
-        I(merge), the configuration changes merge with the current
-        device running configuration.  When you set this argument to I(check)
-        the configuration updates are determined but not actually configured
-        on the remote device.
-    default: merge
-    choices: ['merge', 'check']
-  save:
-    description:
-      - The C(save) argument instructs the module to save the running-
-        config to the startup-config at the conclusion of the module
-        running.  If check mode is specified, this argument is ignored.
-    type: bool
-    default: 'no'
-  config:
-    description:
-      - The module, by default, will connect to the remote device and
-        retrieve the current running-config to use as a base for comparing
-        against the contents of source.  There are times when it is not
-        desirable to have the task get the current running-config for
-        every task in a playbook.  The I(config) argument allows the
-        implementer to pass in the configuration to use as the base
-        config for comparison.
-  backup:
-    description:
-      - This argument will cause the module to create a full backup of
-        the current C(running-config) from the remote device before any
-        changes are made. If the C(backup_options) value is not given,
-        the backup file is written to the C(backup) folder in the playbook
-        root directory. If the directory does not exist, it is created.
-    type: bool
-    default: 'no'
-  backup_options:
-    description:
-      - This is a dict object containing configurable options related to backup file path.
-        The value of this option is read only when C(backup) is set to I(yes), if C(backup) is set
-        to I(no) this option will be silently ignored.
-    suboptions:
-      filename:
-        description:
-          - The filename to be used to store the backup configuration. If the the filename
-            is not given it will be generated based on the hostname, current time and date
-            in format defined by <hostname>_config.<current-date>@<current-time>
-      dir_path:
-        description:
-          - This option provides the path ending with directory name in which the backup
-            configuration file will be stored. If the directory does not exist it will be first
-            created and the filename is either the value of C(filename) or default filename
-            as described in C(filename) options description. If the path value is not given
-            in that case a I(backup) directory will be created in the current working directory
-            and backup configuration will be copied in C(filename) within I(backup) directory.
-        type: path
-    type: dict
-    version_added: '2.8'
+# find the correct sorting and add the required base classes so that sublcasses
+# can be correctly created
+classes = _ALL_CLASSES[:-1]
+ordered_cls = []
+while classes:
+    for c in classes[:]:
+        bases = set(c.__bases__) - set((object, InfoExtractor, SearchInfoExtractor))
+        stop = False
+        for b in bases:
+            if b not in classes and b not in ordered_cls:
+                if b.__name__ == 'GenericIE':
+                    exit()
+                classes.insert(0, b)
+                stop = True
+        if stop:
+            break
+        if all(b in ordered_cls for b in bases):
+            ordered_cls.append(c)
+            classes.remove(c)
+            break
+ordered_cls.append(_ALL_CLASSES[-1])
+    
+        outfile, = args
+    
+    # Output file base name for HTML help builder.
+htmlhelp_basename = 'youtube-dldoc'
+
+    
+    
+if __name__ == '__main__':
+    unittest.main()
+
+    
+            '''
+        assert all(hasattr(type(self), attr) for attr in kwargs.keys())
+        self.__dict__.update(**kwargs)
+    
+        def load_installed_plugins(self):
+        for entry_point_name in ENTRY_POINT_NAMES:
+            for entry_point in iter_entry_points(entry_point_name):
+                plugin = entry_point.load()
+                plugin.package_name = entry_point.dist.key
+                self.register(entry_point.load())
+    
+    
+def test_default_headers_case_insensitive(httpbin):
+    '''
+    <https://github.com/jakubroztocil/httpie/issues/644>
+    '''
+    r = http(
+        '--debug',
+        '--print=H',
+        httpbin.url + '/post',
+        'CONTENT-TYPE:application/json-patch+json',
+        'a=b',
+    )
+    assert 'CONTENT-TYPE: application/json-patch+json' in r
+    assert 'Content-Type' not in r
+    
+    test_encode_face = '''
+encoding = face_recognition.face_encodings(image, known_face_locations=face_locations)[0]
 '''
     
-        mutually_exclusive = [('lines', 'src'),
-                          ('parents', 'src')]
+    '''
+Structure:
+        <test_image>.jpg
+        <train_dir>/
+            <person_1>/
+                <person_1_face-1>.jpg
+                <person_1_face-2>.jpg
+                .
+                .
+                <person_1_face-n>.jpg
+           <person_2>/
+                <person_2_face-1>.jpg
+                <person_2_face-2>.jpg
+                .
+                .
+                <person_2_face-n>.jpg
+            .
+            .
+            <person_n>/
+                <person_n_face-1>.jpg
+                <person_n_face-2>.jpg
+                .
+                .
+                <person_n_face-n>.jpg
+'''
     
-        def test_udevadm_uuid(self):
-        module = Mock()
-        module.run_command = Mock(return_value=(0, UDEVADM_OUTPUT, ''))  # (rc, out, err)
-        lh = linux.LinuxHardware(module=module, load_on_init=False)
-        udevadm_uuid = lh._udevadm_uuid('mock_device')
+    # Load a sample picture and learn how to recognize it.
+obama_image = face_recognition.load_image_file('obama.jpg')
+obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
     
-        param_to_xpath_map = collections.OrderedDict()
-    param_to_xpath_map.update([
-        ('name', {'xpath': 'name', 'is_key': True}),
-        ('vlan_id', 'vlan-id'),
-        ('l3_interface', 'l3-interface'),
-        ('filter_input', 'forwarding-options/filter/input'),
-        ('filter_output', 'forwarding-options/filter/output'),
-        ('description', 'description')
-    ])
+        if len(unknown_face_encodings) > 0:
+        face_found = True
+        # 看看图片中的第一张脸是不是奥巴马
+        match_results = face_recognition.compare_faces([known_face_encoding], unknown_face_encodings[0])
+        if match_results[0]:
+            is_obama = True
     
-        def __init__(self):
-        self.graph = defaultdict(list)
+            coro = foo()
+        task = self.new_task(self.loop, coro)
+        Future.set_exception(task, MyExc())
     
-    if len(sys.argv)>2:
-    n_topic = int(sys.argv[2])
+        def test_get_source_encoding(self):
+        # Source is considered encoded in UTF-8 by default unless otherwise
+        # specified by an encoding line.
+        source = '_ = 'ü''
+        self.loader.source = source.encode('utf-8')
+        returned_source = self.loader.get_source(self.name)
+        self.assertEqual(returned_source, source)
+        source = '# coding: latin-1\n_ = ü'
+        self.loader.source = source.encode('latin-1')
+        returned_source = self.loader.get_source(self.name)
+        self.assertEqual(returned_source, source)
+    
+        def test_scope_isolation_from_global(self):
+        expected = {0: None, 1: None, 2: None, 3: None, 4: None, 5: None,
+                    6: None, 7: None, 8: None, 9: None}
+        actual = {g: None for g in range(10)}
+        self.assertEqual(actual, expected)
+        self.assertEqual(g, 'Global variable')
+    
+        def getwelcome(self):
+        return self.welcome
+    
+    
+def printy(ret):
+    '''
+    
+    
+def softmax(x, axis=-1):
+    '''
+    Examples:
+        n_dim = x.get_shape().ndims
+        assert n_dim >= 2
+    
+    
+def relu6(x):
+    '''
+    `o = min(max(x, 0), 6)`
+    '''
+    return tf.nn.relu6(x)
+    
+    
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description='Convert a COCO pre-trained model for use with Cityscapes')
+    parser.add_argument(
+        '--coco_model', dest='coco_model_file_name',
+        help='Pretrained network weights file path',
+        default=None, type=str)
+    parser.add_argument(
+        '--convert_func', dest='convert_func',
+        help='Blob conversion function',
+        default='cityscapes_to_coco', type=str)
+    parser.add_argument(
+        '--output', dest='out_file_name',
+        help='Output file path',
+        default=None, type=str)
+    
+        def test_deprecated_key_from_list(self):
+        # You should see logger messages like:
+        #   'Deprecated config key (ignoring): MODEL.DILATION'
+        opts = ['FINAL_MSG', 'foobar', 'MODEL.DILATION', 2]
+        with self.assertRaises(AttributeError):
+            _ = cfg.FINAL_MSG  # noqa
+        with self.assertRaises(AttributeError):
+            _ = cfg.MODEL.DILATION  # noqa
+        core_config.merge_cfg_from_list(opts)
+        with self.assertRaises(AttributeError):
+            _ = cfg.FINAL_MSG  # noqa
+        with self.assertRaises(AttributeError):
+            _ = cfg.MODEL.DILATION  # noqa
+    
+    
+def get_rpn_box_proposals(im, args):
+    cfg.immutable(False)
+    merge_cfg_from_file(args.rpn_cfg)
+    cfg.NUM_GPUS = 1
+    cfg.MODEL.RPN_ONLY = True
+    cfg.TEST.RPN_PRE_NMS_TOP_N = 10000
+    cfg.TEST.RPN_POST_NMS_TOP_N = 2000
+    assert_and_infer_cfg(cache_urls=False)
+    
+    
+def add_rpn_blobs(blobs, im_scales, roidb):
+    '''Add blobs needed training RPN-only and end-to-end Faster R-CNN models.'''
+    if cfg.FPN.FPN_ON and cfg.FPN.MULTILEVEL_RPN:
+        # RPN applied to many feature levels, as in the FPN paper
+        k_max = cfg.FPN.RPN_MAX_LEVEL
+        k_min = cfg.FPN.RPN_MIN_LEVEL
+        foas = []
+        for lvl in range(k_min, k_max + 1):
+            field_stride = 2.**lvl
+            anchor_sizes = (cfg.FPN.RPN_ANCHOR_START_SIZE * 2.**(lvl - k_min), )
+            anchor_aspect_ratios = cfg.FPN.RPN_ASPECT_RATIOS
+            foa = data_utils.get_field_of_anchors(
+                field_stride, anchor_sizes, anchor_aspect_ratios
+            )
+            foas.append(foa)
+        all_anchors = np.concatenate([f.field_of_anchors for f in foas])
+    else:
+        foa = data_utils.get_field_of_anchors(
+            cfg.RPN.STRIDE, cfg.RPN.SIZES, cfg.RPN.ASPECT_RATIOS
+        )
+        all_anchors = foa.field_of_anchors
+    
+        # detections (N, 6) format:
+    #   detections[:, :4] - boxes
+    #   detections[:, 4] - scores
+    #   detections[:, 5] - classes
+    detections = np.vstack(detections)
+    # sort all again
+    inds = np.argsort(-detections[:, 4])
+    detections = detections[inds[0:cfg.TEST.DETECTIONS_PER_IM], :]
+    
+        def GetMedianValue(self):
+        return np.median(self.deque)
+    
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+    
+    
+def do_reval(dataset_name, output_dir, args):
+    dataset = JsonDataset(dataset_name)
+    dets = load_object(os.path.join(output_dir, 'detections.pkl'))
+    
+    file_name = args[0]
+    
+    
+'''
+    
+    print(','.join(tags))
+    
+    
