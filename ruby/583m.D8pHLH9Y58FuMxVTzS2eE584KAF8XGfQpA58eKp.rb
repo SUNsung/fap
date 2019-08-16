@@ -1,63 +1,76 @@
 
         
-        version = ['', 'ext/etc/'].find do |dir|
-  begin
-    break File.open(File.expand_path('../#{dir}/etc.c', __FILE__)) do |f|
-      f.gets '\n#define RUBY_ETC_VERSION '
-      f.gets[/'(.+)'/, 1]
-    end
-  rescue
-    next
-  end
-end
-    
-        [[1,2,3,4], [81, 2, 118, 3146]].each { |w,x,y,z|
-      obj = (x.to_f + y.to_f / z.to_f) * Math.exp(w.to_f / (x.to_f + y.to_f / z.to_f))
-      assert_equal obj, Marshal.load(Marshal.dump(obj))
-    }
-    
-      def self.set_screen_size(rows, columns)
-    raise NotImplementedError
-  end
-    
-      def test_error_handling
-    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.acos('2') }
-    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.log('2') }
-    assert_raise(ArgumentError) { CMath.log(2, '2') }
-    assert_raise(NoMethodError) { CMath.log(2, 2i) }
-    assert_raise(RangeError) { CMath.hypot(2i, 2i) }
-  end
-    
-    describe 'GzipReader#getc' do
-    
-        false
-  end
-    
-    if rails_env != 'development'
-  config('path vendor/bundle')
-  config('frozen true')
-  config('disable_shared_gems true')
-end
-    
-          # Inspired by https://github.com/nov/openid_connect_sample/blob/master/app/controllers/connect/clients_controller.rb#L24
-      def create
-        registrar = OpenIDConnect::Client::Registrar.new(request.url, params)
-        client = Api::OpenidConnect::OAuthApplication.register! registrar
-        render json: client.as_json(root: false)
+              def test_declare_missing_helper
+        e = assert_raise AbstractController::Helpers::MissingHelperError do
+          AbstractHelpers.helper :missing
+        end
+        assert_equal 'helpers/missing_helper.rb', e.path
       end
     
-      def index
-    comments = comment_service.find_for_post(params[:post_id])
-    respond_with do |format|
-      format.json { render json: CommentPresenter.as_collection(comments), status: 200 }
-      format.mobile { render layout: false, locals: {comments: comments} }
+        it 'returns true if installed' do
+      expect(machine.communicate).to receive(:test).
+        with(command, sudo: true).and_return(true)
+      subject.chef_installed(machine, 'chef_solo', version)
+    end
+    
+      describe '#metadata_url' do
+    subject { super().metadata_url }
+    it { should be_nil }
+  end
+    
+      describe '#state' do
+    it 'returns not_created if no ID' do
+      allow(machine).to receive(:id).and_return(nil)
+      allow(machine).to receive(:data_dir).and_return('.vagrant')
+    
+          expect(Process).to receive(:exit!).with(3)
+      subject.send(:trigger_abort, 3)
+    end
+    
+        def generate_temporary_path
+      Stud::Temporary.pathname
+    end
+    
+        # any errors will be logged to $stderr by invoke!
+    # Bundler cannot update and clean gems in one operation so we have to call the CLI twice.
+    options = {:update => plugins, :rubygems_source => gemfile.gemset.sources}
+    options[:local] = true if local?
+    output = LogStash::Bundler.invoke!(options)
+    # We currently dont removed unused gems from the logstash installation
+    # see: https://github.com/elastic/logstash/issues/6339
+    # output = LogStash::Bundler.invoke!(:clean => true)
+    display_updated_plugins(previous_gem_specs_map)
+  rescue => exception
+    gemfile.restore!
+    report_exception('Updated Aborted', exception)
+  ensure
+    display_bundler_output(output)
+  end
+    
+        desc 'new [PROJECT] [SESSION]', COMMANDS[:new]
+    map 'open' => :new
+    map 'edit' => :new
+    map 'o' => :new
+    map 'e' => :new
+    map 'n' => :new
+    method_option :local, type: :boolean,
+                          aliases: ['-l'],
+                          desc: 'Create local project file at ./.tmuxinator.yml'
+    
+        include_examples :unsupported_version_message, :stop, :foo
+  end
+    
+        context 'tmux_command is not specified' do
+      it 'returns the default' do
+        expect(project.tmux_command).to eq 'tmux'
+      end
     end
   end
     
-      def set_up_contacts
-    if params[:a_id].present?
-      @aspect = current_user.aspects.find(params[:a_id])
-      gon.preloads[:aspect] = AspectPresenter.new(@aspect).as_json
-    end
-    @contacts_size = current_user.contacts.size
+      def attributes_match
+    expect(@actual).to have_attributes(@expected_attrs)
   end
+    
+    describe Tmuxinator::WemuxSupport do
+  let(:klass) { Class.new }
+  let(:instance) { klass.new }
