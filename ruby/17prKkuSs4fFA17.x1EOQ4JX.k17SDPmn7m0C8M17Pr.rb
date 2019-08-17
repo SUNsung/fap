@@ -1,117 +1,143 @@
 
         
-        def each_const
-  DEFS.each {|name, default_value|
-    guard = nil
-    if /\A(AF_INET6|PF_INET6|IPV6_.*)\z/ =~ name
-      # IPv6 is not supported although AF_INET6 is defined on mingw
-      guard = 'defined(INET6)'
-    end
-    yield guard, name, default_value
-  }
-end
+          # ==> Configuration for :timeoutable
+  # The time you want to timeout the user session without activity. After this
+  # time the user will be asked for credentials again. Default is 30 minutes.
+  # config.timeout_in = 30.minutes
     
-        if no_leap_seconds?
-      assert_equal(78796800, Time.utc(1972, 7, 1, 0, 0, 0).tv_sec)
-      assert_equal(78796801, Time.utc(1972, 7, 1, 0, 0, 1).tv_sec)
-      assert_equal(946684800, Time.utc(2000, 1, 1, 0, 0, 0).tv_sec)
-      assert_equal(0x7fffffff, Time.utc(2038, 1, 19, 3, 14, 7).tv_sec)
-      assert_equal(0x80000000, Time.utc(2038, 1, 19, 3, 14, 8).tv_sec)
-    else
-      assert_equal(2, Time.utc(1972, 7, 1, 0, 0, 0) - Time.utc(1972, 6, 30, 23, 59, 59))
-      assert_equal(78796800, Time.utc(1972, 6, 30, 23, 59, 60).tv_sec)
-      assert_equal(78796801, Time.utc(1972, 7, 1, 0, 0, 0).tv_sec)
-      assert_equal(78796802, Time.utc(1972, 7, 1, 0, 0, 1).tv_sec)
-      assert_equal(946684822, Time.utc(2000, 1, 1, 0, 0, 0).tv_sec)
+      def set_up_contacts_json
+    type = params[:set].presence
+    if params[:a_id].present?
+      type ||= 'by_aspect'
+      @aspect = current_user.aspects.find(params[:a_id])
+    end
+    type ||= 'receiving'
+    contacts_by_type(type).paginate(page: params[:page], per_page: 25)
+                          .map {|c| ContactPresenter.new(c, current_user).full_hash_with_person }
+  end
+    
+        respond_to do |format|
+      format.html
+      format.xml { render :xml => @notifications.to_xml }
+      format.json {
+        render json: render_as_json(@unread_notification_count, @grouped_unread_notification_counts, @notifications)
+      }
     end
   end
     
-      # Send deprecation notices to registered listeners.
-  config.active_support.deprecation = :notify
+    Gem::Specification.new do |gem|
+  gem.name          = 'capistrano'
+  gem.version       = Capistrano::VERSION
+  gem.authors       = ['Tom Clements', 'Lee Hambley']
+  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
+  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
+  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
+  gem.homepage      = 'http://capistranorb.com/'
     
-      # Configure static asset server for tests with Cache-Control for performance.
-  if config.respond_to?(:serve_static_files)
-    # rails >= 4.2
-    config.serve_static_files = true
-  elsif config.respond_to?(:serve_static_assets)
-    # rails < 4.2
-    config.serve_static_assets = true
+          OptionParser.new do |opts|
+        opts.banner = 'See full documentation at http://capistranorb.com/.'
+        opts.separator ''
+        opts.separator 'Install capistrano in a project:'
+        opts.separator '    bundle exec cap install [STAGES=qa,staging,production,...]'
+        opts.separator ''
+        opts.separator 'Show available tasks:'
+        opts.separator '    bundle exec cap -T'
+        opts.separator ''
+        opts.separator 'Invoke (or simulate invoking) a task:'
+        opts.separator '    bundle exec cap [--dry-run] STAGE TASK'
+        opts.separator ''
+        opts.separator 'Advanced options:'
+    
+          def question
+        if default.nil?
+          I18n.t(:question, key: key, scope: :capistrano)
+        else
+          I18n.t(:question_default, key: key, default_value: default, scope: :capistrano)
+        end
+      end
+    
+            def to_h
+          @properties
+        end
+    
+          def untrusted!
+        @trusted = false
+        yield
+      ensure
+        @trusted = true
+      end
+    
+        # To make sure we have the maximum compatibility
+    # we will ignore theses gems and they won't be included in the pack
+    IGNORE_GEMS_IN_PACK = %w(
+      logstash-core
+      logstash-core-plugin-api
+      jar-dependencies
+    )
+    
+            if Utils::HttpClient.remote_file_exist?(uri)
+          PluginManager.ui.debug('Found package at: #{uri}')
+          return LogStash::PluginManager::PackInstaller::Remote.new(uri)
+        else
+          PluginManager.ui.debug('Package not found at: #{uri}')
+          return nil
+        end
+      rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
+        # This probably means there is a firewall in place of the proxy is not correctly configured.
+        # So lets skip this strategy but log a meaningful errors.
+        PluginManager.ui.debug('Network error, skipping Elastic pack, exception: #{e}')
+    
+    describe LogStash::Config::PipelineConfig do
+  let(:source) { LogStash::Config::Source::Local }
+  let(:pipeline_id) { :main }
+  let(:ordered_config_parts) do
+    [
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/1', 0, 0, 'input { generator1 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/2', 0, 0,  'input { generator2 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/3', 0, 0, 'input { generator3 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/4', 0, 0, 'input { generator4 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/5', 0, 0, 'input { generator5 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/6', 0, 0, 'input { generator6 }'),
+      org.logstash.common.SourceWithMetadata.new('string', 'config_string', 0, 0, 'input { generator1 }'),
+    ]
   end
-  config.static_cache_control = 'public, max-age=3600'
     
-          # Custom destructuring method. This can be used to normalize
-      # destructuring for different variations of the node.
-      #
-      # In this case, the `def` node destructures into:
-      #
-      #   `method_name, arguments, body`
-      #
-      # while the `defs` node destructures into:
-      #
-      #   `receiver, method_name, arguments, body`
-      #
-      # so we reverse the destructured array to get the optional receiver
-      # at the end, where it can be discarded.
-      #
-      # @return [Array] the different parts of the `def` or `defs` node
-      def node_parts
-        to_a.reverse
+              it 'fails when installing a non logstash plugin' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install  bundler')
+            expect(command).not_to install_successfully
+          end
+    
+          new_exists = Tmuxinator::Config.exists?(name: new)
+      question = '#{new} already exists, would you like to overwrite it?'
+      if !new_exists || yes?(question, :red)
+        say 'Overwriting #{new}' if Tmuxinator::Config.exists?(name: new)
+        FileUtils.copy_file(existing_config_path, new_config_path)
+      end
+    
+        def last?
+      index == tab.panes.length - 1
+    end
+    
+        initialize_with { Tmuxinator::Project.new(file) }
+  end
+    
+      subject { instance }
+    
+      describe 'tmux_kill_session_command' do
+    let(:command) { '#{executable} kill-session -t #{session}' }
+    let(:executable) { project.tmux }
+    let(:session) { project.name }
+    
+      describe '#name' do
+    it { expect(instance.name).to eq 'wemux' }
+  end
+    
+          def local_project
+        [LOCAL_DEFAULT].detect { |f| File.exist?(f) }
+      end
+    
+          it 'should set the synchronize-panes window option on' do
+        expect(window.tmux_synchronize_panes).to eq full_command
       end
     end
   end
-end
-
-    
-            def_node_matcher :erb_new_with_non_keyword_arguments, <<-PATTERN
-          (send
-            (const {nil? cbase} :ERB) :new $...)
-        PATTERN
-    
-      option '--workdir', 'WORKDIR',
-    'The directory you want fpm to do its work in, where 'work' is any file ' \
-    'copying, downloading, etc. Roughly any scratch space fpm needs to build ' \
-    'your package.', :default => Dir.tmpdir
-    
-        temporary_file_name = target_path + '~'
-    
-    class FPM::Package::NPM < FPM::Package
-  class << self
-    include FPM::Util
-  end
-  # Flags '--foo' will be accessable  as attributes[:npm_foo]
-  option '--bin', 'NPM_EXECUTABLE',
-    'The path to the npm executable you wish to run.', :default => 'npm'
-    
-      def to_s_extension; 'pkg'; end
-    
-        # Evaluate dependencies.
-    if !attributes[:no_auto_depends?]
-	    pkgdepend_gen = safesystemout('pkgdepend', 'generate',  '-md', '#{staging_path}',  manifest_fn)
-      File.write(build_path('#{name}.p5m.3'), pkgdepend_gen)
-    
-      # Download the given package if necessary. If version is given, that version
-  # will be downloaded, otherwise the latest is fetched.
-  def download_if_necessary(package, version=nil)
-    # TODO(sissel): this should just be a 'download' method, the 'if_necessary'
-    # part should go elsewhere.
-    path = package
-    # If it's a path, assume local build.
-    if File.directory?(path) or (File.exist?(path) and File.basename(path) == 'setup.py')
-      return path
-    end
-    
-        safesystem('tar', *args)
-  end # def output
-    
-        # use dir to set stuff up properly, mainly so I don't have to reimplement
-    # the chdir/prefix stuff special for zip.
-    dir = convert(FPM::Package::Dir)
-    if attributes[:chdir]
-      dir.attributes[:chdir] = File.join(build_path, attributes[:chdir])
-    else
-      dir.attributes[:chdir] = build_path
-    end
-    
-        args.flatten!.compact!
-    
-    require 'stringio'
