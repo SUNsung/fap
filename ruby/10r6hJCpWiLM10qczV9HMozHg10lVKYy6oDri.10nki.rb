@@ -1,271 +1,382 @@
 
         
-                a_split <=> b_split
-      else
-        a.casecmp(b)
-      end
-    end
-  end
-end
-
-    
-        def build_pages
-      history = Set.new initial_urls.map(&:downcase)
-      instrument 'running.scraper', urls: initial_urls
-    
-        module MultipleBaseUrls
-      def self.included(base)
-        base.extend ClassMethods
-      end
-    
-        def self.subscribe_to(notifier)
-      attach_to(namespace, new, notifier)
-    end
-    
-    testdata( File.dirname($0) + '/scandata', ARGV ).each do |file|
-  $stderr.print File.basename(file) + ': '
-  begin
-    ok = File.read(file)
-    s = Racc::GrammarFileScanner.new( ok )
-    sym, (val, _lineno) = s.scan
-    if printonly then
-      $stderr.puts
-      $stderr.puts val
-      next
-    end
-    
-      it 'returns true when at EOF with a length greater than the size of uncompressed data' do
-    gz = Zlib::GzipReader.new @io
-    gz.eof?.should be_false
-    gz.read(11)
-    gz.eof?.should be_true
-  end
-    
-      before :each do
-    @data = '12345abcde'
-    @zip = [31, 139, 8, 0, 44, 220, 209, 71, 0, 3, 51, 52, 50, 54, 49, 77,
-            76, 74, 78, 73, 5, 0, 157, 5, 0, 36, 10, 0, 0, 0].pack('C*')
-    @io = StringIO.new @zip
-  end
-    
-      it 'invokes seek method on the associated IO object' do
-    # first, prepare the mock object:
-    (obj = mock('io')).should_receive(:get_io).any_number_of_times.and_return(@io)
-    def obj.read(args); get_io.read(args); end
-    def obj.seek(pos, whence = 0)
-      ScratchPad.record :seek
-      get_io.seek(pos, whence)
-    end
-    
-    describe :gzipreader_each, shared: true do
-    
-        describe 'with an empty string' do
-      it 'does not insert anything into the stream' do
-        @gz.ungetc ''
-        @gz.read.should == 'abcde'
-      end
-    
-    describe 'GzipWriter#write' do
-  before :each do
-    @data = '12345abcde'
-    @zip = [31, 139, 8, 0, 44, 220, 209, 71, 0, 3, 51, 52, 50, 54, 49, 77,
-            76, 74, 78, 73, 5, 0, 157, 5, 0, 36, 10, 0, 0, 0].pack('C*')
-    @io = StringIO.new ''.b
-  end
-    
-      before do
-    @zeros    = Zlib::Deflate.deflate('0' * 100_000)
-    @inflator = Zlib::Inflate.new
-    @chunks   = []
-    
-          File.open('bower.json', 'w') do |f|
-        f.puts JSON.pretty_generate(spec)
-      end
-    end
-  end
-end
-
-    
-        def str_to_byte_pos(pos)
-      @s.string.slice(0, pos).bytesize
-    end
-  end
-end
-    
-        def log_http_get_files(files, from, cached = false)
-      return if files.empty?
-      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
-      end
-    end
-    
-    class NodeMincerTest < Minitest::Test
-  DUMMY_PATH = 'test/dummy_node_mincer'
-    
-    module URI
-  ;
-  class << self
-# Does the char code correspond to an alpha-numeric char.
-# isAlphaNumeric('a'.ord) => true
-# isAlphaNumeric(''.ord) => false
-    def isAlphaNumeric(cc)
-      # a - z
-      if (97 <= cc && cc <= 122);
-        return true
-      end
-      # A - Z
-      if (65 <= cc && cc <= 90);
-        return true
-      end
-      # 0 - 9
-      if (48 <= cc && cc <= 57);
-        return true
-      end
-    
-          # private
-    
-          def string_to_code string
-        # sha bytes
-        b = [Digest::SHA1.hexdigest(string)[0, 20]].pack('H*').bytes.to_a
-        # Thanks donpark's IdenticonUtil.java for this.
-        # Match the following Java code
-        # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
-        #	 ((b[2] & 0xFF) << 8) | (b[3] & 0xFF)
-    
-        def self.teardown(&block)
-      define_method(:teardown, &block)
-    end
-  end
-  (
-  class << klass;
-    self
-  end).send(:define_method, :name) { name.gsub(/\W/, '_') }
-  $contexts << klass
-  klass.class_eval &block
-end
-    
-      test 'remove page extentions' do
-    view = Precious::Views::LatestChanges.new
-    assert_equal 'page', view.remove_page_extentions('page.wiki')
-    assert_equal 'page-wiki', view.remove_page_extentions('page-wiki.md')
-    assert_equal 'file.any_extention', view.remove_page_extentions('file.any_extention')
-  end
-    
-          catch(:IRB_EXIT) do
-        irb.eval_input
-      end
-    end
-  end
-    
-      end
-end
-
-    
-          def button_link_to(text, url, html_options = {})
-        if html_options[:method] &&
-            !html_options[:method].to_s.casecmp('get').zero? &&
-            !html_options[:remote]
-          form_tag(url, method: html_options.delete(:method), class: 'd-inline') do
-            button(text, html_options.delete(:icon), nil, html_options)
-          end
+            def get_path_for_upload(upload)
+      extension =
+        if upload.extension
+          '.#{upload.extension}'
         else
-          if html_options['data-update'].nil? && html_options[:remote]
-            object_name, action = url.split('/')[-2..-1]
-            html_options['data-update'] = [action, object_name.singularize].join('_')
-          end
+          # Maintain backward compatibility before Jobs::MigrateUploadExtensions runs
+          File.extname(upload.original_filename)
+        end
     
-          after_transition do |payment, transition|
-        payment.state_changes.create!(
-          previous_state: transition.from,
-          next_state: transition.to,
-          name: 'payment'
-        )
+          SiteSetting.enable_s3_uploads = true
+      SiteSetting.s3_upload_bucket = 's3-upload-bucket'
+      SiteSetting.s3_access_key_id = 'some key'
+      SiteSetting.s3_secret_access_key = 'some secret key'
+    
+          # there might be more information available in the exception
+      if message_template == :email_reject_invalid_post && e.message.size > 6
+        message_template = :email_reject_invalid_post_specified
+        template_args[:post_error] = e.message
+      end
+    
+      context 'plugins' do
+    before do
+      DiscoursePluginRegistry.register_locale(
+        'foo',
+        name: 'Foo',
+        nativeName: 'Foo Bar',
+        plural: {
+          keys: [:one, :few, :other],
+          rule: lambda do |n|
+            return :one if n == 1
+            return :few if n < 10
+            :other
+          end
+        }
+      )
+    
+        Category.where(id: @topic.category_id).update_all(latest_post_id: @post.id)
+    Category.where(id: @topic.category_id).update_all(latest_topic_id: @topic.id) if @post.is_first_post?
+  end
+    
+      def construct_url_with(action, opts)
+    method = url_method(opts)
+    
+        context 'tagging' do
+      context 'tagging disabled' do
+        before do
+          SiteSetting.tagging_enabled = false
+        end
+    
+        it 'can produce confusing results when using site_setting_saved' do
+      # site_setting_saved is deprecated. This test case illustrates why it can be confusing
+    
+          def remember_me_is_active?(resource)
+        return false unless resource.respond_to?(:remember_me)
+        scope = Devise::Mapping.find_scope!(resource)
+        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
+        resource.remember_me?(token, generated_at)
+      end
+    
+    module Devise
+  module Controllers
+    # Create url helpers to be used with resource/scope configuration. Acts as
+    # proxies to the generated routes created by devise.
+    # Resource param can be a string or symbol, a class, or an instance object.
+    # Example using a :user resource:
+    #
+    #   new_session_path(:user)      => new_user_session_path
+    #   session_path(:user)          => user_session_path
+    #   destroy_session_path(:user)  => destroy_user_session_path
+    #
+    #   new_password_path(:user)     => new_user_password_path
+    #   password_path(:user)         => user_password_path
+    #   edit_password_path(:user)    => edit_user_password_path
+    #
+    #   new_confirmation_path(:user) => new_user_confirmation_path
+    #   confirmation_path(:user)     => user_confirmation_path
+    #
+    # Those helpers are included by default to ActionController::Base.
+    #
+    # In case you want to add such helpers to another class, you can do
+    # that as long as this new class includes both url_helpers and
+    # mounted_helpers. Example:
+    #
+    #     include Rails.application.routes.url_helpers
+    #     include Rails.application.routes.mounted_helpers
+    #
+    module UrlHelpers
+      def self.remove_helpers!
+        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
+          remove_method method
+        end
+      end
+    
+    module Devise
+  module Mailers
+    module Helpers
+      extend ActiveSupport::Concern
+    
+        private
+    
+    require 'devise/models/authenticatable'
+
+    
+            if Devise.activerecord51?
+          def clear_reset_password_token?
+            encrypted_password_changed = respond_to?(:will_save_change_to_encrypted_password?) && will_save_change_to_encrypted_password?
+            authentication_keys_changed = self.class.authentication_keys.any? do |attribute|
+              respond_to?('will_save_change_to_#{attribute}?') && send('will_save_change_to_#{attribute}?')
+            end
+    
+          module ClassMethods
+        Devise::Models.config(self, :timeout_in)
       end
     end
+  end
+end
+
     
-          def currency
-        @payment.currency
+    ###
+#
+# This module implements the Bind TCP handler.  This means that
+# it will attempt to connect to a remote host on a given port for a period of
+# time (typically the duration of an exploit) to see if a the payload has
+# started listening.  This can tend to be rather verbose in terms of traffic
+# and in general it is preferable to use reverse payloads.
+#
+###
+module BindUdp
+    
+        # Extract each header value pair
+    header.split(/\r\n/mn).each { |str|
+      if (md = str.match(/^(.+?)\s*:\s*(.+?)\s*$/))
+        if (self[md[1]])
+          self[md[1]] << ', ' + md[2]
+        else
+          self[md[1]] = md[2]
+        end
       end
+    }
+  end
     
-      def self.check_missing_translations
-    self.missing_translation_messages = []
-    self.used_translations ||= []
-    used_translations.map { |a| a.split('.') }.each do |translation_keys|
-      root = translations
-      processed_keys = []
-      translation_keys.each do |key|
-        root = root.fetch(key.to_sym)
-        processed_keys << key.to_sym
-      rescue KeyError
-        error = '#{(processed_keys << key).join('.')} (#{I18n.locale})'
-        unless Spree.missing_translation_messages.include?(error)
-          Spree.missing_translation_messages << error
+              # Encodes the realm field
+          #
+          # @return [String]
+          def encode_realm
+            encoded = ''
+            encoded << [realm.length].pack('N')
+            encoded << realm
+    
+                k3 = OpenSSL::HMAC.digest('MD5', k1, checksum)
+    
+                int
+          end
+    
+            # Cleans up projects before writing.
+        #
+        def cleanup_projects(projects)
+          projects.each do |project|
+            [project.pods, project.support_files_group,
+             project.development_pods, project.dependencies_group].each { |group| group.remove_from_project if group.empty? }
+            project.sort(:groups_position => :below)
+          end
         end
       end
     end
   end
+end
+
     
-          def requires_authentication?
-        Spree::Api::Config[:requires_authentication]
+          def spec_sets
+        @spec_sets ||= begin
+          analyzer.send(:update_repositories) if repo_update?(:default => true)
+          aggregate = Source::Aggregate.new(analyzer.sources)
+          installed_pods.map do |pod_name|
+            aggregate.search(Dependency.new(pod_name))
+          end.compact.uniq
+        end
       end
     
-            def create
-          authorize! :create, Image
-          @image = scope.images.new(image_params)
-          if @image.save
-            respond_with(@image, status: 201, default_template: :show)
-          else
-            invalid_resource!(@image)
-          end
-        end
-    
-            def authorize
-          perform_payment_action(:authorize)
-        end
-    
-            def product_property
-          if @product
-            @product_property ||= @product.product_properties.find_by(id: params[:id])
-            @product_property ||= @product.product_properties.includes(:property).where(spree_properties: { name: params[:id] }).first
-            raise ActiveRecord::RecordNotFound unless @product_property
-    
-    Sidekiq.logger.level = Logger::ERROR
-    
-          assert_nil client.push('class' => MyWorker, 'args' => [0])
-      assert_match(/[0-9a-f]{12}/, client.push('class' => MyWorker, 'args' => [1]))
-      client.push_bulk('class' => MyWorker, 'args' => [[0], [1]]).each do |jid|
-        assert_match(/[0-9a-f]{12}/, jid)
-      end
+      # Indicates an user error. This is defined in cocoapods-core.
+  #
+  class Informative < PlainInformative
+    def message
+      '[!] #{super}'.red
     end
   end
     
-        def initialize(params={})
-      @thehash = default.merge(params)
+          describe 'concerning other_ld_flags' do
+        it 'other_ld_flags should not include -ObjC when there are not static frameworks' do
+          target_definition = fixture_target_definition(:contents => { 'inheritance' => 'complete' })
+          spec = stub('spec', :library_specification? => false, :spec_type => :test)
+          consumer = stub('consumer',
+                          :libraries => ['xml2'],
+                          :frameworks => ['XCTest'],
+                          :weak_frameworks => [],
+                          :spec => spec,
+                         )
+          file_accessor = stub('file_accessor',
+                               :spec => spec,
+                               :spec_consumer => consumer,
+                               :vendored_static_artifacts => [],
+                              )
+          pod_target = stub('pod_target',
+                            :file_accessors => [file_accessor],
+                            :requires_frameworks? => true,
+                            :dependent_targets => [],
+                            :recursive_dependent_targets => [],
+                            :sandbox => config.sandbox,
+                            :include_in_build_config? => true,
+                            :should_build? => false,
+                            :spec_consumers => [consumer],
+                            :build_as_static? => false,
+                            :product_basename => 'PodTarget',
+                            :target_definitions => [target_definition],
+                           )
+          pod_target.stubs(:build_settings => pod(pod_target))
+          aggregate_target = fixture_aggregate_target([pod_target], true)
+          aggregate(aggregate_target).other_ldflags.should.not.include '-ObjC'
+        end
+    
+      spec.source_files  = 'Classes', 'Classes/**/*.{h,m}'
+  spec.exclude_files = 'Classes/Exclude'
+    
+      describe '#body' do
+    context 'with a single expression body' do
+      let(:source) do
+        'class << self; bar; end'
+      end
+    
+    module RuboCop
+  module Cop
+    # Common functionality for checking assignment nodes.
+    module CheckAssignment
+      def on_lvasgn(node)
+        check_assignment(node, extract_rhs(node))
+      end
+      alias on_ivasgn   on_lvasgn
+      alias on_cvasgn   on_lvasgn
+      alias on_gvasgn   on_lvasgn
+      alias on_casgn    on_lvasgn
+      alias on_masgn    on_lvasgn
+      alias on_op_asgn  on_lvasgn
+      alias on_or_asgn  on_lvasgn
+      alias on_and_asgn on_lvasgn
+    
+          it { expect(if_node.nested_conditional?).to be_truthy }
     end
     
-        it 'executes client middleware' do
-      Sidekiq.client_middleware.add MyStopper
-      begin
-        @retry.schedule (Time.now - 60).to_f, @error_1
-        @retry.schedule (Time.now - 60).to_f, @error_2
-        @scheduled.schedule (Time.now - 60).to_f, @future_2
-        @scheduled.schedule (Time.now - 60).to_f, @future_3
+          # Returns the body of the `for` loop.
+      #
+      # @return [Node, nil] The body of the `for` loop.
+      def body
+        node_parts[2]
+      end
+    end
+  end
+end
+
     
-    @@ layout
-<html>
-  <head>
-    <title>Sinatra + Sidekiq</title>
-    <body>
-      <%= yield %>
-    </body>
-</html>
+          @right_diff_line_number = nil
     
-        def define_query
-      name = @name
-      @klass.send :define_method, '#{@name}?' do
-        send(name).file?
+          def versions
+        i = @versions.size + 1
+        @versions.map do |v|
+          i -= 1
+          { :id        => v.id,
+            :id7       => v.id[0..6],
+            :num       => i,
+            :selected  => @page.version.id == v.id,
+            :author    => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
+            :message   => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
+            :date      => v.authored_date.strftime('%B %d, %Y'),
+            :gravatar  => Digest::MD5.hexdigest(v.author.email.strip.downcase),
+            :identicon => self._identicon_code(v.author.email),
+            :date_full => v.authored_date,
+          }
+        end
+      end
+    
+    #############################################################################
+#
+# Standard tasks
+#
+#############################################################################
+    
+        # Extract the path string that Gollum::Wiki expects
+    def extract_path(file_path)
+      return nil if file_path.nil?
+      last_slash = file_path.rindex('/')
+      if last_slash
+        file_path[0, last_slash]
+      end
+    end
+    
+        it 'returns nil if an except is provided' do
+      valid_article = create(:article, tags: 'explainlikeimfive')
+      expect(described_class.new(valid_article, 'explainlikeimfive').tag).to eq(nil)
+    end
+    
+        it 'denies chat channel invitation to non-authorized user' do
+      expect do
+        post '/chat_channel_memberships', params: {
+          chat_channel_membership: {
+            user_id: second_user.id, chat_channel_id: chat_channel.id
+          }
+        }
+      end.to raise_error(Pundit::NotAuthorizedError)
+    end
+  end
+    
+      it 'renders a user's story successfully' do
+    expect(get: '/ben/this-is-a-slug').to route_to(
+      controller: 'stories',
+      action: 'show',
+      slug: 'this-is-a-slug',
+      username: 'ben',
+    )
+  end
+    
+          it('renders empty body') { expect(response.body).to be_empty }
+    end
+  end
+    
+    def capture_logging(lvl=Logger::INFO)
+  old = Sidekiq.logger
+  begin
+    out = StringIO.new
+    logger = Logger.new(out)
+    logger.level = lvl
+    Sidekiq.logger = logger
+    yield
+    out.string
+  ensure
+    Sidekiq.logger = old
+  end
+end
+    
+      it 'does not support invalid concurrency' do
+    assert_raises(ArgumentError) { new_manager(concurrency: 0) }
+    assert_raises(ArgumentError) { new_manager(concurrency: -1) }
+  end
+    
+      it 'correctly replaces middleware when using middleware with options in the initializer' do
+    chain = Sidekiq::Middleware::Chain.new
+    chain.add NonYieldingMiddleware
+    chain.add NonYieldingMiddleware, {:foo => 5}
+    assert_equal 1, chain.count
+  end
+    
+      describe 'error handling' do
+    it 'deals with user-specified error handlers which raise errors' do
+      output = capture_logging do
+        begin
+          Sidekiq.error_handlers << proc {|x, hash|
+            raise 'boom'
+          }
+          cli = Sidekiq::CLI.new
+          cli.handle_exception(RuntimeError.new('hello'))
+        ensure
+          Sidekiq.error_handlers.pop
+        end
+      end
+      assert_includes output, 'boom'
+      assert_includes output, 'ERROR'
+    end
+  end
+    
+          begin
+        Sidekiq::Testing.fake! do
+          AttributeWorker.perform_async
+          assert_equal 0, AttributeWorker.count
+        end
+    
+      describe 'delay' do
+    require 'action_mailer'
+    class InlineFooMailer < ActionMailer::Base
+      def bar(str)
+        raise InlineError
       end
     end
