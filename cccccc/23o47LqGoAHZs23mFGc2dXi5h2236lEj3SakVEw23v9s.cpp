@@ -1,183 +1,310 @@
 
         
-        Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+        // Get basic type definitions.
+#define IPC_MESSAGE_IMPL
+#include 'content/nw/src/common/common_message_generator.h'
     
-    #include 'tensorflow/compiler/xla/service/gpu/hlo_execution_profiler.h'
-#include 'tensorflow/core/platform/stream_executor_no_cuda.h'
+    // Tell browser we have an uncaughtException from node.
+IPC_MESSAGE_ROUTED1(ShellViewHostMsg_UncaughtException,
+                    std::string /* err */)
     
-    #include 'tensorflow/compiler/xla/service/buffer_assignment.h'
-#include 'tensorflow/compiler/xla/service/gpu/buffer_allocations.h'
-#include 'tensorflow/compiler/xla/service/gpu/hlo_execution_profiler.h'
-#include 'tensorflow/compiler/xla/service/gpu/thunk.h'
-#include 'tensorflow/compiler/xla/service/hlo_instruction.h'
-#include 'tensorflow/core/platform/stream_executor_no_cuda.h'
-#include 'tensorflow/core/platform/types.h'
     
-    Status CustomCallThunk::ExecuteOnStream(const ExecuteParams& params) {
-  // gpu_stream is CUstream or e.g. the equivalent type in ROCm.
-  auto gpu_stream = se::gpu::AsGpuStreamValue(params.stream);
-  auto typed_call_target =
-      reinterpret_cast<void (*)(decltype(gpu_stream), void** /*buffers*/,
-                                const char* /*opaque*/, size_t /*opaque_len*/)>(
-          call_target_);
+#include 'base/basictypes.h'
+    
+    
+    {  gtk_widget_show(menu_item_);
+  g_object_ref_sink(G_OBJECT(menu_item_));
+} 
+    
+    bool NwAppClearCacheFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  content::BrowsingDataRemover* remover = content::BrowserContext::GetBrowsingDataRemover(
+      Profile::FromBrowserContext(context_));
     }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
     
-    FftThunk::FftThunk(FftType fft_type, absl::Span<const int64> fft_length,
-                   const BufferAllocation::Slice& input_buffer,
-                   const BufferAllocation::Slice& output_buffer,
-                   const Shape& input_shape, const Shape& output_shape,
-                   const HloInstruction* hlo)
-    : Thunk(Kind::kFft, hlo),
-      fft_type_(FftTypeToSeType(fft_type)),
-      fft_length_(fft_length.begin(), fft_length.end()),
-      scale_factor_(1.0f),
-      input_buffer_(input_buffer),
-      output_buffer_(output_buffer),
-      input_shape_(input_shape),
-      output_shape_(output_shape) {}
+    {  KeyComparator comparator_;
+  int refs_;
+  Arena arena_;
+  Table table_;
+};
     
-    #endif  // TENSORFLOW_COMPILER_XLA_SERVICE_GPU_INFEED_THUNK_H_
+    template <typename Key, class Comparator>
+typename SkipList<Key, Comparator>::Node* SkipList<Key, Comparator>::FindLast()
+    const {
+  Node* x = head_;
+  int level = GetMaxHeight() - 1;
+  while (true) {
+    Node* next = x->Next(level);
+    if (next == nullptr) {
+      if (level == 0) {
+        return x;
+      } else {
+        // Switch to next list
+        level--;
+      }
+    } else {
+      x = next;
+    }
+  }
+}
+    
+      // If true, the implementation will do aggressive checking of the
+  // data it is processing and will stop early if it detects any
+  // errors.  This may have unforeseen ramifications: for example, a
+  // corruption of one DB entry may cause a large number of entries to
+  // become unreadable or for the entire DB to become unopenable.
+  bool paranoid_checks = false;
+    
+    
+    {}  // namespace leveldb
+    
+      // Advanced operation: flush any buffered key/value pairs to file.
+  // Can be used to ensure that two adjacent entries never live in
+  // the same data block.  Most clients should not need to use this method.
+  // REQUIRES: Finish(), Abandon() have not been called
+  void Flush();
+    
+    #endif  // STORAGE_LEVELDB_TABLE_BLOCK_BUILDER_H_
 
     
-     private:
-  // Buffers passed to the kernel as arguments.
-  const std::vector<const BufferAllocation*> args_;
+    #include <atomic>
+#include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <vector>
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    //------------------------------------------------------------------------
     
-    Status SequentialThunk::Initialize(const GpuExecutable& executable,
-                                   se::StreamExecutor* executor) {
-  for (auto& thunk : thunks_) {
-    TF_RETURN_IF_ERROR(thunk->Initialize(executable, executor));
-  }
-  return Status::OK();
+      // Get angle
+  int getAngle() { return angle; }
+    
+    PopplerCacheItem::~PopplerCacheItem()
+{
 }
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    public:
-  /// Introduces a new constraint checker arena, supplanting any
-  /// existing constraint checker arena.
-  ///
-  /// \param self The ASTContext into which this constraint checker arena
-  /// will be installed.
-  ///
-  /// \param allocator The allocator used for allocating any data that
-  /// goes into the constraint checker arena.
-  ConstraintCheckerArenaRAII(ASTContext &self,
-                             llvm::BumpPtrAllocator &allocator);
-    
-    
-    {  auto origKey =
-      (uintptr_t)SWIFT_THREAD_GETSPECIFIC(SWIFT_COMPATIBILITY_50_TLS_KEY);
-  if ((origKey & 0x1) != 0) {
-    auto mask = ((uintptr_t)-1) < 1;
-    auto resetKey = origKey & mask;
-    SWIFT_THREAD_SETSPECIFIC(SWIFT_COMPATIBILITY_50_TLS_KEY, (void *)resetKey);
-    return nullptr;
-  }
-  return ReplFn;
-}
-    
-        Offset offset = (RelativeOffsetPlusIndirectAndInt & ~getIntMask());
-    
-    /// RAII class that suppresses diagnostics by temporarily disabling all of
-/// the diagnostic consumers.
-class DiagnosticSuppression {
-  DiagnosticEngine &diags;
-  std::vector<DiagnosticConsumer *> consumers;
+    void PreScanOutputDev::check(GfxColorSpace *colorSpace, GfxColor *color,
+			     double opacity, GfxBlendMode blendMode) {
+  GfxRGB rgb;
     }
     
-    class OrientationDetector {
- public:
-  OrientationDetector(const GenericVector<int>* allowed_scripts,
-                      OSResults* results);
-  bool detect_blob(BLOB_CHOICE_LIST* scores);
-  int get_orientation();
- private:
-  OSResults* osr_;
-  const GenericVector<int>* allowed_scripts_;
-};
+    #include <stdlib.h>
+#include <stddef.h>
+#include 'ProfileData.h'
     
-    #include 'dppoint.h'
-#include 'errcode.h'
-#include 'tprintf.h'
     
-      // Get the value of the top (smallest, defined by operator< ) element.
-  const Pair& PeekTop() const {
-    return heap_[0];
+    {  //
+  // parse Media Screen Parameters
+  if (obj->dictLookup('SP', &tmp2)->isDict()) { // media screen parameters
+    Object params;
+    if (tmp2.dictLookup('MH', &params)->isDict()) {
+      MH.parseMediaScreenParameters(&params);
+    }
+    params.free();
+    if (tmp2.dictLookup('BE', &params)->isDict()) {
+      BE.parseMediaScreenParameters(&params);
+    }
+    params.free();
   }
-  // Get the value of the worst (largest, defined by operator< ) element.
-  const Pair& PeekWorst() const { return heap_[IndexOfWorst()]; }
-    
-      // Insert the given unichar represention in the UNICHARMAP and associate it
-  // with the given id. The length of the representation MUST be non-zero.
-  void insert(const char* const unichar_repr, UNICHAR_ID id);
-    
-    // Clear all data.
-void IntFeatureDist::Clear() {
-  delete [] features_;
-  features_ = nullptr;
-  delete [] features_delta_one_;
-  features_delta_one_ = nullptr;
-  delete [] features_delta_two_;
-  features_delta_two_ = nullptr;
+  tmp2.free();
 }
     
-    # endif  // NDEBUG for EXPECT_DEBUG_DEATH
-#endif  // GTEST_HAS_DEATH_TEST
+      GBool getIsEmbedded() { return isEmbedded; }
+  Stream* getEmbbededStream() { return embeddedStream; }
+  // write embedded stream to file
+  void outputToFile(FILE*);
     
-    #if 0
+    //========================================================================
+//
+// Modified under the Poppler project - http://poppler.freedesktop.org
+//
+// All changes made under the Poppler project to this file are licensed
+// under GPL version 2 or later
+//
+// Copyright (C) 2010 Albert Astals Cid <aacid@kde.org>
+//
+// To see a description of the changes please see the Changelog file that
+// came with your tarball or type make ChangeLog if you are building from git
+//
+//========================================================================
     
-    // Internal macro for implementing {EXPECT|ASSERT}_PRED_FORMAT3.
-// Don't use this in your code.
-#define GTEST_PRED_FORMAT3_(pred_format, v1, v2, v3, on_failure)\
-  GTEST_ASSERT_(pred_format(#v1, #v2, #v3, v1, v2, v3), \
-                on_failure)
+    #ifndef SECURITYHANDLER_H
+#define SECURITYHANDLER_H
     
-      tuple(const tuple& t) : f0_(t.f0_), f1_(t.f1_), f2_(t.f2_), f3_(t.f3_),
-      f4_(t.f4_), f5_(t.f5_), f6_(t.f6_) {}
+      XRef *xref;			// xref table for current document
     
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33>
-struct Types33 {
-  typedef T1 Head;
-  typedef Types32<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
-      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
-      T30, T31, T32, T33> Tail;
+    /**
+ * Simple struct for storing a write concern error with an endpoint.
+ *
+ * Certain types of errors are not stored in WriteOps or must be returned to a caller.
+ */
+struct ShardWCError {
+    ShardWCError(const ShardEndpoint& endpoint, const WriteConcernErrorDetail& error)
+        : endpoint(endpoint) {
+        error.cloneTo(&this->error);
+    }
+    }
+    
+    #pragma once
+    
+        /**
+     * Reattaches to the OperationContext and reacquires any storage-engine state.
+     *
+     * It is only legal to call this in the 'detached' state. On return, the cursor is left in a
+     * 'saved' state, so callers must still call restoreState to use this object.
+     */
+    virtual void reattachToOperationContext(OperationContext* opCtx) = 0;
+    
+    
+    {    switch (logicalOp) {
+        case LogicalOp::opInvalid:
+            // use 0 for unknown, non-specific
+            break;
+        case LogicalOp::opUpdate:
+            c.update.inc(micros);
+            break;
+        case LogicalOp::opInsert:
+            c.insert.inc(micros);
+            break;
+        case LogicalOp::opQuery:
+            c.queries.inc(micros);
+            break;
+        case LogicalOp::opGetMore:
+            c.getmore.inc(micros);
+            break;
+        case LogicalOp::opDelete:
+            c.remove.inc(micros);
+            break;
+        case LogicalOp::opKillCursors:
+            break;
+        case LogicalOp::opCommand:
+            c.commands.inc(micros);
+            break;
+        default:
+            MONGO_UNREACHABLE;
+    }
+}
+    
+    
+    {    if (UTEXT_FULL_TEXT_IN_CHUNK(fInputText, fInputLength)) {
+        MatchChunkAt((int32_t)nativeStart, TRUE, status);
+    } else {
+        MatchAt(nativeStart, TRUE, status);
+    }
+    return fMatch;
+}
+    
+    void RemoveTransliterator::handleTransliterate(Replaceable& text, UTransPosition& index,
+                                               UBool /*isIncremental*/) const {
+    // Our caller (filteredTransliterate) has already narrowed us
+    // to an unfiltered run.  Delete it.
+    UnicodeString empty;
+    text.handleReplaceBetween(index.start, index.limit, empty);
+    int32_t len = index.limit - index.start;
+    index.contextLimit -= len;
+    index.limit -= len;
+}
+U_NAMESPACE_END
+    
+        /**
+     * Destructor.
+     */
+    virtual ~RemoveTransliterator();
+    
+    U_CAPI int32_t U_EXPORT2
+uhash_hashScriptSet(const UElement key);
+    
+    void SearchIterator::setAttribute(USearchAttribute       attribute,
+                                  USearchAttributeValue  value,
+                                  UErrorCode            &status)
+{
+    if (U_SUCCESS(status)) {
+        switch (attribute)
+        {
+        case USEARCH_OVERLAP :
+            m_search_->isOverlap = (value == USEARCH_ON ? TRUE : FALSE);
+            break;
+        case USEARCH_CANONICAL_MATCH :
+            m_search_->isCanonicalMatch = (value == USEARCH_ON ? TRUE : FALSE);
+            break;
+        case USEARCH_ELEMENT_COMPARISON :
+            if (value == USEARCH_PATTERN_BASE_WEIGHT_IS_WILDCARD || value == USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD) {
+                m_search_->elementComparisonType = (int16_t)value;
+            } else {
+                m_search_->elementComparisonType = 0;
+            }
+            break;
+        default:
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+        }
+    }
+    if (value == USEARCH_ATTRIBUTE_VALUE_COUNT) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+    }
+}
+    
+    UnicodeString&
+SelectFormat::format(const Formattable& obj,
+                   UnicodeString& appendTo,
+                   FieldPosition& pos,
+                   UErrorCode& status) const
+{
+    if (U_FAILURE(status)) {
+        return appendTo;
+    }
+    if (obj.getType() == Formattable::kString) {
+        return format(obj.getString(status), appendTo, pos, status);
+    } else {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return appendTo;
+    }
+}
+    
+    class U_I18N_API SharedCalendar : public SharedObject {
+public:
+    SharedCalendar(Calendar *calToAdopt) : ptr(calToAdopt) { }
+    virtual ~SharedCalendar();
+    const Calendar *get() const { return ptr; }
+    const Calendar *operator->() const { return ptr; }
+    const Calendar &operator*() const { return *ptr; }
+private:
+    Calendar *ptr;
+    SharedCalendar(const SharedCalendar &);
+    SharedCalendar &operator=(const SharedCalendar &);
 };
     
-    // The following family of struct and struct templates are used to
-// represent template lists.  In particular, TemplatesN<T1, T2, ...,
-// TN> represents a list of N templates (T1, T2, ..., and TN).  Except
-// for Templates0, every struct in the family has two member types:
-// Head for the selector of the first template in the list, and Tail
-// for the rest of the list.
+      Options options = CurrentOptions();
+  options.table_factory.reset(NewBlockBasedTableFactory(table_options));
+  options.prefix_extractor.reset(NewCappedPrefixTransform(9));
+  options.compaction_filter_factory = std::make_shared<SkipEvenFilterFactory>();
+  options.disable_auto_compactions = true;
+  options.create_if_missing = true;
+  DestroyAndReopen(options);
+    
+    Status TransactionDBMutexImpl::TryLockFor(int64_t timeout_time) {
+  bool locked = true;
+    }
+    
+    #pragma once
+    
+      // atomic write
+  WriteBatch batch;
+  batch.Put(handles[0], Slice('key2'), Slice('value2'));
+  batch.Put(handles[1], Slice('key3'), Slice('value3'));
+  batch.Delete(handles[0], Slice('key'));
+  s = db->Write(WriteOptions(), &batch);
+  assert(s.ok());
+    
+      MyFilter filter;
+    
+      // atomically apply a set of updates
+  {
+    WriteBatch batch;
+    batch.Delete('key1');
+    batch.Put('key2', value);
+    s = db->Write(WriteOptions(), &batch);
+  }
+    
+      WriteOptions write_options;
+  ReadOptions read_options;
+  TransactionOptions txn_options;
+  std::string value;
