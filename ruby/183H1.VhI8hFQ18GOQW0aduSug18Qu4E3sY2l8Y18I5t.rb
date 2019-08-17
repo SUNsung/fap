@@ -1,119 +1,181 @@
 
         
-        # Test https://github.com/jekyll/jekyll/pull/6735#discussion_r165499868
-# ------------------------------------------------------------------------
-def check_with_regex(content)
-  !content.to_s.match?(%r!{[{%]!)
-end
-    }
-    }
+            class ChangeTableComment2 < SilentMigration
+      def change
+        change_table_comment :horses, from: 'Sekitoba', to: 'Diomed'
+      end
+    end
     
-      p.option 'source', '-s', '--source [DIR]', 'Source directory (defaults to ./)'
-  p.option 'destination', '-d', '--destination [DIR]',
-    'Destination directory (defaults to ./_site)'
-  p.option 'safe', '--safe', 'Safe mode (defaults to false)'
-  p.option 'plugins_dir', '-p', '--plugins PLUGINS_DIR1[,PLUGINS_DIR2[,...]]', Array,
-    'Plugins directory (defaults to ./_plugins)'
-  p.option 'layouts_dir', '--layouts DIR', String,
-    'Layouts directory (defaults to ./_layouts)'
-  p.option 'profile', '--profile', 'Generate a Liquid rendering profile'
+      if ENV['RAILS_LOG_TO_STDOUT'].present?
+    logger           = ActiveSupport::Logger.new(STDOUT)
+    logger.formatter = config.log_formatter
+    config.logger    = ActiveSupport::TaggedLogging.new(logger)
+  end
     
-              theme.create!
-          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
-                             ' is ready for you in #{theme.path.to_s.cyan}!'
-          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
-        end
-        # rubocop:enable Metrics/AbcSize
+        def find_app_tester(email: nil, app: nil)
+      tester = app.get_beta_testers(filter: { email: email }, includes: 'apps,betaTesterMetrics,betaGroups').first
+    
+              @client = Faraday.new(hostname, options) do |c|
+            c.response(:json, content_type: /\bjson$/)
+            c.response(:xml, content_type: /\bxml$/)
+            c.response(:plist, content_type: /\bplist$/)
+            c.use(FaradayMiddleware::RelsMiddleware)
+            c.adapter(Faraday.default_adapter)
+            c.headers['Authorization'] = 'Bearer #{token.text}'
+    
+            return type_instance
+      end
+    
+            resps = Spaceship::ConnectAPI.get_beta_groups(filter: filter, includes: includes, limit: limit, sort: sort).all_pages
+        return resps.map(&:to_models).flatten
       end
     end
   end
 end
 
     
-            def log_error(error)
-          Jekyll.logger.error 'LiveReload experienced an error. ' \
-            'Run with --trace for more information.'
-          raise error
+      it 'renders a user's story successfully' do
+    expect(get: '/ben/this-is-a-slug').to route_to(
+      controller: 'stories',
+      action: 'show',
+      slug: 'this-is-a-slug',
+      username: 'ben',
+    )
+  end
+    
+        shared_context 'when user/organization articles exist' do
+      let(:organization) { create(:organization) }
+      let!(:user_article) { create(:article, user_id: user.id) }
+      let!(:organization_article) { create(:article, organization_id: organization.id) }
+    end
+    
+      def self.send_to_buffer(text, buffer_profile_id_code)
+    client = Buffer::Client.new(ApplicationConfig['BUFFER_ACCESS_TOKEN'])
+    client.create_update(
+      body: {
+        text:
+        text,
+        profile_ids: [
+          buffer_profile_id_code,
+        ]
+      },
+    )
+  end
+    
+          now = Time.current
+      @user.onboarding_package_requested_again = true if @user.onboarding_package_requested
+      @user.onboarding_package_requested = true
+      @user.onboarding_package_form_submmitted_at = now
+      @user.personal_data_updated_at = now
+      @user.shipping_validated_at = now if user_params[:shipping_validated] == '1'
+      if @user.save!
+        format.html { redirect_to '/freestickers/edit' }
+        format.json { render :show, status: :ok, location: @user }
+      else
+        format.html { render :edit }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+    
+      describe '#dependencies' do
+    it_behaves_like :Default, description.gsub(/^#/, '').to_sym, []
+    it_behaves_like :Mutator, description.gsub(/^#/, '').to_sym
+  end
+    
+      def add_path(tar, tar_path, path)
+    stat = File.lstat(path)
+    if stat.directory?
+      tar.mkdir(tar_path, stat.mode)
+    elsif stat.symlink?
+      tar.add_symlink(tar_path, File.readlink(path), stat.mode)
+    else
+      tar.add_file_simple(tar_path, stat.mode, stat.size) do |io|
+        File.open(path) do |fd|
+          chunk = nil
+          size = 0
+          while chunk = fd.read(16384) do
+            size += io.write(chunk)
+          end
+          if size != stat.size
+            raise 'Failed to add #{path} to the archive; expected to ' +
+                  'write #{stat.size} bytes, only wrote #{size}'
+          end
+        end
+      end # tar.tar.add_file_simple
+    end
+  end # def add_path
+    
+      def self.default_prefix
+    npm_prefix = safesystemout('npm', 'prefix', '-g').chomp
+    if npm_prefix.count('\n') > 0
+      raise FPM::InvalidPackageConfiguration, '`npm prefix -g` returned unexpected output.'
+    elsif !File.directory?(npm_prefix)
+      raise FPM::InvalidPackageConfiguration, '`npm prefix -g` returned a non-existent directory'
+    end
+    logger.info('Setting default npm install prefix', :prefix => npm_prefix)
+    npm_prefix
+  end
+    
+        # Final format of manifest
+    safesystem('pkgfmt', manifest_fn)
+    
+        # Remove the stuff we don't want
+    delete_these = ['.depdb', '.depdblock', '.filemap', '.lock', '.channel', 'cache', 'temp', 'download', '.channels', '.registry']
+    Find.find(staging_path) do |path|
+      if File.file?(path)
+        logger.info('replacing staging_path in file', :replace_in => path, :staging_path => staging_path)
+        begin
+          content = File.read(path).gsub(/#{Regexp.escape(staging_path)}/, '')
+          File.write(path, content)
+        rescue ArgumentError => e
+          logger.warn('error replacing staging_path in file', :replace_in => path, :error => e)
         end
       end
-    end
-  end
-end
-
-    
-      def delete_target_file?
-    return true if overwrite?
-    puts('File #{target_file} exist, do you want to overwrite it? (Y/N)')
-    ( 'y' == STDIN.gets.strip.downcase ? true : false)
-  end
-    
-        def load_locale!
-      require 'i18n'
-      I18n.enforce_available_locales = true
-      I18n.load_path << LogStash::Environment.locales_path('en.yml')
-      I18n.reload!
-      fail 'No locale? This is a bug.' if I18n.available_locales.empty?
+      FileUtils.rm_r(path) if delete_these.include?(File.basename(path))
     end
     
-        class << self
-      def elastic_pack_base_uri
-        env_url = ENV['LOGSTASH_PACK_URL']
-        (env_url.nil? || env_url.empty?) ? DEFAULT_PACK_URL : env_url
+        File.write(build_path('packlist'), files.sort.join('\n'))
+    
+        platforms.each do |platform|
+      logger.info('Generating service manifest.', :platform => platform.class.name)
+      platform.program = command.first
+      platform.name = attributes[:pleaserun_name]
+      platform.args = command[1..-1]
+      platform.description = if attributes[:description_given?]
+        attributes[:description]
+      else
+        platform.name
       end
-    
-        it 'allows #via to point to same Redi' do
-      conn = MiniTest::Mock.new
-      conn.expect(:multi, [0, 1])
-      sharded_pool = ConnectionPool.new(size: 1) { conn }
-      Sidekiq::Client.via(sharded_pool) do
-        Sidekiq::Client.via(sharded_pool) do
-          CWorker.perform_async(1,2,3)
+      pleaserun_attributes.each do |attribute_name|
+        attribute = 'pleaserun_#{attribute_name}'.to_sym
+        if attributes.has_key?(attribute) and not attributes[attribute].nil?
+          platform.send('#{attribute_name}=', attributes[attribute])
         end
       end
-      conn.verify
+    
+      # Helper for group lookup
+  def gid2group(gid)
+    begin
+      grent = Etc.getgrgid(gid)
+      return grent.name
+    rescue ArgumentError => e
+      # Invalid user id? No user? Return the uid.
+      logger.warn('Failed to find group for gid #{gid}')
+      return gid.to_s
     end
+  end # def uid2user
+end # class FPM::Target::Puppet
     
-        it 'logs the exception to Sidekiq.logger' do
-      Component.new.invoke_exception(:a => 1)
-      @str_logger.rewind
-      log = @str_logger.readlines
-      assert_match(/'a':1/, log[0], 'didn't include the context')
-      assert_match(/Something didn't work!/, log[1], 'didn't include the exception message')
-      assert_match(/test\/test_exception_handler.rb/, log[2], 'didn't include the backtrace')
+        begin
+      json_test_code = [
+        'try:',
+        '  import json',
+        'except ImportError:',
+        '  import simplejson as json'
+      ].join('\n')
+      safesystem('#{attributes[:python_bin]} -c '#{json_test_code}'')
+    rescue FPM::Util::ProcessFailed => e
+      logger.error('Your python environment is missing json support (either json or simplejson python module). I cannot continue without this.', :python => attributes[:python_bin], :error => e)
+      raise FPM::Util::ProcessFailed, 'Python (#{attributes[:python_bin]}) is missing simplejson or json modules.'
     end
-    
-          @retry = Sidekiq::RetrySet.new
-      @scheduled = Sidekiq::ScheduledSet.new
-      @poller = Sidekiq::Scheduled::Poller.new
-    end
-    
-        it 'disables testing in a block' do
-      Sidekiq::Testing.fake!
-      assert Sidekiq::Testing.fake?
-    
-      context 'called with null values' do
-    it 'writes rules for other three' do
-      ruleset = 'border-top-style: inset; ' +
-                'border-right-style: none; ' +
-                'border-left-style: double;'
-      bad_rule = 'border-bottom-style: null;'
-    
-      context 'called with arguments (1, $ratio: $golden-ratio)' do
-    it 'output the first value from the golden ratio scale' do
-      expect('.one-golden-ratio').to have_rule('font-size: 1.618em')
-    end
-  end
-    
-      context 'called with two sizes' do
-    it 'applies to alternating sides' do
-      ruleset = 'position: absolute; ' +
-                'top: 2px; ' +
-                'right: 3px; ' +
-                'bottom: 2px; ' +
-                'left: 3px;'
-    
-      context 'called with multiple prefixes' do
-    it 'applies the prefixes to the property' do
-      rule = '-moz-appearance: none; ' +
-             '-ms-appearance: none; ' +
-             'appearance: none;'
