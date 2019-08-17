@@ -1,177 +1,89 @@
 
         
-        
-class HitCounts(MRJob):
+                if not any(os.path.isfile('%s/certutil' % x) for x in os.environ['PATH'].split(os.pathsep)):
+            xlog.warn('please install *libnss3-tools* package to import GoAgent root ca')
+            return False
     
-        def remove(self, key):
-        hash_index = self._hash_function(key)
-        for index, item in enumerate(self.table[hash_index]):
-            if item.key == key:
-                del self.table[hash_index][index]
-                return
-        raise KeyError('Key not found')
+            self.lock = threading.Lock()
+    
+    
+    def substring(self, start, stop):
+        '''
+        For infinite streams, you don't need this; primarily I'm providing
+        a useful interface for action code.  Just make sure actions don't
+        use this on streams that don't support it.
+        '''
+    
+    # PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
+# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
+# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
+    
+        # Return the result as json
+    result = {
+        'face_found_in_image': face_found,
+        'is_picture_of_obama': is_obama
+    }
+    return jsonify(result)
+    
+        for face_location in face_locations:
+        print_result(image_to_check, face_location)
+    
+    import face_recognition
+import picamera
+import numpy as np
+    
+                for face_location in face_locations:
+                # Print the location of each face in this frame
+                top, right, bottom, left = face_location
+                print(' - A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
+    
+        raw_detections_batched = _raw_face_locations_batched(images, number_of_times_to_upsample, batch_size)
+    
+            # Hit 'q' on the keyboard to quit!
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            Global.is_exit = True
+            break
+    
+    import face_recognition
+from flask import Flask, jsonify, request, redirect
+    
+        author = proj_info['author'],
+    author_email = proj_info['author_email'],
+    url = proj_info['url'],
+    license = proj_info['license'],
+    
+        stream_types = [  #this is just a sample. Will make it in prepare()
+        # {'id': '1080'},
+        # {'id': '720'},
+        # {'id': '360'},
+        # {'id': '288'},
+        # {'id': '190'},
+        # {'id': '180'},
+        
+    ]
+    
+    site_info = 'Dailymotion.com'
+download = dailymotion_download
+download_playlist = playlist_not_supported('dailymotion')
 
     
-        def __init__(self, url, contents, child_urls):
-        self.url = url
-        self.contents = contents
-        self.child_urls = child_urls
-        self.signature = self.create_signature()
+    #----------------------------------------------------------------------
+def makeMimi(upid):
+    '''From http://cdn37.atwikiimg.com/sitescript/pub/dksitescript/FC2.site.js
+    Also com.hps.util.fc2.FC2EncrptUtil.makeMimiLocal
+    L110'''
+    strSeed = 'gGddgPfeaf_gzyr'
+    prehash = upid + '_' + strSeed
+    return md5(prehash.encode('utf-8')).hexdigest()
     
-      x_embedding_id = tf.squeeze(features['x_embedding_id'], [-1])
-  y_embedding_id = tf.squeeze(features['y_embedding_id'], [-1])
-  nc_embedding_id = tf.squeeze(features['nc_embedding_id'], [-1])
-  labels = tf.squeeze(features['rel_id'], [-1])
-  path_counts = tf.to_float(tf.reshape(features['counts'], [batch_size, -1]))
-    
-      path_to_index = {p: i for i, p in enumerate(vocab)}
-  return embeddings, path_to_index
-    
-        return nested_vars_dict
+        roidb = json_dataset.get_roidb()
+    for i, entry in enumerate(roidb):
+        im_name = entry['image']
     
     
-class IntegrationToBoundModel:
-  def __init__(self, N):
-    scale = 0.8 / float(N**0.5)
-    self.N = N
-    self.Wh_nxn = tf.Variable(tf.random_normal([N, N], stddev=scale))
-    self.b_1xn = tf.Variable(tf.zeros([1, N]))
-    self.Bu_1xn = tf.Variable(tf.zeros([1, N]))
-    self.Wro_nxo = tf.Variable(tf.random_normal([N, 1], stddev=scale))
-    self.bro_o = tf.Variable(tf.zeros([1]))
-    
-        # Convert indices to vocab_size dimensions.
-    new_arr_batch[np.arange(sequence_length), indices_batch] = 1
-  return new_arr
-    
-    versions_info['versions'][version] = new_version
-versions_info['latest'] = version
-    
-        out = bug_text + dev_text
-    
-    
-class IqiyiIEWithCredentials(IqiyiIE):
-    def _get_login_info(self):
-        return 'foo', 'bar'
-    
-    
-class TestMultipleSocks(unittest.TestCase):
-    @staticmethod
-    def _check_params(attrs):
-        params = get_params()
-        for attr in attrs:
-            if attr not in params:
-                print('Missing %s. Skipping.' % attr)
-                return
-        return params
-    
-    import time
-import datetime
-    
-    
-def main():
-    argument_spec = ec2_argument_spec()
-    argument_spec.update(dict(
-        state=dict(required=True, choices=['present', 'absent']),
-        name=dict(required=True),
-        description=dict(required=False),
-        subnets=dict(required=False, type='list'),
-    )
-    )
-    module = AnsibleModule(argument_spec=argument_spec)
-    
-    from ansible.module_utils.aws.core import AnsibleAWSModule
-from ansible.module_utils.ec2 import camel_dict_to_snake_dict, get_aws_connection_info, boto3_conn
-import json
-import datetime
-import sys
-import re
-    
-    - oneandone_firewall_policy:
-    auth_token: oneandone_private_api_key
-    state: absent
-    name: ansible-firewall-policy
-    
-    from ansible.module_utils.opennebula import OpenNebulaModule
-    
-        module = AnsibleModule(
-        argument_spec=dict(
-            component=dict(required=True, aliases=['name']),
-            version=dict(required=True),
-            token=dict(required=True, no_log=True),
-            state=dict(required=True, choices=['started', 'finished', 'failed']),
-            hosts=dict(required=False, default=[socket.gethostname()], aliases=['host']),
-            env=dict(required=False),
-            owner=dict(required=False),
-            description=dict(required=False),
-            message=dict(required=False),
-            source_system=dict(required=False, default='ansible'),
-            validate_certs=dict(default='yes', type='bool'),
-            url=dict(required=False, default='https://api.bigpanda.io'),
-        ),
-        supports_check_mode=True,
-    )
-    
-            followed_count += 1
-    
-    # Optional dataset entry keys
-_IM_PREFIX = 'image_prefix'
-_DEVKIT_DIR = 'devkit_directory'
-_RAW_DIR = 'raw_dir'
-    
-        return roidb
-    
-    
-def add_stage(
-    model,
-    prefix,
-    blob_in,
-    n,
-    dim_in,
-    dim_out,
-    dim_inner,
-    dilation,
-    stride_init=2
-):
-    '''Add a ResNet stage to the model by stacking n residual blocks.'''
-    # e.g., prefix = res2
-    for i in range(n):
-        blob_in = add_residual_block(
-            model,
-            '{}_{}'.format(prefix, i),
-            blob_in,
-            dim_in,
-            dim_out,
-            dim_inner,
-            dilation,
-            stride_init,
-            # Not using inplace for the last block;
-            # it may be fetched externally or used by FPN
-            inplace_sum=i < n - 1
-        )
-        dim_in = dim_out
-    return blob_in, dim_in
-    
-    
-def add_fast_rcnn_losses(model):
-    '''Add losses for RoI classification and bounding box regression.'''
-    cls_prob, loss_cls = model.net.SoftmaxWithLoss(
-        ['cls_score', 'labels_int32'], ['cls_prob', 'loss_cls'],
-        scale=model.GetLossScale()
-    )
-    loss_bbox = model.net.SmoothL1Loss(
-        [
-            'bbox_pred', 'bbox_targets', 'bbox_inside_weights',
-            'bbox_outside_weights'
-        ],
-        'loss_bbox',
-        scale=model.GetLossScale()
-    )
-    loss_gradients = blob_utils.get_loss_gradients(model, [loss_cls, loss_bbox])
-    model.Accuracy(['cls_prob', 'labels_int32'], 'accuracy_cls')
-    model.AddLosses(['loss_cls', 'loss_bbox'])
-    model.AddMetrics('accuracy_cls')
-    return loss_gradients
+# ---------------------------------------------------------------------------- #
+# Box heads
+# ---------------------------------------------------------------------------- #
     
     
 def _ratio_enum(anchor, ratios):
@@ -185,96 +97,199 @@ def _ratio_enum(anchor, ratios):
     return anchors
     
     
-def fpn_rpn(model):
-    logger.warn(
-        'Deprecated: use `MODEL.TYPE: generalized_rcnn` with '
-        '`MODEL.RPN_ONLY: True` and FPN enabled via configs'
-    )
-    return generalized_rcnn(model)
+_RENAME = {
+    # Removed 'ResNet_' from the name because it wasn't relevent
+    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v1up4convs':
+        'mask_rcnn_heads.mask_rcnn_fcn_head_v1up4convs',
+    # Removed 'ResNet_' from the name because it wasn't relevent
+    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v1up':
+        'mask_rcnn_heads.mask_rcnn_fcn_head_v1up',
+    # Removed 'ResNet_' from the name because it wasn't relevent
+    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v0upshare':
+        'mask_rcnn_heads.mask_rcnn_fcn_head_v0upshare',
+    # Removed 'ResNet_' from the name because it wasn't relevent
+    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v0up':
+        'mask_rcnn_heads.mask_rcnn_fcn_head_v0up',
+    # Removed head_builder module in favor of the more specific fast_rcnn name
+    'head_builder.add_roi_2mlp_head':
+        'fast_rcnn_heads.add_roi_2mlp_head',
+}
     
     
-def _add_allreduce_graph(model):
-    '''Construct the graph that performs Allreduce on the gradients.'''
-    # Need to all-reduce the per-GPU gradients if training with more than 1 GPU
-    all_params = model.TrainableParams()
-    assert len(all_params) % cfg.NUM_GPUS == 0
-    # The model parameters are replicated on each GPU, get the number
-    # distinct parameter blobs (i.e., the number of parameter blobs on
-    # each GPU)
-    params_per_gpu = int(len(all_params) / cfg.NUM_GPUS)
-    with c2_utils.CudaScope(0):
-        # Iterate over distinct parameter blobs
-        for i in range(params_per_gpu):
-            # Gradients from all GPUs for this parameter blob
-            gradients = [
-                model.param_to_grad[p] for p in all_params[i::params_per_gpu]
+def get_fast_rcnn_blob_names(is_training=True):
+    '''Fast R-CNN blob names.'''
+    # rois blob: holds R regions of interest, each is a 5-tuple
+    # (batch_idx, x1, y1, x2, y2) specifying an image batch index and a
+    # rectangle (x1, y1, x2, y2)
+    blob_names = ['rois']
+    if is_training:
+        # labels_int32 blob: R categorical labels in [0, ..., K] for K
+        # foreground classes plus background
+        blob_names += ['labels_int32']
+    if is_training:
+        # bbox_targets blob: R bounding-box regression targets with 4
+        # targets per class
+        blob_names += ['bbox_targets']
+        # bbox_inside_weights blob: At most 4 targets per roi are active
+        # this binary vector sepcifies the subset of active targets
+        blob_names += ['bbox_inside_weights']
+        blob_names += ['bbox_outside_weights']
+    if is_training and cfg.MODEL.MASK_ON:
+        # 'mask_rois': RoIs sampled for training the mask prediction branch.
+        # Shape is (#masks, 5) in format (batch_idx, x1, y1, x2, y2).
+        blob_names += ['mask_rois']
+        # 'roi_has_mask': binary labels for the RoIs specified in 'rois'
+        # indicating if each RoI has a mask or not. Note that in some cases
+        # a *bg* RoI will have an all -1 (ignore) mask associated with it in
+        # the case that no fg RoIs can be sampled. Shape is (batchsize).
+        blob_names += ['roi_has_mask_int32']
+        # 'masks_int32' holds binary masks for the RoIs specified in
+        # 'mask_rois'. Shape is (#fg, M * M) where M is the ground truth
+        # mask size.
+        blob_names += ['masks_int32']
+    if is_training and cfg.MODEL.KEYPOINTS_ON:
+        # 'keypoint_rois': RoIs sampled for training the keypoint prediction
+        # branch. Shape is (#instances, 5) in format (batch_idx, x1, y1, x2,
+        # y2).
+        blob_names += ['keypoint_rois']
+        # 'keypoint_locations_int32': index of keypoint in
+        # KRCNN.HEATMAP_SIZE**2 sized array. Shape is (#instances). Used in
+        # SoftmaxWithLoss.
+        blob_names += ['keypoint_locations_int32']
+        # 'keypoint_weights': weight assigned to each target in
+        # 'keypoint_locations_int32'. Shape is (#instances). Used in
+        # SoftmaxWithLoss.
+        blob_names += ['keypoint_weights']
+        # 'keypoint_loss_normalizer': optional normalization factor to use if
+        # cfg.KRCNN.NORMALIZE_BY_VISIBLE_KEYPOINTS is False.
+        blob_names += ['keypoint_loss_normalizer']
+    if cfg.FPN.FPN_ON and cfg.FPN.MULTILEVEL_ROIS:
+        # Support for FPN multi-level rois without bbox reg isn't
+        # implemented (... and may never be implemented)
+        k_max = cfg.FPN.ROI_MAX_LEVEL
+        k_min = cfg.FPN.ROI_MIN_LEVEL
+        # Same format as rois blob, but one per FPN level
+        for lvl in range(k_min, k_max + 1):
+            blob_names += ['rois_fpn' + str(lvl)]
+        blob_names += ['rois_idx_restore_int32']
+        if is_training:
+            if cfg.MODEL.MASK_ON:
+                for lvl in range(k_min, k_max + 1):
+                    blob_names += ['mask_rois_fpn' + str(lvl)]
+                blob_names += ['mask_rois_idx_restore_int32']
+            if cfg.MODEL.KEYPOINTS_ON:
+                for lvl in range(k_min, k_max + 1):
+                    blob_names += ['keypoint_rois_fpn' + str(lvl)]
+                blob_names += ['keypoint_rois_idx_restore_int32']
+    return blob_names
+    
+        # Create a blob to hold the input images
+    blob = blob_utils.im_list_to_blob(processed_ims)
+    
+        retnet_roi_fg_bbox_locs -> for the bbox regression, since we are only
+                               interested in regressing on fg bboxes which are
+                               M in number and the output prediction of the network
+                               is of shape N x (A * 4) x H x W
+                               (in case of non class-specific bbox), so we
+                               store the locations of positive fg boxes in this
+                               blob retnet_roi_fg_bbox_locs of shape M x 4 where
+                               each row looks like: [img_id, anchor_id, x_loc, y_loc]
+    '''
+    # im_info: (height, width, image scale)
+    blob_names = ['im_info']
+    assert cfg.FPN.FPN_ON, 'RetinaNet uses FPN for dense detection'
+    # Same format as RPN blobs, but one per FPN level
+    if is_training:
+        blob_names += ['retnet_fg_num', 'retnet_bg_num']
+        for lvl in range(cfg.FPN.RPN_MIN_LEVEL, cfg.FPN.RPN_MAX_LEVEL + 1):
+            suffix = 'fpn{}'.format(lvl)
+            blob_names += [
+                'retnet_cls_labels_' + suffix,
+                'retnet_roi_bbox_targets_' + suffix,
+                'retnet_roi_fg_bbox_locs_' + suffix,
             ]
-            if len(gradients) > 0:
-                if cfg.USE_NCCL:
-                    model.net.NCCLAllreduce(gradients, gradients)
-                else:
-                    muji.Allreduce(model.net, gradients, reduced_affix='')
+    return blob_names
     
-    from detectron.datasets import json_dataset
-from detectron.datasets import roidb as roidb_utils
-from detectron.utils import blob as blob_utils
-import detectron.roi_data.fast_rcnn as fast_rcnn_roi_data
+      current_buffer = VimBuffer( 'buffer',
+                              contents = [ 'te' ],
+                              filetype = FILETYPE,
+                              omnifunc = Omnifunc )
     
-        cache_key = str(stride) + str(anchor_sizes) + str(anchor_aspect_ratios)
-    if cache_key in _threadlocal_foa.cache:
-        return _threadlocal_foa.cache[cache_key]
-    
-        if fg_inds.shape[0] > 0:
-        # Class labels for the foreground rois
-        mask_class_labels = blobs['labels_int32'][fg_inds]
-        masks = blob_utils.zeros((fg_inds.shape[0], M**2), int32=True)
-    
-            if self.done is not None and not self.done and self.steps > 0:
-            raise error.Error('Tried to reset environment which is not done. While the monitor is active for {}, you cannot call reset() unless the episode is over.'.format(self.env_id))
-    
-            obser, r, done, info = env.step(a)
-        if r != 0:
-            print('reward %0.3f' % r)
-        total_reward += r
-        window_still_open = env.render()
-        if window_still_open==False: return False
-        if done: break
-        if human_wants_restart: break
-        while human_sets_pause:
-            env.render()
-            time.sleep(0.1)
-        time.sleep(0.1)
-    print('timesteps %i reward %0.2f' % (total_timesteps, total_reward))
-    
-    # Top-down car dynamics simulation.
-#
-# Some ideas are taken from this great tutorial http://www.iforce2d.net/b2dtut/top-down-car by Chris Campbell.
-# This simulation is a bit more detailed, with wheels rotation.
-#
-# Created by Oleg Klimov. Licensed on the same terms as the rest of OpenAI Gym.
+            vimsupport.ReplaceChunks(
+          self._response[ 'fixits' ][ fixit_index ][ 'chunks' ],
+          silent = self._command == 'Format' )
+      except RuntimeError as e:
+        vimsupport.PostVimMessage( str( e ) )
     
     
-class ShutdownException(Exception):
-    pass
+  def Start( self ):
+    request_data = BuildRequestData()
+    if self._extra_data:
+      request_data.update( self._extra_data )
+    self._response = self.PostDataToHandler( request_data,
+                                             'debug_info',
+                                             display_message = False )
     
-        def download_all(self, version):
-        files = {
-            'docker-compose-Darwin-x86_64': None,
-            'docker-compose-Linux-x86_64': None,
-            'docker-compose-Windows-x86_64.exe': None,
+        if self._response_future is None:
+      # First poll
+      self._SendRequest()
+      return True
+    
+    
+  def Start( self ):
+    self.PostDataToHandler( {},
+                            'shutdown',
+                            TIMEOUT_SECONDS,
+                            display_message = False )
+    
+    
+# This class can be used to keep the ycmd server alive for the duration of the
+# life of the client. By default, ycmd shuts down if it doesn't see a request in
+# a while.
+class YcmdKeepalive( object ):
+  def __init__( self, ping_interval_seconds = 60 * 10 ):
+    self._keepalive_thread = Thread( target = self._ThreadMain )
+    self._keepalive_thread.daemon = True
+    self._ping_interval_seconds = ping_interval_seconds
+    
+            Schedules the callable to be executed as fn(*args, **kwargs) and returns
+        a Future instance representing the execution of the callable.
+    
+        Here `srv` is the user under which the cheat.sh server was running
+    '''
+    
+    import sys
+import os
+from .git_adapter import GitRepositoryAdapter
+    
+        def _get_page(self, topic, request_options=None):
+        '''
+        Go through pages/{common,linux,osx,sunos,windows}/
+        and as soon as anything is found, format and return it.
+        '''
+    
+        def test_tls_client_and_ca_explicit(self):
+        options = {
+            '--tlscert': self.client_cert, '--tlskey': self.key,
+            '--tlsverify': True, '--tlscacert': self.ca_cert,
+            '--tls': True
         }
+        result = tls_config_from_options(options)
+        assert isinstance(result, docker.tls.TLSConfig)
+        assert result.cert == (options['--tlscert'], options['--tlskey'])
+        assert result.ca_cert == options['--tlscacert']
+        assert result.verify is True
     
-        @no_cluster('inspect volume by name defect on Swarm Classic')
-    def test_exists_external_aliased(self):
-        vol = self.create_volume('volume01', external='composetest_alias01')
-        assert vol.exists() is False
-        vol.create()
-        assert vol.exists() is True
+            assert 'option 'com.docker.network.driver.foo' has changed' in str(e.value)
     
-        def test_format_return(self):
-        expected = repr({'Id': 'ok'})
-        actual = verbose_proxy.format_return({'Id': 'ok'}, 2)
-        assert expected == actual
+            if item.is_stop and not cascade_stop:
+            continue
     
     
-class ParallelTest(unittest.TestCase):
+VERSION_EXPLANATION = (
+    'You might be seeing this error because you\'re using the wrong Compose file version. '
+    'Either specify a supported version (e.g '2.2' or '3.3') and place '
+    'your service definitions under the `services` key, or omit the `version` key '
+    'and place your service definitions at the root of the file to use '
+    'version 1.\nFor more on the Compose file format versions, see '
+    'https://docs.docker.com/compose/compose-file/')
