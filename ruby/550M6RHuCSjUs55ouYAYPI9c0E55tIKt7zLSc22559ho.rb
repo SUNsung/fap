@@ -1,229 +1,194 @@
 
         
-          #
-  # Returns the connection oriented general handler type, in this case bind.
-  #
-  def self.general_handler_type
-    'bind'
-  end
+              def bump_version(bump_type)
+        UI.user_error!('Do not support bump of 'appendix', please use `update_version_appendix(appendix)` instead') if bump_type == 'appendix'
     
-          # block comment awareness
-      if ln =~ /^=end$/
-        in_comment = false
-        next
-      end
-      in_comment = true if ln =~ /^=begin$/
-      next if in_comment
-    
-      def initialize(info = {})
-    super(merge_info(info,
-      'Name'          => 'Unix Command Shell, Reverse TCP (/dev/tcp)',
-      'Description'   => %q{
-        Creates an interactive shell via bash's builtin /dev/tcp.
-    }
-    
-        # default chunk sizes (if chunked is used)
-    self.chunk_min_size = 1
-    self.chunk_max_size = 10
-    
-    # Default timings
-IAX_DEFAULT_REG_REFRESH = 60
-IAX_DEFAULT_TIMEOUT     = 10
-    
-    require 'rex/proto/ipmi/utils'
-    
-    
-  # open rmcpplus_request with cipherzero
-  def self.create_ipmi_session_open_cipher_zero_request(console_session_id)
-    head = [
-      0x06, 0x00, 0xff, 0x07,   # RMCP Header
-      0x06,                     # RMCP+ Authentication Type
-      PAYLOAD_RMCPPLUSOPEN_REQ, # Payload Type
-      0x00, 0x00, 0x00, 0x00,   # Session ID
-      0x00, 0x00, 0x00, 0x00    # Sequence Number
-    ].pack('C*')
-    
-        def pos=(i)
-      @s.pos = str_to_byte_pos i
-      i
-    end
-    
-        it { expect(alias_node.is_a?(described_class)).to be(true) }
-  end
-    
-      describe '#body' do
-    context 'with a single expression body' do
-      let(:source) do
-        'class << self; bar; end'
+        def run(path, color = nil)
+      unless color
+        color = Frameit::Color::BLACK
+        color = Frameit::Color::SILVER if Frameit.config[:white] || Frameit.config[:silver]
+        color = Frameit::Color::GOLD if Frameit.config[:gold]
+        color = Frameit::Color::ROSE_GOLD if Frameit.config[:rose_gold]
       end
     
-          let(:expected_source) { <<-RUBY }
-        def some_method(foo,
-            _bar)
-          puts foo
-        end
-      RUBY
-    
-      context 'when private_class_method is used with arguments' do
-    it 'does not register an offense' do
-      expect_no_offenses(<<~RUBY)
-        class SomeClass
-          private_class_method def self.some_method
-            puts 10
-          end
-        end
-      RUBY
-    end
-  end
-    
-      context 'when a keyword splat method argument is not used' do
-    it 'accepts' do
-      expect_no_offenses(<<~RUBY)
-        def some_method(name: value, **rest_keywords)
-        end
-      RUBY
-    end
-  end
-    
-              return false unless last_children&.send_type?
-    
-          # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
-      def left_shift int, shift
-        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
-        # 1>>31, 2**32
-        (r & 2147483648) == 0 ? r : r - 4294967296
-      end
-    
-          def bar_side
-        @bar_side.to_s
-      end
-    
-        assert last_response.ok?
-    
-    context 'Precious::Views::LatestChanges' do
-  include Rack::Test::Methods
-  
-  def app
-    Precious::App
-  end
-  
-  setup do
-    @path = cloned_testpath('examples/lotr.git')
-    @wiki = Gollum::Wiki.new(@path)
-    Precious::App.set(:gollum_path, @path)
-    Precious::App.set(:wiki_options, {:latest_changes_count => 10})
-  end
-    
-      teardown do
-    FileUtils.rm_rf(@path)
-  end
-    
-    def gemspec_file
-  '#{name}.gemspec'
-end
-    
-      s.require_paths = %w[lib]
-    
-        def create_eligible_credit_event
-      # When cancelling an order, a payment with the negative amount
-      # of the payment total is created to refund the customer. That
-      # payment has a source of itself (Spree::Payment) no matter the
-      # type of payment getting refunded, hence the additional check
-      # if the source is a store credit.
-      return unless store_credit? && source.is_a?(Spree::StoreCredit)
-    
-          def gateway_options
-        order.reload
-        gateway_options_class.new(self).to_hash
-      end
-    
-                it 'deducts the default VAT from the cost' do
-              shipping_rates = subject.shipping_rates(package)
-              # deduct default vat: 4.00 / 1.2 = 3.33 (rounded)
-              expect(shipping_rates.first.cost).to eq(3.33)
+                  # Creates the mapping for a bundle identifier and profile specifier/uuid
+              if has_profile_specifier
+                provisioning_profile_mapping[bundle_identifier] = provisioning_profile_specifier
+              elsif has_profile_uuid
+                provisioning_profile_mapping[bundle_identifier] = provisioning_profile_uuid
+              end
             end
-          end
     
-          before_action :set_content_type
-      before_action :load_user
-      before_action :authorize_for_order, if: proc { order_token.present? }
-      before_action :authenticate_user
-      before_action :load_user_roles
+      describe '#detect_project_profile_mapping' do
+    it 'returns the mapping of the selected provisioning profiles', requires_xcode: true do
+      workspace_path = 'gym/spec/fixtures/projects/cocoapods/Example.xcworkspace'
+      project = FastlaneCore::Project.new({
+        workspace: workspace_path
+      })
+      csm = Gym::CodeSigningMapping.new(project: project)
+      expect(csm.detect_project_profile_mapping).to eq({ 'family.wwdc.app' => 'match AppStore family.wwdc.app', 'family.wwdc.app.watchkitapp' => 'match AppStore family.wwdc.app.watchkitapp', 'family.wwdc.app.watchkitapp.watchkitextension' => 'match AppStore family.wwdc.app.watchkitappextension' })
+    end
     
-            def new
-          @payment_methods = Spree::PaymentMethod.available
-          respond_with(@payment_methods)
+            containing = File.expand_path(Snapshot.config[:buildlog_path])
+        FileUtils.mkdir_p(containing)
+    
+            def read(path)
+          blob = @repository.blob_at(@commit.id, path) if @commit
+          raise FileNotFoundError if blob.nil?
+    
+      def notification_service
+    @notification_service ||= NotificationService.new
+  end
+end
+
+    
+        def aes256_gcm_decrypt(value)
+      return unless value
+    
+            if options.valid_within && (Time.now.to_i - @decoded['iat']).abs > options.valid_within.to_i
+          raise ClaimInvalid, ''iat' timestamp claim is too skewed from present'
         end
     
-    require 'minitest/autorun'
+              @diffable = diffable
+          @include_stats = diff_options.delete(:include_stats)
+          @project = project
+          @diff_options = diff_options
+          @diff_refs = diff_refs
+          @fallback_diff_refs = fallback_diff_refs
+          @repository = project.repository
+        end
     
-          q = Sidekiq::Queue.new('foo')
-      job = q.first
-      assert_equal 'foo', job['queue']
-      assert_equal 12, job['retry']
+          subject.diff_files
     end
     
-        assert_nil dead_set.find_job('000101')
-    assert dead_set.find_job('000102')
-    assert dead_set.find_job('000103')
+      def self.move_cursor_up(val)
+    if val > 0
+      @@SetConsoleCursorPosition.call(@@hConsoleHandle, (cursor_pos.y - val) * 65536 + cursor_pos.x)
+    elsif val < 0
+      move_cursor_down(-val)
+    end
+  end
+    
+      def test_functions
+    assert_equal (1),                                          CMath.exp(0)
+    assert_in_delta (-1.1312043837568135+2.4717266720048188i), CMath.exp(1+2i)
+    assert_in_delta (-1),                                      CMath.exp(Math::PI.i)
+    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.exp('0') }
+    
+      it 'returns nil at the end of the stream' do
+    gz = Zlib::GzipReader.new @io
+    gz.read
+    pos = gz.pos
+    gz.getc.should be_nil
+    gz.pos.should == pos
+  end
+    
+      before :each do
+    @data = '12345abcde'
+    @zip = [31, 139, 8, 0, 44, 220, 209, 71, 0, 3, 51, 52, 50, 54, 49, 77,
+            76, 74, 78, 73, 5, 0, 157, 5, 0, 36, 10, 0, 0, 0].pack('C*')
+    @io = StringIO.new @zip
+  end
+    
+      it 'calls the given block for each line in the stream, passing the line as an argument' do
+    ScratchPad.record []
+    @gzreader.send(@method) { |b| ScratchPad << b }
+    
+        def gem_config_path(gem_name, relative_config_path)
+      spec = Gem::Specification.find_by_name(gem_name)
+      File.join(spec.gem_dir, relative_config_path)
+    rescue Gem::LoadError => e
+      raise Gem::LoadError,
+            'Unable to find gem #{gem_name}; is the gem installed? #{e}'
+    end
   end
 end
 
     
-      it 'does not support invalid concurrency' do
-    assert_raises(ArgumentError) { new_manager(concurrency: 0) }
-    assert_raises(ArgumentError) { new_manager(concurrency: -1) }
-  end
+          module_function
     
-      describe 'poller' do
-    before do
-      Sidekiq.redis{|c| c.flushdb}
-      @error_1  = { 'class' => ScheduledWorker.name, 'args' => [0], 'queue' => 'queue_1' }
-      @error_2  = { 'class' => ScheduledWorker.name, 'args' => [1], 'queue' => 'queue_2' }
-      @error_3  = { 'class' => ScheduledWorker.name, 'args' => [2], 'queue' => 'queue_3' }
-      @future_1 = { 'class' => ScheduledWorker.name, 'args' => [3], 'queue' => 'queue_4' }
-      @future_2 = { 'class' => ScheduledWorker.name, 'args' => [4], 'queue' => 'queue_5' }
-      @future_3 = { 'class' => ScheduledWorker.name, 'args' => [5], 'queue' => 'queue_6' }
+            def remove_incorrect_closing_paren(node, corrector)
+          corrector.remove(
+            range_between(
+              incorrect_parenthesis_removal_begin(node),
+              incorrect_parenthesis_removal_end(node)
+            )
+          )
+        end
     
-          assert SomeScheduledWorker.perform_in(1.month, 'mike')
-      job = ss.first
-      assert job['created_at']
-      refute job['enqueued_at']
-    end
-  end
-    
-      it 'stubs the async call when in testing mode' do
-    assert InlineWorker.perform_async(true)
-    
-      def perform(msg='lulz you forgot a msg!')
-    $redis.lpush('sinkiq-example-messages', msg)
-  end
-end
-    
-        def synchronize_after?
-      synchronize == 'after'
-    end
-  end
-end
-
-    
-            expect(described_class.directory).to eq described_class.home
-      end
+          expect_offense(<<~RUBY)
+        def method(arg)
+                   ^^^ #{message}
+          1
+        end
+      RUBY
     end
     
-    describe Tmuxinator::Doctor do
-  describe '.installed?' do
-    context 'tmux is installed' do
-      before do
-        allow(Kernel).to receive(:system) { true }
+        it 'does not registers an offense Array.new with block' do
+      expect_no_offenses('test = Array.new { 1 }')
+    end
+    
+    
+    {      # Checks whether the `block` literal is delimited by curly braces.
+      #
+      # @return [Boolean] whether the `block` literal is enclosed in braces
+      def braces?
+        loc.end&.is?('}')
       end
     
-        before do
-      allow(project).to receive_messages(
-        name: 'test',
-        tmux: 'tmux',
-        root: root,
-        root?: root?,
-        base_index: 1
-      )
-    end
+    module RuboCop
+  module AST
+    # A node extension for `hash` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `hash` nodes within RuboCop.
+    class HashNode < Node
+      # Returns an array of all the key value pairs in the `hash` literal.
+      #
+      # @return [Array<PairNode>] an array of `pair` nodes
+      def pairs
+        each_pair.to_a
+      end
+    
+            other_branches = if elsif_conditional?
+                           else_branch.branches
+                         else
+                           [else_branch]
+                         end
+        branches.concat(other_branches)
+      end
+    
+        def set(*args)
+      options = args.extract_options!
+      options.each do |name, value|
+        set_preference name, value
+      end
+    
+              scope = scope.not_deleted unless params[:show_deleted]
+          scope = scope.not_discontinued unless params[:show_discontinued]
+        else
+          scope = Product.accessible_by(current_ability, :show).active.includes(*product_includes)
+        end
+    
+              if @address.update(address_params)
+            respond_with(@address, default_template: :show)
+          else
+            invalid_resource!(@address)
+          end
+        end
+    
+            def find_property
+          @property = Spree::Property.accessible_by(current_ability, :show).find(params[:id])
+        rescue ActiveRecord::RecordNotFound
+          @property = Spree::Property.accessible_by(current_ability, :show).find_by!(name: params[:id])
+        end
+    
+            def show
+          authorize! :admin, ReturnAuthorization
+          @return_authorization = order.return_authorizations.accessible_by(current_ability, :show).find(params[:id])
+          respond_with(@return_authorization)
+        end
+    
+            def show
+          @state = scope.find(params[:id])
+          respond_with(@state)
+        end
