@@ -1,164 +1,289 @@
 
         
-        void convert_dataset(const char* image_filename, const char* label_filename,
-        const char* db_filename) {
-  // Open files
-  std::ifstream image_file(image_filename, std::ios::in | std::ios::binary);
-  std::ifstream label_file(label_filename, std::ios::in | std::ios::binary);
-  CHECK(image_file) << 'Unable to open file ' << image_filename;
-  CHECK(label_file) << 'Unable to open file ' << label_filename;
-  // Read the magic and the meta data
-  uint32_t magic;
-  uint32_t num_items;
-  uint32_t num_labels;
-  uint32_t rows;
-  uint32_t cols;
-    }
+        #include 'KeyChord.g.cpp'
     
-    #endif  // CAFFE_COMMON_HPP_
-
-    
-    
-    {
-  shared_ptr<Caffe::RNG> rng_;
-  Phase phase_;
-  Blob<Dtype> data_mean_;
-  vector<Dtype> mean_values_;
-};
-    
-    /**
- * @brief Get a specific filler from the specification given in FillerParameter.
- *
- * Ideally this would be replaced by a factory pattern, but we will leave it
- * this way for now.
- */
-template <typename Dtype>
-Filler<Dtype>* GetFiller(const FillerParameter& param) {
-  const std::string& type = param.type();
-  if (type == 'constant') {
-    return new ConstantFiller<Dtype>(param);
-  } else if (type == 'gaussian') {
-    return new GaussianFiller<Dtype>(param);
-  } else if (type == 'positive_unitball') {
-    return new PositiveUnitballFiller<Dtype>(param);
-  } else if (type == 'uniform') {
-    return new UniformFiller<Dtype>(param);
-  } else if (type == 'xavier') {
-    return new XavierFiller<Dtype>(param);
-  } else if (type == 'msra') {
-    return new MSRAFiller<Dtype>(param);
-  } else if (type == 'bilinear') {
-    return new BilinearFiller<Dtype>(param);
-  } else {
-    CHECK(false) << 'Unknown filler name: ' << param.type();
-  }
-  return (Filler<Dtype>*)(NULL);
+    MyComputedHashes::Writer::~Writer() {
 }
     
-      virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
+    namespace content {
+class RenderView;
+}
+    
+    base::string16 MenuDelegate::GetLabelForCommandId(int command_id) const {
+  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  return item->label_;
+}
+    
+    
+void MenuItem::UpdateKeys(GtkAccelGroup *gtk_accel_group){
+  this->gtk_accel_group = gtk_accel_group;
+  if (enable_shortcut && GTK_IS_ACCEL_GROUP(gtk_accel_group)){
+    gtk_widget_add_accelerator(
+      menu_item_,
+      'activate',
+      gtk_accel_group,
+      keyval,
+      modifiers_mask,
+      GTK_ACCEL_VISIBLE);
+  }
+  if (submenu_ != NULL){
+    submenu_->UpdateKeys(gtk_accel_group);
+  }
+  return;
+}
+    
+    bool NwAppClearCacheFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  content::BrowsingDataRemover* remover = content::BrowserContext::GetBrowsingDataRemover(
+      Profile::FromBrowserContext(context_));
+    }
+    
+          std::string encoded_image_base64;
+      std::string encoded_image_str(encoded_image.data(), encoded_image.data() + encoded_image.size());
+      base::Base64Encode(encoded_image_str, &encoded_image_base64);
+    
+    #include <vector>
+    
+    #endif   // CAFFE_UTIL_HDF5_H_
+#endif   // USE_HDF5
+
     
     
     {}  // namespace caffe
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of ConvolutionLayer.
- *        Fallback to ConvolutionLayer for CPU mode.
- *
- * cuDNN accelerates convolution through forward kernels for filtering and bias
- * plus backward kernels for the gradient w.r.t. the filters, biases, and
- * inputs. Caffe + cuDNN further speeds up the computation through forward
- * parallelism across groups and backward parallelism across gradients.
- *
- * The CUDNN engine does not have memory overhead for matrix buffers. For many
- * input and filter regimes the CUDNN engine is faster than the CAFFE engine,
- * but for fully-convolutional models and large inputs the CAFFE engine can be
- * faster as long as it fits in memory.
-*/
-template <typename Dtype>
-class CuDNNConvolutionLayer : public ConvolutionLayer<Dtype> {
- public:
-  explicit CuDNNConvolutionLayer(const LayerParameter& param)
-      : ConvolutionLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNConvolutionLayer();
-    }
-    
-      // skip leading whitespace and comments
-  comment = gFalse;
-  while (1) {
-    if ((c = getChar()) == EOF) {
-      buf[0] = '\0';
-      *length = 0;
-      return gFalse;
-    }
-    if (comment) {
-      if (c == '\x0a' || c == '\x0d') {
-	comment = gFalse;
-      }
-    } else if (c == '%') {
-      comment = gTrue;
-    } else if (specialChars[c] != 1) {
-      break;
-    }
-  }
-    
-    #endif
+#endif  // USE_HDF5
 
     
-      // Get transition.
-  Object *getTrans(Object *obj) { return trans.fetch(xref, obj); }
-    
-      type = transitionReplace;
-  duration = 1;
-  alignment = transitionHorizontal;
-  direction = transitionInward;
-  angle = 0;
-  scale = 1.0;
-  rectangular = gFalse;
-  ok = gTrue;
-    
-    StandardSecurityHandler::StandardSecurityHandler(PDFDoc *docA,
-						 Object *encryptDictA):
-  SecurityHandler(docA)
-{
-  Object versionObj, revisionObj, lengthObj;
-  Object ownerKeyObj, userKeyObj, permObj, fileIDObj;
-  Object fileIDObj1;
-  Object cryptFiltersObj, streamFilterObj, stringFilterObj;
-  Object cryptFilterObj, cfmObj, cfLengthObj;
-  Object encryptMetadataObj;
+      if (reshape) {
+    blob->Reshape(blob_dims);
+  } else {
+    if (blob_dims != blob->shape()) {
+      // create shape string for error message
+      ostringstream stream;
+      int count = 1;
+      for (int i = 0; i < blob_dims.size(); ++i) {
+        stream << blob_dims[i] << ' ';
+        count = count * blob_dims[i];
+      }
+      stream << '(' << count << ')';
+      string source_shape_string = stream.str();
+    }
     }
     
-    //------------------------------------------------------------------------
-// StdinPDFDocBuilder
-//------------------------------------------------------------------------
+      Dtype min = this->layer_param_.clip_param().min();
+  Dtype max = this->layer_param_.clip_param().max();
     
-        /** Removes all actions from all the targets.
-     */
-    virtual void removeAllActions();
+    TYPED_TEST(NeuronLayerTest, TestPReLUParam) {
+  typedef typename TypeParam::Dtype Dtype;
+  LayerParameter layer_param;
+  PReLULayer<Dtype> layer(layer_param);
+  layer.SetUp(this->blob_bottom_vec_, this->blob_top_vec_);
+  const Dtype* slopes = layer.blobs()[0]->cpu_data();
+  int count = layer.blobs()[0]->count();
+  for (int i = 0; i < count; ++i, ++slopes) {
+    EXPECT_EQ(*slopes, 0.25);
+  }
+}
     
-        // Overrides
-	virtual TurnOffTiles* clone() const override;
-    virtual void startWithTarget(Node *target) override;
-    virtual void update(float time) override;
+      /**
+   * @brief Reshape all layers from bottom to top.
+   *
+   * This is useful to propagate changes to layer sizes without running
+   * a forward pass, e.g. to compute output feature size.
+   */
+  void Reshape();
     
-CC_CONSTRUCTOR_ACCESS:
-    TurnOffTiles() {}
-    virtual ~TurnOffTiles();
-    
-    NS_CC_BEGIN
-    
-    Component* Component::create()
-{
-    Component * ret = new (std::nothrow) Component();
+    // TODO(Yangqing): Is there a faster way to do pooling in the channel-first
+// case?
+template <typename Dtype>
+void PoolingLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top) {
+  const Dtype* bottom_data = bottom[0]->cpu_data();
+  Dtype* top_data = top[0]->mutable_cpu_data();
+  const int top_count = top[0]->count();
+  // We'll output the mask to top[1] if it's of size >1.
+  const bool use_top_mask = top.size() > 1;
+  int* mask = NULL;  // suppress warnings about uninitialized variables
+  Dtype* top_mask = NULL;
+  // Different pooling methods. We explicitly do the switch outside the for
+  // loop to save time, although this results in more code.
+  switch (this->layer_param_.pooling_param().pool()) {
+  case PoolingParameter_PoolMethod_MAX:
+    // Initialize
+    if (use_top_mask) {
+      top_mask = top[1]->mutable_cpu_data();
+      caffe_set(top_count, Dtype(-1), top_mask);
+    } else {
+      mask = max_idx_.mutable_cpu_data();
+      caffe_set(top_count, -1, mask);
     }
+    caffe_set(top_count, Dtype(-FLT_MAX), top_data);
+    // The main loop
+    for (int n = 0; n < bottom[0]->num(); ++n) {
+      for (int c = 0; c < channels_; ++c) {
+        for (int ph = 0; ph < pooled_height_; ++ph) {
+          for (int pw = 0; pw < pooled_width_; ++pw) {
+            int hstart = ph * stride_h_ - pad_h_;
+            int wstart = pw * stride_w_ - pad_w_;
+            int hend = min(hstart + kernel_h_, height_);
+            int wend = min(wstart + kernel_w_, width_);
+            hstart = max(hstart, 0);
+            wstart = max(wstart, 0);
+            const int pool_index = ph * pooled_width_ + pw;
+            for (int h = hstart; h < hend; ++h) {
+              for (int w = wstart; w < wend; ++w) {
+                const int index = h * width_ + w;
+                if (bottom_data[index] > top_data[pool_index]) {
+                  top_data[pool_index] = bottom_data[index];
+                  if (use_top_mask) {
+                    top_mask[pool_index] = static_cast<Dtype>(index);
+                  } else {
+                    mask[pool_index] = index;
+                  }
+                }
+              }
+            }
+          }
+        }
+        // compute offset
+        bottom_data += bottom[0]->offset(0, 1);
+        top_data += top[0]->offset(0, 1);
+        if (use_top_mask) {
+          top_mask += top[0]->offset(0, 1);
+        } else {
+          mask += top[0]->offset(0, 1);
+        }
+      }
+    }
+    break;
+  case PoolingParameter_PoolMethod_AVE:
+    for (int i = 0; i < top_count; ++i) {
+      top_data[i] = 0;
+    }
+    // The main loop
+    for (int n = 0; n < bottom[0]->num(); ++n) {
+      for (int c = 0; c < channels_; ++c) {
+        for (int ph = 0; ph < pooled_height_; ++ph) {
+          for (int pw = 0; pw < pooled_width_; ++pw) {
+            int hstart = ph * stride_h_ - pad_h_;
+            int wstart = pw * stride_w_ - pad_w_;
+            int hend = min(hstart + kernel_h_, height_ + pad_h_);
+            int wend = min(wstart + kernel_w_, width_ + pad_w_);
+            int pool_size = (hend - hstart) * (wend - wstart);
+            hstart = max(hstart, 0);
+            wstart = max(wstart, 0);
+            hend = min(hend, height_);
+            wend = min(wend, width_);
+            for (int h = hstart; h < hend; ++h) {
+              for (int w = wstart; w < wend; ++w) {
+                top_data[ph * pooled_width_ + pw] +=
+                    bottom_data[h * width_ + w];
+              }
+            }
+            top_data[ph * pooled_width_ + pw] /= pool_size;
+          }
+        }
+        // compute offset
+        bottom_data += bottom[0]->offset(0, 1);
+        top_data += top[0]->offset(0, 1);
+      }
+    }
+    break;
+  case PoolingParameter_PoolMethod_STOCHASTIC:
+    NOT_IMPLEMENTED;
+    break;
+  default:
+    LOG(FATAL) << 'Unknown pooling method.';
+  }
+}
     
-    /// @endcond
+    // Return the function that the solver can use to find out if a snapshot or
+// early exit is being requested.
+ActionCallback SignalHandler::GetActionFunction() {
+  return boost::bind(&SignalHandler::CheckForSignals, this);
+}
+    
+      caffe::Datum datum;
+  datum.set_channels(2);  // one channel for each image in the pair
+  datum.set_height(rows);
+  datum.set_width(cols);
+  LOG(INFO) << 'A total of ' << num_items << ' items.';
+  LOG(INFO) << 'Rows: ' << rows << ' Cols: ' << cols;
+  for (int itemid = 0; itemid < num_items; ++itemid) {
+    int i = caffe::caffe_rng_rand() % num_items;  // pick a random  pair
+    int j = caffe::caffe_rng_rand() % num_items;
+    read_image(&image_file, &label_file, i, rows, cols,
+        pixels, &label_i);
+    read_image(&image_file, &label_file, j, rows, cols,
+        pixels + (rows * cols), &label_j);
+    datum.set_data(pixels, 2*rows*cols);
+    if (label_i  == label_j) {
+      datum.set_label(1);
+    } else {
+      datum.set_label(0);
+    }
+    datum.SerializeToString(&value);
+    std::string key_str = caffe::format_int(itemid, 8);
+    db->Put(leveldb::WriteOptions(), key_str, value);
+  }
+    
+    class Context
+{
+public:
+    Context(size_t stack_size, coroutine_func_t fn, void* private_data);
+    ~Context();
+    bool swap_in();
+    bool swap_out();
+#if !defined(SW_NO_USE_ASM_CONTEXT) && defined(SW_LOG_TRACE_OPEN)
+    ssize_t get_stack_usage();
 #endif
+    inline bool is_end()
+    {
+        return end_;
+    }
+    static void context_func(void* arg);
+    }
+    
+    bool Context::swap_out()
+{
+    jump_fcontext(&ctx_, swap_ctx_, (intptr_t) this, true);
+    return true;
+}
+    
+    Context::Context(size_t stack_size, coroutine_func_t fn, void* private_data) :
+        fn_(fn), stack_size_(stack_size), private_data_(private_data)
+{
+    if (-1 == getcontext(&ctx_))
+    {
+        swoole_throw_error(SW_ERROR_CO_GETCONTEXT_FAILED);
+        return;
+    }
+    }
+    
+    
+    {
+    {        ret = chan.pop(0.001);
+        ASSERT_EQ(ret, nullptr);
+    });
+}
+
+    
+    
+    
+    
+    {    sigemptyset(&curset);
+    sigprocmask(SIG_BLOCK, NULL, &curset);
+    ret = sigismember(&curset,SIGUSR1);
+    ASSERT_EQ(ret, 0);
+}
+#endif
+
+    
+        friend
+    void RedisQtCleanup(void * adapter) {
+        RedisQtAdapter * a = static_cast<RedisQtAdapter *>(adapter);
+        a->cleanup();
+    }
+    
+        private:
+        void finish() { emit finished(); }
+    
+    #endif // OPENPOSE_CORE_RECTANGLE_HPP
