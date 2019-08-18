@@ -1,224 +1,246 @@
 
         
-            def undo_temp_name(self, filename):
-        if filename.endswith('.part'):
-            return filename[:-len('.part')]
-        return filename
+            :param img_path: path to image to be recognized
+    :param predictions: results of the predict function
+    :return:
+    '''
+    pil_image = Image.open(img_path).convert('RGB')
+    draw = ImageDraw.Draw(pil_image)
     
-            self._check_formats(formats, video_id)
-        self._sort_formats(formats)
+    # Find all the faces in the image using a pre-trained convolutional neural network.
+# This method is more accurate than the default HOG model, but it's slower
+# unless you have an nvidia GPU and dlib compiled with CUDA extensions. But if you do,
+# this will use GPU acceleration and perform well.
+# See also: find_faces_in_picture.py
+face_locations = face_recognition.face_locations(image, number_of_times_to_upsample=0, model='cnn')
     
-            return {
-            'id': video_id,
-            'title': title,
-            'description': video.get('long_description') or video.get(
-                'short_description'),
-            'duration': float_or_none(video.get('duration'), scale=1000),
-            'formats': formats,
-            'subtitles': subtitles,
-        }
+        # Load the uploaded image file
+    img = face_recognition.load_image_file(file_stream)
+    # Get face encodings for any faces in the uploaded image
+    unknown_face_encodings = face_recognition.face_encodings(img)
     
-    import optparse
-import os
-from os.path import dirname as dirn
-import sys
+    # Create a PIL imagedraw object so we can draw on the picture
+pil_image = Image.fromarray(image)
+d = ImageDraw.Draw(pil_image)
     
-        out = issue_template_tmpl % {'version': locals()['__version__']}
+    requirements = [
+    'face_recognition_models>=0.3.0',
+    'Click>=6.0',
+    'dlib>=19.7',
+    'numpy',
+    'Pillow'
+]
     
+        # 获得所有人脸的位置以及它们的编码
+    face_locations = face_recognition.face_locations(output)
+    print('Found {} faces in image.'.format(len(face_locations)))
+    face_encodings = face_recognition.face_encodings(output, face_locations)
     
-def get_base_name(base):
-    if base is InfoExtractor:
-        return 'LazyLoadExtractor'
-    elif base is SearchInfoExtractor:
-        return 'LazyLoadSearchExtractor'
-    else:
-        return base.__name__
-    
-    if isinstance(helptext, bytes):
-    helptext = helptext.decode('utf-8')
-    
-        return ret
-    
-        with open(ZSH_COMPLETION_FILE, 'w') as f:
-        f.write(template)
-    
-    # Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named 'default.css' will overwrite the builtin 'default.css'.
-html_static_path = ['_static']
-    
-    
-def _mkdir(d):
-    if not os.path.exists(d):
-        os.mkdir(d)
-    
-            return [package.split()[0] for package in packages]
-    except subprocess.CalledProcessError as err:
-        if err.returncode == 1 and err.output == '':
-            return []
-        else:
-            raise err
-    
-        def instant_mode_alias(self, alias_name):
-        if os.environ.get('THEFUCK_INSTANT_MODE', '').lower() == 'true':
-            mark = ('%{' +
-                    USER_COMMAND_MARK + '\b' * len(USER_COMMAND_MARK)
-                    + '%}')
-            return '''
-                export PS1='{user_command_mark}$PS1';
-                {app_alias}
-            '''.format(user_command_mark=mark,
-                       app_alias=self.app_alias(alias_name))
-        else:
-            log_path = os.path.join(
-                gettempdir(), 'thefuck-script-log-{}'.format(uuid4().hex))
-            return '''
-                export THEFUCK_INSTANT_MODE=True;
-                export THEFUCK_OUTPUT_LOG={log};
-                thefuck --shell-logger {log};
-                rm -f {log};
-                exit
-            '''.format(log=log_path)
-    
-    
-def _get_operations(app):
-    proc = subprocess.Popen([app, '--help'],
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE)
-    lines = proc.stdout.readlines()
-    
-    # Define the loss.
-loss = K.variable(0.)
-for layer_name in settings['features']:
-    # Add the L2 norm of the features of a layer to the loss.
-    if layer_name not in layer_dict:
-        raise ValueError('Layer ' + layer_name + ' not found in model.')
-    coeff = settings['features'][layer_name]
-    x = layer_dict[layer_name].output
-    # We avoid border artifacts by only involving non-border pixels in the loss.
-    scaling = K.prod(K.cast(K.shape(x), 'float32'))
-    if K.image_data_format() == 'channels_first':
-        loss += coeff * K.sum(K.square(x[:, :, 2: -2, 2: -2])) / scaling
-    else:
-        loss += coeff * K.sum(K.square(x[:, 2: -2, 2: -2, :])) / scaling
-    
-    print('Pad sequences (samples x time)')
-x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
-x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
-print('x_train shape:', x_train.shape)
-print('x_test shape:', x_test.shape)
-    
-                def build(self, input_shape):
-                self.kernel = self.add_weight(shape=(input_shape[-1], self.units),
-                                              initializer='uniform',
-                                              name='kernel')
-                self.recurrent_kernel = self.add_weight(
-                    shape=(self.units, self.units),
-                    initializer='uniform',
-                    name='recurrent_kernel')
-                self.built = True
-    
-        with tempfile.NamedTemporaryFile('wb', delete=True) as f:
-        np.savez(f, x_train=x_train, y_train=y_train, x_test=x_test, y_test=y_test)
-        monkeypatch.setattr(imdb, 'get_file', lambda *args, **kwargs: f.name)
-        yield f.name
-    
-    from keras import backend as K
-from keras.models import Sequential, Model
-from keras.layers import convolutional_recurrent, Input, Masking, Lambda
-from keras.utils.test_utils import layer_test
-from keras import regularizers
-    
-    
-def get(identifier):
-    if isinstance(identifier, dict):
-        config = {'class_name': str(identifier), 'config': {}}
-        return deserialize(config)
-    elif isinstance(identifier, six.string_types):
-        return deserialize(str(identifier))
-    elif callable(identifier):
-        return identifier
-    else:
-        raise ValueError('Could not interpret '
-                         'metric function identifier:', identifier)
+        :param known_face_encodings: A list of known face encodings
+    :param face_encoding_to_check: A single face encoding to compare against the list
+    :param tolerance: How much distance between faces to consider it a match. Lower is more strict. 0.6 is typical best performance.
+    :return: A list of True/False values indicating which known_face_encodings match the face encoding to check
+    '''
+    return list(face_distance(known_face_encodings, face_encoding_to_check) <= tolerance)
 
     
-            # Arguments
-            name: String, name for the metric.
-        '''
+        # Hit 'q' on the keyboard to quit!
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
     
-            self.input_dim = input_dim
-        self.output_dim = output_dim
-        self.embeddings_initializer = initializers.get(embeddings_initializer)
-        self.embeddings_regularizer = regularizers.get(embeddings_regularizer)
-        self.activity_regularizer = regularizers.get(activity_regularizer)
-        self.embeddings_constraint = constraints.get(embeddings_constraint)
-        self.mask_zero = mask_zero
-        self.supports_masking = mask_zero
-        self.input_length = input_length
+    # Training directory
+train_dir = os.listdir('/train_dir/')
     
-        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
-    plt.plot(sample_sizes, one_core, label='one core')
-    plt.plot(sample_sizes, multi_core, label='multi core')
-    plt.xlabel('n_samples')
-    plt.ylabel('Time (s)')
-    plt.title('Parallel %s' % func.__name__)
-    plt.legend()
+            limits = resource.getrlimit(resource.RLIMIT_AS)
+        self.assertEqual(resource.prlimit(0, resource.RLIMIT_AS, BadSeq()),
+                         limits)
     
-                tstart = time()
-            clf.fit(X_train, y_train)
-            asgd_results[i, j, 0] = mean_squared_error(clf.predict(X_test),
-                                                       y_test)
-            asgd_results[i, j, 1] = time() - tstart
+                    b = BytesIO()
+                self.assertRaises(TypeError, plistlib.dump, pl, b, fmt=fmt)
     
-        from sklearn.tree import DecisionTreeClassifier
+        if inspect.isgeneratorfunction(func):
+        coro = func
+    else:
+        @functools.wraps(func)
+        def coro(*args, **kw):
+            res = func(*args, **kw)
+            if (base_futures.isfuture(res) or inspect.isgenerator(res) or
+                    isinstance(res, CoroWrapper)):
+                res = yield from res
+            else:
+                # If 'res' is an awaitable, run it.
+                try:
+                    await_meth = res.__await__
+                except AttributeError:
+                    pass
+                else:
+                    if isinstance(res, collections.abc.Awaitable):
+                        res = yield from await_meth()
+            return res
     
-    In this examples we will use a movie review dataset.
+        # disable this test for now. When the version where the fail* methods will
+    # be removed is decided, re-enable it and update the version
+    def _testDeprecatedFailMethods(self):
+        '''Test that the deprecated fail* methods get removed in 3.x'''
+        if sys.version_info[:2] < (3, 3):
+            return
+        deprecated_names = [
+            'failIfEqual', 'failUnlessEqual', 'failUnlessAlmostEqual',
+            'failIfAlmostEqual', 'failUnless', 'failUnlessRaises', 'failIf',
+            'assertDictContainsSubset',
+        ]
+        for deprecated_name in deprecated_names:
+            with self.assertRaises(AttributeError):
+                getattr(self, deprecated_name)  # remove these in 3.x
     
-    The dataset is generated using the ``make_biclusters`` function, which
-creates a matrix of small values and implants bicluster with large
-values. The rows and columns are then shuffled and passed to the
-Spectral Co-Clustering algorithm. Rearranging the shuffled matrix to
-make biclusters contiguous shows how accurately the algorithm found
-the biclusters.
+    # This is a copy of lib2to3.fixes.fix_imports.MAPPING.  We cannot import
+# lib2to3 and use the mapping defined there, because lib2to3 uses pickle.
+# Thus, this could cause the module to be imported recursively.
+IMPORT_MAPPING = {
+    '__builtin__' : 'builtins',
+    'copy_reg': 'copyreg',
+    'Queue': 'queue',
+    'SocketServer': 'socketserver',
+    'ConfigParser': 'configparser',
+    'repr': 'reprlib',
+    'tkFileDialog': 'tkinter.filedialog',
+    'tkSimpleDialog': 'tkinter.simpledialog',
+    'tkColorChooser': 'tkinter.colorchooser',
+    'tkCommonDialog': 'tkinter.commondialog',
+    'Dialog': 'tkinter.dialog',
+    'Tkdnd': 'tkinter.dnd',
+    'tkFont': 'tkinter.font',
+    'tkMessageBox': 'tkinter.messagebox',
+    'ScrolledText': 'tkinter.scrolledtext',
+    'Tkconstants': 'tkinter.constants',
+    'Tix': 'tkinter.tix',
+    'ttk': 'tkinter.ttk',
+    'Tkinter': 'tkinter',
+    'markupbase': '_markupbase',
+    '_winreg': 'winreg',
+    'thread': '_thread',
+    'dummy_thread': '_dummy_thread',
+    'dbhash': 'dbm.bsd',
+    'dumbdbm': 'dbm.dumb',
+    'dbm': 'dbm.ndbm',
+    'gdbm': 'dbm.gnu',
+    'xmlrpclib': 'xmlrpc.client',
+    'SimpleXMLRPCServer': 'xmlrpc.server',
+    'httplib': 'http.client',
+    'htmlentitydefs' : 'html.entities',
+    'HTMLParser' : 'html.parser',
+    'Cookie': 'http.cookies',
+    'cookielib': 'http.cookiejar',
+    'BaseHTTPServer': 'http.server',
+    'test.test_support': 'test.support',
+    'commands': 'subprocess',
+    'urlparse' : 'urllib.parse',
+    'robotparser' : 'urllib.robotparser',
+    'urllib2': 'urllib.request',
+    'anydbm': 'dbm',
+    '_abcoll' : 'collections.abc',
+}
     
-    X = face.reshape((-1, 1))  # We need an (n_sample, n_feature) array
-k_means = cluster.KMeans(n_clusters=n_clusters, n_init=4)
-k_means.fit(X)
-values = k_means.cluster_centers_.squeeze()
-labels = k_means.labels_
+        def _iter_post_close_action_sets(self):
+        for interp in ('same', 'extra', 'other'):
+            yield [
+                ChannelAction('use', 'recv', interp),
+                ]
+            yield [
+                ChannelAction('use', 'send', interp),
+                ]
+    
+            async def test(lock):
+            await asyncio.sleep(0.01)
+            self.assertFalse(lock.locked())
+            with self.assertWarns(DeprecationWarning):
+                with await lock as _lock:
+                    self.assertIs(_lock, None)
+                    self.assertTrue(lock.locked())
+                    await asyncio.sleep(0.01)
+                    self.assertTrue(lock.locked())
+                self.assertFalse(lock.locked())
+    
+            firstId = events[0][2]
+        self.assertSequenceEqual(
+            [
+                ('Created', ' ', firstId),
+                ('cpython._PySys_ClearAuditHooks', ' ', firstId),
+            ],
+            events,
+        )
+    
+        def do_test_trashcan_python_class(self, base):
+        # Check that the trashcan mechanism works properly for a Python
+        # subclass of a class using the trashcan (this specific test assumes
+        # that the base class 'base' behaves like list)
+        class PyList(base):
+            # Count the number of PyList instances to verify that there is
+            # no memory leak
+            num = 0
+            def __init__(self, *args):
+                __class__.num += 1
+                super().__init__(*args)
+            def __del__(self):
+                __class__.num -= 1
+    
+    import tensorflow as tf
+    
+        公式
+        `o = H(x, W)T(x, W) + x(1 - T(x, W))`
+    其中
+        H, T = dense
+    '''
+    n_input = int(x.get_shape()[-1])
+    with tf.variable_scope(name or 'highway_dense'):
+        W, b = get_wb([n_input, n_input])
+    
+    
+class L1L2Regularizer(object):
+    '''L1 L2 正则化
     
     import numpy as np
-from sklearn.cluster import MeanShift, estimate_bandwidth
-from sklearn.datasets.samples_generator import make_blobs
+import tensorflow as tf
     
-        # Commands can be executed later on
-    >>> for cmd in command_stack:
-    ...     cmd.execute()
-    renaming foo.txt to bar.txt
-    renaming bar.txt to baz.txt
-    
-    *TL;DR
-Enables selecting an algorithm at runtime.
-'''
-    
-        def build_size(self):
-        raise NotImplementedError
-    
-        # After we've accessed `relatives`
-    >>> sorted(Jhon.__dict__.items())
-    [('call_count2', 0), ..., ('relatives', 'Many relatives.')]
-    
-    *What does this example do?
-In this example queue.Queue is used to create the pool (wrapped in a
-custom ObjectPool object to use with the with statement), and it is
-populated with strings.
-As we can see, the first string object put in 'yam' is USED by the
-with statement. But because it is released back into the pool
-afterwards it is reused by the explicit call to sample_queue.get().
-Same thing happens with 'sam', when the ObjectPool created insided the
-function is deleted (by the GC) and the object is returned.
+        >>> os.unlink('foo.txt')
+    '''
     
     '''
-Reference: https://en.wikipedia.org/wiki/Delegation_pattern
-Author: https://github.com/IuryAlves
+https://www.djangospin.com/design-patterns-python/mediator/
+    
+    from abc import abstractmethod
+    
+    
+if __name__ == '__main__':
+    simple_hello = TextTag('hello, world!')
+    special_hello = ItalicWrapper(BoldWrapper(simple_hello))
+    print('before:', simple_hello.render())
+    print('after:', special_hello.render())
+    
+            for y in obs_states:
+            prob, state = max((V[t - 1][y0] + trans_p[y0].get(y, MIN_INF) +
+                               emit_p[y].get(obs[t], MIN_FLOAT), y0) for y0 in prev_states)
+            V[t][y] = prob
+            mem_path[t][y] = state
+    
+    USAGE = 'usage:    python extract_tags_stop_words.py [file name] -k [top k]'
+    
+        def test_multiple_strong_etag_match(self):
+        computed_etag = ''xyzzy1''
+        etags = ''xyzzy1', 'xyzzy2''
+        self.check_url(
+            '/cache/' + computed_etag, method='GET',
+            headers=[('If-None-Match', etags)],
+            expected_status=304)
+    
+        def filter(self, record):
+        if record.levelno >= logging.ERROR:
+            self.error_count += 1
+        elif record.levelno >= logging.WARNING:
+            self.warning_count += 1
+        elif record.levelno >= logging.INFO:
+            self.info_count += 1
+        return True
+    
+    if typing.TYPE_CHECKING:
+    from typing import Generator, Any, List, Tuple, Dict  # noqa: F401
