@@ -1,67 +1,218 @@
 
         
-        require 'vagrant/util'
-require 'vagrant/util/shell_quote'
-require 'vagrant/util/which'
-    
-        it 'returns true if installed' do
-      expect(machine.communicate).to receive(:test).
-        with(command, sudo: true).and_return(true)
-      subject.chef_installed(machine, 'chef_solo', version)
-    end
-    
-        describe '#name' do
-      subject { super().name }
-      it     { should eq(:default)  }
-    end
-    
-          it 'it should exclude the dependency' do
-        subject.attributes[:python_disable_dependency] = 'rtxt-dep1'
-        subject.input(example_dir)
-        insist { subject.dependencies.sort } == ['python-rtxt-dep2 = 0.1', 'python-rtxt-dep4  ']
-      end
-    end
-    
-          # Value sanity check
-      insist { subject.name } == 'name'
-      insist { subject.version } == '1.23'
-      insist { subject.scripts[:before_install] } == 'example before_install'
-      insist { subject.scripts[:after_install] } == 'example after_install'
-      insist { subject.scripts[:before_remove] } == 'example before_remove'
-      insist { subject.scripts[:after_remove] } == 'example after_remove'
-      insist { subject.scripts[:rpm_verifyscript] } == 'example rpm_verifyscript'
-      insist { subject.scripts[:rpm_posttrans] } == 'example rpm_posttrans'
-      insist { subject.scripts[:rpm_pretrans] } == 'example rpm_pretrans'
-    end
-    
-      describe '#description' do
-    it_behaves_like :Default, description.gsub(/^#/, '').to_sym, 'no description given'
-    it_behaves_like :Mutator, description.gsub(/^#/, '').to_sym
+          def setup
+    # enable a logger so that (e.g.) the benchmarking stuff runs, so we can get
+    # a more accurate simulation of what happens in 'real life'.
+    super
+    @controller.logger = ActiveSupport::Logger.new(nil)
   end
     
-        def validate
-      # Make sure the user has passed '-s' and '-t' flags
-      mandatory(@command.input_type,
-                'Missing required -s flag. What package source did you want?')
-      mandatory(@command.output_type,
-                'Missing required -t flag. What package output did you want?')
+          def publish(name, *args)
+        notifier.publish(name, *args)
+      end
     
-        self.description = info['description']
-    # Supposedly you can upload a package for npm with no author/author email
-    # so I'm being safer with this. Author can also be a hash or a string
-    self.vendor = 'Unknown <unknown@unknown.unknown>'
-    if info.include?('author')
-      author_info = info['author']
-      # If a hash, assemble into a string
-      if author_info.respond_to? :fetch
-        self.vendor = sprintf('%s <%s>', author_info.fetch('name', 'unknown'),
-                              author_info.fetch('email', 'unknown@unknown.unknown'))
-      else
-        # Probably will need a better check for validity here
-        self.vendor = author_info unless author_info == ''
+            attr_reader :symbol
+    
+            def select_directory(file_name)
+          @categories.keys.find do |category|
+            File.exist?(File.join(category_directory(category), file_name))
+          end
+        end
+      end
+    end
+  end
+end
+
+    
+            def find(key)
+          file_name = '#{key}#{@extension}'
+    
+      def notification_service
+    @notification_service ||= NotificationService.new
+  end
+end
+
+    
+      def output_chronic_duration_attribute(source_attribute)
+    value = attributes[source_attribute.to_s]
+    ChronicDuration.output(value, format: :short) if value
+  end
+end
+
+    
+              find_every_method_call_by_name(body_node, :xcodebuild).each do |m|
+            next if parameters_passed?(m, /SYMROOT=/)
+    
+        it 'deprecated ENV.universal_binary usage' do
+      expect_offense(<<~RUBY)
+        class Foo < Formula
+          desc 'foo'
+          url 'https://brew.sh/foo-1.0.tgz'
+          if build?
+             ENV.universal_binary
+             ^^^^^^^^^^^^^^^^^^^^ macOS has been 64-bit only since 10.6 so ENV.universal_binary is deprecated.
+          end
+        end
+      RUBY
+    end
+    
+      describe '#display_s' do
+    context 'without specific version' do
+      its(:display_s) { is_expected.to eq('java') }
+    end
+    
+        def languages
+      @languages ||= [
+        *ARGV.value('language')&.split(','),
+        *ENV['HOMEBREW_LANGUAGES']&.split(','),
+        *Open3.capture2('defaults', 'read', '-g', 'AppleLanguages')[0].scan(/[^ \n'(),]+/),
+      ].uniq
+    end
+    
+        def downloader
+      @downloader ||= begin
+        strategy = DownloadStrategyDetector.detect(cask.url.to_s, cask.url.using)
+        strategy.new(cask.url.to_s, cask.token, cask.version, cache: Cache.path, **cask.url.specs)
       end
     end
     
-      def to_s_extension; 'pkg'; end
+          return unless @cask.sourcefile_path
     
-        File.write(build_path('packlist'), files.sort.join('\n'))
+          it 'adds the appropriate curl args' do
+        expect(subject).to receive(:system_command!) { |*, args:, **|
+          expect(args.each_cons(2)).to include(['-d', 'form=data'])
+          expect(args.each_cons(2)).to include(['-d', 'is=good'])
+        }
+    
+    if $PROGRAM_NAME == __FILE__ && !ENV['COCOAPODS_NO_BUNDLER']
+  ENV['BUNDLE_GEMFILE'] = File.expand_path('../../Gemfile', __FILE__)
+  require 'rubygems'
+  require 'bundler/setup'
+  $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+elsif ENV['COCOAPODS_NO_BUNDLER']
+  require 'rubygems'
+  gem 'cocoapods'
+end
+    
+          def ==(other)
+        self.class == other.class &&
+            spec == other.spec &&
+            used_by_non_library_targets_only? == other.used_by_non_library_targets_only?
+      end
+    end
+  end
+end
+
+    
+              # Prints a warning informing the user that a build configuration of
+          # the integrated target is overriding the CocoaPods build settings.
+          #
+          # @param  [Target::AggregateTarget] pod_bundle
+          #         The Pods bundle.
+          #
+          # @param  [XcodeProj::PBXNativeTarget] target
+          #         The native target.
+          #
+          # @param  [Xcodeproj::XCBuildConfiguration] config
+          #         The build configuration.
+          #
+          # @param  [String] key
+          #         The key of the overridden build setting.
+          #
+          def self.print_override_warning(pod_bundle, target, config, key)
+            actions = [
+              'Use the `$(inherited)` flag, or',
+              'Remove the build settings from the target.',
+            ]
+            message = 'The `#{target.name} [#{config.name}]` ' \
+              'target overrides the `#{key}` build setting defined in ' \
+              '`#{pod_bundle.pod_bundle.xcconfig_relative_path(config.name)}'. ' \
+              'This can lead to problems with the CocoaPods installation'
+            UI.warn(message, actions)
+          end
+    
+            it 'adds the developer frameworks search paths to the xcconfig if XCTest has been detected' do
+          xcconfig = BuildSettings.new(stub('Target'))
+          xcconfig.stubs(:frameworks => %w(XCTest))
+          frameworks_search_paths = xcconfig.framework_search_paths
+          frameworks_search_paths.should == %w($(PLATFORM_DIR)/Developer/Library/Frameworks)
+        end
+    
+            # @return [PodfileDependencyCache] the cache of all dependencies in the podfile.
+        #
+        attr_reader :podfile_dependency_cache
+    
+          def title
+        @page.title
+      end
+    
+          def title
+        'Latest Changes (Globally)'
+      end
+    
+    def commit_details
+  { :message => 'Did something at #{Time.now}',
+    :name    => 'Tom Preston-Werner',
+    :email   => 'tom@github.com' }
+end
+    
+      test 'clean path with double leading slash' do
+    assert_equal '/Mordor', clean_path('//Mordor')
+  end
+end
+    
+      test 'remove page extentions' do
+    view = Precious::Views::LatestChanges.new
+    assert_equal 'page', view.remove_page_extentions('page.wiki')
+    assert_equal 'page-wiki', view.remove_page_extentions('page-wiki.md')
+    assert_equal 'file.any_extention', view.remove_page_extentions('file.any_extention')
+  end
+    
+          def preference_field_for(form, field, options)
+        case options[:type]
+        when :integer
+          form.text_field(field, preference_field_options(options))
+        when :boolean
+          form.check_box(field, preference_field_options(options))
+        when :string
+          form.text_field(field, preference_field_options(options))
+        when :password
+          form.password_field(field, preference_field_options(options))
+        when :text
+          form.text_area(field, preference_field_options(options))
+        else
+          form.text_field(field, preference_field_options(options))
+        end
+      end
+    
+            def address_params
+          params.require(:address).permit(permitted_address_attributes)
+        end
+    
+            def destroy
+          @option_type = Spree::OptionType.accessible_by(current_ability, :destroy).find(params[:id])
+          @option_type.destroy
+          render plain: nil, status: 204
+        end
+    
+            def taxon
+          @taxon ||= taxonomy.taxons.accessible_by(current_ability, :show).find(params[:id])
+        end
+    
+      if options.respond_to? 'keys'
+    options.each do |k,v|
+      unless v.nil?
+        v = v.join ',' if v.respond_to? 'join'
+        v = v.to_json if v.respond_to? 'keys'
+        output += ' data-#{k.sub'_','-'}='#{v}''
+      end
+    end
+  elsif options.respond_to? 'join'
+    output += ' data-value='#{config[key].join(',')}''
+  else
+    output += ' data-value='#{config[key]}''
+  end
+  output += '></#{tag}>'
+end
+    
+    end
