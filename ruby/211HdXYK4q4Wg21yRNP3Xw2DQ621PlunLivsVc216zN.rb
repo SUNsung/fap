@@ -1,161 +1,125 @@
 
         
-        require 'cases/helper'
-require 'models/numeric_data'
-    
-        def test_migrate_revert_change_column_default
-      migration1 = ChangeColumnDefault1.new
-      migration1.migrate(:up)
-      Horse.reset_column_information
-      assert_equal 'Sekitoba', Horse.new.name
-    
-        before_action :ensure_configured
-    
-        initializer 'action_mailbox.config' do
-      config.after_initialize do |app|
-        ActionMailbox.logger = app.config.action_mailbox.logger || Rails.logger
-        ActionMailbox.incinerate = app.config.action_mailbox.incinerate.nil? ? true : app.config.action_mailbox.incinerate
-        ActionMailbox.incinerate_after = app.config.action_mailbox.incinerate_after || 30.days
-        ActionMailbox.queues = app.config.action_mailbox.queues || {}
-        ActionMailbox.ingress = app.config.action_mailbox.ingress
-      end
+            def add(path, content)
+      @pages[path] = content
     end
-  end
-end
-
     
-      # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
-    
-            def to_s
-          @symbol.to_s
+            css('.file').each do |node|
+          node.content = node.content.strip
         end
-        alias to_str to_s
     
-          it 'activates an existing user' do
-        users(:bob).deactivate!
-        visit admin_users_path
-        find(:css, 'a[href='/admin/users/#{users(:bob).id}/activate']').click
-        expect(page).to have_no_text('inactive')
-        users(:bob).reload
-        expect(users(:bob)).to be_active
+    
+    {        This will not work on circa 2009 and older Debian-based Linux
+        distributions (including Ubuntu) because they compile bash
+        without the /dev/tcp feature.
+      },
+      'Author'        => 'hdm',
+      'License'       => MSF_LICENSE,
+      'Platform'      => 'unix',
+      'Arch'          => ARCH_CMD,
+      'Handler'       => Msf::Handler::ReverseTcp,
+      'Session'       => Msf::Sessions::CommandShell,
+      'PayloadType'   => 'cmd_bash',
+      'RequiredCmd'   => 'bash-tcp',
+      'Payload'       =>
+        {
+          'Offsets' => { },
+          'Payload' => ''
+        }
+      ))
+  end
+    
+      ##
+  #
+  # Builtin response class wrappers.
+  #
+  ##
+    
+          # If the handler class requires a relative resource...
+      if (handler.relative_resource_required?)
+        # Substituted the mount point root in the request to make things
+        # relative to the mount point.
+        request.relative_resource = request.resource.gsub(/^#{root}/, '')
+        request.relative_resource = '/' + request.relative_resource if (request.relative_resource !~ /^\//)
+      end
+    
+            # Decodes a Kerberos response
+        #
+        # @param data [String] the raw response message
+        # @return [<Rex::Proto::Kerberos::Model::KrbError, Rex::Proto::Kerberos::Model::KdcResponse>] the kerberos message response
+        # @raise [RuntimeError] if the response can't be processed
+        def decode_kerb_response(data)
+          asn1 = OpenSSL::ASN1.decode(data)
+          msg_type = asn1.value[0].value[1].value[0].value
+    
+              # Encodes the end_time field
+          #
+          # @return [String]
+          def encode_end_time
+            [end_time].pack('N')
+          end
+    
+              private
+    
+              # Encodes a Rex::Proto::Kerberos::Model::AuthorizationData into an ASN.1 String
+          #
+          # @return [String]
+          def encode
+            seqs = []
+            elements.each do |elem|
+              elems = []
+              type_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_type(elem[:type])], 0, :CONTEXT_SPECIFIC)
+              elems << type_asn1
+              data_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_data(elem[:data])], 1, :CONTEXT_SPECIFIC)
+              elems << data_asn1
+              seqs << OpenSSL::ASN1::Sequence.new(elems)
+            end
+    
+    require_relative 'converter/fonts_conversion'
+require_relative 'converter/less_conversion'
+require_relative 'converter/js_conversion'
+require_relative 'converter/logger'
+require_relative 'converter/network'
+    
+      # Raise exceptions instead of rendering exception templates.
+  config.action_dispatch.show_exceptions = false
+    
+      def safely_remove_file(_path)
+    run_vagrant_command('rm #{test_file}')
+  rescue
+    VagrantHelpers::VagrantSSHCommandError
+  end
+end
+    
+        def cmdline_filters
+      @cmdline_filters ||= []
+    end
+    
+          def warn_third_party_scm_must_be_upgraded
+        $stderr.puts(<<-MESSAGE)
+[Deprecation Notice] `set :scm, #{scm_name.inspect}` is deprecated.
+To ensure this custom SCM will work with future versions of Capistrano,
+please upgrade it to a version that uses the new SCM plugin mechanism
+documented here:
+    
+          # This double assignment is to prevent an 'unused variable' warning on
+      # Ruby 1.9.3.  Yes, it is dumb, but I don't like Ruby yelling at me.
+      path = path = (req.script_name + req.path_info).squeeze('/')
+    
+          def xor_byte_strings(s1, s2)
+        s1.bytes.zip(s2.bytes).map { |(c1,c2)| c1 ^ c2 }.pack('c*')
       end
     end
   end
 end
 
     
-          click_on 'Save'
-    
-        it 'returns a label 'Yes' if a given agent is working' do
-      stub(@agent).working? { true }
-      label = working(@agent)
-      expect(label).to be_html_safe
-      expect(Nokogiri(label).text).to eq 'Yes'
-    end
-    
-      describe '#style_colors' do
-    it 'returns a css style-formated version of the scenario foreground and background colors' do
-      expect(style_colors(scenario)).to eq('color:#AAAAAA;background-color:#000000')
-    end
-    
-                scenario_import.merges = {
-              '0' => {
-                'name' => 'a new name',
-                'schedule' => '6pm',
-                'keep_events_for' => 2.days.to_i.to_s,
-                'disabled' => 'true',
-                'options' => weather_agent_options.merge('api_key' => 'foo').to_json
-              }
-            }
-    
-        @scheduler = Rufus::Scheduler.new
-    
-        let(:validator) { described_class.new(attributes: [attribute]) }
-    let(:record)    { double(errors: errors) }
-    let(:errors)    { double(add: nil) }
-    let(:value)     { '' }
-    let(:attribute) { :foo }
-    
-        grouped_codes = codes.reduce([]) do |agg, current|
-      if current[1]
-        agg << [current[0]]
-      else
-        agg.last << current[0]
-        agg
-      end
-    end
-    
-        context 'with unlocked account' do
-      let(:locked) { false }
-    
-          described_class.new.validate(follow)
-    end
-    
-      def eligible_users
-    User.emailable
-        .where('current_sign_in_at < ?', (FREQUENCY + SIGN_IN_OFFSET).ago)
-        .where('last_emailed_at IS NULL OR last_emailed_at < ?', FREQUENCY.ago)
-  end
-end
-
-    
-      it 'does still notify when sender\'s domain is blocked but sender is followed' do
-    recipient.block_domain!(sender.domain)
-    recipient.follow!(sender)
-    is_expected.to change(Notification, :count)
-  end
-    
-        context 'when the sender is relayed' do
-      let!(:relay_account) { Fabricate(:account, inbox_url: 'https://relay.example.com/inbox') }
-      let!(:relay) { Fabricate(:relay, inbox_url: 'https://relay.example.com/inbox') }
-    
-          ba.wrapper tag: :div, class: :label_input__wrapper do |bb|
-        bb.use :input
-        bb.optional :append, wrap_with: { tag: :div, class: 'label_input__append' }
-      end
-    end
-    
-        def preferences
-      ::Spree::Preferences::ScopedStore.new(self.class.name.underscore)
-    end
-    
-    module Spree
-  class ReturnItem::EligibilityValidator::Default < Spree::ReturnItem::EligibilityValidator::BaseValidator
-    class_attribute :permitted_eligibility_validators
-    self.permitted_eligibility_validators = [
-      ReturnItem::EligibilityValidator::OrderCompleted,
-      ReturnItem::EligibilityValidator::TimeSincePurchase,
-      ReturnItem::EligibilityValidator::RMARequired,
-      ReturnItem::EligibilityValidator::InventoryShipped,
-      ReturnItem::EligibilityValidator::NoReimbursements
-    ]
-    
-        unreturned_return_items.group_by(&:exchange_shipments).each do |shipments, return_items|
-      original_order = shipments.first.order
-      order_attributes = {
-        bill_address: original_order.bill_address,
-        ship_address: original_order.ship_address,
-        email: original_order.email
-      }
-      order_attributes[:store_id] = original_order.store_id
-      order = Spree::Order.create!(order_attributes)
-    
-            def create
-          @order.validate_payments_attributes([payment_params])
-          @payment = @order.payments.build(payment_params)
-          if @payment.save
-            respond_with(@payment, status: 201, default_template: :show)
-          else
-            invalid_resource!(@payment)
+            # Set these key values to boolean 'true' to include in policy
+        NO_ARG_DIRECTIVES.each do |d|
+          if options.key?(d) && options[d].is_a?(TrueClass)
+            directives << d.to_s.sub(/_/, '-')
           end
         end
     
-            def find_property
-          @property = Spree::Property.accessible_by(current_ability, :show).find(params[:id])
-        rescue ActiveRecord::RecordNotFound
-          @property = Spree::Property.accessible_by(current_ability, :show).find_by!(name: params[:id])
-        end
-    
-              if params[:page] || params[:per_page]
-            @states = @states.page(params[:page]).per(params[:per_page])
-          end
+          run DummyApp
+    end
