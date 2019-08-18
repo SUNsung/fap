@@ -1,53 +1,191 @@
 
         
-            delegate :repository, to: :project
+          task :rollback_release_path do
+    on release_roles(:all) do
+      releases = capture(:ls, '-xt', releases_path).split
+      if releases.count < 2
+        error t(:cannot_rollback)
+        exit 1
+      end
     
-            def diff_files
-          @diff_files ||= diffs.decorate! { |diff| decorate_diff!(diff) }
-        end
+    Gem::Specification.new do |gem|
+  gem.name          = 'capistrano'
+  gem.version       = Capistrano::VERSION
+  gem.authors       = ['Tom Clements', 'Lee Hambley']
+  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
+  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
+  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
+  gem.homepage      = 'http://capistranorb.com/'
     
-      let(:machine) { iso_env.machine(iso_env.machine_names[0], :dummy) }
-  let(:communicator) { VagrantTests::DummyCommunicator::Communicator.new(machine) }
-  let(:config)  { double('config') }
+    Given(/^the configuration is in a custom location$/) do
+  TestApp.move_configuration_to_custom_location('app')
+end
     
-    # Set the dummy provider to the default for tests
-ENV['VAGRANT_DEFAULT_PROVIDER'] = 'dummy'
+      def safely_remove_file(_path)
+    run_vagrant_command('rm #{test_file}')
+  rescue
+    VagrantHelpers::VagrantSSHCommandError
+  end
+end
     
-          begin
-        @logger.debug('Creating: #{@local_data_path}')
-        FileUtils.mkdir_p(@local_data_path)
-        # Create the rgloader/loader file so we can use encoded files.
-        loader_file = @local_data_path.join('rgloader', 'loader.rb')
-        if !loader_file.file?
-          source_loader = Vagrant.source_root.join('templates/rgloader.rb')
-          FileUtils.mkdir_p(@local_data_path.join('rgloader').to_s)
-          FileUtils.cp(source_loader.to_s, loader_file.to_s)
-        end
-      rescue Errno::EACCES
-        raise Errors::LocalDataDirectoryNotAccessible,
-          local_data_path: @local_data_path.to_s
+      def run_vagrant_command(command)
+    stdout, stderr, status = vagrant_cli_command('ssh -c #{command.inspect}')
+    return [stdout, stderr] if status.success?
+    raise VagrantSSHCommandError, status
+  end
+end
+    
+        def add_filter(filter=nil, &block)
+      if block
+        raise ArgumentError, 'Both a block and an object were given' if filter
+    
+          def netssh_options
+        @netssh_options ||= super.merge(fetch(:ssh_options) || {})
+      end
+    
+          def fetch_primary(role)
+        hosts = roles_for([role])
+        hosts.find(&:primary) || hosts.first
+      end
+    
+          it 'Does not render below article variant when no variants published' do
+        html_variant = create(:html_variant, published: false, approved: true, group: 'article_show_below_article_cta')
+        get article.path + '?variant_version=0'
+        expect(response.body).not_to include html_variant.html
+      end
+    
+      def satellite_tweet!
+    @article.tags.find_each do |tag|
+      BufferUpdate.buff!(@article.id, twitter_buffer_text, tag.buffer_profile_id_code, 'twitter', tag.id) if tag.buffer_profile_id_code.present?
+    end
+    @article.update(last_buffered: Time.current)
+  end
+    
+      def update
+    prevent_request_if_requested_twice
+    @user = current_user
+    @user.assign_attributes(user_params)
+    @errors = []
+    confirm_presence
+    respond_to do |format|
+      if @invalid_form
+        render :edit
+        return
+      end
+    
+      it 'can display a single scheduled job' do
+    params = add_scheduled
+    get '/scheduled/0-shouldntexist'
+    assert_equal 302, last_response.status
+    get '/scheduled/#{job_params(*params)}'
+    assert_equal 200, last_response.status
+    assert_match(/HardWorker/, last_response.body)
+  end
+    
+          q.clear
+      assert SetWorker.perform_async(1)
+      assert_equal 0, q.size
+    
+        assert_nil dead_set.find_job('000103')
+    assert dead_set.find_job('000102')
+    assert dead_set.find_job('000101')
+  end
+    
+    end
+
+    
+      it 'logs large payloads' do
+    output = capture_logging(Logger::WARN) do
+      SomeClass.delay.doit('a' * 8192)
+    end
+    assert_match(/#{SomeClass}.doit job argument is/, output)
+  end
+    
+          msg['locale'] = 'jp'
+      I18n.locale = I18n.default_locale
+      assert_equal :en, I18n.locale
+      mw = Sidekiq::Middleware::I18n::Server.new
+      mw.call(nil, msg, nil) do
+        assert_equal :jp, I18n.locale
+      end
+      assert_equal :en, I18n.locale
+    end
+    
+          e = assert_raises ArgumentError do
+        Sidekiq.on(:startp)
+      end
+      assert_match(/Invalid event name/, e.message)
+      e = assert_raises ArgumentError do
+        Sidekiq.on('startup')
+      end
+      assert_match(/Symbols only/, e.message)
+      Sidekiq.on(:startup) do
+        1 + 1
+      end
+    
+        if input_type == 'pleaserun'
+      # Special case for pleaserun that all parameters are considered the 'command'
+      # to run through pleaserun.
+      input.input(args)
+    else
+      # Each remaining command line parameter is used as an 'input' argument.
+      # For directories, this means paths. For things like gem and python, this
+      # means package name or paths to the packages (rails, foo-1.0.gem, django,
+      # bar/setup.py, etc)
+      args.each do |arg|
+        input.input(arg)
       end
     end
     
-          configure do |config|
-        config.vm.box = 'foo'
-      end
+      # Clean up any temporary storage used by this class.
+  def cleanup
+    cleanup_staging
+    cleanup_build
+  end # def cleanup
     
-              @logger = Log4r::Logger.new('vagrant::trigger::#{self.class.to_s.downcase}')
+      option '--origin', 'ABI',
+         'Sets the FreeBSD 'origin' pkg field',
+         :default => 'fpm/<name>'
+    
+      public(:input)
+end # class FPM::Package::PleaseRun
+
+    
+        # easy_install will put stuff in @tmpdir/packagename/, so find that:
+    #  @tmpdir/somepackage/setup.py
+    dirs = ::Dir.glob(File.join(target, '*'))
+    if dirs.length != 1
+      raise 'Unexpected directory layout after easy_install. Maybe file a bug? The directory is #{build_path}'
+    end
+    return dirs.first
+  end # def download
+    
+      def migration_name
+    'add_attachment_#{attachment_names.join('_')}_to_#{name.underscore.pluralize}'
+  end
+    
+        def add_active_record_callbacks
+      name = @name
+      @klass.send(:after_save) { send(name).send(:save) }
+      @klass.send(:before_destroy) { send(name).send(:queue_all_for_delete) }
+      if @klass.respond_to?(:after_commit)
+        @klass.send(:after_commit, on: :destroy) do
+          send(name).send(:flush_deletes)
         end
-    
-    require File.expand_path('../../base', __FILE__)
-    
-            expect(described_class.exec(ssh_info)).to eq(nil)
-        expect(Vagrant::Util::SafeExec).to have_received(:exec)
-          .with(ssh_path, 'vagrant@localhost', '-p', '2222', '-o', 'LogLevel=FATAL', '-o', 'StrictHostKeyChecking=no', '-o', 'UserKnownHostsFile=/dev/null', '-i', ssh_info[:private_key_path][0],'-o', 'ForwardX11=yes', '-o', 'ForwardX11Trusted=yes')
+      else
+        @klass.send(:after_destroy) { send(name).send(:flush_deletes) }
       end
     end
     
-        # Enable Vagrant environment specific plugins at given data path
-    #
-    # @param [Pathname] Path to Vagrant::Environment data directory
-    # @return [Pathname] Path to environment specific gem directory
-    def environment_path=(env_data_path)
-      @env_plugin_gem_path = env_data_path.join('plugins', 'gems', RUBY_VERSION).freeze
+        desc 'version', 'Show Bourbon version'
+    def version
+      say 'Bourbon #{Bourbon::VERSION}'
     end
+    
+          expect('.border-width-implied-left').to have_rule(rule)
+    end
+  end
+    
+      context 'called with four sizes' do
+    it 'applies different widths to all sides' do
+      rule = 'padding: 7px 8px 9px 10px'
