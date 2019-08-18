@@ -1,197 +1,184 @@
 
         
-        import os
-import pytest
-from thefuck.shells import Bash
+        
+@pytest.fixture
+def httpbin(httpbin):
+    return prepare_url(httpbin)
     
-        def instant_mode_alias(self, alias_name):
-        if os.environ.get('THEFUCK_INSTANT_MODE', '').lower() == 'true':
-            mark = USER_COMMAND_MARK + '\b' * len(USER_COMMAND_MARK)
-            return '''
-                export PS1='{user_command_mark}$PS1';
-                {app_alias}
-            '''.format(user_command_mark=mark,
-                       app_alias=self.app_alias(alias_name))
-        else:
-            log_path = os.path.join(
-                gettempdir(), 'thefuck-script-log-{}'.format(uuid4().hex))
-            return '''
-                export THEFUCK_INSTANT_MODE=True;
-                export THEFUCK_OUTPUT_LOG={log};
-                thefuck --shell-logger {log};
-                rm {log};
-                exit
-            '''.format(log=log_path)
+        def __enter__(self):
+        self.start()
+        self.ready_event.wait(self.WAIT_EVENT_TIMEOUT)
+        return self.host, self.port
     
-        def how_to_configure(self):
-        return self._create_shell_configuration(
-            content=u'thefuck --alias | source',
-            path='~/.config/fish/config.fish',
-            reload='fish')
-    
-    (c) 2016, Aaron Christianson
-http://github.com/ninjaaron/fast-entry_points
-'''
-from setuptools.command import easy_install
-import re
-TEMPLATE = r'''\
-# -*- coding: utf-8 -*-
-# EASY-INSTALL-ENTRY-SCRIPT: '{3}','{4}','{5}'
-__requires__ = '{3}'
-import re
-import sys
-    
-    misspelled_subcommand = '''\
-az provider: 'lis' is not in the 'az provider' command group. See 'az provider --help'.
-    
-            if form._meta.labels and class_name in form._meta.labels:
-            label = form._meta.labels[class_name]
-        else:
-            label = label_for_field(field, form._meta.model, model_admin, form=form)
-    
-    
-class RunInTmpDirMixin:
+        :param jar: cookielib.CookieJar (not necessarily a RequestsCookieJar)
+    :param request: our own requests.Request object
+    :param response: urllib3.HTTPResponse object
     '''
-    Allow i18n tests that need to generate .po/.mo files to run in an isolated
-    temporary filesystem tree created by tempfile.mkdtemp() that contains a
-    clean copy of the relevant test code.
+    if not (hasattr(response, '_original_response') and
+            response._original_response):
+        return
+    # the _original_response field is the wrapped httplib.HTTPResponse object,
+    req = MockRequest(request)
+    # pull out the HTTPMessage with the headers and put it in the mock:
+    res = MockResponse(response._original_response.msg)
+    jar.extract_cookies(res, req)
     
-    nb_examples = 100
-in_encoder = encoder_input_data[:nb_examples]
-in_decoder = np.zeros(
-    (len(input_texts), max_decoder_seq_length, num_decoder_tokens),
-    dtype='float32')
+    
+def naughty_strings(filepath=FILEPATH):
+    '''Get the list of naughty_strings.
+    
+        @staticmethod
+    def _get_old_cert(commonname):
+        certfile = os.path.join(CertUtil.ca_certdir, commonname + '.crt')
+        if os.path.exists(certfile):
+            with open(certfile, 'rb') as fp:
+                cert = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, fp.read())
+            if datetime.datetime.strptime(cert.get_notAfter(), '%Y%m%d%H%M%SZ') < datetime.datetime.utcnow() + datetime.timedelta(days=30):
+                try:
+                    os.remove(certfile)
+                except OSError as e:
+                    xlog.warning('CertUtil._get_old_cert failed: unable to remove outdated cert, %r', e)
+                else:
+                    return
+                # well, have to use the old one
+            return certfile
     
     
-for seq_index in range(100):
-    # Take one sequence (part of the training set)
-    # for trying out decoding.
-    input_seq = encoder_input_data[seq_index: seq_index + 1]
-    decoded_sentence = decode_sequence(input_seq)
-    print('-')
-    print('Input sentence:', input_texts[seq_index])
-    print('Decoded sentence:', decoded_sentence)
-
+try:
+    from Crypto.Cipher.ARC4 import new as _Crypto_Cipher_ARC4_new
+except ImportError:
+    logging.warn('Load Crypto.Cipher.ARC4 Failed, Use Pure Python Instead.')
+    class _Crypto_Cipher_ARC4_new(object):
+        def __init__(self, key):
+            x = 0
+            box = range(256)
+            for i, y in enumerate(box):
+                x = (x + y + ord(key[i % len(key)])) & 0xff
+                box[i], box[x] = box[x], y
+            self.__box = box
+            self.__x = 0
+            self.__y = 0
+        def encrypt(self, data):
+            out = []
+            out_append = out.append
+            x = self.__x
+            y = self.__y
+            box = self.__box
+            for char in data:
+                x = (x + 1) & 0xff
+                y = (y + box[x]) & 0xff
+                box[x], box[y] = box[y], box[x]
+                out_append(chr(ord(char) ^ box[(box[x] + box[y]) & 0xff]))
+            self.__x = x
+            self.__y = y
+            return ''.join(out)
     
-    - Load the original image.
-- Define a number of processing scales (i.e. image shapes),
-    from smallest to largest.
-- Resize the original image to the smallest scale.
-- For every scale, starting with the smallest (i.e. current one):
-    - Run gradient ascent
-    - Upscale image to the next scale
-    - Reinject the detail that was lost at upscaling time
-- Stop when we are back to the original size.
+    - ANTLRStringStream: Reads from a string objects. The input should be a unicode
+  object, or ANTLR3 will have trouble decoding non-ascii data.
+- ANTLRFileStream: Opens a file and read the contents, with optional character
+  decoding.
+- ANTLRInputStream: Reads the date from a file-like object, with optional
+  character decoding.
     
+    
+##     def specialTransition(self, state, symbol):
+##         return 0
+    
+            # Test: merge with an invalid key
+        s = 'dummy3'
+        cfg2 = AttrDict()
+        cfg2.FOO = AttrDict()
+        cfg2.FOO.BAR = s
+        with self.assertRaises(KeyError):
+            core_config.merge_cfg_from_cfg(cfg2)
+    
+    
+def get_detectron_ops_lib():
+    '''Retrieve Detectron ops library.'''
+    # Candidate prefixes for detectron ops lib path
+    prefixes = [_CMAKE_INSTALL_PREFIX, sys.prefix, sys.exec_prefix] + sys.path
+    # Candidate subdirs for detectron ops lib
+    subdirs = ['lib', 'torch/lib']
+    # Try to find detectron ops lib
+    for prefix in prefixes:
+        for subdir in subdirs:
+            ops_path = os.path.join(prefix, subdir, _DETECTRON_OPS_LIB)
+            if os.path.exists(ops_path):
+                print('Found Detectron ops lib: {}'.format(ops_path))
+                return ops_path
+    raise Exception('Detectron ops lib not found')
+    
+    
+def configure_bbox_reg_weights(model, saved_cfg):
+    '''Compatibility for old models trained with bounding box regression
+    mean/std normalization (instead of fixed weights).
     '''
-Note:
-batch_size is highly sensitive.
-Only 2 epochs are needed as the dataset is very small.
-'''
+    if 'MODEL' not in saved_cfg or 'BBOX_REG_WEIGHTS' not in saved_cfg.MODEL:
+        logger.warning('Model from weights file was trained before config key '
+                       'MODEL.BBOX_REG_WEIGHTS was added. Forcing '
+                       'MODEL.BBOX_REG_WEIGHTS = (1., 1., 1., 1.) to ensure '
+                       'correct **inference** behavior.')
+        # Generally we don't allow modifying the config, but this is a one-off
+        # hack to support some very old models
+        is_immutable = cfg.is_immutable()
+        cfg.immutable(False)
+        cfg.MODEL.BBOX_REG_WEIGHTS = (1., 1., 1., 1.)
+        cfg.immutable(is_immutable)
+        logger.info('New config:')
+        logger.info(pprint.pformat(cfg))
+        assert not model.train, (
+            'This model was trained with an older version of the code that '
+            'used bounding box regression mean/std normalization. It can no '
+            'longer be used for training. To upgrade it to a trainable model '
+            'please use fb/compat/convert_bbox_reg_normalized_model.py.'
+        )
     
-    print('Train...')
-model.fit(x_train, y_train,
-          batch_size=batch_size,
-          epochs=15,
-          validation_data=(x_test, y_test))
-score, acc = model.evaluate(x_test, y_test,
-                            batch_size=batch_size)
-print('Test score:', score)
-print('Test accuracy:', acc)
-
+        def GetGlobalAverageValue(self):
+        return self.total / self.count
     
-        # - Produce data on 4 worker threads, consume on main thread:
-    #   - All worker threads share the SAME generator
-    model.predict_generator(custom_generator(),
-                            steps=STEPS,
-                            max_queue_size=10,
-                            workers=WORKERS,
-                            use_multiprocessing=False)
+    # Copyright (c) 2017-present, Facebook, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the 'License');
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an 'AS IS' BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+##############################################################################
     
-        def build(self, input_shape):
-        self.embeddings = self.add_weight(
-            shape=(self.input_dim, self.output_dim),
-            initializer=self.embeddings_initializer,
-            name='embeddings',
-            regularizer=self.embeddings_regularizer,
-            constraint=self.embeddings_constraint,
-            dtype=self.dtype)
-        self.built = True
+        dt_testdev = []
+    print('Filtering test-dev from test...')
+    t = Timer()
+    t.tic()
+    for i in range(len(dt)):
+        if i % 1000 == 0:
+            print('{}/{}'.format(i, len(dt)))
+        if dt[i]['image_id'] in image_testdev_id:
+            dt_testdev.append(dt[i])
+    print('Done filtering ({:2}s)!'.format(t.toc()))
     
+    print('='*40)
+print('2. 添加自定义词典/调整词典')
+print('-'*40)
     
-max_timeout = 5
+    content = open(file_name, 'rb').read()
     
-    ## All tokens go to the parser (unless skip() is called in that rule)
-# on a particular 'channel'.  The parser tunes to a particular channel
-# so that whitespace etc... can go to the parser on a 'hidden' channel.
-DEFAULT_CHANNEL = 0
+        def testPosseg_NOHMM(self):
+        import jieba.posseg as pseg
+        for content in test_contents:
+            result = pseg.cut(content,HMM=False)
+            assert isinstance(result, types.GeneratorType), 'Test Posseg Generator error'
+            result = list(result)
+            assert isinstance(result, list), 'Test Posseg error on content: %s' % content
+            print(' , '.join([w.word + ' / ' + w.flag for w in result]), file=sys.stderr)
+        print('testPosseg_NOHMM', file=sys.stderr)
     
-            
-        if input is not None:
-            self.input = input
-            self.index = input.index()
-    
-    
-    def toString(self, start=None, stop=None):
-        '''
-        Return the text of all tokens from start to stop, inclusive.
-        If the stream does not buffer all the tokens then it can just
-        return '' or null;  Users should not access $ruleLabel.text in
-        an action of course in that case.
-    
-        def test_multiple_runs(self):
-        # Bug 8527 reported that multiple calls produced empty
-        # __pycache__/__pycache__ directories.
-        self.assertRunOK('-q', self.pkgdir)
-        # Verify the __pycache__ directory contents.
-        self.assertTrue(os.path.exists(self.pkgdir_cachedir))
-        cachecachedir = os.path.join(self.pkgdir_cachedir, '__pycache__')
-        self.assertFalse(os.path.exists(cachecachedir))
-        # Call compileall again.
-        self.assertRunOK('-q', self.pkgdir)
-        self.assertTrue(os.path.exists(self.pkgdir_cachedir))
-        self.assertFalse(os.path.exists(cachecachedir))
-    
-            self.checkraises(TypeError, ' ', 'join')
-        self.checkraises(TypeError, ' ', 'join', None)
-        self.checkraises(TypeError, ' ', 'join', 7)
-        self.checkraises(TypeError, ' ', 'join', [1, 2, bytes()])
-        try:
-            def f():
-                yield 4 + ''
-            self.fixtype(' ').join(f())
-        except TypeError as e:
-            if '+' not in str(e):
-                self.fail('join() ate exception message')
-        else:
-            self.fail('exception not raised')
-    
-    class EOFTestCase(unittest.TestCase):
-    def test_EOFC(self):
-        expect = 'EOL while scanning string literal (<string>, line 1)'
-        try:
-            eval(''''this is a test\
-            ''')
-        except SyntaxError as msg:
-            self.assertEqual(str(msg), expect)
-        else:
-            raise support.TestFailed
-    
-            if not self.tmp_dir:
-            # When tests are run from the Python build directory, it is best practice
-            # to keep the test files in a subfolder.  This eases the cleanup of leftover
-            # files using the 'make distclean' command.
-            if sysconfig.is_python_build():
-                self.tmp_dir = sysconfig.get_config_var('abs_builddir')
-                if self.tmp_dir is None:
-                    # bpo-30284: On Windows, only srcdir is available. Using
-                    # abs_builddir mostly matters on UNIX when building Python
-                    # out of the source tree, especially when the source tree
-                    # is read only.
-                    self.tmp_dir = sysconfig.get_config_var('srcdir')
-                self.tmp_dir = os.path.join(self.tmp_dir, 'build')
-            else:
-                self.tmp_dir = tempfile.gettempdir()
-    
-        def test_block_add_hook(self):
-        self.do_test('test_block_add_hook')
+    url = sys.argv[1]
+content = open(url,'rb').read()
+t1 = time.time()
+words = '/ '.join(jieba.cut(content))
