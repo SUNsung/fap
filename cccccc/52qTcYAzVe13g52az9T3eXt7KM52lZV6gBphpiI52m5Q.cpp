@@ -1,470 +1,357 @@
 
         
-        #include 'pch.h'
-#include 'KeyChord.h'
+                    // Initialize the necessary startup info struct        
+            STARTUPINFOEX startupInfo{};
+            if (S_OK == InitializeStartupInfoAttachedToPseudoConsole(&startupInfo, hPC))
+            {
+                // Launch ping to emit some text back via the pipe
+                PROCESS_INFORMATION piClient{};
+                hr = CreateProcess(
+                    NULL,                           // No module name - use Command Line
+                    szCommand,                      // Command Line
+                    NULL,                           // Process handle not inheritable
+                    NULL,                           // Thread handle not inheritable
+                    FALSE,                          // Inherit handles
+                    EXTENDED_STARTUPINFO_PRESENT,   // Creation flags
+                    NULL,                           // Use parent's environment block
+                    NULL,                           // Use parent's starting directory 
+                    &startupInfo.StartupInfo,       // Pointer to STARTUPINFO
+                    &piClient)                      // Pointer to PROCESS_INFORMATION
+                    ? S_OK
+                    : GetLastError();
+    }
     
-    int64_t UniValue::get_int64() const
+    class GetMergeSingleMapFeatureTensorsGradient : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
+  vector<OperatorDef> GetGradientDefs() override {
+    vector<string> input_blob_names{};
+    vector<string> output_blob_names{};
+    }
+    }
+    
+    Github Link:
+- https://github.com/pytorch/pytorch/blob/master/caffe2/operators/floor_op.cc
+    
+              vector<TensorShape> out(1);
+          switch (order) {
+            case StorageOrder::NCHW:
+              out[0] = CreateTensorShape(
+                  vector<int>{N, C * kernel_h * kernel_w, out_h, out_w},
+                  TensorProto::FLOAT);
+              break;
+            case StorageOrder::NHWC:
+              out[0] = CreateTensorShape(
+                  vector<int>{N, out_h, out_w, kernel_h * kernel_w * C},
+                  TensorProto::FLOAT);
+              break;
+            default:
+              CAFFE_THROW('Unknown storage order: ', order);
+          }
+    
+    
+    {} // namespace caffe2
+    
+    #include 'hdf5.h'
+#include 'hdf5_hl.h'
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the computed outputs @f$
+   *        y = \max(min, \min(max, x))
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+    
+    {}  // namespace caffe
+
+    
+    TYPED_TEST(NeuronLayerTest, TestDropoutGradientTest) {
+  typedef typename TypeParam::Dtype Dtype;
+  LayerParameter layer_param;
+  layer_param.set_phase(TEST);
+  DropoutLayer<Dtype> layer(layer_param);
+  GradientChecker<Dtype> checker(1e-2, 1e-3);
+  checker.CheckGradientEltwise(&layer, this->blob_bottom_vec_,
+      this->blob_top_vec_);
+}
+    
+    template <typename Dtype>
+void InnerProductLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+    const vector<Blob<Dtype>*>& top) {
+  const Dtype* bottom_data = bottom[0]->cpu_data();
+  Dtype* top_data = top[0]->mutable_cpu_data();
+  const Dtype* weight = this->blobs_[0]->cpu_data();
+  caffe_cpu_gemm<Dtype>(CblasNoTrans, transpose_ ? CblasNoTrans : CblasTrans,
+      M_, N_, K_, (Dtype)1.,
+      bottom_data, weight, (Dtype)0., top_data);
+  if (bias_term_) {
+    caffe_cpu_gemm<Dtype>(CblasNoTrans, CblasNoTrans, M_, N_, 1, (Dtype)1.,
+        bias_multiplier_.cpu_data(),
+        this->blobs_[1]->cpu_data(), (Dtype)1., top_data);
+  }
+}
+    
+    /**
+  * @brief Enumeration of actions that a client of the Solver may request by
+  * implementing the Solver's action request function, which a
+  * client may optionally provide in order to request early termination
+  * or saving a snapshot without exiting. In the executable caffe, this
+  * mechanism is used to allow the snapshot to be saved when stopping
+  * execution with a SIGINT (Ctrl-C).
+  */
+  namespace SolverAction {
+    enum Enum {
+      NONE = 0,  // Take no special action.
+      STOP = 1,  // Stop training. snapshot_after_train controls whether a
+                 // snapshot is created.
+      SNAPSHOT = 2  // Take a snapshot, and keep training.
+    };
+  }
+    
+      bp::class_<Net<Dtype>, shared_ptr<Net<Dtype> >, boost::noncopyable >('Net',
+    bp::no_init)
+    // Constructor
+    .def('__init__', bp::make_constructor(&Net_Init,
+          bp::default_call_policies(), (bp::arg('network_file'), 'phase',
+            bp::arg('level')=0, bp::arg('stages')=bp::object(),
+            bp::arg('weights')=bp::object())))
+    // Legacy constructor
+    .def('__init__', bp::make_constructor(&Net_Init_Load))
+    .def('_forward', &Net<Dtype>::ForwardFromTo)
+    .def('_backward', &Net<Dtype>::BackwardFromTo)
+    .def('reshape', &Net<Dtype>::Reshape)
+    .def('clear_param_diffs', &Net<Dtype>::ClearParamDiffs)
+    // The cast is to select a particular overload.
+    .def('copy_from', static_cast<void (Net<Dtype>::*)(const string&)>(
+        &Net<Dtype>::CopyTrainedLayersFrom))
+    .def('share_with', &Net<Dtype>::ShareTrainedLayersWith)
+    .add_property('_blob_loss_weights', bp::make_function(
+        &Net<Dtype>::blob_loss_weights, bp::return_internal_reference<>()))
+    .def('_bottom_ids', bp::make_function(&Net<Dtype>::bottom_ids,
+        bp::return_value_policy<bp::copy_const_reference>()))
+    .def('_top_ids', bp::make_function(&Net<Dtype>::top_ids,
+        bp::return_value_policy<bp::copy_const_reference>()))
+    .add_property('_blobs', bp::make_function(&Net<Dtype>::blobs,
+        bp::return_internal_reference<>()))
+    .add_property('layers', bp::make_function(&Net<Dtype>::layers,
+        bp::return_internal_reference<>()))
+    .add_property('_blob_names', bp::make_function(&Net<Dtype>::blob_names,
+        bp::return_value_policy<bp::copy_const_reference>()))
+    .add_property('_layer_names', bp::make_function(&Net<Dtype>::layer_names,
+        bp::return_value_policy<bp::copy_const_reference>()))
+    .add_property('_inputs', bp::make_function(&Net<Dtype>::input_blob_indices,
+        bp::return_value_policy<bp::copy_const_reference>()))
+    .add_property('_outputs',
+        bp::make_function(&Net<Dtype>::output_blob_indices,
+        bp::return_value_policy<bp::copy_const_reference>()))
+    .def('_set_input_arrays', &Net_SetInputArrays,
+        bp::with_custodian_and_ward<1, 2, bp::with_custodian_and_ward<1, 3> >())
+    .def('save', &Net_Save)
+    .def('save_hdf5', &Net_SaveHDF5)
+    .def('load_hdf5', &Net_LoadHDF5)
+    .def('before_forward', &Net_before_forward)
+    .def('after_forward', &Net_after_forward)
+    .def('before_backward', &Net_before_backward)
+    .def('after_backward', &Net_after_backward)
+    .def('after_backward', &Net_add_nccl);
+  BP_REGISTER_SHARED_PTR_TO_PYTHON(Net<Dtype>);
+    
+    using std::min;
+using std::max;
+    
+    void convert_dataset(const string& input_folder, const string& output_folder,
+    const string& db_type) {
+  scoped_ptr<db::DB> train_db(db::GetDB(db_type));
+  train_db->Open(output_folder + '/cifar10_train_' + db_type, db::NEW);
+  scoped_ptr<db::Transaction> txn(train_db->NewTransaction());
+  // Data buffer
+  int label;
+  char str_buffer[kCIFARImageNBytes];
+  Datum datum;
+  datum.set_channels(3);
+  datum.set_height(kCIFARSize);
+  datum.set_width(kCIFARSize);
+    }
+    
+      string file = argv[5];
+    
+    #include 'caffe/proto/caffe.pb.h'
+#include 'caffe/util/format.hpp'
+#include 'caffe/util/math_functions.hpp'
+    
+      cli_sock = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0,
+                       grpc_get_default_wsa_socket_flags());
+  GPR_ASSERT(cli_sock != INVALID_SOCKET);
+    
+    static void iomgr_platform_flush(void) { grpc_iocp_flush(); }
+    
+    #ifndef GRPCPP_CREATE_CHANNEL_H
+#define GRPCPP_CREATE_CHANNEL_H
+    
+    #ifndef GRPCPP_SUPPORT_CHANNEL_ARGUMENTS_H
+#define GRPCPP_SUPPORT_CHANNEL_ARGUMENTS_H
+    
+    using grpc::testing::EchoRequest;
+using grpc::testing::EchoResponse;
+using std::chrono::system_clock;
+    
+      void TearDown() override {
+    if (server_) {
+      server_->Shutdown();
+    }
+    void* ignored_tag;
+    bool ignored_ok;
+    for (auto it = cqs_.begin(); it != cqs_.end(); ++it) {
+      (*it)->Shutdown();
+      while ((*it)->Next(&ignored_tag, &ignored_ok))
+        ;
+    }
+  }
+    
+      void SetUp() override {
+    port_ = grpc_pick_unused_port_or_die();
+    ref_desc_pool_ = protobuf::DescriptorPool::generated_pool();
+    }
+    
+      send_request_.set_message('hello bidi streaming');
+  std::unique_ptr<ClientAsyncReaderWriter<EchoRequest, EchoResponse>>
+      cli_stream(stub_->AsyncBidiStream(&cli_ctx_, cq_.get(), tag(1)));
+    
+    `btree/secondary_operations.*` and `btree/reql_specific.*` are the only files in the
+`btree/` directory that know about ReQL-specific concepts such as metainfo and sindexes.
+They should probably be moved out of the `btree/` directory. */
+    
+    void store_t::write(
+        DEBUG_ONLY(const metainfo_checker_t& metainfo_checker, )
+        const region_map_t<binary_blob_t>& new_metainfo,
+        const write_t &_write,
+        write_response_t *response,
+        const write_durability_t durability,
+        state_timestamp_t timestamp,
+        UNUSED order_token_t order_token,  // TODO
+        write_token_t *token,
+        signal_t *interruptor)
+        THROWS_ONLY(interrupted_exc_t) {
+    assert_thread();
+    }
+    
+        std::map<sindex_name_t, secondary_index_t> get_sindexes() const;
+    
+                for (;;) {
+                if (it == sindexes.end()) {
+                    ASSERT_TRUE(jt == mirror.end());
+                    break;
+                }
+                ASSERT_TRUE(jt != mirror.end());
+    }
+    
+    template <GTEST_6_TYPENAMES_(T)>
+struct tuple_size<GTEST_6_TUPLE_(T) > {
+  static const int value = 6;
+};
+    
+      static void setInitialized(bool f) { data_.initialized = f; }
+    
+    void DHTReplaceNodeTask::onReceived(const DHTPingReplyMessage* message)
 {
-    if (typ != VNUM)
-        throw std::runtime_error('JSON value is not an integer as expected');
-    int64_t retval;
-    if (!ParseInt64(getValStr(), &retval))
-        throw std::runtime_error('JSON integer out of range');
-    return retval;
+  A2_LOG_INFO(fmt('ReplaceNode: Ping reply received from %s.',
+                  message->getRemoteNode()->toString().c_str()));
+  setFinished(true);
 }
     
-    // Maximum level to which a new compacted memtable is pushed if it
-// does not create overlap.  We try to push to level 2 to avoid the
-// relatively expensive level 0=>1 compactions and to avoid some
-// expensive manifest file operations.  We do not push all the way to
-// the largest level since that can generate a lot of wasted disk
-// space if the same key space is being repeatedly overwritten.
-static const int kMaxMemCompactLevel = 2;
-    
-    extern 'C' {
-PyMODINIT_FUNC INITFUNC() {
-#if PY_MAJOR_VERSION >= 3
-  PyObject* module = PyModule_Create(&_module);
-#else
-  PyObject* module = Py_InitModule3(const_cast<char*>(kModuleName), NULL,
-                                    const_cast<char*>(kModuleDocstring));
-#endif
-  if (module == NULL) {
-    return INITFUNC_ERRORVAL;
+    void DHTTaskExecutor::update()
+{
+  execTasks_.erase(std::remove_if(execTasks_.begin(), execTasks_.end(),
+                                  std::mem_fn(&DHTTask::finished)),
+                   execTasks_.end());
+  int r;
+  if (static_cast<size_t>(numConcurrent_) > execTasks_.size()) {
+    r = numConcurrent_ - execTasks_.size();
   }
-    }
-    }
-    
-      // The Python MessageFactory used to create the class. It is needed to resolve
-  // fields descriptors, including extensions fields; its C++ MessageFactory is
-  // used to instantiate submessages.
-  // This reference must stay alive until all message pointers are destructed.
-  PyMessageFactory* py_message_factory;
-    
-    extern PyTypeObject RepeatedScalarContainer_Type;
-    
-    #include <google/protobuf/message.h>
-#include <google/protobuf/pyext/message.h>
-#include <google/protobuf/pyext/scoped_pyobject_ptr.h>
-#include <google/protobuf/unknown_field_set.h>
-#include <google/protobuf/wire_format_lite.h>
-    
-    #ifdef ADDRESS_SANITIZER
-#include <sanitizer/asan_interface.h>
-#endif  // ADDRESS_SANITIZER
-    
-    #include <google/protobuf/stubs/logging.h>
-#include <google/protobuf/stubs/common.h>
-#include <google/protobuf/io/coded_stream.h>
-#include <google/protobuf/io/zero_copy_stream_impl_lite.h>
-#include <google/protobuf/arena.h>
-    
-      // Sets the destination filename and enables images to be written to a PDF
-  // on destruction.
-  void WritePDF(const char* filename) {
-    if (pixaGetCount(pixa_) > 0) {
-      pixaConvertToPdf(pixa_, 300, 1.0f, 0, 0, 'AllDebugImages', filename);
-      pixaClear(pixa_);
+  else {
+    r = 0;
+  }
+  while (r && !queue_.empty()) {
+    std::shared_ptr<DHTTask> task = queue_.front();
+    queue_.pop_front();
+    task->startup();
+    if (!task->finished()) {
+      execTasks_.push_back(task);
+      --r;
     }
   }
-    
-    // Solve the dynamic programming problem for the given array of points, with
-// the given size and cost function.
-// Steps backwards are limited to being between min_step and max_step
-// inclusive.
-// The return value is the tail of the best path.
-DPPoint* DPPoint::Solve(int min_step, int max_step, bool debug,
-                        CostFunc cost_func, int size, DPPoint* points) {
-  if (size <= 0 || max_step < min_step || min_step >= size)
-    return nullptr;  // Degenerate, but not necessarily an error.
-  ASSERT_HOST(min_step > 0);  // Infinite loop possible if this is not true.
-  if (debug)
-    tprintf('min = %d, max=%d\n',
-            min_step, max_step);
-  // Evaluate the total cost at each point.
-  for (int i = 0; i < size; ++i) {
-    for (int offset = min_step; offset <= max_step; ++offset) {
-      DPPoint* prev = offset <= i ? points + i - offset : nullptr;
-      int64_t new_cost = (points[i].*cost_func)(prev);
-      if (points[i].best_prev_ != nullptr && offset > min_step * 2 &&
-          new_cost > points[i].total_cost_)
-        break;  // Find only the first minimum if going over twice the min.
-    }
-    points[i].total_cost_ += points[i].local_cost_;
-    if (debug) {
-      tprintf('At point %d, local cost=%d, total_cost=%d, steps=%d\n',
-              i, points[i].local_cost_, points[i].total_cost_,
-              points[i].total_steps_);
-    }
-  }
-  // Now find the end of the best path and return it.
-  int best_cost = points[size - 1].total_cost_;
-  int best_end = size - 1;
-  for (int end = best_end - 1; end >= size - min_step; --end) {
-    int cost = points[end].total_cost_;
-    if (cost < best_cost) {
-      best_cost = cost;
-      best_end = end;
-    }
-  }
-  return points + best_end;
+  A2_LOG_DEBUG(fmt('Executing %u Task(s). Queue has %u task(s).',
+                   static_cast<unsigned int>(getExecutingTaskSize()),
+                   static_cast<unsigned int>(getQueueSize())));
 }
     
+    #include <memory>
     
-    {  /* Accept modes which occur between the above rejection groups */
-  R_NN_ACCEPT,          // NN acceptance
-  R_HYPHEN_ACCEPT,      // Hyphen acceptance
-  R_MM_ACCEPT,          // Matrix match acceptance
-  R_QUALITY_ACCEPT,     // Accept word in good quality doc
-  R_MINIMAL_REJ_ACCEPT  // Accept EVERYTHING except tess failures
-};
-    
-      // Get the value of the top (smallest, defined by operator< ) element.
-  const Pair& PeekTop() const {
-    return heap_[0];
-  }
-  // Get the value of the worst (largest, defined by operator< ) element.
-  const Pair& PeekWorst() const { return heap_[IndexOfWorst()]; }
-    
-      // Initialize the bool array to the given size of feature space.
-  // The feature_map is just borrowed, and must exist for the entire
-  // lifetime of the IntFeatureDist.
-  void Init(const IntFeatureMap* feature_map);
-    
-    	if (cfgRoot.length() != 0)
-	{
-		swprintf_s(args, L'%s  -loadcfgfile \'%s\'', args, userConEmuCfgPath);
-	}
-    
-      // contents
-  pageDict->lookupNF('Contents', &contents);
-  if (!(contents.isRef() || contents.isArray() ||
-	contents.isNull())) {
-    error(-1, 'Page contents object (page %d) is wrong type (%s)',
-	  num, contents.getTypeName());
-    contents.free();
-    goto err1;
-  }
-    
-    
-    {    switch (interval->style) {
-    case Interval::Arabic:
-      number = strtol(str + prefixLength, &end, 10);
-      if (*end == '\0' && number - interval->first < interval->length) {
-	*index = base + number - interval->first;
-	return gTrue;
-      }
-      break;
-    case Interval::LowercaseRoman:
-    case Interval::UppercaseRoman:
-      number = fromRoman(str + prefixLength);
-      if (number >= 0 && number - interval->first < interval->length) {
-	*index = base + number - interval->first;
-	return gTrue;
-      }
-      break;
-    case Interval::UppercaseLatin:
-    case Interval::LowercaseLatin:
-      number = fromLatin(str + prefixLength);
-      if (number >= 0 && number - interval->first < interval->length) {
-	*index = base + number - interval->first;
-	return gTrue;
-      }
-      break;
-    case Interval::None:
-      break;
-    }
-  }
-    
-      // Get direction
-  PageTransitionDirection getDirection() { return direction; }
-    
-    ProfileData::ProfileData() {
-	count = 0;
-	total = 0.0;
-	min = 0.0;
-	max = 0.0;
+    void DHTTaskQueueImpl::executeTask()
+{
+  A2_LOG_DEBUG('Updating periodicTaskQueue1');
+  periodicTaskQueue1_.update();
+  A2_LOG_DEBUG('Updating periodicTaskQueue2');
+  periodicTaskQueue2_.update();
+  A2_LOG_DEBUG('Updating immediateTaskQueue');
+  immediateTaskQueue_.update();
 }
     
-        /**
-     * Notifies a PlanExecutor that it should die. Callers must specify the reason for why this
-     * executor is being killed. Subsequent calls to getNext() will return FAILURE, and fill
-     * 'objOut'
-     * with an error reflecting 'killStatus'. If this method is called multiple times, only the
-     * first 'killStatus' will be retained. It is an error to call this method with Status::OK.
-     */
-    virtual void markAsKilled(Status killStatus) = 0;
-    
-        Top() = default;
-    
-        BSONObj query = fromjson('{$text: {$search:\'awesome\', $caseSensitive: false}}');
-    auto expr =
-        unittest::assertGet(ExtensionsCallbackReal(&_opCtx, &_nss).parseText(query.firstElement()));
-    
-    
-    
-    U_CAPI void U_EXPORT2
-uhash_deleteScriptSet(void *obj);
-    
-    
-    {    BreakIterator *get() const { return ptr; }
-    BreakIterator *operator->() const { return ptr; }
-    BreakIterator &operator*() const { return *ptr; }
+    class DHTTaskQueueImpl : public DHTTaskQueue {
 private:
-    BreakIterator *ptr;
-    SharedBreakIterator(const SharedBreakIterator &);
-    SharedBreakIterator &operator=(const SharedBreakIterator &);
-};
+  DHTTaskExecutor periodicTaskQueue1_;
+    }
     
-        // serialize the JSON numbers
-    std::cout << j_integer_t << '\n';
-    std::cout << j_unsigned_t << '\n';
-    std::cout << j_enum << '\n';
-    std::cout << j_short << '\n';
-    std::cout << j_int << '\n';
-    std::cout << j_long << '\n';
-    std::cout << j_int_least32_t << '\n';
-    std::cout << j_uint8_t << '\n';
-    std::cout << j_ok << '\n';
-    std::cout << j_nan << '\n';
-    std::cout << j_infinity << '\n';
-    std::cout << j_float << '\n';
-    std::cout << j_float_nan << '\n';
-    std::cout << j_double << '\n\n';
-    
-    #include 'cyber/common/log.h'
-#include 'modules/common/math/linear_quadratic_regulator.h'
+    class DHTTokenTracker {
+private:
+  static const size_t SECRET_SIZE = 4;
+    }
     
     namespace apollo {
 namespace drivers {
-namespace gnss {
+namespace velodyne {
     }
     }
     }
     
-    // @brief default initializer used in concurrent object pool
-template <class T>
-struct ObjectPoolDefaultInitializer {
-  void operator()(T* t) const {}
-};
-// @brief concurrent object pool with dynamic size
-template <class ObjectType, size_t N = kPoolDefaultSize,
-          class Initializer = ObjectPoolDefaultInitializer<ObjectType>>
-class ConcurrentObjectPool : public BaseObjectPool<ObjectType> {
- public:
-  // using ObjectTypePtr = typename BaseObjectPool<ObjectType>::ObjectTypePtr;
-  using BaseObjectPool<ObjectType>::capacity_;
-  // @brief Only allow accessing from global instance
-  static ConcurrentObjectPool& Instance() {
-    static ConcurrentObjectPool pool(N);
-    return pool;
-  }
-  // @brief overrided function to get object smart pointer
-  std::shared_ptr<ObjectType> Get() override {
-// TODO(All): remove conditional build
-#ifndef PERCEPTION_BASE_DISABLE_POOL
-    ObjectType* ptr = nullptr;
-    {
-      std::lock_guard<std::mutex> lock(mutex_);
-      if (queue_.empty()) {
-        Add(1 + kPoolDefaultExtendNum);
-      }
-      ptr = queue_.front();
-      queue_.pop();
+    void Poller::HandleChanges() {
+  CtrlParamMap local_params;
+  {
+    ReadLockGuard<AtomicRWLock> lck(poll_data_lock_);
+    if (ctrl_params_.empty()) {
+      return;
     }
-    // For efficiency consideration, initialization should be invoked
-    // after releasing the mutex
-    kInitializer(ptr);
-    return std::shared_ptr<ObjectType>(ptr, [&](ObjectType* obj_ptr) {
-      std::lock_guard<std::mutex> lock(mutex_);
-      queue_.push(obj_ptr);
-    });
-#else
-    return std::shared_ptr<ObjectType>(new ObjectType);
-#endif
-  }
-  // @brief overrided function to get batch of smart pointers
-  // @params[IN] num: batch number
-  // @params[OUT] data: vector container to store the pointers
-  void BatchGet(size_t num,
-                std::vector<std::shared_ptr<ObjectType>>* data) override {
-#ifndef PERCEPTION_BASE_DISABLE_POOL
-    std::vector<ObjectType*> buffer(num, nullptr);
-    {
-      std::lock_guard<std::mutex> lock(mutex_);
-      if (queue_.size() < num) {
-        Add(num - queue_.size() + kPoolDefaultExtendNum);
-      }
-      for (size_t i = 0; i < num; ++i) {
-        buffer[i] = queue_.front();
-        queue_.pop();
-      }
-    }
-    // For efficiency consideration, initialization should be invoked
-    // after releasing the mutex
-    for (size_t i = 0; i < num; ++i) {
-      kInitializer(buffer[i]);
-      data->emplace_back(
-          std::shared_ptr<ObjectType>(buffer[i], [&](ObjectType* obj_ptr) {
-            std::lock_guard<std::mutex> lock(mutex_);
-            queue_.push(obj_ptr);
-          }));
-    }
-#else
-    for (size_t i = 0; i < num; ++i) {
-      data->emplace_back(std::shared_ptr<ObjectType>(new ObjectType));
-    }
-#endif
-  }
-  // @brief overrided function to get batch of smart pointers
-  // @params[IN] num: batch number
-  // @params[IN] is_front: indicating insert to front or back of the list
-  // @params[OUT] data: list container to store the pointers
-  void BatchGet(size_t num, bool is_front,
-                std::list<std::shared_ptr<ObjectType>>* data) override {
-#ifndef PERCEPTION_BASE_DISABLE_POOL
-    std::vector<ObjectType*> buffer(num, nullptr);
-    {
-      std::lock_guard<std::mutex> lock(mutex_);
-      if (queue_.size() < num) {
-        Add(num - queue_.size() + kPoolDefaultExtendNum);
-      }
-      for (size_t i = 0; i < num; ++i) {
-        buffer[i] = queue_.front();
-        queue_.pop();
-      }
-    }
-    // For efficiency consideration, initialization should be invoked
-    // after releasing the mutex
-    for (size_t i = 0; i < num; ++i) {
-      kInitializer(buffer[i]);
-      is_front ? data->emplace_front(std::shared_ptr<ObjectType>(
-                     buffer[i],
-                     [&](ObjectType* obj_ptr) {
-                       std::lock_guard<std::mutex> lock(mutex_);
-                       queue_.push(obj_ptr);
-                     }))
-               : data->emplace_back(std::shared_ptr<ObjectType>(
-                     buffer[i], [&](ObjectType* obj_ptr) {
-                       std::lock_guard<std::mutex> lock(mutex_);
-                       queue_.push(obj_ptr);
-                     }));
-    }
-#else
-    for (size_t i = 0; i < num; ++i) {
-      is_front
-          ? data->emplace_front(std::shared_ptr<ObjectType>(new ObjectType))
-          : data->emplace_back(std::shared_ptr<ObjectType>(new ObjectType));
-    }
-#endif
-  }
-  // @brief overrided function to get batch of smart pointers
-  // @params[IN] num: batch number
-  // @params[IN] is_front: indicating insert to front or back of the deque
-  // @params[OUT] data: deque container to store the pointers
-  void BatchGet(size_t num, bool is_front,
-                std::deque<std::shared_ptr<ObjectType>>* data) override {
-#ifndef PERCEPTION_BASE_DISABLE_POOL
-    std::vector<ObjectType*> buffer(num, nullptr);
-    {
-      std::lock_guard<std::mutex> lock(mutex_);
-      if (queue_.size() < num) {
-        Add(num - queue_.size() + kPoolDefaultExtendNum);
-      }
-      for (size_t i = 0; i < num; ++i) {
-        buffer[i] = queue_.front();
-        queue_.pop();
-      }
-    }
-    for (size_t i = 0; i < num; ++i) {
-      kInitializer(buffer[i]);
-      is_front ? data->emplace_front(std::shared_ptr<ObjectType>(
-                     buffer[i],
-                     [&](ObjectType* obj_ptr) {
-                       std::lock_guard<std::mutex> lock(mutex_);
-                       queue_.push(obj_ptr);
-                     }))
-               : data->emplace_back(std::shared_ptr<ObjectType>(
-                     buffer[i], [&](ObjectType* obj_ptr) {
-                       std::lock_guard<std::mutex> lock(mutex_);
-                       queue_.push(obj_ptr);
-                     }));
-    }
-#else
-    for (size_t i = 0; i < num; ++i) {
-      is_front
-          ? data->emplace_front(std::shared_ptr<ObjectType>(new ObjectType))
-          : data->emplace_back(std::shared_ptr<ObjectType>(new ObjectType));
-    }
-#endif
-  }
-#ifndef PERCEPTION_BASE_DISABLE_POOL
-  // @brief overrided function to set capacity
-  void set_capacity(size_t capacity) override {
-    std::lock_guard<std::mutex> lock(mutex_);
-    if (capacity_ < capacity) {
-      Add(capacity - capacity_);
-    }
-  }
-  // @brief get remained object number
-  size_t RemainedNum() override { return queue_.size(); }
-#endif
-  // @brief destructor to release the cached memory
-  ~ConcurrentObjectPool() override {
-    if (cache_) {
-      delete[] cache_;
-      cache_ = nullptr;
-    }
-    for (auto& ptr : extended_cache_) {
-      delete ptr;
-    }
-    extended_cache_.clear();
+    local_params.swap(ctrl_params_);
   }
     }
     
-    struct LaneLine {
-  LaneLineType type;
-  LaneLinePositionType pos_type;
-  // @brief image coordinate system
-  LaneLineCubicCurve curve_car_coord;
-  // @brief camera coordinate system
-  LaneLineCubicCurve curve_camera_coord;
-  // @brief image coordinate system
-  LaneLineCubicCurve curve_image_coord;
-  // @brief curve image point set
-  std::vector<Point2DF> curve_image_point_set;
-  // @brief curve camera point set
-  std::vector<Point3DF> curve_camera_point_set;
-  // @brief curve car coord point set, only on XY plane
-  std::vector<Point2DF> curve_car_coord_point_set;
-  // @brief image end point set
-  std::vector<EndPoints> image_end_point_set;
-  // @brief track id
-  int track_id = -1;
-  // @brief confidence for lane line
-  float confidence = 1.0f;
-    }
     
-    
-    {  float relative_radial_velocity = 0.0f;
-  float relative_tangential_velocity = 0.0f;
-  float radial_velocity = 0.0f;
-};
-    
-    void DstManager::BuildNamesMap(const std::vector<std::string> &fod_subset_names,
-                               DstCommonData *dst_data) {
-  // reset and reserve space
-  dst_data->fod_subset_names_.clear();
-  dst_data->fod_subset_names_.resize(dst_data->fod_subsets_.size());
-  for (size_t i = 0; i < dst_data->fod_subsets_.size(); ++i) {
-    dst_data->fod_subset_names_[i] =
-        std::bitset<64>(dst_data->fod_subsets_[i]).to_string();
-  }
-  // set fod to unknown
-  dst_data->fod_subset_names_[dst_data->fod_loc_] = 'unknown';
-  for (size_t i = 0;
-       i < std::min(fod_subset_names.size(), dst_data->fod_subsets_.size());
-       ++i) {
-    dst_data->fod_subset_names_[i] = fod_subset_names[i];
-  }
+    {  return (b * d - 3.0 * a * c) / (d * d * d);
 }
+    
+    #pragma once
+    
+    #define AINFO_EVERY(freq) \
+  LOG_EVERY_N(INFO, freq) << LEFT_BRACKET << MODULE_NAME << RIGHT_BRACKET
+#define AWARN_EVERY(freq) \
+  LOG_EVERY_N(WARNING, freq) << LEFT_BRACKET << MODULE_NAME << RIGHT_BRACKET
+#define AERROR_EVERY(freq) \
+  LOG_EVERY_N(ERROR, freq) << LEFT_BRACKET << MODULE_NAME << RIGHT_BRACKET
+    
+    
+    {
+    {
+    {
+    {}  // namespace valet_parking
+}  // namespace scenario
+}  // namespace planning
+}  // namespace apollo
