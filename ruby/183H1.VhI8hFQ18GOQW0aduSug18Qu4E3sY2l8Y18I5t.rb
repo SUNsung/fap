@@ -1,181 +1,295 @@
 
         
-            class ChangeTableComment2 < SilentMigration
-      def change
-        change_table_comment :horses, from: 'Sekitoba', to: 'Diomed'
-      end
+        # Sample contents
+WITHOUT_LIQUID = <<-TEXT.freeze
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce auctor libero at
+pharetra tempus. Etiam bibendum magna et metus fermentum, eu cursus lorem
+mattis. Curabitur vel dui et lacus rutrum suscipit et eget neque.
+    
+            def start(opts)
+          @thread = Thread.new do
+            # Use epoll if the kernel supports it
+            EM.epoll
+            EM.run do
+              EM.error_handler { |e| log_error(e) }
+    
+        def sha256(value)
+      salt = Settings.attr_encrypted_db_key_base_truncated
+      ::Digest::SHA256.base64digest('#{value}#{salt}')
     end
     
-      if ENV['RAILS_LOG_TO_STDOUT'].present?
-    logger           = ActiveSupport::Logger.new(STDOUT)
-    logger.formatter = config.log_formatter
-    config.logger    = ActiveSupport::TaggedLogging.new(logger)
+            raise ClaimInvalid, 'Missing required 'iat' claim' if options.valid_within && !@decoded['iat']
+    
+              if formula_tap == 'homebrew-core' && (depends_on?('veclibfort') || depends_on?('lapack'))
+            problem 'Formulae should use OpenBLAS as the default serial linear algebra library.'
+          end
+    
+    module Utils
+  class Bottles
+    class << self
+      undef tag
+    
+        depends_on(deps) if add_mac_dependency?(args)
   end
     
-        def find_app_tester(email: nil, app: nil)
-      tester = app.get_beta_testers(filter: { email: email }, includes: 'apps,betaTesterMetrics,betaGroups').first
-    
-              @client = Faraday.new(hostname, options) do |c|
-            c.response(:json, content_type: /\bjson$/)
-            c.response(:xml, content_type: /\bxml$/)
-            c.response(:plist, content_type: /\bplist$/)
-            c.use(FaradayMiddleware::RelsMiddleware)
-            c.adapter(Faraday.default_adapter)
-            c.headers['Authorization'] = 'Bearer #{token.text}'
-    
-            return type_instance
-      end
-    
-            resps = Spaceship::ConnectAPI.get_beta_groups(filter: filter, includes: includes, limit: limit, sort: sort).all_pages
-        return resps.map(&:to_models).flatten
-      end
+          expect(f.class.stable.deps.first.name).to eq('foo')
+      expect(f.class.devel.deps.first.name).to eq('foo')
+      expect(f.class.head.deps.first.name).to eq('foo')
     end
   end
 end
 
     
-      it 'renders a user's story successfully' do
-    expect(get: '/ben/this-is-a-slug').to route_to(
-      controller: 'stories',
-      action: 'show',
-      slug: 'this-is-a-slug',
-      username: 'ben',
+          allow(OS).to receive(:mac?).and_return(true)
+      allow(OS::Mac).to receive(:version).and_return(OS::Mac::Version.new(sierra_os_version))
+    end
+    
+        it 'raises an error when accessing missing resources' do
+      subject.owner = owner
+      expect {
+        subject.resource('foo')
+      }.to raise_error(ResourceMissingError)
+    end
+  end
+    
+      it 'prints the file used to cache the Cask' do
+    transmission_location = CurlDownloadStrategy.new(
+      local_transmission.url.to_s, local_transmission.token, local_transmission.version,
+      cache: Cask::Cache.path, **local_transmission.url.specs
+    ).cached_location
+    caffeine_location = CurlDownloadStrategy.new(
+      local_caffeine.url.to_s, local_caffeine.token, local_caffeine.version,
+      cache: Cask::Cache.path, **local_caffeine.url.specs
+    ).cached_location
+    
+          # Homebrew Cask metadata
+      if @cask.metadata_versioned_path.directory?
+        @cask.metadata_versioned_path.children.each do |subdir|
+          gain_permissions_remove(subdir)
+        end
+    
+    
+    
+    protected
+    
+        case res.code
+    when 201
+      print_good('Playing https://www.youtube.com/watch?v=#{vid}')
+    when 200
+      print_status('Stopping video')
+    when 404
+      print_error('Target no longer supports casting via the DIAL protocol. ' \
+                  'CASTV2 is not supported by this module at this time.')
+    end
+  end
+    
+      def parse(reader)
+    # PDF
+    # print_status 'PDF Version: #{reader.pdf_version}'
+    # print_status 'PDF Title: #{reader.info['title']}'
+    # print_status 'PDF Info: #{reader.info}'
+    # print_status 'PDF Metadata: #{reader.metadata}'
+    # print_status 'PDF Pages: #{reader.page_count}'
+    
+      def initialize(info = {})
+    super(update_info(
+              info,
+              'Name' => 'Allegro Software RomPager 'Misfortune Cookie' (CVE-2014-9222) Authentication Bypass',
+              'Description' => %q(
+        This module exploits HTTP servers that appear to be vulnerable to the
+        'Misfortune Cookie' vulnerability which affects Allegro Software
+        Rompager versions before 4.34 and can allow attackers to authenticate
+        to the HTTP service as an administrator without providing valid
+        credentials.
+      ),
+              'Author' => [
+                  'Jon Hart <jon_hart[at]rapid7.com>', # metasploit scanner module
+                  'Jan Trencansky <jan.trencansky[at]gmail.com>', # metasploit auxiliary admin module
+                  'Lior Oppenheim' # CVE-2014-9222
+              ],
+              'References' => [
+                  ['CVE', '2014-9222'],
+                  ['URL', 'http://mis.fortunecook.ie'],
+                  ['URL', 'http://mis.fortunecook.ie/misfortune-cookie-suspected-vulnerable.pdf'], # list of likely vulnerable devices
+                  ['URL', 'http://mis.fortunecook.ie/too-many-cooks-exploiting-tr069_tal-oppenheim_31c3.pdf'] # 31C3 presentation with POC
+              ],
+              'DisclosureDate' => 'Dec 17 2014',
+              'License' => MSF_LICENSE
+          ))
+    
+        print_status('Sending Jenkins and Groovy go-go-gadgets')
+    send_request_cgi(
+      'method'   => 'GET',
+      'uri'      => go_go_gadget1,
+      'vars_get' => vars_get
     )
   end
     
-        shared_context 'when user/organization articles exist' do
-      let(:organization) { create(:organization) }
-      let!(:user_article) { create(:article, user_id: user.id) }
-      let!(:organization_article) { create(:article, organization_id: organization.id) }
-    end
+          ])
     
-      def self.send_to_buffer(text, buffer_profile_id_code)
-    client = Buffer::Client.new(ApplicationConfig['BUFFER_ACCESS_TOKEN'])
-    client.create_update(
-      body: {
-        text:
-        text,
-        profile_ids: [
-          buffer_profile_id_code,
-        ]
-      },
-    )
-  end
-    
-          now = Time.current
-      @user.onboarding_package_requested_again = true if @user.onboarding_package_requested
-      @user.onboarding_package_requested = true
-      @user.onboarding_package_form_submmitted_at = now
-      @user.personal_data_updated_at = now
-      @user.shipping_validated_at = now if user_params[:shipping_validated] == '1'
-      if @user.save!
-        format.html { redirect_to '/freestickers/edit' }
-        format.json { render :show, status: :ok, location: @user }
-      else
-        format.html { render :edit }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-    
-      describe '#dependencies' do
-    it_behaves_like :Default, description.gsub(/^#/, '').to_sym, []
-    it_behaves_like :Mutator, description.gsub(/^#/, '').to_sym
-  end
-    
-      def add_path(tar, tar_path, path)
-    stat = File.lstat(path)
-    if stat.directory?
-      tar.mkdir(tar_path, stat.mode)
-    elsif stat.symlink?
-      tar.add_symlink(tar_path, File.readlink(path), stat.mode)
-    else
-      tar.add_file_simple(tar_path, stat.mode, stat.size) do |io|
-        File.open(path) do |fd|
-          chunk = nil
-          size = 0
-          while chunk = fd.read(16384) do
-            size += io.write(chunk)
+        for line in config_lines
+      line.chomp
+      line_num += 1
+      if line_num == 8
+        enc_password = Rex::Text.decode_base64(line)
+        password = decrypt_password(enc_password)
+      elsif line_num == 12
+        if line.match(/<(.*)>.(.*)/)
+          # Parse for output
+          url = $1
+          realm = $2
+          realm.gsub! '\r', ''   #Remove \r (not common)
+          if line.match(/<(.*):\/\/(.*):(.*)>/)
+            # Parse for reporting
+            sname = $1
+            host = $2
+            portnum = $3
+            portnum.gsub! '\r', ''   #Remove \r (not common)
           end
-          if size != stat.size
-            raise 'Failed to add #{path} to the archive; expected to ' +
-                  'write #{stat.size} bytes, only wrote #{size}'
-          end
+        else
+          url = '<Unknown/Error>'
         end
-      end # tar.tar.add_file_simple
-    end
-  end # def add_path
-    
-      def self.default_prefix
-    npm_prefix = safesystemout('npm', 'prefix', '-g').chomp
-    if npm_prefix.count('\n') > 0
-      raise FPM::InvalidPackageConfiguration, '`npm prefix -g` returned unexpected output.'
-    elsif !File.directory?(npm_prefix)
-      raise FPM::InvalidPackageConfiguration, '`npm prefix -g` returned a non-existent directory'
-    end
-    logger.info('Setting default npm install prefix', :prefix => npm_prefix)
-    npm_prefix
-  end
-    
-        # Final format of manifest
-    safesystem('pkgfmt', manifest_fn)
-    
-        # Remove the stuff we don't want
-    delete_these = ['.depdb', '.depdblock', '.filemap', '.lock', '.channel', 'cache', 'temp', 'download', '.channels', '.registry']
-    Find.find(staging_path) do |path|
-      if File.file?(path)
-        logger.info('replacing staging_path in file', :replace_in => path, :staging_path => staging_path)
-        begin
-          content = File.read(path).gsub(/#{Regexp.escape(staging_path)}/, '')
-          File.write(path, content)
-        rescue ArgumentError => e
-          logger.warn('error replacing staging_path in file', :replace_in => path, :error => e)
-        end
+      elsif line_num == 16
+        user_name = line
+        user_name.gsub! '\r', ''  #Remove \r (not common)
       end
-      FileUtils.rm_r(path) if delete_these.include?(File.basename(path))
     end
+    config.close
     
-        File.write(build_path('packlist'), files.sort.join('\n'))
-    
-        platforms.each do |platform|
-      logger.info('Generating service manifest.', :platform => platform.class.name)
-      platform.program = command.first
-      platform.name = attributes[:pleaserun_name]
-      platform.args = command[1..-1]
-      platform.description = if attributes[:description_given?]
-        attributes[:description]
-      else
-        platform.name
-      end
-      pleaserun_attributes.each do |attribute_name|
-        attribute = 'pleaserun_#{attribute_name}'.to_sym
-        if attributes.has_key?(attribute) and not attributes[attribute].nil?
-          platform.send('#{attribute_name}=', attributes[attribute])
-        end
-      end
-    
-      # Helper for group lookup
-  def gid2group(gid)
+        # Check for result
     begin
-      grent = Etc.getgrgid(gid)
-      return grent.name
-    rescue ArgumentError => e
-      # Invalid user id? No user? Return the uid.
-      logger.warn('Failed to find group for gid #{gid}')
-      return gid.to_s
+      size = session.fs.file.stat(net_com_opts[:target].gsub('\\', '\\\\')).size
+      print_good 'File #{net_com_opts[:target].gsub('\\', '\\\\')} found, #{size}kb'
+    rescue
+      print_error 'File #{net_com_opts[:target].gsub('\\', '\\\\')} not found,' \
+                  ' NET CLR version #{datastore['NET_CLR_VER']} possibly not available'
+      return
     end
-  end # def uid2user
-end # class FPM::Target::Puppet
     
-        begin
-      json_test_code = [
-        'try:',
-        '  import json',
-        'except ImportError:',
-        '  import simplejson as json'
-      ].join('\n')
-      safesystem('#{attributes[:python_bin]} -c '#{json_test_code}'')
-    rescue FPM::Util::ProcessFailed => e
-      logger.error('Your python environment is missing json support (either json or simplejson python module). I cannot continue without this.', :python => attributes[:python_bin], :error => e)
-      raise FPM::Util::ProcessFailed, 'Python (#{attributes[:python_bin]}) is missing simplejson or json modules.'
+    task :gemspec => 'rack-protection.gemspec'
+task :default => :spec
+task :test    => :spec
+
+    
+            if @javascript and not @escaper.respond_to? :escape_javascript
+          fail('Use EscapeUtils for JavaScript escaping.')
+        end
+      end
+    
+            reaction
+      end
+    
+      context 'escaping' do
+    it 'escapes html entities' do
+      mock_app do |env|
+        request = Rack::Request.new(env)
+        [200, {'Content-Type' => 'text/plain'}, [request.params['foo']]]
+      end
+      get '/', :foo => '<bar>'
+      expect(body).to eq('&lt;bar&gt;')
     end
+    
+          # Try to add the gems to the current gemfile and lock file, if successful
+      # both of them will be updated. This injector is similar to Bundler's own injector class
+      # minus the support for additionals source and doing local resolution only.
+      ::Bundler::LogstashInjector.inject!(pack)
+    
+        puts('Updating #{filtered_plugins.collect(&:name).join(', ')}') unless filtered_plugins.empty?
+    
+      describe 'on #{logstash.hostname}' do
+    context 'with a direct internet connection' do
+      context 'when the plugin exist' do
+        context 'from a local `.GEM` file' do
+          let(:gem_name) { 'logstash-filter-qatest-0.1.1.gem' }
+          let(:gem_path_on_vagrant) { '/tmp/#{gem_name}' }
+          before(:each) do
+            logstash.download('https://rubygems.org/gems/#{gem_name}', gem_path_on_vagrant)
+          end
+    
+      describe 'bulk' do
+    after do
+      Sidekiq::Queue.new.clear
+    end
+    it 'can push a large set of jobs at once' do
+      jids = Sidekiq::Client.push_bulk('class' => QueuedWorker, 'args' => (1..1_000).to_a.map { |x| Array(x) })
+      assert_equal 1_000, jids.size
+    end
+    it 'can push a large set of jobs at once using a String class' do
+      jids = Sidekiq::Client.push_bulk('class' => 'QueuedWorker', 'args' => (1..1_000).to_a.map { |x| Array(x) })
+      assert_equal 1_000, jids.size
+    end
+    it 'returns the jids for the jobs' do
+      Sidekiq::Client.push_bulk('class' => 'QueuedWorker', 'args' => (1..2).to_a.map { |x| Array(x) }).each do |jid|
+        assert_match(/[0-9a-f]{12}/, jid)
+      end
+    end
+    it 'handles no jobs' do
+      result = Sidekiq::Client.push_bulk('class' => 'QueuedWorker', 'args' => [])
+      assert_equal 0, result.size
+    end
+  end
+    
+        it 'can start and stop' do
+      f = Sidekiq::Processor.new(Mgr.new)
+      f.terminate
+    end
+    
+      def options
+    { :concurrency => 3, :queues => ['default'] }
+  end
+    
+          refute Sidekiq::Testing.enabled?
+      refute Sidekiq::Testing.fake?
+    end
+    
+        def self.register_private_key(email_address)
+      registration = client.new_account(:contact => 'mailto:#{email_address}', :terms_of_service_agreed => true)
+      logger.info 'Successfully registered private key with address #{email_address}'
+      true
+    end
+    
+      def check_mx_records
+    result = resolver.getresources(self.name, Resolv::DNS::Resource::IN::MX)
+    records = result.map(&:exchange)
+    if records.empty?
+      self.mx_status = 'Missing'
+      self.mx_error = 'There are no MX records for #{self.name}'
+    else
+      missing_records = Postal.config.dns.mx_records.dup - records.map { |r| r.to_s.downcase }
+      if missing_records.empty?
+        self.mx_status = 'OK'
+        self.mx_error = nil
+      elsif missing_records.size == Postal.config.dns.mx_records.size
+        self.mx_status = 'Missing'
+        self.mx_error = 'You have MX records but none of them point to us.'
+      else
+        self.mx_status = 'Invalid'
+        self.mx_error = 'MX #{missing_records.size == 1 ? 'record' : 'records'} for #{missing_records.to_sentence} are missing and are required.'
+      end
+    end
+  end
+    
+    end
+
+    
+      def suspend
+    @server.suspend(params[:reason])
+    redirect_to_with_json [organization, @server], :notice => 'Server has been suspended'
+  end
+    
+      def update
+    if @smtp_endpoint.update(safe_params)
+      redirect_to_with_json [organization, @server, :smtp_endpoints]
+    else
+      render_form_errors 'edit', @smtp_endpoint
+    end
+  end
+    
+      def create
+    @webhook = @server.webhooks.build(safe_params)
+    if @webhook.save
+      redirect_to_with_json [organization, @server, :webhooks]
+    else
+      render_form_errors 'new', @webhook
+    end
+  end
