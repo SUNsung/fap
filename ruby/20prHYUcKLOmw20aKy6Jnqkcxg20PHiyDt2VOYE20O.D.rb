@@ -1,152 +1,97 @@
 
         
-              case command.method_name
-      when 'sh'
-        error_callback = proc { |string_value| closure_argument_value = string_value }
-        command_param = parameter_map[:command]
-        log_param = parameter_map[:log]
-        action_return = Fastlane::FastFile.sh(command_param, log: log_param, error_callback: error_callback)
+              expect(first_encoding).to eq(Encoding::UTF_8)
+      expect(second_encoding).to eq(Encoding::UTF_8)
+    end
+    
+          if id = ids.shift
+        result[id] ||= []
+        result[id] << @translations[:original_poster]
       end
     
-          it 'adds docset_fallback_url param to command' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          appledoc(
-            project_name: 'Project Name',
-            project_company: 'Company',
-            input: 'input/dir',
-            docset_fallback_url: 'http://docset-fallback-url.com'
-          )
-        end').runner.execute(:test)
+    describe 'translate accelerator' do
+  before(:all) do
+    @original_i18n_load_path = I18n.load_path.dup
+    I18n.load_path += Dir['#{Rails.root}/spec/fixtures/i18n/translate_accelerator.*.yml']
+    I18n.reload!
+  end
     
-          it 'add a cache_builds flag to command if cache_builds is set to true' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            carthage(
-              cache_builds: true
-            )
-          end').runner.execute(:test)
+          expect(list[:de_AT]).to eq([:de_AT, :de, :en])
+      expect(list[:de]).to eq([:de, :en])
+      expect(list[:en]).to eq([:en])
+    end
     
-            it 'sets up metadata folder in fastlane folder' do
-          expect(options[:metadata_path]).to eq('./fastlane/metadata')
-        end
-      end
+    describe VagrantPlugins::Chef::Cap::Linux::ChefInstalled do
+  include_context 'unit'
     
-    module Vagrant
-  # This class handles guest-OS specific interactions with a machine.
-  # It is primarily responsible for detecting the proper guest OS
-  # implementation and then delegating capabilities.
-  #
-  # Vagrant has many tasks which require specific guest OS knowledge.
-  # These are implemented using a guest/capability system. Various plugins
-  # register as 'guests' which determine the underlying OS of the system.
-  # Then, 'guest capabilities' register themselves for a specific OS (one
-  # or more), and these capabilities are called.
-  #
-  # Example capabilities might be 'mount_virtualbox_shared_folder' or
-  # 'configure_networks'.
-  #
-  # This system allows for maximum flexibility and pluginability for doing
-  # guest OS specific operations.
-  class Guest
-    include CapabilityHost
+    describe VagrantPlugins::Chef::Cap::OmniOS::ChefInstalled do
+  include_context 'unit'
     
-            # Execute a command on the remote machine. The exact semantics
-        # of this method are up to the implementor, but in general the
-        # users of this class will expect this to be a shell.
-        #
-        # This method gives you no way to write data back to the remote
-        # machine, so only execute commands that don't expect input.
-        #
-        # @param [String] command Command to execute.
-        # @yield [type, data] Realtime output of the command being executed.
-        # @yieldparam [String] type Type of the output. This can be
-        #   `:stdout`, `:stderr`, etc. The exact types are up to the
-        #   implementor.
-        # @yieldparam [String] data Data for the given output.
-        # @return [Integer] Exit code of the command.
-        def execute(command, opts=nil)
+            local_data_pathname = Pathname.new(local_data_path)
+        foo_id_file = local_data_pathname.join('machines/foo/virtualbox/id')
+        expect(foo_id_file).to be_file
+        expect(foo_id_file.read).to eq('foo_id')
+    
+            # Execute a `docker-compose` command
+        def compose_execute(*cmd, **opts, &block)
+          synchronized do
+            execute('docker-compose', '-f', composition_path.to_s,
+              '-p', machine.env.cwd.basename.to_s, *cmd, **opts, &block)
+          end
         end
     
-          spec['main'] =
-          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
-          find_files.(Bootstrap.fonts_path) +
-          %w(assets/javascripts/bootstrap.js)
+      # escape unicode
+  content.gsub!(/./) { |c| c.bytesize > 1 ? '\\u{#{c.codepoints.first.to_s(16)}}' : c }
     
-        def log_processed(name)
-      puts green '    #{name}'
+            directives.compact.sort.join('; ')
+      end
+    
+        it 'Reads referrer from Host header when Referer header is relative' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => '/valid'}
+      expect(subject.referrer(env)).to eq('foo.com')
     end
     
-      def test_font_helper_without_suffix
-    assert_match %r(url\(['']?/assets/.*eot['']?\)), @css
-  end
+        it 'denies requests with duplicate session cookies' do
+      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
+      expect(last_response).not_to be_ok
+    end
     
-        def tmux_main_command(command)
-      if command
-        _send_target(command.shellescape)
-      else
-        ''
+      context 'escaping' do
+    it 'escapes html entities' do
+      mock_app do |env|
+        request = Rack::Request.new(env)
+        [200, {'Content-Type' => 'text/plain'}, [request.params['foo']]]
+      end
+      get '/', :foo => '<bar>'
+      expect(body).to eq('&lt;bar&gt;')
+    end
+    
+    # This is basically a copy of the original bundler 'bundle' shim
+# with the addition of the loading of our Bundler patches that
+# modify Bundler's caching behaviour.
+    
+    module LogStash
+  module PluginManager
+    class Error < StandardError; end
+    
+        def self.find_by_name_with_wildcards(pattern)
+      re = transform_pattern_into_re(pattern)
+      ::Gem::Specification.find_all.select do |specification|
+        specification.name =~ re
       end
     end
     
-        def root
-      _yaml_root || _project_root
-    end
+    module LogStash module PluginManager module PackFetchStrategy
+  class Repository
+    DEFAULT_PACK_URL = 'https://artifacts.elastic.co/downloads/logstash-plugins'
+    PACK_EXTENSION = 'zip'
     
-        initialize_with { Tmuxinator::Project.new(file) }
-  end
+          PluginManager.ui.info('Installing file: #{local_file}')
+      uncompressed_path = uncompress(local_file)
+      PluginManager.ui.debug('Pack uncompressed to #{uncompressed_path}')
+      pack = LogStash::PluginManager::PackInstaller::Pack.new(uncompressed_path)
+      raise PluginManager::InvalidPackError, 'The pack must contains at least one plugin' unless pack.valid?
     
-      describe '#hook_on_project_start' do
-    it_should_behave_like 'a project hook' do
-      let(:hook_name) { 'on_project_start' }
-    end
-  end
-  describe '#hook_on_project_first_start' do
-    it_should_behave_like 'a project hook' do
-      let(:hook_name) { 'on_project_first_start' }
-    end
-  end
-  describe '#hook_on_project_restart' do
-    it_should_behave_like 'a project hook' do
-      let(:hook_name) { 'on_project_restart' }
-    end
-  end
-  describe '#hook_on_project_exit' do
-    it_should_behave_like 'a project hook' do
-      let(:hook_name) { 'on_project_exit' }
-    end
-  end
-  describe '#hook_on_project_stop' do
-    it_should_behave_like 'a project hook' do
-      let(:hook_name) { 'on_project_stop' }
-    end
-  end
-end
-
-    
-    describe Tmuxinator::Pane do
-  let(:klass) { described_class }
-  let(:instance) { klass.new(index, project, window, *commands) }
-  # let(:index) { 'vim' }
-  # let(:project) { 0 }
-  # let(:tab) { nil }
-  # let(:commands) { nil }
-  let(:index) { 0 }
-  let(:project) { double }
-  let(:window) { double }
-  let(:commands) { ['vim', 'bash'] }
-    
-            expect(project.startup_pane).to eq('sample:0.1')
-      end
-    end
-    
-      if base_index = options.fetch(:base_index) { 1 }
-    standard_options << 'base-index #{base_index}'
-  end
-    
-        def window(i)
-      '#{name}:#{i}'
-    end
-    
-      s.post_install_message = %q{
-    __________________________________________________________
-    ..........................................................
-    }
+            get '/', splines: '[{'x':2,'ints':[]},{'x':3,'ints':[4],'obj':{'y':'quack'}}]'
+        expect(last_response.status).to eq(200)
+        expect(last_response.body).to eq('arrays work')
