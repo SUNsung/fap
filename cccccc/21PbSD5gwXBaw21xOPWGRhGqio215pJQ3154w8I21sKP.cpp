@@ -1,269 +1,307 @@
 
         
-        #include 'tensorflow/core/framework/api_def.pb.h'
-#include 'tensorflow/core/framework/attr_value.pb.h'
-#include 'tensorflow/core/framework/op_def.pb.h'
-#include 'tensorflow/core/platform/types.h'
+        #ifndef KNOWN_STDLIB_TYPE_DECL
+/// KNOWN_STDLIB_TYPE_DECL(NAME, DECL_CLASS, NUM_GENERIC_PARAMS)
+///
+/// The macro is expanded for each known standard library type. NAME is
+/// bound to the unqualified name of the type. DECL_CLASS is bound to the
+/// Decl subclass it is expected to be an instance of. NUM_GENERIC_PARAMS is
+/// bound to the number of generic parameters the type is expected to have.
+#define KNOWN_STDLIB_TYPE_DECL(NAME, DECL_CLASS, NUM_GENERIC_PARAMS)
+#endif
     
-    REGISTER_KERNEL_BUILDER(Name('Ackermann').Device(DEVICE_CPU), AckermannOp);
+      void emitAbstractFuncDecl(AbstractFunctionDecl *AFD);
+  
+  /// Generate code for a source file of the module.
+  void emitSourceFile(SourceFile *sf);
+  
+  /// Generates code for the given FuncDecl and adds the
+  /// SILFunction to the current SILModule under the name SILDeclRef(decl). For
+  /// curried functions, curried entry point Functions are also generated and
+  /// added to the current SILModule.
+  void emitFunction(FuncDecl *fd);
+  
+  /// Generates code for the given closure expression and adds the
+  /// SILFunction to the current SILModule under the name SILDeclRef(ce).
+  SILFunction *emitClosure(AbstractClosureExpr *ce);
+  /// Generates code for the given ConstructorDecl and adds
+  /// the SILFunction to the current SILModule under the name SILDeclRef(decl).
+  void emitConstructor(ConstructorDecl *decl);
     
-    Safe_TFE_TensorHandlePtr make_safe(TFE_TensorHandle* handle) {
-  return Safe_TFE_TensorHandlePtr(handle);
+      /// The metadata is ready for the layout of other types that store values
+  /// of this type.
+  ///
+  /// In addition to the requirements of Abstract, metadata in this state
+  /// must have a valid value witness table, meaning that its size,
+  /// alignment, and basic type properties (such as POD-ness) have been
+  /// computed.
+  LayoutComplete = 0x3F,
+    
+        // Ignore first non-switch arg if it's not a standalone package.
+    bool ignore_arg = !package->self_extract();
+    for (unsigned i = 1; i < argv.size(); ++i) {
+      if (ignore_arg && argv[i] == args[0]) {
+        ignore_arg = false;
+        continue;
+      }
+    }
+    
+    // Call method of an object in browser.
+// function CallObjectMethod(id, type, method, args);
+v8::Handle<v8::Value> CallObjectMethod(int routing_id,
+                                       int object_id,
+                                       const std::string& type,
+                                       const std::string& method,
+                                       v8::Handle<v8::Value> args);
+    
+       void Call(const std::string& method,
+                    const base::ListValue& arguments) override;
+   void CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result) override;
+    
+    #include 'content/nw/src/api/menu/menu.h'
+    
+    namespace {
+    }
+    
+    #include 'extensions/browser/extension_function.h'
+    
+    namespace tesseract {
+    }
+    
+      // Adds a new point. Takes a copy - the pt doesn't need to stay in scope.
+  // Add must be called on points in sequence along the line.
+  void Add(const ICOORD& pt);
+  // Associates a half-width with the given point if a point overlaps the
+  // previous point by more than half the width, and its distance is further
+  // than the previous point, then the more distant point is ignored in the
+  // distance calculation. Useful for ignoring i dots and other diacritics.
+  void Add(const ICOORD& pt, int halfwidth);
+    
+    const int kHistogramSize = 256;  // The size of a histogram of pixel values.
+    
+    #define           MAP_ACCEPT '1'
+#define           MAP_REJECT_PERM '0'
+#define           MAP_REJECT_TEMP '2'
+#define           MAP_REJECT_POTENTIAL '3'
+    
+     private:
+  // A hole in the heap exists at hole_index, and we want to fill it with the
+  // given pair. SiftUp sifts the hole upward to the correct position and
+  // returns the destination index without actually putting pair there.
+  int SiftUp(int hole_index, const Pair& pair) {
+    int parent;
+    while (hole_index > 0 && pair < heap_[parent = ParentNode(hole_index)]) {
+      heap_[hole_index] = heap_[parent];
+      hole_index = parent;
+    }
+    return hole_index;
+  }
+    
+    // Provides access to the ShapeTable that this classifier works with.
+const ShapeTable* TessClassifier::GetShapeTable() const {
+  return classify_->shape_table();
+}
+// Provides access to the UNICHARSET that this classifier works with.
+// Only needs to be overridden if GetShapeTable() can return nullptr.
+const UNICHARSET& TessClassifier::GetUnicharset() const {
+  return classify_->unicharset;
 }
     
-    namespace stream_executor {
-namespace host {
+    	void set_region_merge_size(float p_value);
+	float get_region_merge_size() const;
+    
+    public:
+	virtual size_t get_position() const; ///< get position in the file
+	virtual size_t get_len() const; ///< get size of the file
+    
+    #ifdef ALSAMIDI_ENABLED
+    
+    
+    {		list.push_back(name);
+	}
+    
+    
+    {	MIDIDriverCoreMidi();
+	virtual ~MIDIDriverCoreMidi();
+};
+    
+    	virtual PoolStringArray get_connected_inputs();
+    
+    static SDL_bool LocalReferenceHolder_IsActive(void) {
+	return s_active > 0;
+}
+    
+    	PowerAndroid();
+	virtual ~PowerAndroid();
+	static bool LocalReferenceHolder_Init(struct LocalReferenceHolder *refholder, JNIEnv *env);
+	static struct LocalReferenceHolder LocalReferenceHolder_Setup(const char *func);
+	static void LocalReferenceHolder_Cleanup(struct LocalReferenceHolder *refholder);
+    
+    public:
+	PowerIphone();
+	virtual ~PowerIphone();
+    
+    class SemaphoreIphone : public Semaphore {
+    }
+    
+    #pragma once
+    
+    namespace mongo {
+namespace {
     }
     }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    void TemporaryKVRecordStore::deleteTemporaryTable(OperationContext* opCtx) {
+    // Need at least Global IS before calling into the storage engine, to protect against it being
+    // destructed while we're using it.
+    invariant(opCtx->lockState()->isReadLocked());
+    }
     
-    // This file contains declarations relating to kernel cache configuration
-// parameters recognized by the StreamExecutor.
-#ifndef TENSORFLOW_STREAM_EXECUTOR_KERNEL_CACHE_CONFIG_H_
-#define TENSORFLOW_STREAM_EXECUTOR_KERNEL_CACHE_CONFIG_H_
+                    // If we are positioned just before a new-line that is located at the
+                //   end of input, succeed.
+                UChar32 c = UTEXT_NEXT32(fInputText);
+                if (UTEXT_GETNATIVEINDEX(fInputText) >= fAnchorLimit) {
+                    if (isLineTerminator(c)) {
+                        // If not in the middle of a CR/LF sequence
+                        if ( !(c==0x0a && fp->fInputIdx>fAnchorStart && ((void)UTEXT_PREVIOUS32(fInputText), UTEXT_PREVIOUS32(fInputText))==0x0d)) {
+                            // At new-line at end of input. Success
+                            fHitEnd = TRUE;
+                            fRequireEnd = TRUE;
+    }
+    }
+    }
     
-      printf('============= Test #4 ==============\n');
-  var = engine->NewVariable();
-  oprs.clear();
-  oprs.push_back(engine->NewOperator(
-      [](mxnet::RunContext ctx, mxnet::Engine::CallbackOnComplete cb) {
-        std::this_thread::sleep_for(std::chrono::seconds{2});
-        Foo(ctx, 42);
-        cb();
-      },
-      {}, {var}, mxnet::FnProperty::kCopyFromGPU));
-  engine->Push(oprs.at(0), mxnet::Context{});
-  LOG(INFO) << 'IO operator pushed, should wait for 2 seconds.';
-  engine->WaitForVar(var);
-  LOG(INFO) << 'OK, here I am.';
-  for (auto&& i : oprs) {
-    engine->DeleteOperator(i);
-  }
-  engine->DeleteVariable([](mxnet::RunContext) {}, mxnet::Context{}, var);
-  engine->WaitForAll();
+        case URX_STRING:
+    case URX_STRING_I:
+        {
+            int32_t lengthOp       = fCompiledPat->elementAti(index+1);
+            U_ASSERT(URX_TYPE(lengthOp) == URX_STRING_LEN);
+            int32_t length = URX_VAL(lengthOp);
+            UnicodeString str(fLiteralText, val, length);
+            printf('%s', CStr(str)());
+        }
+        break;
     
-    DMLC_REGISTER_PARAMETER(FullyConnectedParam);
+        if(attributeHasBeenSetExplicitly(UCOL_ALTERNATE_HANDLING)) {
+        appendAttribute(result, 'A', getAttribute(UCOL_ALTERNATE_HANDLING, errorCode), errorCode);
+    }
+    // ATTR_VARIABLE_TOP not supported because 'B' was broken.
+    // See ICU tickets #10372 and #10386.
+    if(attributeHasBeenSetExplicitly(UCOL_CASE_FIRST)) {
+        appendAttribute(result, 'C', getAttribute(UCOL_CASE_FIRST, errorCode), errorCode);
+    }
+    if(attributeHasBeenSetExplicitly(UCOL_NUMERIC_COLLATION)) {
+        appendAttribute(result, 'D', getAttribute(UCOL_NUMERIC_COLLATION, errorCode), errorCode);
+    }
+    if(attributeHasBeenSetExplicitly(UCOL_CASE_LEVEL)) {
+        appendAttribute(result, 'E', getAttribute(UCOL_CASE_LEVEL, errorCode), errorCode);
+    }
+    if(attributeHasBeenSetExplicitly(UCOL_FRENCH_COLLATION)) {
+        appendAttribute(result, 'F', getAttribute(UCOL_FRENCH_COLLATION, errorCode), errorCode);
+    }
+    // Note: UCOL_HIRAGANA_QUATERNARY_MODE is deprecated and never changes away from default.
+    length = uloc_getKeywordValue(resultLocale, 'collation', subtag, UPRV_LENGTHOF(subtag), &errorCode);
+    appendSubtag(result, 'K', subtag, length, errorCode);
+    length = uloc_getLanguage(resultLocale, subtag, UPRV_LENGTHOF(subtag), &errorCode);
+    appendSubtag(result, 'L', subtag, length, errorCode);
+    if(attributeHasBeenSetExplicitly(UCOL_NORMALIZATION_MODE)) {
+        appendAttribute(result, 'N', getAttribute(UCOL_NORMALIZATION_MODE, errorCode), errorCode);
+    }
+    length = uloc_getCountry(resultLocale, subtag, UPRV_LENGTHOF(subtag), &errorCode);
+    appendSubtag(result, 'R', subtag, length, errorCode);
+    if(attributeHasBeenSetExplicitly(UCOL_STRENGTH)) {
+        appendAttribute(result, 'S', getAttribute(UCOL_STRENGTH, errorCode), errorCode);
+    }
+    length = uloc_getVariant(resultLocale, subtag, UPRV_LENGTHOF(subtag), &errorCode);
+    appendSubtag(result, 'V', subtag, length, errorCode);
+    length = uloc_getScript(resultLocale, subtag, UPRV_LENGTHOF(subtag), &errorCode);
+    appendSubtag(result, 'Z', subtag, length, errorCode);
     
-    class AggregateStats {
- public:
-  struct StatData {
-    /*!
-     * \brief Types that the console printer knows how to format
-     */
-    enum StatType {
-      kDuration = 1,
-      kCounter = 2,
-      kOther = 4
+    UnicodeString &ScientificNumberFormatter::format(
+        const Formattable &number,
+        UnicodeString &appendTo,
+        UErrorCode &status) const {
+    if (U_FAILURE(status)) {
+        return appendTo;
+    }
+    UnicodeString original;
+    FieldPositionIterator fpi;
+    fDecimalFormat->format(number, original, &fpi, status);
+    return fStyle->format(
+            original,
+            fpi,
+            fPreExponent,
+            *fStaticSets,
+            appendTo,
+            status);
+}
+    
+    int32_t SearchIterator::first(UErrorCode &status)
+{
+    if (U_FAILURE(status)) {
+        return USEARCH_DONE;
+    }
+    setOffset(0, status);
+    return handleNext(0, status);
+}
+    
+    Format* SelectFormat::clone() const
+{
+    return new SelectFormat(*this);
+}
+    
+    #ifndef __SHARED_DATEFORMATSYMBOLS_H__
+#define __SHARED_DATEFORMATSYMBOLS_H__
+    
+        // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        IDXGISwapChain1* swapChain1 = NULL;
+    dxgiFactory->CreateSwapChainForHwnd(g_pd3dCommandQueue, hWnd, &sd, NULL, NULL, &swapChain1);
+    swapChain1->QueryInterface(IID_PPV_ARGS(&g_pSwapChain));
+    swapChain1->Release();
+    dxgiFactory->Release();
+    
+    int main()
+{
+    // create JSON object
+    json object =
+    {
+        {'the good', 'il buono'},
+        {'the bad', 'il cattivo'},
+        {'the ugly', 'il brutto'}
     };
     }
-    }
     
     
+    // out_of_range.106
+    try
     {
-    {}  // namespace storage
-}  // namespace mxnet
-    
-      const Context &ctx = handle.ctx;
-  auto&& device = storage_managers_.at(ctx.dev_type);
-  std::shared_ptr<storage::StorageManager> manager = device.Get(
-      ctx.real_dev_id(), []() {
-        LOG(FATAL) <<  'Cannot Free space to a device you have not allocated';
-        return nullptr;
-      });
-    
-    #include <mxnet/storage.h>
-#include <cstddef>
-    
-    int MXIsNumpyShape(bool* curr) {
-  API_BEGIN();
-  *curr = Imperative::Get()->is_np_shape();
-  API_END();
-}
-    
-      // get the shape hints
-  std::string shape_hints_key = std::string(attr_name) + '_hints';
-  if (ret.attrs.count(shape_hints_key)) {
-    nnvm::NodeEntryMap<AttrType> shape_hints =
-      ret.GetAttr<nnvm::NodeEntryMap<AttrType>>(shape_hints_key);
-    for (const auto& kv : shape_hints) {
-      nnvm::NodeEntry e = kv.first;
-      if (idx.exist(e.node.get())) {
-        rshape[idx.entry_id(kv.first)] = kv.second;
-      }
+        // try to use an array index with leading '0'
+        json::reference ref = j.at('/array/01'_json_pointer);
     }
-  }
-    
-    For an input array with shape  :math:`(d_1, d_2, ..., d_n)`, `index_array` returns a
-:math:`(d_1, d_2, ..., d_n, n)` array `idx`, where
-:math:`idx[i_1, i_2, ..., i_n, :] = [i_1, i_2, ..., i_n]`.
-    
-    static bool
-extent_commit(extent_hooks_t* /*extent_hooks*/, void* /*addr*/, size_t /*size*/,
-              size_t /*offset*/, size_t /*length*/, unsigned /*arena_ind*/) {
-  return false;
-}
-    
-    Array createBacktrace(const BacktraceArgs& backtraceArgs);
-void addBacktraceToStructLog(const Array& bt, StructuredLogEntry& cols);
-int64_t createBacktraceHash(bool consider_metadata);
-req::ptr<CompactTrace> createCompactBacktrace();
-const Func* GetCallerFunc();
-const Func* GetCallerFuncSkipBuiltins();
-const Func* GetCallerFuncSkipCPPBuiltins();
-Class* GetCallerClass();
-Class* GetCallerClassSkipBuiltins();
-Class* GetCallerClassSkipCPPBuiltins();
-c_ResumableWaitHandle* GetResumedWaitHandle();
-Array GetCallerInfo();
-ActRec* GetFrameForDebuggerUnsafe(int frameDepth);
-    
-      // Version 2 of this command means we're trying to get the value of a single
-  // variable.
-  always_assert(m_version == 2);
-  always_assert(!m_varName.empty());
-    
-      if (requestedObject.empty()) {
-    // If no object is requested, we return info about this thread's current
-    // stop location.
-    auto const frame = g_context->getFrameAtDepthForDebuggerUnsafe(0);
-    if (frame == nullptr) {
-      throw DebuggerCommandException(
-        'No object specified and the target thread is not stopped in a frame'
-      );
-    }
+    catch (json::parse_error& e)
+    {
+        std::cout << e.what() << '\n';
     }
     
-    Variant binary_deserialize(int8_t thrift_typeID, PHPInputTransport& transport,
-                           const Array& fieldspec) {
-  switch (thrift_typeID) {
-    case T_STOP:
-    case T_VOID:
-      return init_null();
-    case T_STRUCT: {
-      Variant val;
-      if ((val = fieldspec[s_class]).isNull()) {
-        throw_tprotocolexception('no class type in spec', INVALID_DATA);
-      }
-      String structType = val.toString();
-      Object ret(createObject(structType));
-      if (ret.isNull()) {
-        // unable to create class entry
-        skip_element(T_STRUCT, transport);
-        return init_null();
-      }
-      Variant spec(get_tspec(ret->getVMClass()));
-      if (!spec.isArray()) {
-        char errbuf[128];
-        snprintf(errbuf, 128, 'spec for %s is wrong type: %s\n',
-                 structType.data(), ret->getClassName().c_str());
-        throw_tprotocolexception(String(errbuf, CopyString), INVALID_DATA);
-      }
-      binary_deserialize_spec(ret, transport, spec.toArray());
-      return ret;
+        // out_of_range.401
+    try
+    {
+        // try to use a an invalid array index
+        json::const_reference ref = j.at('/array/4'_json_pointer);
     }
-    case T_BOOL: {
-      uint8_t c;
-      transport.readBytes(&c, 1);
-      return c != 0;
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
     }
-  //case T_I08: // same numeric value as T_BYTE
-    case T_BYTE: {
-      uint8_t c;
-      transport.readBytes(&c, 1);
-      return Variant((int8_t)c);
-    }
-    case T_I16: {
-      uint16_t c;
-      transport.readBytes(&c, 2);
-      return Variant((int16_t)ntohs(c));
-    }
-    case T_I32: {
-      uint32_t c;
-      transport.readBytes(&c, 4);
-      return Variant((int32_t)ntohl(c));
-    }
-    case T_U64:
-    case T_I64: {
-      uint64_t c;
-      transport.readBytes(&c, 8);
-      return Variant((int64_t)ntohll(c));
-    }
-    case T_DOUBLE: {
-      union {
-        uint64_t c;
-        double d;
-      } a;
-      transport.readBytes(&(a.c), 8);
-      a.c = ntohll(a.c);
-      return a.d;
-    }
-    case T_FLOAT: {
-      union {
-        uint32_t c;
-        float d;
-      } a;
-      transport.readBytes(&(a.c), 4);
-      a.c = ntohl(a.c);
-      return a.d;
-    }
-    //case T_UTF7: // aliases T_STRING
-    case T_UTF8:
-    case T_UTF16:
-    case T_STRING: {
-      uint32_t size = transport.readU32();
-      if (size && (size + 1)) {
-        String s = String(size, ReserveString);
-        char* strbuf = s.mutableData();
-        transport.readBytes(strbuf, size);
-        s.setSize(size);
-        return s;
-      } else {
-        return empty_string_variant();
-      }
-    }
-    case T_MAP: { // array of key -> value
-      uint8_t types[2];
-      transport.readBytes(types, 2);
-      uint32_t size = transport.readU32();
-    }
-    }
-    }
-    
-    #include 'hphp/util/fixed-vector.h'
-    
-    #include 'hphp/util/ringbuffer.h'
-    
-    class Solution {
-    public:
-        /*
-         *  profits[trans, day]
-         *  - `trans` represents the number of transactions we've done so far. ( 0 <= trans <= k )
-         *  - `day` represents the number of days so far. ( 0 <= day <= prices.size() )
-         *
-         *  So, we have the initialization as below:
-         *
-         *  profits[0, day] = 0; // 0 <= day <= prices.size()
-         *  profits[trans, 0] = 0; // 0 <= trans <= k
-         *
-         *  And the iteration logic as below:
-         *
-         *  profits[trans, day] = max (
-         *                              profits[trans, day-1], // same times transactions, but one days before.
-         *                              profits[trans-1, i-1] + (prices[day] - prices[i]) // for all of (0 <= i < day )
-         *                                                                                // this means find max profit from
-         *                                                                                // previous any of days
-         *                            )
-         *
-         */
-    }
-    
-        return maxArea;        
-    
-            //live -> die
-        //if (board[r][c]==1 && (cnt < 2 || cnt > 3)) board[r][c] = 1;
