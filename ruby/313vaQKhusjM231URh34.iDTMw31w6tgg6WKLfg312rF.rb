@@ -1,11 +1,13 @@
 
         
-                  should 'return dir correctly for index page' do
-            @page = setup_page('/contacts', 'index.html')
-            assert_equal '/contacts/', @page.dir
-          end
-        end
-      end
+                {% link _methods/yaml_with_dots.md %}
+      CONTENT
+      create_post(content,
+                  'source'           => source_dir,
+                  'destination'      => dest_dir,
+                  'collections'      => { 'methods' => { 'output' => true } },
+                  'read_collections' => true)
+    end
     
     Nullam luctus fermentum est id blandit. Phasellus consectetur ullamcorper
 ligula, at finibus eros laoreet id. Etiam sit amet est in libero efficitur
@@ -14,139 +16,196 @@ Aliquam vel ornare mauris. Suspendisse ornare diam tempor nulla facilisis
 aliquet. Sed ultrices placerat ultricies.
 TEXT
     
-      Jekyll::Command.subclasses.each { |c| c.init_with_program(p) }
+    CONTENT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
     
-          def after_tags(tags); end
-    
-      describe '#find' do
-    it 'returns the full path of the found template' do
-      result = finder.find('500')
-    
-        args = msg['args'] + [msg['error_message']]
-    
-    # This class finds files in a repository by name and content
-# the result is joined and sorted by file name
-module Gitlab
-  class FileFinder
-    attr_reader :project, :ref
-    
-      describe '#can_update?' do
-    context 'when user can update_group_member' do
-      before do
-        allow(presenter).to receive(:can?).with(user, :update_group_member, presenter).and_return(true)
+        def log_http_get_files(files, from, cached = false)
+      return if files.empty?
+      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
+      if cached
+        puts dark green s
+      else
+        puts dark cyan s
       end
+    end
     
-              kubernetes_namespace.save!
+      # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
+  # the I18n.default_locale when a translation can not be found).
+  config.i18n.fallbacks = true
+    
+      autoload :AggregateTarget,           'cocoapods/target/aggregate_target'
+  autoload :Command,                   'cocoapods/command'
+  autoload :Deintegrator,              'cocoapods_deintegrate'
+  autoload :Executable,                'cocoapods/executable'
+  autoload :ExternalSources,           'cocoapods/external_sources'
+  autoload :Installer,                 'cocoapods/installer'
+  autoload :HooksManager,              'cocoapods/hooks_manager'
+  autoload :PodTarget,                 'cocoapods/target/pod_target'
+  autoload :Project,                   'cocoapods/project'
+  autoload :Resolver,                  'cocoapods/resolver'
+  autoload :Sandbox,                   'cocoapods/sandbox'
+  autoload :Target,                    'cocoapods/target'
+  autoload :Validator,                 'cocoapods/validator'
+    
+            # Initialize a new instance
+        #
+        # @param [Sandbox] sandbox @see #sandbox
+        # @param [String] path @see #path
+        # @param [Array<PodTarget>] pod_targets @see #pod_targets
+        # @param [Hash{String=>Symbol}] build_configurations @see #build_configurations
+        # @param [Array<Platform>] platforms @see #platforms
+        # @param [String] object_version @see #object_version
+        # @param [String] podfile_path @see #podfile_path
+        #
+        def initialize(sandbox, path, pod_targets, build_configurations, platforms,
+                       object_version, podfile_path = nil, pod_target_subproject: false)
+          @sandbox = sandbox
+          @path = path
+          @pod_targets = pod_targets
+          @build_configurations = build_configurations
+          @platforms = platforms
+          @object_version = object_version
+          @podfile_path = podfile_path
+          @pod_target_subproject = pod_target_subproject
         end
     
-        def check_url_for_https_availability(url_to_check, user_agents: [:default])
-      problem = curl_check_http_content(url_to_check.to_s, user_agents: user_agents)
-      add_error problem if problem
+            it 'does not propagate framework or libraries from a app specification to an aggregate target' do
+          target_definition = fixture_target_definition(:contents => { 'inheritance' => 'complete' })
+          spec = stub('spec', :library_specification? => false, :spec_type => :app)
+          consumer = stub('consumer',
+                          :libraries => ['xml2'],
+                          :frameworks => ['XCTest'],
+                          :weak_frameworks => [],
+                          :spec => spec,
+                         )
+          file_accessor = stub('file_accessor',
+                               :spec => spec,
+                               :spec_consumer => consumer,
+                               :vendored_static_frameworks => [config.sandbox.root + 'StaticFramework.framework'],
+                               :vendored_static_libraries => [config.sandbox.root + 'libStaticLibrary.a'],
+                               :vendored_static_artifacts => [config.sandbox.root + 'StaticFramework.framework', config.sandbox.root + 'libStaticLibrary.a'],
+                               :vendored_dynamic_frameworks => [config.sandbox.root + 'VendoredFramework.framework'],
+                               :vendored_dynamic_libraries => [config.sandbox.root + 'VendoredDyld.dyld'],
+                              )
+          pod_target = stub('pod_target',
+                            :file_accessors => [file_accessor],
+                            :requires_frameworks? => true,
+                            :dependent_targets => [],
+                            :recursive_dependent_targets => [],
+                            :sandbox => config.sandbox,
+                            :include_in_build_config? => true,
+                            :should_build? => false,
+                            :spec_consumers => [consumer],
+                            :build_as_static? => false,
+                            :product_basename => 'PodTarget',
+                            :target_definitions => [target_definition],
+                           )
+          pod_target.stubs(:build_settings => pod(pod_target))
+          aggregate_target = fixture_aggregate_target([pod_target])
+          aggregate(aggregate_target).other_ldflags.should.not.include '-framework'
+        end
+      end
+    
+          def spree_dom_id(record)
+        dom_id(record, 'spree')
+      end
+    
+      config.fail_fast = ENV['FAIL_FAST'] || false
+  config.order = 'random'
+end
+
+    
+            def inventory_unit_params
+          params.require(:inventory_unit).permit(permitted_inventory_unit_attributes)
+        end
+      end
     end
   end
 end
 
     
-            def_node_search :conditional_dependencies, <<~EOS
-          {$(if (send (send nil? :build) ${:include? :with? :without?} $(str _))
-              (send nil? :depends_on $({str sym} _)) nil?)
-    }
+            def create
+          authorize! :create, ProductProperty
+          @product_property = @product.product_properties.new(product_property_params)
+          if @product_property.save
+            respond_with(@product_property, status: 201, default_template: :show)
+          else
+            invalid_resource!(@product_property)
+          end
+        end
     
-      private
+              @properties = @properties.page(params[:page]).per(params[:per_page])
+          respond_with(@properties)
+        end
     
-        def languages
-      @languages ||= [
-        *ARGV.value('language')&.split(','),
-        *ENV['HOMEBREW_LANGUAGES']&.split(','),
-        *Open3.capture2('defaults', 'read', '-g', 'AppleLanguages')[0].scan(/[^ \n'(),]+/),
-      ].uniq
-    end
+            def taxonomy
+          if params[:taxonomy_id].present?
+            @taxonomy ||= Spree::Taxonomy.accessible_by(current_ability, :show).find(params[:taxonomy_id])
+          end
+        end
     
-    describe GitDownloadStrategy do
-  subject { described_class.new(url, name, version) }
-    
-          # For OS::Mac::Version compatability
-      def requires_nehalem_cpu?
-        Hardware.oldest_cpu(self) == :nehalem
-      end
-      # https://en.wikipedia.org/wiki/Nehalem_(microarchitecture)
-      # Ensure any extra methods are also added to version/null.rb
-      alias requires_sse4? requires_nehalem_cpu?
-      alias requires_sse41? requires_nehalem_cpu?
-      alias requires_sse42? requires_nehalem_cpu?
-      alias requires_popcnt? requires_nehalem_cpu?
-    end
-  end
-end
-
-    
-      let(:local_caffeine) {
-    Cask::CaskLoader.load(cask_path('local-caffeine'))
-  }
-    
-        Feature5072 = '[ruby-core:38367]'
-    
-      it 'returns false when at EOF when there's data left in the buffer to read' do
-    gz = Zlib::GzipReader.new @io
-    gz.read(9)
-    gz.eof?.should be_false
-    gz.read
-    gz.eof?.should be_true
-  end
-    
-      after :each do
-    ScratchPad.clear
-  end
-    
-        def recheck
-      pod = Pod.find(params[:pod_id])
-      pod.test_connection!
-    
-    class ConversationsController < ApplicationController
-  before_action :authenticate_user!
-  respond_to :html, :mobile, :json, :js
-    
-    When(/^an error is raised$/) do
-  error = TestApp.shared_path.join('fail')
-  run_vagrant_command(test_file_exists(error))
+    Before do
+  gemfile = ENV['BUNDLE_GEMFILE'].to_s
+  ENV['BUNDLE_GEMFILE'] = File.join(Dir.pwd, gemfile) unless gemfile.start_with?(Dir.pwd)
+  @framework_version = nil
 end
     
-    Given(/^servers with the roles app and web$/) do
-  begin
-    vagrant_cli_command('up')
-  rescue
-    nil
-  end
-end
+    require 'erb'
+require 'digest'
+require 'tempfile'
+require 'paperclip/version'
+require 'paperclip/geometry_parser_factory'
+require 'paperclip/geometry_detector_factory'
+require 'paperclip/geometry'
+require 'paperclip/processor'
+require 'paperclip/processor_helpers'
+require 'paperclip/tempfile'
+require 'paperclip/thumbnail'
+require 'paperclip/interpolations/plural_cache'
+require 'paperclip/interpolations'
+require 'paperclip/tempfile_factory'
+require 'paperclip/style'
+require 'paperclip/attachment'
+require 'paperclip/storage'
+require 'paperclip/callbacks'
+require 'paperclip/file_command_content_type_detector'
+require 'paperclip/media_type_spoof_detector'
+require 'paperclip/content_type_detector'
+require 'paperclip/glue'
+require 'paperclip/errors'
+require 'paperclip/missing_attachment_styles'
+require 'paperclip/validators'
+require 'paperclip/logger'
+require 'paperclip/helpers'
+require 'paperclip/has_attached_file'
+require 'paperclip/attachment_registry'
+require 'paperclip/filename_cleaner'
+require 'paperclip/rails_environment'
     
-        def role_properties_for(names, &block)
-      servers.role_properties_for(names, &block)
+        def define
+      define_flush_errors
+      define_getters
+      define_setter
+      define_query
+      register_new_attachment
+      add_active_record_callbacks
+      add_paperclip_callbacks
+      add_required_validations
     end
     
-          def add_roles(roles)
-        Array(roles).each { |role| add_role(role) }
-        self
-      end
-      alias roles= add_roles
-    
-      s.add_development_dependency 'activesupport', '< 5.0.0' # Please see issue #432
-  s.add_development_dependency 'awesome_print', '~> 1.2'
-  s.add_development_dependency 'bundler', '>= 1.3'
-  s.add_development_dependency 'coveralls', '~> 0.8'
-  s.add_development_dependency 'factory_bot', '~> 4.8'
-  s.add_development_dependency 'pry', '~> 0.10'
-  s.add_development_dependency 'rake', '~> 10.4'
-  s.add_development_dependency 'rspec', '~> 3.3'
-  s.add_development_dependency 'rubocop', '~> 0.48.1'
-  s.add_development_dependency 'simplecov', '~> 0.16'
-    
-    describe Tmuxinator::WemuxSupport do
-  let(:klass) { Class.new }
-  let(:instance) { klass.new }
-    
-        def _hashed?
-      @yaml.is_a?(Hash)
+        # Hash assignment of interpolations. Included only for compatibility,
+    # and is not intended for normal use.
+    def self.[]= name, block
+      define_method(name, &block)
+      @interpolators_cache = nil
     end
-    
-      it { expect(subject.tmux_window_and_pane_target).to eql 'foo:0.1' }
-end
