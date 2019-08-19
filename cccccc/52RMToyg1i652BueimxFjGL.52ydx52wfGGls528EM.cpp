@@ -1,326 +1,336 @@
 
         
-        
-    {
-    {
-    {
-    {}  // namespace js
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-    
-    template <int N>
-struct SCCInfo {
-  SCCInfoBase base;
-  // Semantically this is const SCCInfo<T>* which is is a templated type.
-  // The obvious inheriting from SCCInfoBase mucks with struct initialization.
-  // Attempts showed the compiler was generating dynamic initialization code.
-  // Zero length arrays produce warnings with MSVC.
-  SCCInfoBase* deps[N ? N : 1];
-};
-    
-    // Compares fields by their index offset by one, so index 0 matches with 1, etc.
-class OffsetByOneMapKeyComparator
-    : public util::MessageDifferencer::MapKeyComparator {
- public:
-  typedef util::MessageDifferencer::SpecificField SpecificField;
-  virtual bool IsMatch(const Message& message1, const Message& message2,
-                       const std::vector<SpecificField>& parent_fields) const {
-    return parent_fields.back().index + 1 == parent_fields.back().new_index;
-  }
-};
-    
-    
-    {  return true;
-}
-    
-    TEST_F(ParserTest, WarnIfFieldNameIsNotUpperCamel) {
-  SetupParser(
-      'syntax = \'proto2\';'
-      'message abc {}');
-  FileDescriptorProto file;
-  EXPECT_TRUE(parser_->Parse(input_.get(), &file));
-  EXPECT_TRUE(error_collector_.warning_.find(
-                  'Message name should be in UpperCamelCase. Found: abc.') !=
-              string::npos);
-}
-    
-    TEST_F(JsonObjectWriterTest, ListInList) {
-  ow_ = new JsonObjectWriter('', out_stream_);
-  ow_->StartList('')
-      ->StartList('')
-      ->RenderString('', 'value')
-      ->EndList()
-      ->EndList();
-  EXPECT_EQ('[[\'value\']]', CloseStreamAndGetString());
-}
-    
-    TEST(JavaDocCommentTest, Escaping) {
-  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
-  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
-  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
-  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
-  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
-  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
-}
-    
-    namespace grpc_impl {
-    }
-    
-    std::vector<string> GetAllCredentialsTypeList() {
-  std::vector<grpc::string> credentials_types;
-  if (GetCredentialsProvider()->GetChannelCredentials(kInsecureCredentialsType,
-                                                      nullptr) != nullptr) {
-    credentials_types.push_back(kInsecureCredentialsType);
-  }
-  auto sec_list = GetCredentialsProvider()->GetSecureCredentialsTypeList();
-  for (auto sec = sec_list.begin(); sec != sec_list.end(); sec++) {
-    credentials_types.push_back(*sec);
-  }
-  GPR_ASSERT(!credentials_types.empty());
-    }
-    
-    #endif /* GRPC_CORE_LIB_GPRPP_GLOBAL_CONFIG_ENV_H */
+        #endif  // SHELL_APP_COMMAND_LINE_ARGS_H_
 
     
-    namespace experimental {
+    #include 'shell/browser/native_window_views.h'
+    
+    #ifndef SHELL_BROWSER_API_ATOM_API_DOWNLOAD_ITEM_H_
+#define SHELL_BROWSER_API_ATOM_API_DOWNLOAD_ITEM_H_
+    
+    
+    {}  // namespace electron
+    
+    namespace api {
+    }
+    
+    NODE_LINKED_MODULE_CONTEXT_AWARE(atom_browser_power_save_blocker, Initialize)
+
+    
+      device::mojom::WakeLockPtr wake_lock_;
+    
+    #endif // HAVE_OPENCL
+    
+        for (std::vector<Int64>::const_iterator i = symbols.begin(); 
+         i != symbols.end();
+         ++i)
+    {
+        int codeLen = *i & 63;
+        int symbol  = *i >> 6;
     }
     
     
-    {}  // namespace grpc_impl
-
     
     
-    {
-    { private:
-  std::shared_ptr<grpc::Channel> CreateChannelWithInterceptors(
-      const string& target, const grpc::ChannelArguments& args,
-      std::vector<
-          std::unique_ptr<experimental::ClientInterceptorFactoryInterface>>
-          interceptor_creators) override {
-    grpc_channel_args channel_args;
-    args.SetChannelArgs(&channel_args);
-    return CreateChannelInternal(
-        '',
-        grpc_cronet_secure_channel_create(engine_, target.c_str(),
-                                          &channel_args, nullptr),
-        std::move(interceptor_creators));
-  }
-  void* engine_;
-};
-}  // namespace grpc
-namespace grpc_impl {
-std::shared_ptr<ChannelCredentials> CronetChannelCredentials(void* engine) {
-  return std::shared_ptr<ChannelCredentials>(
-      new grpc::CronetChannelCredentialsImpl(engine));
+void
+FrameBuffer::insert (const string &name, const Slice &slice)
+{
+    insert (name.c_str(), slice);
 }
-}  // namespace grpc_impl
-
     
-    namespace {
+    #include 'ImfIO.h'
+#include 'ImfHeader.h'
+#include 'ImfNamespace.h'
+#include 'ImfExport.h'
+    
+    OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_ENTER
+    
+    
+    {	s = in[i];
     }
     
-        static const ncclUniqueId emptyNcclId = {};
-    if (memcmp(&ncclId, &emptyNcclId, sizeof(ncclId)) == 0)
+    String ResourceImporterImage::get_resource_type() const {
+    }
+    
+    	EditorFileDialog *file;
+	EditorNode *editor;
+    
+    void FileAccessNetworkClient::lock_mutex() {
+    }
+    
+    	//path get caches
+	struct PathGetCache {
+		struct NodeInfo {
+			NodePath path;
+			ObjectID instance;
+		};
+    }
+    
+    void InputEventScreenDrag::set_speed(const Vector2 &p_speed) {
+    }
+    
+    		if (location < 0) {
+			E = E->next();
+			continue;
+		}
+    
+    	Object *o = ObjectDB::get_instance(obj);
+	if (!o)
+		return NULL;
+    
+    	if (!is_visible_in_tree()) {
+		must_reload = true;
+		return;
+	}
+    
+    class EditorImportPlugin : public ResourceImporter {
+	GDCLASS(EditorImportPlugin, ResourceImporter);
+    }
+    
+    	make_flags.clear();
+    
+    /* NurbsProperty */
+#define GLU_AUTO_LOAD_MATRIX               100200
+#define GLU_CULLING                        100201
+#define GLU_SAMPLING_TOLERANCE             100203
+#define GLU_DISPLAY_MODE                   100204
+#define GLU_PARAMETRIC_TOLERANCE           100202
+#define GLU_SAMPLING_METHOD                100205
+#define GLU_U_STEP                         100206
+#define GLU_V_STEP                         100207
+#define GLU_NURBS_MODE                     100160
+#define GLU_NURBS_MODE_EXT                 100160
+#define GLU_NURBS_TESSELLATOR              100161
+#define GLU_NURBS_TESSELLATOR_EXT          100161
+#define GLU_NURBS_RENDERER                 100162
+#define GLU_NURBS_RENDERER_EXT             100162
+    
+    #if OPI_SUPPORT
+  //----- OPI functions
+  virtual void opiBegin(GfxState *state, Dict *opiDict);
+  virtual void opiEnd(GfxState *state, Dict *opiDict);
+#endif
+    
+      PSTokenizer(int (*getCharFuncA)(void *), void *dataA);
+  ~PSTokenizer();
+    
+    
     {
-        fprintf(stderr, 'NcclComm failed to obtain ncclUniqueId: %s\n', ncclGetErrorString(res));
+    {    switch (i) {
+    case 0:
+      break;
+    case 5:
+      str->append(wh[2 * k + 1]);
+      break;
+    case 9:
+      str->append(wh[2 * k + 0]);
+      str->append(wh[ 2 * k + 2]);
+      break;
+    case 4:
+      str->append(wh[2 * k + 0]);
+      str->append(wh[2 * k + 1]);
+      break;
+    default:
+      if (i > 5) {
+       str->append(wh[2 * k + 1]);
+       i -= 5;
+      }
+      for (j = 0; j < i; j++) {
+       str->append(wh[2 * k + 0]);
+      }
+    }
+       
+    divisor = divisor / 10;
+  }
+}
+    
+      // get alignment
+  if (dict->lookup('Dm', &obj)->isName()) {
+    const char *dm = obj.getName();
+    
+    if (strcmp('H', dm) == 0)
+      alignment = transitionHorizontal;
+    else if (strcmp('V', dm) == 0)
+      alignment = transitionVertical;
+  }
+  obj.free();
+    
+    Stream *Parser::makeStream(Object *dict, Guchar *fileKey,
+			   CryptAlgorithm encAlgorithm, int keyLength,
+			   int objNum, int objGen, std::set<int> *fetchOriginatorNums) {
+  Object obj;
+  BaseStream *baseStr;
+  Stream *str;
+  Guint pos, endPos, length;
+    }
+    
+      struct Color {
+    double r, g, b;
+  };
+    
+    
+    {  if (!(core = (WinPDFCore *)doc->getGUIData()) ||
+      !(password = core->getPassword())) {
+    return NULL;
+  }
+  return new StandardAuthData(password, password->copy());
+#else
+  return NULL;
+#endif
+}
+    
+      // paint the transparency group onto the parent bitmap
+  // - the clip path was set in the parent's state)
+  splash->composite(tBitmap, 0, 0, tx, ty,
+		    tBitmap->getWidth(), tBitmap->getHeight(),
+		    gFalse, !isolated);
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    
+      ALWAYS_INLINE
+  void emitCJ8(X64Instr op, int jcond, ssize_t imm) {
+    // this is for jcc only
+    assert(op.flags & IF_JCC);
+    ssize_t delta = imm - ((ssize_t)codeBlock.frontier() + 2);
+    // Emit opcode
+    byte(jcond | 0x70);
+    // Emit 8-bit offset
+    byte(safe_cast<int8_t>(delta));
+  }
+    
+    bool MemFile::eof() {
+  assertx(m_len != -1);
+  int64_t avail = bufferedLen();
+  if (avail > 0) {
+    return false;
+  }
+  return m_cursor == m_len;
+}
+    
+    bool OutputFile::flush() {
+  if (!isClosed()) {
+    g_context->flush();
+    return true;
+  }
+  return false;
+}
+    
+      arr = make_dict_array('k1', 'v1', 'k2', 'v2');
+  i = 0;
+  for (ArrayIter iter = arr.begin(); iter; ++iter, ++i) {
+    if (i == 0) {
+      EXPECT_TRUE(equal(iter.first(), String('k1')));
+      EXPECT_TRUE(equal(iter.second(), String('v1')));
+    } else {
+      EXPECT_TRUE(equal(iter.first(), String('k2')));
+      EXPECT_TRUE(equal(iter.second(), String('v2')));
+    }
+  }
+  EXPECT_TRUE(i == 2);
+    
+    // nextLookahead() advances an iterator forward in the lookahead store.
+// If the end of the store is reached, a new token will be scanned from
+// the frontier. nextLookahead skips over whitespace and comments.
+void Scanner::nextLookahead(TokenStore::iterator& pos) {
+  for (;;) {
+    ++pos;
+    if (pos == m_lookahead.end()) {
+      pos = m_lookahead.appendNew();
+      pos->loc = *m_loc;
+      pos->t = scanToken(pos->token, pos->loc);
+    }
+    switch (pos->t) {
+      case T_DOC_COMMENT:
+      case T_COMMENT:
+      case T_OPEN_TAG:
+      case T_WHITESPACE:
+        break;
+      default:
         return;
     }
-    
-    template <class ElemType>
-shared_ptr<ComputationNode<ElemType>> ComputationNetworkBuilder<ElemType>::CreateSparseInputNode(const std::wstring& inputName, const size_t rows, const wstring& dynamicAxisName)
-{
-    return net.AddNodeToNetWithElemType(New<SparseInputValue<ElemType>>(net.GetDeviceId(), inputName, rows, dynamicAxisName));
+  }
 }
     
-            if (pass == ndlPassInitial)
-        {
-            // evaluate only scalar parameters
-            vector<void*> params = EvaluateParameters(node, baseName, 0, parameter.size(), pass);
-            size_t i = 0;
-            auto tensorShape = ProcessTensorShapeParameters(node, params, i, /*isImage=*/false, cnNodeType);
+      bool isAddrInSomeTrans(TCA addr) const {
+    if ((ahotBase   <= addr && addr < ahotFrontier)  ||
+        (aBase      <= addr && addr < aFrontier)     ||
+        (aprofBase  <= addr && addr < aprofFrontier) ||
+        (coldBase   <= addr && addr < coldFrontier)  ||
+        (frozenBase <= addr && addr < frozenFrontier)) {
+      return getTransContaining(addr) != INVALID_ID;
     }
+    return false;
+  }
     
-    // EqualInsensitive - check to see if two nodes are equal
-// string1 - [in,out] string to compare, if comparision is equal insensitive but not sensitive, will replace with sensitive version
-// string2 - second string to compare
-// alternate - alternate naming of the string
-// return - true if strings are equal insensitive and modifies string1 to sensitive version if different
-bool EqualInsensitive(std::wstring& string1, const std::wstring& string2, const wchar_t* alternate /*=NULL*/)
-{
-    bool equal = EqualCI(string1, string2) ||
-                 (alternate && EqualCI(string1, alternate));
-    }
+    using json = nlohmann::json;
     
-            NDLNode<ElemType>* ndlNode = NULL;
-    
-    #include 'stdafx.h'
-#include 'Actions.h'
-#include 'SimpleNetworkBuilder.h'
-#include 'NDLNetworkBuilder.h'
-#include 'ScriptableObjects.h'
-#include 'BrainScriptEvaluator.h'
-#include 'BrainScriptParser.h'
-    
-    
-    {        // determine the node group by its group tag string
-        auto& nodeGroup = GetNodeGroup(groupTag);
-        // if node is already in the list then we are done
-        if (node->HasTag(groupTag))
-        {
-            for (const auto& groupNode : nodeGroup) // TODO: is there an STL algorithm?
-                if (groupNode == node)
-                    return;
-            // we get here if the node has the tag but is not in the node group yet
-        }
-        // verify and update the node's tag
-        node->SetTag(groupTag);
-        // add to the node group
-        nodeGroup.push_back(node);
-    }
-    
-    template <class ElemType>
-class ComputationNetworkBuilder
-{
-    typedef shared_ptr<ComputationNode<ElemType>> ComputationNodePtr;
-    ComputationNetwork& net;
-    ComputationNetworkBuilder();
-    ComputationNetworkBuilder(const ComputationNetworkBuilder&);
-    void operator=(const ComputationNetworkBuilder&);
-    }
-    
-        float DecayCoefficient()
+        // out_of_range.109
+    try
     {
-        float f = 1.f;
-        switch (m_adjustLearningRateAtBeginningType)
-        {
-        case AdjustLearningRateAtBeginning::None:
-            break;
-        case AdjustLearningRateAtBeginning::Linearly:
-            f = min(f, max(0.f, (float)(m_adjustCoefficient + (1 - m_adjustCoefficient) / m_adjustMBNumber * m_parameterSyncCounter)));
-            break;
-        case AdjustLearningRateAtBeginning::Staircase:
-            f = min(f, max(0.f, (float)(m_adjustCoefficient * (m_parameterSyncCounter / m_adjustMBNumber + 1))));
-            break;
-        default:
-            break;
-        }
-        return f;
+        // try to use an array index that is not a number
+        json::reference ref = j.at('/array/one'_json_pointer);
     }
-    
-            // begin decimating matrices
-        size_t rv = 0;
-        for (const auto& it : MB)
-        {
-            const wstring& name = it.first;
-            const auto& input = it.second;
-            auto& mat = MB.GetInputMatrix<ElemType>(name);
-            size_t numRows = mat.GetNumRows();
-            size_t numCols = mat.GetNumCols();
-            int deviceId   = mat.GetDeviceId();
-    }
-    
-        // uses a small percentage of training data of minibatch to
-    // speculatively train with various MB sizes; then picks the best
-    size_t SearchForBestMinibatchSize(ComputationNetworkPtr net,
-                                      ComputationNetworkPtr refNet,
-                                      const ComputationNodeBasePtr& refNode,
-                                      const int epochNumber,
-                                      const size_t numFramesToUseInSearch,
-                                      IDataReader* trainSetDataReader,
-                                      const double learnRatePerSample,
-                                      const std::vector<ComputationNodeBasePtr>& featureNodes,
-                                      const std::vector<ComputationNodeBasePtr>& labelNodes,
-                                      const std::vector<ComputationNodeBasePtr>& criterionNodes,
-                                      const std::vector<ComputationNodeBasePtr>& evaluationNodes,
-                                      StreamMinibatchInputs* inputMatrices,
-                                      const std::list<ComputationNodeBasePtr>& learnableNodes,
-                                      std::list<MatrixBasePtr>& smoothedGradients, std::vector<double> smoothedCounts,
-                                      const size_t minMinibatchSize, const size_t maxMinibatchSize);
-    
-    void DHTReplaceNodeTask::onReceived(const DHTPingReplyMessage* message)
-{
-  A2_LOG_INFO(fmt('ReplaceNode: Ping reply received from %s.',
-                  message->getRemoteNode()->toString().c_str()));
-  setFinished(true);
-}
-    
-    public:
-  DHTResponseMessage(const std::shared_ptr<DHTNode>& localNode,
-                     const std::shared_ptr<DHTNode>& remoteNode,
-                     const std::string& transactionID);
-    
-        dispatcher->setTimeout(std::chrono::seconds(messageTimeout));
-    
-    class DownloadContext;
-class PeerStorage;
-class DHTTask;
-class DHTNode;
-class DHTBucket;
-    
-    namespace aria2 {
-    }
-    
-    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
-                                             std::chrono::seconds interval)
-    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
-{
-}
-    
-    #include 'DHTNode.h'
-#include 'util.h'
-#include 'a2functional.h'
-    
-    DNSCache::CacheEntry::CacheEntry(const std::string& hostname, uint16_t port)
-    : hostname_(hostname), port_(port)
-{
-}
-    
-            /**
-         * Less or equal comparison operator.
-         * @param point Point<T> to be compared.
-         * @result Whether the instance satisfies the condition with respect to point.
-         */
-        inline bool operator<=(const Point<T>& point) const
-        {
-            return area() <= point.area();
-        }
-    
-            Rectangle(const T x = 0, const T y = 0, const T width = 0, const T height = 0);
-    
-        /**
-     * A synchronization point that enqueues a barrier operation.
-     *
-     * Enqueues a barrier command which waits for either a list of events to complete, 
-     * or if the list is empty it waits for all commands previously enqueued in command_queue 
-     * to complete before it completes. This command blocks command execution, that is, any 
-     * following commands enqueued after it do not execute until it completes. This command 
-     * returns an event which can be waited on, i.e. this event can be waited on to insure that 
-     * all events either in the event_wait_list or all previously enqueued commands, queued 
-     * before this command to command_queue, have completed.
-     */
-    cl_int enqueueBarrierWithWaitList(
-        const vector<Event> *events = 0,
-        Event *event = 0)
+    catch (json::parse_error& e)
     {
-        cl_event tmp;
-        cl_int err = detail::errHandler(
-            ::clEnqueueBarrierWithWaitList(
-                object_,
-                (events != NULL) ? (cl_uint) events->size() : 0,
-                (events != NULL && events->size() > 0) ? (cl_event*) &events->front() : NULL,
-                (event != NULL) ? &tmp : NULL),
-            __ENQUEUE_BARRIER_WAIT_LIST_ERR);
+        std::cout << e.what() << '\n';
     }
     
-            void generateMesh(const Array<float>& poseKeypoints3D, const Array<float>& faceKeypoints3D,
-                          const std::array<Array<float>, 2>& handKeypoints3D,
-                          const double* const adamPosePtr,
-                          const double* const adamTranslationPtr,
-                          const double* const vtVecPtr, const int vtVecRows,
-                          const double* const j0VecPtr, const int j0VecRows,
-                          const double* const adamFaceCoeffsExpPtr);
+            // ------------------------------ Basic Operators ------------------------------ //
+        Rectangle<T>& operator*=(const T value);
     
-        public:
-        PersonIdExtractor(const float confidenceThreshold = 0.1f, const float inlierRatioThreshold = 0.5f,
-                          const float distanceThreshold = 30.f, const int numberFramesToDeletePerson = 10);
+    #endif // OPENPOSE_HAND_HAND_PARAMETERS_HPP
+
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+        // Overrides
+    virtual void startWithTarget(Node *target) override;
+    virtual ActionCamera * reverse() const override;
+    virtual ActionCamera *clone() const override;
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    static bool sendComponentEventToJS(Component* node, int action)
+{
+    auto scriptEngine = ScriptEngineManager::getInstance()->getScriptEngine();
+    
+    if (scriptEngine->isCalledFromScript())
+    {
+        scriptEngine->setCalledFromScript(false);
+    }
+    else
+    {
+        BasicScriptData data(node,(void*)&action);
+        ScriptEvent scriptEvent(kComponentEvent,(void*)&data);
+        if (scriptEngine->sendEvent(&scriptEvent))
+            return true;
+    }
+    
+    return false;
+}
+    
+        bool isEnabled() const { return _enabled; }
+    virtual void setEnabled(bool enabled);
+    
+    const std::string& getName() const { return _name; }
+    virtual void setName(const std::string& name) { _name = name; }
+    
+    Node* getOwner() const { return _owner; }
+    virtual void setOwner(Node *owner);
+    
+    
+    {    return ret;
+ }
+    
+    #ifndef __CC_FRAMEWORK_COMCONTAINER_H__
+#define __CC_FRAMEWORK_COMCONTAINER_H__
