@@ -1,65 +1,145 @@
 
         
-          context 'as an admin' do
-    before :each do
-      login_as(users(:jane))
-    end
-    
-        fill_in(:agent_options, with: '{
-      'expected_receive_period_in_days': '2'
-      'keep_event': 'false'
-    }')
-    expect(get_alert_text_from { click_on 'Save' }).to have_text('Sorry, there appears to be an error in your JSON input. Please fix it before continuing.')
+          def create_user(attr)
+    allowed_keys = %w[
+      email strip_exif show_community_spotlight_in_stream language disable_mail auto_follow_back
+    ]
+    data = convert_keys(archive_hash['user'], allowed_keys)
+    # setting getting_started to false as the user doesn't need to see the getting started wizard
+    data.merge!(
+      username:              attr[:username],
+      password:              attr[:password],
+      password_confirmation: attr[:password],
+      getting_started:       false,
+      person:                {
+        profile_attributes: profile_attributes
+      }
+    )
+    self.user = User.build(data)
+    user.save!
   end
     
-        it 'in the future' do
-      expect(relative_distance_of_time_in_words(Time.now+5.minutes)).to eq('in 5m')
+      def return_photo_error(message)
+    respond_to do |format|
+      format.json { render(layout: false, json: {'success' => false, 'error' => message}.to_json) }
+      format.html { render(layout: false, json: {'success' => false, 'error' => message}.to_json) }
     end
   end
 end
 
     
-        it 'can be turned off' do
-      stub(DefaultScenarioImporter).seed { fail 'seed should not have been called'}
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'false' }
-      DefaultScenarioImporter.import(user)
+        context 'Conversation' do
+      let(:participant) { FactoryGirl.create(:person) }
+      let(:diaspora_entity) { FactoryGirl.create(:conversation_with_message, participants: [participant]) }
+      let(:federation_entity) { described_class.build(diaspora_entity) }
+    
+      private
+    
+      def respond_destroy_success
+    respond_to do |format|
+      format.mobile { redirect_back fallback_location: stream_path }
+      format.js { head :no_content }
+      format.json { head :no_content }
+    end
+  end
+    
+      def contacts_by_type(type)
+    order = ['profiles.first_name ASC', 'profiles.last_name ASC', 'profiles.diaspora_handle ASC']
+    contacts = case type
+      when 'all'
+        order.unshift 'receiving DESC'
+        current_user.contacts
+      when 'only_sharing'
+        current_user.contacts.only_sharing
+      when 'receiving'
+        current_user.contacts.receiving
+      when 'by_aspect'
+        order.unshift 'contact_id IS NOT NULL DESC'
+        contacts_by_aspect(@aspect.id)
+      else
+        raise ArgumentError, 'unknown type #{type}'
+      end
+    contacts.includes(person: :profile)
+            .order(order)
+  end
+    
+      task :print_config_variables do
+    puts
+    puts '------- Printing current config variables -------'
+    env.keys.each do |config_variable_key|
+      if is_question?(config_variable_key)
+        puts '#{config_variable_key.inspect} => Question (awaits user input on next fetch(#{config_variable_key.inspect}))'
+      else
+        puts '#{config_variable_key.inspect} => #{fetch(config_variable_key).inspect}'
+      end
     end
     
-        it 'cleans up old logs when there are more than log_length' do
-      stub(AgentLog).log_length { 4 }
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 1')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 2')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 3')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 4')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 4')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 1')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 5')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 5')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 2')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 6')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 6')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 3')
+    World(RemoteCommandHelpers)
+
+    
+      at_exit do
+    if ENV['KEEP_RUNNING']
+      puts 'Vagrant vm will be left up because KEEP_RUNNING is set.'
+      puts 'Rerun without KEEP_RUNNING set to cleanup the vm.'
+    else
+      vagrant_cli_command('destroy -f')
+    end
+  end
+    
+        def install_plugin(plugin, load_hooks: true, load_immediately: false)
+      installer.install(plugin,
+                        load_hooks: load_hooks,
+                        load_immediately: load_immediately)
     end
     
-    Then(/^the tasks folder is created$/) do
-  path = TestApp.test_app_path.join('lib/capistrano/tasks')
-  expect(Dir.exist?(path)).to be true
-end
+        specify 'fetch article id only if :article_id key in hash ' do
+      allow(Article).to receive(:find_by)
+      described_class.perform_now('Reaction', 456, milestone_service)
+      expect(Article).to have_received(:find_by).with(id: 456)
+    end
     
-    Given(/^servers with the roles app and web$/) do
+    def capture_logging(lvl=Logger::INFO)
+  old = Sidekiq.logger
   begin
-    vagrant_cli_command('up')
-  rescue
-    nil
+    out = StringIO.new
+    logger = Logger.new(out)
+    logger.level = lvl
+    Sidekiq.logger = logger
+    yield
+    out.string
+  ensure
+    Sidekiq.logger = old
   end
 end
     
-      class VagrantSSHCommandError < RuntimeError; end
+        def setup
+      Sidekiq.redis {|c| c.flushdb }
+    end
     
-        def load_imports
-      if options.show_tasks && Rake::Task.task_defined?('load:defaults')
-        invoke 'load:defaults'
-        set(:stage, '')
-        Dir[deploy_config_path].each { |f| add_import f }
+          JoeWorker.perform_in(0.01, 0)
+    
+        describe 'when the exception does not have a backtrace' do
+      it 'does not fail' do
+        exception = ExceptionHandlerTestException.new
+        assert_nil exception.backtrace
+    
+        Thank you for installing tmuxinator.
+    
+        it 'returns the string' do
+      expect(project.send('hook_#{hook_name}')).to eq('echo 'on hook'')
+    end
+  end
+    
+          # $TMUXINATOR_CONFIG (and create directory) or ''.
+      def environment
+        environment = ENV['TMUXINATOR_CONFIG']
+        return '' if environment.to_s.empty? # variable is unset (nil) or blank
+        FileUtils::mkdir_p(environment) unless File.directory?(environment)
+        environment
+      end
+    
+      describe '.editor?' do
+    context '$EDITOR is set' do
+      before do
+        allow(ENV).to receive(:[]).with('EDITOR') { 'vim' }
       end
