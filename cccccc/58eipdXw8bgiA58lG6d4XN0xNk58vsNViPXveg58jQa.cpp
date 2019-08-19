@@ -1,351 +1,239 @@
 
         
-        // CertificateManagerModel provides the data to be displayed in the certificate
-// manager dialog, and processes changes from the view.
-class CertificateManagerModel {
- public:
-  typedef base::Callback<void(std::unique_ptr<CertificateManagerModel>)>
-      CreationCallback;
-    }
+          if (engine == LRNParameter_Engine_DEFAULT) {
+#ifdef USE_CUDNN
+    engine = LRNParameter_Engine_CUDNN;
+#else
+    engine = LRNParameter_Engine_CAFFE;
+#endif
+  }
     
-    CallbackHolderBase::CallbackHolderBase(v8::Isolate* isolate)
-    : v8_ref_(isolate, v8::External::New(isolate, this)) {
-  v8_ref_.SetWeak(this, &CallbackHolderBase::FirstWeakCallback,
-                  v8::WeakCallbackType::kParameter);
+    TYPED_TEST(NeuronLayerTest, TestPReLUConsistencyReLU) {
+  typedef typename TypeParam::Dtype Dtype;
+  LayerParameter prelu_layer_param;
+  LayerParameter relu_layer_param;
+  relu_layer_param.mutable_relu_param()->set_negative_slope(0.25);
+  PReLULayer<Dtype> prelu(prelu_layer_param);
+  ReLULayer<Dtype> relu(relu_layer_param);
+  // Set up blobs
+  vector<Blob<Dtype>*> blob_bottom_vec_2;
+  vector<Blob<Dtype>*> blob_top_vec_2;
+  shared_ptr<Blob<Dtype> > blob_bottom_2(new Blob<Dtype>());
+  shared_ptr<Blob<Dtype> > blob_top_2(new Blob<Dtype>());
+  blob_bottom_vec_2.push_back(blob_bottom_2.get());
+  blob_top_vec_2.push_back(blob_top_2.get());
+  blob_bottom_2->CopyFrom(*this->blob_bottom_, false, true);
+  // SetUp layers
+  prelu.SetUp(this->blob_bottom_vec_, this->blob_top_vec_);
+  relu.SetUp(blob_bottom_vec_2, blob_top_vec_2);
+  // Check forward
+  prelu.Forward(this->blob_bottom_vec_, this->blob_top_vec_);
+  relu.Forward(this->blob_bottom_vec_, blob_top_vec_2);
+  for (int s = 0; s < blob_top_2->count(); ++s) {
+    EXPECT_EQ(this->blob_top_->cpu_data()[s], blob_top_2->cpu_data()[s]);
+  }
+  // Check backward
+  shared_ptr<Blob<Dtype> > tmp_blob(new Blob<Dtype>());
+  tmp_blob->ReshapeLike(*blob_top_2.get());
+  FillerParameter filler_param;
+  GaussianFiller<Dtype> filler(filler_param);
+  filler.Fill(tmp_blob.get());
+  caffe_copy(blob_top_2->count(), tmp_blob->cpu_data(),
+      this->blob_top_->mutable_cpu_diff());
+  caffe_copy(blob_top_2->count(), tmp_blob->cpu_data(),
+      blob_top_2->mutable_cpu_diff());
+  vector<bool> propagate_down;
+  propagate_down.push_back(true);
+  prelu.Backward(this->blob_top_vec_, propagate_down, this->blob_bottom_vec_);
+  relu.Backward(blob_top_vec_2, propagate_down, blob_bottom_vec_2);
+  for (int s = 0; s < blob_bottom_2->count(); ++s) {
+    EXPECT_EQ(this->blob_bottom_->cpu_diff()[s], blob_bottom_2->cpu_diff()[s]);
+  }
 }
     
-      // Add 'destroy' and 'isDestroyed' methods.
-  ObjectTemplateBuilder& MakeDestroyable();
+      /**
+   * @brief For an already initialized net, implicitly copies (i.e., using no
+   *        additional memory) the pre-trained layers from another Net.
+   */
+  void ShareTrainedLayersWith(const Net* other);
+  // For an already initialized net, CopyTrainedLayersFrom() copies the already
+  // trained layers from another net parameter instance.
+  /**
+   * @brief For an already initialized net, copies the pre-trained layers from
+   *        another Net.
+   */
+  void CopyTrainedLayersFrom(const NetParameter& param);
+  void CopyTrainedLayersFrom(const string& trained_filename);
+  void CopyTrainedLayersFromBinaryProto(const string& trained_filename);
+  void CopyTrainedLayersFromHDF5(const string& trained_filename);
+  /// @brief Writes the net to a proto.
+  void ToProto(NetParameter* param, bool write_diff = false) const;
+  /// @brief Writes the net to an HDF5 file.
+  void ToHDF5(const string& filename, bool write_diff = false) const;
     
-    
-    {}  // namespace mate
-    
-    template <typename T>
-class Wrappable : public WrappableBase {
- public:
-  Wrappable() {}
-    }
-    
-    #ifndef CHROME_BROWSER_PROCESS_SINGLETON_H_
-#define CHROME_BROWSER_PROCESS_SINGLETON_H_
-    
-    bool DownloadItem::IsDone() const {
-  return download_item_->IsDone();
+    template <typename Dtype>
+void Net<Dtype>::ShareWeights() {
+  for (int i = 0; i < params_.size(); ++i) {
+    if (param_owners_[i] < 0) { continue; }
+    params_[i]->ShareData(*params_[param_owners_[i]]);
+    params_[i]->ShareDiff(*params_[param_owners_[i]]);
+  }
 }
     
-    #if defined(WIDEVINE_CDM_AVAILABLE)
-bool IsWidevineAvailable(
-    base::FilePath* cdm_path,
-    std::vector<media::VideoCodec>* codecs_supported,
-    base::flat_set<media::CdmSessionType>* session_types_supported,
-    base::flat_set<media::EncryptionMode>* modes_supported) {
-  static enum {
-    NOT_CHECKED,
-    FOUND,
-    NOT_FOUND,
-  } widevine_cdm_file_check = NOT_CHECKED;
+    	if (cc) {
+		DEBUG_PRINT('\nFragment Code:\n\n' + String(cc->fragment_globals));
+	}
+	DEBUG_PRINT('\nFragment Code:\n\n' + String(code_string.get_data()));
+#endif
+    
+    void ShaderGLES3::finish() {
     }
     
-    TegraRowOp_Invoker(combine2, combine2, 2, 1, 0, RANGE_DATA(ST, src1_data, sizeof(ST)), range.end-range.start,
-                                                RANGE_DATA(ST, src2_data, sizeof(ST)), range.end-range.start,
-                                                RANGE_DATA(DT, dst1_data, 2*sizeof(DT)), range.end-range.start)
-TegraRowOp_Invoker(combine3, combine3, 3, 1, 0, RANGE_DATA(ST, src1_data, sizeof(ST)), range.end-range.start,
-                                                RANGE_DATA(ST, src2_data, sizeof(ST)), range.end-range.start,
-                                                RANGE_DATA(ST, src3_data, sizeof(ST)), range.end-range.start,
-                                                RANGE_DATA(DT, dst1_data, 3*sizeof(DT)), range.end-range.start)
-TegraRowOp_Invoker(combine4, combine4, 4, 1, 0, RANGE_DATA(ST, src1_data, sizeof(ST)), range.end-range.start,
-                                                RANGE_DATA(ST, src2_data, sizeof(ST)), range.end-range.start,
-                                                RANGE_DATA(ST, src3_data, sizeof(ST)), range.end-range.start,
-                                                RANGE_DATA(ST, src4_data, sizeof(ST)), range.end-range.start,
-                                                RANGE_DATA(DT, dst1_data, 4*sizeof(DT)), range.end-range.start)
-#define TEGRA_MERGE64S(type, src, dst, len, cn) \
-( \
-    CAROTENE_NS::isSupportedConfiguration() ? \
-        cn == 2 ? \
-        parallel_for_(Range(0, len), \
-        TegraRowOp_combine2_Invoker<const type, type>(src[0], src[1], dst), \
-        (len) / static_cast<double>(1<<16)), \
-        CV_HAL_ERROR_OK : \
-        cn == 3 ? \
-        parallel_for_(Range(0, len), \
-        TegraRowOp_combine3_Invoker<const type, type>(src[0], src[1], src[2], dst), \
-        (len) / static_cast<double>(1<<16)), \
-        CV_HAL_ERROR_OK : \
-        cn == 4 ? \
-        parallel_for_(Range(0, len), \
-        TegraRowOp_combine4_Invoker<const type, type>(src[0], src[1], src[2], src[3], dst), \
-        (len) / static_cast<double>(1<<16)), \
-        CV_HAL_ERROR_OK : \
-        CV_HAL_ERROR_NOT_IMPLEMENTED \
-    : CV_HAL_ERROR_NOT_IMPLEMENTED \
-)
+    	static Ref<EditorSettings> singleton;
     
-        void operator() (const typename internal::VecTraits<T>::vec128 & v_src0,
-                     const typename internal::VecTraits<T>::vec128 & v_src1,
-                     typename internal::VecTraits<T>::vec128 & v_dst) const
-    {
-        typename internal::VecTraits<T>::vec128 v_min = internal::vminq(v_src0, v_src1);
-        typename internal::VecTraits<T>::vec128 v_max = internal::vmaxq(v_src0, v_src1);
-        v_dst = internal::vqsubq(v_max, v_min);
+    class EditorImportPlugin : public ResourceImporter {
+	GDCLASS(EditorImportPlugin, ResourceImporter);
     }
     
-    namespace {
-    }
     
-        if (borderType == BORDER_MODE_CONSTANT)
-        for (s32 k = 0; k < cn; ++k)
-        {
-            lanea[-cn+k] = borderValue;
-            lanea[colsn+k] = borderValue;
-            laneA[-cn+k] = borderValue;
-            laneA[colsn+k] = borderValue;
-            laneb[-cn+k] = borderValue;
-            laneb[colsn+k] = borderValue;
-            laneB[-cn+k] = borderValue;
-            laneB[colsn+k] = borderValue;
-        }
-    
-    void assertSupportedConfiguration(bool parametersSupported)
-{
-    if (!isSupportedConfiguration()) {
-        std::cerr << 'internal error: attempted to use an unavailable function' << std::endl;
-        std::abort();
-    }
-    }
-    
-    namespace CAROTENE_NS {
-    }
-    
-                    tprev[1] = tcurr[1];
-                tcurr[1] = tnext[1];
-    
-    template <typename T>
-inline void inRangeCheck(const Size2D &_size,
-                         const T * srcBase, ptrdiff_t srcStride,
-                         const T * rng1Base, ptrdiff_t rng1Stride,
-                         const T * rng2Base, ptrdiff_t rng2Stride,
-                         u8 * dstBase, ptrdiff_t dstStride)
-{
-    typedef typename internal::VecTraits<T>::vec128 vec128;
-    typedef typename internal::VecTraits<T>::unsign::vec128 uvec128;
-    }
-    
-    enum PSOutMode {
-  psModePS,
-  psModeEPS,
-  psModeForm,
-  psModePSOrigPageSizes
+    {public:
+	virtual uint32_t get_import_flags() const;
+	virtual void get_extensions(List<String> *r_extensions) const;
+	virtual Node *import_scene(const String &p_path, uint32_t p_flags, int p_bake_fps, List<String> *r_missing_deps, Error *r_err = NULL);
+	virtual Ref<Animation> import_animation(const String &p_path, uint32_t p_flags, int p_bake_fps);
 };
     
-    GBool PSTokenizer::getToken(char *buf, int size, int *length) {
-  GBool comment, backslash;
-  int c;
-  int i;
-    }
+    #ifdef __linux__
+#if defined __i386 || defined __x86_64
+#define BREAKPOINT __asm__ volatile ('int3')
+#else   /* not x86/amd64 */
+#define BREAKPOINT (raise(SIGTRAP))
+#endif  /* x86/amd64 */
+#elif defined(__MACH__)
+#define BREAKPOINT (raise(SIGTRAP))
+#elif defined(_WIN32)
+#define BREAKPOINT DebugBreak()
+#else
+#error 'BREAKPOINT not defined for this operating system'
+#endif
     
-    int StdinCacheLoader::load(const std::vector<ByteRange> &ranges, CachedFileWriter *writer)
-{
-  return 0;
+    
+    {                    buf_write_t buf_write(&kv_location.buf);
+                    auto leaf_node = static_cast<leaf_node_t *>(buf_write.get_data_write());
+                    leaf::remove(sizer,
+                                 leaf_node,
+                                 keys[i].btree_key(),
+                                 repli_timestamp_t::distant_past,
+                                 kv_location.buf.get_recency(),
+                                 key_modification_proof_t::real_proof());
+                }
+                check_and_handle_underfull(sizer, &kv_location.buf,
+                        &kv_location.last_buf, kv_location.superblock,
+                        keys[i].btree_key(),
+                        deletion_context->balancing_detacher());
+    
+                    store.acquire_superblock_for_write(
+                    1, write_durability_t::SOFT, &token,
+                    &txn, &super_block, &dummy_interruptor);
+    
+      // Opaque implementation object.  This field is never changed once
+  // the object is constructed.  We don't mark it as const here, as
+  // doing so will cause a warning in the constructor of UnitTest.
+  // Mutable state in *impl_ is protected by mutex_.
+  internal::UnitTestImpl* impl_;
+    
+    
+    {  str = tree.DumpModel(fmap, false, 'text');
+  ASSERT_EQ(str.find('cover'), std::string::npos);
 }
     
-      void Write(const SparsePage& page, dmlc::Stream* fo) override {
-    const auto& offset_vec = page.offset.HostVector();
-    const auto& data_vec = page.data.HostVector();
-    CHECK(offset_vec.size() != 0 && offset_vec[0] == 0);
-    CHECK_EQ(offset_vec.back(), data_vec.size());
-    fo->Write(offset_vec);
-    min_index_ = page.base_rowid;
-    fo->Write(&min_index_, sizeof(min_index_));
-    index_.data.resize(data_vec.size());
-    value_.data.resize(data_vec.size());
+    /*
+ * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
+ * Method:    XGBoosterGetModelRaw
+ * Signature: (J[[B)I
+ */
+JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_XGBoosterGetModelRaw
+  (JNIEnv * jenv, jclass jcls, jlong jhandle, jobjectArray jout) {
+  BoosterHandle handle = (BoosterHandle) jhandle;
+  bst_ulong len = 0;
+  const char* result;
+  int ret = XGBoosterGetModelRaw(handle, &len, &result);
     }
     
-    
-    {
-    {    for (const auto &batch : (*dmat)->GetRowBatches()) {
-      for (int i = 0; i < batch.Size(); i++) {
-        auto inst = batch[i];
-        for (int j = 0; i < inst.size(); i++) {
-          ASSERT_EQ(inst[j].fvalue, 1.5);
-        }
-      }
-    }
-    delete dmat;
+    template <typename T>
+struct TestTransformRange {
+  void XGBOOST_DEVICE operator()(size_t _idx,
+                                 Span<bst_float> _out, Span<const bst_float> _in) {
+    _out[_idx] = _in[_idx];
   }
-}
-
-    
-    #include '../helpers.h'
-    
-    
-    {    if (learner->AllowLazyCheckPoint()) {
-      rabit::LazyCheckPoint(learner.get());
-    } else {
-      rabit::CheckPoint(learner.get());
-    }
-    version += 1;
-    CHECK_EQ(version, rabit::VersionNumber());
-  }
-  // always save final round
-  if ((param.save_period == 0 || param.num_round % param.save_period != 0) &&
-      param.model_out != 'NONE' &&
-      rabit::GetRank() == 0) {
-    std::ostringstream os;
-    if (param.model_out == 'NULL') {
-      os << param.model_dir << '/'
-         << std::setfill('0') << std::setw(4)
-         << param.num_round << '.model';
-    } else {
-      os << param.model_out;
-    }
-    std::unique_ptr<dmlc::Stream> fo(
-        dmlc::Stream::Create(os.str().c_str(), 'w'));
-    learner->Save(fo.get());
-  }
-    
-    // global
-#include '../src/learner.cc'
-#include '../src/logging.cc'
-#include '../src/common/common.cc'
-#include '../src/common/host_device_vector.cc'
-#include '../src/common/hist_util.cc'
-    
-      EXPECT_ANY_THROW(xgboost::Metric::Create('error@abc', &lparam));
-  delete metric;
-    
-    TEST(Objective, DeclareUnifiedTest(LogisticRegressionGPair)) {
-  xgboost::LearnerTrainParam tparam = xgboost::CreateEmptyGenericParam(0, NGPUS);
-  std::vector<std::pair<std::string, std::string>> args;
-  xgboost::ObjFunction * obj = xgboost::ObjFunction::Create('reg:logistic', &tparam);
-    }
-    
-    #pragma once
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    // Called by Init/NewFrame/Shutdown
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateFontsTexture();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyFontsTexture();
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateDeviceObjects();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyDeviceObjects();
-
-    
-        free(chash);
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-        // Glut has 1 function for characters and one for 'special keys'. We map the characters in the 0..255 range and the keys above.
-    io.KeyMap[ImGuiKey_Tab]         = '\t'; // == 9 == CTRL+I
-    io.KeyMap[ImGuiKey_LeftArrow]   = 256 + GLUT_KEY_LEFT;
-    io.KeyMap[ImGuiKey_RightArrow]  = 256 + GLUT_KEY_RIGHT;
-    io.KeyMap[ImGuiKey_UpArrow]     = 256 + GLUT_KEY_UP;
-    io.KeyMap[ImGuiKey_DownArrow]   = 256 + GLUT_KEY_DOWN;
-    io.KeyMap[ImGuiKey_PageUp]      = 256 + GLUT_KEY_PAGE_UP;
-    io.KeyMap[ImGuiKey_PageDown]    = 256 + GLUT_KEY_PAGE_DOWN;
-    io.KeyMap[ImGuiKey_Home]        = 256 + GLUT_KEY_HOME;
-    io.KeyMap[ImGuiKey_End]         = 256 + GLUT_KEY_END;
-    io.KeyMap[ImGuiKey_Insert]      = 256 + GLUT_KEY_INSERT;
-    io.KeyMap[ImGuiKey_Delete]      = 127;
-    io.KeyMap[ImGuiKey_Backspace]   = 8;  // == CTRL+H
-    io.KeyMap[ImGuiKey_Space]       = ' ';
-    io.KeyMap[ImGuiKey_Enter]       = 13; // == CTRL+M
-    io.KeyMap[ImGuiKey_Escape]      = 27;
-    io.KeyMap[ImGuiKey_A]           = 'A';
-    io.KeyMap[ImGuiKey_C]           = 'C';
-    io.KeyMap[ImGuiKey_V]           = 'V';
-    io.KeyMap[ImGuiKey_X]           = 'X';
-    io.KeyMap[ImGuiKey_Y]           = 'Y';
-    io.KeyMap[ImGuiKey_Z]           = 'Z';
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-        if (out_offset)
-        *out_offset = ImVec2(line_width, text_size.y + line_height);  // offset allow for the possibility of sitting after a trailing \n
-    
-    #endif // D_DHT_REGISTRY_H
-
-    
-    void DHTReplaceNodeTask::sendMessage()
-{
-  std::shared_ptr<DHTNode> questionableNode = bucket_->getLRUQuestionableNode();
-  if (!questionableNode) {
-    setFinished(true);
-  }
-  else {
-    getMessageDispatcher()->addMessageToQueue(
-        getMessageFactory()->createPingMessage(questionableNode), timeout_,
-        make_unique<DHTPingReplyMessageCallback<DHTReplaceNodeTask>>(this));
-  }
-}
-    
-    #include 'DHTAbstractMessage.h'
-#include 'A2STR.h'
-#include 'ValueBase.h'
-    
-    #include 'common.h'
-    
-    #include 'DHTTask.h'
-#include 'Logger.h'
-#include 'LogFactory.h'
-#include 'a2functional.h'
-#include 'fmt.h'
-    
-    public:
-  DHTTaskExecutor(int numConcurrent);
-    
-    #endif // D_DHT_TASK_QUEUE_H
-
-    
-    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
-                                           const std::string& ipaddr,
-                                           uint16_t port,
-                                           const unsigned char* secret) const
-{
-  unsigned char src[DHT_ID_LENGTH + COMPACT_LEN_IPV6 + SECRET_SIZE];
-  memset(src, 0, sizeof(src));
-  int compactlen = bittorrent::packcompact(src + DHT_ID_LENGTH, ipaddr, port);
-  if (compactlen == 0) {
-    throw DL_ABORT_EX(fmt('Token generation failed: ipaddr=%s, port=%u',
-                          ipaddr.c_str(), port));
-  }
-  memcpy(src, infoHash, DHT_ID_LENGTH);
-  memcpy(src + DHT_ID_LENGTH + COMPACT_LEN_IPV6, secret, SECRET_SIZE);
-  unsigned char md[20];
-  message_digest::digest(md, sizeof(md), MessageDigest::sha1().get(), src,
-                         sizeof(src));
-  return std::string(&md[0], &md[sizeof(md)]);
-}
-    
-    void DHTTokenUpdateCommand::setTokenTracker(DHTTokenTracker* tokenTracker)
-{
-  tokenTracker_ = tokenTracker;
-}
-    
-    void DNSCache::remove(const std::string& hostname, uint16_t port)
-{
-  auto target = std::make_shared<CacheEntry>(hostname, port);
-  entries_.erase(target);
-}
-    
-    
-    {  void remove(const std::string& hostname, uint16_t port);
 };
     
-    using json = nlohmann::json;
+    namespace xgboost {
+namespace obj {
+    }
+    }
     
-        // create (integer) JSON numbers
-    json j_short(n_short);
-    json j_int(n_int);
-    json j_long(n_long);
-    json j_int_least32_t(n_int_least32_t);
-    json j_uint8_t(n_uint8_t);
+    template<typename DType>
+inline void CompressArray<DType>::Write(dmlc::Stream* fo) {
+  encoded_chunks_.clear();
+  encoded_chunks_.push_back(0);
+  for (size_t i = 0; i < out_buffer_.size(); ++i) {
+    encoded_chunks_.push_back(encoded_chunks_.back() + out_buffer_[i].length());
+  }
+  fo->Write(raw_chunks_);
+  fo->Write(encoded_chunks_);
+  for (const std::string& buf : out_buffer_) {
+    fo->Write(dmlc::BeginPtr(buf), buf.length());
+  }
+}
+    
+    namespace xgboost {
+namespace data {
+/*!
+ * \brief Format specification of SparsePage.
+ */
+class SparsePageFormat {
+ public:
+  /*! \brief virtual destructor */
+  virtual ~SparsePageFormat() = default;
+  /*!
+   * \brief Load all the segments into page, advance fi to end of the block.
+   * \param page The data to read page into.
+   * \param fi the input stream of the file
+   * \return true of the loading as successful, false if end of file was reached
+   */
+  virtual bool Read(SparsePage* page, dmlc::SeekStream* fi) = 0;
+  /*!
+   * \brief read only the segments we are interested in, advance fi to end of the block.
+   * \param page The page to load the data into.
+   * \param fi the input stream of the file
+   * \param sorted_index_set sorted index of segments we are interested in
+   * \return true of the loading as successful, false if end of file was reached
+   */
+  virtual bool Read(SparsePage* page,
+                    dmlc::SeekStream* fi,
+                    const std::vector<bst_uint>& sorted_index_set) = 0;
+  /*!
+   * \brief save the data to fo, when a page was written.
+   * \param fo output stream
+   */
+  virtual void Write(const SparsePage& page, dmlc::Stream* fo) = 0;
+  /*!
+   * \brief Create sparse page of format.
+   * \return The created format functors.
+   */
+  static SparsePageFormat* Create(const std::string& name);
+  /*!
+   * \brief decide the format from cache prefix.
+   * \return pair of row format, column format type of the cache prefix.
+   */
+  static std::pair<std::string, std::string> DecideFormat(const std::string& cache_prefix);
+};
+    }
+    }
+    
+    template <typename T>
+void HostDeviceVector<T>::Copy(const HostDeviceVector<T>& other) {
+  CHECK_EQ(Size(), other.Size());
+  std::copy(other.HostVector().begin(), other.HostVector().end(), HostVector().begin());
+}
