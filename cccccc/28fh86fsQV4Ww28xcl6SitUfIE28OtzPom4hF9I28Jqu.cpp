@@ -1,246 +1,258 @@
 
         
-            // This uses a dummy interruptor because this is the only thing using the store at
-    //  the moment (since we are still in the constructor), so things should complete
-    //  rather quickly.
-    cond_t dummy_interruptor;
-    write_token_t token;
-    new_write_token(&token);
+        namespace nwapi {
+    }
     
+    #include 'base/basictypes.h'
+#include '../dispatcher_host.h'
     
-// Value-parameterized tests allow you to test your code with different
-// parameters without writing multiple copies of the same test.
-//
-// Here is how you use value-parameterized tests:
-    
-    
-    {  // The name of the source file where the test part took place, or
-  // '' if the source file is unknown.
-  std::string file_name_;
-  // The line in the source file where the test part took place, or -1
-  // if the line number is unknown.
-  int line_number_;
-  std::string summary_;  // The test failure summary.
-  std::string message_;  // The test failure message.
-};
-    
-    #include 'gtest/internal/gtest-port.h'
-    
-    template <GTEST_9_TYPENAMES_(T)>
-inline GTEST_9_TUPLE_(T) make_tuple(const T0& f0, const T1& f1, const T2& f2,
-    const T3& f3, const T4& f4, const T5& f5, const T6& f6, const T7& f7,
-    const T8& f8) {
-  return GTEST_9_TUPLE_(T)(f0, f1, f2, f3, f4, f5, f6, f7, f8);
+    namespace content {
+class RenderView;
 }
     
-      // draw annotations
-  annotList = new Annots(xref, catalog, getAnnots(&obj));
-  obj.free();
+    
+    {  // Convert from content coordinates to window coordinates.
+  // This code copied from chrome_web_contents_view_delegate_views.cc
+  aura::Window* target_window = GetActiveNativeView(rfh);
+  aura::Window* root_window = target_window->GetRootWindow();
+  views::Widget* top_level_widget =
+    views::Widget::GetTopLevelWidgetForNativeView(target_window);
+  aura::client::ScreenPositionClient* screen_position_client =
+        aura::client::GetScreenPositionClient(root_window);
+  if (screen_position_client) {
+    screen_position_client->ConvertPointToScreen(target_window,
+             &screen_point);
+  }
+  set_delay_destruction(true);
+  menu_runner_.reset(new views::MenuRunner(menu_model_.get(), views::MenuRunner::CONTEXT_MENU,
+                                           base::Bind(&Menu::OnMenuClosed, base::Unretained(this))));
+  menu_runner_->RunMenuAt(top_level_widget,
+                       nullptr,
+                       gfx::Rect(screen_point, gfx::Size()),
+                          views::MenuAnchorPosition::kTopRight,
+                       ui::MENU_SOURCE_NONE);
+  // It is possible for the same MenuMessageLoopAura to start a nested
+  // message-loop while it is already running a nested loop. So make
+  // sure the quit-closure gets reset to the outer loop's quit-closure
+  // once the innermost loop terminates.
+  {
+    base::AutoReset<base::Closure> reset_quit_closure(&message_loop_quit_,
+                                                      base::Closure());
   
-  if (annotList->getNumAnnots() > 0) {
-    if (globalParams->getPrintCommands()) {
-      printf('***** Annotations\n');
-    }
-    for (i = 0; i < annotList->getNumAnnots(); ++i) {
-        Annot *annot = annotList->getAnnot(i);
-        if ((annotDisplayDecideCbk &&
-             (*annotDisplayDecideCbk)(annot, annotDisplayDecideCbkData)) || 
-            !annotDisplayDecideCbk) {
-             annotList->getAnnot(i)->draw(gfx, printing);
-	}
-    }
-    out->dump();
+    //base::MessageLoop* loop = base::MessageLoop::current();
+    base::MessageLoopCurrent::ScopedNestableTaskAllower allow;
+    base::RunLoop run_loop;
+    message_loop_quit_ = run_loop.QuitClosure();
+  
+    run_loop.Run();
   }
-  delete annotList;
+  set_delay_destruction(false);
+  if (pending_destruction())
+    object_manager_->OnDeallocateObject(id_);
+}
     
-      prev_digit_value = INT_MAX;
-  value = 0;
-  for (i = 0; buffer[i] != '\0'; i++) {
-    switch (buffer[i]) {
-    case 'm':
-    case 'M':
-      digit_value = 1000;
-      break;
-    case 'd':
-    case 'D':
-      digit_value = 500;
-      break;
-    case 'c':
-    case 'C':
-      digit_value = 100;
-      break;
-    case 'l':
-    case 'L':
-      digit_value = 50;
-      break;
-    case 'x':
-    case 'X':
-      digit_value = 10;
-      break;
-    case 'v':
-    case 'V':
-      digit_value = 5;
-      break;
-    case 'i':
-    case 'I':
-      digit_value = 1;
-      break;
-    default:
-      return -1;
-    }
+    MenuItem::MenuItem(int id,
+                   const base::WeakPtr<ObjectManager>& object_manager,
+                   const base::DictionaryValue& option,
+                   const std::string& extension_id)
+  : Base(id, object_manager, option, extension_id) {
+  Create(option);
+}
+    
+    ExtensionFunction::ResponseAction
+NwAppCloseAllWindowsFunction::Run() {
+  AppWindowRegistry* registry = AppWindowRegistry::Get(browser_context());
+  if (!registry)
+    return RespondNow(Error(''));
+  base::MessageLoopCurrent::Get()->task_runner()->PostTask(
+        FROM_HERE,
+        base::Bind(&NwAppCloseAllWindowsFunction::DoJob, registry, extension()->id()));
     }
     
-      // get stream start position
-  lexer->skipToNextLine();
-  pos = lexer->getPos();
     
-      //----- path clipping
-  virtual void clip(GfxState *state);
-  virtual void eoClip(GfxState *state);
-    
-    class ProfileData {
-public:
-    }
-    
-    private:
-    
-    enum SoundEncoding {
-  soundRaw,			// raw encoding
-  soundSigned,			// twos-complement values
-  soundMuLaw,			// mu-law-encoded samples
-  soundALaw			// A-law-encoded samples
+    {  // ExtensionFunction:
+  ResponseAction Run() override;
+  DECLARE_EXTENSION_FUNCTION('nw.App.closeAllWindows', UNKNOWN)
 };
     
-      // Does this device use upside-down coordinates?
-  // (Upside-down means (0,0) is the top left corner of the page.)
-  virtual GBool upsideDown() { return gTrue; }
+      void Shutdown() { shutdown_ = true; }
     
-            // Rendering
-        ImGui::Render();
-        int display_w, display_h;
-        glfwGetFramebufferSize(window, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);
-        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-        glClear(GL_COLOR_BUFFER_BIT);
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+      // shutdown should trigger cancellation causing everything to shutdown
+  auto deadline =
+      std::chrono::system_clock::now() + std::chrono::microseconds(100);
+  server_->Shutdown(deadline);
+  EXPECT_GE(std::chrono::system_clock::now(), deadline);
     
-            // Start the Dear ImGui frame
-        ImGui_ImplOpenGL2_NewFrame();
-        ImGui_ImplSDL2_NewFrame(window);
-        ImGui::NewFrame();
+      ac = (async_connect*)gpr_malloc(sizeof(async_connect));
+  ac->on_done = on_done;
+  ac->socket = socket;
+  gpr_mu_init(&ac->mu);
+  ac->refs = 2;
+  ac->addr_name = grpc_sockaddr_to_uri(addr);
+  ac->endpoint = endpoint;
+  ac->channel_args = grpc_channel_args_copy(channel_args);
+  GRPC_CLOSURE_INIT(&ac->on_connect, on_connect, ac, grpc_schedule_on_exec_ctx);
+    
+      LOG_TEST_NAME('test_unsetenv');
     
     
-    {        // Rendering
-        ImGui::Render();
-        glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-        glClear(GL_COLOR_BUFFER_BIT);
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-        SDL_GL_SwapWindow(window);
+    {
+    {    /* The buffer should resemble '000001\0'. */
+    for (j = 0; j < i - 2; j++) {
+      GPR_ASSERT(buf[j] == '0');
     }
-    
-    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
-// **Prefer using the code in imgui_impl_opengl3.cpp**
-// This code is mostly provided as a reference to learn how ImGui integration works, because it is shorter to read.
-// If your code is using GL3+ context or any semi modern OpenGL calls, using this is likely to make everything more
-// complicated, will require your code to reset every single OpenGL attributes to their initial state, and might
-// confuse your GPU driver.
-// The GL2 code is unable to reset attributes or even call e.g. 'glUseProgram(0)' because they don't exist in that API.
-    
-    static bool
-extent_purge(extent_hooks_t* /*extent_hooks*/, void* addr, size_t size,
-             size_t offset, size_t length, unsigned /*arena_ind*/) {
-  // This function should return false upon success, which is the case when
-  // madvise returns 0.
-  return madvise((char*)addr + offset, length, MADV_DONTNEED);
+    GPR_ASSERT(buf[i - 1] == '1');
+    GPR_ASSERT(buf[i] == '\0');
+    gpr_free(buf);
+  }
 }
     
-        if (global && system) {
-      client.print('$%s = %s', name.data(), value.data());
-    } else {
-      client.output('$%s = %s', name.data(), value.data());
+    #include <grpc/support/port_platform.h>
+    
+    namespace experimental {
     }
     
+    static grpc::internal::GrpcLibraryInitializer g_gli_initializer;
+ChannelCredentials::ChannelCredentials() { g_gli_initializer.summon(); }
     
-    {      return true;
+    namespace grpc {
+    }
+    
+        for (auto n : input) {
+      if (n != ' ') {
+        buff += n;
+        continue;
+      }
+      if (buff == '') continue;
+      result.push_back(buff);
+      buff = '';
+    }
+    if (buff != '') result.push_back(buff);
+    
+    void NcclComm::AllReduceImpl(void* inputbuffer, void *outputbuffer, size_t count, DataType dtype, MPI_Op op)
+{
+    ncclResult_t res;
+    class NcclTypeLookup
+    {
+        ncclDataType_t ncclTypes[(int)DataType::COUNT];
+    public:
+        NcclTypeLookup()
+        {
+            ncclTypes[(int)DataType::FLOAT]  = ncclFloat;
+            ncclTypes[(int)DataType::DOUBLE] = ncclDouble;
+            ncclTypes[(int)DataType::HALF] = ncclHalf;
+            ncclTypes[(int)DataType::INT]    = ncclInt;
+        }
+        ncclDataType_t Lookup(DataType dtype)
+        {
+            return ncclTypes[(int)dtype];
+        }
+    };
+    }
+    
+    template <class ElemType>
+shared_ptr<ComputationNode<ElemType>> ComputationNetworkBuilder<ElemType>::TransposeTimes(const ComputationNodePtr a, const ComputationNodePtr b, const std::wstring nodeName)
+{
+    return net.AddNodeToNetAndAttachInputs(New<TransposeTimesNode<ElemType>>(net.GetDeviceId(), nodeName), { a, b });
+}
+    
+    // -----------------------------------------------------------------------
+// ConfigurableRuntimeTypeRegister -- static table of all configurable runtime types
+// -----------------------------------------------------------------------
+    
+            // look for default macros and load them (they load into a global area)
+        if (config.Exists('ndlMacros'))
+        {
+            ConfigValue ndlMacrosPaths = config('ndlMacros');
+            NDLScript<ElemType> ndlScript;
+            if (!ndlMacrosPaths.empty())
+            {
+                // load the macro files 1 at a time, so that the sections specified by each file's
+                // 'load' parameter are in fact loaded (if they were all processed at once, the last file's 'load'
+                // parameter would override all the earlier ones, and those sections wouldn't get loaded).
+                std::vector<std::string> filePathVec = msra::strfun::split(ndlMacrosPaths, '+');
+                for (const auto& filePath : filePathVec)
+                {
+                    ndlScript.LoadConfigFileAndResolveVariables(Microsoft::MSR::CNTK::ToFixedWStringFromMultiByte(filePath), config);
+                }
+            }
+        }
+    
+    static void PrintBanner(int argc, wchar_t* argv[], const string& timestamp)
+{
+#ifndef CNTK_VERSION_BANNER
+#error CNTK_VERSION_BANNER must be set
+#endif
+#define MACRO_TO_STRING(s) #s
+    fprintf(stderr, 'CNTK %s (', MACRO_TO_STRING(CNTK_VERSION_BANNER));
+#ifdef _GIT_EXIST
+    fprintf(stderr, '%s %.6s, ', _BUILDBRANCH_, _BUILDSHA1_);
+#endif
+    fprintf(stderr, '%s %s', __DATE__, __TIME__); // build time
+    fprintf(stderr, ') at %s\n\n', timestamp.c_str());
+    for (int i = 0; i < argc; i++)
+        fprintf(stderr, '%*s%ls', i > 0 ? 2 : 0, '', argv[i]); // use 2 spaces for better visual separability
+    fprintf(stderr, '\n');
+}
+    
+                    threadTimer.Restart();
+                // copy parameters from CPU buffer to GPU buffer
+                for (int widx = 0; widx < m_tableCount; widx++)
+                {
+                    ElemType * py2 = m_cpuAsyncBuffer[m_bufferIndexInUse] + m_tableOffsets[widx];
+    }
+    
+                if (rv == 0)
+                rv = numCols;
+            else if (rv != numCols)
+                LogicError('DecimateMinibatch: Inconsistent number of columns among inputs (found %d and %d).', (int) rv, (int) numCols);
+    
+        // Attempts to compute the error signal for the whole utterance, which will
+    // be fed to the neural network as features. Currently it is a workaround
+    // for the two-forward-pass sequence and ctc training, which allows
+    // processing more utterances at the same time. Only used in Kaldi2Reader.
+    // TODO: move the two-forward-pass support out of the reader.
+    void AttemptUtteranceDerivativeFeatures(ComputationNetworkPtr net,
+                                            IDataReader* trainSetDataReader,
+                                            const std::vector<ComputationNodeBasePtr>& featureNodes,
+                                            StreamMinibatchInputs* inputMatrices);
+    
+    #if __linux__
+#include <sys/mman.h>
+#endif
+    
+    #include 'coroutine_system.h'
+    
+    enum
+{
+    EVENT_onStart = 1u << 1,
+    EVENT_onShutdown = 1u << 2,
+    EVENT_onWorkerStart = 1u << 3,
+    EVENT_onWorkerStop = 1u << 4,
+    EVENT_onConnect = 1u << 5,
+    EVENT_onReceive = 1u << 6,
+    EVENT_onPacket = 1u << 7,
+    EVENT_onClose = 1u << 8,
+    EVENT_onTask = 1u << 9,
+    EVENT_onFinish = 1u << 10,
+    EVENT_onPipeMessage = 1u << 11,
+};
+    
+        fd2 = socket(AF_UNIX,SOCK_DGRAM,0);
+    strncpy(un2.sun_path, sock2_path, sizeof(un2.sun_path) - 1); 
+    bind(fd2,(struct sockaddr *)&un2,sizeof(un2));
+    
+    
+    {
+    {        int status = -1;
+        pid_t pid2 = swoole_coroutine_waitpid(pid, &status, 0);
+        ASSERT_EQ(status, 0);
+        ASSERT_EQ(pid, pid2);
     });
-    
-    #include 'hphp/util/assertions.h'
-#include 'hphp/util/trace.h'
-    
-    template<class T, class V, bool case_sensitive, class E>
-inline
-void FixedStringMapBuilder<T,V,case_sensitive,E>::create(FSMap& map) {
-  map.extra() = size();
-  map.init(size(), 0);
-  if (!size()) {
-    return;
-  }
-  for (const_iterator it = begin(); it != end(); ++it) {
-    map.add(it->first, it->second);
-  }
 }
     
-    HeapObject* SparseHeap::allocSlab(MemoryUsageStats& stats) {
-  auto finish = [&](void* p) {
-    // expand m_slab_range to include this new slab
-    if (!m_slab_range.size) {
-      m_slab_range = {p, kSlabSize};
-    } else {
-      auto min = std::min(m_slab_range.ptr, p);
-      auto max = std::max((char*)p + kSlabSize,
-                          (char*)m_slab_range.ptr + m_slab_range.size);
-      m_slab_range = {min, size_t((char*)max - (char*)min)};
-    }
-    return static_cast<HeapObject*>(p);
-  };
-    }
-    
-    namespace HPHP { namespace thrift {
-    }
-    }
-    
-    template <typename Or>
-bool implOrSimplify(
-  Env& env, const Or& inst, Vlabel b, size_t i, size_t immed
-) {
- if (env.use_counts[inst.sf] != 0) return false;
- if (immed == 0) return simplify_impl(env, b, i, copy{inst.s1, inst.d});
-    }
-    
-    uintptr_t handleDynamicCall(const Class* cls,
-                            const StringData* name,
-                            const Class* ctx);
-    
-    void Vgen::emit(const trap& i) {
-  env.meta.trapReasons.emplace_back(a->frontier(), i.reason);
-  a->Brk(1);
-}
-    
-    // Simplify MemoryRef vasm types by their direct variant as ppc64 can't
-// change data directly in memory. Grab and save the data.
-#define X(vasm_src, vasm_dst, vasm_load, vasm_store, operands)          \
-void lowerForPPC64(const VLS& e, Vout& v, vasm_src& inst) {             \
-  Vreg tmp = e.allow_vreg() ? v.makeReg() : Vreg(PhysReg(rAsm));        \
-  Vreg tmp2 = e.allow_vreg() ? v.makeReg() : Vreg(PhysReg(rAsm));       \
-  Vptr p = inst.m;                                                      \
-  v << vasm_load{p, tmp};                                               \
-  v << vasm_dst{operands tmp, tmp2, inst.sf};                           \
-  v << vasm_store{tmp2, p};                                             \
-}
-    
-    bool APCLocalArray::IsVectorData(const ArrayData* ad) {
-  auto a = asApcArray(ad);
-  const auto n = a->size();
-  for (ssize_t i = 0; i < n; i++) {
-    if (a->getIndex(i) != i) return false;
-  }
-  return true;
-}
-    
-    ALWAYS_INLINE
-void HashTableCommon::InitHash(int32_t* hash, uint32_t scale) {
-#if defined(__x86_64__)
-  static_assert(Empty == -1, 'The following fills with all 1's.');
-  assertx(HashSize(scale) == scale * 4);
-    }
+            ~RedisQtAdapter() {
+            if (m_ctx != 0) {
+                m_ctx->ev.data = NULL;
+            }
+        }
