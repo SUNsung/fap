@@ -1,90 +1,87 @@
 
         
-            if K.image_data_format() == 'channels_last':
-        x_train = x_train.transpose(0, 2, 3, 1)
-        x_test = x_test.transpose(0, 2, 3, 1)
+                video_info = self._download_json(
+            'http://feeds.cbsn.cbsnews.com/rundown/story', display_id, query={
+                'device': 'desktop',
+                'dvr_slug': display_id,
+            })
     
-        out1 = utils.preprocess_input(x, 'channels_last')
-    out1int = utils.preprocess_input(xint, 'channels_last')
-    out2 = utils.preprocess_input(np.transpose(x, (2, 0, 1)),
-                                  'channels_first')
-    out2int = utils.preprocess_input(np.transpose(xint, (2, 0, 1)),
-                                     'channels_first')
-    assert_allclose(out1, out2.transpose(1, 2, 0))
-    assert_allclose(out1int, out2int.transpose(1, 2, 0))
+            return {
+            'id': video_id,
+            'display_id': display_id,
+            'title': title,
+            'description': description,
+            'thumbnails': thumbnails,
+            'timestamp': timestamp,
+            'duration': duration,
+            'series': f.get('title'),
+            'season_number': int_or_none(info.get('season')),
+            'episode_number': int_or_none(info.get('episode')),
+            'episode': title,
+            'formats': formats,
+        }
     
-    from keras.models import Sequential, Model
-from keras.layers import Dense, Input, Average
-from keras.utils import np_utils
-from keras.utils import test_utils
-from keras import regularizers
-from keras import backend as K
+                videos = try_get(
+                video_list, lambda x: x['result']['videoList'], list)
+            if not videos:
+                break
     
-        requests_session = get_requests_session(ssl_version)
-    requests_session.max_redirects = args.max_redirects
-    
-        def __str__(self):
-        defaults = dict(type(self).__dict__)
-        actual = dict(defaults)
-        actual.update(self.__dict__)
-        actual['config'] = self.config
-        return repr_dict_nice(dict(
-            (key, value)
-            for key, value in actual.items()
-            if not key.startswith('_'))
-        )
-    
-    
-class Conversion(object):
+        _TESTS = [{
+        'url': 'http://www.southpark.nl/full-episodes/s18e06-freemium-isnt-free',
+        'info_dict': {
+            'title': 'Freemium Isn\'t Free',
+            'description': 'Stan is addicted to the new Terrance and Phillip mobile game.',
+        },
+        'playlist_mincount': 3,
+    }]
     
     
-FIXTURES_ROOT = path.join(path.abspath(path.dirname(__file__)))
-FILE_PATH = path.join(FIXTURES_ROOT, 'test.txt')
-JSON_FILE_PATH = path.join(FIXTURES_ROOT, 'test.json')
-BIN_FILE_PATH = path.join(FIXTURES_ROOT, 'test.bin')
+def openssl_encode(algo, key, iv):
+    cmd = ['openssl', 'enc', '-e', '-' + algo, '-K', hex_str(key), '-iv', hex_str(iv)]
+    prog = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+    out, _ = prog.communicate(secret_msg)
+    return out
     
-        for i in range(1, n + 1):
-        print('==================')
-        print('Iteration %02d of %02d' % (i, n))
-        print('==================')
-        n_features = i * step
-        n_informative = n_features / 10
+    filenames = {
+    'bin': 'youtube-dl',
+    'exe': 'youtube-dl.exe',
+    'tar': 'youtube-dl-%s.tar.gz' % version}
+build_dir = os.path.join('..', '..', 'build', version)
+for key, filename in filenames.items():
+    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
+    fn = os.path.join(build_dir, filename)
+    with open(fn, 'rb') as f:
+        data = f.read()
+    if not data:
+        raise ValueError('File %s is empty!' % fn)
+    sha256sum = hashlib.sha256(data).hexdigest()
+    new_version[key] = (url, sha256sum)
     
-        plt.imshow(avg_dist, interpolation='nearest', cmap=plt.cm.gnuplot2,
-               vmin=0)
-    plt.xticks(range(n_clusters), labels, rotation=45)
-    plt.yticks(range(n_clusters), labels)
-    plt.colorbar()
-    plt.suptitle('Interclass %s distances' % metric, size=18)
-    plt.tight_layout()
+    # Add any paths that contain custom static files (such as style sheets) here,
+# relative to this directory. They are copied after the builtin static files,
+# so a file named 'default.css' will overwrite the builtin 'default.css'.
+html_static_path = ['_static']
     
-    fignum = 1
-titles = ['8 clusters', '3 clusters', '3 clusters, bad initialization']
-for name, est in estimators:
-    fig = plt.figure(fignum, figsize=(4, 3))
-    ax = Axes3D(fig, rect=[0, 0, .95, 1], elev=48, azim=134)
-    est.fit(X)
-    labels = est.labels_
+    from test.helper import try_rm
     
-    import numpy as np
-import matplotlib.pyplot as plt
+            urls=[]
+        for i in self.stream_urls[stream_id]:
+            vlink=i['l']
+            if not vlink.startswith('/'):
+                #vlink is encode
+                vlink=getVrsEncodeCode(vlink)
+            key=getDispathKey(vlink.split('/')[-1].split('.')[0])
+            baseurl = [x for x in self.baseurl]
+            baseurl.insert(-1,key)
+            url='/'.join(baseurl)+vlink+'?su='+self.gen_uid+'&qyid='+uuid4().hex+'&client=&z=&bt=&ct=&tn='+str(randint(10000,20000))
+            urls.append(json.loads(get_content(url))['l'])
+        #download should be complete in 10 minutes
+        #because the url is generated before start downloading
+        #and the key may be expired after 10 minutes
+        self.streams[stream_id]['src'] = urls
+'''
     
-    from sklearn.utils import shuffle
-from sklearn.utils import check_random_state
-from sklearn.cluster import MiniBatchKMeans
-from sklearn.cluster import KMeans
-    
-    # #############################################################################
-# Generate sample data
-centers = [[1, 1], [-1, -1], [1, -1]]
-X, _ = make_blobs(n_samples=10000, centers=centers, cluster_std=0.6)
-    
-    print(__doc__)
-    
-        author = proj_info['author'],
-    author_email = proj_info['author_email'],
-    url = proj_info['url'],
-    license = proj_info['license'],
+        test_suite = 'tests',
     
                 if stream_id not in self.streams:
                 log.e('[Error] Invalid video format.')
@@ -96,42 +93,200 @@ X, _ = make_blobs(n_samples=10000, centers=centers, cluster_std=0.6)
             _, s['container'], s['size'] = url_info(s['url'])
             s['src'] = [s['url']]
     
-    	xml = get_html('http://www.ehow.com/services/video/series.xml?demand_ehow_videoid=%s' % vid)
+    #----------------------------------------------------------------------
+def ckplayer_download_by_xml(ckinfo, output_dir = '.', merge = False, info_only = False, **kwargs):
+    #Info XML
+    video_info = ckplayer_get_info_by_xml(ckinfo)
     
-	from xml.dom.minidom import parseString
-	doc = parseString(xml)
-	tab = doc.getElementsByTagName('related')[0].firstChild
+    try:
+        title = kwargs['title']
+    except:
+        title = ''
+    type_ = ''
+    size = 0
     
-            mp3 = match1(content, r'name='filename'\s*value='([^']+\.mp3)'')
-        if mp3: mp3 = 'http://res.infoq.com/downloads/mp3downloads/%s' % mp3
+    if len(video_info['links']) > 0:  #has link
+        type_, _ext, size = url_info(video_info['links'][0])  #use 1st to determine type, ext
     
-            if self.config.get('mask_type', None):
-            var_y = input_
-            var_y = self.blocks.upscale(var_y, 512)
-            var_y = self.blocks.upscale(var_y, 256)
-            var_y = self.blocks.upscale(var_y, 128)
-            var_y = self.blocks.upscale(var_y, 64)
-            var_y = Conv2D(1, kernel_size=5, padding='same', activation='sigmoid')(var_y)
-            outputs.append(var_y)
-        return KerasModel([input_], outputs=outputs)
-
+    if 'size' in video_info:
+        size = int(video_info['size'])
+    else:
+        for i in video_info['links'][1:]:  #save 1st one
+            size += url_info(i)[2]
     
-            dest_format = self.get_dest_format()
-        if len(self.args.alignments_file) == 1:
-            retval = AlignmentData(self.args.alignments_file[0], dest_format)
-        else:
-            retval = [AlignmentData(a_file, dest_format) for a_file in self.args.alignments_file]
-        logger.debug('Alignments: %s', retval)
-        return retval
+    print_info(site_info, title, type_, size)
+    if not info_only:
+        download_urls(video_info['links'], title, _ext, size, output_dir=output_dir, merge=merge)
     
-            # merge the channels together and convert back to the RGB color
-        # space, being sure to utilize the 8-bit unsigned integer data
-        # type
-        transfer = cv2.merge([light, col_a, col_b])  # pylint: disable=no-member
-        transfer = cv2.cvtColor(  # pylint: disable=no-member
-            transfer.astype('uint8'),
-            cv2.COLOR_LAB2BGR).astype('float32') / 255.0  # pylint: disable=no-member
-        background = new_face * (1 - raw_mask)
-        merged = transfer + background
-        # return the color transferred image
-        return merged
+        for quality in ['1080','720','480','380','240','144','auto']:
+        try:
+            real_url = info[quality][1]['url']
+            if real_url:
+                break
+        except KeyError:
+            pass
+    
+    __all__ = ['ehow_download']
+    
+        def prepare(self, **kwargs):
+        if re.search(r'imgur\.com/a/', self.url):
+            # album
+            content = get_content(self.url)
+            album = match1(content, r'album\s*:\s*({.*}),') or \
+                    match1(content, r'image\s*:\s*({.*}),')
+            album = json.loads(album)
+            count = album['album_images']['count']
+            images = album['album_images']['images']
+            ext = images[0]['ext']
+            self.streams = {
+                'original': {
+                    'src': ['http://i.imgur.com/%s%s' % (i['hash'], ext)
+                            for i in images],
+                    'size': sum([i['size'] for i in images]),
+                    'container': ext[1:]
+                },
+                'thumbnail': {
+                    'src': ['http://i.imgur.com/%ss%s' % (i['hash'], '.jpg')
+                            for i in images],
+                    'container': 'jpg'
+                }
+            }
+            self.title = album['title']
+    
+    
+if __name__ == '__main__':
+    main()
+    
+    
+if __name__ == '__main__':
+    main()
+    
+    
+class TestSetOfStacks(object):
+    
+            print('Test: Two or more element stack (general case)')
+        num_items = 10
+        numbers = [randint(0, 10) for x in range(num_items)]
+        sorted_stack = self.get_sorted_stack(stack, numbers)
+        sorted_numbers = []
+        for _ in range(num_items):
+            sorted_numbers.append(sorted_stack.pop())
+        assert_equal(sorted_numbers, sorted(numbers, reverse=True))
+    
+        # TODO: It would be better if we had unit tests for each
+    # method in addition to the following end-to-end test
+    def test_end_to_end(self):
+        print('Test: Empty stack')
+        stack = Stack()
+        assert_equal(stack.peek(), None)
+        assert_equal(stack.pop(), None)
+    
+    		def InOrder (node):
+			if node is not None:
+				InOrder(node.leftChild)
+				inOrder.append(node.data)
+				InOrder(node.rightChild)
+    
+    
+		print('Test: insert checking with pre order traversal')
+		expectVal = [50, 30, 10, 7, 25, 40, 38, 70, 60, 80]
+		assert_equal(myTree.printPreOrder(), expectVal)
+		expectVal = [1, 11, 21, 31, 41, 51, 61, 71, 81, 91]
+		assert_equal(myTree2.printPreOrder(), expectVal)
+    
+        def __init__(self):
+        self.array = []
+    
+      cand_indexes = []
+  for (i, token) in enumerate(tokens):
+    if token == '[CLS]' or token == '[SEP]':
+      continue
+    # Whole Word Masking means that if we mask all of the wordpieces
+    # corresponding to an original word. When a word has been split into
+    # WordPieces, the first token does not have any marker and any subsequence
+    # tokens are prefixed with ##. So whenever we see the ## token, we
+    # append it to the previous set of word indexes.
+    #
+    # Note that Whole Word Masking does *not* change the training code
+    # at all -- we still predict each WordPiece independently, softmaxed
+    # over the entire vocabulary.
+    if (FLAGS.do_whole_word_mask and len(cand_indexes) >= 1 and
+        token.startswith('##')):
+      cand_indexes[-1].append(i)
+    else:
+      cand_indexes.append([i])
+    
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+    
+        tf.logging.info('**** Trainable Variables ****')
+    for var in tvars:
+      init_string = ''
+      if var.name in initialized_variable_names:
+        init_string = ', *INIT_FROM_CKPT*'
+      tf.logging.info('  name = %s, shape = %s%s', var.name, var.shape,
+                      init_string)
+    
+    csv_file_object = csv.reader(open('train.csv', 'rb'))       # Load in the csv file
+header = csv_file_object.next()                             # Skip the fist line as it is a header
+data=[]                                                     # Create a variable to hold the data
+    
+    # All the missing Fares -> assume median of their respective class
+if len(test_df.Fare[ test_df.Fare.isnull() ]) > 0:
+    median_fare = np.zeros(3)
+    for f in range(0,3):                                              # loop 0 to 2
+        median_fare[f] = test_df[ test_df.Pclass == f+1 ]['Fare'].dropna().median()
+    for f in range(0,3):                                              # loop 0 to 2
+        test_df.loc[ (test_df.Fare.isnull()) & (test_df.Pclass == f+1 ), 'Fare'] = median_fare[f]
+    
+        # Block 5
+    x = Convolution2D(512, 3, 3, activation='relu', border_mode='same', name='block5_conv1')(x)
+    x = Convolution2D(512, 3, 3, activation='relu', border_mode='same', name='block5_conv2')(x)
+    x = Convolution2D(512, 3, 3, activation='relu', border_mode='same', name='block5_conv3')(x)
+    x = Convolution2D(512, 3, 3, activation='relu', border_mode='same', name='block5_conv4')(x)
+    x = MaxPooling2D((2, 2), strides=(2, 2), name='block5_pool')(x)
+    
+    
+import numpy
+from six.moves import xrange
+    
+    # define a cost variable to optimize
+cost = sequence_categorical_crossentropy(logreg_layer.p_y_given_x,
+                                         x[1:],
+                                         mask[1:]) / batch_size
+    
+    polynomial = components[-1]
+calculate_polynomial = theano.function(inputs=[coefficients, x],
+                                       outputs=polynomial,
+                                       updates=updates)
+    
+    output, updates = theano.scan(fn=step,
+                              outputs_info=[probabilities, None],
+                              n_steps=nb_samples)
+    
+        LOGPATS  = r'(\S+) (\S+) \[(.*?)\] (\S+) (\S+) ' \
+               r'(\S+) (\S+) (\S+) ('([^']+)'|-) ' \
+               r'(\S+) (\S+) (\S+) (\S+) (\S+) (\S+) ' \
+               r'('([^']+)'|-) ('([^']+)'|-)'
+    NUM_ENTRIES_PER_LINE = 17
+    logpat = re.compile(LOGPATS)
+    
+            tree = estimator.tree_
+        
+        if tree.feature[i] == 0:
+            plt.plot([tree.threshold[i], tree.threshold[i]], ylim, '-k')
+            plot_boundaries(tree.children_left[i],
+                            [xlim[0], tree.threshold[i]], ylim)
+            plot_boundaries(tree.children_right[i],
+                            [tree.threshold[i], xlim[1]], ylim)
+        
+        elif tree.feature[i] == 1:
+            plt.plot(xlim, [tree.threshold[i], tree.threshold[i]], '-k')
+            plot_boundaries(tree.children_left[i], xlim,
+                            [ylim[0], tree.threshold[i]])
+            plot_boundaries(tree.children_right[i], xlim,
+                            [tree.threshold[i], ylim[1]])
+            
+    if boundaries:
+        plot_boundaries(0, plt.xlim(), plt.ylim())
