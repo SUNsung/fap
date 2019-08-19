@@ -1,199 +1,126 @@
 
         
-                thumbnails = []
-        for thumbnail in video_data.get('images', {}).get('thumbnails', []):
-            thumbnail_url = thumbnail.get('source')
-            if not thumbnail_url:
-                continue
-            thumbnails.append({
-                'url': thumbnail_url,
-                'width': int_or_none(thumbnail.get('width')),
-                'height': int_or_none(thumbnail.get('height')),
-            })
+            @patch('thefuck.utils.difflib_get_close_matches')
+    def test_call_without_n(self, difflib_mock, settings):
+        get_close_matches('', [])
+        assert difflib_mock.call_args[0][2] == settings.get('num_close_matches')
     
-    import os
+        def _get_history_line(self, command_script):
+        return u'#+{}\n{}\n'.format(int(time()), command_script)
+    
+    
+@pytest.fixture(autouse=True)
+def history_without_current(mocker):
+    return mocker.patch(
+        'thefuck.rules.no_command.get_valid_history_without_current',
+        return_value=['git commit'])
+    
+    (c) 2016, Aaron Christianson
+http://github.com/ninjaaron/fast-entry_points
+'''
+from setuptools.command import easy_install
+import re
+TEMPLATE = r'''\
+# -*- coding: utf-8 -*-
+# EASY-INSTALL-ENTRY-SCRIPT: '{3}','{4}','{5}'
+__requires__ = '{3}'
+import re
 import sys
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    
-        infile, outfile = args
-    
-        def gen_ies_md(ies):
-        for ie in ies:
-            ie_md = '**{0}**'.format(ie.IE_NAME)
-            ie_desc = getattr(ie, 'IE_DESC', None)
-            if ie_desc is False:
-                continue
-            if ie_desc is not None:
-                ie_md += ': {0}'.format(ie.IE_DESC)
-            if not ie.working():
-                ie_md += ' (Currently broken)'
-            yield ie_md
-    
-        with open(ZSH_COMPLETION_FILE, 'w') as f:
-        f.write(template)
-    
-        with app.test_request_context():
-        assert url_for('index', args=[4, 5, 6]) == '/4,5,6'
-    
-            def register_template(state):
-            state.app.jinja_env.tests[name or f.__name__] = f
-    
-        def get_namespace(self, namespace, lowercase=True, trim_namespace=True):
-        '''Returns a dictionary containing a subset of configuration options
-        that match the specified namespace/prefix. Example usage::
-    
-        for idx, (loader, srcobj, triple) in enumerate(attempts):
-        if isinstance(srcobj, Flask):
-            src_info = 'application '%s'' % srcobj.import_name
-        elif isinstance(srcobj, Blueprint):
-            src_info = 'blueprint '%s' (%s)' % (srcobj.name, srcobj.import_name)
-        else:
-            src_info = repr(srcobj)
-    
-        def dispatch_request(self):
-        '''Subclasses have to override this method to implement the
-        actual view function code.  This method is called with all
-        the arguments from the URL rule.
-        '''
-        raise NotImplementedError()
     
     
-@pytest.fixture
-def install_egg(modules_tmpdir, monkeypatch):
-    '''Generate egg from package name inside base and put the egg into
-    sys.path.'''
-    
-        @app.route('/')
-    def index():
-        raise Exception('dummy')
-    
-        :func:`prepare_exec_for_file` has a side effect where the parent directory
-    of the given import is added to :data:`sys.path`. This is reset after the
-    test runs.
-    '''
-    original_path = sys.path[:]
+@eager
+def _parse_apt_operations(help_text_lines):
+    is_commands_list = False
+    for line in help_text_lines:
+        line = line.decode().strip()
+        if is_commands_list and line:
+            yield line.split()[0]
+        elif line.startswith('Basic commands:') \
+                or line.startswith('Most used commands:'):
+            is_commands_list = True
     
     
-if __name__ == '__main__':
-    main()
+if len(args) < 1:
+    print(USAGE)
+    sys.exit(1)
+    
+    if withWeight is True:
+    for tag in tags:
+        print('tag: %s\t\t weight: %f' % (tag[0],tag[1]))
+else:
+    print(','.join(tags))
 
     
     
-@gen.engine
-def e1():
-    for i in range(10):
-        yield gen.Task(e2)
+'''
     
     
-def main():
-    parse_command_line()
-    if options.dump:
-        print(tmpl.code)
-        sys.exit(0)
-    t = Timer(render)
-    results = t.timeit(options.num) / options.num
-    print('%0.3f ms per iteration' % (results * 1000))
+def _GetRequiredNamespaceImport( completion ):
+  if ( 'extra_data' not in completion
+       or 'required_namespace_import' not in completion[ 'extra_data' ] ):
+    return None
+  return completion[ 'extra_data' ][ 'required_namespace_import' ]
     
-        def finish_tree(self, tree, filename):
-        if self.found_future_import:
-            return
-        if not isinstance(tree, pytree.Node):
-            # Empty files (usually __init__.py) show up as a single Leaf
-            # instead of a Node, so leave them alone
-            return
-        first_stmt = tree.children[0]
-        if is_docstring(first_stmt):
-            # Skip a line and add the import after the docstring
-            tree.insert_child(1, Newline())
-            pos = 2
-        elif first_stmt.prefix:
-            # No docstring, but an initial comment (perhaps a #! line).
-            # Transfer the initial comment to a new blank line.
-            newline = Newline()
-            newline.prefix = first_stmt.prefix
-            first_stmt.prefix = ''
-            tree.insert_child(0, newline)
-            pos = 1
-        else:
-            # No comments or docstring, just insert at the start
-            pos = 0
-        tree.insert_child(pos, self.new_future_import(None))
-        tree.insert_child(pos + 1, Newline())  # terminates the import stmt
-
+      current_buffer = VimBuffer( 'buffer',
+                              contents = [ '†åsty_π.t' ],
+                              filetype = FILETYPE,
+                              omnifunc = Omnifunc )
     
-                @run_on_executor(executor='_Object__executor')
-            def f(self):
-                return 42
+        if 'message' in self._response:
+      return self._HandleMessageResponse()
     
-            print('Test: Enqueue on empty stack')
-        print('Test: Enqueue on non-empty stack')
-        print('Test: Multiple enqueue in a row')
-        num_items = 3
-        for i in range(0, num_items):
-            queue.enqueue(i)
+    _logger = logging.getLogger( __name__ )
     
     
-		print('Test: insert checking with pre order traversal')
-		expectVal = [50, 30, 10, 7, 25, 40, 38, 70, 60, 80]
-		assert_equal(myTree.printPreOrder(), expectVal)
-		expectVal = [1, 11, 21, 31, 41, 51, 61, 71, 81, 91]
-		assert_equal(myTree2.printPreOrder(), expectVal)
+  def _ThreadMain( self ):
+    while True:
+      time.sleep( self._ping_interval_seconds )
     
     
-def datingClassTest():
-    '''
-    对约会网站的测试方法
-    :return: 错误数
-    '''
-    # 设置测试数据的的一个比例（训练数据集比例=1-hoRatio）
-    hoRatio = 0.1  # 测试范围,一部分测试一部分作为样本
-    # 从文件中加载数据
-    datingDataMat, datingLabels = file2matrix('data/2.KNN/datingTestSet2.txt')  # load data setfrom file
-    # 归一化数据
-    normMat, ranges, minVals = autoNorm(datingDataMat)
-    # m 表示数据的行数，即矩阵的第一维
-    m = normMat.shape[0]
-    # 设置测试的样本数量， numTestVecs:m表示训练样本的数量
-    numTestVecs = int(m * hoRatio)
-    print('numTestVecs=', numTestVecs)
-    errorCount = 0.0
-    for i in range(numTestVecs):
-        # 对数据测试
-        classifierResult = classify0(normMat[i, :], normMat[numTestVecs:m, :], datingLabels[numTestVecs:m], 3)
-        print('the classifier came back with: %d, the real answer is: %d' % (classifierResult, datingLabels[i]))
-        if (classifierResult != datingLabels[i]): errorCount += 1.0
-    print('the total error rate is: %f' % (errorCount / float(numTestVecs)))
-    print(errorCount)
-    
-    from __future__ import print_function
-import sys
-import math
-from operator import itemgetter
-    
-            print('-------', hit, rec_count)
-        precision = hit / (1.0 * rec_count)
-        recall = hit / (1.0 * test_count)
-        coverage = len(all_rec_items) / (1.0 * self.item_count)
-        popularity = popular_sum / (1.0 * rec_count)
+def _assert_accept_equals( filter, text_or_obj, expected ):
+  if not isinstance( text_or_obj, dict ):
+    text_or_obj = { 'text': text_or_obj }
     
     
-class SigmoidActivator(object):
-    def forward(self, weighted_input):
-        return 1.0 / (1.0 + np.exp(-weighted_input))
+def ExtractKeywordsFromGroup_KeywordStarts_test():
+  assert_that( syntax_parse._ExtractKeywordsFromGroup(
+                 syntax_parse.SyntaxGroup( '', [
+                   'foo bar',
+                   'contained boo baa',
+                   'zoo goo',
+                 ] ) ),
+               contains_inanyorder( 'foo', 'bar', 'boo', 'baa', 'zoo', 'goo' ) )
     
-        def calc_gradient(self, x):
-        # 初始化遗忘门权重梯度矩阵和偏置项
-        self.Wfh_grad, self.Wfx_grad, self.bf_grad = (
-            self.init_weight_gradient_mat())
-        # 初始化输入门权重梯度矩阵和偏置项
-        self.Wih_grad, self.Wix_grad, self.bi_grad = (
-            self.init_weight_gradient_mat())
-        # 初始化输出门权重梯度矩阵和偏置项
-        self.Woh_grad, self.Wox_grad, self.bo_grad = (
-            self.init_weight_gradient_mat())
-        # 初始化单元状态权重梯度矩阵和偏置项
-        self.Wch_grad, self.Wcx_grad, self.bc_grad = (
-            self.init_weight_gradient_mat())
+      def _adjust_thread_count( self ):
+    # When the executor gets lost, the weakref callback will wake up
+    # the worker threads.
+    def weakref_cb( _, q=self._work_queue ):
+      q.put( None )
+    # TODO(bquinlan): Should avoid creating new threads if there are more
+    # idle threads than items in the work queue.
+    if len( self._threads ) < self._max_workers:
+      t = threading.Thread( target=_worker,
+                            args=( weakref.ref( self, weakref_cb ),
+                                   self._work_queue ) )
+      t.daemon = True
+      t.start()
+      self._threads.add( t )
     
-        # 最后测试一下距离计算方法
-    print(' distEclud(dataMat[0], dataMat[1])=', distEclud(dataMat[0], dataMat[1]))
+        >>> Point = namedtuple('Point', 'x y')
+    >>> Point.__doc__                   # docstring for the new class
+    'Point(x, y)'
+    >>> p = Point(11, y=22)             # instantiate with positional args or keywords
+    >>> p[0] + p[1]                     # indexable like a plain tuple
+    33
+    >>> x, y = p                        # unpack like a regular tuple
+    >>> x, y
+    (11, 22)
+    >>> p.x + p.y                       # fields also accessable by name
+    33
+    >>> d = p._asdict()                 # convert to a dictionary
+    >>> d['x']
+    11
+    >>> Point(**d)                      # convert from a dictionary
+    Point(x=11, y=22)
+    >>> p._replace(x=100)               # _replace() is like str.replace() but targets named fields
+    Point(x=100, y=22)
