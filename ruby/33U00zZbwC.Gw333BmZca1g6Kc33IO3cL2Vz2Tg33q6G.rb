@@ -1,111 +1,123 @@
 
         
-            class Agents::DotBar < Agent
-      cannot_be_scheduled!
-    
-        it 'in the future' do
-      expect(relative_distance_of_time_in_words(Time.now+5.minutes)).to eq('in 5m')
-    end
-  end
-end
-
-    
-      after :each do
-    @scheduler.shutdown(:wait)
-    
-      describe 'path request must exist' do
-    it 'should check that validation added if path does not exist' do
-      opts = @opts.tap { |o| o.delete('path') }
-      @checker = Agents::AftershipAgent.new(:name => 'tectonic', :options => opts)
-      @checker.user = users(:bob)
-      expect(@checker.save).to eq false
-      expect(@checker.errors.full_messages.first).to eq('You need to specify a path request')
-    end
+          it 'accepts post form requests with masked authenticity_token field' do
+    post('/', {'authenticity_token' => masked_token}, 'rack.session' => session)
+    expect(last_response).to be_ok
   end
     
-      describe 'validating' do
-    before do
-      expect(@checker).to be_valid
-    end
+      it 'should ignore CSP3 no arg directives unless they are set to true' do
+    mock_app do
+      use Rack::Protection::ContentSecurityPolicy, :block_all_mixed_content => false, :disown_opener => 'false', :upgrade_insecure_requests => 'foo'
     
-        def password_change(record, opts={})
-      devise_mail(record, :password_change, opts)
-    end
-  end
-end
-
+    # Now, add our init-scripts, systemd services, and so on:
+pleaserun = package.convert(FPM::Package::PleaseRun)
+pleaserun.input ['/usr/bin/my-executable', '--foo-from', 'bar']
     
-          def parse_uri(location)
-        location && URI.parse(location)
-      rescue URI::InvalidURIError
-        nil
-      end
+        pkg = klass.new
+    pkg.cleanup_staging # purge any directories that may have been created by klass.new
     
-        private
-    
-        def self.check_fields!(klass)
-      failed_attributes = []
-      instance = klass.new
-    
-        # Recoverable takes care of resetting the user password and send reset instructions.
-    #
-    # ==Options
-    #
-    # Recoverable adds the following options to devise_for:
-    #
-    #   * +reset_password_keys+: the keys you want to use when recovering the password for an account
-    #   * +reset_password_within+: the time period within which the password must be reset or the token expires.
-    #   * +sign_in_after_reset_password+: whether or not to sign in the user automatically after a password reset.
-    #
-    # == Examples
-    #
-    #   # resets the user password and save the record, true if valid passwords are given, otherwise false
-    #   User.find(1).reset_password('password123', 'password123')
-    #
-    #   # creates a new token and send it with instructions about how to reset the password
-    #   User.find(1).send_reset_password_instructions
-    #
-    module Recoverable
-      extend ActiveSupport::Concern
-    
-            # This contains all the guests and their parents.
-        #
-        # @return [Registry<Symbol, Array<Class, Symbol>>]
-        attr_reader :guests
-    
-              result
-        end
-    
-              # Otherwise set the value
-          data[key] = value
-        end
+        # Build the packaging metadata files.
+    checksums = {}
+    self.files.each do |f|
+      path = staging_path(f)
+      if File.symlink?(path)
+        checksums[f] = '-'
+      elsif File.file?(path)
+        checksums[f] = Digest::SHA256.file(path).hexdigest
       end
     end
+    
+        npm_flags = []
+    settings.each do |key, value|
+      # npm lets you specify settings in a .npmrc but the same key=value settings
+      # are valid as '--key value' command arguments to npm. Woo!
+      logger.debug('Configuring npm', key => value)
+      npm_flags += [ '--#{key}', value ]
+    end
+    
+        if self.attributes[:osxpkg_payload_free?]
+      args << '--nopayload'
+    else
+      args += ['--root', staging_path]
+    end
+    
+        logger.info('Installing pear package', :package => input_package,
+                  :directory => staging_path)
+    ::Dir.chdir(staging_path) do
+      safesystem('pear', '-c', config, 'install', '-n', '-f', input_package)
+    end
+    
+        args = [ tar_cmd,
+             '-C',
+             staging_path,
+             '-cf',
+             payload_tar,
+             '--owner=0',
+             '--group=0',
+             '--numeric-owner',
+             '.' ]
+    
+        def synchronize_after?
+      synchronize == 'after'
+    end
   end
 end
 
     
-            # This should return a hash of information that explains how to
-        # SSH into the machine. If the machine is not at a point where
-        # SSH is even possible, then `nil` should be returned.
-        #
-        # The general structure of this returned hash should be the
-        # following:
-        #
-        #     {
-        #       host: '1.2.3.4',
-        #       port: '22',
-        #       username: 'mitchellh',
-        #       private_key_path: '/path/to/my/key'
-        #     }
-        #
-        # **Note:** Vagrant only supports private key based authentication,
-        # mainly for the reason that there is no easy way to exec into an
-        # `ssh` prompt with a password, whereas we can pass a private key
-        # via commandline.
-        #
-        # @return [Hash] SSH information. For the structure of this hash
-        #   read the accompanying documentation for this method.
-        def ssh_info
-          nil
-        end
+        initialize_with { Tmuxinator::Project.new(file) }
+  end
+    
+    shared_examples_for 'a project hook' do
+  let(:project) { FactoryBot.build(:project) }
+    
+        context 'attach is false in yaml' do
+      before { project.yaml['attach'] = false }
+      it 'returns false' do
+        expect(project.attach?).to be_falsey
+      end
+    end
+    
+          expect(instance.render).to match %r{wemux.ls.2>\/dev\/null}
+    end
+  end
+    
+        context 'environment variable $TMUXINATOR_CONFIG is nil' do
+      it 'is an empty string' do
+        allow(ENV).to receive(:[]).with('TMUXINATOR_CONFIG').
+          and_return nil
+        # allow(XDG).to receive(:[]).with('CONFIG').and_return nil
+        allow(File).to receive(:directory?).and_return true
+        expect(described_class.environment).to eq ''
+      end
+    end
+    
+        context 'synchronization is true' do
+      let(:synchronize) { true }
+    
+      config.before(:suite) do
+    # Test that the factories are working as they should and then clean up before getting started on
+    # the rest of the suite.
+    begin
+      DatabaseCleaner.start
+      FactoryBot.lint(FactoryBot.factories.select { |f| !FACTORIES_EXCLUDED_FROM_LINT.include?(f.name.to_sym) })
+    ensure
+      DatabaseCleaner.clean
+    end
+    
+      def destroy
+    @credential.destroy
+    redirect_to_with_json [organization, @server, :credentials]
+  end
+    
+      def create
+    @ip_address = @ip_pool.ip_addresses.build(safe_params)
+    if @ip_address.save
+      redirect_to_with_json [:edit, @ip_pool]
+    else
+      render_form_errors 'new', @ip_address
+    end
+  end
+    
+      def index
+    @ip_pools = IPPool.order(:name).to_a
+  end
