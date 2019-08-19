@@ -1,102 +1,127 @@
 
         
-        
-# context locals
-_request_ctx_stack = LocalStack()
-_app_ctx_stack = LocalStack()
-current_app = LocalProxy(_find_app)
-request = LocalProxy(partial(_lookup_req_object, 'request'))
-session = LocalProxy(partial(_lookup_req_object, 'session'))
-g = LocalProxy(partial(_lookup_app_object, 'g'))
+        from scrapy.commands import ScrapyCommand
+from scrapy.exceptions import UsageError
+    
+        class _v19_S3Connection(S3Connection):
+        '''A dummy S3Connection wrapper that doesn't do any synchronous download'''
+        def _mexe(self, method, bucket, key, headers, *args, **kwargs):
+            return headers
+    
+        def _downloaded(self, response, slot, request, spider):
+        slot.remove_request(request)
+        return self.download(response, spider) \
+                if isinstance(response, Request) else response
+    
+            for fmt, func in six.iteritems(self._formats):
+            new_response = func(response)
+            if new_response:
+                logger.debug('Decompressed response with format: %(responsefmt)s',
+                             {'responsefmt': fmt}, extra={'spider': spider})
+                return new_response
+        return response
 
     
-        #: Tag classes to bind when creating the serializer. Other tags can be
-    #: added later using :meth:`~register`.
-    default_tags = [
-        TagDict,
-        PassDict,
-        TagTuple,
-        PassList,
-        TagBytes,
-        TagMarkup,
-        TagUUID,
-        TagDateTime,
-    ]
+        @classmethod
+    def from_crawler(cls, crawler):
+        headers = without_none_values(crawler.settings['DEFAULT_REQUEST_HEADERS'])
+        return cls(headers.items())
     
-        preserve_context = False
+        @classmethod
+    def from_crawler(cls, crawler):
+        o = cls(crawler.settings.getfloat('DOWNLOAD_TIMEOUT'))
+        crawler.signals.connect(o.spider_opened, signal=signals.spider_opened)
+        return o
     
-        @bp.route('/bar', endpoint='bar')
-    def foo_bar():
-        return flask.request.endpoint
+            self.stats.inc_value('httpcache/invalidate', spider=spider)
+        self._cache_response(spider, response, request, cachedresponse)
+        return response
     
-    
-async def test_duplicate_error(hass):
-    '''Test that errors are shown when duplicates are added.'''
-    conf = {
-        CONF_IP_ADDRESS: '192.168.1.100',
-        CONF_PASSWORD: 'password',
-        CONF_PORT: 8080,
-        CONF_SSL: True,
-    }
-    
-        try:
-        await hass.async_add_job(auth.login)
-        return await result
-    except AuthorizationError as err:
-        if err.response.status_code == 401:
-            raise config_flow.CodeInvalid()
-        raise config_flow.NestAuthError('Unknown error: {} ({})'.format(
-            err, err.response.status_code))
-
-    
-    
-async def test_if_fires_on_event_with_data(hass, calls):
-    '''Test the firing of events with data.'''
-    assert await async_setup_component(hass, automation.DOMAIN, {
-        automation.DOMAIN: {
-            'trigger': {
-                'platform': 'event',
-                'event_type': 'test_event',
-                'event_data': {'some_attr': 'some_value'}
-            },
-            'action': {
-                'service': 'test.automation',
-            }
+        def test_create_sns_message_body_raw_message_delivery(self):
+        self.subscriber['RawMessageDelivery'] = 'true'
+        action = {
+            'Message': ['msg']
         }
-    })
+        result = sns_listener.create_sns_message_body(self.subscriber, action)
+        self.assertEqual(result, 'msg')
     
-            self.hass.states.set('test.indoorhumidity', 'A',
-                             {ATTR_UNIT_OF_MEASUREMENT: '%'})
-        self.hass.block_till_done()
-        moldind = self.hass.states.get('sensor.mold_indicator')
-        assert moldind
-        assert moldind.state == 'unavailable'
-        assert moldind.attributes.get(ATTR_DEWPOINT) is None
-        assert moldind.attributes.get(ATTR_CRITICAL_TEMP) is None
+            # Place the raw event message document into the Kinesis message format
+        kinesis_record = {
+            'PartitionKey': 'key123',
+            'Data': json.dumps(ddb_new_image)
+        }
     
-        with patch.dict(discovery.CONFIG_ENTRY_HANDLERS, {
-        'mock-service': 'mock-component'}), patch(
-            'homeassistant.data_entry_flow.FlowManager.async_init') as m_init:
-        await mock_discovery(hass, discover)
+        def test_bucket_policy(self):
+        # create test bucket
+        self.s3_client.create_bucket(Bucket=TEST_BUCKET_NAME_WITH_POLICY)
     
-            # 更新聚类中心
-        log.info(centers)
-        for i in range(k):
-            data_i = data[ret[:, 0] == i]  # 标签为 i 的样本
-            centers[i, :] = np.mean(data_i, axis=0)  # 按类别过滤样本
+    # Repeat the entire benchmark this many times (on different ports)
+# This gives JITs time to warm up, etc.  Pypy needs 3-5 runs at
+# --n=15000 for its JIT to reach full effectiveness
+define('num_runs', type=int, default=1)
     
+    tmpl = Template('''\
+<!doctype html>
+<html>
+  <head>
+    <title>{{ page_title }}</title>
+  </head>
+  <body>
+    <div class='header'>
+      <h1>{{ page_title }}</h1>
+    </div>
+    <ul class='navigation'>
+    {% for href, caption in [ \
+        ('index.html', 'Index'), \
+        ('downloads.html', 'Downloads'), \
+        ('products.html', 'Products') \
+      ] %}
+      <li><a href='{{ href }}'>{{ caption }}</a></li>
+    {% end %}
+    </ul>
+    <div class='table'>
+      <table>
+      {% for row in table %}
+        <tr>
+        {% for cell in row %}
+          <td>{{ cell }}</td>
+        {% end %}
+        </tr>
+      {% end %}
+      </table>
+    </div>
+  </body>
+</html>\
+''')
     
+        Intended to be used at the end of scripts like unit test runners,
+    to run the tests again after any source file changes (but see also
+    the command-line interface in `main`)
+    '''
+    io_loop = ioloop.IOLoop()
+    io_loop.add_callback(start)
+    io_loop.start()
     
+    For each function or class described in `tornado.platform.interface`,
+the appropriate platform-specific implementation exists in this module.
+Most code that needs access to this functionality should do e.g.::
     
-def print_params_dict():
-    ''''''
-    print(SPLIT_LINE)
-    print('params_dict')
-    param_dict = get_params_dict()
-    # pprint(param_dict, indent=2)
-    for k, v in param_dict.items():
-        print('   ', k, '\t', end='')
-        pprint(v, indent=2)
-        # for vk, vv in v.items():
-        #     print(vk, '-', vv, '\t', end='')
-        # print()
+        def tearDown(self):
+        asyncio.set_event_loop_policy(self.orig_policy)
+        self.executor.shutdown()
+    
+        def test_google_login(self):
+        response = self.fetch('/client/login')
+        self.assertDictEqual(
+            {
+                u'name': u'Foo',
+                u'email': u'foo@example.com',
+                u'access_token': u'fake-access-token',
+            },
+            json_decode(response.body),
+        )
+
+    
+            o = Object()
+        answer = yield o.f()
+        self.assertEqual(answer, 42)
