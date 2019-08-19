@@ -1,160 +1,231 @@
 
         
-        #ifndef CHROME_BROWSER_UI_VIEWS_FRAME_GLOBAL_MENU_BAR_REGISTRAR_X11_H_
-#define CHROME_BROWSER_UI_VIEWS_FRAME_GLOBAL_MENU_BAR_REGISTRAR_X11_H_
+          const ServiceDescriptor* service_descriptor =
+      reinterpret_cast<PyDescriptorPool*>(self)->pool->FindServiceByName(
+          string(name, name_size));
+  if (service_descriptor == NULL) {
+    return SetErrorFromCollector(
+        reinterpret_cast<PyDescriptorPool*>(self)->error_collector, name,
+        'service');
+  }
     
+      // The preferred MessageFactory to be used by descriptors.
+  // TODO(amauryfa): Don't create the Factory from the DescriptorPool, but
+  // use the one passed while creating message classes. And remove this member.
+  PyMessageFactory* py_message_factory;
     
-    {}  // namespace mate
-
+      // Restore SIGPIPE handling.
+  signal(SIGPIPE, old_pipe_handler);
     
-    PersistentDictionary::~PersistentDictionary() {}
+    template<typename T>
+bool MathUtil::WithinFractionOrMargin(const T x, const T y,
+                                      const T fraction, const T margin) {
+  // Not just '0 <= fraction' to fool the compiler for unsigned types.
+  GOOGLE_DCHECK((T(0) < fraction || T(0) == fraction) &&
+         fraction < T(1) &&
+         margin >= T(0));
+    }
     
-    template <typename P1, typename P2, typename P3, typename P4, typename P5>
-inline WrappableBase* InvokeFactory(
-    Arguments* args,
-    const base::Callback<WrappableBase*(P1, P2, P3, P4, P5)>& callback) {
-  typename CallbackParamTraits<P1>::LocalType a1;
-  typename CallbackParamTraits<P2>::LocalType a2;
-  typename CallbackParamTraits<P3>::LocalType a3;
-  typename CallbackParamTraits<P4>::LocalType a4;
-  typename CallbackParamTraits<P5>::LocalType a5;
-  if (!GetNextArgument(args, 0, true, &a1) ||
-      !GetNextArgument(args, 0, false, &a2) ||
-      !GetNextArgument(args, 0, false, &a3) ||
-      !GetNextArgument(args, 0, false, &a4) ||
-      !GetNextArgument(args, 0, false, &a5))
-    return nullptr;
-  return callback.Run(a1, a2, a3, a4, a5);
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
+    
+    void MapLiteTestUtil::ExpectArenaMapFieldsSet(
+    const unittest::TestArenaMapLite& message) {
+  MapTestUtilImpl::ExpectArenaMapFieldsSet<unittest::MapEnumLite,
+                                           unittest::MAP_ENUM_BAR_LITE,
+                                           unittest::MAP_ENUM_BAZ_LITE>(
+      message);
 }
     
-      v8::Isolate* isolate() const { return isolate_; }
     
+    {
+    {  // No default clause, clang will abort if a code is missing from
+  // above switch.
+  return 'UNKNOWN';
+}
+}  // namespace error.
     
-    {  return args[0];
+    #include <google/protobuf/stubs/common.h>
+#include <gtest/gtest.h>
+    
+        std::cerr << 'Generating ' << input_file
+        << ' to ' << output_file << std::endl;
+    benchmarks::BenchmarkDataset dataset;
+    Message* message;
+    std::string dataset_payload = ReadFile(input_file);
+    GOOGLE_CHECK(dataset.ParseFromString(dataset_payload))
+      << 'Can' t parse data file ' << input_file;
+    
+    class LLSQ {
+ public:
+  LLSQ() {  // constructor
+    clear();  // set to zeros
+  }
+  void clear();  // initialize
+    }
+    
+    // Computes the histogram for the given image rectangle, and the given
+// single channel. Each channel is always one byte per pixel.
+// Histogram is always a kHistogramSize(256) element array to count
+// occurrences of each pixel value.
+void HistogramRect(Pix* src_pix, int channel,
+                   int left, int top, int width, int height,
+                   int* histogram);
+    
+        char display_char() {
+      if (perm_rejected ())
+        return MAP_REJECT_PERM;
+      else if (accept_if_good_quality ())
+        return MAP_REJECT_POTENTIAL;
+      else if (rejected ())
+        return MAP_REJECT_TEMP;
+      else
+        return MAP_ACCEPT;
+    }
+    
+    // A smart pointer class that implements a double-ended pointer. Each end
+// points to the other end. The copy constructor and operator= have MOVE
+// semantics, meaning that the relationship with the other end moves to the
+// destination of the copy, leaving the source unattached.
+// For this reason both the copy constructor and the operator= take a non-const
+// reference argument, and the const reference versions cannot be used.
+// DoublePtr is useful to incorporate into structures that are part of a
+// collection such as GenericVector or STL containers, where reallocs can
+// relocate the members. DoublePtr is also useful in a GenericHeap, where it
+// can correctly maintain the pointer to an element of the heap despite it
+// getting moved around on the heap.
+class DoublePtr {
+ public:
+  DoublePtr() : other_end_(nullptr) {}
+  // Copy constructor steals the partner off src and is therefore a non
+  // const reference arg.
+  // Copying a const DoublePtr generates a compiler error.
+  DoublePtr(DoublePtr& src) {
+    other_end_ = src.other_end_;
+    if (other_end_ != nullptr) {
+      other_end_->other_end_ = this;
+      src.other_end_ = nullptr;
+    }
+  }
+  // Operator= steals the partner off src, and therefore needs src to be a non-
+  // const reference.
+  // Assigning from a const DoublePtr generates a compiler error.
+  void operator=(DoublePtr& src) {
+    Disconnect();
+    other_end_ = src.other_end_;
+    if (other_end_ != nullptr) {
+      other_end_->other_end_ = this;
+      src.other_end_ = nullptr;
+    }
+  }
+    }
+    
+      // Simple accessors.
+  bool empty() const {
+    return heap_.empty();
+  }
+  int size() const {
+    return heap_.size();
+  }
+  int size_reserved() const {
+    return heap_.size_reserved();
+  }
+  void clear() {
+    // Clear truncates to 0 to keep the number reserved in tact.
+    heap_.truncate(0);
+  }
+  // Provides access to the underlying vector.
+  // Caution! any changes that modify the keys will invalidate the heap!
+  GenericVector<Pair>* heap() {
+    return &heap_;
+  }
+  // Provides read-only access to an element of the underlying vector.
+  const Pair& get(int index) const {
+    return heap_[index];
+  }
+    
+    #ifndef TESSERACT_CCUTIL_UNICHARMAP_H_
+#define TESSERACT_CCUTIL_UNICHARMAP_H_
+    
+    // Provides access to the ShapeTable that this classifier works with.
+const ShapeTable* TessClassifier::GetShapeTable() const {
+  return classify_->shape_table();
+}
+// Provides access to the UNICHARSET that this classifier works with.
+// Only needs to be overridden if GetShapeTable() can return nullptr.
+const UNICHARSET& TessClassifier::GetUnicharset() const {
+  return classify_->unicharset;
 }
     
-      // TODO(erg): Mozilla's implementation has a workaround for GDBus
-  // cancellation here. However, it's marked as fixed. If there's weird
-  // problems with cancelation, look at how they fixed their issues.
+      // Disable SSLv2 and enable all workarounds for buggy servers
+  SSL_CTX_set_options(sslCtx_, SSL_OP_ALL | SSL_OP_NO_SSLv2 | ver_opts
+#ifdef SSL_OP_SINGLE_ECDH_USE
+                                   | SSL_OP_SINGLE_ECDH_USE
+#endif // SSL_OP_SINGLE_ECDH_USE
+#ifdef SSL_OP_NO_COMPRESSION
+                                   | SSL_OP_NO_COMPRESSION
+#endif // SSL_OP_NO_COMPRESSION
+  );
+  SSL_CTX_set_mode(sslCtx_, SSL_MODE_AUTO_RETRY);
+  SSL_CTX_set_mode(sslCtx_, SSL_MODE_ENABLE_PARTIAL_WRITE);
+#ifdef SSL_MODE_RELEASE_BUFFERS
+  /* keep memory usage low */
+  SSL_CTX_set_mode(sslCtx_, SSL_MODE_RELEASE_BUFFERS);
+#endif
+  if (SSL_CTX_set_cipher_list(sslCtx_, 'HIGH:!aNULL:!eNULL') == 0) {
+    good_ = false;
+    A2_LOG_ERROR(fmt('SSL_CTX_set_cipher_list() failed. Cause: %s',
+                     ERR_error_string(ERR_get_error(), nullptr)));
+  }
     
-    
-void Base::Call(const std::string& method, const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  NOTREACHED() << 'Uncatched call in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    EventListener::~EventListener() {
-  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
-    delete i->second;
+    ssize_t OpenSSLTLSSession::writeData(const void* data, size_t len)
+{
+  ERR_clear_error();
+  rv_ = SSL_write(ssl_, data, len);
+  if (rv_ <= 0) {
+    if (wouldblock(ssl_, rv_)) {
+      return TLS_ERR_WOULDBLOCK;
+    }
+    else {
+      return TLS_ERR_ERROR;
+    }
+  }
+  else {
+    ssize_t ret = rv_;
+    rv_ = 1;
+    return ret;
   }
 }
     
-    class MenuDelegate : public ui::SimpleMenuModel::Delegate {
- public:
-  MenuDelegate(ObjectManager* object_manager);
-  ~MenuDelegate() override;
+    PrefPtr i2p(size_t id) { return getPrefFactory()->i2p(id); }
+    
+    
+    {} // namespace aria2
+    
+    void setGlobalSignalHandler(int sig, sigset_t* mask, signal_handler_t handler,
+                            int flags)
+{
+#if _WIN32
+  if (sig == SIGINT || sig == SIGTERM) {
+    // Handler will be called on a new/different thread.
+    LockGuard lg(win_signal_lock);
+    }
     }
     
-      GtkRequisition menu_req;
-  gtk_widget_size_request(GTK_WIDGET(menu), &menu_req);
-  GdkScreen* screen;
-  gdk_display_get_pointer(gdk_display_get_default(), &screen, NULL, NULL, NULL);
-  gint monitor = gdk_screen_get_monitor_at_point(screen, *x, *y);
     
-    
-    {}  // namespace nw
-
-    
-    MenuItem::~MenuItem() {
-  Destroy();
-}
-    
-    namespace extensions {
-    }
-    
-    #include 'db/dbformat.h'
-#include 'db/filename.h'
-#include 'db/table_cache.h'
-#include 'db/version_edit.h'
-#include 'leveldb/db.h'
-#include 'leveldb/env.h'
-#include 'leveldb/iterator.h'
-    
-    // Build a Table file from the contents of *iter.  The generated file
-// will be named according to meta->number.  On success, the rest of
-// *meta will be filled with metadata about the generated table.
-// If no data is present in *iter, meta->file_size will be set to
-// zero, and no Table file will be produced.
-Status BuildTable(const std::string& dbname, Env* env, const Options& options,
-                  TableCache* table_cache, Iterator* iter, FileMetaData* meta);
-    
-      const SequenceNumber sequence_number_;
-    
-    #include 'leveldb/db.h'
-#include 'leveldb/write_batch.h'
-#include 'util/testharness.h'
-    
-    
-    { private:
-  friend class CondVar;
-  std::mutex mu_;
+    {  static void setInitialized6(bool f) { data6_.initialized = f; }
 };
     
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_IMPL_API void     ImGui_ImplDX10_InvalidateDeviceObjects();
-IMGUI_IMPL_API bool     ImGui_ImplDX10_CreateDeviceObjects();
-
+      virtual ~DHTResponseMessage();
     
+      bool addNode(const std::shared_ptr<DHTNode>& node);
     
-    {    vkDestroyDevice(g_Device, g_Allocator);
-    vkDestroyInstance(g_Instance, g_Allocator);
-}
-    
-    void CleanupRenderTarget()
-{
-    if (g_mainRenderTargetView) { g_mainRenderTargetView->Release(); g_mainRenderTargetView = NULL; }
-}
-
-    
-    
-    {    return 0;
-}
-
-    
-    
-    {    switch (msg)
-    {
-    case WM_SIZE:
-        if (g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
-        {
-            CleanupRenderTarget();
-            g_pSwapChain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam), DXGI_FORMAT_UNKNOWN, 0);
-            CreateRenderTarget();
-        }
-        return 0;
-    case WM_SYSCOMMAND:
-        if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
-            return 0;
-        break;
-    case WM_DESTROY:
-        ::PostQuitMessage(0);
-        return 0;
-    }
-    return ::DefWindowProc(hWnd, msg, wParam, lParam);
-}
-
-    
-    static bool ImGui_ImplDX9_CreateFontsTexture()
-{
-    // Build texture atlas
-    ImGuiIO& io = ImGui::GetIO();
-    unsigned char* pixels;
-    int width, height, bytes_per_pixel;
-    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height, &bytes_per_pixel);
-    }
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
+    #include 'common.h'
