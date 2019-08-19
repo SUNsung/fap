@@ -1,149 +1,228 @@
 
         
-            def __init__(self, seller_category_map, seller_category_overrides_map):
-        self.seller_category_map = seller_category_map
-        self.seller_category_overrides_map = seller_category_overrides_map
+        This typically means that you attempted to use functionality that needed
+an active HTTP request.  Consult the documentation on testing for
+information about how to avoid this problem.\
+'''
+_app_ctx_err_msg = '''\
+Working outside of application context.
     
-            Emit key value pairs of the form:
+        @app.teardown_appcontext
+    def cleanup(exception):
+        cleanup_stuff.append(exception)
     
-    from mrjob.job import MRJob
-    
-    
-class PersonServer(object):
-    
-            t1 = asyncio.Task(c1(result), loop=self.loop)
-        t2 = asyncio.Task(c2(result), loop=self.loop)
-        t3 = asyncio.Task(c3(result), loop=self.loop)
-    
-        def test_isspace(self):
-        self.checkequal(False, '', 'isspace')
-        self.checkequal(False, 'a', 'isspace')
-        self.checkequal(True, ' ', 'isspace')
-        self.checkequal(True, '\t', 'isspace')
-        self.checkequal(True, '\r', 'isspace')
-        self.checkequal(True, '\n', 'isspace')
-        self.checkequal(True, ' \t\r\n', 'isspace')
-        self.checkequal(False, ' \t\r\na', 'isspace')
-        self.checkraises(TypeError, 'abc', 'isspace', 42)
-    
-    
-class Test_TestCase(unittest.TestCase, TestEquality, TestHashing):
-    
-    # Same, but for 3.x to 2.x
-REVERSE_IMPORT_MAPPING = dict((v, k) for (k, v) in IMPORT_MAPPING.items())
-assert len(REVERSE_IMPORT_MAPPING) == len(IMPORT_MAPPING)
-REVERSE_NAME_MAPPING = dict((v, k) for (k, v) in NAME_MAPPING.items())
-assert len(REVERSE_NAME_MAPPING) == len(NAME_MAPPING)
-    
-    import asyncio
-from asyncio.proactor_events import BaseProactorEventLoop
-from asyncio.proactor_events import _ProactorSocketTransport
-from asyncio.proactor_events import _ProactorWritePipeTransport
-from asyncio.proactor_events import _ProactorDuplexPipeTransport
-from asyncio.proactor_events import _ProactorDatagramTransport
-from test import support
-from test.test_asyncio import utils as test_utils
-    
-            for i, (r, w) in enumerate(clients):
-            response = await r.readline()
-            self.assertEqual(response, 'LOWER-{}\n'.format(i).encode())
-            w.close()
-            await r.close()
-    
-    Larry
---JfISa01'''
-        env = {
-            'REQUEST_METHOD': 'POST',
-            'CONTENT_TYPE': 'multipart/form-data; boundary={}'.format(BOUNDARY),
-            'CONTENT_LENGTH': str(len(POSTDATA))}
-        fp = BytesIO(POSTDATA.encode('latin-1'))
-        fs = cgi.FieldStorage(fp, environ=env, encoding='latin-1')
-        self.assertEqual(len(fs.list), 1)
-        self.assertEqual(fs.list[0].name, 'submit-name')
-        self.assertEqual(fs.list[0].value, 'Larry')
-    
-        def test_xmlcharrefvalues(self):
-        # enhance coverage of:
-        # Python/codecs.c::PyCodec_XMLCharRefReplaceErrors()
-        # and inline implementations
-        v = (1, 5, 10, 50, 100, 500, 1000, 5000, 10000, 50000, 100000,
-             500000, 1000000)
-        s = ''.join([chr(x) for x in v])
-        codecs.register_error('test.xmlcharrefreplace', codecs.xmlcharrefreplace_errors)
-        for enc in ('ascii', 'iso-8859-15'):
-            for err in ('xmlcharrefreplace', 'test.xmlcharrefreplace'):
-                s.encode(enc, err)
-    
-        with tf.variable_scope(name, reuse=reuse):
-        alpha = get_w(alpha_shape, w_initializer=alpha_init, name='alpha')
-        # o = relu(x) + 0.5 * tf.multiply(alpha, x - tf.abs(x))  # TFLearn
-        o = leaky_relu(x, alpha)  # TensorLayer / <Deep Learning>
-    
-    
-def get_wb(shape,
-           w_initializer=truncated_normal,
-           b_initializer=zeros,
-           w_regularizer=l2_regularizer,
-           b_regularizer=None,  # 一般不对偏置做权重惩罚，可能会导致欠拟合
-           name=None):
-    ''''''
-    name = '' if name is None else name + '_'
-    W = tf.get_variable(name + 'W', shape=shape,
-                        dtype=tf_float, initializer=w_initializer, regularizer=w_regularizer)
-    b = tf.get_variable(name + 'b', shape=shape[-1:],
-                        dtype=tf_float, initializer=b_initializer, regularizer=b_regularizer)
-    return W, b
-    
-    
-def permute(x, perm):
-    '''
-    Examples:
-        x.shape == [128, 32, 1]
-        x = permute(x, [0, 2, 1])
-        x.shape == [128, 1, 32]
-    
-    
-    
-    
-class GzipHTTPTest(AsyncHTTPTestCase, TestMixin):
-    def get_app(self):
-        return Application(self.get_handlers(), gzip=True, **self.get_app_kwargs())
-    
-    # These benchmarks are delicate.  They hit various fast-paths in the gen
-# machinery in order to stay synchronous so we don't need an IOLoop.
-# This removes noise from the results, but it's easy to change things
-# in a way that completely invalidates the results.
-    
-        def initialize(self) -> None:
-        self.io_loop = IOLoop.current()
-        self.channel = pycares.Channel(sock_state_cb=self._sock_state_cb)
-        self.fds = {}  # type: Dict[int, int]
-    
-    
-class GoogleOAuth2AuthorizeHandler(RequestHandler):
-    def get(self):
-        # issue a fake auth code and redirect to redirect_uri
-        code = 'fake-authorization-code'
-        self.redirect(url_concat(self.get_argument('redirect_uri'), dict(code=code)))
-    
-            Keyword Arguments:
-        :param str spinner_name: A spinner type e.g. 'dots' or 'bouncingBar' (default: {'bouncingBar'})
-        :param str start_text: Text to start off the spinner with (default: {None})
-        :param dict handler_map: Handler map for signals to be handled gracefully (default: {None})
-        :param bool nospin: If true, use the dummy spinner (default: {False})
-        :param bool write_to_stdout: Writes to stdout if true, otherwise writes to stderr (default: True)
+        def test_tabular_model_form_meta_readonly_field(self):
         '''
+        Tabular inlines use ModelForm.Meta.help_texts and labels for read-only
+        fields.
+        '''
+        response = self.client.get(reverse('admin:admin_inlines_someparentmodel_add'))
+        self.assertContains(
+            response,
+            '<img src='/static/admin/img/icon-unknown.svg' '
+            'class='help help-tooltip' width='10' height='10' '
+            'alt='(Help text from ModelForm.Meta)' '
+            'title='Help text from ModelForm.Meta'>'
+        )
+        self.assertContains(response, 'Label from ModelForm.Meta')
     
-            self._last_char[0] = byte_str[-1]
+            This is the most complex implementation of the spatial backends due to
+        what is supported on geodetic geometry columns vs. what's available on
+        projected geometry columns.  In addition, it has to take into account
+        the geography column type.
+        '''
+        # Getting the distance parameter
+        value = dist_val[0]
     
-    GB2312_ST = (
-    MachineState.ERROR,MachineState.START,MachineState.START,MachineState.START,MachineState.START,MachineState.START,     3,MachineState.ERROR,#00-07
-    MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ITS_ME,MachineState.ITS_ME,#08-0f
-    MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ERROR,MachineState.ERROR,MachineState.START,#10-17
-         4,MachineState.ERROR,MachineState.START,MachineState.START,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,#18-1f
-    MachineState.ERROR,MachineState.ERROR,     5,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ITS_ME,MachineState.ERROR,#20-27
-    MachineState.ERROR,MachineState.ERROR,MachineState.START,MachineState.START,MachineState.START,MachineState.START,MachineState.START,MachineState.START #28-2f
-)
     
-    from .charsetprober import CharSetProber
-from .enums import CharacterCategory, ProbingState, SequenceLikelihood
+def _multi_decorate(decorators, method):
+    '''
+    Decorate `method` with one or more function decorators. `decorators` can be
+    a single decorator or an iterable of decorators.
+    '''
+    if hasattr(decorators, '__iter__'):
+        # Apply a list/tuple of decorators if 'decorators' is one. Decorator
+        # functions are applied so that the call order is the same as the
+        # order in which they appear in the iterable.
+        decorators = decorators[::-1]
+    else:
+        decorators = [decorators]
+    
+              # Getting the 'description' field for the feature.
+          desc = feature['description']
+    
+        if dat == 'forestcover':
+        dataset = fetch_covtype(shuffle=True, random_state=random_state)
+        X = dataset.data
+        y = dataset.target
+        # normal data are those with attribute 2
+        # abnormal those with attribute 4
+        s = (y == 2) + (y == 4)
+        X = X[s, :]
+        y = y[s]
+        y = (y != 2).astype(int)
+        print_outlier_ratio(y)
+    
+    from sklearn.svm.bounds import l1_min_c
+from sklearn.svm import LinearSVC
+from sklearn.linear_model.logistic import LogisticRegression
+    
+    In both cases, only 10% of the features are informative.
+'''
+import gc
+from time import time
+import numpy as np
+    
+        for n_components in [i.astype(int) for i in
+                         np.linspace(data.shape[1] // 10,
+                                     data.shape[1], num=4)]:
+        all_times = defaultdict(list)
+        all_errors = defaultdict(list)
+        pca = PCA(n_components=n_components)
+        rpca = PCA(n_components=n_components, svd_solver='randomized',
+                   random_state=1999)
+        results_dict = {k: benchmark(est, data) for k, est in [('pca', pca),
+                                                               ('rpca', rpca)]}
+    
+    from sklearn.utils import check_random_state
+from sklearn.metrics.pairwise import pairwise_distances
+from sklearn.metrics.pairwise import pairwise_kernels
+    
+    for i, n in enumerate(n_samples):
+    for j, p in enumerate(n_features):
+        X = np.random.normal(size=(n, p))
+        t0 = time.time()
+        ward.fit(X)
+        scikits_time[j, i] = time.time() - t0
+        t0 = time.time()
+        hierarchy.ward(X)
+        scipy_time[j, i] = time.time() - t0
+    
+        # TASK: Predict the outcome on the testing set and store it in a variable
+    # named y_predicted
+    
+    plt.show()
+
+    
+    for connectivity in (None, knn_graph):
+    for n_clusters in (30, 3):
+        plt.figure(figsize=(10, 4))
+        for index, linkage in enumerate(('average',
+                                         'complete',
+                                         'ward',
+                                         'single')):
+            plt.subplot(1, 4, index + 1)
+            model = AgglomerativeClustering(linkage=linkage,
+                                            connectivity=connectivity,
+                                            n_clusters=n_clusters)
+            t0 = time.time()
+            model.fit(X)
+            elapsed_time = time.time() - t0
+            plt.scatter(X[:, 0], X[:, 1], c=model.labels_,
+                        cmap=plt.cm.nipy_spectral)
+            plt.title('linkage=%s\n(time %.2fs)' % (linkage, elapsed_time),
+                      fontdict=dict(verticalalignment='top'))
+            plt.axis('equal')
+            plt.axis('off')
+    
+        classifiers = proj_info['classifiers'],
+    
+    
+def cntv_download(url, **kwargs):
+    if re.match(r'http://tv\.cntv\.cn/video/(\w+)/(\w+)', url):
+        rid = match1(url, r'http://tv\.cntv\.cn/video/\w+/(\w+)')
+    elif re.match(r'http://tv\.cctv\.com/\d+/\d+/\d+/\w+.shtml', url):
+        rid = r1(r'var guid = '(\w+)'', get_content(url))
+    elif re.match(r'http://\w+\.cntv\.cn/(\w+/\w+/(classpage/video/)?)?\d+/\d+\.shtml', url) or \
+         re.match(r'http://\w+.cntv.cn/(\w+/)*VIDE\d+.shtml', url) or \
+         re.match(r'http://(\w+).cntv.cn/(\w+)/classpage/video/(\d+)/(\d+).shtml', url) or \
+         re.match(r'http://\w+.cctv.com/\d+/\d+/\d+/\w+.shtml', url) or \
+         re.match(r'http://\w+.cntv.cn/\d+/\d+/\d+/\w+.shtml', url): 
+        page = get_content(url)
+        rid = r1(r'videoCenterId','(\w+)'', page)
+        if rid is None:
+            guid = re.search(r'guid\s*=\s*'([0-9a-z]+)'', page).group(1)
+            rid = guid
+    elif re.match(r'http://xiyou.cntv.cn/v-[\w-]+\.html', url):
+        rid = r1(r'http://xiyou.cntv.cn/v-([\w-]+)\.html', url)
+    else:
+        raise NotImplementedError(url)
+    
+        @classmethod
+    def get_cdninfo(cls, hashid):
+        url = 'http://jobsfe.funshion.com/query/v1/mp4/{}.json'.format(hashid)
+        meta = json.loads(get_content(url, decoded=False).decode('utf8'))
+        return meta['playlist'][0]['urls']
+    
+            mp3 = match1(content, r'name='filename'\s*value='([^']+\.mp3)'')
+        if mp3: mp3 = 'http://res.infoq.com/downloads/mp3downloads/%s' % mp3
+    
+        # Counting to five...
+    >>> for number in count_to_five():
+    ...     print(number)
+    one
+    two
+    three
+    four
+    five
+    '''
+    
+    '''
+https://www.djangospin.com/design-patterns-python/mediator/
+    
+    
+# Test our radio out
+def main():
+    radio = Radio()
+    actions = [radio.scan] * 2 + [radio.toggle_amfm] + [radio.scan] * 2
+    actions *= 2
+    
+        print('`{}` was processed'.format(data))
+    
+    
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod(optionflags=doctest.ELLIPSIS)
+
+    
+        sample_queue = queue.Queue()
+    
+    '''
+*What is this pattern about?
+This patterns aims to reduce the number of classes required by an
+application. Instead of relying on subclasses it creates objects by
+copying a prototypical instance at run-time.
+    
+        def __init__(self, wrapped):
+        self._wrapped = wrapped
+    
+    
+  def Start( self ):
+    request_data = BuildRequestData()
+    request_data.update( { 'filetypes': self.filetypes } )
+    self._response = self.PostDataToHandler( request_data,
+                                             'semantic_completion_available' )
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+        self._cached_response = self.HandleFuture( self._response_future,
+                                               truncate_message = True )
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
