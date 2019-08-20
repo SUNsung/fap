@@ -1,142 +1,121 @@
-        def preload_stages_warnings
-          # This preloads the number of warnings for every stage, ensuring
-          # that Ci::Stage#has_warnings? doesn't execute any additional
-          # queries.
-          @pipeline.stages.each { |stage| stage.number_of_warnings }
-        end
-      end
+
+        
+            it 'does not use older tags when requested not to', :needs_macos do
+      allow(ARGV).to receive(:skip_or_later_bottles?).and_return(true)
+      allow(OS::Mac).to receive(:prerelease?).and_return(true)
+      subject[:mavericks] = 'foo'
+      expect(subject.send(:find_matching_tag, :mavericks)).to eq(:mavericks)
+      expect(subject.send(:find_matching_tag, :yosemite)).to be_nil
     end
+    
+        filename = Filename.create(formula, tag, spec.rebuild)
+    @resource.url('#{spec.root_url}/#{filename.bintray}',
+                  select_download_strategy(spec.root_url_specs))
+    @resource.version = formula.pkg_version
+    @resource.checksum = checksum
+    @prefix = spec.prefix
+    @cellar = spec.cellar
+    @rebuild = spec.rebuild
   end
-end
+    
+    puts 'Bundler configured! Please run 'bin/bundle install' now.'
 
     
-          # Sets multiple keys to a given value.
-      #
-      # mapping - A Hash mapping the cache keys to their values.
-      # timeout - The time after which the cache key should expire.
-      def self.write_multiple(mapping, timeout: TIMEOUT)
-        Redis::Cache.with do |redis|
-          redis.multi do |multi|
-            mapping.each do |raw_key, value|
-              multi.set(cache_key_for(raw_key), value, ex: timeout)
-            end
-          end
-        end
+          def fetch_public_key_from_json(string, jwt)
+        json = JSON.parse(string)
+        keys = json['keys']
+        public_key = get_key_from_kid(keys, jwt.header['kid'])
+        public_key
       end
     
-            def execute
-          create_labels
-        end
-    
-            def importer_class
-          LfsObjectImporter
-        end
-    
-          private
-    
-        subdirs = Dir.chdir(SimpleCov.root) { Dir.glob('*') }
-                 .reject { |d| d.end_with?('.rb') || ['test', 'vendor'].include?(d) }
-                 .map { |d| '#{d}/**/*.rb' }.join(',')
-    
-      # Returns parsed JavaScript blocks.
-  # The parsed version is a RKelly object that allows you to be able do advanced parsing.
-  #
-  # @see https://github.com/tenderlove/rkelly
-  # @return [Array<RKelly::Nodes::SourceElementsNode>]
-  def get_html_scripts
-    n = get_html_document
-    rkelly = RKelly::Parser.new
-    n.search('//script').map { |s| rkelly.parse(s.text) }
+        respond_to do |format|
+      format.html
+      format.xml { render :xml => @notifications.to_xml }
+      format.json {
+        render json: render_as_json(@unread_notification_count, @grouped_unread_notification_counts, @notifications)
+      }
+    end
   end
     
-              def initialize(options = {})
-            self.class.attributes.each do |attr|
-              if options.has_key?(attr)
-                m = (attr.to_s + '=').to_sym
-                self.send(m, options[attr])
-              end
-            end
-          end
+          def lines
+        lines = []
+        @diff.diff.split('\n')[2..-1].each_with_index do |line, line_index|
+          lines << { :line  => line,
+                     :class => line_class(line),
+                     :ldln  => left_diff_line_number(0, line),
+                     :rdln  => right_diff_line_number(0, line) }
+        end if @diff
+        lines
+      end
     
-              # Encodes a Rex::Proto::Kerberos::Model::EncryptionKey into an
-          # ASN.1 String
-          #
-          # @return [String]
-          def encode
-            elems = []
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_type], 0, :CONTEXT_SPECIFIC)
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_value], 1, :CONTEXT_SPECIFIC)
-            seq = OpenSSL::ASN1::Sequence.new(elems)
+          def has_header
+        @header = (@page.header || false) if @header.nil? && @page
+        !!@header
+      end
     
-              # Decodes the crealm field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [String]
-          def decode_crealm(input)
-            input.value[0].value
-          end
-    
-              delta(first.value.loc, second.value.loc)
-        end
-    
-          def line_class(line)
-        if line =~ /^@@/
-          'gc'
-        elsif line =~ /^\+/
-          'gi'
-        elsif line =~ /^\-/
-          'gd'
-        else
-          ''
+          def versions
+        i = @versions.size + 1
+        @versions.map do |v|
+          i -= 1
+          { :id        => v.id,
+            :id7       => v.id[0..6],
+            :num       => i,
+            :selected  => @page.version.id == v.id,
+            :author    => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
+            :message   => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
+            :date      => v.authored_date.strftime('%B %d, %Y'),
+            :gravatar  => Digest::MD5.hexdigest(v.author.email.strip.downcase),
+            :identicon => self._identicon_code(v.author.email),
+            :date_full => v.authored_date,
+          }
         end
       end
     
-        assert_no_match /New/, last_response.body, ''New' link not blocked in pages template'
+      test 'extract destination file name in case of path renaming' do
+    view = Precious::Views::LatestChanges.new
+    assert_equal 'newname.md', view.extract_renamed_path_destination('oldname.md => newname.md')
+    assert_equal 'newDirectoryName/fileName.md', view.extract_renamed_path_destination('{oldDirectoryName => newDirectoryName}/fileName.md')
+  end
     
-      s.authors  = ['Tom Preston-Werner', 'Rick Olson']
-  s.email    = 'tom@github.com'
-  s.homepage = 'http://github.com/gollum/gollum'
+    desc 'Build and install'
+task :install => :build do
+  sh 'gem install --local --no-ri --no-rdoc pkg/#{name}-#{version}.gem'
+end
     
-        # Create the .txz package archive from the files in staging_path.
-    File.open(output_path, 'wb') do |file|
-      XZ::StreamWriter.new(file) do |xz|
-        FPM::Util::TarWriter.new(xz) do |tar|
-          # The manifests must come first for pkg.
-          add_path(tar, '+COMPACT_MANIFEST',
-                   File.join(staging_path, '+COMPACT_MANIFEST'))
-          add_path(tar, '+MANIFEST',
-                   File.join(staging_path, '+MANIFEST'))
+      def destroy?
+    update?
+  end
     
-      def to_s_extension; 'pkg'; end
+      private
     
-        args = [ '-B', build_path('build-info'), '-c', build_path('comment'), '-d', build_path('description'), '-f', build_path('packlist'), '-I', '/opt/local', '-p', staging_path,  '-U', '#{cwd}/#{name}-#{self.version}-#{iteration}.tgz' ]
-    safesystem('pkg_create', *args)
+          now = Time.current
+      @user.onboarding_package_requested_again = true if @user.onboarding_package_requested
+      @user.onboarding_package_requested = true
+      @user.onboarding_package_form_submmitted_at = now
+      @user.personal_data_updated_at = now
+      @user.shipping_validated_at = now if user_params[:shipping_validated] == '1'
+      if @user.save!
+        format.html { redirect_to '/freestickers/edit' }
+        format.json { render :show, status: :ok, location: @user }
+      else
+        format.html { render :edit }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
+    end
+  end
     
-        scripts[:after_install] = template(File.join('pleaserun', 'scripts', 'after-install.sh')).result(binding)
-    scripts[:before_remove] = template(File.join('pleaserun', 'scripts', 'before-remove.sh')).result(binding)
-  end # def input
+    RSpec.configure do |config|
+  config.order = 'random'
+end
     
-        template = template('solaris.erb')
-    File.open('#{build_path}/pkginfo', 'w') do |pkginfo|
-      pkginfo.puts template.result(binding)
+          expect(instance.render).to match %r{wemux.ls.2>\/dev\/null}
+    end
+  end
+    
+        context 'master' do
+      let(:version) { 'master' }
+      it { is_expected.to eq Float::INFINITY }
     end
     
-        # Unpack the tarball to the staging path
-    args = ['-cf', output_path, '-C', staging_path]
-    tar_compression_flag(output_path).tap do |flag|
-      args << flag unless flag.nil?
-    end
-    args << '.'
-    
-          one_to_increment = portion_to_work_with[0].to_i
-      incremented = one_to_increment + 1
-    
-                namespace_reverse_stackable handler_type, Hash[args.map { |arg| [arg, handler] }]
-          end
-    
-            def document_attribute(names, opts)
-          setting = description_field(:params)
-          setting ||= description_field(:params, {})
-          Array(names).each do |name|
-            setting[name[:full_name].to_s] ||= {}
-            setting[name[:full_name].to_s].merge!(opts)
+        context 'synchronization disabled' do
+      let(:synchronize) { false }
