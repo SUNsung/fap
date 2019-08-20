@@ -1,206 +1,296 @@
 
         
         
-    {  int delta = this - prev;
-  int32_t n = prev->n_ + 1;
-  int32_t sig_x = prev->sig_x_ + delta;
-  int64_t sig_xsq = prev->sig_xsq_ + delta * delta;
-  int64_t cost = (sig_xsq - sig_x * sig_x / n) / n;
-  cost += prev->total_cost_;
-  UpdateIfBetter(cost, prev->total_steps_ + 1, prev, n, sig_x, sig_xsq);
-  return cost;
-}
+    {  Alarm alarm_;
+  bool signal_client_;
+  std::mutex mu_;
+  std::unique_ptr<grpc::string> host_;
+};
     
-      // Fills in two ambiguity tables (replaceable and dangerous) with information
-  // read from the ambigs file. An ambiguity table is an array of lists.
-  // The array is indexed by a class id. Each entry in the table provides
-  // a list of potential ambiguities which can start with the corresponding
-  // character. For example the ambiguity 'rn -> m', would be located in the
-  // table at index of unicharset.unichar_to_id('r').
-  // In 1-1 ambiguities (e.g. s -> S, 1 -> I) are recorded in
-  // one_to_one_definite_ambigs_. This vector is also indexed by the class id
-  // of the wrong part of the ambiguity and each entry contains a vector of
-  // unichar ids that are ambiguous to it.
-  // encoder_set is used to encode the ambiguity strings, undisturbed by new
-  // unichar_ids that may be created by adding the ambigs.
-  void LoadUnicharAmbigs(const UNICHARSET& encoder_set,
-                         TFile *ambigs_file, int debug_level,
-                         bool use_ambigs_for_adaption, UNICHARSET *unicharset);
-    
-      // The UNICHARMAP is represented as a tree whose nodes are of type
-  // UNICHARMAP_NODE.
-  struct UNICHARMAP_NODE {
+    // TODO(ctiller): leaked objects in this test
+TEST_P(ShutdownTest, ShutdownTest) {
+  ResetStub();
     }
     
-    bool GetVarint64(Slice* input, uint64_t* value) {
-  const char* p = input->data();
-  const char* limit = p + input->size();
-  const char* q = GetVarint64Ptr(p, limit, value);
-  if (q == nullptr) {
-    return false;
+    static void async_connect_unlock_and_cleanup(async_connect* ac,
+                                             grpc_winsocket* socket) {
+  int done = (--ac->refs == 0);
+  gpr_mu_unlock(&ac->mu);
+  if (done) {
+    grpc_channel_args_destroy(ac->channel_args);
+    gpr_mu_destroy(&ac->mu);
+    gpr_free(ac->addr_name);
+    gpr_free(ac);
+  }
+  if (socket != NULL) grpc_winsocket_destroy(socket);
+}
+    
+    #include <grpc/support/atm.h>
+#include 'src/core/lib/debug/trace.h'
+#include 'src/core/lib/gpr/mpscq.h'
+#include 'src/core/lib/iomgr/exec_ctx.h'
+    
+    static inline std::shared_ptr<::grpc::Channel> CreateChannel(
+    const grpc::string& target,
+    const std::shared_ptr<ChannelCredentials>& creds) {
+  return ::grpc_impl::CreateChannelImpl(target, creds);
+}
+    
+    
+    {class SecureChannelCredentials;
+class ResourceQuota;
+}  // namespace grpc_impl
+    
+    ChannelCredentials::~ChannelCredentials() {}
+    
+      void SendSimpleClientStreaming() {
+    EchoRequest send_request;
+    EchoResponse recv_response;
+    grpc::string expected_message;
+    ClientContext cli_ctx;
+    cli_ctx.set_wait_for_ready(true);
+    send_request.set_message('Hello');
+    auto stream = stub_->RequestStream(&cli_ctx, &recv_response);
+    for (int i = 0; i < 5; i++) {
+      EXPECT_TRUE(stream->Write(send_request));
+      expected_message.append(send_request.message());
+    }
+    stream->WritesDone();
+    Status recv_status = stream->Finish();
+    EXPECT_EQ(expected_message, recv_response.message());
+    EXPECT_TRUE(recv_status.ok());
+  }
+    
+        grpc::string exp = '';
+    EXPECT_TRUE(cstream->Read(&response));
+    exp.append(response.message() + ' ');
+    
+      void SendRpc(int num_rpcs) {
+    for (int i = 0; i < num_rpcs; i++) {
+      EchoRequest send_request;
+      EchoRequest recv_request;
+      EchoResponse send_response;
+      EchoResponse recv_response;
+      Status recv_status;
+    }
+    }
+    
+            // 3. Show another simple window.
+        if (show_another_window)
+        {
+            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
+        }
+    
+    // !!! GLUT/FreeGLUT IS OBSOLETE SOFTWARE. Using GLUT is not recommended unless you really miss the 90's. !!!
+// !!! If someone or something is teaching you GLUT in 2019, you are being abused. Please show some resistance. !!!
+// !!! Nowadays, prefer using GLFW or SDL instead!
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+        // Setup window
+    SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
+    SDL_Window* window = SDL_CreateWindow('Dear ImGui SDL2+DirectX11 example', SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
+    SDL_SysWMinfo wmInfo;
+    SDL_VERSION(&wmInfo.version);
+    SDL_GetWindowWMInfo(window, &wmInfo);
+    HWND hwnd = (HWND)wmInfo.info.win.window;
+    
+    // Data
+static ID3D11Device*            g_pd3dDevice = NULL;
+static ID3D11DeviceContext*     g_pd3dDeviceContext = NULL;
+static IDXGISwapChain*          g_pSwapChain = NULL;
+static ID3D11RenderTargetView*  g_mainRenderTargetView = NULL;
+    
+    // InitXXX function with 'install_callbacks=true': install GLFW callbacks. They will call user's previously installed callbacks, if any.
+// InitXXX function with 'install_callbacks=false': do not install GLFW callbacks. You will need to call them yourself from your own GLFW callbacks.
+IMGUI_IMPL_API void     ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
+
+    
+        // Our state (make them static = more or less global) as a convenience to keep the example terse.
+    static bool show_demo_window = true;
+    static bool show_another_window = false;
+    static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    
+    // Win32 message handler
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
+        return true;
+    }
+    
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_IMPL_API bool     ImGui_ImplDX9_CreateDeviceObjects();
+IMGUI_IMPL_API void     ImGui_ImplDX9_InvalidateDeviceObjects();
+
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+      void Flush() override {
+    if (flush_pending_) {
+      flush_pending_ = false;
+    }
+    last_flush_micros_ = env_->NowMicros();
+  }
+    
+    /*
+ * Class:     org_rocksdb_CompactionJobInfo
+ * Method:    compactionReason
+ * Signature: (J)B
+ */
+jbyte Java_org_rocksdb_CompactionJobInfo_compactionReason(
+    JNIEnv*, jclass, jlong jhandle) {
+  auto* compact_job_info =
+    reinterpret_cast<rocksdb::CompactionJobInfo*>(jhandle);
+  return rocksdb::CompactionReasonJni::toJavaCompactionReason(
+      compact_job_info->compaction_reason);
+}
+    
+    /*
+ * Class:     org_rocksdb_CompactionOptionsFIFO
+ * Method:    newCompactionOptionsFIFO
+ * Signature: ()J
+ */
+jlong Java_org_rocksdb_CompactionOptionsFIFO_newCompactionOptionsFIFO(
+    JNIEnv*, jclass) {
+  const auto* opt = new rocksdb::CompactionOptionsFIFO();
+  return reinterpret_cast<jlong>(opt);
+}
+    
+    /*
+ * Class:     org_rocksdb_Env
+ * Method:    getDefaultEnvInternal
+ * Signature: ()J
+ */
+jlong Java_org_rocksdb_Env_getDefaultEnvInternal(
+    JNIEnv*, jclass) {
+  return reinterpret_cast<jlong>(rocksdb::Env::Default());
+}
+    
+    /*
+ * Class:     org_rocksdb_EnvOptions
+ * Method:    newEnvOptions
+ * Signature: ()J
+ */
+jlong Java_org_rocksdb_EnvOptions_newEnvOptions__(
+    JNIEnv*, jclass) {
+  auto *env_opt = new rocksdb::EnvOptions();
+  return reinterpret_cast<jlong>(env_opt);
+}
+    
+    /*
+ * Class:     org_rocksdb_OptionsUtil
+ * Method:    getLatestOptionsFileName
+ * Signature: (Ljava/lang/String;J)Ljava/lang/String;
+ */
+jstring Java_org_rocksdb_OptionsUtil_getLatestOptionsFileName(
+    JNIEnv* env, jclass /*jcls*/, jstring jdbpath, jlong jenv_handle) {
+  jboolean has_exception = JNI_FALSE;
+  auto db_path = rocksdb::JniUtil::copyStdString(env, jdbpath, &has_exception);
+  if (has_exception == JNI_TRUE) {
+    // exception occurred
+    return nullptr;
+  }
+  std::string options_file_name;
+  rocksdb::Status s = rocksdb::GetLatestOptionsFileName(
+      db_path, reinterpret_cast<rocksdb::Env*>(jenv_handle),
+      &options_file_name);
+  if (!s.ok()) {
+    // error, raise an exception
+    rocksdb::RocksDBExceptionJni::ThrowNew(env, s);
+    return nullptr;
   } else {
-    *input = Slice(q, limit - q);
-    return true;
+    return env->NewStringUTF(options_file_name.c_str());
+  }
+}
+
+    
+    class TableFilterJniCallback : public JniCallback {
+ public:
+    TableFilterJniCallback(
+        JNIEnv* env, jobject jtable_filter);
+    std::function<bool(const rocksdb::TableProperties&)> GetTableFilterFunction();
+    }
+    
+    /*
+ * Class:     org_rocksdb_ThreadStatus
+ * Method:    getOperationPropertyName
+ * Signature: (BI)Ljava/lang/String;
+ */
+jstring Java_org_rocksdb_ThreadStatus_getOperationPropertyName(
+    JNIEnv* env, jclass, jbyte joperation_type_value, jint jindex) {
+  auto name = rocksdb::ThreadStatus::GetOperationPropertyName(
+      rocksdb::OperationTypeJni::toCppOperationType(joperation_type_value),
+      static_cast<int>(jindex));
+  return rocksdb::JniUtil::toJavaString(env, &name, true);
+}
+    
+        pt::ptree container_details;
+    s = dockerApi('/containers/' + r['id'] + '/json?stream=false',
+                  container_details);
+    if (s.ok()) {
+      r['pid'] =
+          BIGINT(container_details.get_child('State').get<pid_t>('Pid', -1));
+      r['started_at'] = container_details.get_child('State').get<std::string>(
+          'StartedAt', '');
+      r['finished_at'] = container_details.get_child('State').get<std::string>(
+          'FinishedAt', '');
+      r['privileged'] = container_details.get_child('HostConfig')
+                                .get<bool>('Privileged', false)
+                            ? INTEGER(1)
+                            : INTEGER(0);
+      r['readonly_rootfs'] = container_details.get_child('HostConfig')
+                                     .get<bool>('ReadonlyRootfs', false)
+                                 ? INTEGER(1)
+                                 : INTEGER(0);
+      r['path'] = container_details.get<std::string>('Path', '');
+    }
+    
+    bool validate_value_using_flags(const std::string& value,
+                                                      int flags) {
+  if ((flags & NonEmpty) > 0) {
+    if (value.length() == 0) {
+      return false;
+    }
+  }
+    }
+    
+    void setToBackgroundPriority() {
+  auto ret =
+      SetPriorityClass(GetCurrentProcess(), PROCESS_MODE_BACKGROUND_BEGIN);
+  if (ret != TRUE) {
+    LOG(WARNING) << 'Failed to set background process priority with '
+                 << GetLastError();
   }
 }
     
-    // Standard Put... routines append to a string
-void PutFixed32(std::string* dst, uint32_t value);
-void PutFixed64(std::string* dst, uint64_t value);
-void PutVarint32(std::string* dst, uint32_t value);
-void PutVarint64(std::string* dst, uint64_t value);
-void PutLengthPrefixedSlice(std::string* dst, const Slice& value);
-    
-    WriteBatch::Handler::~Handler() = default;
-    
-                // There should be at most 2 dims we cannot drop
-            auto numDimsThatCannotBeDropped = std::count_if(dimsToDrop.begin(), dimsToDrop.end(), [](const bool& val) {
-                return !val;
-            });
-    
-    
-    {
-    {            if (map.size() > RAND_MAX * (size_t) RAND_MAX)
-                RuntimeError('RandomOrdering: too large training set: need to change to different random generator!');
-            srand((unsigned int) seed);
-            size_t retries = 0;
-            foreach_index (t, map)
-            {
-                for (int tries = 0; tries < 5; tries++)
-                {
-                    // swap current pos with a random position
-                    // Random positions are limited to t+randomizationrange.
-                    // This ensures some locality suitable for paging with a sliding window.
-                    const size_t tbegin = max((size_t) t, randomizationrange / 2) - randomizationrange / 2; // range of window  --TODO: use bounds() function above
-                    const size_t tend = min(t + randomizationrange / 2, map.size());
-                    assert(tend >= tbegin);                  // (guard against potential numeric-wraparound bug)
-                    const size_t trand = rand(tbegin, tend); // random number within windows
-                    assert((size_t) t <= trand + randomizationrange / 2 && trand < (size_t) t + randomizationrange / 2);
-                    // if range condition is fulfilled then swap
-                    if (trand <= map[t] + randomizationrange / 2 && map[t] < trand + randomizationrange / 2 && (size_t) t <= map[trand] + randomizationrange / 2 && map[trand] < (size_t) t + randomizationrange / 2)
-                    {
-                        std::swap(map[t], map[trand]);
-                        break;
-                    }
-                    // but don't multi-swap stuff out of its range (for swapping positions that have been swapped before)
-                    // instead, try again with a different random number
-                    retries++;
-                }
-            }
-            fprintf(stderr, 'RandomOrdering: %lu retries for %lu elements (%.1f%%) to ensure window condition\n', (unsigned long) retries, (unsigned long) map.size(), 100.0 * retries / map.size());
-            // ensure the window condition
-            foreach_index (t, map)
-                assert((size_t) t <= map[t] + randomizationrange / 2 && map[t] < (size_t) t + randomizationrange / 2);
-#if 0 // and a live check since I don't trust myself here yet
-            foreach_index (t, map) if (!((size_t) t <= map[t] + randomizationrange/2 && map[t] < (size_t) t + randomizationrange/2))
-            {
-                fprintf (stderr, 'RandomOrdering: windowing condition violated %d -> %d\n', t, map[t]);
-                LogicError('RandomOrdering: windowing condition violated');
-            }
-#endif
-#if 0 // test whether it is indeed a unique complete sequence
-            auto map2 = map;
-            ::sort (map2.begin(), map2.end());
-            foreach_index (t, map2) assert (map2[t] == (size_t) t);
-#endif
-            fprintf(stderr, 'RandomOrdering: recached sequence for seed %d: %d, %d, ...\n', (int) seed, (int) map[0], (int) map[1]);
-            currentseed = seed;
-        }
-        return map; // caller can now access it through operator[]
+        if (context.isAnyColumnUsed({'cwd', 'root', 'path', 'on_disk'})) {
+      getProcessPathInfo(proc_handle, pid, r);
     }
     
-    // not in the cache yet: create it (or not if no such member)
-void /*CustomConfigRecord::*/ ComputationNetwork::LazyCreateConfigMember(const wstring& id) const /*override*/
-{
-    auto iter = m_nameToNodeMap.find(id);
-    if (iter == m_nameToNodeMap.end())
-    {
-        // workaround to allow to access members with '.' inside: change to _
-        for (iter = m_nameToNodeMap.begin(); iter != m_nameToNodeMap.end(); iter++)
-            if (msra::strfun::ReplaceAll<wstring>(iter->first, L'.', L'_') == id)
-                break;
-        if (iter == m_nameToNodeMap.end())
-            return; // no such node
+      if (action->second == 'genConfig') {
+    std::map<std::string, std::string> config;
+    auto stat = genConfig(config);
+    response.push_back(config);
+    return stat;
+  } else if (action->second == 'genPack') {
+    auto name = request.find('name');
+    auto value = request.find('value');
+    if (name == request.end() || value == request.end()) {
+      return Status(1, 'Missing name or value');
     }
-    const ComputationNodeBasePtr& node = iter->second;
-    // TODO: What is the expressionPath?
-    let& nodeName = node->NodeName();   // failFn lambda below holds a copy of the name for the error message. Let's not hold an unneccessary shared_ptr to the node, risking cycles & stuff.
-    auto valuep = ConfigValuePtr(node, [nodeName](const std::wstring &) { LogicError('ComputationNetwork: Failed to retrieve node '%ls'.', nodeName.c_str()); }, node->NodeName());
-    InsertConfigMember(id, move(valuep));
-}
-    
-    
-    {        stt = firstLbl;
-        stp = lastLbl;
-    };
-    
-    template <class ElemType>
-void EpochAccumulatorNode<ElemType>::Validate(bool isFinalValidationPass)
-{
-    Base::Validate(isFinalValidationPass);
-    SetDims(Input(0)->GetSampleLayout(), HasMBLayout());
-}
-    
-        size_t maxSeqLength = seq[sequenceOrder[0]].GetNumTimeSteps();
-    // BUGBUG: This forces the sequences to fit, due to a very bad convention in the evaldll interface.
-    if (maxSeqLength > mb->GetNumTimeSteps())
-        maxSeqLength = mb->GetNumTimeSteps();
-    
-      if (comma != data) {
-    // we have meta
-    ssize_t meta_len = comma - data;
-    data_len -= meta_len;
-    char* semi = (char*)memchr(data, ';', meta_len);
-    char* slash = (char*)memchr(data, '/', meta_len);
     }
     
-    
-    {  req::ptr<File> open(const String& filename, const String& mode, int options,
-                      const req::ptr<StreamContext>& context) override;
-};
-    
-    void PlainDirectory::rewind() {
-  ::rewinddir(m_dir);
-}
-    
-    struct GlobStreamWrapper final : Stream::Wrapper {
-  req::ptr<File> open(const String& filename, const String& mode, int options,
-                      const req::ptr<StreamContext>& context) override;
-  req::ptr<Directory> opendir(const String& path) override;
-};
-    
-      Pipe();
-  virtual ~Pipe();
-    
-    namespace rocksdb {
-    }
-    
-      // When an actor (column family) requests a stop token, all writes will be
-  // stopped until the stop token is released (deleted)
-  std::unique_ptr<WriteControllerToken> GetStopToken();
-  // When an actor (column family) requests a delay token, total delay for all
-  // writes to the DB will be controlled under the delayed write rate. Every
-  // write needs to call GetDelay() with number of bytes writing to the DB,
-  // which returns number of microseconds to sleep.
-  std::unique_ptr<WriteControllerToken> GetDelayToken(
-      uint64_t delayed_write_rate);
-  // When an actor (column family) requests a moderate token, compaction
-  // threads will be increased
-  std::unique_ptr<WriteControllerToken> GetCompactionPressureToken();
-    
-      // Load the options file.
-  DBOptions loaded_db_opt;
-  std::vector<ColumnFamilyDescriptor> loaded_cf_descs;
-  s = LoadLatestOptions(kDBPath, Env::Default(), &loaded_db_opt,
-                        &loaded_cf_descs);
-  assert(s.ok());
-  assert(loaded_db_opt.create_if_missing == db_opt.create_if_missing);
-    
-    // Supported only for Leveled compaction
-Status SuggestCompactRange(DB* db, ColumnFamilyHandle* column_family,
-                           const Slice* begin, const Slice* end);
-Status SuggestCompactRange(DB* db, const Slice* begin, const Slice* end);
-    
-    
-    {  virtual std::string GetPrintableOptions() const = 0;
-};
+    #include <osquery/config/tests/test_utils.h>
