@@ -1,186 +1,180 @@
 
         
-        
-class MissingSchema(RequestException, ValueError):
-    '''The URL schema (e.g. http or https) is missing.'''
+          Raises:
+    ValueError: if metric is not in the metric class dictionary.
+  '''
+  eval_metric_fn_keys = eval_config.metrics_set
+  if not eval_metric_fn_keys:
+    eval_metric_fn_keys = [EVAL_DEFAULT_METRIC]
+  evaluators_list = []
+  for eval_metric_fn_key in eval_metric_fn_keys:
+    if eval_metric_fn_key not in EVAL_METRICS_CLASS_DICT:
+      raise ValueError('Metric not found: {}'.format(eval_metric_fn_key))
+    if eval_metric_fn_key == 'oid_challenge_object_detection_metrics':
+      logging.warning(
+          'oid_challenge_object_detection_metrics is deprecated; '
+          'use oid_challenge_detection_metrics instead'
+      )
+    if eval_metric_fn_key == 'oid_V2_detection_metrics':
+      logging.warning(
+          'open_images_V2_detection_metrics is deprecated; '
+          'use oid_V2_detection_metrics instead'
+      )
+    evaluators_list.append(
+        EVAL_METRICS_CLASS_DICT[eval_metric_fn_key](categories=categories))
+  return evaluators_list
     
-            # because special names such as Name.Class, Name.Function, etc.
-        # are not recognized as such later in the parsing, we choose them
-        # to look the same as ordinary variables.
-        Name:                      '#000000',        # class: 'n'
-        Name.Attribute:            '#c4a000',        # class: 'na' - to be revised
-        Name.Builtin:              '#004461',        # class: 'nb'
-        Name.Builtin.Pseudo:       '#3465a4',        # class: 'bp'
-        Name.Class:                '#000000',        # class: 'nc' - to be revised
-        Name.Constant:             '#000000',        # class: 'no' - to be revised
-        Name.Decorator:            '#888',           # class: 'nd' - to be revised
-        Name.Entity:               '#ce5c00',        # class: 'ni'
-        Name.Exception:            'bold #cc0000',   # class: 'ne'
-        Name.Function:             '#000000',        # class: 'nf'
-        Name.Property:             '#000000',        # class: 'py'
-        Name.Label:                '#f57900',        # class: 'nl'
-        Name.Namespace:            '#000000',        # class: 'nn' - to be revised
-        Name.Other:                '#000000',        # class: 'nx'
-        Name.Tag:                  'bold #004461',   # class: 'nt' - like a keyword
-        Name.Variable:             '#000000',        # class: 'nv' - to be revised
-        Name.Variable.Class:       '#000000',        # class: 'vc' - to be revised
-        Name.Variable.Global:      '#000000',        # class: 'vg' - to be revised
-        Name.Variable.Instance:    '#000000',        # class: 'vi' - to be revised
+        with tf.device(deploy_config.optimizer_device()):
+      training_optimizer, optimizer_summary_vars = optimizer_builder.build(
+          train_config.optimizer)
+      for var in optimizer_summary_vars:
+        tf.summary.scalar(var.op.name, var, family='LearningRate')
     
-    #: Python 2.x?
-is_py2 = (_ver[0] == 2)
+        Args:
+      is_training: Indicates whether the Mask head is in training mode.
+      num_classes: number of classes.  Note that num_classes *does not*
+        include the background category, so if groundtruth labels take values
+        in {0, 1, .., K-1}, num_classes=K (and not K+1, even though the
+        assigned classification targets can range from {0,... K}).
+      freeze_batchnorm: Whether to freeze batch norm parameters during
+        training or not. When training with a small batch size (e.g. 1), it is
+        desirable to freeze batch norm update and use pretrained batch norm
+        params.
+      conv_hyperparams: A `hyperparams_builder.KerasLayerHyperparams` object
+        containing hyperparameters for convolution ops.
+      mask_height: Desired output mask height. The default value is 14.
+      mask_width: Desired output mask width. The default value is 14.
+      mask_prediction_num_conv_layers: Number of convolution layers applied to
+        the image_features in mask prediction branch.
+      mask_prediction_conv_depth: The depth for the first conv2d_transpose op
+        applied to the image_features in the mask prediction branch. If set
+        to 0, the depth of the convolution layers will be automatically chosen
+        based on the number of object classes and the number of channels in the
+        image features.
+      masks_are_class_agnostic: Boolean determining if the mask-head is
+        class-agnostic or not.
+      convolve_then_upsample: Whether to apply convolutions on mask features
+        before upsampling using nearest neighbor resizing. Otherwise, mask
+        features are resized to [`mask_height`, `mask_width`] using bilinear
+        resizing before applying convolutions.
+      name: A string name scope to assign to the mask head. If `None`, Keras
+        will auto-generate one from the class name.
+    '''
+    super(MaskRCNNMaskHead, self).__init__(name=name)
+    self._is_training = is_training
+    self._freeze_batchnorm = freeze_batchnorm
+    self._num_classes = num_classes
+    self._conv_hyperparams = conv_hyperparams
+    self._mask_height = mask_height
+    self._mask_width = mask_width
+    self._mask_prediction_num_conv_layers = mask_prediction_num_conv_layers
+    self._mask_prediction_conv_depth = mask_prediction_conv_depth
+    self._masks_are_class_agnostic = masks_are_class_agnostic
+    self._convolve_then_upsample = convolve_then_upsample
     
-        def __getitem__(self, name):
-        '''Dict-like __getitem__() for compatibility with client code. Throws
-        exception if there are more than one cookie with name. In that case,
-        use the more explicit get() method instead.
-    
-    from . import __version__ as requests_version
-    
-    
-http_proxies = {'http': 'http://http.proxy',
-                'http://some.host': 'http://some.host.proxy'}
-all_proxies = {'all': 'socks5://http.proxy',
-               'all://some.host': 'socks5://some.host.proxy'}
-mixed_proxies = {'http': 'http://http.proxy',
-                 'http://some.host': 'http://some.host.proxy',
-                 'all': 'socks5://http.proxy'}
-@pytest.mark.parametrize(
-    'url, expected, proxies', (
-        ('hTTp://u:p@Some.Host/path', 'http://some.host.proxy', http_proxies),
-        ('hTTp://u:p@Other.Host/path', 'http://http.proxy', http_proxies),
-        ('hTTp:///path', 'http://http.proxy', http_proxies),
-        ('hTTps://Other.Host', None, http_proxies),
-        ('file:///etc/motd', None, http_proxies),
-    
-        # Redirection.
-    300: ('multiple_choices',),
-    301: ('moved_permanently', 'moved', '\\o-'),
-    302: ('found',),
-    303: ('see_other', 'other'),
-    304: ('not_modified',),
-    305: ('use_proxy',),
-    306: ('switch_proxy',),
-    307: ('temporary_redirect', 'temporary_moved', 'temporary'),
-    308: ('permanent_redirect',
-          'resume_incomplete', 'resume',),  # These 2 to be removed in 3.0
-    
-    
-def _parse_content_type_header(header):
-    '''Returns content type and parameters from given header
-    
-            if args:
-            if 'gui' in conf and conf['gui']:
-                # Enter GUI mode.
-                from .gui import gui_main
-                gui_main(*args, **conf)
-            else:
-                # Enter console mode.
-                from .console import console_main
-                console_main(*args, **conf)
-    
-        def prepare(self, **kwargs):
-    
-    
-class CNTV(VideoExtractor):
-    name = 'CNTV.com'
-    stream_types = [
-        {'id': '1', 'video_profile': '1280x720_2000kb/s', 'map_to': 'chapters4'},
-        {'id': '2', 'video_profile': '1280x720_1200kb/s', 'map_to': 'chapters3'},
-        {'id': '3', 'video_profile': '640x360_850kb/s', 'map_to': 'chapters2'},
-        {'id': '4', 'video_profile': '480x270_450kb/s', 'map_to': 'chapters'},
-        {'id': '5', 'video_profile': '320x180_200kb/s', 'map_to': 'lowChapters'},
-    ]
-    
-    #----------------------------------------------------------------------
-def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    '''wrapper'''
-    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
-    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
-    hostname = urlparse(url).hostname
-    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
+        :param str u_string: unicode string to check. Must be unicode
+        and not Python 2 `str`.
+    :rtype: bool
+    '''
+    assert isinstance(u_string, str)
+    try:
+        u_string.encode('ascii')
+        return True
+    except UnicodeEncodeError:
         return False
-    upid = match1(url, r'.+/content/(\w+)')
-    
-        if not info_only:
-        download_url_ffmpeg(m3u8_url, title, 'm3u8', None, output_dir=output_dir, merge=merge)
-    
-        # Histogram of ground-truth objects
-    gt_hist = np.zeros((len(classes)), dtype=np.int)
-    for entry in roidb:
-        gt_inds = np.where(
-            (entry['gt_classes'] > 0) & (entry['is_crowd'] == 0))[0]
-        gt_classes = entry['gt_classes'][gt_inds]
-        gt_hist += np.histogram(gt_classes, bins=hist_bins)[0]
-    logger.debug('Ground-truth class histogram:')
-    for i, v in enumerate(gt_hist):
-        logger.debug(
-            '{:d}{:s}: {:d}'.format(
-                i, classes[i].rjust(char_len), v))
-    logger.debug('-' * char_len)
-    logger.debug(
-        '{:s}: {:d}'.format(
-            'total'.rjust(char_len), np.sum(gt_hist)))
 
     
+    Available hooks:
     
-def add_roi_pose_head_v1convX(model, blob_in, dim_in, spatial_scale):
-    '''Add a Mask R-CNN keypoint head. v1convX design: X * (conv).'''
-    hidden_dim = cfg.KRCNN.CONV_HEAD_DIM
-    kernel_size = cfg.KRCNN.CONV_HEAD_KERNEL
-    pad_size = kernel_size // 2
-    current = model.RoIFeatureTransform(
-        blob_in,
-        '_[pose]_roi_feat',
-        blob_rois='keypoint_rois',
-        method=cfg.KRCNN.ROI_XFORM_METHOD,
-        resolution=cfg.KRCNN.ROI_XFORM_RESOLUTION,
-        sampling_ratio=cfg.KRCNN.ROI_XFORM_SAMPLING_RATIO,
-        spatial_scale=spatial_scale
-    )
     
-        if not model.train or cfg.MODEL.FASTER_RCNN:
-        # Proposals are needed during:
-        #  1) inference (== not model.train) for RPN only and Faster R-CNN
-        #  OR
-        #  2) training for Faster R-CNN
-        # Otherwise (== training for RPN only), proposals are not needed
-        model.net.Sigmoid('rpn_cls_logits', 'rpn_cls_probs')
-        model.GenerateProposals(
-            ['rpn_cls_probs', 'rpn_bbox_pred', 'im_info'],
-            ['rpn_rois', 'rpn_roi_probs'],
-            anchors=anchors,
-            spatial_scale=spatial_scale
-        )
+def test_idna_with_version_attribute(mocker):
+    '''Verify we're actually setting idna version when it should be available.'''
+    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
+    assert info()['idna'] == {'version': '2.6'}
+
     
-    logger = logging.getLogger(__name__)
+    r'''
+The ``codes`` object defines a mapping from common names for HTTP statuses
+to their numerical codes, accessible either as attributes or as dictionary
+items.
+>>> import requests
+>>> requests.codes['temporary_redirect']
+307
+>>> requests.codes.teapot
+418
+>>> requests.codes['\o/']
+200
     
-        clss = bbox_target_data[:, 0]
-    bbox_targets = blob_utils.zeros((clss.size, 4 * num_bbox_reg_classes))
-    bbox_inside_weights = blob_utils.zeros(bbox_targets.shape)
-    inds = np.where(clss > 0)[0]
-    for ind in inds:
-        cls = int(clss[ind])
-        start = 4 * cls
-        end = start + 4
-        bbox_targets[ind, start:end] = bbox_target_data[ind, 1:]
-        bbox_inside_weights[ind, start:end] = (1.0, 1.0, 1.0, 1.0)
-    return bbox_targets, bbox_inside_weights
+            assert len(server.handler_results) == 0
     
-        # Compute anchor labels:
-    # label=1 is positive, 0 is negative, -1 is don't care (ignore)
-    labels = np.empty((num_inside, ), dtype=np.float32)
-    labels.fill(-1)
-    if len(gt_boxes) > 0:
-        # Compute overlaps between the anchors and the gt boxes overlaps
-        anchor_by_gt_overlap = box_utils.bbox_overlaps(anchors, gt_boxes)
-        # Map from anchor to gt box that has highest overlap
-        anchor_to_gt_argmax = anchor_by_gt_overlap.argmax(axis=1)
-        # For each anchor, amount of overlap with most overlapping gt box
-        anchor_to_gt_max = anchor_by_gt_overlap[
-            np.arange(num_inside), anchor_to_gt_argmax]
+    # 'setup.py publish' shortcut.
+if sys.argv[-1] == 'publish':
+    os.system('python setup.py sdist bdist_wheel')
+    os.system('twine upload dist/*')
+    sys.exit()
     
-                res, grad, grad_estimated = gc.CheckSimple(op, [X, I], 0, [0])
-            self.assertTrue(res, 'Grad check failed')
+            :param request: The :class:`PreparedRequest <PreparedRequest>` to add headers to.
+        :param kwargs: The keyword arguments from the call to send().
+        '''
+        pass
+    
+        with server as (host, port):
+        url = u'http://{}:{}'.format(host, port)
+        r = requests.get(url=url, allow_redirects=True)
+        assert r.status_code == 200
+        assert len(r.history) == 1
+        assert r.history[0].status_code == 301
+        assert redirect_request[0].startswith(b'GET /' + expected_path + b' HTTP/1.1')
+        assert r.url == u'{}/{}'.format(url, expected_path.decode('ascii'))
+    
+            self.addr1 = Addr.fromstring('127.0.0.1')
+        self.addr2 = Addr.fromstring('127.0.0.1:*')
+    
+            if not dns_api:
+            self.dns = discovery.build('dns', 'v1',
+                                       credentials=credentials,
+                                       cache_discovery=False)
+        else:
+            self.dns = dns_api
+    
+    
+class IntegrationTestsContext(certbot_context.IntegrationTestsContext):
+    '''General fixture describing a certbot-nginx integration tests context'''
+    def __init__(self, request):
+        super(IntegrationTestsContext, self).__init__(request)
+    
+        # Execution of certbot in a self-contained workspace
+    workspace = os.environ.get('WORKSPACE', os.path.join(os.getcwd(), '.certbot_test_workspace'))
+    if not os.path.exists(workspace):
+        print('--> Creating a workspace for certbot_test: {0}'.format(workspace))
+        os.mkdir(workspace)
+    else:
+        print('--> Using an existing workspace for certbot_test: {0}'.format(workspace))
+    config_dir = os.path.join(workspace, 'conf')
+    
+        else:
+      testsuite.attrib['tests'] = str(num_errors + num_failures)
+      if num_errors > 0:
+        testcase = xml.etree.ElementTree.SubElement(testsuite, 'testcase')
+        testcase.attrib['name'] = 'errors'
+        error = xml.etree.ElementTree.SubElement(testcase, 'error')
+        error.text = '\n'.join(self._junit_errors)
+      if num_failures > 0:
+        # Group failures by file
+        failed_file_order = []
+        failures_by_file = {}
+        for failure in self._junit_failures:
+          failed_file = failure[0]
+          if failed_file not in failed_file_order:
+            failed_file_order.append(failed_file)
+            failures_by_file[failed_file] = []
+          failures_by_file[failed_file].append(failure)
+        # Create a testcase for each file
+        for failed_file in failed_file_order:
+          failures = failures_by_file[failed_file]
+          testcase = xml.etree.ElementTree.SubElement(testsuite, 'testcase')
+          testcase.attrib['name'] = failed_file
+          failure = xml.etree.ElementTree.SubElement(testcase, 'failure')
+          template = '{0}: {1} [{2}] [{3}]'
+          texts = [template.format(f[1], f[2], f[3], f[4]) for f in failures]
+          failure.text = '\n'.join(texts)
