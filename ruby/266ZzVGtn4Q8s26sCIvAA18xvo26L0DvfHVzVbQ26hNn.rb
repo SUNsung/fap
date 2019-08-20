@@ -1,176 +1,150 @@
 
         
-            it 'returns a correct icon tag for other services' do
-      icon = omniauth_provider_icon(:'37signals')
-      expect(icon).to be_html_safe
-      elem = Nokogiri(icon).at('i.fa.fa-lock')
-      expect(elem).to be_a Nokogiri::XML::Element
-    end
-  end
+            args = msg['args'] + [msg['error_message']]
     
-              @bar3 = Agents::DotBar.new(name: 'bar3').tap { |agent|
-            agent.user = users(:bob)
-            agent.sources << @bar2
-            agent.save!
-          },
-        ]
-        @foo.reload
-        @bar2.reload
+        def aes256_gcm_decrypt(value)
+      return unless value
     
-      describe '#relative_distance_of_time_in_words' do
-    it 'in the past' do
-      expect(relative_distance_of_time_in_words(Time.now-5.minutes)).to eq('5m ago')
-    end
-    
-        it 'creates a scenario label with the given text' do
-      expect(scenario_label(scenario, 'Other')).to eq(
-        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Other</span>'
-      )
-    end
-  end
-    
-      it 'should run scheduled agents' do
-    mock(Agent).run_schedule('every_1h')
-    mock.instance_of(IO).puts('Queuing schedule for every_1h')
-    @scheduler.send(:run_schedule, 'every_1h')
-  end
-    
-        it 'should raise an exception when encountering complex JSONPaths' do
-      @agent.options['username_path'] = '$.very.complex[*]'
-      expect { LiquidMigrator.convert_all_agent_options(@agent) }.
-        to raise_error('JSONPath '$.very.complex[*]' is too complex, please check your migration.')
-    end
-    
-        stub_request(:get, /trackings/).to_return(
-      :body => File.read(Rails.root.join('spec/data_fixtures/aftership.json')),
-      :status => 200,
-      :headers => {'Content-Type' => 'text/json'}
-    )
-    
-            a_split.each_with_index { |s, i| a_split[i] = s.to_i unless i == a_length - 1 }
-        b_split.each_with_index { |s, i| b_split[i] = s.to_i unless i == b_length - 1 }
-    
-        def as_json
-      @pages
-    end
-    
-        def parse_as_document
-      document = Nokogiri::HTML.parse @content, nil, 'UTF-8'
-      @title = document.at_css('title').try(:content)
-      document
-    end
-    
-        def effective_path
-      @effective_path ||= effective_url.path
-    end
-  end
-end
-
-    
-          if !cask.url.blank? && !cask.url.using
-        check_url_for_https_availability(cask.url, user_agents: [cask.url.user_agent])
-      end
-      check_url_for_https_availability(cask.appcast) unless cask.appcast.blank?
-      check_url_for_https_availability(cask.homepage, user_agents: [:browser]) unless cask.homepage.blank?
-    end
-    
-        it 'when lapack is used instead of OpenBLAS' do
-      expect_offense(<<~RUBY, '/homebrew-core/')
-        class Foo < Formula
-          url 'https://brew.sh/foo-1.0.tgz'
-          homepage 'https://brew.sh'
-          depends_on 'lapack'
-          ^^^^^^^^^^^^^^^^^^^ Formulae should use OpenBLAS as the default serial linear algebra library.
-        end
-      RUBY
-    end
-    
-      before_action -> { authorize_if_got_token! :read, :'read:statuses' }, only: :show
-  before_action :set_poll
-  before_action :refresh_poll
-    
-      def perform(account_id, options = {})
-    @options = options.with_indifferent_access
-    @account = Account.find(account_id)
-    
-          expect(response).to redirect_to(settings_preferences_notifications_path)
-      user.reload
-      expect(user.settings['notification_emails']['follow']).to be true
-      expect(user.settings['interactions']['must_be_follower']).to be false
-    end
-  end
-end
-
-    
-      let(:json) do
-    {
-      '@context': 'https://www.w3.org/ns/activitystreams',
-      id: 'foo',
-      type: 'Move',
-      actor: old_account.uri,
-      object: old_account.uri,
-      target: new_account.uri,
-    }.with_indifferent_access
-  end
-    
-          it 'does not process payload if no signature exists' do
-        expect_any_instance_of(ActivityPub::LinkedDataSignature).to receive(:verify_account!).and_return(nil)
-        expect(ActivityPub::Activity).not_to receive(:factory)
-    
+          context 'and user can admin_project_member' do
         before do
-      recipient.follow!(sender)
-      ActivityPub::Activity::Undo.new(undo_json, sender).perform
-    end
+          allow(presenter).to receive(:can?).with(user, :admin_project_member, project).and_return(true)
+        end
     
-          # Takes the amount in cents to capture.
-      # Can be used to capture partial amounts of a payment, and will create
-      # a new pending payment record for the remaining amount to capture later.
-      def capture!(amount = nil)
-        return true if completed?
+      it 'calls Gitlab::Diff::File#unfold_diff_lines with correct position' do
+    position = instance_double(Gitlab::Diff::Position, file_path: 'README')
+    readme_file = instance_double(Gitlab::Diff::File, file_path: 'README')
+    other_file = instance_double(Gitlab::Diff::File, file_path: 'foo.rb')
+    nil_path_file = instance_double(Gitlab::Diff::File, file_path: nil)
     
-        let(:return_item) { create(:return_item, reception_status: status) }
+        def backup_path
+      return if @cask.staged_path.nil?
     
-            private
+        context 'with :using and :data specified' do
+      let(:specs) {
+        {
+          using: :post,
+          data:  {
+            form: 'data',
+            is:   'good',
+          },
+        }
+      }
     
-        def last?
-      index == tab.panes.length - 1
-    end
+      def show_version_java
+    properties = java.lang.System.getProperties
+    puts 'java #{properties['java.version']} (#{properties['java.vendor']})'
+    puts 'jvm #{properties['java.vm.name']} / #{properties['java.vm.version']}'
+  end # def show_version_java
     
-          @name = first_key.to_s.shellescape unless first_key.nil?
-      @yaml = window_yaml.values.first
-      @project = project
-      @index = index
-      @commands = build_commands(tmux_window_command_prefix, @yaml)
-    end
+    require 'bundler/cli'
+require 'bundler/friendly_errors'
     
-      describe '#hook_on_project_start' do
-    it_should_behave_like 'a project hook' do
-      let(:hook_name) { 'on_project_start' }
-    end
-  end
-  describe '#hook_on_project_first_start' do
-    it_should_behave_like 'a project hook' do
-      let(:hook_name) { 'on_project_first_start' }
-    end
-  end
-  describe '#hook_on_project_restart' do
-    it_should_behave_like 'a project hook' do
-      let(:hook_name) { 'on_project_restart' }
-    end
-  end
-  describe '#hook_on_project_exit' do
-    it_should_behave_like 'a project hook' do
-      let(:hook_name) { 'on_project_exit' }
-    end
-  end
-  describe '#hook_on_project_stop' do
-    it_should_behave_like 'a project hook' do
-      let(:hook_name) { 'on_project_stop' }
+    require 'clamp'
+require 'pluginmanager/util'
+require 'pluginmanager/gemfile'
+require 'pluginmanager/install'
+require 'pluginmanager/remove'
+require 'pluginmanager/list'
+require 'pluginmanager/update'
+require 'pluginmanager/pack'
+require 'pluginmanager/unpack'
+require 'pluginmanager/generate'
+require 'pluginmanager/prepare_offline_pack'
+require 'pluginmanager/proxy_support'
+configure_proxy
+    
+        context 'update all the plugins' do
+      it 'has executed successfully' do
+        logstash.run_command_in_path('bin/logstash-plugin update --no-verify')
+        expect(logstash).to have_installed?(plugin_name, '0.1.1')
+      end
     end
   end
 end
 
     
-          def stop_template
-        asset_path 'template-stop.erb'
+          it { expect(class_node.body).to be(nil) }
+    end
+  end
+end
+
+    
+        it { expect(module_node.is_a?(described_class)).to be(true) }
+  end
+    
+    module RuboCop
+  module Cop
+    # This auto-corrects unused arguments.
+    class UnusedArgCorrector
+      extend RangeHelp
+    
+              outermost_send = outermost_send_on_same_line(heredoc_arg)
+          return unless outermost_send
+          return unless outermost_send.loc.end
+          return unless heredoc_arg.first_line != outermost_send.loc.end.line
+    
+    module RuboCop
+  module Cop
+    module Style
+      # This cop checks for trailing comma in argument lists.
+      #
+      # @example EnforcedStyleForMultiline: consistent_comma
+      #   # bad
+      #   method(1, 2,)
+      #
+      #   # good
+      #   method(1, 2)
+      #
+      #   # good
+      #   method(
+      #     1, 2,
+      #     3,
+      #   )
+      #
+      #   # good
+      #   method(
+      #     1,
+      #     2,
+      #   )
+      #
+      # @example EnforcedStyleForMultiline: comma
+      #   # bad
+      #   method(1, 2,)
+      #
+      #   # good
+      #   method(1, 2)
+      #
+      #   # good
+      #   method(
+      #     1,
+      #     2,
+      #   )
+      #
+      # @example EnforcedStyleForMultiline: no_comma (default)
+      #   # bad
+      #   method(1, 2,)
+      #
+      #   # good
+      #   method(1, 2)
+      #
+      #   # good
+      #   method(
+      #     1,
+      #     2
+      #   )
+      class TrailingCommaInArguments < Cop
+        include TrailingComma
+    
+        context 'when there's a similar variable' do
+      it 'suggests the variable name' do
+        expect_offense(<<~RUBY)
+          def some_method
+            environment = nil
+            another_symbol
+            enviromnent = {}
+            ^^^^^^^^^^^ Useless assignment to variable - `enviromnent`. Did you mean `environment`?
+            puts environment
+          end
+        RUBY
       end
+    end
