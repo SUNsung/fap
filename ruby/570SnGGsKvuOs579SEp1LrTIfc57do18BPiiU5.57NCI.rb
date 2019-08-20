@@ -1,127 +1,248 @@
 
         
-            assert_kind_of BigDecimal, m1.big_bank_balance
-    assert_equal BigDecimal('234000567.95'), m1.big_bank_balance
-  end
+            def test_migrate_revert_whole_migration
+      migration = InvertibleMigration.new
+      [LegacyMigration, InvertibleMigration].each do |klass|
+        revert = RevertWholeMigration.new(klass)
+        migration.migrate :up
+        revert.migrate :up
+        assert_not migration.connection.table_exists?('horses')
+        revert.migrate :down
+        assert migration.connection.table_exists?('horses')
+        migration.migrate :down
+        assert_not migration.connection.table_exists?('horses')
+      end
+    end
     
-          def test_invert_remove_column
-        add = @recorder.inverse_of :remove_column, [:table, :column, :type, {}]
-        assert_equal [:add_column, [:table, :column, :type, {}], nil], add
+          def test_invert_remove_foreign_key_with_on_delete_on_update
+        enable = @recorder.inverse_of :remove_foreign_key, [:dogs, :people, on_delete: :nullify, on_update: :cascade]
+        assert_equal [:add_foreign_key, [:dogs, :people, on_delete: :nullify, on_update: :cascade]], enable
       end
     
-      def build_post_stats
-    if PostCreator.track_post_stats
-      draft_key = @topic ? 'topic_#{@topic.id}' : 'new_topic'
-    
-        context 'with a category restriction' do
-      fab!(:category) { Fabricate(:category, read_restricted: true) }
-      let(:topic) { Fabricate(:topic, category: category) }
-      let(:post) { Fabricate(:post, topic: topic) }
-      fab!(:moderator) { Fabricate(:moderator) }
-      fab!(:admin) { Fabricate(:admin) }
-    
-      def destroy
-    group = Group.find_by(id: params[:id])
-    raise Discourse::NotFound unless group
-    
-        def ensure_cors!
-      rule = {
-        allowed_headers: ['*'],
-        allowed_methods: ['PUT'],
-        allowed_origins: [Discourse.base_url_no_prefix],
-        max_age_seconds: 3000
-      }
-    
-      def update_tombstone_lifecycle(grace_period)
-    return if !SiteSetting.s3_configure_tombstone_policy
-    return if @tombstone_prefix.blank?
-    update_lifecycle('purge_tombstone', grace_period, prefix: @tombstone_prefix)
-  end
-    
-        @objects << { key: 'backups/second/multi-2.tar.gz', size: 19, last_modified: Time.parse('2018-11-27T03:16:54Z') }
-    @objects << { key: 'backups/second/multi-1.tar.gz', size: 22, last_modified: Time.parse('2018-11-26T03:17:09Z') }
-    @objects << { key: 'backups/second/subfolder/multi-3.tar.gz', size: 23, last_modified: Time.parse('2019-01-24T18:44:00Z') }
-  end
-    
-            # Timeout and datastore options need to be passed through to the client
-        opts = {
-          :datastore    => datastore,
-          :expiration   => datastore['SessionExpirationTimeout'].to_i,
-          :comm_timeout => datastore['SessionCommunicationTimeout'].to_i,
-          :retry_total  => datastore['SessionRetryTotal'].to_i,
-          :retry_wait   => datastore['SessionRetryWait'].to_i,
-          :udp_session  => true
-        }
-    
-      def self.handler_type_alias
-    'bind_tcp_rc4'
-  end
-    
-        # Handle user-specified seed values
-    if datastore['PayloadUUIDSeed'].to_s.length > 0
-      conf[:seed] = datastore['PayloadUUIDSeed'].to_s
+    class TestCollections < JekyllUnitTest
+  context 'an evil collection' do
+    setup do
+      @collection = Jekyll::Collection.new(fixture_site, '../../etc/password')
     end
     
-    begin
-  require 'bundler/setup'
-rescue LoadError => e
-  $stderr.puts '[*] Bundler failed to load and returned this error:'
-  $stderr.puts
-  $stderr.puts '   '#{e}''
-  $stderr.puts
-  $stderr.puts '[*] You may need to uninstall or upgrade bundler'
-  exit(1)
+          private def_delegator :@obj, :config, :fallback_data
+    
+    def normalize_bullets(markdown)
+  markdown.gsub(%r!\n\s{2}\*{1}!, '\n-')
 end
     
-        path = datastore['PATH'] || session.sys.config.getenv('USERPROFILE')
-    path.chomp!('\\')
+    # No trailing slash
+Benchmark.ips do |x|
+  path = '/some/very/very/long/path/to/a/file/i/like/'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
+end
+
     
-        report_note(host: host,
-        type: 'host.persistance.cleanup',
-        data: {
-          local_id: session.sid,
-          stype: session.type,
-          desc: session.info,
-          platform: session.platform,
-          via_payload: session.via_payload,
-          via_exploit: session.via_exploit,
-          created_at: Time.now.utc,
-          commands: @clean_up_rc
-        })
+    if pathutil_relative == native_relative
+  Benchmark.ips do |x|
+    x.report('pathutil') { pathutil_relative }
+    x.report('native')   { native_relative }
+    x.compare!
   end
+else
+  print 'PATHUTIL: '
+  puts pathutil_relative
+  print 'NATIVE:   '
+  puts native_relative
+end
+
     
-        register_options(
-      [
-        OptPath.new('SOURCE_FILE', [true, 'Path to source code']),
-        OptBool.new('RUN_BINARY', [false, 'Execute the generated binary', false]),
-        OptString.new('ASSEMBLIES', [false, 'Any assemblies outside the defaults', 'mscorlib.dll, System.dll, System.Xml.dll, System.Data.dll' ]),
-        OptString.new('OUTPUT_TARGET', [false, 'Name and path of the generated binary, default random, omit extension' ]),
-        OptString.new('COMPILER_OPTS', [false, 'Options to pass to compiler', '/optimize']),
-        OptString.new('CODE_PROVIDER', [true, 'Code provider to use', 'Microsoft.CSharp.CSharpCodeProvider'])
-      ], self.class
-    )
-    register_advanced_options(
-      [
-        OptString.new('NET_CLR_VER', [false, 'Minimum NET CLR version required to compile', '4.0'])
-      ], self.class
-    )
-  end
-    
-        class PluginRawContext
-      HOOK_FILE = 'logstash_registry.rb'
-      NAME_DELIMITER = '-'
-    
-    require 'bootstrap/environment'
-    
-          validate_plugins!
+          importer = ThemeStore::GitImporter.new(ssh_url, private_key: 'private_key')
+      importer.import!
     end
     
-      it 'returns the sorted config parts' do
-    expect(subject.config_parts).to eq(ordered_config_parts)
+        unless @topic.topic_allowed_users.where(user_id: @user.id).exists?
+      unless @topic.topic_allowed_groups.where('group_id IN (
+                                              SELECT group_id FROM group_users where user_id = ?
+                                           )', @user.id).exists?
+        @topic.topic_allowed_users.create!(user_id: @user.id)
+      end
+    end
   end
     
-        desc 'Halt all VM's involved in the acceptance test round'
-    task :halt, :platform do |t, args|
-      config   = PlatformConfig.new
-      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
-      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
+        render_json_dump(json, rest_serializer: true)
+  end
+    
+                s3_bucket.expects(:object).with('discourse-uploads/uploads/tombstone/default/original/1X/#{upload.sha1}.png').returns(s3_object)
+            s3_object.expects(:copy_from).with(copy_source: 's3-upload-bucket/discourse-uploads/uploads/default/original/1X/#{upload.sha1}.png')
+            s3_bucket.expects(:object).with('discourse-uploads/uploads/default/original/1X/#{upload.sha1}.png').returns(s3_object)
+            s3_object.expects(:delete)
+    
+        expect(posts.count).to eq(1)
+    expect(posts.first['id']).to eq(post.id)
+    
+          it 'should still have the correct category' do
+        settings.test_setting = 102
+        expect(settings.all_settings.find { |s| s[:setting] == :test_setting }[:category]).to eq(:tests)
+      end
+    end
+  end
+    
+          def find_matching_tag(tag)
+        # Used primarily by developers testing beta macOS releases.
+        if OS::Mac.prerelease? && ARGV.skip_or_later_bottles?
+          generic_find_matching_tag(tag)
+        else
+          generic_find_matching_tag(tag) ||
+            find_older_compatible_tag(tag)
+        end
+      end
+    
+              find_instance_method_call(body_node, :man, :+) do |method|
+            next unless match = regex_match_group(parameters(method).first, /^man[1-8]$/)
+    
+              find_method_with_args(body_node, :system, 'xcodebuild') do
+            problem %q(use 'xcodebuild *args' instead of 'system 'xcodebuild', *args')
+          end
+    
+        return false if args[:after] && OS::Mac.version < args[:after]
+    
+        it 'doesn't adds the dependency without OS version requirements' do
+      spec.uses_from_macos('foo')
+      spec.uses_from_macos('bar' => :head)
+    
+        context 'with version 1.8' do
+      subject { described_class.new(%w[1.8]) }
+    
+        module CLT
+      module_function
+    
+    require 'cask/cmd/abstract_command'
+require 'cask/cmd/--cache'
+require 'cask/cmd/audit'
+require 'cask/cmd/automerge'
+require 'cask/cmd/cat'
+require 'cask/cmd/create'
+require 'cask/cmd/doctor'
+require 'cask/cmd/edit'
+require 'cask/cmd/fetch'
+require 'cask/cmd/home'
+require 'cask/cmd/info'
+require 'cask/cmd/install'
+require 'cask/cmd/list'
+require 'cask/cmd/outdated'
+require 'cask/cmd/reinstall'
+require 'cask/cmd/style'
+require 'cask/cmd/uninstall'
+require 'cask/cmd/upgrade'
+require 'cask/cmd/zap'
+    
+    Then(/^the tasks folder is created$/) do
+  path = TestApp.test_app_path.join('lib/capistrano/tasks')
+  expect(Dir.exist?(path)).to be true
+end
+    
+          def value_or_default
+        if response.empty?
+          default
+        else
+          response
+        end
+      end
+    
+            if built_in_scm_name?
+          load_built_in_scm
+        else
+          # Compatibility with existing 3.x third-party SCMs
+          register_legacy_scm_hooks
+          load_legacy_scm_by_name
+        end
+      end
+    
+      describe '#system?' do
+    context 'when the pipeline is a system pipeline' do
+      let(:settings) { mock_settings({ 'pipeline.system' => true })}
+    
+        after(:all) do
+      logstash.uninstall
+    end
+    
+          def shipping
+        order.ship_total * exchange_multiplier
+      end
+    
+          # the order builds a shipment on its own on transition to delivery, but we want
+      # the original exchange shipment, not the built one
+      order.shipments.destroy_all
+      shipments.each { |shipment| shipment.update(order_id: order.id) }
+      order.update!(state: 'confirm')
+    
+            def create
+          authorize! :create, Spree::OptionType
+          @option_type = Spree::OptionType.new(option_type_params)
+          if @option_type.save
+            render :show, status: 201
+          else
+            invalid_resource!(@option_type)
+          end
+        end
+    
+            def create
+          authorize! :create, ProductProperty
+          @product_property = @product.product_properties.new(product_property_params)
+          if @product_property.save
+            respond_with(@product_property, status: 201, default_template: :show)
+          else
+            invalid_resource!(@product_property)
+          end
+        end
+    
+            def destroy
+          @return_authorization = order.return_authorizations.accessible_by(current_ability, :destroy).find(params[:id])
+          @return_authorization.destroy
+          respond_with(@return_authorization, status: 204)
+        end
+    
+        def render(context)
+      quote = paragraphize(super)
+      author = '<strong>#{@by.strip}</strong>' if @by
+      if @source
+        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
+        parts = []
+        url.each do |part|
+          if (parts + [part]).join('/').length < 32
+            parts << part
+          end
+        end
+        source = parts.join('/')
+        source << '/&hellip;' unless source == @source
+      end
+      if !@source.nil?
+        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
+      elsif !@title.nil?
+        cite = ' <cite>#{@title}</cite>'
+      end
+      blockquote = if @by.nil?
+        quote
+      elsif cite
+        '#{quote}<footer>#{author + cite}</footer>'
+      else
+        '#{quote}<footer>#{author}</footer>'
+      end
+      '<blockquote>#{blockquote}</blockquote>'
+    end
+    
+          super
+    end
+    
+        def render(context)
+      code_dir = (context.registers[:site].config['code_dir'].sub(/^\//,'') || 'downloads/code')
+      code_path = (Pathname.new(context.registers[:site].source) + code_dir).expand_path
+      file = code_path + @file
+    
+      # Summary is used on the Archive pages to return the first block of content from a post.
+  def summary(input)
+    if input.index(/\n\n/)
+      input.split(/\n\n/)[0]
+    else
+      input
+    end
+  end
