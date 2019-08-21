@@ -1,155 +1,192 @@
 
         
-                  # Remove the -p option if --archive is enabled (--archive equals -rlptgoD)
-          # otherwise new files will not have the destination-default permissions
-          args << '--no-perms' if args.include?('--archive') || args.include?('-a')
-        end
+            def store_file(file, path, opts = {})
+      not_implemented
+    end
     
-            it 'should not use the --chown flag' do
-          expect(Vagrant::Util::Subprocess).to receive(:execute) { |*args|
-            expect(args.detect{|a| a.include?('--chown')}).to be_falsey
-            rsync_result
-          }
-          subject.rsync_single(machine, ssh_info, opts)
-        end
-      end
-    
-          def build_rsync_chown(opts)
-        guest_path = Shellwords.escape(opts[:guestpath])
-        if(opts[:exclude] && !Array(opts[:exclude]).empty?)
-          exclude_base = Pathname.new(opts[:guestpath])
-          exclusions = Array(opts[:exclude]).map do |ex_path|
-            ex_path = ex_path.slice(1, ex_path.size) if ex_path.start_with?(File::SEPARATOR)
-            '-path #{Shellwords.escape(exclude_base.join(ex_path))} -prune'
-          end.join(' -o ') + ' -o '
-        end
-        'find #{guest_path} #{exclusions}' \
-          ''!' -type l -a ' \
-          ''(' ! -user #{opts[:owner]} -or ! -group #{opts[:group]} ')' -exec ' \
-          'chown #{opts[:owner]}:#{opts[:group]} '{}' +'
+            expect(FileStore::BaseStore.new.get_path_for_upload(upload))
+          .to eq('original/2X/4/4170ac2a2782a1516fe9e13d7322ae482c1bd594.png')
       end
     end
+    
+          if message_template
+        # inform the user about the rejection
+        message = Mail::Message.new(mail_string)
+        template_args[:former_title] = message.subject
+        template_args[:destination] = message.to
+        template_args[:site_name] = SiteSetting.title
+    
+        # Validate parameters are all editable
+    edit_params = params[:reviewable] || {}
+    edit_params.each do |name, value|
+      if value.is_a?(ActionController::Parameters)
+        value.each do |pay_name, pay_value|
+          raise Discourse::InvalidAccess.new unless editable.has?('#{name}.#{pay_name}')
+        end
+      else
+        raise Discourse::InvalidAccess.new unless editable.has?(name)
+      end
+    end
+    
+              expect(upload.persisted?).to eq(true)
+          expect(upload.original_filename).to eq(filename)
+        end
+      end
+    end
+    
+          it 'removes the file from s3 on multisite' do
+        test_multisite_connection('default') do
+          upload = build_upload
+          store.expects(:get_depth_for).with(upload.id).returns(0)
+          s3_helper.expects(:s3_bucket).returns(s3_bucket).at_least_once
+          upload.update!(url: '//s3-upload-bucket.s3.dualstack.us-west-1.amazonaws.com/uploads/default/original/1X/#{upload.sha1}.png')
+          s3_object = stub
+    
+        it { expect(alias_node.is_a?(described_class)).to be(true) }
   end
-end
-
     
-        it 'returns the host machine object' do
-      allow(machine.provider_config).to receive(:vagrant_vagrantfile).and_return('/path/to/Vagrantfile')
-      allow(machine.provider_config).to receive(:vagrant_machine).and_return(:default)
-      allow(machine).to receive(:env).and_return(true)
-      allow(machine.env).to receive(:root_path).and_return('/.vagrant.d')
-      allow(machine.env).to receive(:home_path).and_return('/path/to')
-      allow(machine.env).to receive(:ui_class).and_return(true)
+    RSpec.describe RuboCop::AST::SelfClassNode do
+  let(:self_class_node) { parse_source(source).ast }
     
-        it 'returns true if installed' do
-      expect(machine.communicate).to receive(:test).
-        with(command, sudo: true).and_return(true)
-      subject.chef_installed(machine, 'chef_solo', version)
-    end
+              @processed_source = processed_source
     
-        # Returns the configuration for a single machine.
-    #
-    # When loading a box Vagrantfile, it will be prepended to the
-    # key order specified when initializing this class. Sub-machine
-    # and provider-specific overrides are appended at the end. The
-    # actual order is:
-    #
-    # - box
-    # - keys specified for #initialize
-    # - sub-machine
-    # - provider
-    #
-    # The return value is a hash with the following keys (symbols)
-    # and values:
-    #
-    #   - box: the {Box} backing the machine
-    #   - config: the actual configuration
-    #   - config_errors: list of errors, if any
-    #   - config_warnings: list of warnings, if any
-    #   - provider_cls: class of the provider backing the machine
-    #   - provider_options: options for the provider
-    #
-    # @param [Symbol] name Name of the machine.
-    # @param [Symbol] provider The provider the machine should
-    #   be backed by (required for provider overrides).
-    # @param [BoxCollection] boxes BoxCollection to look up the
-    #   box Vagrantfile.
-    # @param [Pathname] data_path Machine data path
-    # @return [Hash<Symbol, Object>] Various configuration parameters for a
-    #   machine. See the main documentation body for more info.
-    def machine_config(name, provider, boxes, data_path=nil, validate_provider=true)
-      keys = @keys.dup
+          it 'registers an offense for block body starting with a blank passed to '\
+         'a multi-line method call' do
+        inspect_source(<<~RUBY)
+          some_method arg,
+            another_arg #{open}
     
-          context 'file exists' do
-        let(:meta_file_content) { '{'name':'base','version':'1.0'}' }
+          * Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+      * Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials provided
+        with the distribution.
+      * Neither the name of Google Inc. nor the names of its
+        contributors may be used to endorse or promote products derived
+        from this software without specific prior written permission.
     
-      describe '#machine' do
-    # A helper to register a provider for use in tests.
-    def register_provider(name, config_class=nil, options=nil)
-      provider_cls = Class.new(VagrantTests::DummyProvider)
-    
-        after{ subject.update(plugins, specific) }
-    
-            # Apply any changes made to the composition
-        def apply_composition!(*args)
-          block = args.detect{|arg| arg.is_a?(Proc) }
-          execute_args = ['up', '--remove-orphans']
-          if args.include?(:detach)
-            execute_args << '-d'
-          end
-          machine.env.lock('compose', retry: true) do
-            if block
-              compose_execute(*execute_args, &block)
-            else
-              compose_execute(*execute_args)
-            end
-          end
-        end
-    
-        it 'performs the check on the running containers list' do
-      subject.running?(cid)
-      expect(cmd_executed).to match(/docker ps \-q/)
-      expect(cmd_executed).to_not include('-a')
-    end
-    
-        def initialize(tag_name, markup, tokens)
-      @by = nil
-      @source = nil
-      @title = nil
-      if markup =~ FullCiteWithTitle
-        @by = $1
-        @source = $2 + $3
-        @title = $4.titlecase.strip
-      elsif markup =~ FullCite
-        @by = $1
-        @source = $2 + $3
-      elsif markup =~ AuthorTitle
-        @by = $1
-        @title = $2.titlecase.strip
-      elsif markup =~ Author
-        @by = $1
+          def after
+        @versions[1][0..6]
       end
-      super
+    
+            return left_shift(b[0], 24) |
+            left_shift(b[1], 16) |
+            left_shift(b[2], 8) |
+            b[3] & 0xFF
+      end
+    
+          attr_reader :content, :page, :header, :footer
+      DATE_FORMAT    = '%Y-%m-%d %H:%M:%S'
+      DEFAULT_AUTHOR = 'you'
+      @@to_xml       = { :save_with => Nokogiri::XML::Node::SaveOptions::DEFAULT_XHTML ^ 1, :indent => 0, :encoding => 'UTF-8' }
+    
+    $contexts = []
+    
+    context 'Precious::Views::LatestChanges' do
+  include Rack::Test::Methods
+  
+  def app
+    Precious::App
+  end
+  
+  setup do
+    @path = cloned_testpath('examples/lotr.git')
+    @wiki = Gollum::Wiki.new(@path)
+    Precious::App.set(:gollum_path, @path)
+    Precious::App.set(:wiki_options, {:latest_changes_count => 10})
+  end
+    
+        # make a backup of the option and sanitize it
+    base_path_original = base_path.dup
+    base_path = CGI.escape(base_path)
+    
+    # then let the user know if we changed the URL
+    unless base_path_original == base_path
+      puts <<MSG
+Warning: your base-path has been sanitized:
+  - original: '#{base_path_original}'
+  - sanitized: '#{base_path}'
+MSG
     end
-    
-        # Outputs a single category as an <a> link.
-    #
-    #  +category+ is a category string to format as an <a> link
-    #
-    # Returns string
-    #
-    def category_link(category)
-      dir = @context.registers[:site].config['category_dir']
-      '<a class='category' href='/#{dir}/#{category.to_url}/'>#{category}</a>'
-    end
-    
-    Liquid::Template.register_tag('config_tag', ConfigTag)
-    
-          rtn = ''
-      (context.environments.first['site'][@array_name] || []).each do |file|
-        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
-          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
-        end
-    
-    end
-Liquid::Template.register_filter OctopressLiquidFilters
+      
+    # and finally, let others enjoy our hard work:
+    wiki_options[:base_path] = base_path
+  end
+  opts.on('--page-file-dir [PATH]', 'Specify the subdirectory for all pages. Default: repository root.', 
+    'Example: setting this to 'pages' will make Gollum serve only pages at '<git-repo>/pages/*'.') do |path|
+    wiki_options[:page_file_dir] = path
+  end
+  opts.on('--css', 'Inject custom CSS into each page. The '<git-repo>/custom.css' file is used (must be committed).') do
+    wiki_options[:css] = true
+  end
+  opts.on('--js', 'Inject custom JavaScript into each page. The '<git-repo>/custom.js' file is used (must be committed).') do
+    wiki_options[:js] = true
+  end
+  opts.on('--emoji', 'Parse and interpret emoji tags (e.g. :heart:).') do
+    wiki_options[:emoji] = true
+  end
+  opts.on('--no-edit', 'Disable the feature of editing pages.')  do
+    wiki_options[:allow_editing] = false
+  end
+  opts.on('--live-preview', 'Enable the live preview feature in page editor.') do
+    wiki_options[:live_preview] = true
+  end
+  opts.on('--no-live-preview', 'Disable the live preview feature in page editor.') do
+    wiki_options[:live_preview] = false
+  end
+  opts.on('--allow-uploads [MODE]', [:dir, :page], 'Enable file uploads.',
+    'If set to 'dir', Gollum will store all uploads in the '<git-repo>/uploads/' directory.',
+    'If set to 'page', Gollum will store each upload at the currently edited page.') do |mode|
+    wiki_options[:allow_uploads]    = true
+    wiki_options[:per_page_uploads] = true if mode == :page
+  end
+  opts.on('--mathjax', 'Enable MathJax (renders mathematical equations).',
+    'By default, uses the 'TeX-AMS-MML_HTMLorMML' config with the 'autoload-all' extension.') do
+    wiki_options[:mathjax] = true
+  end
+  opts.on('--irb', 'Launch Gollum in 'console mode', with a predefined API.') do
+    options[:irb] = true
+  end
+  
+  opts.separator ''
+  opts.separator '  Minor:'
+  
+  opts.on('--h1-title', 'Use the first '<h1>' as page title.') do
+    wiki_options[:h1_title] = true
+  end
+  opts.on('--show-all', 'Also show files in the file view. By default, only valid pages are shown.') do
+    wiki_options[:show_all] = true
+  end
+  opts.on('--collapse-tree', 'Collapse the tree, when file view is opened. By default, the tree is expanded.') do
+    wiki_options[:collapse_tree] = true
+  end
+  opts.on('--user-icons [MODE]', [:gravatar, :identicon, :none], 'Use specific user-icons for history view.',
+    'Can be set to 'gravatar', 'identicon' or 'none'. Default: 'none'.') do |mode|
+    wiki_options[:user_icons] = mode
+  end
+  opts.on('--mathjax-config [FILE]', 'Specify path to a custom MathJax configuration.',
+    'If not specified, uses the '<git-repo>/mathjax.config.js' file.') do |file|
+    wiki_options[:mathjax_config] = file || 'mathjax.config.js'
+  end
+  opts.on('--plantuml-url [URL]', 'Sets the PlantUML server endpoint.') do |url|
+    wiki_options[:plantuml_url] = url
+  end
+  opts.on('--template-dir [PATH]', 'Specify custom mustache template directory.') do |path|
+    wiki_options[:template_dir] = path
+  end
+  
+  opts.separator ''
+  opts.separator '  Common:'
+  
+  opts.on('--help', 'Display this message.') do
+    puts opts
+    exit 0
+  end
+  opts.on('--version', 'Display the current version of Gollum.') do
+    puts 'Gollum ' + Gollum::VERSION
+    exit 0
+  end
+  
+  opts.separator ''
+end
