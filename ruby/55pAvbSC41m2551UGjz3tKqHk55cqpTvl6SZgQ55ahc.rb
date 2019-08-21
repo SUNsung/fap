@@ -1,1069 +1,439 @@
 
         
-              # private
-    
-          def base_url
-        @base_url
-      end
-    
-        get 'A/fc66539528eb96f21b2bbdbf557788fe8a1196ac'
-    
-      test 'remove page extentions' do
-    view = Precious::Views::LatestChanges.new
-    assert_equal 'page', view.remove_page_extentions('page.wiki')
-    assert_equal 'page-wiki', view.remove_page_extentions('page-wiki.md')
-    assert_equal 'file.any_extention', view.remove_page_extentions('file.any_extention')
-  end
-    
-        def not_found(msg = nil)
-      @message = msg || 'The requested page does not exist.'
-      status 404
-      return mustache :error
+              importer = ThemeStore::GitImporter.new(url, branch: branch)
+      importer.import!
     end
     
-      # = MANIFEST =
-  s.files = %w[
-    CONTRIBUTING.md
-    Gemfile
-    HISTORY.md
-    ISSUE_TEMPLATE.md
-    LICENSE
-    README.md
-    Rakefile
-    bin/gollum
-    config.rb
-    config.ru
-    contrib/openrc/conf.d/gollum
-    contrib/openrc/init.d/gollum
-    contrib/systemd/gollum@.service
-    contrib/sysv-debian/init.d/gollum
-    gollum.gemspec
-    lib/gollum.rb
-    lib/gollum/app.rb
-    lib/gollum/helpers.rb
-    lib/gollum/public/gollum/css/_styles.css
-    lib/gollum/public/gollum/css/dialog.css
-    lib/gollum/public/gollum/css/editor.css
-    lib/gollum/public/gollum/css/gollum.css
-    lib/gollum/public/gollum/css/ie7.css
-    lib/gollum/public/gollum/css/print.css
-    lib/gollum/public/gollum/css/template.css
-    lib/gollum/public/gollum/fonts/FontAwesome.otf
-    lib/gollum/public/gollum/fonts/fontawesome-webfont.eot
-    lib/gollum/public/gollum/fonts/fontawesome-webfont.svg
-    lib/gollum/public/gollum/fonts/fontawesome-webfont.ttf
-    lib/gollum/public/gollum/fonts/fontawesome-webfont.woff
-    lib/gollum/public/gollum/images/dirty-shade.png
-    lib/gollum/public/gollum/images/fileview/document.png
-    lib/gollum/public/gollum/images/fileview/folder-horizontal.png
-    lib/gollum/public/gollum/images/fileview/toggle-small-expand.png
-    lib/gollum/public/gollum/images/fileview/toggle-small.png
-    lib/gollum/public/gollum/images/fileview/trashcan.png
-    lib/gollum/public/gollum/images/icon-sprite.png
-    lib/gollum/public/gollum/images/man_24.png
-    lib/gollum/public/gollum/images/para.png
-    lib/gollum/public/gollum/images/pin-16.png
-    lib/gollum/public/gollum/images/pin-20.png
-    lib/gollum/public/gollum/images/pin-24.png
-    lib/gollum/public/gollum/images/pin-32.png
-    lib/gollum/public/gollum/javascript/editor/gollum.editor.js
-    lib/gollum/public/gollum/javascript/editor/langs/asciidoc.js
-    lib/gollum/public/gollum/javascript/editor/langs/creole.js
-    lib/gollum/public/gollum/javascript/editor/langs/markdown.js
-    lib/gollum/public/gollum/javascript/editor/langs/org.js
-    lib/gollum/public/gollum/javascript/editor/langs/pod.js
-    lib/gollum/public/gollum/javascript/editor/langs/rdoc.js
-    lib/gollum/public/gollum/javascript/editor/langs/textile.js
-    lib/gollum/public/gollum/javascript/gollum.dialog.js
-    lib/gollum/public/gollum/javascript/gollum.js
-    lib/gollum/public/gollum/javascript/gollum.placeholder.js
-    lib/gollum/public/gollum/javascript/identicon_canvas.js
-    lib/gollum/public/gollum/javascript/jquery-1.7.2.min.js
-    lib/gollum/public/gollum/javascript/jquery.color.js
-    lib/gollum/public/gollum/javascript/mousetrap.min.js
-    lib/gollum/public/gollum/livepreview/css/custom.css
-    lib/gollum/public/gollum/livepreview/images/cancel_24.png
-    lib/gollum/public/gollum/livepreview/images/globe_24.png
-    lib/gollum/public/gollum/livepreview/images/lr_24.png
-    lib/gollum/public/gollum/livepreview/images/save_24.png
-    lib/gollum/public/gollum/livepreview/images/savecomment_24.png
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ace.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/anchor.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/anchor_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/autocomplete.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/autocomplete/popup.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/autocomplete/text_completer.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/autocomplete/util.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/background_tokenizer.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/background_tokenizer_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/commands/command_manager.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/commands/command_manager_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/commands/default_commands.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/commands/incremental_search_commands.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/commands/multi_select_commands.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/commands/occur_commands.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/config.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/config_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/css/codefolding-fold-button-states.png
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/css/editor.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/css/expand-marker.png
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/document.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/document_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/edit_session.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/edit_session/bracket_match.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/edit_session/fold.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/edit_session/fold_line.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/edit_session/folding.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/edit_session_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/editor.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/editor_change_document_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/editor_highlight_selected_word_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/editor_navigation_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/editor_text_edit_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/beautify.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/beautify/php_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/chromevox.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/elastic_tabstops_lite.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/emmet.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/error_marker.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/keybinding_menu.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/language_tools.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/linking.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/menu_tools/add_editor_menu_options.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/menu_tools/element_generator.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/menu_tools/generate_settings_menu.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/menu_tools/get_editor_keyboard_shortcuts.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/menu_tools/get_set_functions.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/menu_tools/overlay_page.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/menu_tools/settings_menu.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/modelist.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/old_ie.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/old_ie_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/searchbox.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/searchbox.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/settings_menu.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/spellcheck.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/split.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/static.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/static_highlight.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/static_highlight_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/statusbar.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/textarea.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/themelist.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/whitespace.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/ext/whitespace_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/incremental_search.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/incremental_search_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/keyboard/emacs.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/keyboard/emacs_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/keyboard/hash_handler.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/keyboard/keybinding.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/keyboard/keybinding_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/keyboard/state_handler.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/keyboard/textarea.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/keyboard/textinput.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/keyboard/vim.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/keyboard/vim_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/layer/cursor.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/layer/font_metrics.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/layer/gutter.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/layer/marker.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/layer/text.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/layer/text_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/lib/app_config.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/lib/dom.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/lib/es5-shim.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/lib/event.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/lib/event_emitter.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/lib/event_emitter_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/lib/fixoldbrowsers.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/lib/keys.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/lib/lang.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/lib/net.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/lib/oop.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/lib/regexp.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/lib/useragent.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/line_widgets.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/Readme.md
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/highlight_rules_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/package.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/text_asciidoc.txt
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/text_coffee.txt
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/text_curly.txt
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/text_html.txt
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/text_javascript.txt
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/text_livescript.txt
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/text_lucene.txt
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/text_markdown.txt
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/text_php.txt
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/text_ruby.txt
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/text_xml.txt
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_abap.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_abc.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_actionscript.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_ada.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_asciidoc.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_assembly_x86.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_autohotkey.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_batchfile.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_c9search.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_c_cpp.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_cirru.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_clojure.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_cobol.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_coffee.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_coldfusion.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_csharp.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_css.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_curly.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_d.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_dart.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_diff.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_dot.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_eiffel.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_ejs.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_elixir.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_elm.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_erlang.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_forth.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_ftl.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_gcode.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_gherkin.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_gitignore.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_glsl.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_golang.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_groovy.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_haml.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_handlebars.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_haskell.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_haxe.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_html.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_html_ruby.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_ini.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_io.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_jack.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_jade.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_java.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_javascript.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_json.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_jsoniq.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_jsp.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_jsx.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_julia.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_latex.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_less.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_liquid.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_lisp.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_livescript.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_logiql.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_lsl.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_lua.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_luapage.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_lucene.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_markdown.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_mask.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_matlab.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_mel.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_mushcode.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_mysql.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_nix.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_objectivec.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_ocaml.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_pascal.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_perl.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_pgsql.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_php.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_powershell.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_prolog.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_properties.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_protobuf.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_python.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_r.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_rdoc.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_rhtml.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_ruby.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_rust.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_sass.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_scad.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_scala.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_scheme.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_scss.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_sh.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_sjs.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_smarty.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_snippets.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_soy_template.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_space.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_sql.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_stylus.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_svg.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_tcl.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_tex.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_text.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_textile.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_toml.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_twig.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_typescript.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_vala.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_vbscript.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_velocity.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_verilog.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_vhdl.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_xml.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_xquery.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/_test/tokens_yaml.json
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/abap.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/abap_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/abc.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/abc_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/actionscript.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/actionscript_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/ada.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/ada_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/apache_conf.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/apache_conf_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/applescript.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/applescript_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/asciidoc.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/asciidoc_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/assembly_x86.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/assembly_x86_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/autohotkey.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/autohotkey_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/batchfile.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/batchfile_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/behaviour.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/behaviour/behaviour_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/behaviour/css.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/behaviour/cstyle.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/behaviour/html.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/behaviour/xml.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/behaviour/xquery.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/c9search.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/c9search_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/c_cpp.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/c_cpp_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/cirru.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/cirru_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/clojure.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/clojure_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/cobol.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/cobol_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/coffee.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/coffee/coffee-script.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/coffee/helpers.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/coffee/lexer.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/coffee/nodes.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/coffee/parser.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/coffee/parser_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/coffee/rewriter.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/coffee/scope.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/coffee_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/coffee_worker.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/coldfusion.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/coldfusion_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/coldfusion_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/csharp.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/csharp_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/css.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/css/csslint.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/css_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/css_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/css_worker.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/css_worker_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/curly.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/curly_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/d.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/d_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/dart.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/dart_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/diff.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/diff_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/django.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/doc_comment_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/dockerfile.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/dockerfile_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/dot.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/dot_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/eiffel.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/eiffel_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/ejs.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/elixir.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/elixir_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/elm.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/elm_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/erlang.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/erlang_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/folding/asciidoc.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/folding/c9search.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/folding/coffee.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/folding/coffee_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/folding/csharp.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/folding/cstyle.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/folding/cstyle_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/folding/diff.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/folding/fold_mode.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/folding/html.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/folding/html_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/folding/ini.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/folding/latex.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/folding/lua.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/folding/markdown.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/folding/mixed.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/folding/pythonic.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/folding/pythonic_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/folding/velocity.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/folding/xml.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/folding/xml_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/forth.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/forth_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/ftl.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/ftl_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/gcode.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/gcode_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/gherkin.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/gherkin_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/gitignore.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/gitignore_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/glsl.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/glsl_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/golang.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/golang_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/groovy.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/groovy_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/haml.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/haml_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/handlebars.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/handlebars_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/haskell.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/haskell_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/haxe.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/haxe_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/html.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/html/saxparser.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/html_completions.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/html_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/html_ruby.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/html_ruby_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/html_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/html_worker.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/ini.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/ini_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/io.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/io_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/jack.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/jack_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/jade.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/jade_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/java.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/java_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/javascript.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/javascript/jshint.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/javascript_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/javascript_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/javascript_worker.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/javascript_worker_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/js_regex_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/json.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/json/json_parse.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/json_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/json_worker.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/json_worker_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/jsoniq.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/jsp.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/jsp_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/jsx.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/jsx_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/julia.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/julia_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/latex.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/latex_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/less.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/less_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/liquid.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/liquid_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/lisp.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/lisp_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/livescript.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/logiql.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/logiql_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/logiql_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/lsl.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/lsl_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/lua.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/lua/luaparse.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/lua_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/lua_worker.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/luapage.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/luapage_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/lucene.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/lucene_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/makefile.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/makefile_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/markdown.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/markdown_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/mask.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/mask_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/matching_brace_outdent.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/matching_parens_outdent.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/matlab.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/matlab_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/mel.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/mel_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/mushcode.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/mushcode_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/mysql.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/mysql_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/nix.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/nix_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/objectivec.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/objectivec_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/ocaml.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/ocaml_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/pascal.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/pascal_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/perl.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/perl_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/pgsql.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/pgsql_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/php.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/php/php.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/php_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/php_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/php_worker.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/plain_text.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/plain_text_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/powershell.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/powershell_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/praat.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/praat_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/prolog.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/prolog_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/properties.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/properties_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/protobuf.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/protobuf_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/python.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/python_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/python_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/r.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/r_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/rdoc.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/rdoc_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/rhtml.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/rhtml_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/ruby.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/ruby_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/ruby_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/rust.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/rust_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/sass.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/sass_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/scad.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/scad_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/scala.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/scala_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/scheme.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/scheme_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/scss.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/scss_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/sh.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/sh_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/sjs.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/sjs_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/smarty.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/smarty_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/snippets.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/soy_template.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/soy_template_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/space.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/space_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/sql.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/sql_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/stylus.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/stylus_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/svg.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/svg_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/tcl.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/tcl_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/tex.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/tex_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/text.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/text_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/text_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/textile.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/textile_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/toml.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/toml_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/twig.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/twig_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/typescript.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/typescript_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/vala.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/vala_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/vbscript.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/vbscript_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/velocity.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/velocity_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/verilog.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/verilog_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/vhdl.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/vhdl_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/xml.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/xml/dom-parser.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/xml/dom.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/xml/sax.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/xml_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/xml_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/xml_worker.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/xquery.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/xquery/Readme.md
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/xquery/jsoniq_lexer.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/xquery/xqlint.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/xquery/xquery_lexer.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/xquery_worker.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/yaml.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mode/yaml_highlight_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/model/editor.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mouse/default_gutter_handler.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mouse/default_handlers.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mouse/dragdrop_handler.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mouse/fold_handler.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mouse/mouse_event.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mouse/mouse_handler.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mouse/mouse_handler_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/mouse/multi_select_handler.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/multi_select.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/multi_select_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/occur.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/occur_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/placeholder.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/placeholder_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/range.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/range_list.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/range_list_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/range_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/renderloop.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/requirejs/text.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/requirejs/text_build.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/scrollbar.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/search.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/search_highlight.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/search_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/selection.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/selection_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/_.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/_all_modes.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/_all_modes.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/abap.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/abap.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/abc.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/abc.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/actionscript.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/actionscript.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/ada.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/ada.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/all_modes.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/all_modes.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/apache.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/apache_conf.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/apache_conf.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/applescript.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/applescript.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/asciidoc.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/asciidoc.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/assembly_x86.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/assembly_x86.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/autohotkey.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/autohotkey.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/autoit.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/batchfile.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/batchfile.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/c.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/c9search.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/c9search.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/c_cpp.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/c_cpp.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/chef.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/cirru.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/cirru.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/clojure.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/clojure.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/cmake.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/cobol.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/cobol.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/coffee.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/coffee.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/coldfusion.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/coldfusion.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/cs.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/csharp.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/csharp.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/css.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/css.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/curly.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/curly.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/d.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/d.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/dart.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/dart.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/diff.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/diff.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/django.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/django.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/dockerfile.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/dockerfile.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/dot.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/dot.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/dummy.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/dummy_syntax.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/eiffel.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/eiffel.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/ejs.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/ejs.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/elixir.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/elixir.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/elm.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/elm.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/erlang.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/erlang.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/eruby.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/falcon.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/forth.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/forth.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/ftl.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/ftl.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/gcode.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/gcode.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/gherkin.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/gherkin.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/gitignore.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/gitignore.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/glsl.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/glsl.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/go.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/golang.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/golang.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/groovy.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/groovy.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/haml.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/haml.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/handlebars.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/handlebars.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/haskell.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/haskell.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/haxe.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/haxe.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/html.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/html.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/html_ruby.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/html_ruby.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/htmldjango.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/htmltornado.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/ini.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/ini.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/io.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/io.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/jack.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/jack.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/jade.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/jade.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/java.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/java.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/javascript-jquery.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/javascript.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/javascript.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/json.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/json.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/jsoniq.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/jsoniq.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/jsp.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/jsp.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/jsx.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/jsx.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/julia.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/julia.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/latex.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/latex.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/ledger.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/less.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/less.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/liquid.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/liquid.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/lisp.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/lisp.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/livescript.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/livescript.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/logiql.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/logiql.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/lsl.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/lsl.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/lua.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/lua.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/luapage.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/luapage.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/lucene.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/lucene.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/makefile.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/makefile.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/mako.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/markdown.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/markdown.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/matlab.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/matlab.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/mel.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/mel.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/mushcode.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/mushcode.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/mushcode_high_rules.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/mushcode_high_rules.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/mysql.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/mysql.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/nix.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/nix.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/objc.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/objectivec.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/objectivec.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/ocaml.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/ocaml.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/pascal.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/pascal.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/perl.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/perl.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/pgsql.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/pgsql.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/php.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/php.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/plain_text.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/plain_text.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/powershell.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/powershell.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/praat.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/praat.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/prolog.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/prolog.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/properties.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/properties.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/protobuf.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/protobuf.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/python.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/python.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/r.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/r.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/rdoc.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/rdoc.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/rhtml.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/rhtml.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/rst.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/ruby.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/ruby.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/rust.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/rust.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/sass.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/sass.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/scad.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/scad.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/scala.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/scala.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/scheme.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/scheme.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/scss.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/scss.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/sh.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/sh.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/sjs.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/sjs.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/smarty.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/smarty.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/snippets.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/snippets.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/soy_template.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/soy_template.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/space.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/space.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/sql.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/sql.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/stylus.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/stylus.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/svg.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/svg.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/tcl.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/tcl.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/tex.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/tex.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/text.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/text.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/textile.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/textile.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/tmsnippet.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/toml.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/toml.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/twig.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/twig.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/typescript.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/typescript.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/vala.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/vala.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/vbscript.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/vbscript.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/velocity.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/velocity.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/verilog.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/verilog.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/vhdl.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/vhdl.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/xml.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/xml.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/xquery.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/xquery.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/xslt.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/yaml.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets/yaml.snippets
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/snippets_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/split.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/test/all.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/test/all_browser.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/test/assertions.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/test/asyncjs/assert.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/test/asyncjs/async.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/test/asyncjs/index.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/test/asyncjs/test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/test/asyncjs/utils.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/test/benchmark.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/test/mockdom.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/test/mockrenderer.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/test/tests.html
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/ambiance.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/ambiance.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/chaos.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/chaos.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/chrome.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/chrome.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/clouds.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/clouds.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/clouds_midnight.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/clouds_midnight.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/cobalt.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/cobalt.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/crimson_editor.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/crimson_editor.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/dawn.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/dawn.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/dreamweaver.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/dreamweaver.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/eclipse.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/eclipse.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/github.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/github.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/idle_fingers.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/idle_fingers.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/katzenmilch.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/katzenmilch.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/kr_theme.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/kr_theme.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/kuroir.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/kuroir.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/merbivore.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/merbivore.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/merbivore_soft.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/merbivore_soft.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/mono_industrial.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/mono_industrial.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/monokai.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/monokai.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/pastel_on_dark.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/pastel_on_dark.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/solarized_dark.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/solarized_dark.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/solarized_light.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/solarized_light.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/terminal.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/terminal.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/textmate.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/textmate.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/tomorrow.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/tomorrow.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/tomorrow_night.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/tomorrow_night.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/tomorrow_night_blue.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/tomorrow_night_blue.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/tomorrow_night_bright.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/tomorrow_night_bright.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/tomorrow_night_eighties.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/tomorrow_night_eighties.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/twilight.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/twilight.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/vibrant_ink.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/vibrant_ink.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/xcode.css
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/theme/xcode.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/token_iterator.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/token_iterator_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/tokenizer.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/tokenizer_dev.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/tokenizer_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/tooltip.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/undomanager.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/unicode.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/virtual_renderer.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/virtual_renderer_test.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/worker/mirror.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/worker/worker.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/worker/worker_client.js
-    lib/gollum/public/gollum/livepreview/js/ace/lib/ace/worker/worker_test.js
-    lib/gollum/public/gollum/livepreview/js/jquery.ba-throttle-debounce.min.js
-    lib/gollum/public/gollum/livepreview/js/livepreview.js
-    lib/gollum/public/gollum/livepreview/js/md_sundown.js
-    lib/gollum/public/gollum/livepreview/js/requirejs.min.js
-    lib/gollum/public/gollum/livepreview/js/sundown.js
-    lib/gollum/public/gollum/livepreview/licenses/ace/LICENSE.txt
-    lib/gollum/public/gollum/livepreview/licenses/bootstraponline_gollum/LICENSE.txt
-    lib/gollum/public/gollum/livepreview/licenses/debounce/LICENSE-MIT.txt
-    lib/gollum/public/gollum/livepreview/licenses/gollum/LICENSE.txt
-    lib/gollum/public/gollum/livepreview/licenses/jquery/MIT-LICENSE.txt
-    lib/gollum/public/gollum/livepreview/licenses/licenses.txt
-    lib/gollum/public/gollum/livepreview/licenses/notepages/LICENSE.txt
-    lib/gollum/public/gollum/livepreview/licenses/requirejs/LICENSE.txt
-    lib/gollum/public/gollum/livepreview/licenses/retina_display_icon_set/by_sa_3.0_unported_legalcode.txt
-    lib/gollum/public/gollum/livepreview/licenses/sizzle/LICENSE.txt
-    lib/gollum/public/gollum/livepreview/licenses/sundown/sundown.txt
-    lib/gollum/public/gollum/livepreview/licenses/templarian_windowsicons/license.txt
-    lib/gollum/public/gollum/livepreview/readme.md
-    lib/gollum/templates/compare.mustache
-    lib/gollum/templates/create.mustache
-    lib/gollum/templates/edit.mustache
-    lib/gollum/templates/editor.mustache
-    lib/gollum/templates/error.mustache
-    lib/gollum/templates/file_view.mustache
-    lib/gollum/templates/history.mustache
-    lib/gollum/templates/history_authors/gravatar.mustache
-    lib/gollum/templates/history_authors/identicon.mustache
-    lib/gollum/templates/history_authors/none.mustache
-    lib/gollum/templates/latest_changes.mustache
-    lib/gollum/templates/layout.mustache
-    lib/gollum/templates/livepreview.mustache
-    lib/gollum/templates/page.mustache
-    lib/gollum/templates/pages.mustache
-    lib/gollum/templates/search.mustache
-    lib/gollum/templates/searchbar.mustache
-    lib/gollum/uri_encode_component.rb
-    lib/gollum/views/compare.rb
-    lib/gollum/views/create.rb
-    lib/gollum/views/edit.rb
-    lib/gollum/views/editable.rb
-    lib/gollum/views/error.rb
-    lib/gollum/views/file_view.rb
-    lib/gollum/views/has_page.rb
-    lib/gollum/views/history.rb
-    lib/gollum/views/latest_changes.rb
-    lib/gollum/views/layout.rb
-    lib/gollum/views/livepreview.rb
-    lib/gollum/views/page.rb
-    lib/gollum/views/pages.rb
-    lib/gollum/views/search.rb
-    licenses/css_tree_menu_thecssninja/license.txt
-    licenses/licenses.txt
-    licenses/unity_asset_pool/COPYRIGHT
-  ]
-  # = MANIFEST =
+      context 'when plugin registered fallback locale' do
+    before do
+      DiscoursePluginRegistry.register_locale('es_MX', fallbackLocale: 'es')
+      DiscoursePluginRegistry.register_locale('de_AT', fallbackLocale: 'de')
+    end
+    
+      describe '.get' do
+    before do
+      settings.setting(:title, 'Discourse v1')
+      settings.refresh!
+    end
+    
+      describe '#scenario_label' do
+    it 'creates a scenario label with the scenario name' do
+      expect(scenario_label(scenario)).to eq(
+        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Scene</span>'
+      )
+    end
+    
+          context '#run_workers' do
+        it 'runs all the workers' do
+          mock.instance_of(HuginnScheduler).run!
+          mock.instance_of(DelayedJobWorker).run!
+          @agent_runner.send(:run_workers)
+        end
+    
+        it 'should work' do
+      LiquidMigrator.convert_all_agent_options(@agent)
+      expect(@agent.reload.options).to eq({'auth_token' => 'token', 'color' => 'yellow', 'notify' => false, 'room_name' => 'test', 'username' => '{{username}}', 'message' => '{{message}}'})
+    end
+    
+          it 'does not write the headers when with_header is false' do
+        @checker.options['with_header'] = 'false'
+        event = Event.new(payload: { 'data' => {'key' => 'value', 'key2' => 'value2', 'key3' => 'value3'} })
+        expect { @checker.receive([event])}.to change(Event, :count).by(1)
+        expect(Event.last.payload).to eq('data' => '\'value\',\'value2\',\'value3\'\n')
+      end
+    
+    
+    {        # Start a new thread and pass the client connection
+        # as the input and output pipe.  Client's are expected
+        # to implement the Stream interface.
+        conn_threads << framework.threads.spawn('BindUdpHandlerSession', false, client) { |client_copy|
+          begin
+            handle_connection(client_copy, opts)
+          rescue
+            elog('Exception raised from BindUdp.handle_connection: #{$!}')
+          end
+        }
+      else
+        wlog('No connection received before the handler completed')
+      end
+    }
+  end
+    
+        # PHP escapes quotes by default with magic_quotes_gpc, so we use some
+    # tricks to get around using them.
+    #
+    # The raw, unquoted base64 without the terminating equals works because
+    # PHP treats it like a string.  There are, however, a couple of caveats
+    # because first, PHP tries to parse the bare string as a constant.
+    # Because of this, the string is limited to things that can be
+    # identifiers, i.e., things that start with [a-zA-Z] and contain only
+    # [a-zA-Z0-9_].  Also, for payloads that encode to more than 998
+    # characters, only part of the payload gets unencoded on the victim,
+    # presumably due to a limitation in PHP identifier name lengths, so we
+    # break the encoded payload into roughly 900-byte chunks.
+    #
+    # https://wiki.php.net/rfc/deprecate-bareword-strings
+    
+      # Run Method for when run command is issued
+  def run
+    unless is_root?
+      fail_with(Failure::BadConfig, 'Insufficient Privileges: must be running as root to dump the hashes')
+    end
+    
+      # List of known values and models
+  def devices_list
+    known_devices = {
+        :'AZ-D140W'=>
+            {:name=>'Azmoon', :model=>'AZ-D140W', :values=>[
+                [107367693, 13]
+            ]},
+        :'BiPAC 5102S'=>
+            {:name=>'Billion', :model=>'BiPAC 5102S', :values=>[
+                [107369694, 13]
+            ]},
+        :'BiPAC 5200'=>
+            {:name=>'Billion', :model=>'BiPAC 5200', :values=>[
+                [107369545, 9],
+                [107371218, 21]
+            ]},
+        :'BiPAC 5200A'=>
+            {:name=>'Billion', :model=>'BiPAC 5200A', :values=>[
+                [107366366, 25],
+                [107371453, 9]
+            ]},
+        :'BiPAC 5200GR4'=>
+            {:name=>'Billion', :model=>'BiPAC 5200GR4', :values=>[
+                [107367690, 21]
+            ]},
+        :'BiPAC 5200SRD'=>
+            {:name=>'Billion', :model=>'BiPAC 5200SRD', :values=>[
+                [107368270, 1],
+                [107371378, 3],
+                [107371218, 13]
+            ]},
+        :'DSL-2520U'=>
+            {:name=>'D-Link', :model=>'DSL-2520U', :values=>[
+                [107368902, 25]
+            ]},
+        :'DSL-2600U'=>
+            {:name=>'D-Link', :model=>'DSL-2600U', :values=>[
+                [107366496, 13],
+                [107360133, 20]
+            ]},
+        :'TD-8616'=>
+            {:name=> 'TP-Link', :model=>'TD-8616', :values=>[
+                [107371483, 21],
+                [107369790, 17],
+                [107371161, 1],
+                [107371426, 17],
+                [107370211, 5],
+            ]},
+        :'TD-8817'=>
+            {:name=> 'TP-Link', :model=>'TD-8817', :values=>[
+                [107369790, 17],
+                [107369788, 1],
+                [107369522, 25],
+                [107369316, 21],
+                [107369321, 9],
+                [107351277, 20]
+            ]},
+        :'TD-8820'=>
+            {:name=>'TP-Link', :model=>'TD-8820', :values=>[
+                [107369768, 17]
+            ]},
+        :'TD-8840T'=>
+            {:name=>'TP-Link', :model=>'TD-8840T', :values=>[
+                [107369845, 5],
+                [107369790, 17],
+                [107369570, 1],
+                [107369766, 1],
+                [107369764, 5],
+                [107369688, 17]
+            ]},
+        :'TD-W8101G'=>
+            {:name=>'TP-Link', :model=>'TD-W8101G', :values=>[
+                [107367772, 37],
+                [107367808, 21],
+                [107367751, 21],
+                [107367749, 13],
+                [107367765, 25],
+                [107367052, 25],
+                [107365835, 1]
+            ]},
+        :'TD-W8151N'=>
+            {:name=>'TP-Link', :model=>'TD-W8151N', :values=>[
+                [107353867, 24]
+            ]},
+        :'TD-W8901G'=>
+            {:name=> 'TP-Link', :model=>'TD-W8901G', :values=>[
+                [107367787, 21],
+                [107368013, 5],
+                [107367854, 9],
+                [107367751, 21],
+                [107367749, 13],
+                [107367765, 25],
+                [107367682, 21],
+                [107365835, 1],
+                [107367052, 25]
+            ]},
+        :'TD-W8901GB'=>
+            {:name=>'TP-Link', :model=>'TD-W8901GB', :values=>[
+                [107367756, 13],
+                [107369393, 21]
+            ]},
+        :'TD-W8901N'=>
+            {:name=>'TP-Link', :model=>'TD-W8901N', :values=>[
+                [107353880, 0]
+            ]},
+        :'TD-W8951ND'=>
+            {:name=>'TP-Link', :model=>'TD-W8951ND', :values=>[
+                [107369839, 25],
+                [107369876, 13],
+                [107366743, 21],
+                [107364759, 25],
+                [107364759, 13],
+                [107364760, 21]
+            ]},
+        :'TD-W8961NB'=>
+            {:name=>'TP-Link', :model=>'TD-W8961NB', :values=>[
+                [107369844, 17],
+                [107367629, 21],
+                [107366421, 13]
+            ]},
+        :'TD-W8961ND'=>
+            {:name=>'TP-Link', :model=>'TD-W8961ND', :values=>[
+                [107369839, 25],
+                [107369876, 13],
+                [107364732, 25],
+                [107364771, 37],
+                [107364762, 29],
+                [107353880, 0],
+                [107353414, 36]
+            ]},
+        :'P-660R-T3 v3'=> #This value works on devices with model P-660R-T3 v3 not P-660R-T3 v3s
+            {:name=>'ZyXEL', :model=>'P-660R-T3', :values=>[
+                [107369567, 21]
+            ]},
+        :'P-660RU-T3 v2'=> #Couldn't verify this
+            {:name=>'ZyXEL', :model=>'P-660R-T3', :values=>[
+                [107369567, 21]
+            ]},
+        :'ALL'=> # Used when `ForceAttempt` === true
+            {:name=>'Unknown', :model=>'Forced', :values=>[]
+            },
+    }
+    # collect all known cookies for a brute force option
+    all_cookies = []
+    known_devices.collect { |_, v| v[:values] }.each do |list|
+      all_cookies += list
+    end
+    known_devices[:'ALL'][:values] = all_cookies.uniq
+    known_devices
+  end
+    
+        uuid ||= generate_payload_uuid
+    uri  = generate_uri_uuid(sum, uuid, len)
+    record_payload_uuid_url(uuid, uri)
+    
+    def BigDecimal.new(*args, **kwargs)
+  return BigDecimal(*args) if kwargs.empty?
+  BigDecimal(*args, **kwargs)
+end
+# Remove bigdecimal warning - end
+    
+      def webcam_get_frame(quality)
+    request = Packet.create_request('webcam_get_frame')
+    request.add_tlv(TLV_TYPE_WEBCAM_QUALITY, quality)
+    response = client.send_request(request)
+    response.get_tlv(TLV_TYPE_WEBCAM_IMAGE).value
+  end
+    
+      #
+  # Invoke the kerberos ticket listing functionality on the target machine.
+  #
+  def cmd_kerberos_ticket_list(*args)
+    if args.include?('-h')
+      kerberos_ticket_list_usage
+      return
+    end
+    
+        def test_send_leak_symbol_no_optimization
+      assert_no_immortal_symbol_in_method_missing('sym slow') do |name|
+        42.method(:send).call(name.to_sym)
+      end
+    end
+    
+        def call(*args)
+      import = @proto.split('')
+      args.each_with_index do |x, i|
+        args[i], = [x == 0 ? nil : x].pack('p').unpack(POINTER_TYPE) if import[i] == 'S'
+        args[i], = [x].pack('I').unpack('i') if import[i] == 'I'
+      end
+      ret, = @func.call(*args)
+      return ret || 0
+    end
+  end
+    
+      it 'returns nil at the end of the stream' do
+    gz = Zlib::GzipReader.new @io
+    gz.read
+    pos = gz.pos
+    gz.getc.should be_nil
+    gz.pos.should == pos
+  end
+    
+            expect(new_source).to eq(<<~RUBY)
+          some_method #{open}
+    
+          it 'registers an offense if no method is defined' do
+        src = <<~RUBY
+          class << A
+            #{modifier}
+          end
+        RUBY
+        inspect_source(src)
+        expect(cop.offenses.size).to eq(1)
+      end
+    
+          it 'does auto-correction' do
+        corrected = autocorrect_source(source)
+        expect(corrected).to eq(<<~RUBY)
+          foo def a
+            a1
+          end
+    
+          it 'corrects each to for and uses _ as the item' do
+        new_source = autocorrect_source(<<~RUBY)
+          def func
+            [1, 2, 3].each do
+              something
+            end
+          end
+        RUBY
+    
+    
+    {      # Checks whether the `hash` literal is delimited by curly braces.
+      #
+      # @return [Boolean] whether the `hash` literal is enclosed in braces
+      def braces?
+        loc.end&.is?('}')
+      end
+    end
+  end
+end
+
+    
+          # This is used for duck typing with `pair` nodes which also appear as
+      # `hash` elements.
+      #
+      # @return [false]
+      def hash_rocket?
+        false
+      end
+    
+        # returns the formatted price for the specified variant as a difference from product price
+    def variant_price_diff(variant)
+      variant_amount = variant.amount_in(current_currency)
+      product_amount = variant.product.amount_in(current_currency)
+      return if variant_amount == product_amount || product_amount.nil?
+    
+            def scope
+          if params[:product_id]
+            Spree::Product.friendly.find(params[:product_id])
+          elsif params[:variant_id]
+            Spree::Variant.find(params[:variant_id])
+          end
+        end
+      end
+    end
+  end
+end
+
+    
+            def destroy
+          @option_value = scope.accessible_by(current_ability, :destroy).find(params[:id])
+          @option_value.destroy
+          render plain: nil, status: 204
+        end
+    
+            def show
+          @state = scope.find(params[:id])
+          respond_with(@state)
+        end
+    
+            def create
+          authorize! :create, Spree.user_class
+          @user = Spree.user_class.new(user_params)
+          if @user.save
+            respond_with(@user, status: 201, default_template: :show)
+          else
+            invalid_resource!(@user)
+          end
+        end
+    
+                def scope
+              spree_current_user.credit_cards.accessible_by(current_ability, :show)
+            end
+          end
+        end
+      end
+    end
+  end
+end
+
+    
+        FileUtils::mv(temporary_target_path, target_path)
+  end
+    
+      option '--identifier-prefix', 'IDENTIFIER_PREFIX',
+    'Reverse domain prefix prepended to package identifier, ' \
+    'ie. 'org.great.my'. If this is omitted, the identifer ' \
+    'will be the package name.'
+  option '--payload-free', :flag, 'Define no payload, assumes use of script options.',
+    :default => false
+  option '--ownership', 'OWNERSHIP',
+    '--ownership option passed to pkgbuild. Defaults to 'recommended'. ' \
+    'See pkgbuild(1).', :default => 'recommended' do |value|
+    if !OWNERSHIP_OPTIONS.include?(value)
+      raise ArgumentError, 'osxpkg-ownership value of '#{value}' is invalid. ' \
+        'Must be one of #{OWNERSHIP_OPTIONS.join(', ')}'
+    end
+    value
+  end
+    
+      def default_output
+    v = version
+    v = '#{epoch}:#{v}' if epoch
+    if iteration
+      '#{name}_#{v}-#{iteration}_#{architecture}.#{type}'
+    else
+      '#{name}_#{v}_#{architecture}.#{type}'
+    end
+  end # def default_output
+    
+        # Remove the stuff we don't want
+    delete_these = ['.depdb', '.depdblock', '.filemap', '.lock', '.channel', 'cache', 'temp', 'download', '.channels', '.registry']
+    Find.find(staging_path) do |path|
+      if File.file?(path)
+        logger.info('replacing staging_path in file', :replace_in => path, :staging_path => staging_path)
+        begin
+          content = File.read(path).gsub(/#{Regexp.escape(staging_path)}/, '')
+          File.write(path, content)
+        rescue ArgumentError => e
+          logger.warn('error replacing staging_path in file', :replace_in => path, :error => e)
+        end
+      end
+      FileUtils.rm_r(path) if delete_these.include?(File.basename(path))
+    end
+    
+        if attributes[:python_pip].nil?
+      # no pip, use easy_install
+      logger.debug('no pip, defaulting to easy_install', :easy_install => attributes[:python_easyinstall])
+      safesystem(attributes[:python_easyinstall], '-i',
+                 attributes[:python_pypi], '--editable', '-U',
+                 '--build-directory', target, want_pkg)
+    else
+      logger.debug('using pip', :pip => attributes[:python_pip])
+      # TODO: Support older versions of pip
+      safesystem(attributes[:python_pip], 'download', '--no-clean', '--no-deps', '--no-binary', ':all:', '-i', attributes[:python_pypi], '--build', target,  want_pkg)
+    end
