@@ -1,296 +1,304 @@
 
         
-        
-    {  Alarm alarm_;
-  bool signal_client_;
-  std::mutex mu_;
-  std::unique_ptr<grpc::string> host_;
+        	Ref<StyleBox> style = get_stylebox('panel', 'PopupMenu');
+	ms += style->get_minimum_size();
+	main->set_margin(MARGIN_LEFT, style->get_margin(MARGIN_LEFT));
+	main->set_margin(MARGIN_RIGHT, -style->get_margin(MARGIN_RIGHT));
+	main->set_margin(MARGIN_TOP, style->get_margin(MARGIN_TOP));
+	main->set_margin(MARGIN_BOTTOM, -style->get_margin(MARGIN_BOTTOM));
+    
+    	Ref<Mesh> get_debug_mesh();
+    
+    public:
+	virtual String get_name() const { return 'Audio'; }
+	bool has_main_screen() const { return false; }
+	virtual void edit(Object *p_object);
+	virtual bool handles(Object *p_object) const;
+	virtual void make_visible(bool p_visible);
+    
+    void GDAPI godot_pool_real_array_new(godot_pool_real_array *r_dest) {
+	PoolVector<godot_real> *dest = (PoolVector<godot_real> *)r_dest;
+	memnew_placement(dest, PoolVector<godot_real>);
+}
+    
+    const void GDAPI *godot_string_name_get_data_unique_pointer(const godot_string_name *p_self) {
+	const StringName *self = (const StringName *)p_self;
+	return self->data_unique_pointer();
+}
+    
+    
+    {	return 0;
+}
+    
+    // Return a new iterator that converts internal keys (yielded by
+// '*internal_iter') that were live at the specified 'sequence' number
+// into appropriate user keys.
+Iterator* NewDBIterator(DBImpl* db, const Comparator* user_key_comparator,
+                        Iterator* internal_iter, SequenceNumber sequence,
+                        uint32_t seed);
+    
+    // Return the name of the sstable with the specified number
+// in the db named by 'dbname'.  The result will be prefixed with
+// 'dbname'.
+std::string TableFileName(const std::string& dbname, uint64_t number);
+    
+      bool CanAppend() {
+    WritableFile* tmp;
+    Status s = env_->NewAppendableFile(CurrentFileName(dbname_), &tmp);
+    delete tmp;
+    if (s.IsNotSupportedError()) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+    
+    TableCache::TableCache(const std::string& dbname, const Options& options,
+                       int entries)
+    : env_(options.env),
+      dbname_(dbname),
+      options_(options),
+      cache_(NewLRUCache(entries)) {}
+    
+      // The name of the comparator.  Used to check for comparator
+  // mismatches (i.e., a DB created with one comparator is
+  // accessed using a different comparator.
+  //
+  // The client of this package should switch to a new name whenever
+  // the comparator implementation changes in a way that will cause
+  // the relative ordering of any two keys to change.
+  //
+  // Names starting with 'leveldb.' are reserved and should not be used
+  // by any clients of this package.
+  virtual const char* Name() const = 0;
+    
+      // Arrange to run '(*function)(arg)' once in a background thread.
+  //
+  // 'function' may run in an unspecified thread.  Multiple functions
+  // added to the same Env may run concurrently in different threads.
+  // I.e., the caller may not assume that background work items are
+  // serialized.
+  virtual void Schedule(void (*function)(void* arg), void* arg) = 0;
+    
+      // Return the name of this policy.  Note that if the filter encoding
+  // changes in an incompatible way, the name returned by this method
+  // must be changed.  Otherwise, old incompatible filters may be
+  // passed to methods of this type.
+  virtual const char* Name() const = 0;
+    
+    inline bool operator!=(const Slice& x, const Slice& y) { return !(x == y); }
+    
+    #include 'port/thread_annotations.h'
+    
+    #include 'table/filter_block.h'
+    
+    Status ReadBlock(RandomAccessFile* file, const ReadOptions& options,
+                 const BlockHandle& handle, BlockContents* result) {
+  result->data = Slice();
+  result->cachable = false;
+  result->heap_allocated = false;
+    }
+    
+    TEST(Coding, Varint64Overflow) {
+  uint64_t result;
+  std::string input('\x81\x82\x83\x84\x85\x81\x82\x83\x84\x85\x11');
+  ASSERT_TRUE(GetVarint64Ptr(input.data(), input.data() + input.size(),
+                             &result) == nullptr);
+}
+    
+        NDLBuilderImpl(ComputationNetworkPtr computationNetwork)
+    {
+        m_computationNetwork = computationNetwork;
+        m_nodeEvaluator = new NDLNodeEvaluatorImpl<ElemType>(m_computationNetwork);
+    }
+    
+            std::string name = node->GetName();
+        // if we are calling a macro make a new copy of it and execute that instead (macro expansion)
+        // we do this so the evalValues in the macros will be valid regardless of number of instantiations
+        NDLNode<ElemType>* newNode = new NDLNode<ElemType>(name, node->GetValue(), this, ndlTypeMacroCall);
+        NDLScript<ElemType>* newScript = new NDLScript<ElemType>(*node->GetScript());
+        newNode->SetScript(newScript);
+        newNode->SetParamMacro(node->GetParamMacro());
+    
+    template <class ConfigRecordType, typename ElemType>
+ComputationNetworkPtr GetModelFromConfig(const ConfigRecordType& config, const wstring& outputNodeNamesConfig, vector<wstring>& outputNodeNamesVector)
+{
+    DEVICEID_TYPE deviceId = DeviceFromConfig(config);
+    }
+    
+        // determine which epoch to start with, including recovering a checkpoint if any and 'makeMode' enabled
+    int startEpoch = optimizer->DetermineStartEpoch(makeMode);
+    if (startEpoch == optimizer->GetMaxEpochs())
+    {
+        LOGPRINTF(stderr, 'No further training is necessary.\n');
+        return;
+    }
+    
+        bool progressTracing = config(L'progressTracing', false);
+    size_t fullTotalMaxEpochs = 1; // BUGBUG: BS does not allow me to read out the max epochs parameters, as that would instantiate and thus execute the objects
+    
+        // TODO: can these be changed to ComputationNodeBasePtr?
+    // TODO: move into a separate header/class, to decouple from this class which would then be only used by old NDL and SimpleNetworkBuilder.
+    static ComputationNodePtr NewStandardNode(const std::wstring& nodeType, DEVICEID_TYPE deviceId, const wstring& name);
+    static ComputationNodePtr NewNode(const std::wstring& nodeType, DEVICEID_TYPE deviceId, const wstring& name);
+    template <class ElemType2>
+    static ComputationNodePtr NewNode2(const std::wstring& nodeType, DEVICEID_TYPE deviceId, const wstring& name);
+    
+        // Handles transform accessing for all derive classes. Derived objects still need to
+    // implement rest of ITransformerNode interface.
+    const SpaceTransform& GetTransformForInput(size_t inputIndex)
+    {
+        if (m_transforms.empty())
+            LogicError('No transforms present on GetTransformForInput call. Maybe SetNumberOfInputs has not been called?');
+    }
+    
+        void Train(shared_ptr<ComputationNetwork> net, DEVICEID_TYPE deviceId,
+               IDataReader* trainSetDataReader,
+               IDataReader* validationSetDataReader, int startEpoch, bool loadNetworkFromCheckpoint);
+    void Adapt(wstring origModelFileName, wstring refNodeName,
+               IDataReader* trainSetDataReader,
+               IDataReader* validationSetDataReader,
+               const DEVICEID_TYPE deviceID, const bool makeMode = true);
+    
+        for (size_t i = 0; i < labelDim; i++)
+        result[i] = (int)(outputBuffer[0].m_buffer[i] * scaler);
+    
+        // Prepare aggregator.
+    std::shared_ptr<IDistGradAggregator<ElemType>> distGradAgg = GetSimpleDistGradAggregator<ElemType>(
+        mpi,
+        false /*useAsyncAggregation*/,
+        net->GetDeviceId(),
+        0 /*syncStatsTrace*/,
+        packThresholdSizeInBytes);
+    
+        // main way of reading this out: compute the actual average criterion value from the aggregate and sample count
+    double Average() const { return second > 0 ? first / second : 0.0; } // compute the epoch-average
+    
+    
+    {    LabelScopeKind kind;
+    int id;
+  };
+    
+          tmp = get_node(fault->children, 'detail');
+      if (tmp != nullptr) {
+        details = master_to_zval(encodePtr(), tmp);
+      }
+    } else {
+      tmp = get_node(fault->children, 'Code');
+      if (tmp != nullptr && tmp->children != nullptr) {
+        tmp = get_node(tmp->children, 'Value');
+        if (tmp != nullptr && tmp->children != nullptr) {
+          faultcode = (char*)tmp->children->content;
+        }
+      }
+    
+    template<class V, bool case_sensitive, class ExtraType = int32_t>
+struct FixedStringMap {
+  explicit FixedStringMap(int num) : m_table(nullptr) { init(num); }
+  FixedStringMap() : m_mask(0), m_table(nullptr) {}
+  ~FixedStringMap() { clear(); }
+    }
+    
+    static entity_table_t ent_uni_338_402[] = {
+  /* 338 (0x0152) */
+  'OElig', 'oelig', nullptr, nullptr, nullptr, nullptr,
+  nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+  /* 352 (0x0160) */
+  'Scaron', 'scaron', nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+  nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+  nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+  /* 376 (0x0178) */
+  'Yuml', nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+  nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+  nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+  /* 400 (0x0190) */
+  nullptr, nullptr, 'fnof'
 };
     
-    // TODO(ctiller): leaked objects in this test
-TEST_P(ShutdownTest, ShutdownTest) {
-  ResetStub();
-    }
+      void wait();
+  bool wait(long seconds); // false if timed out
+  bool wait(long seconds, long long nanosecs); // false if timed out
+  void notify();
+  void notifyAll();
     
-    static void async_connect_unlock_and_cleanup(async_connect* ac,
-                                             grpc_winsocket* socket) {
-  int done = (--ac->refs == 0);
-  gpr_mu_unlock(&ac->mu);
-  if (done) {
-    grpc_channel_args_destroy(ac->channel_args);
-    gpr_mu_destroy(&ac->mu);
-    gpr_free(ac->addr_name);
-    gpr_free(ac);
+    
+    {  if (m_shouldRepost) {
+    VLOG(2) << 'Reposting transaction's completed receiving header,'
+            << ' beginning partial post';
+    beginPartialPostEcho();
   }
-  if (socket != NULL) grpc_winsocket_destroy(socket);
+  if (!bufferRequest()) {
+    m_server->onRequest(shared_from_this());
+  } // otherwise we wait for EOM
 }
     
-    #include <grpc/support/atm.h>
-#include 'src/core/lib/debug/trace.h'
-#include 'src/core/lib/gpr/mpscq.h'
-#include 'src/core/lib/iomgr/exec_ctx.h'
-    
-    static inline std::shared_ptr<::grpc::Channel> CreateChannel(
-    const grpc::string& target,
-    const std::shared_ptr<ChannelCredentials>& creds) {
-  return ::grpc_impl::CreateChannelImpl(target, creds);
-}
-    
-    
-    {class SecureChannelCredentials;
-class ResourceQuota;
-}  // namespace grpc_impl
-    
-    ChannelCredentials::~ChannelCredentials() {}
-    
-      void SendSimpleClientStreaming() {
-    EchoRequest send_request;
-    EchoResponse recv_response;
-    grpc::string expected_message;
-    ClientContext cli_ctx;
-    cli_ctx.set_wait_for_ready(true);
-    send_request.set_message('Hello');
-    auto stream = stub_->RequestStream(&cli_ctx, &recv_response);
-    for (int i = 0; i < 5; i++) {
-      EXPECT_TRUE(stream->Write(send_request));
-      expected_message.append(send_request.message());
-    }
-    stream->WritesDone();
-    Status recv_status = stream->Finish();
-    EXPECT_EQ(expected_message, recv_response.message());
-    EXPECT_TRUE(recv_status.ok());
+      static const Class::Const* GetConstFor(ObjectData* obj) {
+    return Native::data<ReflectionConstHandle>(obj)->getConst();
   }
     
-        grpc::string exp = '';
-    EXPECT_TRUE(cstream->Read(&response));
-    exp.append(response.message() + ' ');
-    
-      void SendRpc(int num_rpcs) {
-    for (int i = 0; i < num_rpcs; i++) {
-      EchoRequest send_request;
-      EchoRequest recv_request;
-      EchoResponse send_response;
-      EchoResponse recv_response;
-      Status recv_status;
-    }
-    }
-    
-            // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
-        }
-    
-    // !!! GLUT/FreeGLUT IS OBSOLETE SOFTWARE. Using GLUT is not recommended unless you really miss the 90's. !!!
-// !!! If someone or something is teaching you GLUT in 2019, you are being abused. Please show some resistance. !!!
-// !!! Nowadays, prefer using GLFW or SDL instead!
-    
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
-    
-        // Setup window
-    SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
-    SDL_Window* window = SDL_CreateWindow('Dear ImGui SDL2+DirectX11 example', SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
-    SDL_SysWMinfo wmInfo;
-    SDL_VERSION(&wmInfo.version);
-    SDL_GetWindowWMInfo(window, &wmInfo);
-    HWND hwnd = (HWND)wmInfo.info.win.window;
-    
-    // Data
-static ID3D11Device*            g_pd3dDevice = NULL;
-static ID3D11DeviceContext*     g_pd3dDeviceContext = NULL;
-static IDXGISwapChain*          g_pSwapChain = NULL;
-static ID3D11RenderTargetView*  g_mainRenderTargetView = NULL;
-    
-    // InitXXX function with 'install_callbacks=true': install GLFW callbacks. They will call user's previously installed callbacks, if any.
-// InitXXX function with 'install_callbacks=false': do not install GLFW callbacks. You will need to call them yourself from your own GLFW callbacks.
-IMGUI_IMPL_API void     ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
-
-    
-        // Our state (make them static = more or less global) as a convenience to keep the example terse.
-    static bool show_demo_window = true;
-    static bool show_another_window = false;
-    static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-    
-    // Win32 message handler
-extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-    if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
-        return true;
-    }
-    
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_IMPL_API bool     ImGui_ImplDX9_CreateDeviceObjects();
-IMGUI_IMPL_API void     ImGui_ImplDX9_InvalidateDeviceObjects();
-
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-      void Flush() override {
-    if (flush_pending_) {
-      flush_pending_ = false;
-    }
-    last_flush_micros_ = env_->NowMicros();
-  }
-    
-    /*
- * Class:     org_rocksdb_CompactionJobInfo
- * Method:    compactionReason
- * Signature: (J)B
- */
-jbyte Java_org_rocksdb_CompactionJobInfo_compactionReason(
-    JNIEnv*, jclass, jlong jhandle) {
-  auto* compact_job_info =
-    reinterpret_cast<rocksdb::CompactionJobInfo*>(jhandle);
-  return rocksdb::CompactionReasonJni::toJavaCompactionReason(
-      compact_job_info->compaction_reason);
+    ArrayData* castObjToDict(ObjectData* obj) {
+  return castObjToHackArrImpl(
+    obj,
+    Array::CreateDict,
+    [](const Array& arr) { return arr.toDict(); },
+    [](Array& arr, ArrayIter& iter) { arr.set(iter.first(), iter.second()); },
+    'Non-iterable object to dict conversion'
+  );
 }
     
-    /*
- * Class:     org_rocksdb_CompactionOptionsFIFO
- * Method:    newCompactionOptionsFIFO
- * Signature: ()J
- */
-jlong Java_org_rocksdb_CompactionOptionsFIFO_newCompactionOptionsFIFO(
-    JNIEnv*, jclass) {
-  const auto* opt = new rocksdb::CompactionOptionsFIFO();
-  return reinterpret_cast<jlong>(opt);
+    
+    {  return m_dwarf.onDIEAtOffset(
+    GlobalOff::fromRaw(key.object_id),
+    [&](Dwarf_Die die) {
+      return genObject(
+        die,
+        state.all_objs[iter->second].name,
+        key
+      );
+    }
+  );
 }
     
-    /*
- * Class:     org_rocksdb_Env
- * Method:    getDefaultEnvInternal
- * Signature: ()J
- */
-jlong Java_org_rocksdb_Env_getDefaultEnvInternal(
-    JNIEnv*, jclass) {
-  return reinterpret_cast<jlong>(rocksdb::Env::Default());
+    
+    
+        ScopedLock lock(sg_messagequeue_map_mutex);
+    const MessageQueue_t& id = Handler2Queue(Post2Handler(_message));
+    std::map<MessageQueue_t, MessageQueueContent>::iterator pos = sg_messagequeue_map.find(id);
+    if (sg_messagequeue_map.end() == pos) return false;
+    MessageQueueContent& content = pos->second;
+    
+        template<typename T, typename C>
+    AsyncResult(const T& _func, const C& _callback, const void* _place_holder = NULL)
+        : wrapper_(new AsyncResultWrapper()) {
+#if __cplusplus >= 201103L
+        BOOST_STATIC_ASSERT(boost::is_same<typename boost::result_of<T()>::type, void>::value);
+#endif
+        wrapper_->invoke_function = _func;
+        wrapper_->callback_function = _callback;
+    }
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    unsigned int getSignal(bool isWifi) {
+    xverbose_function();
+    return (unsigned int)0;
 }
     
-    /*
- * Class:     org_rocksdb_EnvOptions
- * Method:    newEnvOptions
- * Signature: ()J
- */
-jlong Java_org_rocksdb_EnvOptions_newEnvOptions__(
-    JNIEnv*, jclass) {
-  auto *env_opt = new rocksdb::EnvOptions();
-  return reinterpret_cast<jlong>(env_opt);
-}
+        std::string ip_stack_log;
+    TLocalIPStack ip_stack = local_ipstack_detect_log(ip_stack_log);
     
-    /*
- * Class:     org_rocksdb_OptionsUtil
- * Method:    getLatestOptionsFileName
- * Signature: (Ljava/lang/String;J)Ljava/lang/String;
- */
-jstring Java_org_rocksdb_OptionsUtil_getLatestOptionsFileName(
-    JNIEnv* env, jclass /*jcls*/, jstring jdbpath, jlong jenv_handle) {
-  jboolean has_exception = JNI_FALSE;
-  auto db_path = rocksdb::JniUtil::copyStdString(env, jdbpath, &has_exception);
-  if (has_exception == JNI_TRUE) {
-    // exception occurred
-    return nullptr;
-  }
-  std::string options_file_name;
-  rocksdb::Status s = rocksdb::GetLatestOptionsFileName(
-      db_path, reinterpret_cast<rocksdb::Env*>(jenv_handle),
-      &options_file_name);
-  if (!s.ok()) {
-    // error, raise an exception
-    rocksdb::RocksDBExceptionJni::ThrowNew(env, s);
-    return nullptr;
-  } else {
-    return env->NewStringUTF(options_file_name.c_str());
-  }
-}
-
+    struct AccountInfo {
+	AccountInfo():uin(0), is_logoned(false){}
+	int64_t uin;
+	std::string username;
+	bool is_logoned;
+};
     
-    class TableFilterJniCallback : public JniCallback {
- public:
-    TableFilterJniCallback(
-        JNIEnv* env, jobject jtable_filter);
-    std::function<bool(const rocksdb::TableProperties&)> GetTableFilterFunction();
+    
+    {        if (kMobile != getNetInfo())
+            wifi_send_data_size_ += _send;
+        else
+            mobile_send_data_size_ += _send;
     }
-    
-    /*
- * Class:     org_rocksdb_ThreadStatus
- * Method:    getOperationPropertyName
- * Signature: (BI)Ljava/lang/String;
- */
-jstring Java_org_rocksdb_ThreadStatus_getOperationPropertyName(
-    JNIEnv* env, jclass, jbyte joperation_type_value, jint jindex) {
-  auto name = rocksdb::ThreadStatus::GetOperationPropertyName(
-      rocksdb::OperationTypeJni::toCppOperationType(joperation_type_value),
-      static_cast<int>(jindex));
-  return rocksdb::JniUtil::toJavaString(env, &name, true);
-}
-    
-        pt::ptree container_details;
-    s = dockerApi('/containers/' + r['id'] + '/json?stream=false',
-                  container_details);
-    if (s.ok()) {
-      r['pid'] =
-          BIGINT(container_details.get_child('State').get<pid_t>('Pid', -1));
-      r['started_at'] = container_details.get_child('State').get<std::string>(
-          'StartedAt', '');
-      r['finished_at'] = container_details.get_child('State').get<std::string>(
-          'FinishedAt', '');
-      r['privileged'] = container_details.get_child('HostConfig')
-                                .get<bool>('Privileged', false)
-                            ? INTEGER(1)
-                            : INTEGER(0);
-      r['readonly_rootfs'] = container_details.get_child('HostConfig')
-                                     .get<bool>('ReadonlyRootfs', false)
-                                 ? INTEGER(1)
-                                 : INTEGER(0);
-      r['path'] = container_details.get<std::string>('Path', '');
-    }
-    
-    bool validate_value_using_flags(const std::string& value,
-                                                      int flags) {
-  if ((flags & NonEmpty) > 0) {
-    if (value.length() == 0) {
-      return false;
-    }
-  }
-    }
-    
-    void setToBackgroundPriority() {
-  auto ret =
-      SetPriorityClass(GetCurrentProcess(), PROCESS_MODE_BACKGROUND_BEGIN);
-  if (ret != TRUE) {
-    LOG(WARNING) << 'Failed to set background process priority with '
-                 << GetLastError();
-  }
-}
-    
-        if (context.isAnyColumnUsed({'cwd', 'root', 'path', 'on_disk'})) {
-      getProcessPathInfo(proc_handle, pid, r);
-    }
-    
-      if (action->second == 'genConfig') {
-    std::map<std::string, std::string> config;
-    auto stat = genConfig(config);
-    response.push_back(config);
-    return stat;
-  } else if (action->second == 'genPack') {
-    auto name = request.find('name');
-    auto value = request.find('value');
-    if (name == request.end() || value == request.end()) {
-      return Status(1, 'Missing name or value');
-    }
-    }
-    
-    #include <osquery/config/tests/test_utils.h>
