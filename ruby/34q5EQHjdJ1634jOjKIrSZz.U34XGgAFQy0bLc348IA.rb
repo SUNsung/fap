@@ -1,181 +1,139 @@
 
         
-              def cell_prefix(status)
-        @prefixes[status]
+              def step_name(_keyword, _step_match, status, _source_indent, _background, _file_colon_line)
+        @io.print CHARS[status]
+        @io.print ' '
       end
+      # rubocop:enable Metrics/ParameterLists
     
-              new_theme_name = args.join('_')
-          theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
-          Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.' if theme.path.exist?
-    
-          private
-    
-          if existing == nil or value > existing then
-        redis.call('set', key, value)
-        redis.call('expire', key, ttl)
-        return true
-      else
-        return false
-      end
-      EOF
-    
-    module Gitlab
-  module GithubImport
-    # HTTP client for interacting with the GitHub API.
-    #
-    # This class is basically a fancy wrapped around Octokit while adding some
-    # functionality to deal with rate limiting and parallel imports. Usage is
-    # mostly the same as Octokit, for example:
-    #
-    #     client = GithubImport::Client.new('hunter2')
-    #
-    #     client.labels.each do |label|
-    #       puts label.name
-    #     end
-    class Client
-      include ::Gitlab::Utils::StrongMemoize
-    
-            def representation_class
-          Representation::Issue
-        end
-    
-          # The class to use for importing objects when importing them sequentially.
-      def importer_class
-        raise NotImplementedError
-      end
-    
-            expose_attribute :id, :login
-    
-      it 'allows to click on on the agent name in select2 tags' do
-    visit new_agent_path
-    select_agent_type('Website Agent scrapes')
-    select2('SF Weather', from: 'Sources')
-    click_on 'SF Weather'
-    expect(page).to have_content 'Editing your WeatherAgent'
+      def test_continuation
+    require 'continuation'
+    c = Bug9523.new
+    assert_raise_with_message(RuntimeError, /Marshal\.dump reentered at marshal_dump/) do
+      Marshal.dump(c)
+      GC.start
+      1000.times {'x'*1000}
+      GC.start
+      c.cc.call
+    end
   end
     
-      it 'imports a scenario that does not exist yet' do
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
-    click_on 'Start Import'
-    expect(page).to have_text('This scenario has a few agents to get you started. Feel free to change them or delete them as you see fit!')
-    expect(page).not_to have_text('This Scenario already exists in your system.')
-    check('I confirm that I want to import these Agents.')
-    click_on 'Finish Import'
-    expect(page).to have_text('Import successful!')
+      # This is especially important for JRuby, since eof? there
+  # is more than just a simple accessor.
+  it 'does not affect the reading data' do
+    gz = Zlib::GzipReader.new @io
+    0.upto(9) do |i|
+      gz.eof?.should be_false
+      gz.read(1).should == @data[i, 1]
+    end
+    gz.eof?.should be_true
+    gz.read().should == ''
+    gz.eof?.should be_true
   end
     
-      describe '#scenario_label' do
-    it 'creates a scenario label with the scenario name' do
-      expect(scenario_label(scenario)).to eq(
-        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Scene</span>'
-      )
-    end
-    
-          describe '#generate_diff' do
-        it 'returns AgentDiff objects that include 'current' values from any agents that already exist' do
-          agent_diffs = scenario_import.agent_diffs
-          weather_agent_diff = agent_diffs[0]
-          trigger_agent_diff = agent_diffs[1]
-    
-        it 'strips leading and trailing dashes' do
-      expect(AgentsExporter.new(:name => ',foo,').filename).to eq('foo.json')
-    end
-    
-      describe 'converting escaped JSONPath strings' do
-    it 'should work' do
-      expect(LiquidMigrator.convert_string('Weather looks like <$.conditions> according to the forecast at <$.pretty_date.time>')).to eq(
-                                    'Weather looks like {{conditions}} according to the forecast at {{pretty_date.time}}'
-      )
-    end
-    
-        it 'requires a valid log level' do
-      @log.level = nil
-      expect(@log).not_to be_valid
-      expect(@log).to have(1).error_on(:level)
-    
-        @checker = Agents::AftershipAgent.new(:name => 'tectonic', :options => @opts)
-    @checker.user = users(:bob)
-    @checker.save!
+        @io = StringIO.new @zip
+    @gzreader = Zlib::GzipReader.new @io
   end
     
-        def version
-      context[:version]
-    end
-    
-        def assert_index(index)
-      i = index.is_a?(Integer) ? index : @filters.index(filter_const(index))
-      raise 'No such filter to insert: #{index}' unless i
-      i
-    end
-  end
-end
-
-    
-          def initialize(limit)
-        @limit = limit
-        @minute = nil
-        @counter = 0
+      describe '#body' do
+    context 'with a single expression body' do
+      let(:source) do
+        'class << self; bar; end'
       end
     
-          INDEX = Set.new
-    
-            # Remove ng-* attributes
-        css('*').each do |node|
-          node.attributes.each_key do |attribute|
-            node.remove_attribute(attribute) if attribute.start_with? 'ng-'
+            def correct_for_blockarg_type(node)
+          lambda do |corrector|
+            range = range_with_surrounding_space(range: node.source_range,
+                                                 side: :left)
+            range = range_with_surrounding_comma(range, :left)
+            corrector.remove(range)
           end
         end
-    
-            doc
       end
     end
   end
 end
 
     
-    module Vagrant
-  # This class handles guest-OS specific interactions with a machine.
-  # It is primarily responsible for detecting the proper guest OS
-  # implementation and then delegating capabilities.
-  #
-  # Vagrant has many tasks which require specific guest OS knowledge.
-  # These are implemented using a guest/capability system. Various plugins
-  # register as 'guests' which determine the underlying OS of the system.
-  # Then, 'guest capabilities' register themselves for a specific OS (one
-  # or more), and these capabilities are called.
-  #
-  # Example capabilities might be 'mount_virtualbox_shared_folder' or
-  # 'configure_networks'.
-  #
-  # This system allows for maximum flexibility and pluginability for doing
-  # guest OS specific operations.
-  class Guest
-    include CapabilityHost
+              args.one? || !args[-2].hash_type?
+        end
+      end
+    end
+  end
+end
+
     
-            # Merge another configuration object into this one. This assumes that
-        # the other object is the same class as this one. This should not
-        # mutate this object, but instead should return a new, merged object.
-        #
-        # The default implementation will simply iterate over the instance
-        # variables and merge them together, with this object overriding
-        # any conflicting instance variables of the older object. Instance
-        # variables starting with '__' (double underscores) will be ignored.
-        # This lets you set some sort of instance-specific state on your
-        # configuration keys without them being merged together later.
-        #
-        # @param [Object] other The other configuration object to merge from,
-        #   this must be the same type of object as this one.
-        # @return [Object] The merged object.
-        def merge(other)
-          result = self.class.new
+            expect(cop.messages)
+          .to eq(['Extra empty line detected at block body end.'])
+      end
     
-            def print_version
-          output_pipe.puts 'version: '#{Pod::VERSION}''
+      context 'when using the class_methods method from ActiveSupport::Concern' do
+    let(:config) do
+      RuboCop::Config.new(
+        'Lint/UselessAccessModifier' => {
+          'ContextCreatingMethods' => ['class_methods']
+        }
+      )
+    end
+    
+      shared_examples 'registers an offense' do |klass|
+    context 'target ruby version < 2.4', :ruby23 do
+      context 'when #{klass}' do
+        context 'without any decorations' do
+          let(:source) { '1.is_a?(#{klass})' }
+    
+            def autocorrect(node)
+          lambda do |corrector|
+            node_range = if node.respond_to?(:heredoc?) && node.heredoc?
+                           range_by_whole_lines(node.loc.heredoc_body)
+                         else
+                           range_by_whole_lines(node.source_range)
+                         end
+    
+        it 'denies chat channel invitation to non-authorized user' do
+      expect do
+        post '/chat_channel_memberships', params: {
+          chat_channel_membership: {
+            user_id: second_user.id, chat_channel_id: chat_channel.id
+          }
+        }
+      end.to raise_error(Pundit::NotAuthorizedError)
+    end
+  end
+    
+        it 'works successfully' do
+      article = create(:article, user: user)
+      get '#{article.path}/manage'
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include('Manage Your Post')
+    end
+    
+        if BufferUpdate.where(body_text: body_text, article_id: article_id, tag_id: tag_id, social_service_name: social_service_name).
+        where('created_at > ?', 2.minutes.ago).any?
+      errors.add(:body_text, '\'#{body_text}\' has already been submitted very recently')
+    end
+  end
+end
+
+    
+            def find_order
+          @order = Spree::Order.find_by!(number: order_id)
         end
     
-            self.description = <<-DESC
-          Lints the spec-repo `NAME`. If a directory is provided it is assumed
-          to be the root of a repo. Finally, if `NAME` is not provided this
-          will lint all the spec-repos known to CocoaPods.
-        DESC
+            def new; end
+    
+            private
+    
+            def authorize
+          perform_payment_action(:authorize)
+        end
+    
+            def create
+          authorize! :create, StockLocation
+          @stock_location = StockLocation.new(stock_location_params)
+          if @stock_location.save
+            respond_with(@stock_location, status: 201, default_template: :show)
+          else
+            invalid_resource!(@stock_location)
+          end
+        end
