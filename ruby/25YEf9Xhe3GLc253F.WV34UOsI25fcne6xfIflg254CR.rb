@@ -1,59 +1,40 @@
 
         
-                  # Ignore most global objects (found elsewhere)
-          if type == 'Global Objects'
-            entries << [name, node['id']] if name.start_with?('_') || name == 'global'
-            next
-          end
-    
-        it 'acts like #depends_on' do
-      f = formula 'foo' do
-        url 'foo-1.0'
-    
-        it 'allows specifying dependencies before certain version' do
-      spec.uses_from_macos('foo', before: :high_sierra)
-    
-        it 'allows specifying deprecated options as a Hash from an Array/String to an Array/String' do
-      subject.deprecated_option(['foo1', 'foo2'] => 'bar1', 'foo3' => ['bar2', 'bar3'])
-      expect(subject.deprecated_options).to include(DeprecatedOption.new('foo1', 'bar1'))
-      expect(subject.deprecated_options).to include(DeprecatedOption.new('foo2', 'bar1'))
-      expect(subject.deprecated_options).to include(DeprecatedOption.new('foo3', 'bar2'))
-      expect(subject.deprecated_options).to include(DeprecatedOption.new('foo3', 'bar3'))
+            def modified_time
+      @modified_time ||= File.stat(path).mtime
     end
     
-        def quarantine
-      return if @quarantine.nil?
-      return unless Quarantine.available?
+    Jekyll::Deprecator.process(ARGV)
     
-          unless system curl_executable, '--silent', '--fail', '--output', '/dev/null', package_url
-        package_blob = <<~JSON
-          {'name': '#{bintray_package}',
-           'public_download_numbers': true,
-           'public_stats': true}
-        JSON
-        curl '--silent', '--fail', '--user', '#{bintray_user}:#{bintray_key}',
-             '--header', 'Content-Type: application/json',
-             '--data', package_blob, bintray_repo_url
-        puts
+          def step_name(_keyword, _step_match, status, _source_indent, _background, _file_colon_line)
+        @io.print CHARS[status]
+        @io.print ' '
+      end
+      # rubocop:enable Metrics/ParameterLists
+    
+        context 'when user cannot update_project_member' do
+      before do
+        allow(presenter).to receive(:can?).with(user, :update_project_member, presenter).and_return(false)
+        allow(presenter).to receive(:can?).with(user, :override_project_member, presenter).and_return(false)
       end
     
-        ohai 'Patching #{name}'
-    patches.each(&:apply)
+            def write_cache
+          # No-op
+        end
+    
+        it 'unwraps ActiveJob jobs' do
+      ApiJob.perform_later(1, 2, 3)
+      q = Sidekiq::Queue.new
+      x = q.first
+      assert_equal ApiJob.name, x.display_class
+      assert_equal [1,2,3], x.display_args
+    end
+    
+        assert_equal CustomMiddleware, chain.entries.last.klass
   end
     
-        def test_module_const_get_toplevel
-      bug12089 = '[ruby-dev:49498] [Bug #12089]'
-      name = noninterned_name('A')
-      e = assert_not_interned_error(Object, :const_get, name)
-      assert_equal(name, e.name)
-      assert_not_match(/Object::/, e.message, bug12089)
-    end
+            @poller.enqueue
     
-        ScratchPad.record []
-    while true
-      begin
-        ScratchPad << enum.next
-      rescue StopIteration
-        break
-      end
-    end
+      extend ActiveSupport::Concern
+    
+      include WithinOrganization
