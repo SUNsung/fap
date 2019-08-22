@@ -1,66 +1,187 @@
 
         
-        
-    {    void operator() (const T * src0, const T * src1, T * dst) const
+            if (isa<ProtocolDecl>(decl))
+      return;
+    
+    // Crash due to a weak retain count overflow.
+// FIXME: can't pass the object's address from InlineRefCounts without hacks
+void swift::swift_abortWeakRetainOverflow() {
+  swift::fatalError(FatalErrorFlags::ReportBacktrace,
+                    'Fatal error: Object's weak reference was retained too many times');
+}
+    
+    v8::Handle<v8::Value> AllocateId(int routing_id);
+    
+       void Call(const std::string& method,
+                    const base::ListValue& arguments) override;
+   void CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result) override;
+    
+    
     {
-        dst[0] = internal::saturate_cast<T>(src0[0] >= src1[0] ? (s64)src0[0] - src1[0] : (s64)src1[0] - src0[0]);
+    {    if (zoom_controller) {
+      double zoom_factor = content::ZoomLevelToZoomFactor(zoom_controller->GetZoomLevel());
+      if (zoom_factor > content::kMaximumZoomFactor) {
+        zoom_factor = content::kMaximumZoomFactor;
+      }
+      if (zoom_factor < content::kMinimumZoomFactor) {
+        zoom_factor = content::kMinimumZoomFactor;
+      }
+      x *= zoom_factor;
+      y *= zoom_factor;
     }
+    
+    Popup(x, y, rvh);
+  } else if (method == 'EnableShowEvent') {
+    arguments.GetBoolean(0, &enable_show_event_);
+  } else {
+    NOTREACHED() << 'Invalid call to Menu method:' << method
+                 << ' arguments:' << arguments;
+  }
+}
+    
+       bool IsCommandIdChecked(int command_id) const override;
+   bool IsCommandIdEnabled(int command_id) const override;
+    
+    
+    {}  // namespace
+    
+    static const int kIconWidth = 16;
+static const int kIconHeight = 16;
+    
+    bool NwAppGetArgvSyncFunction::RunNWSync(base::ListValue* response, std::string* error) {
+    }
+    
+    NwClipboardSetListSyncFunction::NwClipboardSetListSyncFunction() {
+}
+    
+    
+    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.readAvailableTypes', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwClipboardReadAvailableTypesFunction);
 };
     
     
-    {
-    {        for (; j < size.width; j++)
-            dst[j] = (u16)src0[j] + (u16)src1[j];
-    }
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
+    {  CHECK_EQ(data.shape_[1], wmat.shape_[1])
+    << 'Incomplete weight tensor detected: weight.data().shape[1] != prod(data.data().shape[1:]).'
+       ' This is not supported by FCForward. If weight is in row_sparse format,'
+       ' please make sure all row ids are present.';
+  // Legacy approach shown here for comparison:
+  //   out = dot(data, wmat.T());
+  linalg_gemm(data, wmat, out, false, true, s);
+  if (!param.no_bias) {
+    Tensor<xpu, 1, DType> bias = in_data[fullc::kBias].get_with_shape<xpu, 1, DType>(
+      Shape1(wmat.shape_[0]), s);
+    CHECK_EQ(bias.shape_[0], wmat.shape_[0])
+      << 'Incomplete bias tensor detected: bias.data().shape[1] != weight.data().shape[0].'
+         ' This is not supported by FCForward. If bias is in row_sparse format, please'
+         ' make sure all row ids are present.';
+    out += repmat(bias, data.size(0));
+  }
 }
     
-        void operator() (const typename VecTraits<T>::vec128 & v_src0,
-                     const typename VecTraits<T>::vec128 & v_src1,
-                     typename VecTraits<T>::vec128 & v_dst) const
-    {
-        typename VecTraits<wtype>::vec128 vrl, vrh;
-        wideAdd(vmovl( vget_low(v_src0)), vmovl( vget_low(v_src1)), vrl);
-        wideAdd(vmovl(vget_high(v_src0)), vmovl(vget_high(v_src1)), vrh);
+                const char *type = getenv('MXNET_GPU_MEM_POOL_TYPE');
+            const bool default_pool = (type == nullptr);
+            if (default_pool) type = 'Naive';
+            std::string strategy = type;
+    
+    then we have::
+    
+    template <typename DType>
+void VanillaRNNBackwardSingleLayer(DType* ws,
+                                   DType* tmp_buf,
+                                   const int D,
+                                   const int T,
+                                   const int N,
+                                   const int I,
+                                   const int H,
+                                   const Tensor<cpu, 2, DType> &x,
+                                   const Tensor<cpu, 2, DType> &hx,
+                                   DType* wx_ptr,
+                                   DType* wh_ptr,
+                                   DType* y_ptr,
+                                   DType* dy_ptr,
+                                   DType* dhy_ptr,
+                                   DType* gateN,
+                                   DType* dx,
+                                   DType* dhx,
+                                   DType* dwx,
+                                   DType* dwh,
+                                   DType* dbx,
+                                   DType* dbh,
+                                   int req_data,
+                                   int req_params,
+                                   int req_state,
+                                   int mode) {
+  DType* dyt;
+  DType* ht1;  // [N, D, H]
+  DType* dart;
+  DType* nt;
+  DType* dar = ws;  // [T, N, H]
+  DType* dht1 = dar + T * N * H;  // [D, N, H]
+  DType* hx_ = dht1 + D * N * H;  // [N, D, H]
     }
     
-    
-    {
-    {            vst1q_s16(dstx + (width - 8), taildx);
-            vst1q_s16(dsty + (width - 8), taildy);
-        }
+        Tensor<xpu, 4, DType> grad_out = out_grad[deformablepsroipool::kOut].get<xpu, 4, DType>(s);
+    Tensor<xpu, 4, DType> data = in_data[deformablepsroipool::kData].get<xpu, 4, DType>(s);
+    Tensor<xpu, 2, DType> bbox = in_data[deformablepsroipool::kBox].get<xpu, 2, DType>(s);
+    Tensor<xpu, 4, DType> top_count = out_data[deformablepsroipool::kTopCount]
+                                        .get<xpu, 4, DType>(s);
+    Tensor<xpu, 4, DType> grad_in = in_grad[deformablepsroipool::kData].get<xpu, 4, DType>(s);
+    Tensor<xpu, 2, DType> grad_roi = in_grad[deformablepsroipool::kBox].get<xpu, 2, DType>(s);
+    Tensor<xpu, 4, DType> grad_trans;
+    Tensor<xpu, 4, DType> trans;
+    if (!param_.no_trans) {
+      CHECK_EQ(in_grad.size(), 3);
+      trans = in_data[deformablepsroipool::kTrans].get<xpu, 4, DType>(s);
+      grad_trans = in_grad[deformablepsroipool::kTrans].get<xpu, 4, DType>(s);
     }
     
-    #define SPLIT(sgn,bits,n) void split##n(const Size2D &size,                                          \
-                                    const sgn##bits * srcBase, ptrdiff_t srcStride                   \
-                                    FILL_LINES##n(FARG, sgn##bits) )                                 \
-{                                                                                                    \
-    internal::assertSupportedConfiguration();                                                        \
-    (void)size;                                                                                      \
-    (void)srcBase;                                                                                   \
-    (void)srcStride;                                                                                 \
-    FILL_LINES##n(VOID, sgn##bits)                                                                   \
-}
+    namespace index_array_enum {
+enum IndexArrayOpInputs {kIn};
+enum IndexArrayOpOutputs {kOut};
+enum IndexArrayOpResource {kTempSpace};
+}  // namespace index_array_enum
     
-    inline void vnst(u8* dst, uint8x16_t v1, uint8x16_t v2) { vst1q_u8(dst, v1); vst1q_u8(dst+16, v2); }
-inline void vnst(u8* dst, uint16x8_t v1, uint16x8_t v2) { vst1q_u8(dst, vcombine_u8(vmovn_u16(v1), vmovn_u16(v2))); }
-inline void vnst(u8* dst, uint32x4_t v1, uint32x4_t v2) { vst1_u8(dst, vmovn_u16(vcombine_u16(vmovn_u32(v1), vmovn_u32(v2)))); }
+    /*! \brief Cuda runtime compile module. */
+class CudaModule {
+ private:
+  /*! \brief Structure for holding internal info. */
+  struct Chunk {
+    /*!
+     * \brief Constructs cuda module.
+     * \param source cuda source code.
+     * \param exports export symbols before mangling.
+     */
+    Chunk(const char* source,
+          const std::vector<std::string>& options,
+          const std::vector<std::string>& exports);
+    /*! \brief deconstrutor */
+    ~Chunk();
+    /*!
+     * \brief Get handle to cuda kernel from loaded module
+     * \param mangled_name mangled kernel name
+     * \param ctx context to run kernel on
+     * \return loaded function handle
+     */
+    CUfunction GetFunction(const std::string& mangled_name, const Context& ctx);
+    /*! \brief nvrtc program handle. */
+    nvrtcProgram prog_;
+    /*! \brief compiled cuda PTX */
+    char* ptx_;
+    /*! \brief lazily loaded cuda module */
+    std::unordered_map<int, CUmodule> mod_;
+    /*! \brief exported names */
+    std::unordered_set<std::string> exports_;
+  };
+  /*! \brief pointer to Chunk */
+  std::shared_ptr<Chunk> ptr_;
+    }
     
-        // Caffe seems to understand phase inside an 'include {}' block
-    if (!param_.prototxt.has_phase()) {
-      if (param_.prototxt.include().size()) {
-        if (param_.prototxt.include(0).has_phase()) {
-          param_.prototxt.set_phase(param_.prototxt.include(0).phase());
-        }
-      }
+        if (loc_ + batch_size_ <= param_.num_examples) {
+      batch_data_.dptr_ = top_[DATA]->mutable_cpu_data();
+      batch_label_.dptr_ = top_[LABEL]->mutable_cpu_data();
     }
     
       for (uint32_t nid = 0; nid < idx.num_nodes(); ++nid) {
@@ -82,162 +203,69 @@ inline void vnst(u8* dst, uint32x4_t v1, uint32x4_t v2) { vst1_u8(dst, vmovn_u16
     skip_plus_node[nid] = 1;
   }
     
-      /*!
-   * \brief returns compression factor, which is the factor by which size of gradient
-   * reduces when using a particular type of compression
-   */
-  int GetCompressionFactor();
-    
-    
-    {
-    {.add_argument('data', 'Symbol or Symbol[]', 'Tensor or List of Tensors, the second input '
-'will be used as crop_like shape reference')
-.add_arguments(CropParam::__FIELDS__())
-.set_key_var_num_args('num_args');
-}  // namespace op
+    namespace mxnet {
+namespace io {
+/*! \return the parameter of default augmenter */
+std::vector<dmlc::ParamFieldInfo> ListDefaultAugParams();
+std::vector<dmlc::ParamFieldInfo> ListDefaultDetAugParams();
+}  // namespace io
 }  // namespace mxnet
+#endif  // MXNET_IO_IMAGE_AUGMENTER_H_
 
     
-      virtual void Backward(const OpContext &ctx,
-                        const std::vector<TBlob> &out_grad,
-                        const std::vector<TBlob> &in_data,
-                        const std::vector<TBlob> &out_data,
-                        const std::vector<OpReqType> &req,
-                        const std::vector<TBlob> &in_grad,
-                        const std::vector<TBlob> &aux_args) {
-    using namespace mshadow;
-    using namespace mshadow::expr;
-    CHECK_EQ(out_grad.size(), 1U);
-    CHECK_EQ(in_data.size(), 1U);
-    CHECK_EQ(out_data.size(), 2U);
-    CHECK_EQ(req.size(), 1U);
-    CHECK_EQ(in_grad.size(), 1U);
-    typename DataType<DType>::ScaleType alpha = 1.0f;
-    typename DataType<DType>::ScaleType beta = 0.0f;
-    Stream<gpu> *s = ctx.get_stream<gpu>();
-    Tensor<gpu, 4, DType> grad = out_grad[lrn_enum::kOut].get<gpu, 4, DType>(s);
-    Tensor<gpu, 4, DType> data = in_data[lrn_enum::kData].get<gpu, 4, DType>(s);
-    Tensor<gpu, 4, DType> output_data = out_data[lrn_enum::kOut].get<gpu, 4, DType>(s);
-    Tensor<gpu, 4, DType> input_grad = in_grad[lrn_enum::kData].get<gpu, 4, DType>(s);
-    CHECK_EQ(s->dnn_handle_ownership_, mshadow::Stream<gpu>::OwnHandle);
-    CUDNN_CALL(cudnnLRNCrossChannelBackward(s->dnn_handle_,
-                                            lrn_desc_,
-                                            CUDNN_LRN_CROSS_CHANNEL_DIM1,
-                                            &alpha,
-                                            shape_desc_,
-                                            output_data.dptr_,
-                                            shape_desc_,
-                                            grad.dptr_,
-                                            shape_desc_,
-                                            data.dptr_,
-                                            &beta,
-                                            shape_desc_,
-                                            input_grad.dptr_));
+    extern size_t getMachineShard(const std::string& hostname = '',
+                              bool force = false);
+    
+      rj::Document doc;
+  if (doc.Parse(request.at('log').c_str()).HasParseError()) {
+    return;
   }
     
-    namespace mxnet {
-namespace op {
-template<>
-Operator *CreateOp<cpu>(IdentityAttachKLSparseRegParam param) {
-  return new IdentityAttachKLSparseRegOp<cpu>(param);
-}
-    }
-    }
+      /** @brief Virtual method which should implement custom logging.
+   *
+   *  LoggerPlugin::logString should be implemented by a subclass of
+   *  LoggerPlugin which needs to log a string in a custom way.
+   *
+   *  @return an instance of osquery::Status which indicates the success or
+   *  failure of the operation.
+   */
+  virtual Status logString(const std::string& s) = 0;
     
-    using namespace std;
-    
-    
-int main() {
-    }
-    
-            ListNode* pre = dummyHead;
-        for(int i = 0; i < m - 1; i ++){
-            pre = pre->next
-        }
-    
-    private:
-    void preorderTraversal(TreeNode* node, vector<int> &res){
+    void Plugin::setName(const std::string& name) {
+  if (!name_.empty() && name != name_) {
+    std::string error = 'Cannot rename plugin ' + name_ + ' to ' + name;
+    throw std::runtime_error(error);
+  }
     }
     
-    #include <iostream>
-#include <vector>
-#include <stack>
-#include <cassert>
+      /// The plugin may publish route info (other than registry type and name).
+  virtual PluginResponse routeInfo() const {
+    return PluginResponse();
+  }
     
-    using namespace std;
+      /// Given a query, return the list of scanned tables.
+  virtual Status getQueryTables(const std::string& query,
+                                std::vector<std::string>& tables) const = 0;
     
-    // PreOrder Morris Traversal
-// Time Complexity: O(n), n is the node number in the tree
-// Space Complexity: O(1)
-class Solution {
-    }
-    
-    using namespace std;
-    
-    
-    {    // FIXME: Using the AdditionalTransform is a complete hack.
-    // This should be done by multiplying the lookup-Matrix with the Node's MV matrix
-    // And then setting the result as the new MV matrix
-    // But that operation needs to be done after all the 'updates'.
-    // So the Director should emit an 'director_after_update' event.
-    // And this object should listen to it
-    _target->setAdditionalTransform(&mv);
+    GTEST_TEST(InMemoryDatabaseTest, test_keys_search) {
+  auto db = std::make_unique<InMemoryDatabase>('test');
+  ASSERT_FALSE(db->open().isError());
+  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'key_1', 1).isError());
+  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'key_2', 2).isError());
+  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'key_3', 3).isError());
+  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'kEy_1', 4).isError());
+  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'kEy_2', 5).isError());
+  auto result_all = db->getKeys(kPersistentSettings);
+  EXPECT_TRUE(result_all);
+  EXPECT_EQ((*result_all).size(), 5);
+  auto result_some = db->getKeys(kPersistentSettings, 'key');
+  EXPECT_TRUE(result_some);
+  EXPECT_EQ((*result_some).size(), 3);
 }
     
-    bool Ripple3D::initWithDuration(float duration, const Size& gridSize, const Vec2& position, float radius, unsigned int waves, float amplitude)
-{
-    if (Grid3DAction::initWithDuration(duration, gridSize))
-    {
-        setPosition(position);
-        _radius = radius;
-        _waves = waves;
-        _amplitude = amplitude;
-        _amplitudeRate = 1.0f;
-    }
-    }
     
-    /**
-@brief The delegate class for ActionTween.
-@details If you want to use ActionTween on a node.
-        You should implement the node follow these steps:
-        1. The node should be inherit from ActionTweenDelegate.
-        2. Override the virtual method updateTweenAction in the node.
-    
-    Animation::~Animation(void)
-{
-    CCLOGINFO('deallocing Animation: %p', this);
-}
-    
-        bool init(void);
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-    
-    std::vector<cocos2d::Vec2> AutoPolygon::marchSquare(const Rect& rect, const Vec2& start, float threshold)
-{
-    int stepx = 0;
-    int stepy = 0;
-    int prevx = 0;
-    int prevy = 0;
-    int startx = start.x;
-    int starty = start.y;
-    int curx = startx;
-    int cury = starty;
-    unsigned int count = 0;
-    std::vector<int> case9s;
-    std::vector<int> case6s;
-    int i;
-    std::vector<int>::iterator it;
-    std::vector<cocos2d::Vec2> _points;
-    do{
-        int sv = getSquareValue(curx, cury, rect, threshold);
-        switch(sv){
-    }
-    }
-    }
+    {    update_db = (!dr.added.empty() || !dr.removed.empty());
+  } else {
+    dr.added = std::move(current_qd);
+    target_gd = &dr.added;
+  }
