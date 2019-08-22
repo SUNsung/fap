@@ -1,248 +1,211 @@
 
         
-            def test_migrate_revert_whole_migration
-      migration = InvertibleMigration.new
-      [LegacyMigration, InvertibleMigration].each do |klass|
-        revert = RevertWholeMigration.new(klass)
-        migration.migrate :up
-        revert.migrate :up
-        assert_not migration.connection.table_exists?('horses')
-        revert.migrate :down
-        assert migration.connection.table_exists?('horses')
-        migration.migrate :down
-        assert_not migration.connection.table_exists?('horses')
-      end
+            # Ensure the file is removed
+    project.bfg_object_map.remove!
+    notification_service.repository_cleanup_failure(project, user, error)
+  end
+    
+          encrypted_token = Base64.decode64(value)
+      Encryptor.decrypt(AES256_GCM_OPTIONS.merge(value: encrypted_token))
     end
-    
-          def test_invert_remove_foreign_key_with_on_delete_on_update
-        enable = @recorder.inverse_of :remove_foreign_key, [:dogs, :people, on_delete: :nullify, on_update: :cascade]
-        assert_equal [:add_foreign_key, [:dogs, :people, on_delete: :nullify, on_update: :cascade]], enable
-      end
-    
-    class TestCollections < JekyllUnitTest
-  context 'an evil collection' do
-    setup do
-      @collection = Jekyll::Collection.new(fixture_site, '../../etc/password')
-    end
-    
-          private def_delegator :@obj, :config, :fallback_data
-    
-    def normalize_bullets(markdown)
-  markdown.gsub(%r!\n\s{2}\*{1}!, '\n-')
-end
-    
-    # No trailing slash
-Benchmark.ips do |x|
-  path = '/some/very/very/long/path/to/a/file/i/like/'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
+  end
 end
 
     
-    if pathutil_relative == native_relative
-  Benchmark.ips do |x|
-    x.report('pathutil') { pathutil_relative }
-    x.report('native')   { native_relative }
-    x.compare!
-  end
-else
-  print 'PATHUTIL: '
-  puts pathutil_relative
-  print 'NATIVE:   '
-  puts native_relative
-end
-
-    
-          importer = ThemeStore::GitImporter.new(ssh_url, private_key: 'private_key')
-      importer.import!
-    end
-    
-        unless @topic.topic_allowed_users.where(user_id: @user.id).exists?
-      unless @topic.topic_allowed_groups.where('group_id IN (
-                                              SELECT group_id FROM group_users where user_id = ?
-                                           )', @user.id).exists?
-        @topic.topic_allowed_users.create!(user_id: @user.id)
+            @decoded
       end
-    end
-  end
     
-        render_json_dump(json, rest_serializer: true)
-  end
-    
-                s3_bucket.expects(:object).with('discourse-uploads/uploads/tombstone/default/original/1X/#{upload.sha1}.png').returns(s3_object)
-            s3_object.expects(:copy_from).with(copy_source: 's3-upload-bucket/discourse-uploads/uploads/default/original/1X/#{upload.sha1}.png')
-            s3_bucket.expects(:object).with('discourse-uploads/uploads/default/original/1X/#{upload.sha1}.png').returns(s3_object)
-            s3_object.expects(:delete)
-    
-        expect(posts.count).to eq(1)
-    expect(posts.first['id']).to eq(post.id)
-    
-          it 'should still have the correct category' do
-        settings.test_setting = 102
-        expect(settings.all_settings.find { |s| s[:setting] == :test_setting }[:category]).to eq(:tests)
-      end
-    end
-  end
-    
-          def find_matching_tag(tag)
-        # Used primarily by developers testing beta macOS releases.
-        if OS::Mac.prerelease? && ARGV.skip_or_later_bottles?
-          generic_find_matching_tag(tag)
-        else
-          generic_find_matching_tag(tag) ||
-            find_older_compatible_tag(tag)
+              @diffable = diffable
+          @include_stats = diff_options.delete(:include_stats)
+          @project = project
+          @diff_options = diff_options
+          @diff_refs = diff_refs
+          @fallback_diff_refs = fallback_diff_refs
+          @repository = project.repository
         end
-      end
     
-              find_instance_method_call(body_node, :man, :+) do |method|
-            next unless match = regex_match_group(parameters(method).first, /^man[1-8]$/)
+          it 'adds svn arguments for :revision' do
+        expect(subject).to receive(:system_command!) { |*, args:, **|
+          expect(args.each_cons(2)).to include(['-r', '10'])
+        }
     
-              find_method_with_args(body_node, :system, 'xcodebuild') do
-            problem %q(use 'xcodebuild *args' instead of 'system 'xcodebuild', *args')
-          end
+        it 'can process' do
+      mgr = Mgr.new
     
-        return false if args[:after] && OS::Mac.version < args[:after]
+    ExceptionHandlerTestException = Class.new(StandardError)
+TEST_EXCEPTION = ExceptionHandlerTestException.new('Something didn't work!')
     
-        it 'doesn't adds the dependency without OS version requirements' do
-      spec.uses_from_macos('foo')
-      spec.uses_from_macos('bar' => :head)
+    describe Sidekiq::Extensions do
+  before do
+    Sidekiq.redis {|c| c.flushdb }
+  end
     
-        context 'with version 1.8' do
-      subject { described_class.new(%w[1.8]) }
+      it 'shuts down the system' do
+    mgr = new_manager(options)
+    mgr.stop(::Process.clock_gettime(::Process::CLOCK_MONOTONIC))
+  end
     
-        module CLT
-      module_function
+      steps %{
+    And I turn off class caching
+    And I write to 'Gemfile' with:
+      '''
+      source 'http://rubygems.org'
+      gem 'rails', '#{framework_version}'
+      gem 'sqlite3', :platform => [:ruby, :rbx]
+      gem 'activerecord-jdbcsqlite3-adapter', :platform => :jruby
+      gem 'jruby-openssl', :platform => :jruby
+      gem 'capybara'
+      gem 'gherkin'
+      gem 'aws-sdk-s3'
+      gem 'racc', :platform => :rbx
+      gem 'rubysl', :platform => :rbx
+      '''
+    And I remove turbolinks
+    And I comment out lines that contain 'action_mailer' in 'config/environments/*.rb'
+    And I empty the application.js file
+    And I configure the application to use 'paperclip' from this project
+  }
     
-    require 'cask/cmd/abstract_command'
-require 'cask/cmd/--cache'
-require 'cask/cmd/audit'
-require 'cask/cmd/automerge'
-require 'cask/cmd/cat'
-require 'cask/cmd/create'
-require 'cask/cmd/doctor'
-require 'cask/cmd/edit'
-require 'cask/cmd/fetch'
-require 'cask/cmd/home'
-require 'cask/cmd/info'
-require 'cask/cmd/install'
-require 'cask/cmd/list'
-require 'cask/cmd/outdated'
-require 'cask/cmd/reinstall'
-require 'cask/cmd/style'
-require 'cask/cmd/uninstall'
-require 'cask/cmd/upgrade'
-require 'cask/cmd/zap'
+    module RailsCommandHelpers
+  def framework_version?(version_string)
+    framework_version =~ /^#{version_string}/
+  end
     
-    Then(/^the tasks folder is created$/) do
-  path = TestApp.test_app_path.join('lib/capistrano/tasks')
-  expect(Dir.exist?(path)).to be true
-end
-    
-          def value_or_default
-        if response.empty?
-          default
-        else
-          response
-        end
-      end
-    
-            if built_in_scm_name?
-          load_built_in_scm
-        else
-          # Compatibility with existing 3.x third-party SCMs
-          register_legacy_scm_hooks
-          load_legacy_scm_by_name
-        end
-      end
-    
-      describe '#system?' do
-    context 'when the pipeline is a system pipeline' do
-      let(:settings) { mock_settings({ 'pipeline.system' => true })}
-    
-        after(:all) do
-      logstash.uninstall
+        # True if the dimensions represent a horizontal rectangle
+    def horizontal?
+      height < width
     end
     
-          def shipping
-        order.ship_total * exchange_multiplier
-      end
+          class HaveNoSelectors < WrappedElementMatcher
+        def element_matches?(el)
+          el.assert_none_of_selectors(*@args, &@filter_block)
+        end
     
-          # the order builds a shipment on its own on transition to delivery, but we want
-      # the original exchange shipment, not the built one
-      order.shipments.destroy_all
-      shipments.each { |shipment| shipment.update(order_id: order.id) }
-      order.update!(state: 'confirm')
+          private
     
-            def create
-          authorize! :create, Spree::OptionType
-          @option_type = Spree::OptionType.new(option_type_params)
-          if @option_type.save
-            render :show, status: 201
+          def attribute_conditions(attributes)
+        attributes.map do |attribute, value|
+          case value
+          when XPath::Expression
+            raise ArgumentError, 'XPath expressions are not supported for the :#{attribute} filter with CSS based selectors'
+          when Regexp
+            Selector::RegexpDisassembler.new(value).substrings.map do |str|
+              '[#{attribute}*='#{str}'#{' i' if value.casefold?}]'
+            end.join
+          when true
+            '[#{attribute}]'
+          when false
+            ':not([attribute])'
           else
-            invalid_resource!(@option_type)
+            if attribute == :id
+              '##{::Capybara::Selector::CSS.escape(value)}'
+            else
+              '[#{attribute}='#{value}']'
+            end
           end
-        end
-    
-            def create
-          authorize! :create, ProductProperty
-          @product_property = @product.product_properties.new(product_property_params)
-          if @product_property.save
-            respond_with(@product_property, status: 201, default_template: :show)
-          else
-            invalid_resource!(@product_property)
-          end
-        end
-    
-            def destroy
-          @return_authorization = order.return_authorizations.accessible_by(current_ability, :destroy).find(params[:id])
-          @return_authorization.destroy
-          respond_with(@return_authorization, status: 204)
-        end
-    
-        def render(context)
-      quote = paragraphize(super)
-      author = '<strong>#{@by.strip}</strong>' if @by
-      if @source
-        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
-        parts = []
-        url.each do |part|
-          if (parts + [part]).join('/').length < 32
-            parts << part
-          end
-        end
-        source = parts.join('/')
-        source << '/&hellip;' unless source == @source
+        end.join
       end
-      if !@source.nil?
-        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
-      elsif !@title.nil?
-        cite = ' <cite>#{@title}</cite>'
-      end
-      blockquote = if @by.nil?
-        quote
-      elsif cite
-        '#{quote}<footer>#{author + cite}</footer>'
-      else
-        '#{quote}<footer>#{author}</footer>'
-      end
-      '<blockquote>#{blockquote}</blockquote>'
-    end
     
-          super
-    end
-    
-        def render(context)
-      code_dir = (context.registers[:site].config['code_dir'].sub(/^\//,'') || 'downloads/code')
-      code_path = (Pathname.new(context.registers[:site].source) + code_dir).expand_path
-      file = code_path + @file
-    
-      # Summary is used on the Archive pages to return the first block of content from a post.
-  def summary(input)
-    if input.index(/\n\n/)
-      input.split(/\n\n/)[0]
-    else
-      input
-    end
+      after do
+    Capybara.save_path = @old_save_path
+    FileUtils.rm_rf alternative_path
   end
+    
+        ##
+    # @!method always_include_port
+    #   See {Capybara.configure}
+    # @!method run_server
+    #   See {Capybara.configure}
+    # @!method default_selector
+    #   See {Capybara.configure}
+    # @!method default_max_wait_time
+    #   See {Capybara.configure}
+    # @!method ignore_hidden_elements
+    #   See {Capybara.configure}
+    # @!method automatic_reload
+    #   See {Capybara.configure}
+    # @!method match
+    #   See {Capybara.configure}
+    # @!method exact
+    #   See {Capybara.configure}
+    # @!method raise_server_errors
+    #   See {Capybara.configure}
+    # @!method visible_text_only
+    #   See {Capybara.configure}
+    # @!method automatic_label_click
+    #   See {Capybara.configure}
+    # @!method enable_aria_label
+    #   See {Capybara.configure}
+    # @!method save_path
+    #   See {Capybara.configure}
+    # @!method asset_host
+    #   See {Capybara.configure}
+    # @!method default_host
+    #   See {Capybara.configure}
+    # @!method app_host
+    #   See {Capybara.configure}
+    # @!method server_host
+    #   See {Capybara.configure}
+    # @!method server_port
+    #   See {Capybara.configure}
+    # @!method server_errors
+    #   See {Capybara.configure}
+    # @!method default_set_options
+    #   See {Capybara.configure}
+    # @!method disable_animation
+    #   See {Capybara.configure}
+    # @!method test_id
+    #   See {Capybara.configure}
+    # @!method default_normalize_ws
+    #   See {Capybara.configure}
+    # @!method w3c_click_offset
+    #   See {Capybara.configure}
+    
+        def extract_results(session)
+      expect(session).to have_xpath('//pre[@id='results']')
+      # YAML.load Nokogiri::HTML(session.body).xpath('//pre[@id='results']').first.inner_html.lstrip
+      YAML.load Capybara::HTML(session.body).xpath('//pre[@id='results']').first.inner_html.lstrip
+    end
+    
+    Capybara::SpecHelper.run_specs TestSessions::Safari, SAFARI_DRIVER.to_s, capybara_skip: skipped_tests do |example|
+  case example.metadata[:full_description]
+  when /click_link can download a file/
+    skip 'safaridriver doesn't provide a way to set the download directory'
+  when /Capybara::Session selenium_safari Capybara::Window#maximize/
+    pending 'Safari headless doesn't support maximize' if ENV['HEADLESS']
+  when /Capybara::Session selenium_safari #visit without a server/,
+       /Capybara::Session selenium_safari #visit with Capybara.app_host set should override server/,
+       /Capybara::Session selenium_safari #reset_session! When reuse_server == false raises any standard errors caught inside the server during a second session/
+    skip 'Safari webdriver doesn't support multiple sessions'
+  when /Capybara::Session selenium_safari #click_link with alternative text given to a contained image/,
+       'Capybara::Session selenium_safari #click_link_or_button with enable_aria_label should click on link'
+    pending 'safaridriver thinks these links are non-interactable for some unknown reason'
+  when /Capybara::Session selenium_safari #attach_file with a block can upload by clicking the file input/
+    skip 'safaridriver doesn't allow clicking on file inputs'
+  when /Capybara::Session selenium_safari #within_frame works if the frame is closed/,
+       /Capybara::Session selenium_safari #switch_to_frame works if the frame is closed/
+    skip 'Safari has a race condition when clicking an element that causes the frame to close. It will sometimes raise a NoSuchFrameError'
+  when /Capybara::Session selenium_safari #reset_session! removes ALL cookies/
+    skip 'Safari webdriver can only remove cookies for the current domain'
+  when /Capybara::Session selenium_safari #refresh it reposts/
+    skip 'Safari opens an alert that can't be closed'
+  when 'Capybara::Session selenium_safari node #double_click should allow to adjust the offset',
+       'Capybara::Session selenium_safari node #double_click should double click an element'
+    pending 'safardriver doesn't generate a double click event'
+  when 'Capybara::Session selenium_safari node #click should allow multiple modifiers',
+       /Capybara::Session selenium_safari node #(click|right_click|double_click) should allow modifiers/
+    pending 'safaridriver doesn't take key state into account when clicking'
+  when 'Capybara::Session selenium_safari #fill_in on a pre-populated textfield with a reformatting onchange should trigger change when clearing field'
+    pending 'safardriver clear doesn't generate change event'
+  when 'Capybara::Session selenium_safari #go_back should fetch a response from the driver from the previous page',
+       'Capybara::Session selenium_safari #go_forward should fetch a response from the driver from the previous page'
+    skip 'safaridriver loses the ability to find elements in the document after `go_back`'
+  when /drag_to.*HTML5/
+    pending 'Safari doesn't support'
+  end
+end
+    
+          def failure_message_helper(negated = '')
+        verb = @expected_title.is_a?(Regexp) ? 'match' : 'include'
+        'expected #{@actual_title.inspect}#{negated} to #{verb} #{@expected_title.inspect}'
+      end
