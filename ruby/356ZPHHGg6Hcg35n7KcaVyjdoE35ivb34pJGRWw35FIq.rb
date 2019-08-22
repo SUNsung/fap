@@ -1,134 +1,173 @@
 
         
-            assert_kind_of Integer, m1.my_house_population
-    assert_equal 3, m1.my_house_population
+        World(VagrantHelpers)
+
     
-        class InvertibleByPartsMigration < SilentMigration
-      attr_writer :test
-      def change
-        create_table('new_horses') do |t|
-          t.column :breed, :string
+        def role_properties_for(names, &block)
+      servers.role_properties_for(names, &block)
+    end
+    
+          def question
+        if default.nil?
+          I18n.t(:question, key: key, scope: :capistrano)
+        else
+          I18n.t(:question_default, key: key, default_value: default, scope: :capistrano)
         end
-        reversible do |dir|
-          @test.yield :both
-          dir.up    { @test.yield :up }
-          dir.down  { @test.yield :down }
+      end
+    
+        private
+    
+            expect(cop.messages).to eq(['Empty line missing at block body '\
+                                    'beginning.',
+                                    'Empty line missing at block body end.'])
+      end
+    
+            it { expect(send_node.parenthesized?).to be_falsey }
+      end
+    
+          expect(new_source).to eq(<<~RUBY)
+        def foo
+          super({}, something)
         end
-        revert do
-          create_table('horses') do |t|
-            t.column :content, :text
-            t.column :remind_at, :datetime
+      RUBY
+    end
+  end
+    
+            expect(new_source).to eq(<<~RUBY)
+          def func
+            [1, 2, 3].each do |n|
+              puts n
+            end
           end
-        end
+        RUBY
       end
     end
     
-        config.action_mailbox.queues = ActiveSupport::InheritableOptions.new \
-      incineration: :action_mailbox_incineration, routing: :action_mailbox_routing
+        it_behaves_like 'accepts', 'b.value == 2'
+    it_behaves_like 'accepts', 'b&.value == 2'
+    it_behaves_like 'accepts', '@value == 2'
+    it_behaves_like 'accepts', '@@value == 2'
+    it_behaves_like 'accepts', 'b = 1; b == 2'
+    it_behaves_like 'accepts', '$var == 5'
+    it_behaves_like 'accepts', 'foo == 'bar''
+    it_behaves_like 'accepts', 'foo[0] > 'bar' || baz != 'baz''
+    it_behaves_like 'accepts', 'node = last_node.parent'
+    it_behaves_like 'accepts', '(first_line - second_line) > 0'
+    it_behaves_like 'accepts', '5 == 6'
+    it_behaves_like 'accepts', '[1, 2, 3] <=> [4, 5, 6]'
+    it_behaves_like 'accepts', '!true'
+    it_behaves_like 'accepts', 'not true'
+    it_behaves_like 'accepts', '0 <=> val'
+    it_behaves_like 'accepts', ''foo' === bar'
     
-      # Mount Action Cable outside main process or domain
-  # config.action_cable.mount_path = nil
-  # config.action_cable.url = 'wss://example.com/cable'
-  # config.action_cable.allowed_request_origins = [ 'http://example.com', /http:\/\/example.*/ ]
     
-      def perform_failure(project_id, user_id, error)
-    project = Project.find(project_id)
-    user = User.find(user_id)
-    
-            filters = @filters.each_with_object([]) do |filter, parsed_filters|
-          match = @raw_query.split.find { |part| part =~ /\A#{filter[:name]}:/ }
-          next unless match
-    
-      def output_chronic_duration_attribute(source_attribute)
-    value = attributes[source_attribute.to_s]
-    ChronicDuration.output(value, format: :short) if value
-  end
-end
-
-    
-            def self.nfs_checkexports!
-          r = Vagrant::Util::Subprocess.execute('nfsd', 'checkexports')
-          if r.exit_code != 0
-            raise Vagrant::Errors::NFSBadExports, output: r.stderr
-          end
-        end
-      end
-    end
-  end
-end
-
-    
-            def windows?
-          @machine.config.vm.communicator == :winrm
-        end
-      end
-    end
-  end
-end
-
-    
-    require File.expand_path('../../../../../base', __FILE__)
-    
-            # @return [Set<String>] the names of the pods that were changed.
-        #
-        attr_reader :changed
-    
-          # @return [Bool] whether this resolved specification is by non-library targets.
+    {      # Checks whether the `hash` literal is delimited by curly braces.
       #
-      attr_reader :used_by_non_library_targets_only
-      alias used_by_non_library_targets_only? used_by_non_library_targets_only
+      # @return [Boolean] whether the `hash` literal is enclosed in braces
+      def braces?
+        loc.end&.is?('}')
+      end
+    end
+  end
+end
+
     
-            # Initialize a new instance
-        #
-        # @param [Sandbox] sandbox @see #sandbox
-        # @param [String] path @see #path
-        # @param [Array<PodTarget>] pod_targets @see #pod_targets
-        # @param [Hash{String=>Symbol}] build_configurations @see #build_configurations
-        # @param [Array<Platform>] platforms @see #platforms
-        # @param [String] object_version @see #object_version
-        # @param [String] podfile_path @see #podfile_path
-        #
-        def initialize(sandbox, path, pod_targets, build_configurations, platforms,
-                       object_version, podfile_path = nil, pod_target_subproject: false)
-          @sandbox = sandbox
-          @path = path
-          @pod_targets = pod_targets
-          @build_configurations = build_configurations
-          @platforms = platforms
-          @object_version = object_version
-          @podfile_path = podfile_path
-          @pod_target_subproject = pod_target_subproject
+    module RuboCop
+  module AST
+    # A node extension for `kwsplat` nodes. This will be used in place of a
+    # plain  node when the builder constructs the AST, making its methods
+    # available to all `kwsplat` nodes within RuboCop.
+    class KeywordSplatNode < Node
+      include HashElementNode
+    
+      def self.check_unused_translations
+    self.used_translations ||= []
+    self.unused_translation_messages = []
+    self.unused_translations = []
+    load_translations(translations)
+    translation_diff = unused_translations - used_translations
+    translation_diff.each do |translation|
+      Spree.unused_translation_messages << '#{translation} (#{I18n.locale})'
+    end
+  end
+    
+          # the order builds a shipment on its own on transition to delivery, but we want
+      # the original exchange shipment, not the built one
+      order.shipments.destroy_all
+      shipments.each { |shipment| shipment.update(order_id: order.id) }
+      order.update!(state: 'confirm')
+    
+              it 'links the shipping rate and the tax rate' do
+            shipping_rates = subject.shipping_rates(package)
+            expect(shipping_rates.first.tax_rate).to eq(tax_rate)
+          end
         end
     
-            self.indentation_level += 2
-        @treat_titles_as_messages = true
-        yield if block_given?
-      ensure
-        @treat_titles_as_messages = false
-        self.indentation_level -= 2
+            def create
+          authorize! :create, Image
+          @image = scope.images.new(image_params)
+          if @image.save
+            respond_with(@image, status: 201, default_template: :show)
+          else
+            invalid_resource!(@image)
+          end
+        end
+    
+            def update
+          @option_value = scope.accessible_by(current_ability, :update).find(params[:id])
+          if @option_value.update(option_value_params)
+            render :show
+          else
+            invalid_resource!(@option_value)
+          end
+        end
+    
+            def product_property_params
+          params.require(:product_property).permit(permitted_product_properties_attributes)
+        end
       end
-    
-    When /^(?:|I )choose '([^']*)'$/ do |field|
-  choose(field)
+    end
+  end
 end
+
     
-    Before do
-  gemfile = ENV['BUNDLE_GEMFILE'].to_s
-  ENV['BUNDLE_GEMFILE'] = File.join(Dir.pwd, gemfile) unless gemfile.start_with?(Dir.pwd)
-  @framework_version = nil
-end
+            def new
+          authorize! :admin, ReturnAuthorization
+        end
     
-        def type_from_mime_magic
-      @type_from_mime_magic ||= File.open(@filepath) do |file|
-        MimeMagic.by_magic(file).try(:type)
-      end
+          get 'array', ids: %w[1 2 890]
+      expect(last_response.status).to eq(200)
+      expect(last_response.body).to eq('array int works')
     end
     
-          [ scale_geometry, crop_geometry ]
-    end
-    
-        # Hash access of interpolations. Included only for compatibility,
-    # and is not intended for normal use.
-    def self.[] name
-      method(name)
-    end
+          module ClassMethods
+        # Add helper methods that will be accessible from any
+        # endpoint within this namespace (and child namespaces).
+        #
+        # When called without a block, all known helpers within this scope
+        # are included.
+        #
+        # @param [Array] new_modules optional array of modules to include
+        # @param [Block] block optional block of methods to include
+        #
+        # @example Define some helpers.
+        #
+        #     class ExampleAPI < Grape::API
+        #       helpers do
+        #         def current_user
+        #           User.find_by_id(params[:token])
+        #         end
+        #       end
+        #     end
+        #
+        # @example Include many modules
+        #
+        #     class ExampleAPI < Grape::API
+        #       helpers Authentication, Mailer, OtherModule
+        #     end
+        #
+        def helpers(*new_modules, &block)
+          include_new_modules(new_modules) if new_modules.any?
+          include_block(block) if block_given?
+          include_all_in_scope if !block_given? && new_modules.empty?
+        end
