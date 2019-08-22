@@ -1,136 +1,194 @@
 
         
-        def main():
-    # First, we load the current README into memory as an array of lines
-    with open('README.md', 'r') as read_me_file:
-        read_me = read_me_file.readlines()
+        This script demonstrates how to implement a basic character-level
+sequence-to-sequence model. We apply it to translating
+short English sentences into short French sentences,
+character-by-character. Note that it is fairly unusual to
+do character-level machine translation, as word-level
+models are more common in this domain.
     
-        def mapper(self, _, line):
-        '''Parse each log line, extract and transform relevant lines.
+    if ngram_range > 1:
+    print('Adding {}-gram features'.format(ngram_range))
+    # Create set of unique n-gram from the training set.
+    ngram_set = set()
+    for input_list in x_train:
+        for i in range(2, ngram_range + 1):
+            set_of_ngram = create_ngram_set(input_list, ngram_value=i)
+            ngram_set.update(set_of_ngram)
     
+        with tempfile.NamedTemporaryFile('wb', delete=True) as f:
+        np.savez(f, x_train=x_train, y_train=y_train, x_test=x_test, y_test=y_test)
+        monkeypatch.setattr(imdb, 'get_file', lambda *args, **kwargs: f.name)
+        yield f.name
     
-def create_app(test_config=None):
-    '''Create and configure an instance of the Flask application.'''
-    app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        # a default secret that should be overridden by instance config
-        SECRET_KEY='dev',
-        # store the database in the instance folder
-        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
-    )
-    
-    from flask import (
-    Blueprint,
-    flash,
-    g,
-    redirect,
-    render_template,
-    request,
-    session,
-    url_for,
-)
-from werkzeug.security import check_password_hash, generate_password_hash
-    
-            return cls(self, **kwargs)
-    
-    
-def explain_template_loading_attempts(app, template, attempts):
-    '''This should help developers understand what failed'''
-    info = ['Locating template '%s':' % template]
-    total_found = 0
-    blueprint = None
-    reqctx = _request_ctx_stack.top
-    if reqctx is not None and reqctx.request.blueprint is not None:
-        blueprint = reqctx.request.blueprint
-    
-    This typically means that you attempted to use functionality that needed
-to interface with the current application object in some way. To solve
-this, set up an application context with app.app_context().  See the
-documentation for more information.\
-'''
-    
-            return list(result)
-    
-        # Returns
-        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
-    
-        with custom_object_scope({'MSE_MAE_loss': MSE_MAE_loss}):
-        loaded_model = keras.models.load_model(model_filename)
-        loaded_model.predict(np.random.rand(128, 2))
+        # cntk doesn't support eval convolution with static
+    # variable, will enable it later
+    if K.backend() != 'cntk':
+        # check regularizers
+        kwargs = {'data_format': data_format,
+                  'return_sequences': return_sequences,
+                  'kernel_size': (num_row, num_col),
+                  'stateful': True,
+                  'filters': filters,
+                  'batch_input_shape': inputs.shape,
+                  'kernel_regularizer': regularizers.L1L2(l1=0.01),
+                  'recurrent_regularizer': regularizers.L1L2(l1=0.01),
+                  'bias_regularizer': 'l2',
+                  'activity_regularizer': 'l2',
+                  'kernel_constraint': 'max_norm',
+                  'recurrent_constraint': 'max_norm',
+                  'bias_constraint': 'max_norm',
+                  'padding': 'same'}
     
     
-def create_multi_input_model_from(layer1, layer2):
-    input_1 = Input(shape=(data_dim,))
-    input_2 = Input(shape=(data_dim,))
-    out1 = layer1(input_1)
-    out2 = layer2(input_2)
-    out = Average()([out1, out2])
-    model = Model([input_1, input_2], out)
-    model.add_loss(K.mean(out2))
-    model.add_loss(1)
-    model.add_loss(1)
-    return model
+def test_deconv_length():
+    assert conv_utils.deconv_length(None, 1, 7, 'same', None) is None
+    assert conv_utils.deconv_length(224, 1, 7, 'same', None) == 224
+    assert conv_utils.deconv_length(224, 2, 7, 'same', None) == 448
+    assert conv_utils.deconv_length(32, 1, 5, 'valid', None) == 36
+    assert conv_utils.deconv_length(32, 2, 5, 'valid', None) == 67
+    assert conv_utils.deconv_length(32, 1, 5, 'full', None) == 28
+    assert conv_utils.deconv_length(32, 2, 5, 'full', None) == 59
+    assert conv_utils.deconv_length(224, 1, 7, 'same', 0) == 224
+    assert conv_utils.deconv_length(224, 2, 7, 'same', 0) == 447
+    assert conv_utils.deconv_length(224, 2, 7, 'same', 1) == 448
+    assert conv_utils.deconv_length(32, 1, 5, 'valid', 0) == 36
+    assert conv_utils.deconv_length(32, 2, 5, 'valid', 0) == 67
+    assert conv_utils.deconv_length(32, 2, 5, 'valid', 1) == 68
+    assert conv_utils.deconv_length(6, 1, 3, 'full', 0) == 4
+    assert conv_utils.deconv_length(6, 2, 3, 'full', 1) == 10
+    assert conv_utils.deconv_length(6, 2, 3, 'full', 2) == 11
     
-        ```python
-    # Consider an array of 5 labels out of a set of 3 classes {0, 1, 2}:
-    > labels
-    array([0, 2, 1, 2, 0])
-    # `to_categorical` converts this into a matrix with as many
-    # columns as there are classes. The number of rows
-    # stays the same.
-    > to_categorical(labels)
-    array([[ 1.,  0.,  0.],
-           [ 0.,  0.,  1.],
-           [ 0.,  1.,  0.],
-           [ 0.,  0.,  1.],
-           [ 1.,  0.,  0.]], dtype=float32)
+        # - Produce data on 4 worker processes, consume on main process:
+    #   - Each worker process runs OWN copy of generator
+    #   - BUT on Windows, `multiprocessing` won't marshall generators across
+    #     process boundaries
+    #       -> make sure `evaluate_generator()` raises raises ValueError
+    #          exception and does not attempt to run the generator.
+    if os.name == 'nt':
+        with pytest.raises(ValueError):
+            model.evaluate_generator(custom_generator(),
+                                     steps=STEPS,
+                                     max_queue_size=10,
+                                     workers=WORKERS,
+                                     use_multiprocessing=True)
+    else:
+        model.evaluate_generator(custom_generator(),
+                                 steps=STEPS,
+                                 max_queue_size=10,
+                                 workers=WORKERS,
+                                 use_multiprocessing=True)
+    
+        # When using the delayed-build pattern (no input shape specified), you can
+    # choose to manually build your model by calling
+    # `build(batch_input_shape)`:
+    model = Sequential()
+    model.add(Dense(32))
+    model.add(Dense(32))
+    model.build((None, 500))
+    model.weights  # returns list of length 4
     ```
     '''
     
-    print('Building model...')
-model = Sequential()
-model.add(Dense(512, input_shape=(max_words,)))
-model.add(Activation('relu'))
-model.add(Dropout(0.5))
-model.add(Dense(num_classes))
-model.add(Activation('softmax'))
+        @property
+    def cell(self):
+        Cell = namedtuple('cell', 'state_size')
+        cell = Cell(state_size=self.units)
+        return cell
     
-    
-def test_conv_output_length():
-    assert conv_utils.conv_output_length(None, 7, 'same', 1) is None
-    assert conv_utils.conv_output_length(224, 7, 'same', 1) == 224
-    assert conv_utils.conv_output_length(224, 7, 'same', 2) == 112
-    assert conv_utils.conv_output_length(32, 5, 'valid', 1) == 28
-    assert conv_utils.conv_output_length(32, 5, 'valid', 2) == 14
-    assert conv_utils.conv_output_length(32, 5, 'causal', 1) == 32
-    assert conv_utils.conv_output_length(32, 5, 'causal', 2) == 16
-    assert conv_utils.conv_output_length(32, 5, 'full', 1) == 36
-    assert conv_utils.conv_output_length(32, 5, 'full', 2) == 18
-    
-    PROJ_METADATA = '%s.json' % PROJ_NAME
-    
-    from ..common import *
-import json
-    
-        res = yield from async_setup_component(hass, automation.DOMAIN, {
-        automation.DOMAIN: {
-            'alias': 'hello',
-            'trigger': {
-                'platform': 'homeassistant',
-                'event': 'shutdown',
-            },
-            'action': {
-                'service': 'test.automation',
-            }
+        def get_config(self):
+        config = {
+            'filters': self.filters,
+            'kernel_size': self.kernel_size,
+            'strides': self.strides,
+            'padding': self.padding,
+            'data_format': self.data_format,
+            'activation': activations.serialize(self.activation),
+            'use_bias': self.use_bias,
+            'kernel_initializer': initializers.serialize(self.kernel_initializer),
+            'bias_initializer': initializers.serialize(self.bias_initializer),
+            'kernel_regularizer': regularizers.serialize(self.kernel_regularizer),
+            'bias_regularizer': regularizers.serialize(self.bias_regularizer),
+            'activity_regularizer':
+                regularizers.serialize(self.activity_regularizer),
+            'kernel_constraint': constraints.serialize(self.kernel_constraint),
+            'bias_constraint': constraints.serialize(self.bias_constraint)
         }
-    })
-    assert res
-    assert not automation.is_on(hass, 'automation.hello')
-    assert len(calls) == 0
+        base_config = super(LocallyConnected2D, self).get_config()
+        return dict(list(base_config.items()) + list(config.items()))
+
     
-        with tf.variable_scope(name, reuse=reuse):
-        alpha = get_w(alpha_shape, w_initializer=alpha_init, name='alpha')
-        # o = relu(x) + 0.5 * tf.multiply(alpha, x - tf.abs(x))  # TFLearn
-        o = leaky_relu(x, alpha)  # TensorLayer / <Deep Learning>
+        def _wrapper(self, *args, **kwargs):
+        # bound_method has the signature that 'decorator' expects i.e. no
+        # 'self' argument, but it's a closure over self so it can call
+        # 'func'. Also, wrap method.__get__() in a function because new
+        # attributes can't be set on bound method objects, only on functions.
+        bound_method = partial(method.__get__(self, type(self)))
+        for dec in decorators:
+            bound_method = dec(bound_method)
+        return bound_method(*args, **kwargs)
     
-        这里实际上没有用到 J 和 d 这个参数，保留是为了与 `attention_flow()` 的参数兼容
+        @property
+    def fields(self):
+        'Return a list of fields in the Feature.'
+        return [
+            force_str(
+                capi.get_field_name(capi.get_field_defn(self._layer._ldefn, i)),
+                self.encoding,
+                strings_only=True
+            ) for i in range(self.num_fields)
+        ]
+    
+        def __getitem__(self, index):
+        try:
+            return GDALBand(self.source, index + 1)
+        except GDALException:
+            raise GDALException('Unable to get band index %d' % index)
+
+    
+        @geotransform.setter
+    def geotransform(self, values):
+        'Set the geotransform for the data source.'
+        if len(values) != 6 or not all(isinstance(x, (int, float)) for x in values):
+            raise ValueError('Geotransform must consist of 6 numeric values.')
+        # Create ctypes double array with input and write data
+        values = (c_double * 6)(*values)
+        capi.set_ds_geotransform(self._ptr, byref(values))
+        self._flush()
+    
+        def __getitem__(self, target):
+        '''
+        Return the value of the given string attribute node, None if the node
+        doesn't exist.  Can also take a tuple as a parameter, (target, child),
+        where child is the index of the attribute in the WKT.  For example:
+    
+        def run_loop(self):
+        while self.blackboard.common_state['progress'] < 100:
+            for expert in self.blackboard.experts:
+                if expert.is_eager_to_contribute:
+                    expert.contribute()
+        return self.blackboard.common_state['contributions']
+    
+    Request receiver in simple form keeps a reference to a single successor.
+As a variation some receivers may be capable of sending requests out
+in several directions, forming a `tree of responsibility`.
+    
+    
+def main():
+    '''
+    # Counting to two...
+    >>> for number in count_to_two():
+    ...     print(number)
+    one
+    two
+    
+    
+class A(Node):
+    pass
+    
+        def __init__(self):
+        self.__dict__ = self.__shared_state
+        self.state = 'Init'
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
