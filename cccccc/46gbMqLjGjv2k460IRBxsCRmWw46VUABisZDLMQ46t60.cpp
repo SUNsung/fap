@@ -1,182 +1,286 @@
 
         
-            http://www.apache.org/licenses/LICENSE-2.0
+        OCL_PERF_TEST_P(DenseOpticalFlow_DIS, perf,
+                Combine(Values('PRESET_ULTRAFAST', 'PRESET_FAST', 'PRESET_MEDIUM'), Values(szVGA, sz720p, sz1080p)))
+{
+    DISParams params = GetParam();
+    }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    //
+// Alternative Canonical Huffman decoder:
+//
+// Canonical Huffman decoder based on 'On the Implementation of Minimum
+// Redundancy Prefix Codes' by Moffat and Turpin - highly recommended
+// reading as a good description of the problem space, as well as 
+// a fast decoding algorithm.
+//
+// The premise is that instead of working directly with the coded 
+// symbols, we create a new ordering based on the frequency of symbols.
+// Less frequent symbols (and thus longer codes) are ordered earler.
+// We're calling the values in this ordering 'Ids', as oppsed to 
+// 'Symbols' - which are the short values we eventually want decoded.
+//
+// With this new ordering, a few small tables can be derived ('base' 
+// and 'offset') which drive the decoding. To cut down on the 
+// linear scanning of these tables, you can add a small table
+// to directly look up short codes (as you might in a traditional
+// lookup-table driven decoder). 
+//
+// The decoder is meant to be compatible with the encoder (and decoder)
+// in ImfHuf.cpp, just faster. For ease of implementation, this decoder
+// should only be used on compressed bitstreams >= 128 bits long.
+//
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
     
+OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_EXIT
     
-    {  tensorflow::DeviceNameUtils::ParsedName parsed_name;
-  if (!tensorflow::DeviceNameUtils::ParseFullName(node_def.device(),
-                                                  &parsed_name)) {
-    LOG(WARNING) << 'Failed to parse device from node_def: '
-                 << node_def.ShortDebugString();
-    return '';
-  }
-  string class_name = '';
-  tensorflow::FindKernelDef(tensorflow::DeviceType(parsed_name.type.c_str()),
-                            node_def, nullptr /* kernel_def */, &class_name)
-      .IgnoreError();
-  return class_name;
-}
+    #ifndef IMFINPUTSTREAMMUTEX_H_
+#define IMFINPUTSTREAMMUTEX_H_
     
-    // Contains device-level options that can be specified at a platform level.
-// Example usage:
-//    auto device_options = DeviceOptions::Default();
+    using content::RenderView;
+using content::RenderThread;
+using content::V8ValueConverter;
+using blink::WebFrame;
+using blink::WebLocalFrame;
+using blink::WebView;
     
-        http://www.apache.org/licenses/LICENSE-2.0
+    namespace nw {
+    }
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+    #ifndef CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
+#define CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    #include 'base/logging.h'
+#include 'base/values.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/nw/src/nw_shell.h'
+#include 'content/public/browser/web_contents.h'
+#include 'content/public/browser/render_widget_host_view.h'
+#include 'ui/gfx/point.h'
+#include 'vector'
+#include 'gtk/gtk.h'
     
-        case URX_STRING:
-    case URX_STRING_I:
-        {
-            int32_t lengthOp       = fCompiledPat->elementAti(index+1);
-            U_ASSERT(URX_TYPE(lengthOp) == URX_STRING_LEN);
-            int32_t length = URX_VAL(lengthOp);
-            UnicodeString str(fLiteralText, val, length);
-            printf('%s', CStr(str)());
-        }
-        break;
+    class NwAppSetProxyConfigFunction : public NWSyncExtensionFunction {
+ public:
+  NwAppSetProxyConfigFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
     
-    U_CAPI void U_EXPORT2
-uhash_deleteScriptSet(void *obj);
+    #include 'extensions/browser/extension_function.h'
     
-    UnicodeString&
-SelectFormat::toPattern(UnicodeString& appendTo) {
-    if (0 == msgPattern.countParts()) {
-        appendTo.setToBogus();
+    #include <vector>
+    
+      // Timing information, handy to tune e.g. nbr of GPUs
+  Timer iteration_timer_;
+  float iterations_last_;
+    
+    // TODO(Yangqing): Is there a faster way to do pooling in the channel-first
+// case?
+template <typename Dtype>
+void PoolingLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top) {
+  const Dtype* bottom_data = bottom[0]->cpu_data();
+  Dtype* top_data = top[0]->mutable_cpu_data();
+  const int top_count = top[0]->count();
+  // We'll output the mask to top[1] if it's of size >1.
+  const bool use_top_mask = top.size() > 1;
+  int* mask = NULL;  // suppress warnings about uninitialized variables
+  Dtype* top_mask = NULL;
+  // Different pooling methods. We explicitly do the switch outside the for
+  // loop to save time, although this results in more code.
+  switch (this->layer_param_.pooling_param().pool()) {
+  case PoolingParameter_PoolMethod_MAX:
+    // Initialize
+    if (use_top_mask) {
+      top_mask = top[1]->mutable_cpu_data();
+      caffe_set(top_count, Dtype(-1), top_mask);
     } else {
-        appendTo.append(msgPattern.getPatternString());
+      mask = max_idx_.mutable_cpu_data();
+      caffe_set(top_count, -1, mask);
     }
-    return appendTo;
-}
-    
-    SharedBreakIterator::~SharedBreakIterator() {
-  delete ptr;
-}
-    
-    U_NAMESPACE_BEGIN
-    
-    int32_t 
-SmallIntFormatter::estimateDigitCount(
-        int32_t positiveValue, const IntDigitCountRange &range) {
-    if (positiveValue >= gMaxFastInt) {
-        return range.getMax();
+    caffe_set(top_count, Dtype(-FLT_MAX), top_data);
+    // The main loop
+    for (int n = 0; n < bottom[0]->num(); ++n) {
+      for (int c = 0; c < channels_; ++c) {
+        for (int ph = 0; ph < pooled_height_; ++ph) {
+          for (int pw = 0; pw < pooled_width_; ++pw) {
+            int hstart = ph * stride_h_ - pad_h_;
+            int wstart = pw * stride_w_ - pad_w_;
+            int hend = min(hstart + kernel_h_, height_);
+            int wend = min(wstart + kernel_w_, width_);
+            hstart = max(hstart, 0);
+            wstart = max(wstart, 0);
+            const int pool_index = ph * pooled_width_ + pw;
+            for (int h = hstart; h < hend; ++h) {
+              for (int w = wstart; w < wend; ++w) {
+                const int index = h * width_ + w;
+                if (bottom_data[index] > top_data[pool_index]) {
+                  top_data[pool_index] = bottom_data[index];
+                  if (use_top_mask) {
+                    top_mask[pool_index] = static_cast<Dtype>(index);
+                  } else {
+                    mask[pool_index] = index;
+                  }
+                }
+              }
+            }
+          }
+        }
+        // compute offset
+        bottom_data += bottom[0]->offset(0, 1);
+        top_data += top[0]->offset(0, 1);
+        if (use_top_mask) {
+          top_mask += top[0]->offset(0, 1);
+        } else {
+          mask += top[0]->offset(0, 1);
+        }
+      }
     }
-    return range.pin(gDigitCount[positiveValue]);
-}
-    
-    
-    {    if (count > 0) {
-        uprv_memcpy(getBytes(), newValues, count);
+    break;
+  case PoolingParameter_PoolMethod_AVE:
+    for (int i = 0; i < top_count; ++i) {
+      top_data[i] = 0;
     }
+    // The main loop
+    for (int n = 0; n < bottom[0]->num(); ++n) {
+      for (int c = 0; c < channels_; ++c) {
+        for (int ph = 0; ph < pooled_height_; ++ph) {
+          for (int pw = 0; pw < pooled_width_; ++pw) {
+            int hstart = ph * stride_h_ - pad_h_;
+            int wstart = pw * stride_w_ - pad_w_;
+            int hend = min(hstart + kernel_h_, height_ + pad_h_);
+            int wend = min(wstart + kernel_w_, width_ + pad_w_);
+            int pool_size = (hend - hstart) * (wend - wstart);
+            hstart = max(hstart, 0);
+            wstart = max(wstart, 0);
+            hend = min(hend, height_);
+            wend = min(wend, width_);
+            for (int h = hstart; h < hend; ++h) {
+              for (int w = wstart; w < wend; ++w) {
+                top_data[ph * pooled_width_ + pw] +=
+                    bottom_data[h * width_ + w];
+              }
+            }
+            top_data[ph * pooled_width_ + pw] /= pool_size;
+          }
+        }
+        // compute offset
+        bottom_data += bottom[0]->offset(0, 1);
+        top_data += top[0]->offset(0, 1);
+      }
+    }
+    break;
+  case PoolingParameter_PoolMethod_STOCHASTIC:
+    NOT_IMPLEMENTED;
+    break;
+  default:
+    LOG(FATAL) << 'Unknown pooling method.';
+  }
 }
     
-    StringMatcher::StringMatcher(const UnicodeString& theString,
-                             int32_t start,
-                             int32_t limit,
-                             int32_t segmentNum,
-                             const TransliterationRuleData& theData) :
-    data(&theData),
-    segmentNumber(segmentNum),
-    matchStart(-1),
-    matchLimit(-1)
+    template <typename Dtype>
+void Net<Dtype>::BackwardDebugInfo(const int layer_id) {
+  const vector<Blob<Dtype>*>& bottom_vec = bottom_vecs_[layer_id];
+  for (int bottom_id = 0; bottom_id < bottom_vec.size(); ++bottom_id) {
+    if (!bottom_need_backward_[layer_id][bottom_id]) { continue; }
+    const Blob<Dtype>& blob = *bottom_vec[bottom_id];
+    const string& blob_name = blob_names_[bottom_id_vecs_[layer_id][bottom_id]];
+    const Dtype diff_abs_val_mean = blob.asum_diff() / blob.count();
+    LOG_IF(INFO, Caffe::root_solver())
+        << '    [Backward] '
+        << 'Layer ' << layer_names_[layer_id]
+        << ', bottom blob ' << blob_name
+        << ' diff: ' << diff_abs_val_mean;
+  }
+  for (int param_id = 0; param_id < layers_[layer_id]->blobs().size();
+       ++param_id) {
+    if (!layers_[layer_id]->param_propagate_down(param_id)) { continue; }
+    const Blob<Dtype>& blob = *layers_[layer_id]->blobs()[param_id];
+    const Dtype diff_abs_val_mean = blob.asum_diff() / blob.count();
+    LOG_IF(INFO, Caffe::root_solver())
+        << '    [Backward] '
+        << 'Layer ' << layer_names_[layer_id]
+        << ', param blob ' << param_id
+        << ' diff: ' << diff_abs_val_mean;
+  }
+}
+    
+      virtual inline const char* type() const { return 'Pooling'; }
+  virtual inline int ExactNumBottomBlobs() const { return 1; }
+  virtual inline int MinTopBlobs() const { return 1; }
+  // MAX POOL layers can output an extra top blob for the mask;
+  // others can only output the pooled inputs.
+  virtual inline int MaxTopBlobs() const {
+    return (this->layer_param_.pooling_param().pool() ==
+            PoolingParameter_PoolMethod_MAX) ? 2 : 1;
+  }
+    
+    /** @brief Fills a Blob with values @f$ x \in [0, 1] @f$
+ *         such that @f$ \forall i \sum_j x_{ij} = 1 @f$.
+ */
+template <typename Dtype>
+class PositiveUnitballFiller : public Filler<Dtype> {
+ public:
+  explicit PositiveUnitballFiller(const FillerParameter& param)
+      : Filler<Dtype>(param) {}
+  virtual void Fill(Blob<Dtype>* blob) {
+    Dtype* data = blob->mutable_cpu_data();
+    DCHECK(blob->count());
+    caffe_rng_uniform<Dtype>(blob->count(), 0, 1, blob->mutable_cpu_data());
+    // We expect the filler to not be called very frequently, so we will
+    // just use a simple implementation
+    int dim = blob->count() / blob->shape(0);
+    CHECK(dim);
+    for (int i = 0; i < blob->shape(0); ++i) {
+      Dtype sum = 0;
+      for (int j = 0; j < dim; ++j) {
+        sum += data[i * dim + j];
+      }
+      for (int j = 0; j < dim; ++j) {
+        data[i * dim + j] /= sum;
+      }
+    }
+    CHECK_EQ(this->filler_param_.sparse(), -1)
+         << 'Sparsity not supported by this Filler.';
+  }
+};
+    
+                ImGui::Begin('Hello, world!');                          // Create a window called 'Hello, world!' and append into it.
+    
+    // Main code
+int main(int, char**)
 {
-    theString.extractBetween(start, limit, pattern);
-}
-    
-    #define NOMINMAX
-#include 'Windows.h' // for HANDLE
-    
-        typedef unsigned int INDEXTYPE; // don't use size_t, as this saves HUGE amounts of RAM
-    std::vector<INDEXTYPE> map;     // [t] -> t' indices in randomized order
-    size_t currentseed;             // seed for current sequence
-    size_t randomizationrange;      // t - randomizationrange/2 <= t' < t + randomizationrange/2 (we support this to enable swapping)
-                                    // special values (randomizeDisable)
-    void Invalidate()
+    // Setup SDL
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0)
     {
-        currentseed = (size_t) -1;
+        printf('Error: %s\n', SDL_GetError());
+        return -1;
     }
-    
-            // add to set
-        let wasAdded = AddNodeToNetIfNotYet(node, /*makeUniqueName=*/ true);
-        if (!wasAdded) // node already there (above will fail if there is a different node with the same name)
-            continue;
-    
-                    ExtractSampleSequence(firstSeq, columnIndices, squashInputs, tokensToIgnore, firstSeqVec);
-                ExtractSampleSequence(secondSeq, columnIndices, squashInputs, tokensToIgnore, secondSeqVec);
-    
-    template<class ElemType>
-OptimizedRNNStackNode<ElemType>::OptimizedRNNStackNode(DEVICEID_TYPE deviceId, const wstring& name)
-    : Base(deviceId, name),
-    m_rnnAttributes(0, 0, 0, L'lstm', -1),
-    m_BackwardDataCalledYet(false)
-{
-}
-    
-    void Assembler::stdx(const Reg64& rt, MemoryRef m) {
-  assertx(!m.r.disp);  // doesn't support immediate displacement
-  EmitXForm(31, rn(rt), rn(m.r.base), rn(m.r.index), 149);
-}
-    
-    APCCollection::~APCCollection() {
-  // Zero for size is correct, because when this APCCollection was unreferenced
-  // it already included the size of the inner handle.
-  m_arrayHandle->unreferenceRoot(0);
-}
-    
-    struct DataStreamWrapper final : Stream::Wrapper {
-  DataStreamWrapper() {
-    m_isLocal = true;
-  }
     }
     
     
-    {}
+    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+            ImGui::End();
+        }
     
-    template<typename AHM>
-void checkAHMSubMaps(const AHM& map, folly::StringPiece mapName,
-                     std::atomic<bool>& done) {
-  if (LIKELY(map.numSubMaps() == 1) ||
-      done.load(std::memory_order_relaxed) ||
-      done.exchange(true, std::memory_order_relaxed)) {
-    return;
-  }
-    }
+    IMGUI_IMPL_API bool     ImGui_Marmalade_Init(bool install_callbacks);
+IMGUI_IMPL_API void     ImGui_Marmalade_Shutdown();
+IMGUI_IMPL_API void     ImGui_Marmalade_NewFrame();
+IMGUI_IMPL_API void     ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data);
     
-    void logAHMSubMapWarning(folly::StringPiece mapName) {
-  StackTrace st;
-  logPerfWarning(
-    'AtomicHashMap overflow',
-    [&](StructuredLogEntry& cols) {
-      cols.setStr('map_name', mapName);
-      cols.setStackTrace('stack', st);
-    }
-  );
-}
+        // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     
-    namespace HPHP {
-    }
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
     
-    #include 'hphp/runtime/base/plain-file.h'
+            static float f = 0.0f;
+        ImGui::Text('Hello, world!');
+        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
+        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
+        ImGui::ShowDemoWindow(NULL);
