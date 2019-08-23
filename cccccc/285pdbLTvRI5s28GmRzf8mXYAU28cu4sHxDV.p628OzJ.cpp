@@ -1,320 +1,183 @@
 
         
         
-    {}  // namespace atom
+    {private:
+    Ui::OpenURIDialog *ui;
+};
+    
+        BOOST_CHECK_EQUAL(obj.setObject(), true);
+    UniValue uv;
+    uv.setInt(42);
+    obj.__pushKV('age', uv);
+    BOOST_CHECK_EQUAL(obj.size(), 1);
+    BOOST_CHECK_EQUAL(obj['age'].getValStr(), '42');
+    
+    #endif // BITCOIN_CRYPTO_RIPEMD160_H
 
     
-    namespace api {
+      const Comparator* user_comparator() const { return user_comparator_; }
+    
+    
+    {    if (!supportsFlags (getFlags (version)))
+    {
+        THROW (IEX_NAMESPACE::InputExc, 'The file format version number's flag field '
+                              'contains unrecognized flags.');
     }
+}
     
-    class AtomBrowserContext;
+        if (usesLongNames (header))
+        version |= LONG_NAMES_FLAG;
     
-    class AtomJavaScriptDialogManager : public content::JavaScriptDialogManager {
- public:
-  explicit AtomJavaScriptDialogManager(api::WebContents* api_web_contents);
-  ~AtomJavaScriptDialogManager() override;
+    #ifndef IMFGENERICOUTPUTFILE_H_
+#define IMFGENERICOUTPUTFILE_H_
+    
+    const Header &
+InputPart::header () const
+{
+    return file->header();
+}
+    
+    OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_ENTER
+    
+    grpc::string ChannelArguments::GetSslTargetNameOverride() const {
+  for (unsigned int i = 0; i < args_.size(); i++) {
+    if (grpc::string(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG) == args_[i].key) {
+      return args_[i].value.string;
     }
-    
-    #ifndef ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
-#define ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
-    
-    #if !defined(OS_MACOSX) || defined(MAS_BUILD)
-std::string AutoUpdater::GetFeedURL() {
+  }
   return '';
 }
     
-    bool AboutProtocolHandler::IsSafeRedirectTarget(const GURL& location) const {
-  return false;
-}
-    
-    #endif  // ATOM_BROWSER_NET_ABOUT_PROTOCOL_HANDLER_H_
-
-    
-    class AsarProtocolHandler : public net::URLRequestJobFactory::ProtocolHandler {
- public:
-  explicit AsarProtocolHandler(
-      const scoped_refptr<base::TaskRunner>& file_task_runner);
-  ~AsarProtocolHandler() override;
-    }
-    
-    #include <string>
-    
-    #include 'ui/views/view.h'
-    
-    TegraCvtColor_Invoker(rgb2gray, rgb2gray, CAROTENE_NS::COLOR_SPACE_BT601, src_data + static_cast<size_t>(range.start) * src_step, src_step, \
-                                                                          dst_data + static_cast<size_t>(range.start) * dst_step, dst_step)
-TegraCvtColor_Invoker(bgr2gray, bgr2gray, CAROTENE_NS::COLOR_SPACE_BT601, src_data + static_cast<size_t>(range.start) * src_step, src_step, \
-                                                                          dst_data + static_cast<size_t>(range.start) * dst_step, dst_step)
-TegraCvtColor_Invoker(rgbx2gray, rgbx2gray, CAROTENE_NS::COLOR_SPACE_BT601, src_data + static_cast<size_t>(range.start) * src_step, src_step, \
-                                                                            dst_data + static_cast<size_t>(range.start) * dst_step, dst_step)
-TegraCvtColor_Invoker(bgrx2gray, bgrx2gray, CAROTENE_NS::COLOR_SPACE_BT601, src_data + static_cast<size_t>(range.start) * src_step, src_step, \
-                                                                            dst_data + static_cast<size_t>(range.start) * dst_step, dst_step)
-#define TEGRA_CVTBGRTOGRAY(src_data, src_step, dst_data, dst_step, width, height, depth, scn, swapBlue) \
-( \
-    depth == CV_8U && CAROTENE_NS::isSupportedConfiguration() ? \
-        scn == 3 ? \
-            (swapBlue ? \
-                parallel_for_(Range(0, height), \
-                TegraCvtColor_rgb2gray_Invoker(src_data, src_step, dst_data, dst_step, width, height), \
-                (width * height) / static_cast<double>(1<<16)) : \
-                parallel_for_(Range(0, height), \
-                TegraCvtColor_bgr2gray_Invoker(src_data, src_step, dst_data, dst_step, width, height), \
-                (width * height) / static_cast<double>(1<<16)) ), \
-            CV_HAL_ERROR_OK : \
-        scn == 4 ? \
-            (swapBlue ? \
-                parallel_for_(Range(0, height), \
-                TegraCvtColor_rgbx2gray_Invoker(src_data, src_step, dst_data, dst_step, width, height), \
-                (width * height) / static_cast<double>(1<<16)) : \
-                parallel_for_(Range(0, height), \
-                TegraCvtColor_bgrx2gray_Invoker(src_data, src_step, dst_data, dst_step, width, height), \
-                (width * height) / static_cast<double>(1<<16)) ), \
-            CV_HAL_ERROR_OK : \
-        CV_HAL_ERROR_NOT_IMPLEMENTED \
-    : CV_HAL_ERROR_NOT_IMPLEMENTED \
-)
-    
-    
-    {        vs1 = vmla_f32(vget_low(vgamma), vs1, vget_low(valpha));
-        vs1 = vmla_f32(vs1, vs2, vget_low(vbeta));
-        v_dst = vcvt_s32_f32(vs1);
-    }
-    
-    #define  VROW_LINE(type, n) const type * src##n = internal::getRowPtr(src##n##Base, src##n##Stride, i);
-#define  PREF_LINE(type, n) internal::prefetch(src##n + sj);
-#define VLD1Q_LINE(type, n) v_dst.val[n] = vld1q_##type(src##n + sj);
-#define  PRLD_LINE(type, n) internal::prefetch(src##n + sj); v_dst.val[n] = vld1q_##type(src##n + sj);
-#define  VLD1_LINE(type, n) v_dst.val[n] = vld1_##type(src##n + sj);
-#define   SLD_LINE(type, n) dst[dj + n] = src##n[sj];
-    
-    f64 dotProduct(const Size2D &_size,
-               const u8 * src0Base, ptrdiff_t src0Stride,
-               const u8 * src1Base, ptrdiff_t src1Stride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    Size2D size(_size);
-    if (src0Stride == src1Stride &&
-        src0Stride == (ptrdiff_t)(size.width))
-    {
-        size.width *= size.height;
-        size.height = 1;
-    }
-    }
-    
-    namespace {
-    }
-    
-    namespace CAROTENE_NS {
-    }
-    
-        for (ptrdiff_t y = 0; y < height; ++y)
-    {
-        const u8 * srow0 = y == 0 && border == BORDER_MODE_CONSTANT ? NULL : internal::getRowPtr(srcBase, srcStride, std::max<ptrdiff_t>(y - 1, 0));
-        const u8 * srow1 = internal::getRowPtr(srcBase, srcStride, y);
-        const u8 * srow2 = y + 1 == height && border == BORDER_MODE_CONSTANT ? NULL : internal::getRowPtr(srcBase, srcStride, std::min(y + 1, height - 1));
-        u8 * drow = internal::getRowPtr(dstBase, dstStride, y);
-    }
-    
     #include <gtest/gtest.h>
     
-    // TODO(thomasvl): Should probably add some unittests for all the special cases
-// of name mangling (class name, field name, enum names).  Rather than doing
-// this with an ObjC test in the objectivec directory, we should be able to
-// use src/google/protobuf/compiler/importer* (like other tests) to support a
-// virtual file system to feed in protos, once we have the Descriptor tree, the
-// tests could use the helper methods for generating names and validate the
-// right things are happening.
+    #include <errno.h>
+#include <fcntl.h>
+#include <string.h>
     
-    void MapLiteTestUtil::ExpectMapFieldsSetInitialized(
-    const unittest::TestMapLite& message) {
-  MapTestUtilImpl::ExpectMapFieldsSetInitialized<unittest::MapEnumLite,
-                                                 unittest::MAP_ENUM_FOO_LITE>(
-      message);
-}
+    #define GPR_GLOBAL_CONFIG_DEFINE_BOOL(name, default_value, help)         \
+  static char g_env_str_##name[] = #name;                                \
+  static ::grpc_core::GlobalConfigEnvBool g_env_##name(g_env_str_##name, \
+                                                       default_value);   \
+  bool gpr_global_config_get_##name() { return g_env_##name.Get(); }     \
+  void gpr_global_config_set_##name(bool value) { g_env_##name.Set(value); }
     
-    bool Status::operator==(const Status& x) const {
-  return error_code_ == x.error_code_ &&
-      error_message_ == x.error_message_;
-}
+      gpr_unsetenv(bool_var_name);
+  EXPECT_TRUE(GPR_GLOBAL_CONFIG_GET(bool_var));
     
-    using google::protobuf::io::FileOutputStream;
-using google::protobuf::io::GzipOutputStream;
+      MockEchoTestServiceStub stub;
+  auto w = new MockClientWriter<EchoRequest>();
+  EchoResponse resp;
+  resp.set_message('hello, world');
     
-    namespace {
-    }
+    #include 'src/core/lib/gpr/tls.h'
+#include 'src/core/lib/iomgr/port.h'
+#include 'src/proto/grpc/testing/echo.grpc.pb.h'
+#include 'test/core/util/port.h'
+#include 'test/core/util/test_config.h'
     
      private:
-  static bool IsMessageSet(const Descriptor *descriptor) {
-    if (descriptor != nullptr
-        && descriptor->options().message_set_wire_format()) {
-      return true;
+  TestServerBuilderPlugin* CheckPresent() {
+    auto it = builder_->plugins_.begin();
+    for (; it != builder_->plugins_.end(); it++) {
+      if ((*it)->name() == PLUGIN_NAME) break;
     }
-    return false;
+    if (it != builder_->plugins_.end()) {
+      return static_cast<TestServerBuilderPlugin*>(it->get());
+    } else {
+      return nullptr;
+    }
   }
     
+    #ifndef STORAGE_LEVELDB_DB_DB_ITER_H_
+#define STORAGE_LEVELDB_DB_DB_ITER_H_
     
-  bool ReadProtoFromTextContent(const std::string& text,
-                                ::google::protobuf::Message* proto) const {
-    bool success = google::protobuf::TextFormat::ParseFromString(text, proto);
-    return success;
-  }
+    #include 'db/filename.h'
+#include 'leveldb/env.h'
+#include 'leveldb/table.h'
+#include 'util/coding.h'
     
-    namespace mxnet {
-namespace engine {
+      static Status InsertInto(const WriteBatch* batch, MemTable* memtable);
+    
+    // See doc/table_format.md for an explanation of the filter block format.
+    
+    Iterator* NewErrorIterator(const Status& status) {
+  return new EmptyIterator(status);
+}
+    
+    class Comparator;
+class Iterator;
+    
+      const char* p = s.data();
+  for (int power = 0; power <= 63; power++) {
+    uint64_t v = static_cast<uint64_t>(1) << power;
+    uint64_t actual;
+    actual = DecodeFixed64(p);
+    ASSERT_EQ(v - 1, actual);
+    p += sizeof(uint64_t);
     }
+    
+    void Top::_appendToUsageMap(BSONObjBuilder& b, const UsageMap& map) const {
+    // pull all the names into a vector so we can sort them for the user
     }
     
-    namespace mxnet {
-namespace io {
-/*!
- * \brief OpenCV based Image augmenter,
- *  The augmenter can contain internal temp state.
+    /**
+ * DB usage monitor.
  */
-class ImageAugmenter {
- public:
-  /*!
-   *  \brief Initialize the Operator by setting the parameters
-   *  This function need to be called before all other functions.
-   *  \param kwargs the keyword arguments parameters
-   */
-  virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) = 0;
-  /*!
-   * \brief augment src image.
-   *   this function is not thread safe, and will only be called by one thread
-   *   however, it will tries to re-use memory space as much as possible
-   * \param src the source image
-   * \param prnd pointer to random number generator.
-   * \return The processed image.
-   */
-  virtual cv::Mat Process(const cv::Mat &src, std::vector<float> *label,
-                          common::RANDOM_ENGINE *prnd) = 0;
-  // virtual destructor
-  virtual ~ImageAugmenter() {}
-  /*!
-   * \brief factory function
-   * \param name Name of the augmenter
-   * \return The created augmenter.
-   */
-  static ImageAugmenter* Create(const std::string& name);
-};
+    
+    class InsertNoId : public Base {
+public:
+    void run() {
+        WriteUnitOfWork wunit(&_opCtx);
+        BSONObj x = BSON('x' << 1);
+        ASSERT(x['_id'].type() == 0);
+        Collection* collection = _context.db()->getOrCreateCollection(&_opCtx, nss());
+        OpDebug* const nullOpDebug = nullptr;
+        ASSERT(!collection->insertDocument(&_opCtx, InsertStatement(x), nullOpDebug, true).isOK());
     }
     }
     
+        const uint32_t allFlags = UREGEX_CANON_EQ | UREGEX_CASE_INSENSITIVE | UREGEX_COMMENTS |
+                              UREGEX_DOTALL   | UREGEX_MULTILINE        | UREGEX_UWORD |
+                              UREGEX_ERROR_ON_UNKNOWN_ESCAPES           | UREGEX_UNIX_LINES | UREGEX_LITERAL;
     
-    {  Stream<xpu> *stream = ctx.get_stream<xpu>();
-  Tensor<xpu, 2, DType> out = out_data[0].get<xpu, 2, DType>(stream);
-  std::vector<Tensor<xpu, 2, DType> > ts_arr(in_data.size());
-  std::transform(in_data.begin(), in_data.end(), ts_arr.begin(),
-                 [&stream](TBlob blob) -> Tensor<xpu, 2, DType> {
-                   return blob.get<xpu, 2, DType>(stream);
-                 });
-  khatri_rao(out, ts_arr);
+    U_CAPI UBool U_EXPORT2
+uhash_equalsScriptSet(const UElement key1, const UElement key2) {
+    icu::ScriptSet *s1 = static_cast<icu::ScriptSet *>(key1.pointer);
+    icu::ScriptSet *s2 = static_cast<icu::ScriptSet *>(key2.pointer);
+    return (*s1 == *s2);
 }
     
-     private:
-  inline void Init(mshadow::Stream<gpu> *s,
-                   const std::vector<TBlob> &in_data,
-                   const std::vector<TBlob> &out_data) {
-    using namespace mshadow;
-    #if CUDNN_MAJOR >= 5
-    format_ = CUDNN_TENSOR_NCHW;
-    #endif
-    CHECK_EQ(in_data.size(), 2U);
-    CHECK_EQ(out_data.size(), 2U);
-    if (!init_cudnn_) {
-      init_cudnn_ = true;
-      Tensor<gpu, 4, DType> data = in_data[bs::kData].get<gpu, 4, DType>(s);
-      Tensor<gpu, 4, DType> out = out_data[bs::kOut].get<gpu, 4, DType>(s);
-      CUDNN_CALL(cudnnCreateSpatialTransformerDescriptor(&st_desc_));
-      CUDNN_CALL(cudnnCreateTensorDescriptor(&in_desc_));
-      CUDNN_CALL(cudnnCreateTensorDescriptor(&out_desc_));
-      CUDNN_CALL(cudnnSetTensor4dDescriptor(in_desc_,
-                                            format_,
-                                            dtype_,
-                                            data.size(0),
-                                            data.size(1),
-                                            data.size(2),
-                                            data.size(3)));
-      CUDNN_CALL(cudnnSetTensor4dDescriptor(out_desc_,
-                                            format_,
-                                            dtype_,
-                                            out.size(0),
-                                            out.size(1),
-                                            out.size(2),
-                                            out.size(3)));
-      int dim[] = {static_cast<int>(out.size(0)), static_cast<int>(out.size(1)),
-                   static_cast<int>(out.size(2)), static_cast<int>(out.size(3))};
-      CUDNN_CALL(cudnnSetSpatialTransformerNdDescriptor(st_desc_,
-                                                        sampler_,
-                                                        dtype_,
-                                                        4,
-                                                        dim));
-    }
-  }
+    SharedBreakIterator::SharedBreakIterator(
+        BreakIterator *biToAdopt) : ptr(biToAdopt) { }
     
-    template<>
-Operator *CreateOp<cpu>(NDArrayOpParam param) {
-  return new NDArrayOp<cpu>(param);
+    #if !UCONFIG_NO_BREAK_ITERATION
+    
+    void    ImGui_ImplOpenGL3_Shutdown()
+{
+    ImGui_ImplOpenGL3_DestroyDeviceObjects();
 }
     
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
     
-    {        return dict[versionKey].Value<size_t>();
-    }
-    
-    
-    {    ~CrossProcessMutex()
-    {
-        if (m_fd != -1)
-        {
-            Release();
-        }
-    }
-};
-    
-    
-    {    ~ScopeTimer()
-    {
-        if (m_verbosity > 2)
-        {
-            m_aggregateTimer.Stop();
-            double time = m_aggregateTimer.ElapsedSeconds();
-            fprintf(stderr, m_message.c_str(), time);
-        }
-    }
-};
-    
-        virtual void CopyTo(ComputationNodeBasePtr nodeP, const std::wstring& newName, const CopyNodeFlags flags) const override
-    {
-        Base::CopyTo(nodeP, newName, flags);
-        if (flags & CopyNodeFlags::copyNodeValue)
-        {
-            auto node = dynamic_pointer_cast<ClassificationErrorNode<ElemType>>(nodeP);
-            node->m_maxIndexes0->SetValue(*m_maxIndexes0);
-            node->m_maxIndexes1->SetValue(*m_maxIndexes1);
-            node->m_maxValues->SetValue(*m_maxValues);
-        }
-    }
-    // request matrices needed to do node function value evaluation
-    virtual void RequestMatricesBeforeForwardProp(MatrixPool& matrixPool)
-    {
-        Base::RequestMatricesBeforeForwardProp(matrixPool);
-        RequestMatrixFromPool(m_maxIndexes0, matrixPool);
-        RequestMatrixFromPool(m_maxIndexes1, matrixPool);
-        RequestMatrixFromPool(m_maxValues, matrixPool);
-    }
-    
-    
-    {}
-    
-      /**
-   * Fill up vector with summary information.
-   */
-  virtual void debuggerInfo(InfoVec& /*info*/) {}
-    
-    PlainDirectory::PlainDirectory(int fd) {
-  m_dir = ::fdopendir(fd);
+    void CleanupDeviceD3D()
+{
+    CleanupRenderTarget();
+    if (g_pSwapChain) { g_pSwapChain->Release(); g_pSwapChain = NULL; }
+    if (g_pd3dDeviceContext) { g_pd3dDeviceContext->Release(); g_pd3dDeviceContext = NULL; }
+    if (g_pd3dDevice) { g_pd3dDevice->Release(); g_pd3dDevice = NULL; }
 }
     
-    namespace HPHP {
+            // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
+        {
+            static float f = 0.0f;
+            static int counter = 0;
     }
+    
+    // Implemented features:
+//  [X] Platform: Clipboard support.
+//  [X] Platform: Gamepad support. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
+//  [x] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'. FIXME: 3 cursors types are missing from GLFW.
+//  [X] Platform: Keyboard arrays indexed using GLFW_KEY_* codes, e.g. ImGui::IsKeyPressed(GLFW_KEY_SPACE).
