@@ -1,127 +1,90 @@
 
         
-        from scrapy.commands import ScrapyCommand
-from scrapy.exceptions import UsageError
+                asset_types = []
+        subtitles = {}
+        formats = []
+        last_e = None
+        for item in items_data.findall('.//item'):
+            asset_type = xpath_text(item, 'assetType')
+            if not asset_type or asset_type in asset_types or 'HLS_FPS' in asset_type or 'DASH_CENC' in asset_type:
+                continue
+            asset_types.append(asset_type)
+            query = {
+                'mbr': 'true',
+                'assetTypes': asset_type,
+            }
+            if asset_type.startswith('HLS') or asset_type in ('OnceURL', 'StreamPack'):
+                query['formats'] = 'MPEG4,M3U'
+            elif asset_type in ('RTMP', 'WIFI', '3G'):
+                query['formats'] = 'MPEG4,FLV'
+            try:
+                tp_formats, tp_subtitles = self._extract_theplatform_smil(
+                    update_url_query(tp_release_url, query), content_id,
+                    'Downloading %s SMIL data' % asset_type)
+            except ExtractorError as e:
+                last_e = e
+                continue
+            formats.extend(tp_formats)
+            subtitles = self._merge_subtitles(subtitles, tp_subtitles)
+        if last_e and not formats:
+            raise last_e
+        self._sort_formats(formats)
     
-        class _v19_S3Connection(S3Connection):
-        '''A dummy S3Connection wrapper that doesn't do any synchronous download'''
-        def _mexe(self, method, bucket, key, headers, *args, **kwargs):
-            return headers
+        with io.open(outfile, 'w', encoding='utf-8') as outf:
+        outf.write(out)
     
-        def _downloaded(self, response, slot, request, spider):
-        slot.remove_request(request)
-        return self.download(response, spider) \
-                if isinstance(response, Request) else response
+        def set_crawler(self, crawler):
+        assert not hasattr(self, '_crawler'), 'crawler already set'
+        self._crawler = crawler
     
-            for fmt, func in six.iteritems(self._formats):
-            new_response = func(response)
-            if new_response:
-                logger.debug('Decompressed response with format: %(responsefmt)s',
-                             {'responsefmt': fmt}, extra={'spider': spider})
-                return new_response
-        return response
+            spidercls = DefaultSpider
+        spider_loader = self.crawler_process.spider_loader
+        if opts.spider:
+            spidercls = spider_loader.load(opts.spider)
+        else:
+            spidercls = spidercls_for_request(spider_loader, request, spidercls)
+        self.crawler_process.crawl(spidercls, start_requests=lambda: [request])
+        self.crawler_process.start()
 
     
-        @classmethod
-    def from_crawler(cls, crawler):
-        headers = without_none_values(crawler.settings['DEFAULT_REQUEST_HEADERS'])
-        return cls(headers.items())
+        def _has_ajax_crawlable_variant(self, response):
+        '''
+        Return True if a page without hash fragment could be 'AJAX crawlable'
+        according to https://developers.google.com/webmasters/ajax-crawling/docs/getting-started.
+        '''
+        body = response.text[:self.lookup_bytes]
+        return _has_ajaxcrawlable_meta(body)
     
-        @classmethod
-    def from_crawler(cls, crawler):
-        o = cls(crawler.settings.getfloat('DOWNLOAD_TIMEOUT'))
-        crawler.signals.connect(o.spider_opened, signal=signals.spider_opened)
-        return o
+    See documentation in docs/topics/downloader-middleware.rst
+'''
     
-            self.stats.inc_value('httpcache/invalidate', spider=spider)
-        self._cache_response(spider, response, request, cachedresponse)
-        return response
     
-        def test_create_sns_message_body_raw_message_delivery(self):
-        self.subscriber['RawMessageDelivery'] = 'true'
-        action = {
-            'Message': ['msg']
-        }
-        result = sns_listener.create_sns_message_body(self.subscriber, action)
-        self.assertEqual(result, 'msg')
+class Scientist(AbstractExpert):
+    @property
+    def is_eager_to_contribute(self):
+        return random.randint(0, 1)
     
-            # Place the raw event message document into the Kinesis message format
-        kinesis_record = {
-            'PartitionKey': 'key123',
-            'Data': json.dumps(ddb_new_image)
-        }
     
-        def test_bucket_policy(self):
-        # create test bucket
-        self.s3_client.create_bucket(Bucket=TEST_BUCKET_NAME_WITH_POLICY)
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
+
     
-    # Repeat the entire benchmark this many times (on different ports)
-# This gives JITs time to warm up, etc.  Pypy needs 3-5 runs at
-# --n=15000 for its JIT to reach full effectiveness
-define('num_runs', type=int, default=1)
-    
-    tmpl = Template('''\
-<!doctype html>
-<html>
-  <head>
-    <title>{{ page_title }}</title>
-  </head>
-  <body>
-    <div class='header'>
-      <h1>{{ page_title }}</h1>
-    </div>
-    <ul class='navigation'>
-    {% for href, caption in [ \
-        ('index.html', 'Index'), \
-        ('downloads.html', 'Downloads'), \
-        ('products.html', 'Products') \
-      ] %}
-      <li><a href='{{ href }}'>{{ caption }}</a></li>
-    {% end %}
-    </ul>
-    <div class='table'>
-      <table>
-      {% for row in table %}
-        <tr>
-        {% for cell in row %}
-          <td>{{ cell }}</td>
-        {% end %}
-        </tr>
-      {% end %}
-      </table>
-    </div>
-  </body>
-</html>\
-''')
-    
-        Intended to be used at the end of scripts like unit test runners,
-    to run the tests again after any source file changes (but see also
-    the command-line interface in `main`)
     '''
-    io_loop = ioloop.IOLoop()
-    io_loop.add_callback(start)
-    io_loop.start()
+http://code.activestate.com/recipes/413838-memento-closure/
     
-    For each function or class described in `tornado.platform.interface`,
-the appropriate platform-specific implementation exists in this module.
-Most code that needs access to this functionality should do e.g.::
+    *TL;DR
+Implements state as a derived class of the state pattern interface.
+Implements state transitions by invoking methods from the pattern's superclass.
+'''
     
-        def tearDown(self):
-        asyncio.set_event_loop_policy(self.orig_policy)
-        self.executor.shutdown()
+        def price_after_discount(self):
+        if self.discount_strategy:
+            discount = self.discount_strategy(self)
+        else:
+            discount = 0
+        return self.price - discount
     
-        def test_google_login(self):
-        response = self.fetch('/client/login')
-        self.assertDictEqual(
-            {
-                u'name': u'Foo',
-                u'email': u'foo@example.com',
-                u'access_token': u'fake-access-token',
-            },
-            json_decode(response.body),
-        )
-
-    
-            o = Object()
-        answer = yield o.f()
-        self.assertEqual(answer, 42)
+    *Where is the pattern used practically?
+Sharing state is useful in applications like managing database connections:
+https://github.com/onetwopunch/pythonDbTemplate/blob/master/database.py
