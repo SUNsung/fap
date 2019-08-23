@@ -1,163 +1,164 @@
 
         
-                result = Fastlane::FastFile.new.parse('lane :test do
-          add_git_tag ({
-            tag: '#{tag}',
-          })
-        end').runner.execute(:test)
-    
-          it 'doesn't add a use-submodules flag to command if use_submodules is set to false' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            carthage(
-              use_submodules: false
-            )
-          end').runner.execute(:test)
-    
-              expect(called).to be(true)
-          expect(FastlaneCore::UI).to have_received(:error).with('Exit status of command 'exit 1' was 1 instead of 0.\n')
-        end
-      end
-    
-        describe 'shell escaping' do
-      let(:keychain_name) { 'keychain with spaces.keychain' }
-      let(:shell_escaped_name) { keychain_name.shellescape }
-      let(:name_regex) { Regexp.new(Regexp.escape(shell_escaped_name)) }
-    
-          def perform(start_id, stop_id)
-        update = '
-          latest_merge_request_diff_id = (
-            SELECT MAX(id)
-            FROM merge_request_diffs
-            WHERE merge_requests.id = merge_request_diffs.merge_request_id
-          )'.squish
-    
-            def sidekiq_worker_class
-          ImportDiffNoteWorker
-        end
-    
-                rows << {
-              label_id: label_id,
-              target_id: target_id,
-              target_type: issue.issuable_type,
-              created_at: time,
-              updated_at: time
-            }
-          end
-    
-          # Returns the ID to use for the cache used for checking if an object has
-      # already been imported or not.
-      #
-      # object - The object we may want to import.
-      def id_for_already_imported_cache(object)
-        raise NotImplementedError
-      end
-    
-    module Gitlab
-  module GithubImport
-    module Representation
-      class User
-        include ToHash
-        include ExposeAttribute
-    
-            File.chmod(0, f.path)
-    
-      # This array contains name of parser events.
-  PARSER_EVENTS = PARSER_EVENT_TABLE.keys
-    
-        return Gem::RemoteFetcher.fetcher.download_to_cache(dependency) unless
-      selected
-    
-        assert_equal B(%w{ 04 06 03 }), point.to_octet_string(:uncompressed)
-    assert_equal B(%w{ 03 06 }), point.to_octet_string(:compressed)
-    assert_equal B(%w{ 07 06 03 }), point.to_octet_string(:hybrid)
-    
-          @socket.read(6).should == 'hello!'
+            def test_migrations_can_handle_foreign_keys_to_specific_tables
+      migration = RevertCustomForeignKeyTable.new
+      InvertibleMigration.migrate(:up)
+      migration.migrate(:up)
+      migration.migrate(:down)
     end
+    
+      def test_validators
+    assert_equal 1, Parrot.validators.size
+    assert_equal 1, Company.validators.size
+    assert_equal 1, Parrot.validators_on(:name).size
+    assert_equal 1, Company.validators_on(:name).size
   end
     
-        def humanized_literal(str)
-      str
-        .gsub(CLEAR, '@@@{CLEAR}')
-        .gsub(BOLD, '@@@{BOLD}')
-        .gsub(UNDERLINE, '@@@{UNDERLINE}')
-        .gsub(REVERSE, '@@@{REVERSE}')
-        .gsub(RED, '@@@{RED}')
-        .gsub(GREEN, '@@@{GREEN}')
-        .gsub(YELLOW, '@@@{YELLOW}')
-        .gsub(BLUE, '@@@{BLUE}')
-        .gsub(MAGENTA, '@@@{MAGENTA}')
-        .gsub(CYAN, '@@@{CYAN}')
-        .dump.gsub(/@@@/, '#')
-    end
+          def password
+        Rails.application.credentials.dig(:action_mailbox, :ingress_password) || ENV['RAILS_INBOUND_EMAIL_PASSWORD']
+      end
   end
 end
 
     
-      def test_undef_w_stateless
-    with_tmpdir {
-      generate_file('t.txt', 'a\uFFFDb')
-      open('t.txt', 'w:euc-jp:utf-8', :undef => :replace) {|f|
-        assert_nothing_raised { f.write 'a\uFFFDb' }
-      }
-      assert_equal('a?b', File.read('t.txt'))
-      open('t.txt', 'w:euc-jp:utf-8', :undef => :replace, :replace => '') {|f|
-        assert_nothing_raised { f.write 'a\uFFFDb' }
-      }
-      assert_equal('ab', File.read('t.txt'))
-      open('t.txt', 'w:euc-jp:utf-8', :invalid => :replace) {|f|
-        assert_raise(Encoding::UndefinedConversionError) { f.write 'a\uFFFDb' }
-      }
-      open('t.txt', 'w:euc-jp:utf-8', :invalid => :replace, :replace => '') {|f|
-        assert_raise(Encoding::UndefinedConversionError) { f.write 'a\uFFFDb' }
-      }
-    }
-  end
+          setup :build_app
+      teardown :teardown_app
     
-          module R
-        refine C do
-          def m
-            :foo
-          end
+        desc 'Get the text for a specific license' do
+      detail 'This feature was introduced in GitLab 8.7.'
+      success ::API::Entities::License
+    end
+    params do
+      requires :name, type: String, desc: 'The name of the template'
+    end
+    get 'templates/licenses/:name', requirements: { name: /[\w\.-]+/ } do
+      template = TemplateFinder.build(:licenses, nil, name: params[:name]).execute
+    
+      subject(:finder) { described_class.new(project, 'files/', '.html', categories) }
+    
+        def find(query)
+      query = Gitlab::Search::Query.new(query, encode_binary: true) do
+        filter :filename, matcher: ->(filter, blob) { blob.binary_filename =~ /#{filter[:regex_value]}$/i }
+        filter :path, matcher: ->(filter, blob) { blob.binary_filename =~ /#{filter[:regex_value]}/i }
+        filter :extension, matcher: ->(filter, blob) { blob.binary_filename =~ /\.#{filter[:regex_value]}$/i }
+      end
+    
+          info do
+        options.info_map.each_with_object({}) do |(k, v), h|
+          h[k.to_s] = decoded[v.to_s]
         end
       end
     
-      def test_copy_stream_socket4
-    with_bigsrc {|bigsrc, bigcontent|
-      File.open(bigsrc) {|f|
-        assert_equal(0, f.pos)
-        with_socketpair {|s1, s2|
-          t1 = Thread.new { s2.read }
-          t2 = Thread.new {
-            ret = IO.copy_stream(f, s1, nil, 100)
-            assert_equal(bigcontent.bytesize-100, ret)
-            assert_equal(0, f.pos)
-            s1.close
-          }
-          result, _ = assert_join_threads([t1, t2])
-          assert_equal(bigcontent[100..-1], result)
-        }
+        allow(subject).to receive(:diff_files) { [readme_file, other_file, nil_path_file] }
+    expect(readme_file).to receive(:unfold_diff_lines).with(position)
+    
+        context 'if compliant?' do
+      let(:compliant) { true }
+    
+          context '!limit_reached?' do
+        let(:limit_reached) { false }
+    
+      def eligible_users
+    User.emailable
+        .where('current_sign_in_at < ?', (FREQUENCY + SIGN_IN_OFFSET).ago)
+        .where('last_emailed_at IS NULL OR last_emailed_at < ?', FREQUENCY.ago)
+  end
+end
+
+    
+          context 'if the message chain initiated by recipient, but is not direct message' do
+        let(:reply_to) { Fabricate(:status, account: recipient) }
+        let(:activity) { Fabricate(:mention, account: recipient, status: Fabricate(:status, account: sender, visibility: :direct, thread: reply_to)) }
+    
+      # You can wrap each item in a collection of radio/check boxes with a tag,
+  # defaulting to :span.
+  # config.item_wrapper_tag = :span
+    
+    RSpec.describe 'Blocks', type: :request do
+  let(:user) { create(:user, :super_admin) }
+    
+      describe 'DELETE /chat_channel_memberships/:id' do
+    before do
+      user.add_role(:super_admin)
+      post '/chat_channel_memberships', params: {
+        chat_channel_membership: { user_id: second_user.id, chat_channel_id: chat_channel.id }
       }
-    }
-  end if defined? UNIXSocket
+    end
     
-          def warn_set_scm_is_deprecated
-        $stderr.puts(<<-MESSAGE)
-[Deprecation Notice] `set :scm, #{scm_name.inspect}` is deprecated.
-To ensure your project is compatible with future versions of Capistrano,
-remove the :scm setting and instead add these lines to your Capfile after
-`require 'capistrano/deploy'`:
+        respond_to do |format|
+      format.html do
+        render 'user', layout: false
+      end
+      format.png do
+        html = render_to_string('user', formats: :html, layout: false)
+        redirect_to HtmlCssToImage.fetch_url(html: html, css: PNG_CSS, google_fonts: 'Roboto'), status: :found
+      end
+    end
+  end
     
-          def primary
-        self if fetch(:primary)
+      def twitter_buffer_text
+    '#{text} https://dev.to#{@article.path}' if text.size <= 255
+  end
+    
+          def partial(name)
+        if name == :author_template
+          self.class.partial('history_authors/#{@wiki.user_icons}')
+        else
+          super
+        end
       end
     
-          # rubocop:disable Security/MarshalLoad
-      def add_role(role, hosts, options={})
-        options_deepcopy = Marshal.dump(options.merge(roles: role))
-        Array(hosts).each { |host| add_host(host, Marshal.load(options_deepcopy)) }
+          def mathjax
+        @mathjax
       end
-      # rubocop:enable Security/MarshalLoad
     
-          def untrusted_keys
-        keys - @trusted_keys
+    context 'Precious::Helpers' do
+  include Precious::Helpers
+    
+    #############################################################################
+#
+# Helper functions
+#
+#############################################################################
+    
+      it 'should package Digest::MD5' do
+    pending('Disabled on travis-ci because it always fails, and there is no way to debug it?') if is_travis
+    
+        context 'and :python_fix_dependencies? is true' do
+      before :each do
+        subject.attributes[:python_fix_dependencies?] = true
       end
+    
+      shared_examples_for :Mutator do |item|
+    context 'when set' do
+      let(:value) { 'whatever' }
+      it 'should return the set value' do
+        expect(subject.send('#{item}=', value)).to(be == value)
+      end
+    
+    class FPM::Package::NPM < FPM::Package
+  class << self
+    include FPM::Util
+  end
+  # Flags '--foo' will be accessable  as attributes[:npm_foo]
+  option '--bin', 'NPM_EXECUTABLE',
+    'The path to the npm executable you wish to run.', :default => 'npm'
+    
+      POSTINSTALL_ACTIONS = [ 'logout', 'restart', 'shutdown' ]
+  OWNERSHIP_OPTIONS = ['recommended', 'preserve', 'preserve-other']
+    
+        if File.directory?(path_to_package)
+      setup_py = File.join(path_to_package, 'setup.py')
+    else
+      setup_py = path_to_package
+    end
+    
+        args = [ tar_cmd,
+             '-C',
+             staging_path,
+             '-cf',
+             payload_tar,
+             '--owner=0',
+             '--group=0',
+             '--numeric-owner',
+             '.' ]
