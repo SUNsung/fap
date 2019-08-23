@@ -1,259 +1,295 @@
 
         
-          const PrimitiveType type_;
-  const int64 batch_size_;
-  const int64 a_batch_stride_;
-  const int64 n_;
-    
-    
-    {
-    {}  // namespace gpu
-}  // namespace xla
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    // A thunk that copies data from a host buffer to a device buffer.
-class HostToDeviceCopyThunk : public Thunk {
- public:
-  // Constructs a CopyThunk that copies host data from `source_address` to the
-  // device buffer `destination_buffer`. `mem_size` is the size of the data in
-  // bytes.
-  HostToDeviceCopyThunk(const void* source_address,
-                        const BufferAllocation::Slice& destination_buffer,
-                        uint64 mem_size, const HloInstruction* hlo_instruction);
+        /** Utility functions used by the Bitcoin Qt UI.
+ */
+namespace GUIUtil
+{
+    // Create human-readable string from date
+    QString dateTimeStr(const QDateTime &datetime);
+    QString dateTimeStr(qint64 nTime);
     }
     
-    se::fft::Type FftTypeToSeType(FftType type) {
-  switch (type) {
-    case FftType::FFT:
-      return se::fft::Type::kC2CForward;
-    case FftType::IFFT:
-      return se::fft::Type::kC2CInverse;
-    case FftType::IRFFT:
-      return se::fft::Type::kC2R;
-    case FftType::RFFT:
-      return se::fft::Type::kR2C;
-    default:
-      LOG(FATAL) << 'unsupported fft type';
+        BOOST_CHECK(v.setNumStr('-688'));
+    BOOST_CHECK(v.isNum());
+    BOOST_CHECK_EQUAL(v.getValStr(), '-688');
+    
+    #ifndef BITCOIN_BECH32_H
+#define BITCOIN_BECH32_H
+    
+    ROTATE_ARGS
+	movdqa	XTMP3, XTMP2	; XTMP3 = W[-2] {BBAA}
+    mov	y0, e		; y0 = e
+    mov	y1, a		; y1 = a
+    ror	y0, (25-11)	; y0 = e >> (25-11)
+	movdqa	XTMP4, XTMP2	; XTMP4 = W[-2] {BBAA}
+    xor	y0, e		; y0 = e ^ (e >> (25-11))
+    ror	y1, (22-13)	; y1 = a >> (22-13)
+    mov	y2, f		; y2 = f
+    xor	y1, a		; y1 = a ^ (a >> (22-13)
+    ror	y0, (11-6)	; y0 = (e >> (11-6)) ^ (e >> (25-6))
+	psrlq	XTMP2, 17	; XTMP2 = W[-2] ror 17 {xBxA}
+    xor	y2, g		; y2 = f^g
+	psrlq	XTMP3, 19	; XTMP3 = W[-2] ror 19 {xBxA}
+    xor	y0, e		; y0 = e ^ (e >> (11-6)) ^ (e >> (25-6))
+    and	y2, e		; y2 = (f^g)&e
+	psrld	XTMP4, 10	; XTMP4 = W[-2] >> 10 {BBAA}
+    ror	y1, (13-2)	; y1 = (a >> (13-2)) ^ (a >> (22-2))
+    xor	y1, a		; y1 = a ^ (a >> (13-2)) ^ (a >> (22-2))
+    xor	y2, g		; y2 = CH = ((f^g)&e)^g
+    ror	y0, 6		; y0 = S1 = (e>>6) & (e>>11) ^ (e>>25)
+	pxor	XTMP2, XTMP3
+    add	y2, y0		; y2 = S1 + CH
+    ror	y1, 2		; y1 = S0 = (a>>2) ^ (a>>13) ^ (a>>22)
+    add	y2, [rsp + _XFER + 2*4]	; y2 = k + w + S1 + CH
+	pxor	XTMP4, XTMP2	; XTMP4 = s1 {xBxA}
+    mov	y0, a		; y0 = a
+    add	h, y2		; h = h + S1 + CH + k + w
+    mov	y2, a		; y2 = a
+	pshufb	XTMP4, SHUF_00BA	; XTMP4 = s1 {00BA}
+    or	y0, c		; y0 = a|c
+    add	d, h		; d = d + h + S1 + CH + k + w
+    and	y2, c		; y2 = a&c
+	paddd	XTMP0, XTMP4	; XTMP0 = {..., ..., W[1], W[0]}
+    and	y0, b		; y0 = (a|c)&b
+    add	h, y1		; h = h + S1 + CH + k + w + S0
+	;; compute high s1
+	pshufd	XTMP2, XTMP0, 01010000b	; XTMP2 = W[-2] {DDCC}
+    or	y0, y2		; y0 = MAJ = (a|c)&b)|(a&c)
+    add	h, y0		; h = h + S1 + CH + k + w + S0 + MAJ
+    
+    void InternalFilterPolicy::CreateFilter(const Slice* keys, int n,
+                                        std::string* dst) const {
+  // We rely on the fact that the code in table.cc does not mind us
+  // adjusting keys[].
+  Slice* mkey = const_cast<Slice*>(keys);
+  for (int i = 0; i < n; i++) {
+    mkey[i] = ExtractUserKey(keys[i]);
+    // TODO(sanjay): Suppress dups?
   }
+  user_policy_->CreateFilter(keys, n, dst);
 }
     
-    Status ForThunk::Initialize(const GpuExecutable& executable,
-                            se::StreamExecutor* executor) {
-  TF_RETURN_IF_ERROR(body_thunk_sequence_->Initialize(executable, executor));
-  return Status::OK();
+    TEST(FaultInjectionTest, FaultTestWithLogReuse) {
+  ReuseLogs(true);
+  DoTest();
 }
     
-    // A thunk that outfeeds data. Data must be already resident on the host. This
-// thunk performs a host to device copy from the buffer allocated for the
-// outfeed op to the host location.
-class OutfeedThunk : public Thunk {
+    static std::string MakeFileName(const std::string& name, uint64_t number,
+                                const char* suffix) {
+  char buf[100];
+  snprintf(buf, sizeof(buf), '/%06llu.%s',
+           static_cast<unsigned long long>(number),
+           suffix);
+  return name + buf;
+}
+    
+    // Class to hold a Pixa collection of debug images with captions and save them
+// to a PDF file.
+class DebugPixa {
  public:
-  // Constructs a OutfeedThunk that copies data to the host-side
-  // outfeed queue from the buffers in the given shape tree.
-  OutfeedThunk(ShapeTree<BufferAllocation::Slice> outfeed_slices,
-               const HloInstruction* hlo_instruction);
+  // TODO(rays) add another constructor with size control.
+  DebugPixa() {
+    pixa_ = pixaCreate(0);
+    fonts_ = bmfCreate(nullptr, 14);
+  }
+  // If the filename_ has been set and there are any debug images, they are
+  // written to the set filename_.
+  ~DebugPixa() {
+    pixaDestroy(&pixa_);
+    bmfDestroy(&fonts_);
+  }
     }
     
-    #include 'tensorflow/compiler/xla/service/gpu/buffer_allocations.h'
-#include 'tensorflow/compiler/xla/service/gpu/hlo_execution_profiler.h'
-#include 'tensorflow/compiler/xla/service/gpu/thunk.h'
-#include 'tensorflow/compiler/xla/service/hlo_instruction.h'
-#include 'tensorflow/core/platform/stream_executor_no_cuda.h'
+    // Solve the dynamic programming problem for the given array of points, with
+// the given size and cost function.
+// Steps backwards are limited to being between min_step and max_step
+// inclusive.
+// The return value is the tail of the best path.
+DPPoint* DPPoint::Solve(int min_step, int max_step, bool debug,
+                        CostFunc cost_func, int size, DPPoint* points) {
+  if (size <= 0 || max_step < min_step || min_step >= size)
+    return nullptr;  // Degenerate, but not necessarily an error.
+  ASSERT_HOST(min_step > 0);  // Infinite loop possible if this is not true.
+  if (debug)
+    tprintf('min = %d, max=%d\n',
+            min_step, max_step);
+  // Evaluate the total cost at each point.
+  for (int i = 0; i < size; ++i) {
+    for (int offset = min_step; offset <= max_step; ++offset) {
+      DPPoint* prev = offset <= i ? points + i - offset : nullptr;
+      int64_t new_cost = (points[i].*cost_func)(prev);
+      if (points[i].best_prev_ != nullptr && offset > min_step * 2 &&
+          new_cost > points[i].total_cost_)
+        break;  // Find only the first minimum if going over twice the min.
+    }
+    points[i].total_cost_ += points[i].local_cost_;
+    if (debug) {
+      tprintf('At point %d, local cost=%d, total_cost=%d, steps=%d\n',
+              i, points[i].local_cost_, points[i].total_cost_,
+              points[i].total_steps_);
+    }
+  }
+  // Now find the end of the best path and return it.
+  int best_cost = points[size - 1].total_cost_;
+  int best_end = size - 1;
+  for (int end = best_end - 1; end >= size - min_step; --end) {
+    int cost = points[end].total_cost_;
+    if (cost < best_cost) {
+      best_cost = cost;
+      best_end = end;
+    }
+  }
+  return points + best_end;
+}
     
-    #include 'tensorflow/compiler/xla/client/xla_builder.h'
-#include 'tensorflow/compiler/xla/client/xla_computation.h'
-#include 'tensorflow/compiler/xla/xla_data.pb.h'
+    Determining whether a character is CURRENTLY rejected depends on implicit
+understanding of the SEQUENCE of possible calls. The flags are defined and
+grouped in the REJ_FLAGS enum. These groupings are used in determining a
+characters CURRENT rejection status. Basically, a character is ACCEPTED if
+    
+    // Classifies the given [training] sample, writing to results.
+// See ShapeClassifier for a full description.
+int TessClassifier::UnicharClassifySample(
+    const TrainingSample& sample, Pix* page_pix, int debug,
+    UNICHAR_ID keep_this, GenericVector<UnicharRating>* results) {
+  const int old_matcher_level = classify_->matcher_debug_level;
+  const int old_matcher_flags = classify_->matcher_debug_flags;
+  const int old_classify_level = classify_->classify_debug_level;
+  if (debug) {
+    // Explicitly set values of various control parameters to generate debug
+    // output if required, restoring the old values after classifying.
+    classify_->matcher_debug_level.set_value(2);
+    classify_->matcher_debug_flags.set_value(25);
+    classify_->classify_debug_level.set_value(3);
+  }
+  classify_->CharNormTrainingSample(pruner_only_, keep_this, sample, results);
+  if (debug) {
+    classify_->matcher_debug_level.set_value(old_matcher_level);
+    classify_->matcher_debug_flags.set_value(old_matcher_flags);
+    classify_->classify_debug_level.set_value(old_classify_level);
+  }
+  return results->size();
+}
     
     
-    {}  // namespace mate
+    {}  // namespace leveldb
 
     
-    void Promise::RejectWithErrorMessage(const std::string& string) {
-  v8::Local<v8::String> error_message =
-      v8::String::NewFromUtf8(isolate(), string.c_str(),
-                              v8::NewStringType::kNormal,
-                              static_cast<int>(string.size()))
-          .ToLocalChecked();
-  v8::Local<v8::Value> error = v8::Exception::Error(error_message);
-  resolver_->Reject(mate::ConvertToV8(isolate(), error));
-}
-    
-    Arguments::~Arguments() {}
-    
-    // Class template for extracting and storing single argument for callback
-// at position |index|.
-template <size_t index, typename ArgType>
-struct ArgumentHolder {
-  using ArgLocalType = typename CallbackParamTraits<ArgType>::LocalType;
-    }
-    
-    // This function is a convenient way to create a handle from a raw pointer
-// without having to write out the type of the object explicitly.
-template <typename T>
-mate::Handle<T> CreateHandle(v8::Isolate* isolate, T* object) {
-  return mate::Handle<T>(object->GetWrapper(), object);
-}
-    
-      // Returns the Isolate this object is created in.
-  v8::Isolate* isolate() const { return isolate_; }
-    
-    content::WebContents* InspectableWebContentsImpl::GetDevToolsWebContents()
-    const {
-  if (external_devtools_web_contents_)
-    return external_devtools_web_contents_;
-  else
-    return managed_devtools_web_contents_.get();
-}
-    
-    
-    {  ANNOTATE_SCOPED_MEMORY_LEAK;  // http://crbug.com/314087
-  // TODO(erg): The mozilla implementation goes to a lot of callback trouble
-  // just to make sure that they react to make sure there's some sort of
-  // cancelable object; including making a whole callback just to handle the
-  // cancelable.
-  //
-  // I don't see any reason why we should care if 'UnregisterWindow' completes
-  // or not.
-  g_dbus_proxy_call(registrar_proxy_, 'UnregisterWindow',
-                    g_variant_new('(u)', xid), G_DBUS_CALL_FLAGS_NONE, -1,
-                    nullptr, nullptr, nullptr);
-}
-    
-    
-    {}  // namespace electron
-    
-      uv_loop_t* loop_;
-    
-      template<typename T>
-  _ListStream &operator<< (T &v) {
-    next();
-    m_jout << v;
-    return *this;
-  }
-    
-    
-    {}
-    
-    #include 'hphp/util/address-range.h'
-    
-    
-    {  m_request->getHeaders().add(name, value);
-  m_requestHeaders[name].push_back(value);
-}
-    
-      promiseHeaders.set(String('hello'),
-                     String('world'));  // dict serializtion path
-  responseHeaders.set(String('foo'), String('bar'));  // dict serializtion path
-  auto id = pushResource(promiseHeaders, responseHeaders, pri);
-    
-    Array HHVM_FUNCTION(
-  HH_facts_parse,
-  const Variant& _root,
-  const Array& pathList,
-  bool allowHipHopSyntax,
-  bool useThreads
-) {
-  if (RuntimeOption::RepoAuthoritative) {
-    SystemLib::throwInvalidOperationExceptionObject(
-      'HH\\facts_parse not allowed in repo-authoritative mode. See #11153611.');
-  }
-    }
-    
-    void APCGCManager::freeAPCHandles(const std::vector<APCHandle*>& v) {
-  assertx(RuntimeOption::EvalGCForAPC);
-  if (RuntimeOption::ServerExecutionMode()) {
-    // Doesn't support server mode yet
-    // But it still needs to finish the Treadmill's job because Treadmill
-    // won't free the handles now
-    for (auto handle : v) {
-      APCTypedValue::fromHandle(handle)->deleteUncounted();
-    }
+    TEST(RecoveryTest, LargeManifestCompacted) {
+  if (!CanAppend()) {
+    fprintf(stderr, 'skipping test because env does not support appending\n');
     return;
   }
-  // This lock will be blocked by current sweeping
-  WriteLock l1(candidateListLock);
-  FTRACE(4, 'Treadmill asks APCGCManager to free! size: {}\n',v.size());
-  for (auto handle : v) {
-    auto it = candidateList.find(handle);
-    // If root haven't been freed before, free it
-    if (it != candidateList.end()) {
-      pendingSize.fetch_add(-it->second, std::memory_order_relaxed);
-      // Remove the root from list, so we won't free it twice
-      candidateList.erase(it);
-      FTRACE(4, 'Sweep! root:{}\n', (void*)handle);
-      APCTypedValue::fromHandle(handle)->deleteUncounted();
+  ASSERT_OK(Put('foo', 'bar'));
+  Close();
+  std::string old_manifest = ManifestFileName();
     }
-  }
+    
+     private:
+  friend class SnapshotList;
+    
+    // Return a new filter policy that uses a bloom filter with approximately
+// the specified number of bits per key.  A good value for bits_per_key
+// is 10, which yields a filter with ~ 1% false positive rate.
+//
+// Callers must delete the result after any database that is using the
+// result has been closed.
+//
+// Note: if you are using a custom comparator that ignores some parts
+// of the keys being compared, you must not use NewBloomFilterPolicy()
+// and must provide your own FilterPolicy that also ignores the
+// corresponding parts of the keys.  For example, if the comparator
+// ignores trailing spaces, it would be incorrect to use a
+// FilterPolicy (like NewBloomFilterPolicy) that does not ignore
+// trailing spaces in keys.
+LEVELDB_EXPORT const FilterPolicy* NewBloomFilterPolicy(int bits_per_key);
+    
+    inline bool operator==(const Slice& x, const Slice& y) {
+  return ((x.size() == y.size()) &&
+          (memcmp(x.data(), y.data(), x.size()) == 0));
 }
     
-    enum class LookupResult {
-  MethodFoundWithThis,
-  MethodFoundNoThis,
-  MagicCallFound,
-  MethodNotFound,
-};
-    
-      int url = 0;
-  for (url = 0; url < nUrls; url++) {
-    String server = 'http://';
-    server += HHVM_FN(php_uname)('n').toString();
-    server += ':' + folly::to<std::string>(port) + '/';
-    server += urls[url];
-    actual = '<No response from server>';
-    std::string err;
-    for (int i = 0; i < 50; i++) {
-      Variant c = HHVM_FN(curl_init)();
-      HHVM_FN(curl_setopt)(c.toResource(), CURLOPT_URL, server);
-      HHVM_FN(curl_setopt)(c.toResource(), CURLOPT_RETURNTRANSFER, true);
-      if (postdata) {
-        HHVM_FN(curl_setopt)(c.toResource(), CURLOPT_POSTFIELDS, postdata);
-        HHVM_FN(curl_setopt)(c.toResource(), CURLOPT_POST, true);
-      }
-      if (header) {
-        HHVM_FN(curl_setopt)(c.toResource(), CURLOPT_HTTPHEADER,
-                      make_varray(header));
-      }
-      if (responseHeader) {
-        HHVM_FN(curl_setopt)(c.toResource(), CURLOPT_HEADER, 1);
-      }
+      // Takes ownership of 'iter' and will delete it when destroyed, or
+  // when Set() is invoked again.
+  void Set(Iterator* iter) {
+    delete iter_;
+    iter_ = iter;
+    if (iter_ == nullptr) {
+      valid_ = false;
+    } else {
+      Update();
     }
+  }
+    
+    namespace leveldb {
     }
     
-        // Select Surface Format
-    const VkFormat requestSurfaceImageFormat[] = { VK_FORMAT_B8G8R8A8_UNORM, VK_FORMAT_R8G8B8A8_UNORM, VK_FORMAT_B8G8R8_UNORM, VK_FORMAT_R8G8B8_UNORM };
-    const VkColorSpaceKHR requestSurfaceColorSpace = VK_COLORSPACE_SRGB_NONLINEAR_KHR;
-    wd->SurfaceFormat = ImGui_ImplVulkanH_SelectSurfaceFormat(g_PhysicalDevice, wd->Surface, requestSurfaceImageFormat, (size_t)IM_ARRAYSIZE(requestSurfaceImageFormat), requestSurfaceColorSpace);
+      char footer_space[Footer::kEncodedLength];
+  Slice footer_input;
+  Status s = file->Read(size - Footer::kEncodedLength, Footer::kEncodedLength,
+                        &footer_input, footer_space);
+  if (!s.ok()) return s;
     
-    #include 'imgui.h'
-#include 'imgui_impl_marmalade.h'
-#include <stdio.h>
+      std::string s;
+  for (size_t i = 0; i < values.size(); i++) {
+    PutVarint64(&s, values[i]);
+  }
     
-    // About OpenGL function loaders: modern OpenGL doesn't have a standard header file and requires individual function pointers to be loaded manually.
-// Helper libraries are often used for this purpose! Here we are supporting a few common ones: gl3w, glew, glad.
-// You may use another loader/header of your choice (glext, glLoadGen, etc.), or chose to manually implement your own.
-#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
-#include <GL/gl3w.h>    // Initialize with gl3wInit()
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
-#include <GL/glew.h>    // Initialize with glewInit()
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
-#include <glad/glad.h>  // Initialize with gladLoadGL()
-#else
-#include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
-#endif
+    IMGUI_IMPL_API bool     ImGui_Marmalade_Init(bool install_callbacks);
+IMGUI_IMPL_API void     ImGui_Marmalade_Shutdown();
+IMGUI_IMPL_API void     ImGui_Marmalade_NewFrame();
+IMGUI_IMPL_API void     ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data);
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
+                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
+            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
+            ImGui::Checkbox('Another Window', &show_another_window);
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
+    IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_Init();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_RenderDrawData(ImDrawData* draw_data);
+    
+        // For an Emscripten build we are disabling file-system access, so let's not attempt to do a fopen() of the imgui.ini file.
+    // You may manually call LoadIniSettingsFromMemory() to load settings from your own storage.
+    io.IniFilename = NULL;
+    
+    
+    {    switch (msg)
+    {
+    case WM_SIZE:
+        if (g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
+        {
+            ImGui_ImplDX12_InvalidateDeviceObjects();
+            CleanupRenderTarget();
+            ResizeSwapChain(hWnd, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
+            CreateRenderTarget();
+            ImGui_ImplDX12_CreateDeviceObjects();
+        }
+        return 0;
+    case WM_SYSCOMMAND:
+        if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
+            return 0;
+        break;
+    case WM_DESTROY:
+        ::PostQuitMessage(0);
+        return 0;
+    }
+    return ::DefWindowProc(hWnd, msg, wParam, lParam);
+}
+
+    
+        // Show the window
+    ::ShowWindow(hwnd, SW_SHOWDEFAULT);
+    ::UpdateWindow(hwnd);
+    
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_IMPL_API bool     ImGui_ImplDX9_CreateDeviceObjects();
+IMGUI_IMPL_API void     ImGui_ImplDX9_InvalidateDeviceObjects();
+
+    
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
     
         // Load Fonts
     // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
@@ -270,83 +306,15 @@ mate::Handle<T> CreateHandle(v8::Isolate* isolate, T* object) {
     //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
     //IM_ASSERT(font != NULL);
     
-            // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
-        }
+      void deleteDbKey(ConnectionsTree::KeyItem& key,
+                   std::function<void(const QString&)> callback) override;
     
-        // Restore the DX9 transform
-    g_pd3dDevice->SetTransform(D3DTS_WORLD, &last_world);
-    g_pd3dDevice->SetTransform(D3DTS_VIEW, &last_view);
-    g_pd3dDevice->SetTransform(D3DTS_PROJECTION, &last_projection);
+      Q_INVOKABLE void encode(const QString& formatterName, const QByteArray& data,
+                          QJSValue jsCallback);
     
-    
-    {    printf('DestroyContext()\n');
-    ImGui::DestroyContext();
-    return 0;
-}
-
-    
-      // Fail the first config load.
-  plugin->fail_ = true;
-    
-    TEST_F(PacksTests, test_check_version) {
-  Pack zpack('fake_version_pack', getPackWithFakeVersion().doc());
-  EXPECT_FALSE(zpack.checkVersion());
-    }
-    
-    /// 1 discovery query which will always pass
-JSON getPackWithValidDiscovery() {
-  auto doc = getExamplePacksConfig();
-  return JSON::newFromValue(doc.doc()['packs']['valid_discovery_pack']);
+    void ConnectionsTree::TreeItem::unlock() {
+  m_locked = false;
+  emit m_model.itemChanged(getSelf());
 }
     
-    namespace osquery {
-    }
-    
-    namespace osquery {
-    }
-    
-    Expected<std::string, DatabaseError> RocksdbDatabase::getString(
-    const std::string& domain, const std::string& key) {
-  auto result = getRawBytes(domain, key);
-  if (result) {
-    std::string result_str = result.take();
-    if (BOOST_UNLIKELY(validateInt32StorageBuffer(result_str))) {
-      auto type_error = createError(RocksdbError::UnexpectedValueType)
-                        << 'Fetching string as integer';
-      LOG(ERROR) << type_error.getMessage().c_str();
-      assert(false);
-      return createError(DatabaseError::KeyNotFound, std::move(type_error));
-    }
-    return result_str;
-  }
-  return result.takeError();
-}
-    
-    std::string RocksdbMigration::randomOutputPath() {
-  auto path = fs::path(OSQUERY_HOME);
-  boost::uuids::uuid uuid = boost::uuids::random_generator()();
-  path.append('migration');
-  path.append(boost::uuids::to_string(uuid));
-  return path.string();
-}
-    
-    Status Flag::getDefaultValue(const std::string& name, std::string& value) {
-  flags::CommandLineFlagInfo info;
-  if (!flags::GetCommandLineFlagInfo(name.c_str(), &info)) {
-    return Status(1, 'Flags name not found.');
-  }
-    }
-    
-    void Plugin::setName(const std::string& name) {
-  if (!name_.empty() && name != name_) {
-    std::string error = 'Cannot rename plugin ' + name_ + ' to ' + name;
-    throw std::runtime_error(error);
-  }
-    }
+      QSharedPointer<Model> model();
