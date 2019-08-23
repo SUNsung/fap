@@ -1,194 +1,153 @@
 
         
-        def normalize_bullets(markdown)
-  markdown.gsub(%r!\n\s{2}\*{1}!, '\n-')
-end
+            it 'syncs added folders to the proper path' do
+      paths['/foo'] = [
+        { machine: machine_stub('m1'), opts: double('opts_m1') },
+        { machine: machine_stub('m2'), opts: double('opts_m2') },
+      ]
+      paths['/bar'] = [
+        { machine: machine_stub('m3'), opts: double('opts_m3') },
+      ]
     
-        def process(args)
-      arg_is_present? args, '--server', 'The --server command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--serve', 'The --serve command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--no-server', 'To build Jekyll without launching a server, \
-                          use the 'build' subcommand.'
-      arg_is_present? args, '--auto', 'The switch '--auto' has been replaced with \
-                          '--watch'.'
-      arg_is_present? args, '--no-auto', 'To disable auto-replication, simply leave off \
-                          the '--watch' switch.'
-      arg_is_present? args, '--pygments', 'The 'pygments'settings has been removed in \
-                          favour of 'highlighter'.'
-      arg_is_present? args, '--paginate', 'The 'paginate' setting can only be set in \
-                          your config files.'
-      arg_is_present? args, '--url', 'The 'url' setting can only be set in your \
-                          config files.'
-      no_subcommand(args)
-    end
+      let(:box_collection) { Vagrant::BoxCollection.new(environment.boxes_dir) }
     
-        #   it 'can add a new trailer' do
-    #     # remove existing
-    #     version.upload_trailer!(nil, 'English', 'ipad')
+      subject { described_class }
     
-          def update_podspec(version = nil)
-        new_version = version || @version_value
-        updated_podspec_content = @podspec_content.gsub(@version_regex, '#{@version_match[:begin]}#{new_version}#{@version_match[:end]}')
-    
-            it 'returns the current version once parsed with longer appendix' do
-          test_content = 'spec.version = '1.3.2.4.5''
-          result = @version_podspec_file.parse(test_content)
-          expect(result).to eq('1.3.2.4.5')
-          expect(@version_podspec_file.version_value).to eq('1.3.2.4.5')
-          expect(@version_podspec_file.version_match[:major]).to eq('1')
-          expect(@version_podspec_file.version_match[:minor]).to eq('3')
-          expect(@version_podspec_file.version_match[:patch]).to eq('2')
-          expect(@version_podspec_file.version_match[:appendix]).to eq('.4.5')
-        end
+          pushes = self.vagrantfile.config.push.__compiled_pushes
+      if !pushes.key?(name)
+        raise Vagrant::Errors::PushStrategyNotDefined,
+          name: name,
+          pushes: pushes.keys
       end
     
-            # to support frozen strings (e.g. ENV variables) too
-        # we have to dupe the value
-        # in < Ruby 2.4.0 `.dup` is not support by boolean values
-        # and there is no good way to check if a class actually
-        # responds to `dup`, so we have to rescue the exception
-        begin
-          value = value.dup
-        rescue TypeError
-          # Nothing specific to do here, if we can't dupe, we just
-          # deal with it (boolean values can't be from env variables anyway)
+            # Save the composition
+        #
+        # @param [Hash] composition New composition
+        def write_composition(composition)
+          @logger.debug('Saving composition to `#{composition_path}`: #{composition}')
+          tmp_file = Tempfile.new('vagrant-docker-compose')
+          tmp_file.write(composition.to_yaml)
+          tmp_file.close
+          synchronized do
+            FileUtils.mv(tmp_file.path, composition_path.to_s)
+          end
         end
-        self.options[method_sym] = value
-      else
-        # We can't set this value, maybe the tool using this configuration system has its own
-        # way of handling this block, as this might be a special block (e.g. ipa block) that's only
-        # executed on demand
-        if @block_for_missing
-          @block_for_missing.call(method_sym, arguments, block)
-        else
-          self.options[method_sym] = '' # important, since this will raise a good exception for free
+    
+              ui.output(I18n.t(
+            'vagrant.box_updating',
+            name: update[0].name,
+            provider: update[2].name,
+            old: box.version,
+            new: update[1].version))
+          @env.action_runner.run(Vagrant::Action.action_box_add, {
+            box_url: box.metadata_url,
+            box_provider: update[2].name,
+            box_version: update[1].version,
+            ui: ui,
+            box_force: force,
+            box_download_client_cert: download_options[:client_cert],
+            box_download_ca_cert: download_options[:ca_cert],
+            box_download_ca_path: download_options[:ca_path],
+            box_download_insecure: download_options[:insecure]
+          })
         end
       end
-    end
-    
-          def pipe(language: nil, locale: nil, log_path: nil)
-        tee_command = ['tee']
-        tee_command << '-a' if log_path && File.exist?(log_path)
-        tee_command << log_path.shellescape if log_path
-    
-          if self.mac?
-        # First check for manually install iTMSTransporter
-        user_local_itms_path = '/usr/local/itms'
-        return user_local_itms_path if File.exist?(user_local_itms_path)
-    
-            version_podspec_file = Helper::PodspecHelper.new(podspec_path, params[:require_variable_prefix])
-    
-        def to_a
-      @filters.dup
-    end
-    
-            css('h1:not(:first-child)').each do |node|
-          node.name = 'h2'
-        end unless at_css('h2')
-    
-      # POST /resource/confirmation
-  def create
-    self.resource = resource_class.send_confirmation_instructions(resource_params)
-    yield resource if block_given?
-    
-        unless env['devise.skip_trackable']
-      warden.session(scope)['last_request_at'] = Time.now.utc.to_i
     end
   end
 end
 
     
-      it 'calls the given block for each byte in the stream, passing the byte as an argument' do
-    gz = Zlib::GzipReader.new @io
-    
-      it 'returns false when at EOF when there's data left in the buffer to read' do
-    gz = Zlib::GzipReader.new @io
-    gz.read(9)
-    gz.eof?.should be_false
-    gz.read
-    gz.eof?.should be_true
+      let(:argv)     { [] }
+  let(:iso_env) do
+    # We have to create a Vagrantfile so there is a root path
+    test_iso_env.vagrantfile('')
+    test_iso_env.create_vagrant_env
   end
+  let(:test_iso_env) { isolated_environment }
     
-    describe 'GzipReader#getc' do
-    
-      it 'returns the position' do
-    gz = Zlib::GzipReader.new @io
-    
-      it 'invokes seek method on the associated IO object' do
-    # first, prepare the mock object:
-    (obj = mock('io')).should_receive(:get_io).any_number_of_times.and_return(@io)
-    def obj.read(args); get_io.read(args); end
-    def obj.seek(pos, whence = 0)
-      ScratchPad.record :seek
-      get_io.seek(pos, whence)
-    end
-    
-    describe :gzipreader_each, shared: true do
-    
-        quarantine! do # https://bugs.ruby-lang.org/issues/13675
-      describe 'with nil' do
-        it 'does not prepend anything to the stream' do
-          @gz.ungetbyte nil
-          @gz.read.should == '12345abcde'
-        end
-    
-      namespace :symlink do
-    desc 'Symlink release to current'
-    task :release do
-      on release_roles :all do
-        tmp_current_path = release_path.parent.join(current_path.basename)
-        execute :ln, '-s', release_path, tmp_current_path
-        execute :mv, tmp_current_path, current_path.parent
-      end
-    end
-    
-    Then(/^the invalid (.+) release is ignored$/) do |filename|
-  test = 'ls -g #{TestApp.releases_path} | grep #{filename}'
-  _, _, status = vagrant_cli_command('ssh -c #{test.shellescape}')
-  expect(status).to be_success
-end
-    
-    Given(/^file '(.*?)' does not exist in shared path$/) do |file|
-  file_shared_path = TestApp.shared_path.join(file)
-  run_vagrant_command('mkdir -p #{TestApp.shared_path}')
-  run_vagrant_command('touch #{file_shared_path} && rm #{file_shared_path}')
-end
-    
-      at_exit do
-    if ENV['KEEP_RUNNING']
-      puts 'Vagrant vm will be left up because KEEP_RUNNING is set.'
-      puts 'Rerun without KEEP_RUNNING set to cleanup the vm.'
-    else
-      vagrant_cli_command('destroy -f')
-    end
-  end
-    
-        def set_if_empty(key, value=nil, &block)
-      set(key, value, &block) unless keys.include?(key)
-    end
-    
-          def call
-        ask_question
-        value_or_default
-      end
-    
-            # rubocop:disable Style/MethodMissing
-        def method_missing(key, value=nil)
-          if value
-            set(lvalue(key), value)
-          else
-            fetch(key)
+          def accepts?(env)
+        cookie_header = env['HTTP_COOKIE']
+        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
+        cookies.each do |k, v|
+          if k == session_key && Array(v).size > 1
+            bad_cookies << k
+          elsif k != session_key && Rack::Utils.unescape(k) == session_key
+            bad_cookies << k
           end
         end
-        # rubocop:enable Style/MethodMissing
-    
-          # Internal use only.
-      def peek(key, default=nil, &block)
-        value = fetch_for(key, default, &block)
-        while callable_without_parameters?(value)
-          value = (values[key] = value.call)
-        end
-        value
+        bad_cookies.empty?
       end
+    
+    RSpec.describe RuboCop::AST::ClassNode do
+  let(:class_node) { parse_source(source).ast }
+    
+              outermost_send = outermost_send_on_same_line(heredoc_arg)
+          return unless outermost_send
+          return unless outermost_send.loc.end
+          return unless heredoc_arg.first_line != outermost_send.loc.end.line
+    
+      context 'when an access modifier has no effect' do
+    it 'registers an offense' do
+      expect_offense(<<~RUBY)
+        class SomeClass
+          def some_method
+            puts 10
+          end
+          private
+          ^^^^^^^ Useless `private` access modifier.
+          def self.some_method
+            puts 10
+          end
+        end
+      RUBY
+    end
+  end
+    
+            return unless rhs
+    
+      include_examples 'registers an offense', 'Fixnum'
+  include_examples 'registers an offense', 'Bignum'
+    
+            def offense_location(node)
+          if node.loc.respond_to?(:end) && node.loc.end
+            :end
+          else
+            :expression
+          end
+        end
+      end
+    end
+  end
+end
+
+    
+            foobar
+      end
+    RUBY
+  end
+    
+    When /^I append gems from Appraisal Gemfile$/ do
+  File.read(ENV['BUNDLE_GEMFILE']).split(/\n/).each do |line|
+    if line =~ /^gem '(?!rails|appraisal)/
+      append_to_gemfile line.strip
+    end
+  end
+end
+    
+    When /^I reset Bundler environment variable$/ do
+  BUNDLE_ENV_VARS.each do |key|
+    ENV[key] = nil
+  end
+end
+    
+      def migration_class_name
+    migration_name.camelize
+  end
+    
+        def clear
+      @attachments = Hash.new { |h,k| h[k] = {} }
+    end
+    
+        def path
+      @file.respond_to?(:path) ? @file.path : @file
+    end
