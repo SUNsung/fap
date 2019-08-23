@@ -1,233 +1,197 @@
 
         
-        // Generate param traits read methods.
-#include 'ipc/param_traits_read_macros.h'
-namespace IPC {
-#include 'content/nw/src/common/common_message_generator.h'
-}  // namespace IPC
-    
-    
-void Base::Call(const std::string& method, const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  NOTREACHED() << 'Uncatched call in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    
-    {}  // namespace nwapi
-
-    
-      static int getUID() {
-    static int id = 0;
-    return ++id;
-  }
-    
-    namespace nw {
-    }
-    
-        bool enabled;
-    if (option.GetBoolean('enabled', &enabled))
-      SetEnabled(enabled);
-    
-    
+        
     {
-  DECLARE_EXTENSION_FUNCTION('nw.App.setProxyConfig', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwAppSetProxyConfigFunction);
-};
+    {    private:
+        Number m_p;
+        Number m_q;
+    };
+}
+
     
-      for (const auto& op : new_net.op()) {
-    EXPECT_NE(op.type(), 'Declare');
-    EXPECT_NE(op.type(), 'Export');
-  }
+            if (e->PreviousExecutionState == ApplicationExecutionState::Terminated)
+        {
+            // TODO: Restore the saved session state only when appropriate, scheduling the
+            // final launch steps after the restore is complete
+        }
     
-    std::string tmppath() {
-  // TMPFILE is for manual test execution during which the user will specify
-  // the full temp file path using the environmental variable TMPFILE
-  const char* tmpfile = getenv('TMPFILE');
-  if (tmpfile) {
-    return std::string(tmpfile);
+        static std::vector<uint32_t> DigitGroupingStringToGroupingVector(std::wstring_view groupingString);
+    std::wstring GroupDigits(std::wstring_view delimiter, std::vector<uint32_t> const& grouping, std::wstring_view displayString, bool isNumNegative = false);
+    
+        PNUMBER Number::ToPNUMBER() const
+    {
+        PNUMBER ret = _createnum(static_cast<uint32_t>(this->Mantissa().size()) + 1);
+        ret->sign = this->Sign();
+        ret->exp = this->Exp();
+        ret->cdigit = static_cast<int32_t>(this->Mantissa().size());
+    }
+    
+    //////////////////////////////////////////////////
+//
+// InitialOneTimeOnlyNumberSetup
+//
+//////////////////////////////////////////////////
+void CCalcEngine::InitialOneTimeOnlySetup(CalculationManager::IResourceProvider& resourceProvider)
+{
+    LoadEngineStrings(resourceProvider);
+    }
+    
+            std::wstring value;
+    
+    
+    {    AutomationProperties::SetName(m_host, announcement->Announcement);
+    AutomationPeer ^ peer = FrameworkElementAutomationPeer::FromElement(m_host);
+    if (peer != nullptr)
+    {
+        peer->RaiseAutomationEvent(AutomationEvents::LiveRegionChanged);
+    }
+}
+
+    
+      void Unref() {
+    bool do_delete = false;
+    {
+      MutexLock lock(&mutex_);
+      --refs_;
+      assert(refs_ >= 0);
+      if (refs_ <= 0) {
+        do_delete = true;
+      }
+    }
+    }
+    
+    /*
+ * Class:     org_rocksdb_CompactionOptionsFIFO
+ * Method:    maxTableFilesSize
+ * Signature: (J)J
+ */
+jlong Java_org_rocksdb_CompactionOptionsFIFO_maxTableFilesSize(
+    JNIEnv*, jobject, jlong jhandle) {
+  auto* opt = reinterpret_cast<rocksdb::CompactionOptionsFIFO*>(jhandle);
+  return static_cast<jlong>(opt->max_table_files_size);
+}
+    
+    /*
+ * Class:     org_rocksdb_CompactionOptionsUniversal
+ * Method:    setCompressionSizePercent
+ * Signature: (JI)V
+ */
+void Java_org_rocksdb_CompactionOptionsUniversal_setCompressionSizePercent(
+    JNIEnv*, jobject, jlong jhandle,
+    jint jcompression_size_percent) {
+  auto* opt = reinterpret_cast<rocksdb::CompactionOptionsUniversal*>(jhandle);
+  opt->compression_size_percent =
+      static_cast<unsigned int>(jcompression_size_percent);
+}
+    
+    /*
+ * Class:     org_rocksdb_Env
+ * Method:    getThreadList
+ * Signature: (J)[Lorg/rocksdb/ThreadStatus;
+ */
+jobjectArray Java_org_rocksdb_Env_getThreadList(
+    JNIEnv* env, jobject, jlong jhandle) {
+  auto* rocks_env = reinterpret_cast<rocksdb::Env*>(jhandle);
+  std::vector<rocksdb::ThreadStatus> thread_status;
+  rocksdb::Status s = rocks_env->GetThreadList(&thread_status);
+  if (!s.ok()) {
+    // error, throw exception
+    rocksdb::RocksDBExceptionJni::ThrowNew(env, s);
+    return nullptr;
   }
     }
     
-    **Result**
-    
-    ```
-    
-    
-    {}  // namespace mongo
-
-    
-    
-    {}  // namespace mongo
-
-    
-    
-    {    return aggregationBuilder.obj();
+    /*
+ * Class:     org_rocksdb_IngestExternalFileOptions
+ * Method:    setAllowBlockingFlush
+ * Signature: (JZ)V
+ */
+void Java_org_rocksdb_IngestExternalFileOptions_setAllowBlockingFlush(
+    JNIEnv*, jobject, jlong jhandle, jboolean jallow_blocking_flush) {
+  auto* options =
+      reinterpret_cast<rocksdb::IngestExternalFileOptions*>(jhandle);
+  options->allow_blocking_flush = static_cast<bool>(jallow_blocking_flush);
 }
     
-            UsageData total;
-    
-    RemoveTransliterator::~RemoveTransliterator() {}
-    
-        /**
-     * Implements {@link Transliterator#handleTransliterate}.
-     * @param text          the buffer holding transliterated and
-     *                      untransliterated text
-     * @param offset        the start and limit of the text, the position
-     *                      of the cursor, and the start and limit of transliteration.
-     * @param incremental   if true, assume more text may be coming after
-     *                      pos.contextLimit. Otherwise, assume the text is complete.
-     */
-    virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
-                                     UBool isIncremental) const;
-    
-            if (matchindex != USEARCH_DONE) {
-            if (m_search_->isOverlap) {
-                matchindex += m_search_->matchedLength - 2;
-            }
-    }
-    
-    #if !UCONFIG_NO_FORMATTING
-    
-    U_NAMESPACE_BEGIN
-    
-      void is_sending_finish(bool val) { is_sending_finish_ = val; }
-    
-    void GemController::SetEpbBreak(const ControlCommand& command) {
-  if (command.parking_brake()) {
-    // None
-  } else {
-    // None
-  }
-}
-    
-    bool LoadBrownCameraIntrinsic(const std::string &yaml_file,
-                              base::BrownCameraDistortionModel *model) {
-  if (!PathExists(yaml_file) || model == nullptr) {
+      jbyte* end_key = new jbyte[jend_key_len];
+  env->GetByteArrayRegion(jend_key, jend_key_off, jend_key_len, end_key);
+  if (env->ExceptionCheck()) {
+    // exception thrown: ArrayIndexOutOfBoundsException
+    delete[] begin_key;
+    delete[] end_key;
     return false;
   }
-    }
+  rocksdb::Slice end_key_slice(reinterpret_cast<char*>(end_key), jend_key_len);
     
-    #pragma once
     
-    /**
- * @brief Checks to see if the provided directory is a temporary folder.
- * @note This just compares the temporary directory path against the given path
- *       on Windows.
- */
-Status platformIsTmpDir(const boost::filesystem::path& dir);
-    
-      std::vector<char> admins_buf(sid_buff_size, '\0');
-  auto admins_sid = static_cast<PSID>(admins_buf.data());
-  if (!CreateWellKnownSid(
-          WinBuiltinAdministratorsSid, nullptr, admins_sid, &sid_buff_size)) {
-    return Status(-1, 'CreateWellKnownSid failed');
-  }
-    
-    /// Given a string with the structure described in `parseSystemStoreString`
-/// return the unlocalized system store name.
-LPCWSTR extractStoreName(LPCWSTR sysStoreW) {
-  auto* delimiter = wcschr(sysStoreW, L'\\');
-  if (delimiter == nullptr) {
-    return sysStoreW;
-  } else {
-    return delimiter + 1;
-  }
-}
-    
-      Row r;
-  r['version'] = tree.get<std::string>('Version', '');
-  r['api_version'] = tree.get<std::string>('ApiVersion', '');
-  r['min_api_version'] = tree.get<std::string>('MinAPIVersion', '');
-  r['git_commit'] = tree.get<std::string>('GitCommit', '');
-  r['go_version'] = tree.get<std::string>('GoVersion', '');
-  r['os'] = tree.get<std::string>('Os', '');
-  r['arch'] = tree.get<std::string>('Arch', '');
-  r['kernel_version'] = tree.get<std::string>('KernelVersion', '');
-  r['build_time'] = tree.get<std::string>('BuildTime', '');
-  results.push_back(r);
-    
-    void Initializer::initWorkerWatcher(const std::string& name) const {
-  if (isWorker()) {
-    initWorker(name);
-  } else {
-    // The watcher will forever monitor and spawn additional workers.
-    // This initialize will handle work for processes without watchdogs too.
-    initWatcher();
-  }
-}
-    
-    /**
- * @brief Categories of process states adapted to be platform agnostic
- *
- * A process can have the following states. Unfortunately, because of operating
- * system differences. A generic state change is not directly translatable on
- * Windows. Therefore, PROCESS_STATE_CHANGE will only occur on POSIX systems.
- */
-enum ProcessState {
-  PROCESS_ERROR = -1,
-  PROCESS_STILL_ALIVE = 0,
-  PROCESS_EXITED,
-  PROCESS_STATE_CHANGE
+    {    Vec3 _center;
+    Vec3 _eye;
+    Vec3 _up;
 };
     
-    namespace osquery {
-uint32_t getUidFromSid(PSID sid);
-uint32_t getGidFromSid(PSID sid);
-namespace tables {
+    void ActionManager::removeAllActions()
+{
+    for (tHashElement *element = _targets; element != nullptr; )
+    {
+        auto target = element->target;
+        element = (tHashElement*)element->hh.next;
+        removeAllActionsFromTarget(target);
     }
-    }
-    
-        if ((ret == NERR_Success || ret == ERROR_MORE_DATA) &&
-        userBuffer != nullptr) {
-      auto iterBuff = LPUSER_INFO_3(userBuffer);
-      for (size_t i = 0; i < dwNumUsersRead; i++) {
-        // User level 4 contains the SID value
-        unsigned long dwDetailedUserInfoLevel = 4;
-        LPBYTE userLvl4Buff = nullptr;
-        ret = NetUserGetInfo(nullptr,
-                             iterBuff->usri3_name,
-                             dwDetailedUserInfoLevel,
-                             &userLvl4Buff);
-    }
-    }
-    
-    namespace fs = boost::filesystem;
-    
-    Status ConfigPlugin::genPack(const std::string& name,
-                             const std::string& value,
-                             std::string& pack) {
-  return Status(1, 'Not implemented');
 }
     
-      /**
-   * @brief Receive a merged JSON document for each top-level config key.
-   *
-   * Called when the Config instance is initially loaded with data from the
-   * active config plugin and when it is updated via an async ConfigPlugin
-   * update. Every config parser will receive a map of merged data for each key
-   * they requested in keys().
-   *
-   * @param source source of the config data
-   * @param config A JSON-parsed document map.
-   * @return Failure if the parser should no longer receive updates.
-   */
-  virtual Status update(const std::string& source,
-                        const ParserConfig& config) = 0;
+    #include '2d/CCAction.h'
+#include 'base/CCVector.h'
+#include 'base/CCRef.h'
     
-    JSON getExamplePacksConfig() {
-  std::string content;
-  auto const filepath = getTestConfigDirectory() / 'test_inline_pack.conf';
-  auto status = readFile(filepath, content);
-  EXPECT_TRUE(status.ok())
-      << 'Could not read file: ' << boost::io::quoted(filepath.string())
-      << ', because: ' << status.what();
-  JSON doc = JSON::newObject();
-  doc.fromString(content);
-  return doc;
-}
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#ifndef __ACTION_CCTILEDGRID_ACTION_H__
+#define __ACTION_CCTILEDGRID_ACTION_H__
+    
+        /** Return the TMXObjectGroup for the specific group. 
+     * 
+     * @return Return the TMXObjectGroup for the specific group.
+     */
+    TMXObjectGroup* getObjectGroup(const std::string& groupName) const;
     
     
-    {} // namespace osquery
+    {private:
+    static std::unordered_map<std::string, FontAtlas *> _atlasMap;
+};
+    
+    class Texture2D;
+class FontCharMap : public Font
+{  
+public:
+    static FontCharMap * create(const std::string& charMapFile, int itemWidth, int itemHeight, int startCharMap);
+    static FontCharMap * create(Texture2D* texture, int itemWidth, int itemHeight, int startCharMap);
+    static FontCharMap * create(const std::string& plistFile);
+    
+    virtual int* getHorizontalKerningForTextUTF32(const std::u32string& text, int &outNumLetters) const override;
+    virtual FontAtlas *createFontAtlas() override;
+    
+protected:    
+    FontCharMap(Texture2D* texture,int itemWidth, int itemHeight, int startCharMap)
+        :_texture(texture)
+        ,_mapStartChar(startCharMap)
+        ,_itemWidth(itemWidth)
+        ,_itemHeight(itemHeight)
+    {}
+    /**
+     * @js NA
+     * @lua NA
+     */
+    virtual ~FontCharMap();
+    
+private:
+    Texture2D* _texture;
+    int _mapStartChar;
+    int _itemWidth;
+    int _itemHeight;
+    }
