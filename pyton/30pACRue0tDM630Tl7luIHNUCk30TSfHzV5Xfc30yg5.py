@@ -1,262 +1,166 @@
 
         
-            def __init__(self, num_levels):
-        self.num_levels = num_levels
-        self.levels = []  # List of Levels
+            plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
+    plt.plot(sample_sizes, one_core, label='one core')
+    plt.plot(sample_sizes, multi_core, label='multi core')
+    plt.xlabel('n_samples')
+    plt.ylabel('Time (s)')
+    plt.title('Parallel %s' % func.__name__)
+    plt.legend()
     
-            subtitles = {}
-        for caption in playinfo.get('captions', {}).get('list', []):
-            lang = dict_get(caption, ('locale', 'language', 'country', 'label'))
-            if lang and caption.get('source'):
-                subtitles[lang] = [{
-                    'ext': 'vtt',
-                    'url': caption['source']}]
+        xx = range(0, n * step, step)
+    plt.figure('scikit-learn tree benchmark results')
+    plt.subplot(211)
+    plt.title('Learning with varying number of samples')
+    plt.plot(xx, scikit_classifier_results, 'g-', label='classification')
+    plt.plot(xx, scikit_regressor_results, 'r-', label='regression')
+    plt.legend(loc='upper left')
+    plt.xlabel('number of samples')
+    plt.ylabel('Time (s)')
     
-        _TESTS = [{
-        'url': 'http://www.southpark.nl/full-episodes/s18e06-freemium-isnt-free',
-        'info_dict': {
-            'title': 'Freemium Isn\'t Free',
-            'description': 'Stan is addicted to the new Terrance and Phillip mobile game.',
-        },
-        'playlist_mincount': 3,
-    }]
+        try:
+        fn = inspect.getsourcefile(obj)
+    except Exception:
+        fn = None
+    if not fn:
+        try:
+            fn = inspect.getsourcefile(sys.modules[obj.__module__])
+        except Exception:
+            fn = None
+    if not fn:
+        return
     
-    import optparse
-import os
-from os.path import dirname as dirn
-import sys
+    plt.figure(2)  # 'banana' shape
+plt.title('Outlier detection on a real data set (boston housing)')
+plt.scatter(X2[:, 0], X2[:, 1], color='black')
+plt.xlim((xx2.min(), xx2.max()))
+plt.ylim((yy2.min(), yy2.max()))
+plt.legend((legend2_values_list[0].collections[0],
+            legend2_values_list[1].collections[0],
+            legend2_values_list[2].collections[0]),
+           (legend2_keys_list[0], legend2_keys_list[1], legend2_keys_list[2]),
+           loc='upper center',
+           prop=matplotlib.font_manager.FontProperties(size=12))
+plt.ylabel('% lower status of the population')
+plt.xlabel('average number of rooms per dwelling')
     
-        infile, outfile = args
+    digits = datasets.load_digits()
+images = digits.images
+X = np.reshape(images, (len(images), -1))
+connectivity = grid_to_graph(*images[0].shape)
+    
+                # Support normal-terminal reset at exit
+            atexit.register(self.set_normal_term)
+    
+            elif len(input_shape) == 2:
+            reduction_axes = list(range(0, len(input_shape)))
+            del reduction_axes[0]
+            batch_size, _ = input_shape
+            if batch_size is None:
+                batch_size = -1
     
     
-parser = youtube_dl.parseOpts()[0]
-build_completion(parser)
+_DEFAULTS = {
+    'method': {
+        'default': 'unsharp_mask',
+        'info': 'The type of sharpening to use:'
+                '\n\t box: Fastest, but weakest method. Uses a box filter to assess edges.'
+                '\n\t gaussian: Slower, but better than box. Uses a gaussian filter to assess '
+                'edges.'
+                '\n\t unsharp-mask: Slowest, but most tweakable. Uses the unsharp-mask method '
+                'to assess edges.',
+        'datatype': str,
+        'rounding': None,
+        'min_max': None,
+        'choices': ['box', 'gaussian', 'unsharp_mask'],
+        'gui_radio': True,
+        'fixed': True,
+    },
+    'amount': {
+        'default': 150,
+        'info': 'Percentage that controls the magnitude of each overshoot (how much darker '
+                'and how much lighter the edge borders become).\nThis can also be thought of '
+                'as how much contrast is added at the edges. It does not affect the width of '
+                'the edge rims.',
+        'datatype': int,
+        'rounding': 1,
+        'min_max': (100, 500),
+        'choices': [],
+        'gui_radio': False,
+        'fixed': True,
+    },
+    'radius': {
+        'default': 0.3,
+        'info': 'Affects the size of the edges to be enhanced or how wide the edge rims '
+                'become, so a smaller radius enhances smaller-scale detail.\nRadius is set as '
+                'a percentage of the final frame width and rounded to the nearest pixel. E.g '
+                'for a 1280 width frame, a 0.6 percenatage will give a radius of 8px.\nHigher '
+                'radius values can cause halos at the edges, a detectable faint light rim '
+                'around objects. Fine detail needs a smaller radius. \nRadius and amount '
+                'interact; reducing one allows more of the other.',
+        'datatype': float,
+        'rounding': 1,
+        'min_max': (0.1, 5.0),
+        'choices': [],
+        'gui_radio': False,
+        'fixed': True,
+    },
+    'threshold': {
+        'default': 5.0,
+        'info': '[unsharp_mask only] Controls the minimal brightness change that will be '
+                'sharpened or how far apart adjacent tonal values have to be before the '
+                'filter does anything.\nThis lack of action is important to prevent smooth '
+                'areas from becoming speckled. The threshold setting can be used to sharpen '
+                'more pronounced edges, while leaving subtler edges untouched. \nLow values '
+                'should sharpen more because fewer areas are excluded. \nHigher threshold '
+                'values exclude areas of lower contrast.',
+        'datatype': float,
+        'rounding': 1,
+        'min_max': (1.0, 10.0),
+        'choices': [],
+        'gui_radio': False,
+        'fixed': True,
+    },
+}
 
     
-    from test.helper import try_rm
+        The following keys are expected for the _DEFAULTS <metadata> dict:
+        datatype:  [required] A python type class. This limits the type of data that can be
+                   provided in the .ini file and ensures that the value is returned in the
+                   correct type to faceswap. Valid datatypes are: <class 'int'>, <class 'float'>,
+                   <class 'str'>, <class 'bool'>.
+        default:   [required] The default value for this option.
+        info:      [required] A string describing what this option does.
+        choices:   [optional] If this option's datatype is of <class 'str'> then valid
+                   selections can be defined here. This validates the option and also enables
+                   a combobox / radio option in the GUI.
+        gui_radio: [optional] If <choices> are defined, this indicates that the GUI should use
+                   radio buttons rather than a combobox to display this option.
+        min_max:   [partial] For <class 'int'> and <class 'float'> datatypes this is required
+                   otherwise it is ignored. Should be a tuple of min and max accepted values.
+                   This is used for controlling the GUI slider range. Values are not enforced.
+        rounding:  [partial] For <class 'int'> and <class 'float'> datatypes this is
+                   required otherwise it is ignored. Used for the GUI slider. For floats, this
+                   is the number of decimal places to display. For ints this is the step size.
+        fixed:     [optional] [train only]. Training configurations are fixed when the model is
+                   created, and then reloaded from the state file. Marking an item as fixed=False
+                   indicates that this value can be changed for existing models, and will override
+                   the value saved in the state file with the updated value in config. If not
+                   provided this will default to True.
+'''
     
-            try:
-            self._db = shelve.open(cache_path)
-        except shelve_open_error + (ImportError,):
-            # Caused when switching between Python versions
-            warn('Removing possibly out-dated cache')
-            os.remove(cache_path)
-            self._db = shelve.open(cache_path)
-    
-    from thefuck.utils import replace_command
-from thefuck.specific.archlinux import get_pkgfile, archlinux_env
-    
-            command = command.split(' ')[0]
-    
-        @pytest.fixture(autouse=True)
-    def Popen(self, mocker):
-        mock = mocker.patch('thefuck.shells.bash.Popen')
-        return mock
-    
-        def test_app_alias(self, shell):
-        assert 'fuck () {' in shell.app_alias('fuck')
-        assert 'FUCK () {' in shell.app_alias('FUCK')
-        assert 'thefuck' in shell.app_alias('fuck')
-        assert 'PYTHONIOENCODING' in shell.app_alias('fuck')
-    }
-    }
-    
-        def and_(self, *commands):
-        return u' && '.join(commands)
-    
-        @memoize
-    def get_aliases(self):
-        raw_aliases = os.environ.get('TF_SHELL_ALIASES', '').split('\n')
-        return dict(self._parse_alias(alias)
-                    for alias in raw_aliases if alias and '=' in alias)
-    
-        def test_repr(self):
-        self.assertEqual('PollError(exhausted=%s, updated={sentinel.AR: '
-                         'sentinel.AR2})' % repr(set()), repr(self.invalid))
-    
-        Handles decoding/encoding between RFC3339 strings and aware (not
-    naive) `datetime.datetime` objects
-    (e.g. ``datetime.datetime.now(pytz.utc)``).
-    
-        @staticmethod
-    def _true_mock():
-        return True
+        The following variables should be defined:
+        _HELPTEXT: A string describing what this plugin does
+        _DEFAULTS: A dictionary containing the options, defaults and meta information. The
+                   dictionary should be defined as:
+                       {<option_name>: {<metadata>}}
     
     
-setup(
-    name='certbot',
-    version=version,
-    description='ACME client',
-    long_description=readme,
-    url='https://github.com/letsencrypt/letsencrypt',
-    author='Certbot Project',
-    author_email='client-dev@letsencrypt.org',
-    license='Apache License 2.0',
-    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*',
-    classifiers=[
-        'Development Status :: 5 - Production/Stable',
-        'Environment :: Console',
-        'Environment :: Console :: Curses',
-        'Intended Audience :: System Administrators',
-        'License :: OSI Approved :: Apache Software License',
-        'Operating System :: POSIX :: Linux',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
-        'Topic :: Internet :: WWW/HTTP',
-        'Topic :: Security',
-        'Topic :: System :: Installation/Setup',
-        'Topic :: System :: Networking',
-        'Topic :: System :: Systems Administration',
-        'Topic :: Utilities',
-    ],
-    
-    
-@zope.interface.implementer(interfaces.IAuthenticator)
-@zope.interface.provider(interfaces.IPluginFactory)
-class Authenticator(dns_common.DNSAuthenticator):
-    '''DNS Authenticator for Google Cloud DNS
-    
-            print('Two or more elements')
-        data = [5, 1, 7, 2, 6, -3, 5, 7, -1]
-        assert_equal(insertion_sort.sort(data), sorted(data))
-    
-    
-class TestSetOfStacks(object):
-    
-    		print('Success: test_max_min_nodes')
-    
-        def __len__(self):
-        return len(self.array)
-    
-            self.known_peers[sender['peer_id']]['sites_changed'] = params['sites_changed']
-        self.known_peers[sender['peer_id']]['updated'] = time.time()
-        self.known_peers[sender['peer_id']]['found'] = time.time()
-    
-            # Response to messages with different peer id
-        sender_info = copy.copy(announcer.sender_info)
-        sender_info['peer_id'] += '-'
-        addr, res = announcer.handleMessage(('0.0.0.0', 123), {'cmd': 'discoverRequest', 'sender': sender_info, 'params': {}})
-        assert res['params']['sites_changed'] > 0
-    
-        def benchmarkPeerMemory(self, site, file_server):
-        # Init source server
-        site.connection_server = file_server
-        file_server.sites[site.address] = site
-    
-        def getCollectors(self):
-        collectors = {}
-        import main
-        file_server = main.file_server
-        sites = file_server.sites
-        if not sites:
-            return collectors
-        content_db = list(sites.values())[0].content_manager.contents.db
-    
-        def getSiteId(self, address):
-        if address not in self.sites:
-            self.execute('INSERT INTO site ?', {'address': address})
-            self.sites[address] = self.cur.cursor.lastrowid
-    
-        def load(self):
-        # Rename previously used mutes.json -> filters.json
-        if os.path.isfile('%s/mutes.json' % config.data_dir):
-            self.log.info('Renaming mutes.json to filters.json...')
-            os.rename('%s/mutes.json' % config.data_dir, self.file_path)
-        if os.path.isfile(self.file_path):
-            try:
-                return json.load(open(self.file_path))
-            except Exception as err:
-                self.log.error('Error loading filters.json: %s' % err)
-                return None
-        else:
-            return None
-    
-    
-def toOpensslPublickey(publickey):
-    publickey_bin = btctools.encode_pubkey(publickey, 'bin')
-    publickey_bin = publickey_bin[1:]
-    publickey_openssl = b'\x02\xca\x00 ' + publickey_bin[:32] + b'\x00 ' + publickey_bin[32:]
-    return publickey_openssl
-
-    
-        # add the text classifier to the pipeline if it doesn't exist
-    # nlp.create_pipe works for built-ins that are registered with spaCy
-    if 'textcat' not in nlp.pipe_names:
-        textcat = nlp.create_pipe(
-            'textcat',
-            config={
-                'exclusive_classes': True,
-                'architecture': 'simple_cnn',
-            }
-        )
-        nlp.add_pipe(textcat, last=True)
-    # otherwise, get it, so we can add labels to it
-    else:
-        textcat = nlp.get_pipe('textcat')
-    
-        if model_links or model_pkgs:
-        header = ('TYPE', 'NAME', 'MODEL', 'VERSION', '')
-        rows = []
-        for name, data in model_pkgs.items():
-            rows.append(get_model_row(current_compat, name, data, msg))
-        for name, data in model_links.items():
-            rows.append(get_model_row(current_compat, name, data, msg, 'link'))
-        msg.table(rows, header=header)
-    else:
-        msg.text('No models found in your current environment.', exits=0)
-    if update_models:
-        msg.divider('Install updates')
-        msg.text('Use the following commands to update the model packages:')
-        cmd = 'python -m spacy download {}'
-        print('\n'.join([cmd.format(pkg) for pkg in update_models]) + '\n')
-    if na_models:
-        msg.text(
-            'The following models are not available for spaCy '
-            'v{}: {}'.format(about.__version__, ', '.join(na_models))
-        )
-    if incompat_links:
-        msg.text(
-            'You may also want to overwrite the incompatible links using the '
-            '`python -m spacy link` command with `--force`, or remove them '
-            'from the data directory. '
-            'Data path: {path}'.format(path=path2str(get_data_path()))
-        )
-    if incompat_models or incompat_links:
-        sys.exit(1)
-    
-    
-def process(base, filename, db):
-    root, ext = os.path.splitext(filename)
-    if ext in ['.pyx', '.cpp']:
-        if hash_changed(base, filename, db) or not os.path.isfile(
-            os.path.join(base, root + '.cpp')
-        ):
-            preserve_cwd(base, process_pyx, root + '.pyx', root + '.cpp')
-            hash_add(base, root + '.cpp', db)
-            hash_add(base, root + '.pyx', db)
-    
-        else:
-        norm_weights_b = layers.Lambda(normalizer(2))(att_weights)
-        beta = layers.dot([norm_weights_b, b], axes=1)
-        comp1 = layers.concatenate([a, beta])
-        v1 = layers.TimeDistributed(G)(comp1)
-        v1_sum = layers.Lambda(sum_word)(v1)
-        concat = v1_sum
-    
-    
-def read_gold_data(nlp, gold_loc):
-    docs = []
-    golds = []
-    for json_obj in srsly.read_jsonl(gold_loc):
-        doc = nlp.make_doc(json_obj['text'])
-        ents = [(ent['start'], ent['end'], ent['label']) for ent in json_obj['spans']]
-        gold = GoldParse(doc, entities=ents)
-        docs.append(doc)
-        golds.append(gold)
-    return list(zip(docs, golds))
+class GithubBackend(OAuthBackend):
+    '''Github OAuth authentication backend'''
+    name = 'github'
+    # Default extra data to store
+    EXTRA_DATA = [
+        ('id', 'id'),
+        ('expires', 'expires')
+    ]
