@@ -1,109 +1,73 @@
 
         
-        
-def double_redirect_view(request):
-    'A view that redirects all requests to a redirection view'
-    return HttpResponseRedirect('/permanent_redirect_view/')
+        # Change to [0.5, 0.75, 1.0, 1.25, 1.5, 1.75] for multi-scale test.
+flags.DEFINE_multi_float('eval_scales', [1.0],
+                         'The scales to resize images for evaluation.')
+    
+      def remove_punc(text):
+    exclude = set(string.punctuation)
+    return ''.join(ch for ch in text if ch not in exclude)
+    
+      def after_create_session(self, session, coord):
+    '''Initialize the iterator after the session has been created.'''
+    del coord
+    self.iterator_initializer_fn(session)
     
     
-class ConsigliereInline(admin.TabularInline):
-    model = Consigliere
+def main(argv):
+  if len(argv) > 1:
+    raise RuntimeError('Too many command-line arguments.')
     
-        def test_case_aggregate(self):
-        agg = Sum(
-            Case(When(friends__age=40, then=F('friends__age'))),
-            filter=Q(friends__name__startswith='test'),
-        )
-        self.assertEqual(Author.objects.aggregate(age=agg)['age'], 80)
+          start = time.clock()
+      for i in range(num_images):
+        query_image_name = query_list[i]
+        input_image_filename = os.path.join(cmd_args.images_dir,
+                                            query_image_name + _IMAGE_EXTENSION)
+        output_feature_filename = os.path.join(
+            cmd_args.output_features_dir, query_image_name + _DELF_EXTENSION)
+        if tf.gfile.Exists(output_feature_filename):
+          tf.logging.info('Skipping %s', query_image_name)
+          continue
     
-        def test_gin_parameters(self):
-        index_name = 'integer_array_gin_params'
-        index = GinIndex(fields=['field'], name=index_name, fastupdate=True, gin_pending_list_limit=64)
-        with connection.schema_editor() as editor:
-            editor.add_index(IntegerArrayModel, index)
-        constraints = self.get_constraints(IntegerArrayModel._meta.db_table)
-        self.assertEqual(constraints[index_name]['type'], 'gin')
-        self.assertEqual(constraints[index_name]['options'], ['gin_pending_list_limit=64', 'fastupdate=on'])
-        with connection.schema_editor() as editor:
-            editor.remove_index(IntegerArrayModel, index)
-        self.assertNotIn(index_name, self.get_constraints(IntegerArrayModel._meta.db_table))
+      # Find nearest-neighbor matches using a KD tree.
+  d1_tree = spatial.cKDTree(descriptors_1)
+  _, indices = d1_tree.query(
+      descriptors_2, distance_upper_bound=_DISTANCE_THRESHOLD)
     
+    def baomihua_download_by_id(id, title=None, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html('http://play.baomihua.com/getvideourl.aspx?flvid=%s&devicetype=phone_app' % id)
+    host = r1(r'host=([^&]*)', html)
+    assert host
+    type = r1(r'videofiletype=([^&]*)', html)
+    assert type
+    vid = r1(r'&stream_name=([^&]*)', html)
+    assert vid
+    dir_str = r1(r'&dir=([^&]*)', html).strip()
+    url = 'http://%s/%s/%s.%s' % (host, dir_str, vid, type)
+    _, ext, size = url_info(url)
+    print_info(site_info, title, type, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir, merge = merge)
     
-class RunTestsExceptionHandlingTests(unittest.TestCase):
-    def test_run_checks_raises(self):
-        '''
-        Teardown functions are run when run_checks() raises SystemCheckError.
-        '''
-        with mock.patch('django.test.runner.DiscoverRunner.setup_test_environment'), \
-                mock.patch('django.test.runner.DiscoverRunner.setup_databases'), \
-                mock.patch('django.test.runner.DiscoverRunner.build_suite'), \
-                mock.patch('django.test.runner.DiscoverRunner.run_checks', side_effect=SystemCheckError), \
-                mock.patch('django.test.runner.DiscoverRunner.teardown_databases') as teardown_databases, \
-                mock.patch('django.test.runner.DiscoverRunner.teardown_test_environment') as teardown_test_environment:
-            runner = DiscoverRunner(verbosity=0, interactive=False)
-            with self.assertRaises(SystemCheckError):
-                runner.run_tests(['test_runner_apps.sample.tests_sample.TestDjangoTestCase'])
-            self.assertTrue(teardown_databases.called)
-            self.assertTrue(teardown_test_environment.called)
+        mime, ext, size = url_info(real_url)
     
+            if 'title' not in kwargs:
+            url = 'http://pv.funshion.com/v5/video/profile/?id={}&cl=mweb&uc=111'.format(self.vid)
+            meta = json.loads(get_content(url))
+            self.title = meta['name']
+        else:
+            self.title = kwargs['title']
     
-def make_setting_element(setting_data, app, fromdocname):
-    refnode = make_refnode(app.builder, fromdocname,
-                           todocname=setting_data['docname'],
-                           targetid=setting_data['refid'],
-                           child=nodes.Text(setting_data['setting_name']))
-    p = nodes.paragraph()
-    p += refnode
+        m3u8_url = get_m3u8_url(stream_id)
     
-        # Max concurrency is limited by global CONCURRENT_REQUESTS setting
-    max_concurrent_requests = 8
-    # Requests per second goal
-    qps = None # same as: 1 / download_delay
-    download_delay = None
-    # time in seconds to delay server responses
-    latency = None
-    # number of slots to create
-    slots = 1
-    
-    
-class _BenchSpider(scrapy.Spider):
-    '''A spider that follows all links'''
-    name = 'follow'
-    total = 10000
-    show = 20
-    baseurl = 'http://localhost:8998'
-    link_extractor = LinkExtractor()
-    
-            self._download_http = httpdownloadhandler(settings).download_request
-    
-            # XXX: Google parses at least first 100k bytes; scrapy's redirect
-        # middleware parses first 4k. 4k turns out to be insufficient
-        # for this middleware, and parsing 100k could be slow.
-        # We use something in between (32K) by default.
-        self.lookup_bytes = settings.getint('AJAXCRAWL_MAXSIZE', 32768)
-    
-        def __init__(self):
-        self._formats = {
-            'tar': self._is_tar,
-            'zip': self._is_zip,
-            'gz': self._is_gzip,
-            'bz2': self._is_bzip2
-        }
-    
-        def spider_opened(self, spider):
-        self._timeout = getattr(spider, 'download_timeout', self._timeout)
-    
-    
-def rand_center(data, k):
-    '''随机采样 k 个样本作为聚类中心'''
-    centers = np.array(random.sample(list(data), k))
-    return centers
-    
-            a = permute(a, [0, 2, 1])  # [batch_size, n_step, n_input]
-        o = tf.multiply(x, a)  # # [batch_size, n_step, n_input]
-    
-    
-    
-            y.shape == [128, 64, 32]
-        y = permute(x, [2, 1, 0])
-        y.shape == [32, 64, 128]
+            elif re.search(r'i\.imgur\.com/', self.url):
+            # direct image
+            _, container, size = url_info(self.url)
+            self.streams = {
+                'original': {
+                    'src': [self.url],
+                    'size': size,
+                    'container': container
+                }
+            }
+            self.title = r1(r'i\.imgur\.com/([^./]*)', self.url)
