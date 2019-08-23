@@ -1,97 +1,109 @@
 
         
-            def score(self):
-        total_value = 0
-        for card in self.cards:
-            total_value += card.value
-        return total_value
-    
-        def reducer(self, key, values):
-        '''Sum values for each key.
-    
-    
-class Budget(object):
-    
-            Emit key value pairs of the form:
+                return {
+            'id': video_id,
+            'title': title,
+            'description': video.get('long_description') or video.get(
+                'short_description'),
+            'duration': float_or_none(video.get('duration'), scale=1000),
+            'formats': formats,
+            'subtitles': subtitles,
+        }
     
     
-class Graph(object):
+class CBSBaseIE(ThePlatformFeedIE):
+    def _parse_smil_subtitles(self, smil, namespace=None, subtitles_lang='en'):
+        subtitles = {}
+        for k, ext in [('sMPTE-TTCCURL', 'tt'), ('ClosedCaptionURL', 'ttml'), ('webVTTCaptionURL', 'vtt')]:
+            cc_e = find_xpath_attr(smil, self._xpath_ns('.//param', namespace), 'name', k)
+            if cc_e is not None:
+                cc_url = cc_e.get('value')
+                if cc_url:
+                    subtitles.setdefault(subtitles_lang, []).append({
+                        'ext': ext,
+                        'url': cc_url,
+                    })
+        return subtitles
     
-        def remove(self, key):
-        hash_index = self._hash_function(key)
-        for index, item in enumerate(self.table[hash_index]):
-            if item.key == key:
-                del self.table[hash_index][index]
-                return
-        raise KeyError('Key not found')
+    if __name__ == '__main__':
+    main()
 
     
-            Accessing a node updates its position to the front of the LRU list.
-        '''
-        node = self.lookup[query]
-        if node is None:
-            return None
-        self.linked_list.move_to_front(node)
-        return node.results
+        def test_youporn(self):
+        self._assert_restricted(
+            'http://www.youporn.com/watch/505835/sex-ed-is-it-safe-to-masturbate-daily/',
+            '505835.mp4', 2, old_age=25)
     
     
-class PagesDataStore(object):
+class TestCache(unittest.TestCase):
+    def setUp(self):
+        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
+        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
+        _mkdir(TESTDATA_DIR)
+        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
+        self.tearDown()
     
     
-class FootNoteForm(forms.ModelForm):
-    extra_field = forms.CharField()
+def prepare_url(value):
+    # Issue #1483: Make sure the URL always has a trailing slash
+    httpbin_url = value.url.rstrip('/') + '/'
     
-        def test_redirect_HEAD(self):
-        'Default is a temporary redirect'
-        response = RedirectView.as_view(url='/bar/')(self.rf.head('/foo/'))
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, '/bar/')
-    
-        def _wrapper(self, *args, **kwargs):
-        # bound_method has the signature that 'decorator' expects i.e. no
-        # 'self' argument, but it's a closure over self so it can call
-        # 'func'. Also, wrap method.__get__() in a function because new
-        # attributes can't be set on bound method objects, only on functions.
-        bound_method = partial(method.__get__(self, type(self)))
-        for dec in decorators:
-            bound_method = dec(bound_method)
-        return bound_method(*args, **kwargs)
-    
-     When instantiating a DataSource object, use the filename of a
- GDAL-supported data source.  For example, a SHP file or a
- TIGER/Line file from the government.
-    
-            # Instantiate target spatial reference system
-        target_srs = SpatialReference(srid)
+        def __exit__(self, exc_type, exc_value, traceback):
+        if exc_type is None:
+            self.stop_event.wait(self.WAIT_EVENT_TIMEOUT)
+        else:
+            if self.wait_to_close_event:
+                # avoid server from waiting for event timeouts
+                # if an exception is found in the main thread
+                self.wait_to_close_event.set()
     
     
-def get_derivatives_helper(loss):
-    '''Return get_gradients() and get_hessians() functions for a given loss.
-    '''
+def dispatch_hook(key, hooks, hook_data, **kwargs):
+    '''Dispatches a hook dictionary on a given piece of data.'''
+    hooks = hooks or {}
+    hooks = hooks.get(key)
+    if hooks:
+        if hasattr(hooks, '__call__'):
+            hooks = [hooks]
+        for hook in hooks:
+            _hook_data = hook(hook_data, **kwargs)
+            if _hook_data is not None:
+                hook_data = _hook_data
+    return hook_data
+
+    
+    from requests.help import info
+    
+            # Add new cookies from the server.
+        extract_cookies_to_jar(response.cookies, req, resp)
+    
+            # Note that prepare_auth must be last to enable authentication schemes
+        # such as OAuth to work on a fully prepared request.
+    
+            assert server.handler_results[0] == data
+    
+            self.assertEqual(result['attr1']['DataType'], 'String')
+        self.assertEqual(result['attr1']['StringValue'], 'value1')
+        self.assertEqual(result['attr2']['DataType'], 'Binary')
+        self.assertEqual(result['attr2']['BinaryValue'], 'value2'.encode('utf-8'))
+        self.assertEqual(result['attr3']['DataType'], 'Number')
+        self.assertEqual(result['attr3']['StringValue'], 'value3')
     
     
-def _sparse_min_max(X, axis):
-        return (_sparse_min_or_max(X, axis, np.minimum),
-                _sparse_min_or_max(X, axis, np.maximum))
+def forward_event_to_target_stream(record, stream_name):
+    kinesis = aws_stack.connect_to_service('kinesis')
+    kinesis.put_record(StreamName=stream_name, Data=record['Data'], PartitionKey=record['PartitionKey'])
+
     
-            print('benchmarking scikit-learn: ')
-        scikit_results.append(bench(ScikitLasso, X, Y, X_test, Y_test, coef_))
-        print('benchmarking glmnet: ')
-        glmnet_results.append(bench(GlmnetLasso, X, Y, X_test, Y_test, coef_))
+        # subscribe SQS to SNS, publish message
+    sns_client.subscribe(TopicArn=topic_info['TopicArn'], Protocol='sqs',
+        Endpoint=aws_stack.sqs_queue_arn(TEST_QUEUE_NAME_FOR_SNS))
+    test_value = short_uid()
+    sns_client.publish(TopicArn=topic_info['TopicArn'], Message='test message for SQS',
+        MessageAttributes={'attr1': {'DataType': 'String', 'StringValue': test_value}})
     
-            start = time.time()
-        func(X, n_jobs=1)
-        one_core.append(time.time() - start)
     
-                tstart = time()
-            clf.fit(X_train, y_train)
-            sgd_results[i, j, 0] = mean_squared_error(clf.predict(X_test),
-                                                      y_test)
-            sgd_results[i, j, 1] = time() - tstart
+class ApiGatewayPathsTest (unittest.TestCase):
     
-    import numpy as np
-from sklearn.covariance import EllipticEnvelope
-from sklearn.svm import OneClassSVM
-import matplotlib.pyplot as plt
-import matplotlib.font_manager
-from sklearn.datasets import load_boston
+    
+class TestLambdaBaseFeatures(unittest.TestCase):
