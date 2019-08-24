@@ -1,44 +1,25 @@
 
         
-              def test_invert_remove_foreign_key_with_on_delete_on_update
-        enable = @recorder.inverse_of :remove_foreign_key, [:dogs, :people, on_delete: :nullify, on_update: :cascade]
-        assert_equal [:add_foreign_key, [:dogs, :people, on_delete: :nullify, on_update: :cascade]], enable
-      end
+              def_delegator  :@obj, :site_data, :data
+      def_delegators :@obj, :time, :pages, :static_files, :tags, :categories
     
-      teardown do
-    reset_connection
-  end
-    
-        expected_cart_output = 'Prefix Verb URI Pattern     Controller#Action\n  cart GET  /cart(.:format) cart#show\n'
-    output = run_routes_command(['-c', 'cart'])
-    assert_equal expected_cart_output, output
-    
-            def initialize(symbol)
-          @symbol = symbol.to_sym
-        end
-    
-        context 'without parameters within if statement' do
-      setup do
-        content = <<~CONTENT
-          ---
-          title: without parameters within if statement
-          ---
-    
-      context '#glob_include?' do
-    setup do
-      @site = Site.new(site_configuration)
-      @filter = EntryFilter.new(@site)
-    end
-    
-    # No trailing slash
-Benchmark.ips do |x|
-  path = '/some/very/very/long/path/to/a/file/i/like/'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
+    def remove_head_from_history(markdown)
+  index = markdown =~ %r!^##\s+\d+\.\d+\.\d+!
+  markdown[index..-1]
 end
-
+    
+    def pr(url)
+  if url.end_with?(FORWARD_SLASH)
+    url
+  else
+    url_dir = File.dirname(url)
+    url_dir.end_with?(FORWARD_SLASH) ? url_dir : '#{url_dir}/'
+  end
+end
+    
+    # -------------------------------------------------------------------
+# Benchmarking changes in https://github.com/jekyll/jekyll/pull/6767
+# -------------------------------------------------------------------
     
       p.option 'source', '-s', '--source [DIR]', 'Source directory (defaults to ./)'
   p.option 'destination', '-d', '--destination [DIR]',
@@ -50,162 +31,131 @@ end
     'Layouts directory (defaults to ./_layouts)'
   p.option 'profile', '--profile', 'Generate a Liquid rendering profile'
     
-        def add(path, content)
-      @pages[path] = content
-    end
-    
-        def parse_as_fragment
-      Nokogiri::HTML.fragment @content, 'UTF-8'
-    end
-  end
-end
-
-    
-          def stub(path, &block)
-        @stubs[path] = block
-        @stubs
-      end
-    end
-    
-            css('button.verbose', 'button.verbose + .l-verbose-section', 'a[id=top]', 'a[href='#top']', '.sidebar', 'br').remove
-    
-    end
-end
-
-    
-      #
-  # Kills off the connection threads if there are any hanging around.
-  #
-  def cleanup_handler
-    # Kill any remaining handle_connection threads that might
-    # be hanging around
-    conn_threads.each { |thr|
-      thr.kill
-    }
+      def failure
+    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
+    redirect_to after_omniauth_failure_path_for(resource_name)
   end
     
-        if valid
-    
-        register_options(
-      [
-        OptPath.new('SOURCE_FILE', [true, 'Path to source code']),
-        OptBool.new('RUN_BINARY', [false, 'Execute the generated binary', false]),
-        OptString.new('ASSEMBLIES', [false, 'Any assemblies outside the defaults', 'mscorlib.dll, System.dll, System.Xml.dll, System.Data.dll' ]),
-        OptString.new('OUTPUT_TARGET', [false, 'Name and path of the generated binary, default random, omit extension' ]),
-        OptString.new('COMPILER_OPTS', [false, 'Options to pass to compiler', '/optimize']),
-        OptString.new('CODE_PROVIDER', [true, 'Code provider to use', 'Microsoft.CSharp.CSharpCodeProvider'])
-      ], self.class
-    )
-    register_advanced_options(
-      [
-        OptString.new('NET_CLR_VER', [false, 'Minimum NET CLR version required to compile', '4.0'])
-      ], self.class
-    )
-  end
-    
+        if resource.errors.empty?
+      set_flash_message! :notice, :unlocked
+      respond_with_navigational(resource){ redirect_to after_unlock_path_for(resource) }
     else
-  print_error('This version of Meterpreter is not supported with this Script!')
-  raise Rex::Script::Completed
-end
-
-    
-      def initialize(info = {})
-    super(
-      update_info(
-        info,
-        'Name'          => 'OSX Meterpreter, Reverse HTTP Inline',
-        'Description'   => 'Run the Meterpreter / Mettle server payload (stageless)',
-        'Author'        => [
-          'Adam Cammack <adam_cammack[at]rapid7.com>',
-          'Brent Cook <brent_cook[at]rapid7.com>',
-          'timwr'
-        ],
-        'Platform'      => 'osx',
-        'Arch'          => ARCH_X64,
-        'License'       => MSF_LICENSE,
-        'Handler'       => Msf::Handler::ReverseHttp,
-        'Session'       => Msf::Sessions::Meterpreter_x64_OSX
-      )
-    )
+      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
+    end
   end
     
-            def jvm_payload
-          @stats.jvm
+    class User < ActiveRecord::Base
+  devise :database_authenticatable
+end
+    
+    module Devise
+  module Controllers
+    # Create url helpers to be used with resource/scope configuration. Acts as
+    # proxies to the generated routes created by devise.
+    # Resource param can be a string or symbol, a class, or an instance object.
+    # Example using a :user resource:
+    #
+    #   new_session_path(:user)      => new_user_session_path
+    #   session_path(:user)          => user_session_path
+    #   destroy_session_path(:user)  => destroy_user_session_path
+    #
+    #   new_password_path(:user)     => new_user_password_path
+    #   password_path(:user)         => user_password_path
+    #   edit_password_path(:user)    => edit_user_password_path
+    #
+    #   new_confirmation_path(:user) => new_user_confirmation_path
+    #   confirmation_path(:user)     => user_confirmation_path
+    #
+    # Those helpers are included by default to ActionController::Base.
+    #
+    # In case you want to add such helpers to another class, you can do
+    # that as long as this new class includes both url_helpers and
+    # mounted_helpers. Example:
+    #
+    #     include Rails.application.routes.url_helpers
+    #     include Rails.application.routes.mounted_helpers
+    #
+    module UrlHelpers
+      def self.remove_helpers!
+        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
+          remove_method method
         end
+      end
     
-        BUNDLE_DIR = ::File.join(LOGSTASH_HOME, 'vendor', 'bundle')
-    GEMFILE_PATH = ::File.join(LOGSTASH_HOME, 'Gemfile')
-    LOCAL_GEM_PATH = ::File.join(LOGSTASH_HOME, 'vendor', 'local_gems')
-    CACHE_PATH = ::File.join(LOGSTASH_HOME, 'vendor', 'cache')
-    LOCKFILE = Pathname.new(::File.join(LOGSTASH_HOME, 'Gemfile.lock'))
-    GEMFILE = Pathname.new(::File.join(LOGSTASH_HOME, 'Gemfile'))
+          def mailer_from(mapping)
+        mailer_sender(mapping, :from)
+      end
     
-        # add path for bare/ungemified plugins lookups. the path must be the base path that will include
-    # the dir structure 'logstash/TYPE/NAME.rb' where TYPE is 'inputs' 'filters', 'outputs' or 'codecs'
-    # and NAME is the name of the plugin
-    # @param path [String] plugins path to add
-    def add_plugin_path(path)
-      $LOAD_PATH << path
+        def authenticatable?
+      @authenticatable ||= self.modules.any? { |m| m.to_s =~ /authenticatable/ }
+    end
+    
+              if formula_tap == 'homebrew-core' && (depends_on?('veclibfort') || depends_on?('lapack'))
+            problem 'Formulae should use OpenBLAS as the default serial linear algebra library.'
+          end
+    
+        it 'formula path shortcut : man' do
+      expect_offense(<<~'RUBY')
+        class Foo < Formula
+          desc 'foo'
+          url 'https://brew.sh/foo-1.0.tgz'
+          def install
+            mv '#{share}/man', share
+                         ^^^^ '#{share}/man' should be '#{man}'
+          end
+        end
+      RUBY
+    end
+    
+          # Version string (a pretty long one) of the CLT package.
+      # Note, that different ways to install the CLTs lead to different
+      # version numbers.
+      def version
+        if @version ||= detect_version
+          ::Version.new @version
+        else
+          ::Version::NULL
+        end
+      end
+    
+        return false if args[:after] && OS::Mac.version < args[:after]
+    
+        it 'ignores OS version specifications' do
+      f = formula 'foo' do
+        url 'foo-1.0'
+    
+        private
+    
+      describe '#fetch' do
+    before do
+      subject.temporary_path.dirname.mkpath
+      FileUtils.touch subject.temporary_path
+    end
+    
+      def execute
+    signal_deprecation_warning_for_pack
+    
+        class Main < Clamp::Command
+      subcommand 'list', 'List all installed Logstash plugins', LogStash::PluginManager::List
+      subcommand 'install', 'Install a Logstash plugin', LogStash::PluginManager::Install
+      subcommand 'remove', 'Remove a Logstash plugin', LogStash::PluginManager::Remove
+      subcommand 'update', 'Update a plugin', LogStash::PluginManager::Update
+      subcommand 'pack', 'Package currently installed plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Pack
+      subcommand 'unpack', 'Unpack packaged plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Unpack
+      subcommand 'generate', 'Create the foundation for a new plugin', LogStash::PluginManager::Generate
+      subcommand 'uninstall', 'Uninstall a plugin. Deprecated: Please use remove instead', LogStash::PluginManager::Remove
+      subcommand 'prepare-offline-pack', 'Create an archive of specified plugins to use for offline installation', LogStash::PluginManager::PrepareOfflinePack
     end
   end
 end
     
-        before(:each) { expect($LOAD_PATH).to_not include(path) }
-    after(:each) { $LOAD_PATH.delete(path) }
-    
-            out = dir.convert(FPM::Package::RPM)
-        out.license = license
-        out.attributes[:rpm_use_file_permissions] = true
-        out.attributes[:rpm_user] = 'root'
-        out.attributes[:rpm_group] = 'root'
-        out.attributes[:rpm_os] = 'linux'
-        out.config_files << '/etc/logstash/startup.options'
-        out.config_files << '/etc/logstash/jvm.options'
-        out.config_files << '/etc/logstash/log4j2.properties'
-        out.config_files << '/etc/logstash/logstash.yml'
-        out.config_files << '/etc/logstash/logstash-sample.conf'
-        out.config_files << '/etc/logstash/pipelines.yml'
-      when 'debian', 'ubuntu'
-        require 'fpm/package/deb'
-    
-        def cache_key_for_products
-      count = @products.count
-      max_updated_at = (@products.maximum(:updated_at) || Date.today).to_s(:number)
-      products_cache_keys = 'spree/products/all-#{params[:page]}-#{max_updated_at}-#{count}'
-      (common_product_cache_keys + [products_cache_keys]).compact.join('/')
-    end
-    
-            def update
-          @image = scope.images.accessible_by(current_ability, :update).find(params[:id])
-          if @image.update(image_params)
-            respond_with(@image, default_template: :show)
-          else
-            invalid_resource!(@image)
+            def correct_for_blockarg_type(node)
+          lambda do |corrector|
+            range = range_with_surrounding_space(range: node.source_range,
+                                                 side: :left)
+            range = range_with_surrounding_comma(range, :left)
+            corrector.remove(range)
           end
-        end
-    
-            def create
-          authorize! :create, Spree::OptionType
-          @option_type = Spree::OptionType.new(option_type_params)
-          if @option_type.save
-            render :show, status: 201
-          else
-            invalid_resource!(@option_type)
-          end
-        end
-    
-            def destroy
-          @stock_item = StockItem.accessible_by(current_ability, :destroy).find(params[:id])
-          @stock_item.destroy
-          respond_with(@stock_item, status: 204)
-        end
-    
-            private
-    
-            def user_params
-          params.require(:user).permit(permitted_user_attributes |
-                                         [bill_address_attributes: permitted_address_attributes,
-                                          ship_address_attributes: permitted_address_attributes])
         end
       end
     end
@@ -213,13 +163,75 @@ end
 end
 
     
-            def product
-          if params[:product_id]
-            @product ||= Spree::Product.accessible_by(current_ability, :show).
-                         friendly.find(params[:product_id])
+            elements[i - 1]
+      end
+    
+          # Set the correct feed URL.
+      self.data['feed_url'] = '#{category_dir}/#{name}'
+    end
+    
+        def cache(gist, file, data)
+      cache_file = get_cache_file_for gist, file
+      File.open(cache_file, 'w') do |io|
+        io.write data
+      end
+    end
+    
+    module Jekyll
+    
+          Dir.chdir(code_path) do
+        code = file.read
+        @filetype = file.extname.sub('.','') if @filetype.nil?
+        title = @title ? '#{@title} (#{file.basename})' : file.basename
+        url = '/#{code_dir}/#{@file}'
+        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
+        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
+        TemplateWrapper::safe_wrap(source)
+      end
+    end
+  end
+    
+      # Escapes CDATA sections in post content
+  def cdata_escape(input)
+    input.gsub(/<!\[CDATA\[/, '&lt;![CDATA[').gsub(/\]\]>/, ']]&gt;')
+  end
+    
+          Dir.chdir(file_path) do
+        contents = file.read
+        if contents =~ /\A-{3}.+[^\A]-{3}\n(.+)/m
+          contents = $1.lstrip
+        end
+        contents = pre_filter(contents)
+        if @raw
+          contents
+        else
+          partial = Liquid::Template.parse(contents)
+          context.stack do
+            partial.render(context)
           end
         end
-    
-        def window_options
-      yaml['windows'].map(&:values).flatten
+      end
     end
+  end
+end
+    
+    
+    
+        def tmux_split_command
+      path = if tab.root?
+               '#{Tmuxinator::Config.default_path_option} #{tab.root}'
+             end
+      '#{project.tmux} splitw #{path} -t #{tab.tmux_window_target}'
+    end
+    
+          describe 'attach' do
+        it 'sets force_attach to false when no attach argument is provided' do
+          project = described_class.new.create_project(name: name)
+          expect(project.force_attach).to eq(false)
+        end
+    
+      describe '#directories' do
+    context 'without TMUXINATOR_CONFIG environment' do
+      before do
+        allow(described_class).to receive(:environment?).and_return false
+      end
