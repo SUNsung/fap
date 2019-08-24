@@ -1,150 +1,91 @@
 
         
-            args = msg['args'] + [msg['error_message']]
+            def str_to_byte_pos(pos)
+      @s.string.slice(0, pos).bytesize
+    end
+  end
+end
     
-        def aes256_gcm_decrypt(value)
-      return unless value
+      def test_font_helper_with_suffix_sharp
+    assert_match %r(url\(['']?/assets/.*svg#.+['']?\)), @css
+  end
     
-          context 'and user can admin_project_member' do
-        before do
-          allow(presenter).to receive(:can?).with(user, :admin_project_member, project).and_return(true)
+      def contacts_by_type(type)
+    order = ['profiles.first_name ASC', 'profiles.last_name ASC', 'profiles.diaspora_handle ASC']
+    contacts = case type
+      when 'all'
+        order.unshift 'receiving DESC'
+        current_user.contacts
+      when 'only_sharing'
+        current_user.contacts.only_sharing
+      when 'receiving'
+        current_user.contacts.receiving
+      when 'by_aspect'
+        order.unshift 'contact_id IS NOT NULL DESC'
+        contacts_by_aspect(@aspect.id)
+      else
+        raise ArgumentError, 'unknown type #{type}'
+      end
+    contacts.includes(person: :profile)
+            .order(order)
+  end
+    
+      private
+    
+      task :rollback_release_path do
+    on release_roles(:all) do
+      releases = capture(:ls, '-xt', releases_path).split
+      if releases.count < 2
+        error t(:cannot_rollback)
+        exit 1
+      end
+    
+      def vagrant_cli_command(command)
+    puts '[vagrant] #{command}'
+    stdout, stderr, status = Dir.chdir(VAGRANT_ROOT) do
+      Open3.capture3('#{VAGRANT_BIN} #{command}')
+    end
+    
+            filter = Object.new
+        def filter.filter(servers)
+          block.call(servers)
         end
-    
-      it 'calls Gitlab::Diff::File#unfold_diff_lines with correct position' do
-    position = instance_double(Gitlab::Diff::Position, file_path: 'README')
-    readme_file = instance_double(Gitlab::Diff::File, file_path: 'README')
-    other_file = instance_double(Gitlab::Diff::File, file_path: 'foo.rb')
-    nil_path_file = instance_double(Gitlab::Diff::File, file_path: nil)
-    
-        def backup_path
-      return if @cask.staged_path.nil?
-    
-        context 'with :using and :data specified' do
-      let(:specs) {
-        {
-          using: :post,
-          data:  {
-            form: 'data',
-            is:   'good',
-          },
-        }
-      }
-    
-      def show_version_java
-    properties = java.lang.System.getProperties
-    puts 'java #{properties['java.version']} (#{properties['java.vendor']})'
-    puts 'jvm #{properties['java.vm.name']} / #{properties['java.vm.version']}'
-  end # def show_version_java
-    
-    require 'bundler/cli'
-require 'bundler/friendly_errors'
-    
-    require 'clamp'
-require 'pluginmanager/util'
-require 'pluginmanager/gemfile'
-require 'pluginmanager/install'
-require 'pluginmanager/remove'
-require 'pluginmanager/list'
-require 'pluginmanager/update'
-require 'pluginmanager/pack'
-require 'pluginmanager/unpack'
-require 'pluginmanager/generate'
-require 'pluginmanager/prepare_offline_pack'
-require 'pluginmanager/proxy_support'
-configure_proxy
-    
-        context 'update all the plugins' do
-      it 'has executed successfully' do
-        logstash.run_command_in_path('bin/logstash-plugin update --no-verify')
-        expect(logstash).to have_installed?(plugin_name, '0.1.1')
+      elsif !filter.respond_to? :filter
+        raise TypeError, 'Provided custom filter <#{filter.inspect}> does ' \
+                         'not have a public 'filter' method'
       end
+      @custom_filters ||= []
+      @custom_filters << filter
     end
-  end
-end
-
     
-          it { expect(class_node.body).to be(nil) }
-    end
-  end
-end
-
-    
-        it { expect(module_node.is_a?(described_class)).to be(true) }
-  end
-    
-    module RuboCop
-  module Cop
-    # This auto-corrects unused arguments.
-    class UnusedArgCorrector
-      extend RangeHelp
-    
-              outermost_send = outermost_send_on_same_line(heredoc_arg)
-          return unless outermost_send
-          return unless outermost_send.loc.end
-          return unless heredoc_arg.first_line != outermost_send.loc.end.line
-    
-    module RuboCop
-  module Cop
-    module Style
-      # This cop checks for trailing comma in argument lists.
-      #
-      # @example EnforcedStyleForMultiline: consistent_comma
-      #   # bad
-      #   method(1, 2,)
-      #
-      #   # good
-      #   method(1, 2)
-      #
-      #   # good
-      #   method(
-      #     1, 2,
-      #     3,
-      #   )
-      #
-      #   # good
-      #   method(
-      #     1,
-      #     2,
-      #   )
-      #
-      # @example EnforcedStyleForMultiline: comma
-      #   # bad
-      #   method(1, 2,)
-      #
-      #   # good
-      #   method(1, 2)
-      #
-      #   # good
-      #   method(
-      #     1,
-      #     2,
-      #   )
-      #
-      # @example EnforcedStyleForMultiline: no_comma (default)
-      #   # bad
-      #   method(1, 2,)
-      #
-      #   # good
-      #   method(1, 2)
-      #
-      #   # good
-      #   method(
-      #     1,
-      #     2
-      #   )
-      class TrailingCommaInArguments < Cop
-        include TrailingComma
-    
-        context 'when there's a similar variable' do
-      it 'suggests the variable name' do
-        expect_offense(<<~RUBY)
-          def some_method
-            environment = nil
-            another_symbol
-            enviromnent = {}
-            ^^^^^^^^^^^ Useless assignment to variable - `enviromnent`. Did you mean `environment`?
-            puts environment
-          end
-        RUBY
+        def initialize(tag_name, markup, tokens)
+      @by = nil
+      @source = nil
+      @title = nil
+      if markup =~ FullCiteWithTitle
+        @by = $1
+        @source = $2 + $3
+        @title = $4.titlecase.strip
+      elsif markup =~ FullCite
+        @by = $1
+        @source = $2 + $3
+      elsif markup =~ AuthorTitle
+        @by = $1
+        @title = $2.titlecase.strip
+      elsif markup =~ Author
+        @by = $1
       end
+      super
     end
+    
+        # Creates an instance of CategoryIndex for each category page, renders it, and
+    # writes the output to a file.
+    #
+    #  +category_dir+ is the String path to the category folder.
+    #  +category+     is the category currently being processed.
+    def write_category_index(category_dir, category)
+      index = CategoryIndex.new(self, self.source, category_dir, category)
+      index.render(self.layouts, site_payload)
+      index.write(self.dest)
+      # Record the fact that this page has been added, otherwise Site::cleanup will remove it.
+      self.pages << index
