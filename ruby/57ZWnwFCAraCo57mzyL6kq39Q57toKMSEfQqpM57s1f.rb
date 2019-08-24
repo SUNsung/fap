@@ -1,47 +1,104 @@
 
         
-        class Auth::OmniauthCallbacksController < Devise::OmniauthCallbacksController
-  skip_before_action :verify_authenticity_token
-    
-      def lock_options
-    { redis: Redis.current, key: 'media_download:#{params[:id]}' }
-  end
-    
-    require 'bootstrap/environment'
-    
-            return nil
+              desc 'Get the list of the available template' do
+        detail 'This feature was introduced in GitLab #{gitlab_version}.'
+        success Entities::TemplatesList
       end
+      params do
+        use :pagination
+      end
+      get 'templates/#{template_type}' do
+        templates = ::Kaminari.paginate_array(TemplateFinder.build(template_type, nil).execute)
+        present paginate(templates), with: Entities::TemplatesList
+      end
+    
+          def decoded
+        secret =
+          case options.algorithm
+          when *%w[RS256 RS384 RS512]
+            OpenSSL::PKey::RSA.new(options.secret).public_key
+          when *%w[ES256 ES384 ES512]
+            OpenSSL::PKey::EC.new(options.secret).tap { |key| key.private_key = nil }
+          when *%w(HS256 HS384 HS512)
+            options.secret
+          else
+            raise NotImplementedError, 'Unsupported algorithm: #{options.algorithm}'
+          end
+    
+          diff_file = subject.diff_files.find { |file| file.new_path == stub_path }
+    
+        def to_a
+      @filters.dup
+    end
+    
+        def parse_as_fragment
+      Nokogiri::HTML.fragment @content, 'UTF-8'
     end
   end
-end end end
+end
 
     
-        context 'without a specific plugin' do
-      it 'display a list of plugins' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list')
-        expect(result.stdout.split('\n').size).to be > 1
+            title = at_css('h1').content.strip
+        if root_page?
+          at_css('h1').content = 'Angular 2 Documentation'
+        elsif title == 'Index'
+          at_css('h1').content = result[:entries].first.name
+        elsif title == 'Angular'
+          at_css('h1').content = slug.split('/').last.gsub('-', ' ')
+        elsif at_css('.breadcrumbs') && title != result[:entries].first.name
+          at_css('h1').content = result[:entries].first.name
+        end
+    
+          def get_type
+        if slug.start_with?('guide/')
+          'Guide'
+        elsif slug.start_with?('cookbook/')
+          'Cookbook'
+        elsif slug == 'glossary'
+          'Guide'
+        else
+          type = at_css('.nav-title.is-selected').content.strip
+          type.remove! ' Reference'
+          type << ': #{mod}' if mod
+          type
+        end
       end
     
-      get(/.+/) do
-    send_sinatra_file(request.path) {404}
-  end
+            def to_s(states: %i(added deleted changed unchanged))
+          lines(states).join('\n')
+        end
     
-    module Jekyll
+                # support user custom paths of Pods group and xcconfigs files.
+            group_path = Pathname.new(group.real_path)
+            xcconfig_path = Pathname.new(pod_bundle.xcconfig_path(config.name))
+            path = xcconfig_path.relative_path_from(group_path)
     
-          Dir.chdir(code_path) do
-        code = file.read
-        @filetype = file.extname.sub('.','') if @filetype.nil?
-        title = @title ? '#{@title} (#{file.basename})' : file.basename
-        url = '/#{code_dir}/#{@file}'
-        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
-        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
-        TemplateWrapper::safe_wrap(source)
+    # It is very likely that we'll need these and as some of those paths will atm
+# result in a I18n deprecation warning, we load those here now so that we can
+# get rid of that warning.
+require 'active_support/core_ext/string/strip'
+require 'active_support/core_ext/string/inflections'
+require 'active_support/core_ext/array/conversions'
+# TODO: check what this actually does by the time we're going to add support for
+# other locales.
+require 'i18n'
+if I18n.respond_to?(:enforce_available_locales=)
+  I18n.enforce_available_locales = false
+end
+    
+        before do
+      @sut.any_instance.stubs(:configure_template)
+    end
+    
+        def render(context)
+      if @img
+        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
+      else
+        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
       end
     end
   end
-    
-    
-module OctopressLiquidFilters
+end
     
       class RenderPartialTag < Liquid::Tag
     include OctopressFilters
@@ -53,22 +110,4 @@ module OctopressLiquidFilters
         @raw = $2 == 'raw'
       end
       super
-    end
-    
-    desc 'Clean up files.'
-task :clean do |t|
-  FileUtils.rm_rf 'doc'
-  FileUtils.rm_rf 'tmp'
-  FileUtils.rm_rf 'pkg'
-  FileUtils.rm_rf 'public'
-  FileUtils.rm 'test/debug.log' rescue nil
-  FileUtils.rm 'test/paperclip.db' rescue nil
-  Dir.glob('paperclip-*.gem').each{|f| FileUtils.rm f }
-end
-
-    
-        def calculated_type_matches
-      possible_types.select do |content_type|
-        content_type == type_from_file_contents
-      end
     end
