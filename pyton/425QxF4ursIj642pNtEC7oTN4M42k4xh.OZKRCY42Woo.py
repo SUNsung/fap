@@ -1,126 +1,98 @@
 
         
-            def test_list(self):
-        assert list(self.case_insensitive_dict) == ['Accept']
+                vid = int(video_id)
+        video_data = list(filter(
+            lambda episode: episode.get('video_id') == vid, response['data']))[0]
+        formats = []
     
-        def __enter__(self):
-        self.start()
-        self.ready_event.wait(self.WAIT_EVENT_TIMEOUT)
-        return self.host, self.port
+            formats = [
+            {'url': format_url}
+            for format_url in orderedSet(format_urls)]
     
-        :param jar: cookielib.CookieJar (not necessarily a RequestsCookieJar)
-    :param request: our own requests.Request object
-    :param response: urllib3.HTTPResponse object
+    
+class SouthParkIE(MTVServicesInfoExtractor):
+    IE_NAME = 'southpark.cc.com'
+    _VALID_URL = r'https?://(?:www\.)?(?P<url>southpark\.cc\.com/(?:clips|(?:full-)?episodes|collections)/(?P<id>.+?)(\?|#|$))'
+    
+    filenames = {
+    'bin': 'youtube-dl',
+    'exe': 'youtube-dl.exe',
+    'tar': 'youtube-dl-%s.tar.gz' % version}
+build_dir = os.path.join('..', '..', 'build', version)
+for key, filename in filenames.items():
+    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
+    fn = os.path.join(build_dir, filename)
+    with open(fn, 'rb') as f:
+        data = f.read()
+    if not data:
+        raise ValueError('File %s is empty!' % fn)
+    sha256sum = hashlib.sha256(data).hexdigest()
+    new_version[key] = (url, sha256sum)
+    
+    import io
+import sys
+import re
+    
+            # Display results overlaid on an image
+        show_prediction_labels_on_image(os.path.join('knn_examples/test', image_file), predictions)
+
+    
+    
+def print_result(filename, location):
+    top, right, bottom, left = location
+    print('{},{},{},{},{}'.format(filename, top, right, bottom, left))
+    
+    print('I found {} face(s) in this photograph.'.format(len(face_landmarks_list)))
+    
+        # 将每一个人脸与已知样本图片比对
+    for face_encoding in face_encodings:
+        # 看是否属于奥巴马或者拜登
+        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
+        name = '<Unknown Person>'
+    
+        # Only process every other frame of video to save time
+    if process_this_frame:
+        # Find all the faces and face encodings in the current frame of video
+        face_locations = face_recognition.face_locations(rgb_small_frame)
+        face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
+    
+    # Convert the image to a PIL-format image so that we can draw on top of it with the Pillow library
+# See http://pillow.readthedocs.io/ for more about PIL/Pillow
+pil_image = Image.fromarray(unknown_image)
+# Create a Pillow ImageDraw Draw instance to draw with
+draw = ImageDraw.Draw(pil_image)
+    
+    # PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
+# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
+# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
+    
+    
+def softsign(x):
     '''
-    if not (hasattr(response, '_original_response') and
-            response._original_response):
-        return
-    # the _original_response field is the wrapped httplib.HTTPResponse object,
-    req = MockRequest(request)
-    # pull out the HTTPMessage with the headers and put it in the mock:
-    res = MockResponse(response._original_response.msg)
-    jar.extract_cookies(res, req)
-    
-            # Verify we receive an Authorization header in response, then
-        # challenge again.
-        request_content = consume_socket_content(sock, timeout=0.5)
-        assert expected_digest in request_content
-        sock.send(text_401)
-    
-            # if the server thread fails to finish, the test suite will hang
-        # and get killed by the jenkins timeout.
-    
-            self.method = method
-        self.url = url
-        self.headers = headers
-        self.files = files
-        self.data = data
-        self.json = json
-        self.params = params
-        self.auth = auth
-        self.cookies = cookies
-    
-        charset_re = re.compile(r'<meta.*?charset=['\']*(.+?)['\'>]', flags=re.I)
-    pragma_re = re.compile(r'<meta.*?content=['\']*;?charset=(.+?)['\'>]', flags=re.I)
-    xml_re = re.compile(r'^<\?xml.*?encoding=['\']*(.+?)['\'>]')
-    
-        def test_auth_is_retained_for_redirect_on_host(self, httpbin):
-        r = requests.get(httpbin('redirect/1'), auth=('user', 'pass'))
-        h1 = r.history[0].request.headers['Authorization']
-        h2 = r.request.headers['Authorization']
-    
-    - BaseRecognizer: Base class with common recognizer functionality.
-- Lexer: Base class for lexers.
-- Parser: Base class for parsers.
-- tree.TreeParser: Base class for %tree parser.
-    
-    # Find all the faces in the image using the default HOG-based model.
-# This method is fairly accurate, but not as accurate as the CNN model and not GPU accelerated.
-# See also: find_faces_in_picture_cnn.py
-face_locations = face_recognition.face_locations(image)
+    o = x / (1 + abs(x))
+    '''
+    return tf.nn.softsign(x)
     
     
-def image_files_in_folder(folder):
-    return [os.path.join(folder, f) for f in os.listdir(folder) if re.match(r'.*\.(jpg|jpeg|png)', f, flags=re.I)]
+def relu6(x):
+    '''
+    `o = min(max(x, 0), 6)`
+    '''
+    return tf.nn.relu6(x)
     
+        Args:
+        x(tf.Tensor):
+        kernel_size(int or list of int):
+        out_channels(int):
+        act_fn(function):
+        strides(int or list of int):
+        padding(str):
+        name(str):
+        reuse(bool):
     
-import unittest
-import os
-import numpy as np
-from click.testing import CliRunner
-    
-    # Load the jpg file into a numpy array
-image = face_recognition.load_image_file('two_people.jpg')
-    
-    
-if len(args) < 1:
-    print(USAGE)
-    sys.exit(1)
-    
-    import jieba
-import jieba.analyse
-from optparse import OptionParser
-    
-        def testPosseg_NOHMM(self):
-        import jieba.posseg as pseg
-        for content in test_contents:
-            result = pseg.cut(content,HMM=False)
-            assert isinstance(result, types.GeneratorType), 'Test Posseg Generator error'
-            result = list(result)
-            assert isinstance(result, list), 'Test Posseg error on content: %s' % content
-            print(' , '.join([w.word + ' / ' + w.flag for w in result]), file=sys.stderr)
-        print('testPosseg_NOHMM', file=sys.stderr)
-    
-        :type paths: list
-    :param paths: List of strings. Additional paths to prepend to the classpath.
-    
-    # file paths by API
-API_FILE_PATHS = {}
-    
-        # create ES domain
-    es_client.create_elasticsearch_domain(DomainName=TEST_DOMAIN_NAME)
-    assert_true(TEST_DOMAIN_NAME in
-        [d['DomainName'] for d in es_client.list_domain_names()['DomainNames']])
-    
-        # receive, assert, and delete message from SQS
-    queue_url = queue_info['QueueUrl']
-    assertions = []
-    # make sure we receive the correct topic ARN in notifications
-    assertions.append({'TopicArn': topic_info['TopicArn']})
-    # make sure the notification contains message attributes
-    assertions.append({'Value': test_value})
-    receive_assert_delete(queue_url, assertions, sqs_client)
-    
-    # parameter variables
-install_requires = []
-dependency_links = []
-package_data = {}
-    
-    def dimension_lambda(kwargs):
-    func_name = kwargs.get('func_name')
-    if not func_name:
-        func_name = kwargs.get('func_arn').split(':function:')[1].split(':')[0]
-    return [{
-        'Name': 'FunctionName',
-        'Value': func_name
-    }]
+            # h_tilde(h~): question to context attended query vectors
+        b = tf.reduce_max(S, axis=2)  # [N, T]
+        b = softmax(b, axis=-1)  # [N, T]
+        b = tf.expand_dims(b, axis=1)  # [N, 1, T]
+        h_tilde = tf.matmul(b, h)  # [N, 1, d]
+        h_tilde = tf.tile(h_tilde, [1, T, 1])  # [N, T, d]
