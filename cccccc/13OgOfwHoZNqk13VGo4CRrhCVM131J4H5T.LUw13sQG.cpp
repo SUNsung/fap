@@ -1,270 +1,289 @@
 
         
-        #include <grpc/support/port_platform.h>
-    
-    namespace grpc {
+        namespace extension_dict {
     }
     
-      Status GetFileContainingExtension(
-      ServerContext* context,
-      const reflection::v1alpha::ExtensionRequest* request,
-      reflection::v1alpha::ServerReflectionResponse* response);
+    #include <google/protobuf/descriptor.h>
+#include <google/protobuf/message.h>
+#include <google/protobuf/pyext/message.h>
+    
+    // Appends a new message to the container for each message in the
+// input iterator, merging each data element in. Equivalent to extend.
+//
+// Returns None if successful; returns NULL and sets an exception if
+// unsuccessful.
+PyObject* MergeFrom(RepeatedCompositeContainer* self, PyObject* other);
+    
+    #endif  // GOOGLE_PROTOBUF_ARENA_TEST_UTIL_H__
+
+    
+    #include <google/protobuf/compiler/cpp/cpp_helpers.h>
+#include <google/protobuf/compiler/cpp/cpp_generator.h>
+#include <google/protobuf/compiler/annotation_test_util.h>
+#include <google/protobuf/compiler/command_line_interface.h>
+#include <google/protobuf/descriptor.pb.h>
+    
+    #include <google/protobuf/compiler/java/java_generator.h>
+    
+    ImmutableGeneratorFactory::ImmutableGeneratorFactory(Context* context)
+    : context_(context) {}
+ImmutableGeneratorFactory::~ImmutableGeneratorFactory() {}
+    
+    namespace google {
+namespace protobuf {
+class FieldDescriptor;    // descriptor.h
+class Descriptor;         // descriptor.h
+class ServiceDescriptor;  // descriptor.h
+namespace compiler {
+namespace java {
+class MessageGenerator;    // message.h
+class ExtensionGenerator;  // extension.h
+class ServiceGenerator;    // service.h
+class Context;             // context.h
+}  // namespace java
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
     
     
-    {}  // namespace grpc
-    
-    #include <grpc/impl/codegen/port_platform.h>
-    
-    
-    {
-    {}  // namespace load_reporter
-}  // namespace grpc
-    
-    #include <grpc/impl/codegen/port_platform.h>
-    
-      PinnableSlice pinnable_val;
-  db->Get(ReadOptions(), db->DefaultColumnFamily(), 'key1', &pinnable_val);
-  assert(s.IsNotFound());
-  // Reset PinnableSlice after each use and before each reuse
-  pinnable_val.Reset();
-  db->Get(ReadOptions(), db->DefaultColumnFamily(), 'key2', &pinnable_val);
-  assert(pinnable_val == 'value');
-  pinnable_val.Reset();
-  // The Slice pointed by pinnable_val is not valid after this point
-    
-    #include 'rocksdb/db.h'
-#include 'rocksdb/status.h'
-    
-    namespace rocksdb {
-namespace lua {
-class LuaStateWrapper {
- public:
-  explicit LuaStateWrapper(const std::string& lua_script) {
-    lua_state_ = luaL_newstate();
-    Init(lua_script, {});
+    {  std::vector<OperatorDef> GetGradientDefs() override {
+    return SingleGradientDef(
+        'SubGradient',
+        '',
+        std::vector<std::string>{GO(0), I(0), I(1)},
+        std::vector<std::string>{GI(0), GI(1)});
   }
-  LuaStateWrapper(
-      const std::string& lua_script,
-      const std::vector<std::shared_ptr<RocksLuaCustomLibrary>>& libraries) {
-    lua_state_ = luaL_newstate();
-    Init(lua_script, libraries);
-  }
-  lua_State* GetLuaState() const { return lua_state_; }
-  ~LuaStateWrapper() { lua_close(lua_state_); }
-    }
-    }
-    }
-    
-    
-    { protected:
-  // To Create an OptimisticTransactionDB, call Open()
-  explicit OptimisticTransactionDB(DB* db) : StackableDB(db) {}
 };
     
-    #include 'modules/drivers/canbus/can_comm/protocol_data.h'
+    template <>
+template <typename T>
+bool EnforceFiniteOp<CPUContext>::DoRunWithType() {
+  EnforceOnCPU<T>(Input(0));
+  return true;
+}
     
-    bool RadarState201::send_quality(const std::uint8_t* bytes,
-                                 int32_t length) const {
-  Byte t0(bytes + 5);
-  uint32_t x = t0.get_byte(4, 1);
+    workspace.FeedBlob('X', (np.random.uniform(-10, 10, (5,5))).astype(np.float32))
+print('X before running op:', workspace.FetchBlob('X'))
+workspace.RunOperatorOnce(op)
+print('X after running op:', workspace.FetchBlob('X'))
+    
+    void ChannelArguments::SetString(const grpc::string& key,
+                                 const grpc::string& value) {
+  grpc_arg arg;
+  arg.type = GRPC_ARG_STRING;
+  strings_.push_back(key);
+  arg.key = const_cast<char*>(strings_.back().c_str());
+  strings_.push_back(value);
+  arg.value.string = const_cast<char*>(strings_.back().c_str());
     }
     
-    unsigned int BaseMapMatrix::LoadBinary(unsigned char* buf) { return 0; }
+    static void winsock_init(void) {
+  WSADATA wsaData;
+  int status = WSAStartup(MAKEWORD(2, 0), &wsaData);
+  GPR_ASSERT(status == 0);
+}
     
-      std::vector<uint32_t> index_list;
-  std::vector<double> pos_list;
-  for (int i = 0; i < 8; i += 2) {
-    index_list.push_back(i);
-    pos_list.push_back(i * 2);
+    int32_t GlobalConfigEnvInt32::Get() {
+  UniquePtr<char> str = GetValue();
+  if (str == nullptr) {
+    return default_value_;
   }
-    
-      std::vector<double> x_pow(2 * num_params + 1, 1.0);
-  for (uint32_t i = 1; i < 2 * num_params + 1; ++i) {
-    x_pow[i] = x_pow[i - 1] * x;
+  // parsing given value string.
+  char* end = str.get();
+  long result = strtol(str.get(), &end, 10);
+  if (*end != 0) {
+    LogParsingError(GetName(), str.get());
+    result = default_value_;
   }
+  return static_cast<int32_t>(result);
+}
     
-      Byte t1(bytes + 3);
-  int32_t t = t1.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
-    
-    Brakemotorrpt372::Brakemotorrpt372() {}
-const int32_t Brakemotorrpt372::ID = 0x72;
-    
-    // config detail: {'name': 'str_can_timeout', 'offset': 0.0, 'precision': 1.0,
-// 'len': 1, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 3,
-// 'type': 'bool', 'order': 'motorola', 'physical_unit': ''}
-bool Globalrpt6a::str_can_timeout(const std::uint8_t* bytes,
-                                  int32_t length) const {
-  Byte t0(bytes + 0);
-  int32_t x = t0.get_byte(3, 1);
+    // Client uses proto, server uses generic codegen, unary
+TEST_F(RawEnd2EndTest, RawServerUnary) {
+  typedef grpc::testing::EchoTestService::WithRawMethod_Echo<
+      grpc::testing::EchoTestService::Service>
+      SType;
+  ResetStub();
+  auto service = BuildAndStartServer<SType>();
+  grpc::GenericServerAsyncResponseWriter response_writer(&srv_ctx_);
     }
     
+        res = ncclAllReduce(inputbuffer, outputbuffer, count, s_ncclTypeLookup.Lookup(dtype), ncclRedOpFromMpiOp(op), m_ncclComm, m_stream);
     
+        // summarize command info upfront in the log and stdout
+    size_t fullTotalMaxEpochs = 0;
+    for (int i = 0; i < command.size(); i++)
     {
-    {
-    {
-    {  Headlight_rpt_77::Commanded_valueType ret =
-      static_cast<Headlight_rpt_77::Commanded_valueType>(x);
-  return ret;
-}
-}  // namespace gem
-}  // namespace canbus
-}  // namespace apollo
-
-    
-    
-    {
-    {
-    {
-    {  Horn_rpt_79::Manual_inputType ret =
-      static_cast<Horn_rpt_79::Manual_inputType>(x);
-  return ret;
-}
-}  // namespace gem
-}  // namespace canbus
-}  // namespace apollo
-
-    
-    ActionCamera* ActionCamera::clone() const
-{
-    auto action = new (std::nothrow) ActionCamera();
-    if (action)
-    {
-        action->autorelease();
-        return action;
+        // get the configuration parameters that match the command
+        ConfigParameters commandParams(config(command[i]));
+        ConfigArray action = commandParams('action', 'train');
     }
     
-    delete action;
-    return nullptr;
-}
+        // ===================================================================
+    // SubminibatchHelpers -- helper for sub-minibatch implementation
+    // TODO: Can this just exist inside SGD.cpp?
+    // ===================================================================
     
-    /** @class OrbitCamera
+        // determine after how many epochs the learning rate should be auto adjusted.
+    size_t m_learnRateAdjustInterval;
+    
+    
+    { private:
+  friend class CarverTests;
+  FRIEND_TEST(CarverTests, test_carve_files_locally);
+};
+    
+    /**
+ * @brief The programmatic representation of osquery's configuration
  *
- * @brief OrbitCamera action.
- * Orbits the camera around the center of the screen using spherical coordinates.
- * @ingroup Actions
+ * @code{.cpp}
+ *   auto c = Config::get();
+ *   // use methods in osquery::Config on `c`
+ * @endcode
  */
-class CC_DLL OrbitCamera : public ActionCamera
-{
-public:
-    /** Creates a OrbitCamera action with radius, delta-radius,  z, deltaZ, x, deltaX. 
-     *
-     * @param t Duration in seconds.
-     * @param radius The start radius.
-     * @param deltaRadius The delta radius.
-     * @param angleZ The start angle in Z.
-     * @param deltaAngleZ The delta angle in Z.
-     * @param angleX The start angle in X.
-     * @param deltaAngleX The delta angle in X.
-     * @return An OrbitCamera.
-     */
-    static OrbitCamera* create(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX);
-    
-    /** Positions the camera according to spherical coordinates. 
-     *
-     * @param r The spherical radius.
-     * @param zenith The spherical zenith.
-     * @param azimuth The spherical azimuth.
-     */
-    void sphericalRadius(float *r, float *zenith, float *azimuth);
+class Config : private boost::noncopyable {
+ private:
+  Config();
     }
     
-    
-    {    // bottom-left
-    v = getOriginalVertex(a);
-    v.x = diff.x;
-    v.z += diff.z;
-    setVertex(a, v);
-    
-    // upper-left
-    v = getOriginalVertex(b);
-    v.x = diff.x;
-    v.z += diff.z;
-    setVertex(b, v);
-    
-    // bottom-right
-    v = getOriginalVertex(c);
-    v.x -= diff.x;
-    v.z -= diff.z;
-    setVertex(c, v);
-    
-    // upper-right
-    v = getOriginalVertex(d);
-    v.x -= diff.x;
-    v.z -= diff.z;
-    setVertex(d, v);
+    ExpectedSuccess<DatabaseError> Database::putInt32(const std::string& domain,
+                                                  const std::string& key,
+                                                  const int32_t value) {
+  std::string buffer = std::to_string(value);
+  return putString(domain, key, buffer);
 }
     
-    void FlipY::update(float time)
-{
-    ActionInstant::update(time);
-    static_cast<Sprite*>(_target)->setFlippedY(_flipY);
-}
     
-        /** init the action */
-    bool initWithFlipX(bool x);
-    
-    void ActionManager::removeAllActionsByTag(int tag, Node *target)
-{
-    CCASSERT(tag != Action::INVALID_TAG, 'Invalid tag value!');
-    CCASSERT(target != nullptr, 'target can't be nullptr!');
-    if (target == nullptr)
-    {
-        return;
-    }
-    
-    tHashElement *element = nullptr;
-    HASH_FIND_PTR(_targets, &target, element);
-    
-    if (element)
-    {
-        auto limit = element->actions->num;
-        for (int i = 0; i < limit;)
-        {
-            Action *action = static_cast<Action*>(element->actions->arr[i]);
-    }
-    }
-    }
-    
-        /**
-    @brief Create an action with duration, grid size.
-    @param duration Specify the duration of the PageTurn3D action. It's a value in seconds.
-    @param gridSize Specify the size of the grid.
-    @return If the creation success, return a pointer of PageTurn3D action; otherwise, return nil.
-    */
-    static PageTurn3D* create(float duration, const Size& gridSize);
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#ifndef __ACTION_CCPROGRESS_TIMER_H__
-#define __ACTION_CCPROGRESS_TIMER_H__
-    
-    The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-    
-    Animation* AnimationCache::getAnimation(const std::string& name)
-{
-    return _animations.at(name);
-}
-    
-    /// @endcond
-#endif  // __CC_FRAMEWORK_COMPONENT_H__
+    {} // namespace osquery
 
     
-    #include '2d/CCNode.h'
-#include '2d/CCTMXObjectGroup.h'
+      rj::Document doc;
+  if (doc.Parse(request.at('log').c_str()).HasParseError()) {
+    return;
+  }
     
-        /** Unload all texture atlas texture create by special file name.
-     CAUTION : All component use this font texture should be reset font name, though the file name is same!
-               otherwise, it will cause program crash!
-    */
-    static void unloadFontAtlasTTF(const std::string& fontFileName);
+      /**
+   * @brief Optionally handle snapshot query results separately from events.
+   *
+   * If a logger plugin wants to write snapshot query results (potentially
+   * large amounts of data) to a specific sink it should implement logSnapshot.
+   * Otherwise the serialized log item data will be forwarded to logString.
+   *
+   * @param s A special log item will complete results from a query.
+   * @return log status
+   */
+  virtual Status logSnapshot(const std::string& s) {
+    return logString(s);
+  }
     
-    /// @cond DO_NOT_SHOW
+      /// Use the SQL implementation to parse a query string and return details
+  /// (name, type) about the columns.
+  virtual Status getQueryColumns(const std::string& query,
+                                 TableColumns& columns) const = 0;
+    
+    
+    {}
+
+    
+    /*
+ * Class:     org_rocksdb_CompactionJobInfo
+ * Method:    tableProperties
+ * Signature: (J)Ljava/util/Map;
+ */
+jobject Java_org_rocksdb_CompactionJobInfo_tableProperties(
+    JNIEnv* env, jclass, jlong jhandle) {
+  auto* compact_job_info =
+      reinterpret_cast<rocksdb::CompactionJobInfo*>(jhandle);
+  auto* map = &compact_job_info->table_properties;
+  
+  jobject jhash_map = rocksdb::HashMapJni::construct(
+      env, static_cast<uint32_t>(map->size()));
+  if (jhash_map == nullptr) {
+    // exception occurred
+    return nullptr;
+  }
+    }
+    
+    /*
+ * Class:     org_rocksdb_CompactionOptions
+ * Method:    setMaxSubcompactions
+ * Signature: (JI)V
+ */
+void Java_org_rocksdb_CompactionOptions_setMaxSubcompactions(
+    JNIEnv*, jclass, jlong jhandle, jint jmax_subcompactions) {
+  auto* compact_opts =
+      reinterpret_cast<rocksdb::CompactionOptions*>(jhandle);
+  compact_opts->max_subcompactions =
+      static_cast<uint32_t>(jmax_subcompactions);
+}
+    
+    /*
+ * Class:     org_rocksdb_CompactionOptionsFIFO
+ * Method:    disposeInternal
+ * Signature: (J)V
+ */
+void Java_org_rocksdb_CompactionOptionsFIFO_disposeInternal(
+    JNIEnv*, jobject, jlong jhandle) {
+  delete reinterpret_cast<rocksdb::CompactionOptionsFIFO*>(jhandle);
+}
+
+    
+    /*
+ * Class:     org_rocksdb_EnvOptions
+ * Method:    setUseMmapWrites
+ * Signature: (JZ)V
+ */
+void Java_org_rocksdb_EnvOptions_setUseMmapWrites(
+    JNIEnv*, jobject, jlong jhandle, jboolean use_mmap_writes) {
+  ENV_OPTIONS_SET_BOOL(jhandle, use_mmap_writes);
+}
+    
+    /*
+ * Class:     org_rocksdb_OptimisticTransactionDB
+ * Method:    getBaseDB
+ * Signature: (J)J
+ */
+jlong Java_org_rocksdb_OptimisticTransactionDB_getBaseDB(
+    JNIEnv*, jobject, jlong jhandle) {
+  auto* optimistic_txn_db =
+      reinterpret_cast<rocksdb::OptimisticTransactionDB*>(jhandle);
+  return reinterpret_cast<jlong>(optimistic_txn_db->GetBaseDB());
+}
+
+    
+    
+    {}  //namespace rocksdb
+    
+    
+    { private:
+    jmethodID m_jwrite_proxy_methodid;
+    jmethodID m_jclose_writer_proxy_methodid;
+    jmethodID m_jget_file_size_methodid;
+};
+    
+      // check if open operation was successful
+  if (s.ok()) {
+    const jsize resultsLen = 1 + len_cols;  // db handle + column family handles
+    std::unique_ptr<jlong[]> results =
+        std::unique_ptr<jlong[]>(new jlong[resultsLen]);
+    results[0] = reinterpret_cast<jlong>(tdb);
+    for (int i = 1; i <= len_cols; i++) {
+      results[i] = reinterpret_cast<jlong>(handles[i - 1]);
+    }
+    }
+    
+    /*
+ * Class:     org_rocksdb_TtlDB
+ * Method:    openCF
+ * Signature: (JLjava/lang/String;[[B[J[IZ)[J
+ */
+jlongArray Java_org_rocksdb_TtlDB_openCF(
+    JNIEnv* env, jclass, jlong jopt_handle, jstring jdb_path,
+    jobjectArray jcolumn_names, jlongArray jcolumn_options,
+    jintArray jttls, jboolean jread_only) {
+  const char* db_path = env->GetStringUTFChars(jdb_path, nullptr);
+  if (db_path == nullptr) {
+    // exception thrown: OutOfMemoryError
+    return 0;
+  }
+    }
