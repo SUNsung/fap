@@ -1,368 +1,304 @@
 
         
-        #include <map>
-    
-    namespace api {
-    }
-    
-    namespace base {
-class SupportsUserData;
+        TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
+  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
+  // Identifiers can't start with digits
+  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
+  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
 }
     
-    AtomQuotaPermissionContext::~AtomQuotaPermissionContext() {}
-    
-    class Delegate {
- public:
-  // An error happened.
-  virtual void OnError(const std::string& error) {}
-    }
-    
-    AboutProtocolHandler::AboutProtocolHandler() {}
-    
-    void OffscreenViewProxy::OnEvent(ui::Event* event) {
-  if (view_) {
-    view_->OnEvent(event);
-  }
-}
-    
-    #endif  // ATOM_BROWSER_UI_COCOA_ROOT_VIEW_MAC_H_
-
-    
-        AtomMenuModel::ItemType type = model->GetTypeAt(i);
-    if (type == AtomMenuModel::TYPE_SEPARATOR) {
-      menuitem_property_set(item, kPropertyType, kTypeSeparator);
-    } else {
-      std::string label = ui::ConvertAcceleratorsFromWindowsStyle(
-          base::UTF16ToUTF8(model->GetLabelAt(i)));
-      menuitem_property_set(item, kPropertyLabel, label.c_str());
-      menuitem_property_set_bool(item, kPropertyEnabled, model->IsEnabledAt(i));
-    }
-    
-    #ifndef SECP256K1_FIELD_INNER5X52_IMPL_H
-#define SECP256K1_FIELD_INNER5X52_IMPL_H
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
     
     
-    {    secp256k1_scalar_set_b32(&sec, seckey, &overflow);
-    /* Fail if the secret key is invalid. */
-    if (!overflow && !secp256k1_scalar_is_zero(&sec)) {
-        unsigned char nonce32[32];
-        unsigned int count = 0;
-        secp256k1_scalar_set_b32(&msg, msg32, NULL);
-        while (1) {
-            ret = noncefp(nonce32, msg32, seckey, NULL, (void*)noncedata, count);
-            if (!ret) {
-                break;
-            }
-            secp256k1_scalar_set_b32(&non, nonce32, &overflow);
-            if (!secp256k1_scalar_is_zero(&non) && !overflow) {
-                if (secp256k1_ecdsa_sig_sign(&ctx->ecmult_gen_ctx, &r, &s, &sec, &msg, &non, &recid)) {
-                    break;
-                }
-            }
-            count++;
-        }
-        memset(nonce32, 0, 32);
-        secp256k1_scalar_clear(&msg);
-        secp256k1_scalar_clear(&non);
-        secp256k1_scalar_clear(&sec);
-    }
-    if (ret) {
-        secp256k1_ecdsa_recoverable_signature_save(signature, &r, &s, recid);
-    } else {
-        memset(signature, 0, sizeof(*signature));
-    }
-    return ret;
-}
-    
-        /* Check NULLs for de/serialization */
-    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, privkey, NULL, NULL) == 1);
-    ecount = 0;
-    CHECK(secp256k1_ecdsa_recoverable_signature_serialize_compact(both, NULL, &recid, &recsig) == 0);
-    CHECK(ecount == 1);
-    CHECK(secp256k1_ecdsa_recoverable_signature_serialize_compact(both, sig, NULL, &recsig) == 0);
-    CHECK(ecount == 2);
-    CHECK(secp256k1_ecdsa_recoverable_signature_serialize_compact(both, sig, &recid, NULL) == 0);
-    CHECK(ecount == 3);
-    CHECK(secp256k1_ecdsa_recoverable_signature_serialize_compact(both, sig, &recid, &recsig) == 1);
-    
-        ;; byte swap first 16 dwords
-    COPY_XMM_AND_BSWAP	X0, [INP + 0*16], BYTE_FLIP_MASK
-    COPY_XMM_AND_BSWAP	X1, [INP + 1*16], BYTE_FLIP_MASK
-    COPY_XMM_AND_BSWAP	X2, [INP + 2*16], BYTE_FLIP_MASK
-    COPY_XMM_AND_BSWAP	X3, [INP + 3*16], BYTE_FLIP_MASK
-    
-    mov	[rsp + _INP], INP
-    
-        // Trigger a long memtable compaction and reopen the database during it
-    ASSERT_OK(Put('foo', 'v1'));                         // Goes to 1st log file
-    ASSERT_OK(Put('big1', std::string(10000000, 'x')));  // Fills memtable
-    ASSERT_OK(Put('big2', std::string(1000, 'y')));      // Triggers compaction
-    ASSERT_OK(Put('bar', 'v2'));                         // Goes to new log file
-    
-    // Return the name of the descriptor file for the db named by
-// 'dbname' and the specified incarnation number.  The result will be
-// prefixed with 'dbname'.
-extern std::string DescriptorFileName(const std::string& dbname,
-                                      uint64_t number);
-    
-      fname = TableFileName('bar', 200);
-  ASSERT_EQ('bar/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(200, number);
-  ASSERT_EQ(kTableFile, type);
-    
-      caffe::Datum datum;
-  datum.set_channels(2);  // one channel for each image in the pair
-  datum.set_height(rows);
-  datum.set_width(cols);
-  LOG(INFO) << 'A total of ' << num_items << ' items.';
-  LOG(INFO) << 'Rows: ' << rows << ' Cols: ' << cols;
-  for (int itemid = 0; itemid < num_items; ++itemid) {
-    int i = caffe::caffe_rng_rand() % num_items;  // pick a random  pair
-    int j = caffe::caffe_rng_rand() % num_items;
-    read_image(&image_file, &label_file, i, rows, cols,
-        pixels, &label_i);
-    read_image(&image_file, &label_file, j, rows, cols,
-        pixels + (rows * cols), &label_j);
-    datum.set_data(pixels, 2*rows*cols);
-    if (label_i  == label_j) {
-      datum.set_label(1);
-    } else {
-      datum.set_label(0);
-    }
-    datum.SerializeToString(&value);
-    std::string key_str = caffe::format_int(itemid, 8);
-    db->Put(leveldb::WriteOptions(), key_str, value);
-  }
-    
-    /**
- * @brief Get a specific filler from the specification given in FillerParameter.
- *
- * Ideally this would be replaced by a factory pattern, but we will leave it
- * this way for now.
- */
-template <typename Dtype>
-Filler<Dtype>* GetFiller(const FillerParameter& param) {
-  const std::string& type = param.type();
-  if (type == 'constant') {
-    return new ConstantFiller<Dtype>(param);
-  } else if (type == 'gaussian') {
-    return new GaussianFiller<Dtype>(param);
-  } else if (type == 'positive_unitball') {
-    return new PositiveUnitballFiller<Dtype>(param);
-  } else if (type == 'uniform') {
-    return new UniformFiller<Dtype>(param);
-  } else if (type == 'xavier') {
-    return new XavierFiller<Dtype>(param);
-  } else if (type == 'msra') {
-    return new MSRAFiller<Dtype>(param);
-  } else if (type == 'bilinear') {
-    return new BilinearFiller<Dtype>(param);
-  } else {
-    CHECK(false) << 'Unknown filler name: ' << param.type();
-  }
-  return (Filler<Dtype>*)(NULL);
-}
-    
-      /**
-   * @brief Return whether to allow force_backward for a given bottom blob
-   *        index.
-   *
-   * If AllowForceBackward(i) == false, we will ignore the force_backward
-   * setting and backpropagate to blob i only if it needs gradient information
-   * (as is done when force_backward == false).
-   */
-  virtual inline bool AllowForceBackward(const int bottom_index) const {
-    return true;
-  }
-    
-    
-    {}  // namespace caffe
-    
-      virtual inline const char* type() const { return 'ArgMax'; }
-  virtual inline int ExactNumBottomBlobs() const { return 1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    
-    /**
- * @brief Normalizes the input to have 0-mean and/or unit (1) variance across
- *        the batch.
- *
- * This layer computes Batch Normalization as described in [1]. For each channel
- * in the data (i.e. axis 1), it subtracts the mean and divides by the variance,
- * where both statistics are computed across both spatial dimensions and across
- * the different examples in the batch.
- *
- * By default, during training time, the network is computing global
- * mean/variance statistics via a running average, which is then used at test
- * time to allow deterministic outputs for each input. You can manually toggle
- * whether the network is accumulating or using the statistics via the
- * use_global_stats option. For reference, these statistics are kept in the
- * layer's three blobs: (0) mean, (1) variance, and (2) moving average factor.
- *
- * Note that the original paper also included a per-channel learned bias and
- * scaling factor. To implement this in Caffe, define a `ScaleLayer` configured
- * with `bias_term: true` after each `BatchNormLayer` to handle both the bias
- * and scaling factor.
- *
- * [1] S. Ioffe and C. Szegedy, 'Batch Normalization: Accelerating Deep Network
- *     Training by Reducing Internal Covariate Shift.' arXiv preprint
- *     arXiv:1502.03167 (2015).
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
-template <typename Dtype>
-class BatchNormLayer : public Layer<Dtype> {
- public:
-  explicit BatchNormLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the reordered input.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient
-   *        with respect to the outputs
-   *   -# @f$ (M \times ...) @f$:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2):
-   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
-   *     required) back to the input x_1
-   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
-   *     false.
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    namespace caffe {
-    }
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of DeConvolutionLayer.
- *        Fallback to DeConvolutionLayer for CPU mode.
- *
- * cuDNN accelerates deconvolution through forward kernels for filtering and
- * bias plus backward kernels for the gradient w.r.t. the filters, biases, and
- * inputs. Caffe + cuDNN further speeds up the computation through forward
- * parallelism across groups and backward parallelism across gradients.
-*/
-template <typename Dtype>
-class CuDNNDeconvolutionLayer : public DeconvolutionLayer<Dtype> {
- public:
-  explicit CuDNNDeconvolutionLayer(const LayerParameter& param)
-    : DeconvolutionLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-                          const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-                       const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNDeconvolutionLayer();
-    }
-    
-    namespace caffe {
-    }
-    
-    #endif  // CAFFE_CUDNN_POOLING_LAYER_HPP_
-
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-            void Reset()
-        {
-            m_loss = { 0.0, 0.0 };
-            m_metric = { 0.0, 0.0 };
-            m_samples = { 0, 0 };
-            m_updates = { 0, 0 };
-            m_lastResetTime = std::chrono::high_resolution_clock::now();
-        }
-    
-            if (!m_distributed)
-        {
-            return externalState;
-        }
-    
-            size_t MaskedCount() const override
-        {
-            if (m_isPacked)
-                // Compute the number of masked samples after the data will be unpacked
-                return m_packedDataLayout ? ((m_packedDataLayout->GetNumTimeSteps() * m_packedDataLayout->GetNumSequences()) - m_packedDataLayout->GetActualNumSamples()) : 0;
-            else
-                return Value::MaskedCount();
-        }
-    
-    bool DataReader::SetNetOutput(
-    const std::vector<std::vector<std::pair<wstring, size_t>>>& uttInfo,
-    const MatrixBase& outputs,
-    const MBLayoutPtr pMBLayout)
-{
-    bool ans = false;
-    for (size_t i = 0; i < m_ioNames.size(); i++)
-        ans = (m_dataReaders[m_ioNames[i]]->SetNetOutput(uttInfo, outputs, pMBLayout) || ans);
-    return ans;
-}
-    
-    // some older code uses this namespace
-namespace DebugUtil
-{
-    void PrintCallStack(size_t skipLevels = 0, bool makeFunctionNamesStandOut = false);
-    }
-    
-            // traverse children: append them to the end of the work list
-        // In case of model editing, map inputs.
-        for (size_t i = 0; i < node->GetNumInputs(); i++)
-        {
-            auto input = node->Input(i);
-    }
-    
-        void SetAliasInfo(
-        const unordered_map<AliasNodePtr, unordered_set<AliasNodePtr>>& groupMap,
-        const unordered_map<AliasNodePtr, AliasNodePtr>& rootLookupMap)
     {
-        m_aliasLookup.clear();
-        for (const auto& pair : groupMap)
+    {
+    {}  // namespace io
+}  // namespace protobuf
+}  // namespace google
+
+    
+    namespace google {
+namespace protobuf {
+namespace util {
+namespace error {
+inline string CodeEnumToString(error::Code code) {
+  switch (code) {
+    case OK:
+      return 'OK';
+    case CANCELLED:
+      return 'CANCELLED';
+    case UNKNOWN:
+      return 'UNKNOWN';
+    case INVALID_ARGUMENT:
+      return 'INVALID_ARGUMENT';
+    case DEADLINE_EXCEEDED:
+      return 'DEADLINE_EXCEEDED';
+    case NOT_FOUND:
+      return 'NOT_FOUND';
+    case ALREADY_EXISTS:
+      return 'ALREADY_EXISTS';
+    case PERMISSION_DENIED:
+      return 'PERMISSION_DENIED';
+    case UNAUTHENTICATED:
+      return 'UNAUTHENTICATED';
+    case RESOURCE_EXHAUSTED:
+      return 'RESOURCE_EXHAUSTED';
+    case FAILED_PRECONDITION:
+      return 'FAILED_PRECONDITION';
+    case ABORTED:
+      return 'ABORTED';
+    case OUT_OF_RANGE:
+      return 'OUT_OF_RANGE';
+    case UNIMPLEMENTED:
+      return 'UNIMPLEMENTED';
+    case INTERNAL:
+      return 'INTERNAL';
+    case UNAVAILABLE:
+      return 'UNAVAILABLE';
+    case DATA_LOSS:
+      return 'DATA_LOSS';
+  }
+    }
+    }
+    }
+    }
+    }
+    
+    TEST(StructurallyValidTest, ValidUTF8String) {
+  // On GCC, this string can be written as:
+  //   'abcd 1234 - \u2014\u2013\u2212'
+  // MSVC seems to interpret \u differently.
+  string valid_str('abcd 1234 - \342\200\224\342\200\223\342\210\222 - xyz789');
+  EXPECT_TRUE(IsStructurallyValidUTF8(valid_str.data(),
+                                      valid_str.size()));
+  // Additional check for pointer alignment
+  for (int i = 1; i < 8; ++i) {
+    EXPECT_TRUE(IsStructurallyValidUTF8(valid_str.data() + i,
+                                        valid_str.size() - i));
+  }
+}
+    
+    
+// Abbreviations: true_type and false_type are structs that represent boolean
+// true and false values. Also define the boost::mpl versions of those names,
+// true_ and false_.
+typedef integral_constant<bool, true>  true_type;
+typedef integral_constant<bool, false> false_type;
+typedef true_type  true_;
+typedef false_type false_;
+    
+    bool secondary_indexes_are_equivalent(const std::vector<char> &left,
+                                      const std::vector<char> &right) {
+    sindex_disk_info_t sindex_info_left;
+    sindex_disk_info_t sindex_info_right;
+    deserialize_sindex_info_or_crash(left, &sindex_info_left);
+    deserialize_sindex_info_or_crash(right, &sindex_info_right);
+    }
+    
+    // An array of TestPartResult objects.
+//
+// Don't inherit from TestPartResultArray as its destructor is not
+// virtual.
+class GTEST_API_ TestPartResultArray {
+ public:
+  TestPartResultArray() {}
+    }
+    
+      // A helper class that aborts a death test when it's deleted.
+  class ReturnSentinel {
+   public:
+    explicit ReturnSentinel(DeathTest* test) : test_(test) { }
+    ~ReturnSentinel() { test_->Abort(TEST_ENCOUNTERED_RETURN_STATEMENT); }
+   private:
+    DeathTest* const test_;
+    GTEST_DISALLOW_COPY_AND_ASSIGN_(ReturnSentinel);
+  } GTEST_ATTRIBUTE_UNUSED_;
+    
+      // Create the directory so that path exists. Returns true if successful or
+  // if the directory already exists; returns false if unable to create the
+  // directory for any reason, including if the parent directory does not
+  // exist. Not named 'CreateDirectory' because that's a macro on Windows.
+  bool CreateFolder() const;
+    
+        if ((level == psLevel2Sep || level == psLevel3Sep) && colorMap &&
+	colorMap->getColorSpace()->getMode() == csSeparation) {
+      color.c[0] = gfxColorComp1;
+      sepCS = (GfxSeparationColorSpace *)colorMap->getColorSpace();
+      sepCS->getCMYK(&color, &cmyk);
+      writePSFmt('{0:.4g} {1:.4g} {2:.4g} {3:.4g} ({4:t}) pdfImSep\n',
+		 colToDbl(cmyk.c), colToDbl(cmyk.m),
+		 colToDbl(cmyk.y), colToDbl(cmyk.k),
+		 sepCS->getName());
+    } else {
+      writePSFmt('{0:s}\n', colorMap ? 'pdfIm' : 'pdfImM');
+    }
+    
+    void Page::displaySlice(OutputDev *out, double hDPI, double vDPI,
+			int rotate, GBool useMediaBox, GBool crop,
+			int sliceX, int sliceY, int sliceW, int sliceH,
+			GBool printing, Catalog *catalog,
+			GBool (*abortCheckCbk)(void *data),
+			void *abortCheckCbkData,
+                        GBool (*annotDisplayDecideCbk)(Annot *annot, void *user_data),
+                        void *annotDisplayDecideCbkData) {
+  Gfx *gfx;
+  Object obj;
+  Annots *annotList;
+  int i;
+  
+  if (!out->checkPageSlice(this, hDPI, vDPI, rotate, useMediaBox, crop,
+			   sliceX, sliceY, sliceW, sliceH,
+			   printing, catalog,
+			   abortCheckCbk, abortCheckCbkData)) {
+    return;
+  }
+    }
+    
+      // get type
+  if (dict->lookup('S', &obj)->isName()) {
+    const char *s = obj.getName();
+    
+    if (strcmp('R', s) == 0)
+      type = transitionReplace;
+    else if (strcmp('Split', s) == 0)
+      type = transitionSplit;
+    else if (strcmp('Blinds', s) == 0)
+      type = transitionBlinds;
+    else if (strcmp('Box', s) == 0)
+      type = transitionBox;
+    else if (strcmp('Wipe', s) == 0)
+      type = transitionWipe;
+    else if (strcmp('Dissolve', s) == 0)
+      type = transitionDissolve;
+    else if (strcmp('Glitter', s) == 0)
+      type = transitionGlitter;
+    else if (strcmp('Fly', s) == 0)
+      type = transitionFly;
+    else if (strcmp('Push', s) == 0)
+      type = transitionPush;
+    else if (strcmp('Cover', s) == 0)
+      type = transitionCover;
+    else if (strcmp('Uncover', s) == 0)
+      type = transitionUncover;
+    else if (strcmp('Fade', s) == 0)
+      type = transitionFade;
+  }
+  obj.free();
+    
+    PopplerCache::~PopplerCache()
+{
+  for (int i = 0; i <= lastValidCacheIndex; ++i) {
+    delete keys[i];
+    delete items[i];
+  }
+  delete[] keys;
+  delete[] items;
+}
+    
+    class PopplerCache
+{
+  public:
+    PopplerCache(int cacheSizeA);
+    ~PopplerCache();
+    
+    /* The item returned is owned by the cache */
+    PopplerCacheItem *lookup(const PopplerCacheKey &key);
+    
+    /* The key and item pointers ownership is taken by the cache */
+    void put(PopplerCacheKey *key, PopplerCacheItem *item);
+    
+    /* The max size of the cache */
+    int size();
+    
+    /* The number of items in the cache */
+    int numberOfItems();
+    
+    /* The n-th item in the cache */
+    PopplerCacheItem *item(int index);
+    
+    /* The n-th key in the cache */
+    PopplerCacheKey *key(int index);
+  
+  private:
+    PopplerCache(const PopplerCache &cache); // not allowed
+  
+    PopplerCacheKey **keys;
+    PopplerCacheItem **items;
+    int lastValidCacheIndex;
+    int cacheSize;
+};
+    
+      MediaRendition* copy();
+    
+        void UserPostProcessing::doSomething(cv::Mat& output, const cv::Mat& input)
+    {
+        try
         {
-            m_aliasGroups.insert(std::make_pair(pair.first, AliasInfo(pair.second.size())));
+            // Random operation on data
+            cv::bitwise_not(input, output);
+        }
+        catch (const std::exception& e)
+        {
+            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
+        }
     }
+    
+        /*! \brief Constructor from cl_mem - takes ownership.
+     *
+     * \param retainObject will cause the constructor to retain its cl object.
+     *                     Defaults to false to maintain compatibility with
+     *                     earlier versions.
+     *  See Memory for further details.
+     */
+    explicit Image1DBuffer(const cl_mem& image1D, bool retainObject = false) :
+        Image(image1D, retainObject) { }
+    
+        private:
+        const bool mMergeResults;
+        const int mLevels;
+        const int mPatchSize;
+        const bool mTrackVelocity;
+        const float mConfidenceThreshold;
+        const bool mScaleVarying;
+        const float mRescale;
+    
+    QHash<QString, std::function<void()>>
+ConnectionsTree::TreeItem::eventHandlers() {
+  QHash<QString, std::function<void()>> events;
+  events['cancel'] = [this]() { cancelCurrentOperation(); };
+  return events;
+}
+    
+      auto errCallback = [this](const QString& k) {
+    return [this, k](const QString& err) {
+      QMutexLocker l(&m_errorsMutex);
+      m_errors.append(QCoreApplication::translate('RDM', 'Cannot copy key ') +
+                      QString('%1: %2').arg(k).arg(err));
+    };
+  };
+    
+      virtual void deleteDbKeys(ConnectionsTree::DatabaseItem& db) override;
+    
+    class AbstractOperation : public QObject {
+  Q_OBJECT
     }
-    
-      void set_max_delayed_write_rate(uint64_t write_rate) {
-    // avoid divide 0
-    if (write_rate == 0) {
-      write_rate = 1u;
-    }
-    max_delayed_write_rate_ = write_rate;
-    // update delayed_write_rate_ as well
-    delayed_write_rate_ = write_rate;
-  }
-    
-      int ret = system('rm -rf /tmp/rocksmergetest');
-  if (ret != 0) {
-    fprintf(stderr, 'Error deleting /tmp/rocksmergetest, code: %d\n', ret);
-    return ret;
-  }
-  rocksdb::Options options;
-  options.create_if_missing = true;
-  options.merge_operator.reset(new MyMerge);
-  options.compaction_filter = &filter;
-  status = rocksdb::DB::Open(options, '/tmp/rocksmergetest', &raw_db);
-  assert(status.ok());
-  std::unique_ptr<rocksdb::DB> db(raw_db);
-    
-      // initialize column families options
-  std::unique_ptr<CompactionFilter> compaction_filter;
-  compaction_filter.reset(new DummyCompactionFilter());
-  cf_descs[0].options.table_factory.reset(NewBlockBasedTableFactory(bbt_opts));
-  cf_descs[0].options.compaction_filter = compaction_filter.get();
-  cf_descs[1].options.table_factory.reset(NewBlockBasedTableFactory(bbt_opts));
-    
-      db->Get(ReadOptions(), 'key2', &value);
-  assert(value == 'value');
