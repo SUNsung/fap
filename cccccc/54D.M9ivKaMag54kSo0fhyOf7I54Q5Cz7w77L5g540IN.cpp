@@ -1,64 +1,311 @@
 
         
-        #endif  // CHROME_BROWSER_UI_VIEWS_FRAME_GLOBAL_MENU_BAR_REGISTRAR_X11_H_
-
-    
-    
-    {}  // namespace mate
-
-    
-    template <typename P1, typename P2>
-inline WrappableBase* InvokeFactory(
-    Arguments* args,
-    const base::Callback<WrappableBase*(P1, P2)>& callback) {
-  typename CallbackParamTraits<P1>::LocalType a1;
-  typename CallbackParamTraits<P2>::LocalType a2;
-  if (!GetNextArgument(args, 0, true, &a1) ||
-      !GetNextArgument(args, 0, false, &a2))
-    return nullptr;
-  return callback.Run(a1, a2);
+        
+    {  /// This class provides a non-trivial .cxx_destruct method, but
+  /// its .cxx_construct is trivial.  For backwards compatibility,
+  /// when setting this flag, HasCXXStructors must be set as well.
+  HasCXXDestructorOnly = 0x00100
+};
+inline ObjCClassFlags &operator|=(ObjCClassFlags &lhs, ObjCClassFlags rhs) {
+  lhs = ObjCClassFlags(uint32_t(lhs) | uint32_t(rhs));
+  return lhs;
+}
+inline ObjCClassFlags operator|(ObjCClassFlags lhs, ObjCClassFlags rhs) {
+  return (lhs |= rhs);
 }
     
-    #endif  // NATIVE_MATE_NATIVE_MATE_HANDLE_H_
-
-    
-    // This converter handles any subclass of Wrappable.
-template <typename T>
-struct Converter<T*,
-                 typename std::enable_if<
-                     std::is_convertible<T*, WrappableBase*>::value>::type> {
-  static v8::Local<v8::Value> ToV8(v8::Isolate* isolate, T* val) {
-    if (val)
-      return val->GetWrapper();
-    else
-      return v8::Null(isolate);
-  }
-    }
-    
-      static void FirstWeakCallback(
-      const v8::WeakCallbackInfo<WrappableBase>& data);
-  static void SecondWeakCallback(
-      const v8::WeakCallbackInfo<WrappableBase>& data);
-    
-    void GlobalMenuBarRegistrarX11::OnWindowMapped(unsigned long xid) {
-  live_xids_.insert(xid);
-    }
+    #ifndef SWIFT_ABI_TYPEIDENTITY_H
+#define SWIFT_ABI_TYPEIDENTITY_H
     
     
-    {}  // namespace
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(UvTaskRunner);
+    {public:
+  explicit DiagnosticSuppression(DiagnosticEngine &diags);
+  ~DiagnosticSuppression();
 };
     
-        QColor TextColor() const { return textColor; }
-    QColor SingleColor() const { return singleColor; }
     
-    int secp256k1_ecdsa_recoverable_signature_parse_compact(const secp256k1_context* ctx, secp256k1_ecdsa_recoverable_signature* sig, const unsigned char *input64, int recid) {
-    secp256k1_scalar r, s;
-    int ret = 1;
-    int overflow = 0;
+    {} // end namespace swift
+    
+    class PrimarySpecificPaths {
+public:
+  /// The name of the main output file,
+  /// that is, the .o file for this input (or a file specified by -o).
+  /// If there is no such file, contains an empty string. If the output
+  /// is to be written to stdout, contains '-'.
+  std::string OutputFilename;
     }
+    
+    /// A placeholder allowing the experimental system to fit into the driver
+/// without changing as much code.
+class DependencyGraphImpl {
+public:
+  /// Use the status quo LoadResult for now.
+  using LoadResult = typename swift::DependencyGraphImpl::LoadResult;
+};
+    
+        void setModel(WalletModel *model);
+    void setAddress_SM(const QString &address);
+    void setAddress_VM(const QString &address);
+    
+    
+    {    /* d += a3 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'movq %%rax,%%rcx\n'
+    'movq %%rdx,%%r15\n'
+    /* d += a2 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d = a0 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c = a4 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += (c & M) * R */
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* t3 (tmp1) = d & M */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    'movq %%rsi,%q1\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* d += a4 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a0 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += c * R */
+    'movq %%r8,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* t4 = d & M (%%rsi) */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* tx = t4 >> 48 (tmp3) */
+    'movq %%rsi,%%rax\n'
+    'shrq $48,%%rax\n'
+    'movq %%rax,%q3\n'
+    /* t4 &= (M >> 4) (tmp2) */
+    'movq $0xffffffffffff,%%rax\n'
+    'andq %%rax,%%rsi\n'
+    'movq %%rsi,%q2\n'
+    /* c = a0 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += a4 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* u0 = d & M (%%rsi) */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* u0 = (u0 << 4) | tx (%%rsi) */
+    'shlq $4,%%rsi\n'
+    'movq %q3,%%rax\n'
+    'orq %%rax,%%rsi\n'
+    /* c += u0 * (R >> 4) */
+    'movq $0x1000003d1,%%rax\n'
+    'mulq %%rsi\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[0] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,0(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a1 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a0 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a4 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c += (d & M) * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* r[1] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,8(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a2 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a1 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a0 * b2 (last use of %%r10 = a0) */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* fetch t3 (%%r10, overwrites a0), t4 (%%rsi) */
+    'movq %q2,%%rsi\n'
+    'movq %q1,%%r10\n'
+    /* d += a4 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c += (d & M) * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 (%%rcx only) */
+    'shrdq $52,%%r15,%%rcx\n'
+    /* r[2] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,16(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += t3 */
+    'addq %%r10,%%r8\n'
+    /* c += d * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[3] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,24(%%rdi)\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* c += t4 (%%r8 only) */
+    'addq %%rsi,%%r8\n'
+    /* r[4] = c */
+    'movq %%r8,32(%%rdi)\n'
+: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
+: 'b'(b), 'D'(r)
+: '%rax', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
+);
+}
+    
+    
+    {  // When limit user key is prefix of start user key
+  ASSERT_EQ(IKey('foobar', 100, kTypeValue),
+            Shorten(IKey('foobar', 100, kTypeValue),
+                    IKey('foo', 200, kTypeValue)));
+}
     
     #include <stdio.h>
 #include 'db/dbformat.h'
@@ -74,140 +321,70 @@ struct Converter<T*,
 #include 'leveldb/write_batch.h'
 #include 'util/logging.h'
     
-    class Env;
-class Iterator;
-class TableCache;
-class VersionEdit;
-    
-      fname = TableFileName('bar', 200);
-  ASSERT_EQ('bar/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(200, number);
-  ASSERT_EQ(kTableFile, type);
-    
-      // REQUIRES: External synchronization
-  void WriteStep(Random* rnd) {
-    const uint32_t k = rnd->Next() % K;
-    const intptr_t g = current_.Get(k) + 1;
-    const Key key = MakeKey(k, g);
-    list_.Insert(key);
-    current_.Set(k, g);
+    // Assume a filename, and not a directory name like '/foo/bar/'
+static std::string GetDirName(const std::string filename) {
+  size_t found = filename.find_last_of('/\\');
+  if (found == std::string::npos) {
+    return '';
+  } else {
+    return filename.substr(0, found);
   }
-    
-    TEST(WriteBatchTest, Multiple) {
-  WriteBatch batch;
-  batch.Put(Slice('foo'), Slice('bar'));
-  batch.Delete(Slice('box'));
-  batch.Put(Slice('baz'), Slice('boo'));
-  WriteBatchInternal::SetSequence(&batch, 100);
-  ASSERT_EQ(100, WriteBatchInternal::Sequence(&batch));
-  ASSERT_EQ(3, WriteBatchInternal::Count(&batch));
-  ASSERT_EQ(
-      'Put(baz, boo)@102'
-      'Delete(box)@101'
-      'Put(foo, bar)@100',
-      PrintContents(&batch));
 }
     
-    inline bool operator!=(const Slice& x, const Slice& y) { return !(x == y); }
-    
-      // count the keys
-  leveldb::Iterator* iter = db->NewIterator(leveldb::ReadOptions());
-  size_t num_keys = 0;
-  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
-    num_keys++;
+    template <typename Dtype>
+void SGDSolver<Dtype>::PreSolve() {
+  // Initialize the history
+  const vector<Blob<Dtype>*>& net_params = this->net_->learnable_params();
+  history_.clear();
+  update_.clear();
+  temp_.clear();
+  for (int i = 0; i < net_params.size(); ++i) {
+    const vector<int>& shape = net_params[i]->shape();
+    history_.push_back(shared_ptr<Blob<Dtype> >(new Blob<Dtype>(shape)));
+    update_.push_back(shared_ptr<Blob<Dtype> >(new Blob<Dtype>(shape)));
+    temp_.push_back(shared_ptr<Blob<Dtype> >(new Blob<Dtype>(shape)));
   }
-  delete iter;
-  ASSERT_EQ(kNumKeys, num_keys) << 'Bad number of keys';
-    
-    namespace leveldb {
-    }
-    
-    Status Footer::DecodeFrom(Slice* input) {
-  const char* magic_ptr = input->data() + kEncodedLength - 8;
-  const uint32_t magic_lo = DecodeFixed32(magic_ptr);
-  const uint32_t magic_hi = DecodeFixed32(magic_ptr + 4);
-  const uint64_t magic = ((static_cast<uint64_t>(magic_hi) << 32) |
-                          (static_cast<uint64_t>(magic_lo)));
-  if (magic != kTableMagicNumber) {
-    return Status::Corruption('not an sstable (bad magic number)');
-  }
-    }
-    
-    Status Table::InternalGet(const ReadOptions& options, const Slice& k, void* arg,
-                          void (*handle_result)(void*, const Slice&,
-                                                const Slice&)) {
-  Status s;
-  Iterator* iiter = rep_->index_block->NewIterator(rep_->options.comparator);
-  iiter->Seek(k);
-  if (iiter->Valid()) {
-    Slice handle_value = iiter->value();
-    FilterBlockReader* filter = rep_->filter;
-    BlockHandle handle;
-    if (filter != nullptr && handle.DecodeFrom(&handle_value).ok() &&
-        !filter->KeyMayMatch(handle.offset(), k)) {
-      // Not found
-    } else {
-      Iterator* block_iter = BlockReader(this, options, iiter->value());
-      block_iter->Seek(k);
-      if (block_iter->Valid()) {
-        (*handle_result)(arg, block_iter->key(), block_iter->value());
-      }
-      s = block_iter->status();
-      delete block_iter;
-    }
-  }
-  if (s.ok()) {
-    s = iiter->status();
-  }
-  delete iiter;
-  return s;
 }
     
-    
-    {  expected = {'select pid from processes where name = 'foobar';'};
-  Pack fpack('discovery_pack', getPackWithDiscovery().doc());
-  EXPECT_EQ(fpack.getDiscoveryQueries(), expected);
-}
-    
-    namespace fs = boost::filesystem;
-    
-    boost::filesystem::path const& getTestConfigDirectory();
-    
-    #include <osquery/core/database/database.h>
-    
-      Expected<int32_t, DatabaseError> getInt32(const std::string& domain,
-                                            const std::string& key) override;
-  Expected<std::string, DatabaseError> getString(
-      const std::string& domain, const std::string& key) override;
-    
-      rj::Document doc;
-  if (doc.Parse(request.at('log').c_str()).HasParseError()) {
-    return;
-  }
-    
-      /**
-   * @brief See the usesLogStatus method, log a Glog status.
-   *
-   * @param log A vector of parsed Glog log lines.
-   * @return Status non-op indicating success or failure.
-   */
-  virtual Status logStatus(const std::vector<StatusLogLine>& log) {
-    (void)log;
-    return Status(1, 'Not enabled');
-  }
-    
-    void Plugin::setName(const std::string& name) {
-  if (!name_.empty() && name != name_) {
-    std::string error = 'Cannot rename plugin ' + name_ + ' to ' + name;
-    throw std::runtime_error(error);
-  }
+      Caffe::set_solver_count(8);
+  for (int dev = 0; dev < Caffe::solver_count(); ++dev) {
+    Caffe::set_solver_rank(dev);
     }
     
-    /**
- * @brief The response part of a plugin (registry item's) call.
- *
- * If a Registry::call succeeds it will fill in a PluginResponse.
- * This response is a vector of key value maps.
- */
-using PluginResponse = std::vector<PluginRequest>;
+    template <>
+void hdf5_load_nd_dataset<double>(hid_t file_id, const char* dataset_name_,
+        int min_dim, int max_dim, Blob<double>* blob, bool reshape) {
+  hdf5_load_nd_dataset_helper(file_id, dataset_name_, min_dim, max_dim, blob,
+                              reshape);
+  herr_t status = H5LTread_dataset_double(
+    file_id, dataset_name_, blob->mutable_cpu_data());
+  CHECK_GE(status, 0) << 'Failed to read double dataset ' << dataset_name_;
+}
+    
+    namespace caffe {
+    }
+    
+    template <typename Dtype>
+void ClipLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& top,
+    const vector<bool>& propagate_down,
+    const vector<Blob<Dtype>*>& bottom) {
+  if (propagate_down[0]) {
+    const Dtype* bottom_data = bottom[0]->cpu_data();
+    const Dtype* top_diff = top[0]->cpu_diff();
+    Dtype* bottom_diff = bottom[0]->mutable_cpu_diff();
+    const int count = bottom[0]->count();
+    }
+    }
+    
+      // Make and apply the update value for the current iteration.
+  virtual void ApplyUpdate() = 0;
+    
+    template <typename Dtype>
+string Solver<Dtype>::SnapshotToBinaryProto() {
+  string model_filename = SnapshotFilename('.caffemodel');
+  LOG(INFO) << 'Snapshotting to binary proto file ' << model_filename;
+  NetParameter net_param;
+  net_->ToProto(&net_param, param_.snapshot_diff());
+  WriteProtoToBinaryFile(net_param, model_filename);
+  return model_filename;
+}
