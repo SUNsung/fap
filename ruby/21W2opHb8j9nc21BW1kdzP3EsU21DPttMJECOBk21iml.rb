@@ -1,73 +1,44 @@
 
         
-          # When true, enter in paranoid mode to avoid user enumeration.
-  mattr_accessor :paranoid
-  @@paranoid = false
+            # NOTE: `relative-dir` is not actually a 'relative dir' in this data structure
+    # due to the fact that when vagrant stores synced folders, it path expands
+    # them with root_dir, and when you grab those synced_folders options from
+    # the machines config file, they end up being a full path rather than a
+    # relative path, and so these tests reflect that.
+    # For reference:
+    # https://github.com/hashicorp/vagrant/blob/9c1b014536e61b332cfaa00774a87a240cce8ed9/lib/vagrant/action/builtin/synced_folders.rb#L45-L46
+    let(:config_synced_folders)  { {'/vagrant':
+      {type: 'rsync',
+        hostpath: '/Users/brian/code/vagrant-sandbox'},
+      '/vagrant/other-dir':
+      {type: 'rsync',
+        hostpath: '/Users/brian/code/vagrant-sandbox/other-dir'},
+      '/vagrant/relative-dir':
+      {type: 'rsync',
+        hostpath: '/Users/brian/code/relative-dir'}}}
     
-      # If true, requires any email changes to be confirmed (exactly the same way as
-  # initial account confirmation) to be applied. Requires additional unconfirmed_email
-  # db field (see migrations). Until confirmed, new email is stored in
-  # unconfirmed_email column, and copied to email column on successful confirmation.
-  config.reconfirmable = true
-    
-    class DeviseTest < ActiveSupport::TestCase
-  test 'bcrypt on the class' do
-    password = 'super secret'
-    klass    = Struct.new(:pepper, :stretches).new('blahblah', 2)
-    hash     = Devise::Encryptor.digest(klass, password)
-    assert_equal ::BCrypt::Password.create(hash), hash
-    
-                  define_method method do |resource_or_scope, *args|
-                scope = Devise::Mapping.find_scope!(resource_or_scope)
-                router_name = Devise.mappings[scope].router_name
-                context = router_name ? send(router_name) : _devise_route_context
-                context.send('#{action}#{scope}_#{module_name}_#{path_or_url}', *args)
-              end
-            end
-          end
-        end
-      end
-    
-    module Devise
-  # Responsible for handling devise mappings and routes configuration. Each
-  # resource configured by devise_for in routes is actually creating a mapping
-  # object. You can refer to devise_for in routes for usage options.
-  #
-  # The required value in devise_for is actually not used internally, but it's
-  # inflected to find all other values.
-  #
-  #   map.devise_for :users
-  #   mapping = Devise.mappings[:user]
-  #
-  #   mapping.name #=> :user
-  #   # is the scope used in controllers and warden, given in the route as :singular.
-  #
-  #   mapping.as   #=> 'users'
-  #   # how the mapping should be search in the path, given in the route as :as.
-  #
-  #   mapping.to   #=> User
-  #   # is the class to be loaded from routes, given in the route as :class_name.
-  #
-  #   mapping.modules  #=> [:authenticatable]
-  #   # is the modules included in the class
-  #
-  class Mapping #:nodoc:
-    attr_reader :singular, :scoped_path, :path, :controllers, :path_names,
-                :class_name, :sign_out_via, :format, :used_routes, :used_helpers,
-                :failure_app, :router_name
-    
-    class SinatraStaticServer < Sinatra::Base
-    
-        # Outputs a single category as an <a> link.
-    #
-    #  +category+ is a category string to format as an <a> link
-    #
-    # Returns string
-    #
-    def category_link(category)
-      dir = @context.registers[:site].config['category_dir']
-      '<a class='category' href='/#{dir}/#{category.to_url}/'>#{category}</a>'
+          subject.rsync_installed(machine)
     end
+  end
     
-    Liquid::Template.register_tag('gist', Jekyll::GistTag)
-Liquid::Template.register_tag('gistnocache', Jekyll::GistTagNoCache)
+          expect(result[0]).to be_kind_of(Vagrant::BoxMetadata)
+      expect(result[1]).to be_kind_of(Vagrant::BoxMetadata::Version)
+      expect(result[2]).to be_kind_of(Vagrant::BoxMetadata::Provider)
+    
+    module Vagrant
+  # This class provides a way to load and access the contents
+  # of a Vagrantfile.
+  #
+  # This class doesn't actually load Vagrantfiles, parse them,
+  # merge them, etc. That is the job of {Config::Loader}. This
+  # class, on the other hand, has higher-level operations on
+  # a loaded Vagrantfile such as looking up the defined machines,
+  # loading the configuration of a specific machine/provider combo,
+  # etc.
+  class Vagrantfile
+    # This is the configuration loaded as-is given the loader and
+    # keys to #initialize.
+    attr_reader :config
+    
+        it 'configures without a provider or boxes' do
+      register_provider('foo')
