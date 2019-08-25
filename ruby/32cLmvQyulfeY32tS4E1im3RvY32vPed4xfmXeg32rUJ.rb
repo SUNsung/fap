@@ -1,77 +1,116 @@
 
         
-                # Setup and normalize the configuration:
-        #   * Create Kramdown if it doesn't exist.
-        #   * Set syntax_highlighter, detecting enable_coderay and merging
-        #       highlighter if none.
-        #   * Merge kramdown[coderay] into syntax_highlighter_opts stripping coderay_.
-        #   * Make sure `syntax_highlighter_opts` exists.
+              select2('SF Weather', from: 'Control targets')
     
-          def after_feature_element(feature_element)
-        @timings[feature_element_timing_key(feature_element)] = Time.now - @timings[feature_element_timing_key(feature_element)]
-        @io.print ' (#{@timings[feature_element_timing_key(feature_element)]}s)'
-      end
+        it 'can not be turned off' do
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'true' }
+      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
+    end
+  end
+end
+
     
-            def handle_websockets_event(websocket)
-          websocket.onopen { |handshake| connect(websocket, handshake) }
-          websocket.onclose { disconnect(websocket) }
-          websocket.onmessage { |msg| print_message(msg) }
-          websocket.onerror { |error| log_error(error) }
-        end
+        it 'should provide the since attribute after the first run' do
+      time = (Time.now-1.minute).iso8601
+      @checker.memory[:last_event] = time
+      @checker.save
+      expect(@checker.reload.send(:query_parameters)).to eq({:query => {:since => time}})
+    end
+  end
     
-            a_split.each_with_index { |s, i| a_split[i] = s.to_i unless i == a_length - 1 }
-        b_split.each_with_index { |s, i| b_split[i] = s.to_i unless i == b_length - 1 }
+      let(:valid_params) {
+    {
+      name: 'Example',
+      schedule: 'every_1h',
+      options: {
+        'action' => 'run',
+      },
+      user: users(:bob),
+      control_targets: [target]
+    }
+  }
     
-        def links
-      context[:links]
+        def as_json
+      { entries: entries_as_json, types: types_as_json }
+    end
+    
+        def parse_html(html)
+      warn '#{self.class.name} is re-parsing the document' unless ENV['RACK_ENV'] == 'test'
+      super
+    end
+    
+        def initialize(filters = nil)
+      @filters = filters ? filters.dup : []
     end
     
         def add(path, content)
       @pages[path] = content
     end
     
-        def effective_path
-      @effective_path ||= effective_url.path
+        def effective_url
+      @effective_url ||= URL.parse super
+    end
+    
+            self.base_url.scheme = effective_base_url.scheme
+        self.base_url.host = effective_base_url.host
+        self.base_url.path = effective_base_url.path
+        super
+      ensure
+        self.base_url.scheme = original_scheme
+        self.base_url.host = original_host
+        self.base_url.path = original_path
+      end
+    end
+    
+        private
+    
+            title = at_css('h1').content.strip
+        if root_page?
+          at_css('h1').content = 'Angular 2 Documentation'
+        elsif title == 'Index'
+          at_css('h1').content = result[:entries].first.name
+        elsif title == 'Angular'
+          at_css('h1').content = slug.split('/').last.gsub('-', ' ')
+        elsif at_css('.breadcrumbs') && title != result[:entries].first.name
+          at_css('h1').content = result[:entries].first.name
+        end
+    
+    blogs.sort_by { |b| b.name.capitalize }
+unavailable.sort_by { |b| b.name.capitalize }
+    
+        context 'on a post from a stranger' do
+      before do
+        @target = eve.post :status_message, text: 'AWESOME', to: eve.aspects.first.id
+      end
+    
+          def all_paths
+        [source_path, dsym_path, bcsymbolmap_paths].flatten.compact
+      end
     end
   end
 end
 
     
-            css('h1 + code').each do |node|
-          node.before('<p></p>')
-          while node.next_element.name == 'code'
-            node.previous_element << ' '
-            node.previous_element << node.next_element
+              projects.each do |project|
+            UI.message '- Writing Xcode project file to #{UI.path project.path}' do
+              library_product_types = [:framework, :dynamic_library, :static_library]
+              results_by_native_target = Hash[pod_target_installation_results.map do |_, result|
+                [result.native_target, result]
+              end]
+              project.recreate_user_schemes(false) do |scheme, target|
+                next unless target.respond_to?(:symbol_type)
+                next unless library_product_types.include? target.symbol_type
+                installation_result = results_by_native_target[target]
+                next unless installation_result
+                installation_result.test_native_targets.each do |test_native_target|
+                  scheme.add_test_target(test_native_target)
+                end
+              end
+              project.save
+            end
           end
-          node.previous_element.prepend_child(node)
         end
-    
-            css('span.badges').each do |node|
-          node.name = 'div'
-        end
-    
-          # Generates the contents of the module.modulemap file.
-      #
-      # @return [String]
-      #
-      def generate
-        <<-MODULE_MAP.strip_heredoc
-#{module_specifier_prefix}module #{target.product_module_name}#{module_declaration_attributes} {
-  #{headers.join('\n  ')}
-    }
-    
-              merged = @target.merge_embedded_pod_targets(embedded_pod_targets_for_build_configuration)
-          merged.pod_targets_for_build_configuration('Debug').should == [@pod_target]
-          merged.pod_targets_for_build_configuration('Release').should == [@pod_target, other_pod_target]
-        end
-    
-          def ==(other)
-        if other.class == self.class
-          other.source_path == @source_path && other.dsym_path == @dsym_path && other.bcsymbolmap_paths == @bcsymbolmap_paths
-        else
-          false
-        end
-      end
     
           def updates
         @updates ||= begin
@@ -91,13 +130,108 @@ end
         end
       end
     
-            # Displays the state of each pod.
-        #
-        # @return [void]
-        #
-        def print
-          states = %i(added deleted changed unchanged)
-          lines(states).each do |line|
-            UI.message(line, '', 2)
-          end
+    if $PROGRAM_NAME == __FILE__ && !ENV['COCOAPODS_NO_BUNDLER']
+  ENV['BUNDLE_GEMFILE'] = File.expand_path('../../Gemfile', __FILE__)
+  require 'rubygems'
+  require 'bundler/setup'
+  $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+elsif ENV['COCOAPODS_NO_BUNDLER']
+  require 'rubygems'
+  gem 'cocoapods'
+end
+    
+              # Creates a file reference to the xcconfig generated by
+          # CocoaPods (if needed) and sets it as the base configuration of
+          # build configuration of the user target.
+          #
+          # @param  [Target::AggregateTarget] pod_bundle
+          #         The Pods bundle.
+          #
+          # @param  [PBXNativeTarget] target
+          #         The native target.
+          #
+          # @param  [Xcodeproj::XCBuildConfiguration] config
+          #         The build configuration.
+          #
+          def self.set_target_xcconfig(pod_bundle, target, config)
+            file_ref = create_xcconfig_ref(pod_bundle, config)
+            path = file_ref.path
+    
+        it 'includes boolean values' do
+      generator = Generator::InfoPlistFile.new('1.0.0', Platform.new(:ios, '6.0'))
+      generator.send(:to_plist, 'MyDictionary' => { 'MyTrue' => true, 'MyFalse' => false
+                                                  }).should == <<-PLIST
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE plist PUBLIC '-//Apple//DTD PLIST 1.0//EN' 'http://www.apple.com/DTDs/PropertyList-1.0.dtd'>
+<plist version='1.0'>
+<dict>
+  <key>MyDictionary</key>
+  <dict>
+    <key>MyFalse</key>
+    <false/>
+    <key>MyTrue</key>
+    <true/>
+  </dict>
+</dict>
+</plist>
+      PLIST
+    end
+    
+          # prints a message followed by a new line unless config is silent.
+      #
+      # @param [String] message
+      #        The message to print.
+      #
+      def print(message)
+        return if config.silent?
+        begin
+          (output_io || STDOUT).print(message)
+        rescue Errno::EPIPE
+          exit 0
         end
+      end
+    
+          def print_issue_full(issue)
+        safe_url = URI.escape issue.html_url
+        UI.puts ' - #{issue.title}'
+        UI.puts '   #{safe_url} [#{issue.state}] [#{issue.comments} comment#{issue.comments == 1 ? '' : 's'}]'
+        UI.puts '   #{pretty_date(issue.updated_at)}'
+        UI.puts ''
+      end
+    
+            it 'other_ld_flags should include -ObjC when linking static frameworks' do
+          target_definition = fixture_target_definition(:contents => { 'inheritance' => 'complete' })
+          spec = stub('spec', :library_specification? => true, :spec_type => :library)
+          consumer = stub('consumer',
+                          :libraries => ['xml2'],
+                          :frameworks => ['XCTest'],
+                          :weak_frameworks => [],
+                          :spec => spec,
+                         )
+          file_accessor = stub('file_accessor',
+                               :spec => spec,
+                               :spec_consumer => consumer,
+                               :vendored_static_artifacts => [],
+                               :vendored_static_libraries => [],
+                               :vendored_dynamic_libraries => [],
+                               :vendored_static_frameworks => [],
+                               :vendored_dynamic_frameworks => [],
+                              )
+          pod_target = stub('pod_target',
+                            :file_accessors => [file_accessor],
+                            :requires_frameworks? => true,
+                            :dependent_targets => [],
+                            :recursive_dependent_targets => [],
+                            :sandbox => config.sandbox,
+                            :include_in_build_config? => true,
+                            :should_build? => false,
+                            :spec_consumers => [consumer],
+                            :build_as_static? => true,
+                            :product_basename => 'PodTarget',
+                            :target_definitions => [target_definition],
+                           )
+          pod_target.stubs(:build_settings => pod(pod_target))
+          aggregate_target = fixture_aggregate_target([pod_target], true)
+          aggregate(aggregate_target).other_ldflags.should.include '-ObjC'
+        end
+      end
