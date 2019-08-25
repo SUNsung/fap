@@ -1,264 +1,199 @@
 
         
-            assert client.get('/1,2,3').data == b'1|2|3'
+                subheading = video.get('subheading')
+        if subheading:
+            title += ' - %s' % subheading
     
+            asset_types = []
+        subtitles = {}
+        formats = []
+        last_e = None
+        for item in items_data.findall('.//item'):
+            asset_type = xpath_text(item, 'assetType')
+            if not asset_type or asset_type in asset_types or 'HLS_FPS' in asset_type or 'DASH_CENC' in asset_type:
+                continue
+            asset_types.append(asset_type)
+            query = {
+                'mbr': 'true',
+                'assetTypes': asset_type,
+            }
+            if asset_type.startswith('HLS') or asset_type in ('OnceURL', 'StreamPack'):
+                query['formats'] = 'MPEG4,M3U'
+            elif asset_type in ('RTMP', 'WIFI', '3G'):
+                query['formats'] = 'MPEG4,FLV'
+            try:
+                tp_formats, tp_subtitles = self._extract_theplatform_smil(
+                    update_url_query(tp_release_url, query), content_id,
+                    'Downloading %s SMIL data' % asset_type)
+            except ExtractorError as e:
+                last_e = e
+                continue
+            formats.extend(tp_formats)
+            subtitles = self._merge_subtitles(subtitles, tp_subtitles)
+        if last_e and not formats:
+            raise last_e
+        self._sort_formats(formats)
     
-# Core signals.  For usage examples grep the source code or consult
-# the API documentation in docs/api.rst as well as docs/signals.rst
-template_rendered = _signals.signal('template-rendered')
-before_render_template = _signals.signal('before-render-template')
-request_started = _signals.signal('request-started')
-request_finished = _signals.signal('request-finished')
-request_tearing_down = _signals.signal('request-tearing-down')
-got_request_exception = _signals.signal('got-request-exception')
-appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
-appcontext_pushed = _signals.signal('appcontext-pushed')
-appcontext_popped = _signals.signal('appcontext-popped')
-message_flashed = _signals.signal('message-flashed')
+    versions_info = json.load(open('update/versions.json'))
+if 'signature' in versions_info:
+    del versions_info['signature']
+    
+    signature = hexlify(rsa.pkcs1.sign(json.dumps(versions_info, sort_keys=True).encode('utf-8'), privkey, 'SHA-256')).decode()
+print('signature: ' + signature)
+    
+    import io
+import optparse
+    
+    with io.open(lazy_extractors_filename, 'wt', encoding='utf-8') as f:
+    f.write(module_src)
 
     
     
-class MethodView(with_metaclass(MethodViewType, View)):
-    '''A class-based view that dispatches request methods to the corresponding
-    class methods. For example, if you implement a ``get`` method, it will be
-    used to handle ``GET`` requests. ::
+class TestAgeRestriction(unittest.TestCase):
+    def _assert_restricted(self, url, filename, age, old_age=None):
+        self.assertTrue(_download_restricted(url, filename, old_age))
+        self.assertFalse(_download_restricted(url, filename, age))
     
-        It is what ends up as :class:`~flask.request`.  If you want to replace
-    the request object used you can subclass this and set
-    :attr:`~flask.Flask.request_class` to your subclass.
+    print('Loading data...')
+(x_train, y_train), (x_test, y_test) = imdb.load_data(num_words=max_features)
+print(len(x_train), 'train sequences')
+print(len(x_test), 'test sequences')
     
+    __Note on specifying the initial state of RNNs__
     
-def test_get_namespace():
-    app = flask.Flask(__name__)
-    app.config['FOO_OPTION_1'] = 'foo option 1'
-    app.config['FOO_OPTION_2'] = 'foo option 2'
-    app.config['BAR_STUFF_1'] = 'bar stuff 1'
-    app.config['BAR_STUFF_2'] = 'bar stuff 2'
-    foo_options = app.config.get_namespace('FOO_')
-    assert 2 == len(foo_options)
-    assert 'foo option 1' == foo_options['option_1']
-    assert 'foo option 2' == foo_options['option_2']
-    bar_options = app.config.get_namespace('BAR_', lowercase=False)
-    assert 2 == len(bar_options)
-    assert 'bar stuff 1' == bar_options['STUFF_1']
-    assert 'bar stuff 2' == bar_options['STUFF_2']
-    foo_options = app.config.get_namespace('FOO_', trim_namespace=False)
-    assert 2 == len(foo_options)
-    assert 'foo option 1' == foo_options['foo_option_1']
-    assert 'foo option 2' == foo_options['foo_option_2']
-    bar_options = app.config.get_namespace(
-        'BAR_', lowercase=False, trim_namespace=False
-    )
-    assert 2 == len(bar_options)
-    assert 'bar stuff 1' == bar_options['BAR_STUFF_1']
-    assert 'bar stuff 2' == bar_options['BAR_STUFF_2']
+        assert np.array_equal(before, after)
     
+        # Returns
+        String, the current default float type.
     
-def to_native_string(string, encoding='ascii'):
-    '''Given a string object, regardless of type, returns a representation of
-    that string in the native string type, encoding and decoding where
-    necessary. This assumes ASCII unless told otherwise.
-    '''
-    if isinstance(string, builtin_str):
-        out = string
-    else:
-        if is_py2:
-            out = string.encode(encoding)
+        def _ensure_group_is_present(
+            self,
+            group_name,
+            parent_name,
+            group_description):
+        '''
+        Checks to see if a server group exists, creates it if it doesn't.
+        :param group_name: the name of the group to validate/create
+        :param parent_name: the name of the parent group for group_name
+        :param group_description: a short description of the server group (used when creating)
+        :return: (changed, group) -
+            changed:  Boolean- whether a change was made,
+            group:  A clc group object for the group
+        '''
+        if not self.root_group:
+            raise AssertionError('Implementation Error: Root Group not set')
+        parent = parent_name if parent_name is not None else self.root_group.name
+        description = group_description
+        changed = False
+        group = group_name
+    
+        def ensure_loadbalancerpool_absent(self, alias, location, name, port):
+        '''
+        Checks to see if a load balancer pool exists and deletes it if it does
+        :param alias: The account alias
+        :param location: the datacenter the load balancer resides in
+        :param name: the name of the load balancer
+        :param port: the port that the load balancer listens on
+        :return: (changed, result) -
+            changed: Boolean whether a change was made
+            result: The result from the CLC API call
+        '''
+        changed = False
+        result = None
+        lb_exists = self._loadbalancer_exists(name=name)
+        if lb_exists:
+            lb_id = self._get_loadbalancer_id(name=name)
+            pool_id = self._loadbalancerpool_exists(
+                alias=alias,
+                location=location,
+                port=port,
+                lb_id=lb_id)
+            if pool_id:
+                changed = True
+                if not self.module.check_mode:
+                    result = self.delete_loadbalancerpool(
+                        alias=alias,
+                        location=location,
+                        lb_id=lb_id,
+                        pool_id=pool_id)
+            else:
+                result = 'Pool doesn't exist'
         else:
-            out = string.decode(encoding)
+            result = 'LB Doesn't Exist'
+        return changed, result
     
-        def cert_verify(self, conn, url, verify, cert):
-        '''Verify a SSL certificate. This method should not be called from user
-        code, and is only exposed for use when subclassing the
-        :class:`HTTPAdapter <requests.adapters.HTTPAdapter>`.
+        if not module.check_mode:
+        if not size and not vsize:
+            pool = system.pools.create(name=name, physical_capacity=Capacity('1TB'), virtual_capacity=Capacity('1TB'))
+        elif size and not vsize:
+            pool = system.pools.create(name=name, physical_capacity=Capacity(size), virtual_capacity=Capacity(size))
+        elif not size and vsize:
+            pool = system.pools.create(name=name, physical_capacity=Capacity('1TB'), virtual_capacity=Capacity(vsize))
+        else:
+            pool = system.pools.create(name=name, physical_capacity=Capacity(size), virtual_capacity=Capacity(vsize))
+        # Default value of ssd_cache is True. Disable ssd chacing if False
+        if not ssd_cache:
+            pool.update_ssd_enabled(ssd_cache)
     
+    from __future__ import absolute_import, division, print_function
+__metaclass__ = type
     
-def test_system_ssl():
-    '''Verify we're actually setting system_ssl when it should be available.'''
-    assert info()['system_ssl']['version'] != ''
-    
-    def test_fragment_not_sent_with_request():
-    '''Verify that the fragment portion of a URI isn't sent to the server.'''
-    def response_handler(sock):
-        req = consume_socket_content(sock, timeout=0.5)
-        sock.send(
-            b'HTTP/1.1 200 OK\r\n'
-            b'Content-Length: '+bytes(len(req))+b'\r\n'
-            b'\r\n'+req
-        )
-    
-            assert len(server.handler_results) == 0
-    
-    from .auth import HTTPBasicAuth
-from .cookies import cookiejar_from_dict, get_cookie_header, _copy_cookie_jar
-from .exceptions import (
-    HTTPError, MissingSchema, InvalidURL, ChunkedEncodingError,
-    ContentDecodingError, ConnectionError, StreamConsumedError)
-from ._internal_utils import to_native_string, unicode_is_ascii
-from .utils import (
-    guess_filename, get_auth_from_url, requote_uri,
-    stream_decode_response_unicode, to_key_val_list, parse_header_links,
-    iter_slices, guess_json_utf, super_len, check_header_validity)
-from .compat import (
-    Callable, Mapping,
-    cookielib, urlunparse, urlsplit, urlencode, str, bytes,
-    is_py2, chardet, builtin_str, basestring)
-from .compat import json as complexjson
-from .status_codes import codes
-    
-    #
-#  Requires the clc-python-sdk.
-#  sudo pip install clc-sdk
-#
-CLC_IMP_ERR = None
-try:
-    import clc as clc_sdk
-    from clc import APIFailedResponse
-except ImportError:
-    CLC_IMP_ERR = traceback.format_exc()
-    CLC_FOUND = False
-    clc_sdk = None
-else:
-    CLC_FOUND = True
-    
-        @staticmethod
-    def _set_user_agent(clc):
-        if hasattr(clc, 'SetRequestsSession'):
-            agent_string = 'ClcAnsibleModule/' + __version__
-            ses = requests.Session()
-            ses.headers.update({'Api-Client': agent_string})
-            ses.headers['User-Agent'] += ' ' + agent_string
-            clc.SetRequestsSession(ses)
-    
-    EXAMPLES = '''
-- name: Make sure pool foo exists. Set pool physical capacity to 10TB
-  infini_pool:
-    name: foo
-    size: 10TB
-    vsize: 10TB
-    user: admin
-    password: secret
-    system: ibox001
-    
-    apache_hashes = ['apr_md5_crypt', 'des_crypt', 'ldap_sha1', 'plaintext']
-    
-            type_list = filter(lambda x: x.name == issue_type, project.list_issue_types())
-        if len(type_list) != 1:
-            return (False, changed, 'Unable to find issue type %s for project %s' % (issue_type, project_name), {})
-        type_id = type_list[0].id
-    
-        response, info = post_sendgrid_api(module, username, password,
-                                       from_address, to_addresses, subject, body, attachments=attachments,
-                                       bcc=bcc, cc=cc, headers=headers, html_body=html_body, api_key=api_key)
-    
-    
-DOCUMENTATION = '''
----
-module: ipmi_boot
-short_description: Management of order of boot devices
-description:
-  - Use this module to manage order of boot devices
-version_added: '2.2'
-options:
-  name:
-    description:
-      - Hostname or ip address of the BMC.
-    required: true
-  port:
-    description:
-      - Remote RMCP port.
-    default: 623
-  user:
-    description:
-      - Username to use to connect to the BMC.
-    required: true
-  password:
-    description:
-      - Password to connect to the BMC.
-    required: true
-  bootdev:
-    description:
-      - Set boot device to use on next reboot
-    required: true
-    choices:
-      - network -- Request network boot
-      - floppy -- Boot from floppy
-      - hd -- Boot from hard drive
-      - safe -- Boot from hard drive, requesting 'safe mode'
-      - optical -- boot from CD/DVD/BD drive
-      - setup -- Boot into setup utility
-      - default -- remove any IPMI directed boot device request
-  state:
-    description:
-      - Whether to ensure that boot devices is desired.
-    default: present
-    choices:
-        - present -- Request system turn on
-        - absent -- Request system turn on
-  persistent:
-    description:
-      - If set, ask that system firmware uses this device beyond next boot.
-        Be aware many systems do not honor this.
-    type: bool
-    default: 'no'
-  uefiboot:
-    description:
-      - If set, request UEFI boot explicitly.
-        Strictly speaking, the spec suggests that if not set, the system should BIOS boot and offers no 'don't care' option.
-        In practice, this flag not being set does not preclude UEFI boot on any system I've encountered.
-    type: bool
-    default: 'no'
-requirements:
-  - 'python >= 2.6'
-  - pyghmi
-author: 'Bulat Gaifullin (@bgaifullin) <gaifullinbf@gmail.com>'
+    - name: Set a record and ensure that this is the only one
+  netcup_dns:
+    api_key: '...'
+    api_password: '...'
+    customer_id: '...'
+    name: 'demo'
+    domain: 'example.com'
+    type: 'AAAA'
+    value: '::1'
+    solo: true
 '''
     
-    if __name__ == '__main__':
-    main()
-
     
-    __all__ = ['baomihua_download', 'baomihua_download_by_id']
+def main():
+    module = AnsibleModule(
+        argument_spec=dict(
+            name=dict(required=True),
+            port=dict(default=623, type='int'),
+            user=dict(required=True, no_log=True),
+            password=dict(required=True, no_log=True),
+            state=dict(default='present', choices=['present', 'absent']),
+            bootdev=dict(required=True, choices=['network', 'hd', 'floppy', 'safe', 'optical', 'setup', 'default']),
+            persistent=dict(default=False, type='bool'),
+            uefiboot=dict(default=False, type='bool')
+        ),
+        supports_check_mode=True,
+    )
     
-    def cbs_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    '''Downloads CBS videos by URL.
-    '''
+            html = get_content(api_url)
+        self.tree = ET.ElementTree(ET.fromstring(html))
     
-    #----------------------------------------------------------------------
-def ckplayer_download_by_xml(ckinfo, output_dir = '.', merge = False, info_only = False, **kwargs):
-    #Info XML
-    video_info = ckplayer_get_info_by_xml(ckinfo)
+        for quality in ['1080','720','480','380','240','144','auto']:
+        try:
+            real_url = info[quality][1]['url']
+            if real_url:
+                break
+        except KeyError:
+            pass
     
-    try:
-        title = kwargs['title']
-    except:
-        title = ''
-    type_ = ''
-    size = 0
+        elif 'subject' in url:
+        titles = re.findall(r'data-title='([^']*)'>', html)
+        song_id = re.findall(r'<li class='song-item' id='([^']*)'', html)
+        song_ssid = re.findall(r'data-ssid='([^']*)'', html)
+        get_song_url = 'http://music.douban.com/j/songlist/get_song_url'
     
-    if len(video_info['links']) > 0:  #has link
-        type_, _ext, size = url_info(video_info['links'][0])  #use 1st to determine type, ext
+        @classmethod
+    def funshion_decrypt_str(cls, a_str, coeff):
+        # r'.{27}0' pattern, untested
+        if len(a_str) == 28 and a_str[-1] == '0':
+            data_bytes = base64.b64decode(a_str[:27] + '=')
+            clear = cls.funshion_decrypt(data_bytes, coeff)
+            return binascii.hexlify(clear.encode('utf8')).upper()
     
-    if 'size' in video_info:
-        size = int(video_info['size'])
-    else:
-        for i in video_info['links'][1:]:  #save 1st one
-            size += url_info(i)[2]
+        m3u8_url = get_m3u8_url(stream_id)
     
-    print_info(site_info, title, type_, size)
-    if not info_only:
-        download_urls(video_info['links'], title, _ext, size, output_dir=output_dir, merge=merge)
-    
-    	title = video.attributes['title'].value
-	assert title 
-    
-        def setUp(self):
-        from acme.errors import PollError
-        self.timeout = PollError(
-            exhausted=set([mock.sentinel.AR]),
-            updated={})
-        self.invalid = PollError(exhausted=set(), updated={
-            mock.sentinel.AR: mock.sentinel.AR2})
+            self._built = False
     
         @certbot_util.patch_get_utility()
     def test_noninteractive(self, mock_util):
@@ -268,22 +203,17 @@ def ckplayer_download_by_xml(ckinfo, output_dir = '.', merge = False, info_only 
         except errors.MissingCommandlineFlag as e:
             self.assertTrue('vhost ambiguity' in str(e))
     
-        def expand_sensitivity_map(self, sensitivity_array):
-        depth = sensitivity_array.shape[0]
-        # 确定扩展后sensitivity map的大小
-        # 计算stride为1时sensitivity map的大小
-        expanded_width = (self.input_width - 
-            self.filter_width + 2 * self.zero_padding + 1)
-        expanded_height = (self.input_height - 
-            self.filter_height + 2 * self.zero_padding + 1)
-        # 构建新的sensitivity_map
-        expand_array = np.zeros((depth, expanded_height, 
-                                 expanded_width))
-        # 从原始sensitivity map拷贝误差值
-        for i in range(self.output_height):
-            for j in range(self.output_width):
-                i_pos = i * self.stride
-                j_pos = j * self.stride
-                expand_array[:,i_pos,j_pos] = \
-                    sensitivity_array[:,i,j]
-        return expand_array
+    
+class ClientTestCommon(test_util.ConfigTestCase):
+    '''Common base class for certbot.client.Client tests.'''
+    
+    Use of this plugin requires a configuration file containing the target DNS
+server and optional port that supports RFC 2136 Dynamic Updates, the name
+of the TSIG key, the TSIG key secret itself and the algorithm used if it's
+different to HMAC-MD5.
+    
+    
+def _prepare_args_env(certbot_args, directory_url, http_01_port, tls_alpn_01_port,
+                      config_dir, workspace, force_renew):
+    new_environ = os.environ.copy()
+    new_environ['TMPDIR'] = workspace
