@@ -1,271 +1,163 @@
 
         
-            # Returns last modification time for this file.
-    def mtime
-      modified_time.to_i
-    end
-    
-          should 'have a relative_directory attribute' do
-        assert_equal '_methods', @collection.to_liquid['relative_directory']
-      end
-    
-        should 'ensure limit posts is 0 or more' do
-      assert_raises ArgumentError do
-        clear_dest
-        @site = fixture_site('limit_posts' => -1)
+              it 'returns an active nav link with menu when on a child page' do
+        stub(self).current_page?('/things') { false }
+        stub(self).current_page?('/things/stuff') { true }
+        nav = nav_link('Things', '/things') { nav_link('Stuff', '/things/stuff') }
+        expect(nav).to be_html_safe
+        a0 = Nokogiri(nav).at('li.dropdown.dropdown-hover.active > a[href='/things']')
+        expect(a0).to be_a Nokogiri::XML::Element
+        expect(a0.text.strip).to eq('Things')
+        a1 = Nokogiri(nav).at('li.dropdown.dropdown-hover.active > li:not(.active) > a[href='/things/stuff']')
+        expect(a1).to be_a Nokogiri::XML::Element
+        expect(a1.text.strip).to eq('Stuff')
       end
     end
+  end
     
-          def [](key)
-        if key != 'posts' && @obj.collections.key?(key)
-          @obj.collections[key].docs
-        else
-          super(key)
+            # Fix the order of receivers
+        @agents.each do |agent|
+          stub.proxy(agent).receivers { |orig| orig.order(:id) }
         end
       end
     
-            def setup
-          @config['syntax_highlighter'] ||= highlighter
-          @config['syntax_highlighter_opts'] ||= {}
-          @config['syntax_highlighter_opts']['guess_lang'] = @config['guess_lang']
-          @config['coderay'] ||= {} # XXX: Legacy.
-          modernize_coderay_config
-        end
+    describe DefaultScenarioImporter do
+  let(:user) { users(:bob) }
+  describe '.import' do
+    it 'imports a set of agents to get the user going when they are first created' do
+      mock(DefaultScenarioImporter).seed(is_a(User))
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'true' }
+      DefaultScenarioImporter.import(user)
+    end
     
-    # Test https://github.com/jekyll/jekyll/pull/6735#discussion_r165499868
-# ------------------------------------------------------------------------
-def check_with_regex(content)
-  !content.to_s.match?(%r!{[{%]!)
-end
-    }
-    }
-    
-    def local_require
-  require 'json'
-  JSON.pretty_generate(DATA)
-end
-    
-    # -------------------------------------------------------------------
-# Benchmarking changes in https://github.com/jekyll/jekyll/pull/6767
-# -------------------------------------------------------------------
-    
-    Jekyll::Deprecator.process(ARGV)
-    
-            private
-    
-      ActiveSupport.run_load_hooks(:devise_controller, self)
-end
-
-    
-          def forget_cookie_values(resource)
-        Devise::Controllers::Rememberable.cookie_values.merge!(resource.rememberable_options)
+          desc 'Get the list of the available template' do
+        detail 'This feature was introduced in GitLab #{gitlab_version}.'
+        success Entities::TemplatesList
+      end
+      params do
+        use :pagination
+      end
+      get 'templates/#{template_type}' do
+        templates = ::Kaminari.paginate_array(TemplateFinder.build(template_type, nil).execute)
+        present paginate(templates), with: Entities::TemplatesList
       end
     
-          private
+            def select_directory(file_name)
+          return [] unless @commit
     
-          protected
-    
-        # The hook which is called inside devise.
-    # So your ORM can include devise compatibility stuff.
-    def devise_modules_hook!
-      yield
-    end
-  end
-end
-    
-          def rsync_pre(machine, opts)
-        guest_path = Shellwords.escape(opts[:guestpath])
-        machine.communicate.sudo('mkdir -p #{guest_path}')
+            @filters << filter
       end
     
-          expect(subject.ssh_info).to eq(nil)
-    end
+      describe '#can_update?' do
+    context 'when user can update_group_member' do
+      before do
+        allow(presenter).to receive(:can?).with(user, :update_group_member, presenter).and_return(true)
+      end
     
-          env[:box_url] = tf.path
-      env[:box_provider] = 'vmware'
-      expect(box_collection).to receive(:add).with(any_args) { |path, name, version, **opts|
-        expect(checksum(path)).to eq(checksum(box_path))
-        expect(name).to eq('foo/bar')
-        expect(version).to eq('0.7')
-        expect(opts[:metadata_url]).to eq('file://#{tf.path}')
-        true
-      }.and_return(box)
+            begin
+          new_value = value.present? ? ChronicDuration.parse(value).to_i : parameters[:default].presence
+          assign_attributes(source_attribute => new_value)
+        rescue ChronicDuration::DurationParseError
+          # ignore error as it will be caught by validation
+        end
+      end
     
-        it 'returns false if not installed' do
-      expect(machine.communicate).to receive(:test).
-        with(command, sudo: true).and_return(false)
-      expect(subject.chef_installed(machine, 'chef_solo', version)).to be_falsey
+        helpers ::API::Helpers::MembersHelpers
+    
+          # The type of trigger, which defines where it will fire. If not defined,
+      # the option will default to `:action`
+      #
+      # @return [Symbol]
+      attr_accessor :type
+    
+      subject { described_class.new(machine) }
+    
+          iso_env.box3('base', '1.0', :foo, vagrantfile: <<-VF)
+      Vagrant.configure('2') do |config|
+        config.ssh.port = 123
+        config.vm.hostname = 'hello'
+      end
+      VF
+    
+      # This allows control over dependency resolution when installing
+  # plugins into vagrant. When true, dependency libraries that Vagrant
+  # core relies upon will be hard constraints.
+  #
+  # @return [Boolean]
+  def self.strict_dependency_enforcement
+    if ENV['VAGRANT_DISABLE_STRICT_DEPENDENCY_ENFORCEMENT']
+      false
+    else
+      true
     end
+  end
+    
+              @env.ui.info('')
+        end
+    
+      def set_poll
+    @poll = Poll.attached.find(params[:id])
+    authorize @poll.status, :show?
+  rescue Mastodon::NotPermittedError
+    raise ActiveRecord::RecordNotFound
+  end
+    
+      def signed_payload
+    @signed_payload ||= Oj.dump(serialize_payload(@account, ActivityPub::UpdateSerializer, signer: @account, sign_with: @options[:sign_with]))
   end
 end
 
     
-          # 4. Vagrant will go through all installed provider plugins (including the
-      #    ones that come with Vagrant), and find the first plugin that reports
-      #    it is usable. There is a priority system here: systems that are known
-      #    better have a higher priority than systems that are worse. For
-      #    example, if you have the VMware provider installed, it will always
-      #    take priority over VirtualBox.
+        old_account.update!(uri: 'https://example.org/alice', domain: 'example.org', protocol: :activitypub, inbox_url: 'https://example.org/inbox')
+    new_account.update!(uri: 'https://example.com/alice', domain: 'example.com', protocol: :activitypub, inbox_url: 'https://example.com/inbox', also_known_as: [old_account.uri])
     
-            def create(params, **opts, &block)
-          # NOTE: Use the direct machine name as we don't
-          # need to worry about uniqueness with compose
-          name    = machine.name.to_s
-          image   = params.fetch(:image)
-          links   = Array(params.fetch(:links, [])).map do |link|
-            case link
-            when Array
-              link
-            else
-              link.to_s.split(':')
-            end
-          end
-          ports   = Array(params[:ports])
-          volumes = Array(params[:volumes]).map do |v|
-            v = v.to_s
-            host, guest = v.split(':', 2)
-            if v.include?(':') && (Vagrant::Util::Platform.windows? || Vagrant::Util::Platform.wsl?)
-              host = Vagrant::Util::Platform.windows_path(host)
-              # NOTE: Docker does not support UNC style paths (which also
-              # means that there's no long path support). Hopefully this
-              # will be fixed someday and the gsub below can be removed.
-              host.gsub!(/^[^A-Za-z]+/, '')
-            end
-            # if host path is a volume key, don't expand it.
-            # if both exist (a path and a key) show warning and move on
-            # otherwise assume it's a realative path and expand the host path
-            compose_config = get_composition
-            if compose_config['volumes'] && compose_config['volumes'].keys.include?(host)
-              if File.directory?(@machine.env.cwd.join(host).to_s)
-                @machine.env.ui.warn(I18n.t('docker_provider.volume_path_not_expanded',
-                                           host: host))
-              end
-            else
-              @logger.debug('Path expanding #{host} to current Vagrant working dir instead of docker-compose config file directory')
-              host = @machine.env.cwd.join(host).to_s
-            end
-            '#{host}:#{guest}'
-          end
-          cmd     = Array(params.fetch(:cmd))
-          env     = Hash[*params.fetch(:env).flatten.map(&:to_s)]
-          expose  = Array(params[:expose])
-          @logger.debug('Creating container `#{name}`')
-          begin
-            update_args = [:apply]
-            update_args.push(:detach) if params[:detach]
-            update_args << block
-            update_composition(*update_args) do |composition|
-              services = composition['services'] ||= {}
-              services[name] ||= {}
-              if params[:extra_args].is_a?(Hash)
-                services[name].merge!(
-                  Hash[
-                    params[:extra_args].map{ |k, v|
-                      [k.to_s, v]
-                    }
-                  ]
-                )
-              end
-              services[name].merge!(
-                'environment' => env,
-                'expose' => expose,
-                'ports' => ports,
-                'volumes' => volumes,
-                'links' => links,
-                'command' => cmd
-              )
-              services[name]['image'] = image if image
-              services[name]['hostname'] = params[:hostname] if params[:hostname]
-              services[name]['privileged'] = true if params[:privileged]
-              services[name]['pty'] = true if params[:pty]
-            end
-          rescue => error
-            @logger.error('Failed to create container `#{name}`: #{error.class} - #{error}')
-            update_composition do |composition|
-              composition['services'].delete(name)
-            end
-            raise
-          end
-          get_container_id(name)
-        end
+        context '!@username.nil?' do
+      let(:username)  { '' }
     
-        return if target_account.nil? || !target_account.also_known_as.include?(origin_account.uri)
-    
-      describe 'POST #block' do
-    let(:scopes) { 'write:blocks' }
-    let(:other_account) { Fabricate(:user, email: 'bob@example.com', account: Fabricate(:account, username: 'bob')).account }
-    
-      let(:user)   { Fabricate(:user, account: Fabricate(:account, username: 'alice')) }
-  let(:scopes) { 'read:statuses' }
-  let(:token)  { Fabricate(:accessible_access_token, resource_owner_id: user.id, scopes: scopes) }
-    
-      let(:unknown_object_json) do
-    {
-      '@context': 'https://www.w3.org/ns/activitystreams',
-      id: 'https://example.com/actor/hello-world',
-      type: 'Note',
-      attributedTo: 'https://example.com/actor',
-      content: 'Hello world',
-      to: 'http://example.com/followers',
-    }
-  end
-    
-          {
-          :type => queue_type,
-          :events_count => events,
-          :queue_size_in_bytes => queue_size_in_bytes,
-          :max_queue_size_in_bytes => max_queue_size_in_bytes,
-      }
+    RSpec.describe UrlValidator, type: :validator do
+  describe '#validate_each' do
+    before do
+      allow(validator).to receive(:compliant?).with(value) { compliant }
+      validator.validate_each(record, attribute, value)
     end
-  end
-end; end;
-
     
-          @event.set('[@metadata]', {
-        'document_type' => 'logstash_state',
-        'timestamp' => Time.now
-      })
+    ActiveRecord::Migration.maintain_test_schema!
+RSpec.configure do |config|
+  config.use_transactional_fixtures = true
+  config.infer_spec_type_from_file_location!
+  config.include FactoryBot::Syntax::Methods
+  config.include Postal::RspecHelpers
     
-        def fetch_node_stats(agent, stats)
-      @global_stats.merge({
-        'http_address' => stats.get_shallow(:http_address).value,
-        'ephemeral_id' => agent.ephemeral_id
-      })
-    end
-  end
-end; end; end
-
-    
-      def execute
-    signal_deprecation_warning_for_pack
-    
-    class LogStash::PluginManager::Unpack < LogStash::PluginManager::PackCommand
-  option '--tgz', :flag, 'unpack a packaged tar.gz file', :default => !LogStash::Environment.win_platform?
-  option '--zip', :flag, 'unpack a packaged  zip file', :default => LogStash::Environment.win_platform?
-    
-        def self.transform_pattern_into_re(pattern)
-      Regexp.new('^#{pattern.gsub(WILDCARD, WILDCARD_INTO_RE)}$')
+      def create
+    @address_endpoint = @server.address_endpoints.build(safe_params)
+    if @address_endpoint.save
+      flash[:notice] = params[:return_notice] if params[:return_notice].present?
+      redirect_to_with_json [:return_to, [organization, @server, :address_endpoints]]
+    else
+      render_form_errors 'new', @address_endpoint
     end
   end
     
-        # any errors will be logged to $stderr by invoke!
-    # Bundler cannot update and clean gems in one operation so we have to call the CLI twice.
-    options = {:update => plugins, :rubygems_source => gemfile.gemset.sources}
-    options[:local] = true if local?
-    output = LogStash::Bundler.invoke!(options)
-    # We currently dont removed unused gems from the logstash installation
-    # see: https://github.com/elastic/logstash/issues/6339
-    # output = LogStash::Bundler.invoke!(:clean => true)
-    display_updated_plugins(previous_gem_specs_map)
-  rescue => exception
-    gemfile.restore!
-    report_exception('Updated Aborted', exception)
-  ensure
-    display_bundler_output(output)
+      def create
+    @http_endpoint = @server.http_endpoints.build(safe_params)
+    if @http_endpoint.save
+      flash[:notice] = params[:return_notice] if params[:return_notice].present?
+      redirect_to_with_json [:return_to, [organization, @server, :http_endpoints]]
+    else
+      render_form_errors 'new', @http_endpoint
+    end
   end
     
-        def user_feedback_string_for(action, platform, machines, options={})
-      experimental_string = options['experimental'] ? 'experimental' : 'non experimental'
-      message  = '#{action} all #{experimental_string} VM's defined in acceptance/Vagrantfile'
-      '#{message} for #{platform}: #{machines}' if !platform.nil?
+      def safe_params
+    params.require(:ip_address).permit(:ipv4, :ipv6, :hostname)
+  end
+    
+      before_action do
+    if params[:server_id]
+      @server = organization.servers.present.find_by_permalink!(params[:server_id])
+      params[:id] && @ip_pool_rule = @server.ip_pool_rules.find_by_uuid!(params[:id])
+    else
+      params[:id] && @ip_pool_rule = organization.ip_pool_rules.find_by_uuid!(params[:id])
     end
+  end
