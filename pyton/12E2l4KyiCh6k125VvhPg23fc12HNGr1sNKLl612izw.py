@@ -1,124 +1,140 @@
 
         
-        print('Enter the PKCS1 private key, followed by a blank line:')
-privkey = b''
-while True:
-    try:
-        line = input()
-    except EOFError:
-        break
-    if line == '':
-        break
-    privkey += line.encode('ascii') + b'\n'
-privkey = rsa.PrivateKey.load_pkcs1(privkey)
+          Args:
+    length: Sequence length.
+    hidden_size: Size of the
+    min_timescale: Minimum scale that will be applied at each position
+    max_timescale: Maximum scale that will be applied at each position
     
-        with io.open(infile, encoding='utf-8') as inf:
-        issue_template_tmpl = inf.read()
+            while not sess.should_stop():
+          tf.logging.info('Visualizing batch %d', batch + 1)
+          _process_batch(sess=sess,
+                         original_images=samples[common.ORIGINAL_IMAGE],
+                         semantic_predictions=predictions,
+                         image_names=samples[common.IMAGE_NAME],
+                         image_heights=samples[common.HEIGHT],
+                         image_widths=samples[common.WIDTH],
+                         image_id_offset=image_id_offset,
+                         save_dir=save_dir,
+                         raw_save_dir=raw_save_dir,
+                         train_id_to_eval_id=train_id_to_eval_id)
+          image_id_offset += FLAGS.vis_batch_size
+          batch += 1
     
+        Returns:
+      rvlad: [K*D] float tensor.
+    '''
     
-if __name__ == '__main__':
-    main()
-
+      Args:
+    subtoken_counts: defaultdict mapping subtokens to their counts
+    min_count: int count used to filter subtokens
     
-    
-def filter_options(readme):
-    ret = ''
-    in_options = False
-    for line in readme.split('\n'):
-        if line.startswith('# '):
-            if line[2:].startswith('OPTIONS'):
-                in_options = True
-            else:
-                in_options = False
-    
-        def debug(self, msg):
-        pass
-    
-    
-class RangeMaxValueValidator(MaxValueValidator):
-    def compare(self, a, b):
-        return a.upper is None or a.upper > b
-    message = _('Ensure that this range is completely less than or equal to %(limit_value)s.')
-    
-    
-@functools.lru_cache()
-def get_default_renderer():
-    renderer_class = import_string(settings.FORM_RENDERER)
-    return renderer_class()
-    
-        @classmethod
-    # pylint: disable=arguments-differ,too-many-arguments
-    def sign(cls, payload, key, alg, nonce, url=None, kid=None):
-        # Per ACME spec, jwk and kid are mutually exclusive, so only include a
-        # jwk field if kid is not provided.
-        include_jwk = kid is None
-        return super(JWS, cls).sign(payload, key=key, alg=alg,
-                                    protect=frozenset(['nonce', 'url', 'kid', 'jwk', 'alg']),
-                                    nonce=nonce, url=url, kid=kid,
-                                    include_jwk=include_jwk)
-
-    
-    from certbot_apache.display_ops import select_vhost_multiple
-from certbot_apache.tests import util
-    
-    # The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-    
-    Certbot will emit a warning if it detects that the credentials file can be
-accessed by other users on your system. The warning reads 'Unsafe permissions
-on credentials configuration file', followed by the path to the credentials
-file. This warning will be emitted each time Certbot uses the credentials file,
-including for renewal, and cannot be silenced except by addressing the issue
-(e.g., by using a command like ``chmod 600`` to restrict access to the file).
-    
-    
-Named Arguments
----------------
-    
-    
-class StaticMethodAttrsTest(unittest.TestCase):
-    def test_func_attribute(self):
-        def f():
-            pass
-    
-    PYTHON3_OSERROR_EXCEPTIONS = (
-    'BrokenPipeError',
-    'ChildProcessError',
-    'ConnectionAbortedError',
-    'ConnectionError',
-    'ConnectionRefusedError',
-    'ConnectionResetError',
-    'FileExistsError',
-    'FileNotFoundError',
-    'InterruptedError',
-    'IsADirectoryError',
-    'NotADirectoryError',
-    'PermissionError',
-    'ProcessLookupError',
-    'TimeoutError',
-)
-    
-        def test_file_display(self):
-        for handler in (self.dialog.idle_credits,
-                        self.dialog.idle_readme,
-                        self.dialog.idle_news):
-            self.error.message = ''
-            self.view.called = False
-            with self.subTest(handler=handler):
-                handler()
-                self.assertEqual(self.error.message, '')
-                self.assertEqual(self.view.called, True)
-    
-        # Update a record, just for good measure.
-    cursor.execute('UPDATE memos SET task='learn italian' WHERE key=1')
+      Raises:
+    ValueError: If AggregationConfig is malformed, or `mapping_path` is
+      missing.
+  '''
+  num_images = len(image_names)
     
     
 if __name__ == '__main__':
-    multiprocessing.freeze_support()
-    test()
+  parser = argparse.ArgumentParser()
+  parser.register('type', 'bool', lambda v: v.lower() == 'true')
+  parser.add_argument(
+      '--aggregation_config_path',
+      type=str,
+      default='/tmp/aggregation_config.pbtxt',
+      help='''
+      Path to AggregationConfig proto text file with configuration to be used
+      for extraction.
+      ''')
+  parser.add_argument(
+      '--dataset_file_path',
+      type=str,
+      default='/tmp/gnd_roxford5k.mat',
+      help='''
+      Dataset file for Revisited Oxford or Paris dataset, in .mat format.
+      ''')
+  parser.add_argument(
+      '--use_query_images',
+      type=lambda x: (str(x).lower() == 'true'),
+      default=False,
+      help='''
+      If True, processes the query images of the dataset. If False, processes
+      the database (ie, index) images.
+      ''')
+  parser.add_argument(
+      '--features_dir',
+      type=str,
+      default='/tmp/features',
+      help='''
+      Directory where image features are located, all in .delf format.
+      ''')
+  parser.add_argument(
+      '--index_mapping_path',
+      type=str,
+      default='',
+      help='''
+      Optional CSV file which maps each .delf file name to the index image ID
+      and detected box ID. If regional aggregation is performed, this should be
+      set. Otherwise, this is ignored.
+      Usually this file is obtained as an output from the
+      `extract_index_boxes_and_features.py` script.
+      ''')
+  parser.add_argument(
+      '--output_aggregation_dir',
+      type=str,
+      default='/tmp/aggregation',
+      help='''
+      Directory where aggregation output will be written to. Each image's
+      features will be written to a file with same name, and extension replaced
+      by one of
+      ['.vlad', '.asmk', '.asmk_star', '.rvlad', '.rasmk', '.rasmk_star'].
+      ''')
+  cmd_args, unparsed = parser.parse_known_args()
+  app.run(main=main, argv=[sys.argv[0]] + unparsed)
 
     
-    buffer = ''
+            # Crop query image according to bounding box.
+        bbox = [int(round(b)) for b in ground_truth[i]['bbx']]
+        im = np.array(_PilLoader(input_image_filename).crop(bbox))
     
-    if os.path.exists(DB_FILE):
-    os.remove(DB_FILE)
+    import tensorflow as tf
+    
+    # Minimum dimensions below which DELF features are not extracted (empty
+# features are returned). This applies after any resizing is performed.
+_MIN_HEIGHT = 10
+_MIN_WIDTH = 10
+    
+      # Read solution.
+  print('Reading solution...')
+  public_solution, private_solution, ignored_ids = dataset_file_io.ReadSolution(
+      cmd_args.solution_path, dataset_file_io.RECOGNITION_TASK_ID)
+  print('done!')
+    
+        # Print the location of each face in this image
+    top, right, bottom, left = face_location
+    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
+    
+        face_found = False
+    is_obama = False
+    
+    def get_download_fn(core, url, msgId):
+    def download_fn(downloadDir=None):
+        params = {
+            'msgid': msgId,
+            'skey': core.loginInfo['skey'],}
+        headers = { 'User-Agent' : config.USER_AGENT }
+        r = core.s.get(url, params=params, stream=True, headers = headers)
+        tempStorage = io.BytesIO()
+        for block in r.iter_content(1024):
+            tempStorage.write(block)
+        if downloadDir is None:
+            return tempStorage.getvalue()
+        with open(downloadDir, 'wb') as f:
+            f.write(tempStorage.getvalue())
+        tempStorage.seek(0)
+        return ReturnValue({'BaseResponse': {
+            'ErrMsg': 'Successfully downloaded',
+            'Ret': 0, },
+            'PostFix': utils.get_image_postfix(tempStorage.read(20)), })
+    return download_fn
