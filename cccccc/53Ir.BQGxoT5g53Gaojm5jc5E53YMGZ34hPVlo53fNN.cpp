@@ -1,344 +1,388 @@
 
         
-        Promise::~Promise() {}
+        string DataTypeToPython(DataType dtype, const string& dtype_module);
     
-    #include 'base/macros.h'
-#include 'native_mate/converter.h'
+    #include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/op_kernel.h'
     
-      void reset(v8::Isolate* isolate, v8::Local<T> handle) {
-    if (!handle.IsEmpty()) {
-      isolate_ = isolate;
-      handle_.Reset(isolate, handle);
-    } else {
-      reset();
-    }
-  }
-    
-    #ifndef NATIVE_MATE_NATIVE_MATE_WRAPPABLE_H_
-#define NATIVE_MATE_NATIVE_MATE_WRAPPABLE_H_
-    
-    napi_value Print(napi_env env, napi_callback_info info) {
-  size_t argc = 1;
-  napi_value args[1];
-  napi_status status;
+    namespace tensorflow {
     }
     
-    #ifndef SHELL_APP_COMMAND_LINE_ARGS_H_
-#define SHELL_APP_COMMAND_LINE_ARGS_H_
+    #ifndef TENSORFLOW_PYTHON_LIB_CORE_SAFE_PTR_H_
+#define TENSORFLOW_PYTHON_LIB_CORE_SAFE_PTR_H_
     
-        // could not link videoconvert0 to matroskamux0, matroskamux0 can't handle caps video/x-raw, format=(string)RGBA
-    std::string pipeline = 'appsrc ! videoconvert ! video/x-raw, format=(string)RGBA ! matroskamux ! filesink location=test.mkv';
-    Size frame_size(640, 480);
+      // Close the underlying file and release its resources.
+  void Close();
     
-                int32x4_t v1L = vreinterpretq_s32_u32(vshll_n_u16(vget_low_u16(v1hw),  SHIFT_BITS));
-            int32x4_t v1H = vreinterpretq_s32_u32(vshll_n_u16(vget_high_u16(v1hw), SHIFT_BITS));
-            int32x4_t v2L = vreinterpretq_s32_u32(vshll_n_u16(vget_low_u16(v2hw),  SHIFT_BITS));
-            int32x4_t v2H = vreinterpretq_s32_u32(vshll_n_u16(vget_high_u16(v2hw), SHIFT_BITS));
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+#include 'tensorflow/python/util/kernel_registry.h'
     
+    // Returns the kernel class name required to execute <node_def> on the device
+// type of <node_def.device>, or an empty string if the kernel class is not
+// found or the device name is invalid.
+string TryFindKernelClass(const string& serialized_node_def);
     
-    {        printf('[----------]\n[ GPU INFO ] \tRun test suite on %s GPU.\n[----------]\n', info.name()), fflush(stdout);
+    namespace stream_executor {
+namespace host {
     }
-#endif
+    }
     
-        bool writemulti(const std::vector<Mat>& img_vec, const std::vector<int>& params) CV_OVERRIDE;
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    void icvCvt_Gray2BGR_8u_C1C3R( const uchar* gray, int gray_step,
-                               uchar* bgr, int bgr_step, Size size );
-void icvCvt_Gray2BGR_16u_C1C3R( const ushort* gray, int gray_step,
-                               ushort* bgr, int bgr_step, Size size );
-    
-    //! Supported logging levels and their semantic
-enum LogLevel {
-    LOG_LEVEL_SILENT = 0,              //!< for using in setLogVevel() call
-    LOG_LEVEL_FATAL = 1,               //!< Fatal (critical) error (unrecoverable internal error)
-    LOG_LEVEL_ERROR = 2,               //!< Error message
-    LOG_LEVEL_WARNING = 3,             //!< Warning message
-    LOG_LEVEL_INFO = 4,                //!< Info message
-    LOG_LEVEL_DEBUG = 5,               //!< Debug message. Disabled in the 'Release' build.
-    LOG_LEVEL_VERBOSE = 6,             //!< Verbose (trace) messages. Requires verbosity level. Disabled in the 'Release' build.
-#ifndef CV_DOXYGEN
-    ENUM_LOG_LEVEL_FORCE_INT = INT_MAX
-#endif
-};
-    
-            // Specifies whether cross references (full names that match the name part) should be computed.
-        bool m_findCrossReferences;
-    
-    
-    {	return file_opened;
-}
-    
-    #endif // ALSAMIDI_ENABLED
+    #endif  // SHELL_APP_COMMAND_LINE_ARGS_H_
 
     
-    PoolStringArray MIDIDriverWinMidi::get_connected_inputs() {
-    }
-    
-    godot_real GDAPI godot_pool_real_array_get(const godot_pool_real_array *p_self, const godot_int p_idx) {
-	const PoolVector<godot_real> *self = (const PoolVector<godot_real> *)p_self;
-	return self->get(p_idx);
-}
-    
-    godot_bool GDAPI godot_string_name_operator_less(const godot_string_name *p_self, const godot_string_name *p_other) {
-	const StringName *self = (const StringName *)p_self;
-	const StringName *other = (const StringName *)p_other;
-	return self < other;
-}
-    
-    #include 'core/os/semaphore.h'
-    
-    namespace leveldb {
-    }
-    
-    
-    {}  // namespace leveldb
-
-    
-      // Pad with zeroes to make manifest file very big.
-  {
-    uint64_t len = FileSize(old_manifest);
-    WritableFile* file;
-    ASSERT_OK(env()->NewAppendableFile(old_manifest, &file));
-    std::string zeroes(3 * 1048576 - static_cast<size_t>(len), 0);
-    ASSERT_OK(file->Append(zeroes));
-    ASSERT_OK(file->Flush());
-    delete file;
-  }
-    
-    
-    {#if !defined(NDEBUG)
-  SnapshotList* list_ = nullptr;
-#endif  // !defined(NDEBUG)
-};
-    
-      static size_t ByteSize(const WriteBatch* batch) { return batch->rep_.size(); }
-    
-      // Insert a mapping from key->value into the cache and assign it
-  // the specified charge against the total cache capacity.
-  //
-  // Returns a handle that corresponds to the mapping.  The caller
-  // must call this->Release(handle) when the returned mapping is no
-  // longer needed.
-  //
-  // When the inserted entry is no longer needed, the key and
-  // value will be passed to 'deleter'.
-  virtual Handle* Insert(const Slice& key, void* value, size_t charge,
-                         void (*deleter)(const Slice& key, void* value)) = 0;
-    
-    
-    {}  // namespace leveldb
-    
-      RandomAccessFile(const RandomAccessFile&) = delete;
-  RandomAccessFile& operator=(const RandomAccessFile&) = delete;
-    
-    inline int Slice::compare(const Slice& b) const {
-  const size_t min_len = (size_ < b.size_) ? size_ : b.size_;
-  int r = memcmp(data_, b.data_, min_len);
-  if (r == 0) {
-    if (size_ < b.size_)
-      r = -1;
-    else if (size_ > b.size_)
-      r = +1;
-  }
-  return r;
-}
-    
-    class Issue200 {};
-    
-    #include <cassert>
-#include <condition_variable>  // NOLINT
-#include <cstddef>
-#include <cstdint>
-#include <mutex>  // NOLINT
+    #include <memory>
 #include <string>
+#include <vector>
     
-      // Read the block contents as well as the type/crc footer.
-  // See table_builder.cc for the code that built this structure.
-  size_t n = static_cast<size_t>(handle.size());
-  char* buf = new char[n + kBlockTrailerSize];
-  Slice contents;
-  Status s = file->Read(handle.offset(), n + kBlockTrailerSize, &contents, buf);
-  if (!s.ok()) {
-    delete[] buf;
-    return s;
-  }
-  if (contents.size() != n + kBlockTrailerSize) {
-    delete[] buf;
-    return Status::Corruption('truncated block read');
-  }
+    #include 'content/browser/frame_host/frame_tree.h'           // nogncheck
+#include 'content/browser/frame_host/frame_tree_node.h'      // nogncheck
+#include 'content/browser/web_contents/web_contents_impl.h'  // nogncheck
+#include 'content/public/browser/guest_mode.h'
     
-    TEST(Coding, Varint32Truncation) {
-  uint32_t large_value = (1u << 31) + 100;
-  std::string s;
-  PutVarint32(&s, large_value);
-  uint32_t result;
-  for (size_t len = 0; len < s.size() - 1; len++) {
-    ASSERT_TRUE(GetVarint32Ptr(s.data(), s.data() + len, &result) == nullptr);
-  }
-  ASSERT_TRUE(GetVarint32Ptr(s.data(), s.data() + s.size(), &result) !=
-              nullptr);
-  ASSERT_EQ(large_value, result);
-}
-    
-            gldPrevious.fIntMath = m_fIntegerMode;
-        gldPrevious.bRecord = m_bRecord;
-        gldPrevious.bUseSep = true;
-    
-    
-    {    return m_client->GetStringAsync(metadataUri);
-}
-    
-        Rational operator<<(Rational lhs, Rational const& rhs)
-    {
-        lhs <<= rhs;
-        return lhs;
+    TEST(ClusteredBitVector, AssignAfterGrowth) {
+  ClusteredBitVector temp;
+  temp.appendClearBits(118);
     }
     
-        int32_t const& Number::Exp() const
-    {
-        return m_exp;
+      ASTContext &getASTContext() { return M.getASTContext(); }
+    
+      // Resolve a type for the attribute.
+  auto mutableAttr = const_cast<CustomAttr*>(attr);
+  auto dc = decl->getDeclContext();
+  auto &ctx = dc->getASTContext();
+  Type type = resolveCustomAttrType(mutableAttr, dc,
+                                    CustomAttrTypeKind::NonGeneric);
+  if (!type) return Type();
+    
+    #include 'swift/Reflection/MetadataSource.h'
+    
+    private:
+  const TypeInfo *getClosureContextInfo(StoredPointer Context,
+                                        const ClosureContextInfo &Info) {
+    RecordTypeInfoBuilder Builder(getBuilder().getTypeConverter(),
+                                  RecordKind::ClosureContext);
     }
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
     
-        // Cleanup
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplSDL2_Shutdown();
-    ImGui::DestroyContext();
+    {
+    {
+    {      TypeRef->dump(OS);
+      auto *TypeInfo =
+          Context.getBuilder().getTypeConverter().getTypeInfo(TypeRef);
+      if (TypeInfo == nullptr) {
+        OS << 'Invalid lowering\n';
+        continue;
+      }
+      TypeInfo->dump(OS);
+    }
+    break;
+  }
+  }
     
-                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    void ImGui_ImplOpenGL2_DestroyFontsTexture()
+{
+    if (g_FontTexture)
+    {
+        ImGuiIO& io = ImGui::GetIO();
+        glDeleteTextures(1, &g_FontTexture);
+        io.Fonts->TexID = 0;
+        g_FontTexture = 0;
+    }
+}
     
-    // Include OpenGL header (without an OpenGL loader) requires a bit of fiddling
-#if defined(_WIN32) && !defined(APIENTRY)
-#define APIENTRY __stdcall                  // It is customary to use APIENTRY for OpenGL function pointer declarations on all platforms.  Additionally, the Windows OpenGL header needs APIENTRY.
-#endif
-#if defined(_WIN32) && !defined(WINGDIAPI)
-#define WINGDIAPI __declspec(dllimport)     // Some Windows OpenGL headers need this
-#endif
-#if defined(__APPLE__)
-#define GL_SILENCE_DEPRECATION
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
-    
-      static Data& getMutableData6() { return data6_; }
-    
-    
-    {} // namespace aria2
+    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
+// You can also handle inputs yourself and use those as a reference.
+IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
 
     
-      // number of nodes
-  READ_CHECK(fp, &temp32, sizeof(temp32));
-  uint32_t numNodes = ntohl(temp32);
-  // 4bytes reserved
-  readBytes(fp, buf, buf.size(), 4);
+        // For an Emscripten build we are disabling file-system access, so let's not attempt to do a fopen() of the imgui.ini file.
+    // You may manually call LoadIniSettingsFromMemory() to load settings from your own storage.
+    io.IniFilename = NULL;
     
+        // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     
-    {} // namespace aria2
+        if (g_pd3dDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, g_frameContext[0].CommandAllocator, NULL, IID_PPV_ARGS(&g_pd3dCommandList)) != S_OK ||
+        g_pd3dCommandList->Close() != S_OK)
+        return false;
     
-    DHTTaskExecutor::DHTTaskExecutor(int numConcurrent)
-    : numConcurrent_(numConcurrent)
+    void ResetDevice()
 {
+    ImGui_ImplDX9_InvalidateDeviceObjects();
+    HRESULT hr = g_pd3dDevice->Reset(&g_d3dpp);
+    if (hr == D3DERR_INVALIDCALL)
+        IM_ASSERT(0);
+    ImGui_ImplDX9_CreateDeviceObjects();
 }
     
-    DHTTaskFactoryImpl::~DHTTaskFactoryImpl() = default;
+        // Main loop
+    while (!glfwWindowShouldClose(window))
+    {
+        // Poll and handle events (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        glfwPollEvents();
+    }
+    
+    // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+// - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+// Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
     
     
-    {} // namespace aria2
+    {
+    {void PlanningBase::FillPlanningPb(const double timestamp,
+                                  ADCTrajectory* const trajectory_pb) {
+  trajectory_pb->mutable_header()->set_timestamp_sec(timestamp);
+  if (local_view_.prediction_obstacles->has_header()) {
+    trajectory_pb->mutable_header()->set_lidar_timestamp(
+        local_view_.prediction_obstacles->header().lidar_timestamp());
+    trajectory_pb->mutable_header()->set_camera_timestamp(
+        local_view_.prediction_obstacles->header().camera_timestamp());
+    trajectory_pb->mutable_header()->set_radar_timestamp(
+        local_view_.prediction_obstacles->header().radar_timestamp());
+  }
+  trajectory_pb->mutable_routing_header()->CopyFrom(
+      local_view_.routing->header());
+}
+}  // namespace planning
+}  // namespace apollo
 
     
-    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
-                                             std::chrono::seconds interval)
-    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
-{
-}
     
-    std::string DHTUnknownMessage::toString() const
-{
-  size_t sampleLength = 8;
-  if (length_ < sampleLength) {
-    sampleLength = length_;
+    {
+    {}  // namespace planning
+}  // namespace apollo
+
+    
+    void GemController::Stop() {
+  if (!is_initialized_) {
+    AERROR << 'GemController stops or starts improperly!';
+    return;
   }
-  return fmt('dht unknown Remote:%s(%u) length=%lu, first 8 bytes(hex)=%s',
-             ipaddr_.c_str(), port_, static_cast<unsigned long>(length_),
-             util::toHex(data_, sampleLength).c_str());
-}
-    
-      const std::string& find(const std::string& hostname, uint16_t port) const;
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    
-    int64_t OutputFile::writeImpl(const char *buffer, int64_t length) {
-  assertx(length > 0);
-  if (isClosed()) return 0;
-  g_context->write(buffer, length);
-  return length;
-}
-    
-    ZipFile::~ZipFile() {
-  ZipFile::closeImpl();
-}
-    
-    
-    {private:
-  struct SavedAnnotation {
-    std::string   fileName;
-    uint64_t      offset;
-    uint32_t      length;
-  };
-  SavedAnnotation writeAnnotation(const Annotation& annotation,
-                                  bool compress = true);
-};
-    
-    /// no discovery queries, no platform restriction, fake version string
-JSON getPackWithFakeVersion() {
-  auto doc = getExamplePacksConfig();
-  return JSON::newFromValue(doc.doc()['packs']['fake_version_pack']);
-}
-    
-    Expected<int32_t, DatabaseError> Database::getInt32(const std::string& domain,
-                                                    const std::string& key) {
-  Expected<std::string, DatabaseError> string_value = getString(domain, key);
-  if (string_value) {
-    auto value = tryTo<int32_t>(*string_value);
-    if (value) {
-      return *value;
-    } else {
-      return createError(DatabaseError::FailToReadData, value.takeError())
-             << 'Failed to convert string to int';
     }
-  } else {
-    return string_value.takeError();
+    
+    Scenario::ScenarioStatus Scenario::Process(
+    const common::TrajectoryPoint& planning_init_point, Frame* frame) {
+  if (current_stage_ == nullptr) {
+    AWARN << 'Current stage is a null pointer.';
+    return STATUS_UNKNOWN;
   }
+  if (current_stage_->stage_type() == ScenarioConfig::NO_STAGE) {
+    scenario_status_ = STATUS_DONE;
+    return scenario_status_;
+  }
+  auto ret = current_stage_->Process(planning_init_point, frame);
+  switch (ret) {
+    case Stage::ERROR: {
+      AERROR << 'Stage '' << current_stage_->Name() << '' returns error';
+      scenario_status_ = STATUS_UNKNOWN;
+      break;
+    }
+    case Stage::RUNNING: {
+      scenario_status_ = STATUS_PROCESSING;
+      break;
+    }
+    case Stage::FINISHED: {
+      auto next_stage = current_stage_->NextStage();
+      if (next_stage != current_stage_->stage_type()) {
+        AINFO << 'switch stage from ' << current_stage_->Name() << ' to '
+              << ScenarioConfig::StageType_Name(next_stage);
+        if (next_stage == ScenarioConfig::NO_STAGE) {
+          scenario_status_ = STATUS_DONE;
+          return scenario_status_;
+        }
+        if (stage_config_map_.find(next_stage) == stage_config_map_.end()) {
+          AERROR << 'Failed to find config for stage: ' << next_stage;
+          scenario_status_ = STATUS_UNKNOWN;
+          return scenario_status_;
+        }
+        current_stage_ = CreateStage(*stage_config_map_[next_stage]);
+        if (current_stage_ == nullptr) {
+          AWARN << 'Current stage is a null pointer.';
+          return STATUS_UNKNOWN;
+        }
+      }
+      if (current_stage_ != nullptr &&
+          current_stage_->stage_type() != ScenarioConfig::NO_STAGE) {
+        scenario_status_ = STATUS_PROCESSING;
+      } else {
+        scenario_status_ = STATUS_DONE;
+      }
+      break;
+    }
+    default: {
+      AWARN << 'Unexpected Stage return value: ' << ret;
+      scenario_status_ = STATUS_UNKNOWN;
+    }
+  }
+  return scenario_status_;
 }
     
-      assert(column_families.size() == raw_handles.size() &&
-         'can't map column families to handles');
-  if (column_families.size() != raw_handles.size()) {
-    return createError(
-        DatabaseError::FailToOpenDatabase,
-        'Fail to open database: can't map column families to handles');
-  }
+        params.push_back(node['focallength'].as<float>());
+    params.push_back(node['principalpoint']['x'].as<float>());
+    params.push_back(node['principalpoint']['y'].as<float>());
     
-      // Determine max indent needed for all flag names.
-  size_t max = 0;
-  for (const auto& flag : details) {
-    max = (max > flag.first.size()) ? max : flag.first.size();
+    class StageParkingTest : public ::testing::Test {
+ public:
+  virtual void SetUp() {
+    config_.set_stage_type(ScenarioConfig::VALET_PARKING_PARKING);
   }
-  // Additional index for flag values.
-  max += 6;
+    }
     
-      /**
-   * @brief Attach a table at runtime.
+    #include <string>
+#include <vector>
+    
+        void Insert(K key, const V &value) {
+      Entry *prev = nullptr;
+      Entry *target = nullptr;
+      Entry *new_entry = nullptr;
+      V *new_value = nullptr;
+      while (true) {
+        if (Find(key, &prev, &target)) {
+          // key exists, update value
+          if (!new_value) {
+            new_value = new V(value);
+          }
+          auto old_val_ptr = target->value_ptr.load(std::memory_order_acquire);
+          if (target->value_ptr.compare_exchange_strong(
+                  old_val_ptr, new_value, std::memory_order_acq_rel,
+                  std::memory_order_relaxed)) {
+            delete old_val_ptr;
+            if (new_entry) {
+              delete new_entry;
+              new_entry = nullptr;
+            }
+            return;
+          }
+          continue;
+        } else {
+          if (!new_entry) {
+            new_entry = new Entry(key, value);
+          }
+          new_entry->next.store(target, std::memory_order_release);
+          if (prev->next.compare_exchange_strong(target, new_entry,
+                                                 std::memory_order_acq_rel,
+                                                 std::memory_order_relaxed)) {
+            // Insert success
+            if (new_value) {
+              delete new_value;
+              new_value = nullptr;
+            }
+            return;
+          }
+          // another entry has been inserted, retry
+        }
+      }
+    }
+    
+    int WriteDetections(const bool enabled, const std::string &out_path,
+                    CameraFrame *frame) {
+  if (!enabled) {
+    return -1;
+  }
+  if (frame == nullptr) {
+    return -1;
+  }
+  std::ofstream outf(out_path, std::ofstream::out);
+  if (!outf.is_open()) {
+    AERROR << 'Cannot open output file: ' << out_path;
+    return -1;
+  }
+  outf << frame->frame_id << std::endl;
+  outf << frame->detected_objects.size() << std::endl;
+  const float *feature_ptr = frame->track_feature_blob->cpu_data();
+  int feature_dim =
+      frame->track_feature_blob->count() / frame->track_feature_blob->num();
+  AINFO << 'Feature dim: ' << feature_dim;
+  for (const auto &obj : frame->detected_objects) {
+    base::RectF rect(obj->camera_supplement.box);
+    outf << ' ' << rect.x;
+    outf << ' ' << rect.y;
+    outf << ' ' << rect.width;
+    outf << ' ' << rect.height;
+    outf << ' ' << obj->type_probs[static_cast<int>(obj->type)];
+    for (int i = 0; i < feature_dim; ++i) {
+      outf << ' ' << *feature_ptr;
+      ++feature_ptr;
+    }
+    outf << std::endl;
+  }
+  return 0;
+}
+    
+    Expected<int32_t, DatabaseError> Database::getInt32Or(
+    const std::string& domain,
+    const std::string& key,
+    const int32_t default_value) {
+  auto result = getInt32(domain, key);
+  if (!result && result.getError() == DatabaseError::KeyNotFound) {
+    return default_value;
+  }
+  return result;
+}
+    
+    
+    {
+    {    for (const auto& pair : data) {
+      auto status = batch.Put(handle_ptr.get(), pair.first, pair.second);
+      if (!status.ok()) {
+        auto batch_write_error = createError(RocksdbError::BatchWriteFail)
+                                 << status.ToString();
+        return createError(DatabaseError::FailToWriteData,
+                           std::move(batch_write_error))
+               << 'Failed to write data';
+      }
+    }
+    auto status = db_->Write(batch_write_options_, &batch);
+    if (!status.ok()) {
+      return createError(DatabaseError::FailToWriteData) << status.ToString();
+    }
+  }
+  return handle.takeError();
+}
+    
+      RocksdbDatabase(std::string name) = delete;
+  explicit RocksdbDatabase(std::string name, std::string path)
+      : Database(std::move(name)), path_(std::move(path)){};
+  ~RocksdbDatabase() override {}
+    
+    ExpectedSuccess<RocksdbMigrationError> RocksdbMigration::dropDbMigration(
+    const std::string& src_path, const std::string& dst_path) {
+  auto dst_db = openDatabase(dst_path, true, true);
+  if (dst_db) {
+    return Success();
+  }
+  return dst_db.takeError();
+}
+    
+    
+    {  /**
+   * @brief The host identifier at the time when logs are flushed.
    *
-   * The SQL implementation plugin may need to manage how virtual tables are
-   * attached at run time. In the case of SQLite where a single DB object is
-   * managed, tables are enumerated and attached during initialization.
+   * There is occasionally a delay between logging a status and decorating
+   * with the host identifier. In most cases the identifier is static so this
+   * does not matter. In some cases the host identifier causes database lookups.
    */
-  virtual Status attach(const std::string& /*name*/) {
-    return Status::success();
-  }
+  std::string identifier;
+};
