@@ -1,126 +1,234 @@
 
         
-            @patch('thefuck.utils.difflib_get_close_matches')
-    def test_call_without_n(self, difflib_mock, settings):
-        get_close_matches('', [])
-        assert difflib_mock.call_args[0][2] == settings.get('num_close_matches')
+        flags.DEFINE_boolean(
+    'train_vggish', True,
+    'If True, allow VGGish parameters to change during training, thus '
+    'fine-tuning VGGish. If False, VGGish parameters are fixed, thus using '
+    'VGGish as a fixed feature extractor.')
     
-        def _get_history_line(self, command_script):
-        return u'#+{}\n{}\n'.format(int(time()), command_script)
+      Returns:
+    output_ranks: 1D NumPy array with index image indices, sorted from the most
+      to the least similar according to the geometric verification and initial
+      scores.
+    
+    import matplotlib.image as mpimg
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy import spatial
+from skimage import feature
+from skimage import measure
+from skimage import transform
+import tensorflow as tf
+    
+      # Read solution.
+  print('Reading solution...')
+  public_solution, private_solution, ignored_ids = dataset_file_io.ReadSolution(
+      cmd_args.solution_path, dataset_file_io.RECOGNITION_TASK_ID)
+  print('done!')
+    
+      # Mean average precision.
+  print('**********************************************')
+  print('(Public)  Mean Average Precision: %f' %
+        metrics.MeanAveragePrecision(public_predictions, public_solution))
+  print('(Private) Mean Average Precision: %f' %
+        metrics.MeanAveragePrecision(private_predictions, private_solution))
+    
+        print('--- Fitting the IsolationForest estimator...')
+    model = IsolationForest(n_jobs=-1, random_state=random_state)
+    tstart = time()
+    model.fit(X_train)
+    fit_time = time() - tstart
+    tstart = time()
+    
+                gc.collect()
+            print('- benchmarking LassoLars')
+            clf = LassoLars(alpha=alpha, fit_intercept=False,
+                            normalize=False, precompute=precompute)
+            tstart = time()
+            clf.fit(X, Y)
+            lars_lasso_results.append(time() - tstart)
+    
+    for i, n in enumerate(n_samples):
+    for j, p in enumerate(n_features):
+        X = np.random.normal(size=(n, p))
+        t0 = time.time()
+        ward.fit(X)
+        scikits_time[j, i] = time.time() - t0
+        t0 = time.time()
+        hierarchy.ward(X)
+        scipy_time[j, i] = time.time() - t0
+    
+    plt.matshow(np.outer(np.sort(model.row_labels_) + 1,
+                     np.sort(model.column_labels_) + 1),
+            cmap=plt.cm.Blues)
+plt.title('Checkerboard structure of rearranged data')
+    
+    Two consequences of imposing a connectivity can be seen. First clustering
+with a connectivity matrix is much faster.
+    
+    ax.w_xaxis.set_ticklabels([])
+ax.w_yaxis.set_ticklabels([])
+ax.w_zaxis.set_ticklabels([])
+ax.set_xlabel('Petal width')
+ax.set_ylabel('Sepal length')
+ax.set_zlabel('Petal length')
+ax.set_title('Ground Truth')
+ax.dist = 12
+    
+    plt.figure(figsize=(12, 12))
+    
+        def appid_exist(self, appids):
+        for appid in appids.split('|'):
+            if appid == '':
+                continue
+            if appid in self.config.GAE_APPIDS:
+                return True
+        return False
     
     
-@pytest.fixture(autouse=True)
-def history_without_current(mocker):
-    return mocker.patch(
-        'thefuck.rules.no_command.get_valid_history_without_current',
-        return_value=['git commit'])
+class CheckAllIp(object):
     
-    (c) 2016, Aaron Christianson
-http://github.com/ninjaaron/fast-entry_points
-'''
-from setuptools.command import easy_install
-import re
-TEMPLATE = r'''\
-# -*- coding: utf-8 -*-
-# EASY-INSTALL-ENTRY-SCRIPT: '{3}','{4}','{5}'
-__requires__ = '{3}'
-import re
-import sys
+        def _test_host(self, url):
+        try:
+            header = {
+                'user-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Safari/537.36',
+                'accept': 'application/json, text/javascript, */*; q=0.01',
+                'accept-encoding': 'gzip, deflate, sdch',
+                'accept-language': 'en-US,en;q=0.8,ja;q=0.6,zh-CN;q=0.4,zh;q=0.2',
+                'connection': 'keep-alive'
+                }
+            response = self.http_client.request('HEAD', url, header, '', read_payload=False)
+            if response:
+                return True
+        except Exception as e:
+            if __name__ == '__main__':
+                xlog.exception('test %s e:%r', url, e)
+    
+        def extractInformationFromTreeNodeStream(self, nodes):
+        from antlr3.tree import Tree, CommonTree
+        from antlr3.tokens import CommonToken
+        
+        self.node = nodes.LT(1)
+        adaptor = nodes.adaptor
+        payload = adaptor.getToken(self.node)
+        if payload is not None:
+            self.token = payload
+            if payload.line <= 0:
+                # imaginary node; no line/pos info; scan backwards
+                i = -1
+                priorNode = nodes.LT(i)
+                while priorNode is not None:
+                    priorPayload = adaptor.getToken(priorNode)
+                    if priorPayload is not None and priorPayload.line > 0:
+                        # we found the most recent real line / pos info
+                        self.line = priorPayload.line
+                        self.charPositionInLine = priorPayload.charPositionInLine
+                        self.approximateLineInfo = True
+                        break
+                    
+                    i -= 1
+                    priorNode = nodes.LT(i)
+                    
+            else: # node created from real token
+                self.line = payload.line
+                self.charPositionInLine = payload.charPositionInLine
+                
+        elif isinstance(self.node, Tree):
+            self.line = self.node.line
+            self.charPositionInLine = self.node.charPositionInLine
+            if isinstance(self.node, CommonTree):
+                self.token = self.node.token
+    
+            if isinstance(index, Token):
+            # index is a Token, grap the stream index from it
+            index = index.index
+    
+    from xml.etree import cElementTree as ET
+from copy import copy
+from ..common import *
+#----------------------------------------------------------------------
+def ckplayer_get_info_by_xml(ckinfo):
+    '''str->dict
+    Information for CKPlayer API content.'''
+    e = ET.XML(ckinfo)
+    video_dict = {'title': '',
+                  #'duration': 0,
+                  'links': [],
+                  'size': 0,
+                  'flashvars': '',}
+    dictified = dictify(e)['ckplayer']
+    if 'info' in dictified:
+        if '_text' in dictified['info'][0]['title'][0]:  #title
+            video_dict['title'] = dictified['info'][0]['title'][0]['_text'].strip()
+    
+    __all__ = ['cntv_download', 'cntv_download_by_id']
+    
+                if not info_only:
+                try:
+                    download_urls([real_url], title, ext, size, output_dir, merge = merge)
+                except:
+                    pass
+    
+    #----------------------------------------------------------------------
+def makeMimi(upid):
+    '''From http://cdn37.atwikiimg.com/sitescript/pub/dksitescript/FC2.site.js
+    Also com.hps.util.fc2.FC2EncrptUtil.makeMimiLocal
+    L110'''
+    strSeed = 'gGddgPfeaf_gzyr'
+    prehash = upid + '_' + strSeed
+    return md5(prehash.encode('utf-8')).hexdigest()
+    
+        if title is None:
+      title = url[0]
+    
+        stream_id_pattern = r'id='html_stream' value='(\w+)''
+    stream_id = match1(html, stream_id_pattern)
     
     
-@eager
-def _parse_apt_operations(help_text_lines):
-    is_commands_list = False
-    for line in help_text_lines:
-        line = line.decode().strip()
-        if is_commands_list and line:
-            yield line.split()[0]
-        elif line.startswith('Basic commands:') \
-                or line.startswith('Most used commands:'):
-            is_commands_list = True
+def main():
+    '''Script main program.'''
+    import argparse
     
+                    fp = BytesIO()
+                plistlib.dump(
+                    pl, fp, fmt=fmt, skipkeys=True, sort_keys=False)
+                data = fp.getvalue()
+                pl2 = plistlib.loads(fp.getvalue())
+                self.assertEqual(pl2, {'snake': 'aWord'})
     
-if len(args) < 1:
-    print(USAGE)
-    sys.exit(1)
+            self.assertEqual(c.contents, [])
+        self.assertEqual(c.buffer, data)
     
-    if withWeight is True:
-    for tag in tags:
-        print('tag: %s\t\t weight: %f' % (tag[0],tag[1]))
-else:
-    print(','.join(tags))
-
+                self.assertIsNone(srv._sockets)
+            self.assertIsNone(srv._waiters)
+            self.assertFalse(srv.is_serving())
     
+        def test_unbuffered_output(self):
+        # Test expected operation of the '-u' switch
+        for stream in ('stdout', 'stderr'):
+            # Binary is unbuffered
+            code = ('import os, sys; sys.%s.buffer.write(b'x'); os._exit(0)'
+                % stream)
+            rc, out, err = assert_python_ok('-u', '-c', code)
+            data = err if stream == 'stderr' else out
+            self.assertEqual(data, b'x', 'binary %s not unbuffered' % stream)
+            # Text is unbuffered
+            code = ('import os, sys; sys.%s.write('x'); os._exit(0)'
+                % stream)
+            rc, out, err = assert_python_ok('-u', '-c', code)
+            data = err if stream == 'stderr' else out
+            self.assertEqual(data, b'x', 'text %s not unbuffered' % stream)
     
-'''
+            # Invalid positive position
+        handler.pos = 3
+        self.assertRaises(IndexError, b'\xff0'.decode, 'ascii', 'test.posreturn')
     
+            response.read()
     
-def _GetRequiredNamespaceImport( completion ):
-  if ( 'extra_data' not in completion
-       or 'required_namespace_import' not in completion[ 'extra_data' ] ):
-    return None
-  return completion[ 'extra_data' ][ 'required_namespace_import' ]
+    from test.fork_wait import ForkWait
+from test.support import reap_children, get_attribute, verbose
     
-      current_buffer = VimBuffer( 'buffer',
-                              contents = [ '†åsty_π.t' ],
-                              filetype = FILETYPE,
-                              omnifunc = Omnifunc )
-    
-        if 'message' in self._response:
-      return self._HandleMessageResponse()
-    
-    _logger = logging.getLogger( __name__ )
-    
-    
-  def _ThreadMain( self ):
-    while True:
-      time.sleep( self._ping_interval_seconds )
-    
-    
-def _assert_accept_equals( filter, text_or_obj, expected ):
-  if not isinstance( text_or_obj, dict ):
-    text_or_obj = { 'text': text_or_obj }
-    
-    
-def ExtractKeywordsFromGroup_KeywordStarts_test():
-  assert_that( syntax_parse._ExtractKeywordsFromGroup(
-                 syntax_parse.SyntaxGroup( '', [
-                   'foo bar',
-                   'contained boo baa',
-                   'zoo goo',
-                 ] ) ),
-               contains_inanyorder( 'foo', 'bar', 'boo', 'baa', 'zoo', 'goo' ) )
-    
-      def _adjust_thread_count( self ):
-    # When the executor gets lost, the weakref callback will wake up
-    # the worker threads.
-    def weakref_cb( _, q=self._work_queue ):
-      q.put( None )
-    # TODO(bquinlan): Should avoid creating new threads if there are more
-    # idle threads than items in the work queue.
-    if len( self._threads ) < self._max_workers:
-      t = threading.Thread( target=_worker,
-                            args=( weakref.ref( self, weakref_cb ),
-                                   self._work_queue ) )
-      t.daemon = True
-      t.start()
-      self._threads.add( t )
-    
-        >>> Point = namedtuple('Point', 'x y')
-    >>> Point.__doc__                   # docstring for the new class
-    'Point(x, y)'
-    >>> p = Point(11, y=22)             # instantiate with positional args or keywords
-    >>> p[0] + p[1]                     # indexable like a plain tuple
-    33
-    >>> x, y = p                        # unpack like a regular tuple
-    >>> x, y
-    (11, 22)
-    >>> p.x + p.y                       # fields also accessable by name
-    33
-    >>> d = p._asdict()                 # convert to a dictionary
-    >>> d['x']
-    11
-    >>> Point(**d)                      # convert from a dictionary
-    Point(x=11, y=22)
-    >>> p._replace(x=100)               # _replace() is like str.replace() but targets named fields
-    Point(x=100, y=22)
+        #Required strings to create intermediate HTML files
+    header = '<html><head><link rel=stylesheet type=text/css href=' + colorscheme + '.css></head><body>\n'
+    footer = '</body></html>'
+    title_content = '<h1 class=titlemain>tldr pages</h1><h4 class=titlesub>Simplified and community driven man pages</h4></body></html>'
