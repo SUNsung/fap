@@ -1,255 +1,275 @@
 
         
-        namespace Ui {
-    class OpenURIDialog;
-}
+        	f = FileAccess::open(p_save_path + '.image', FileAccess::WRITE);
     
     
-    {    /* d = (a0*2) * a3 */
-    'leaq (%%r10,%%r10,1),%%rax\n'
-    'mulq %%r13\n'
-    'movq %%rax,%%rbx\n'
-    'movq %%rdx,%%rcx\n'
-    /* d += (a1*2) * a2 */
-    'leaq (%%r11,%%r11,1),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* c = a4 * a4 */
-    'movq %%r14,%%rax\n'
-    'mulq %%r14\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += (c & M) * R */
-    'andq %%r15,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* t3 (tmp1) = d & M */
-    'movq %%rbx,%%rsi\n'
-    'andq %%r15,%%rsi\n'
-    'movq %%rsi,%q1\n'
-    /* d >>= 52 */
-    'shrdq $52,%%rcx,%%rbx\n'
-    'xorq %%rcx,%%rcx\n'
-    /* a4 *= 2 */
-    'addq %%r14,%%r14\n'
-    /* d += a0 * a4 */
-    'movq %%r10,%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d+= (a1*2) * a3 */
-    'leaq (%%r11,%%r11,1),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d += a2 * a2 */
-    'movq %%r12,%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d += c * R */
-    'movq %%r8,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* t4 = d & M (%%rsi) */
-    'movq %%rbx,%%rsi\n'
-    'andq %%r15,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%rcx,%%rbx\n'
-    'xorq %%rcx,%%rcx\n'
-    /* tx = t4 >> 48 (tmp3) */
-    'movq %%rsi,%%rax\n'
-    'shrq $48,%%rax\n'
-    'movq %%rax,%q3\n'
-    /* t4 &= (M >> 4) (tmp2) */
-    'movq $0xffffffffffff,%%rax\n'
-    'andq %%rax,%%rsi\n'
-    'movq %%rsi,%q2\n'
-    /* c = a0 * a0 */
-    'movq %%r10,%%rax\n'
-    'mulq %%r10\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += a1 * a4 */
-    'movq %%r11,%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d += (a2*2) * a3 */
-    'leaq (%%r12,%%r12,1),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* u0 = d & M (%%rsi) */
-    'movq %%rbx,%%rsi\n'
-    'andq %%r15,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%rcx,%%rbx\n'
-    'xorq %%rcx,%%rcx\n'
-    /* u0 = (u0 << 4) | tx (%%rsi) */
-    'shlq $4,%%rsi\n'
-    'movq %q3,%%rax\n'
-    'orq %%rax,%%rsi\n'
-    /* c += u0 * (R >> 4) */
-    'movq $0x1000003d1,%%rax\n'
-    'mulq %%rsi\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[0] = c & M */
-    'movq %%r8,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq %%rax,0(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* a0 *= 2 */
-    'addq %%r10,%%r10\n'
-    /* c += a0 * a1 */
-    'movq %%r10,%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d += a2 * a4 */
-    'movq %%r12,%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d += a3 * a3 */
-    'movq %%r13,%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* c += (d & M) * R */
-    'movq %%rbx,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 */
-    'shrdq $52,%%rcx,%%rbx\n'
-    'xorq %%rcx,%%rcx\n'
-    /* r[1] = c & M */
-    'movq %%r8,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq %%rax,8(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += a0 * a2 (last use of %%r10) */
-    'movq %%r10,%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* fetch t3 (%%r10, overwrites a0),t4 (%%rsi) */
-    'movq %q2,%%rsi\n'
-    'movq %q1,%%r10\n'
-    /* c += a1 * a1 */
-    'movq %%r11,%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d += a3 * a4 */
-    'movq %%r13,%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* c += (d & M) * R */
-    'movq %%rbx,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 (%%rbx only) */
-    'shrdq $52,%%rcx,%%rbx\n'
-    /* r[2] = c & M */
-    'movq %%r8,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq %%rax,16(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += t3 */
-    'addq %%r10,%%r8\n'
-    /* c += d * R */
-    'movq %%rbx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[3] = c & M */
-    'movq %%r8,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq %%rax,24(%%rdi)\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* c += t4 (%%r8 only) */
-    'addq %%rsi,%%r8\n'
-    /* r[4] = c */
-    'movq %%r8,32(%%rdi)\n'
-: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
-: 'D'(r)
-: '%rax', '%rbx', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
-);
-}
-    
-    static void secp256k1_hmac_sha256_write(secp256k1_hmac_sha256_t *hash, const unsigned char *data, size_t size) {
-    secp256k1_sha256_write(&hash->inner, data, size);
-}
+    {		ofs += get_stylebox('hscroll')->get_margin(MARGIN_TOP);
+		ofs += get_icon('decrement')->get_height();
+	}
     
     
-    {    /* Cleanup */
-    secp256k1_context_destroy(tctx);
-}
-    
-    BOOST_FIXTURE_TEST_SUITE(bech32_tests, BasicTestingSetup)
-    
-    
-    {    CRIPEMD160();
-    CRIPEMD160& Write(const unsigned char* data, size_t len);
-    void Finalize(unsigned char hash[OUTPUT_SIZE]);
-    CRIPEMD160& Reset();
+    {	_FORCE_INLINE_ Vector3	Support ( const Vector3& d,U index ) const
+	{
+		if ( index )
+			return ( Support1 ( d ) );
+		else
+			return ( Support0 ( d ) );
+	}
 };
     
-    class DBImpl : public DB {
- public:
-  DBImpl(const Options& options, const std::string& dbname);
-  virtual ~DBImpl();
+    protected:
+	void _notification(int p_what);
+	static void _bind_methods();
+    
+    	glUseProgram(0);
+	v.ok = true;
+    
+    public:
+	enum ImportFlags {
+		IMPORT_SCENE = 1,
+		IMPORT_ANIMATION = 2,
+		IMPORT_ANIMATION_DETECT_LOOP = 4,
+		IMPORT_ANIMATION_OPTIMIZE = 8,
+		IMPORT_ANIMATION_FORCE_ALL_TRACKS_IN_ALL_CLIPS = 16,
+		IMPORT_ANIMATION_KEEP_VALUE_TRACKS = 32,
+		IMPORT_GENERATE_TANGENT_ARRAYS = 256,
+		IMPORT_FAIL_ON_MISSING_DEPENDENCIES = 512,
+		IMPORT_MATERIALS_IN_INSTANCES = 1024,
+		IMPORT_USE_COMPRESSION = 2048
     }
     
-    #endif  // STORAGE_LEVELDB_DB_DB_ITER_H_
-
+    				if (i > 0) {
+					image->shrink_x2();
+				}
     
-    int InternalKeyComparator::Compare(const Slice& akey, const Slice& bkey) const {
-  // Order by:
-  //    increasing user key (according to user-supplied comparator)
-  //    decreasing sequence number
-  //    decreasing type (though sequence# should be enough to disambiguate)
-  int r = user_comparator_->Compare(ExtractUserKey(akey), ExtractUserKey(bkey));
-  if (r == 0) {
-    const uint64_t anum = DecodeFixed64(akey.data() + akey.size() - 8);
-    const uint64_t bnum = DecodeFixed64(bkey.data() + bkey.size() - 8);
-    if (anum > bnum) {
-      r = -1;
-    } else if (anum < bnum) {
-      r = +1;
+    #ifndef PLUGIN_CONFIG_DIALOG_H
+#define PLUGIN_CONFIG_DIALOG_H
+    
+    			if (points[i].distance_to(mb->get_position()) < 10 * EDSCALE) {
+				making_triangle.push_back(i);
+				if (making_triangle.size() == 3) {
+					//add triangle!
+					if (blend_space->has_triangle(making_triangle[0], making_triangle[1], making_triangle[2])) {
+						making_triangle.clear();
+						EditorNode::get_singleton()->show_warning(TTR('Triangle already exists.'));
+						return;
+					}
     }
-  }
-  return r;
+    }
+    
+      // array
+  if (buf1.isCmd('[')) {
+    shift();
+    obj->initArray(xref);
+    while (!buf1.isCmd(']') && !buf1.isEOF())
+      obj->arrayAdd(getObj(&obj2, fileKey, encAlgorithm, keyLength,
+			   objNum, objGen, fetchOriginatorNums));
+    if (buf1.isEOF())
+      error(getPos(), 'End of file inside array');
+    shift();
+    }
+    
+      // Get stream.
+  Stream *getStream() { return lexer->getStream(); }
+    
+    PopplerCacheItem::~PopplerCacheItem()
+{
 }
     
-        if (type == kZeroType && length == 0) {
-      // Skip zero length record without reporting any drops since
-      // such records are produced by the mmap based writing code in
-      // env_posix.cc that preallocates file regions.
-      buffer_.clear();
-      return kBadRecord;
+    void PreScanOutputDev::drawImage(GfxState *state, Object * /*ref*/, Stream *str,
+				 int width, int height,
+				 GfxImageColorMap *colorMap,
+				 GBool /*interpolate*/, int * /*maskColors*/, GBool inlineImg) {
+  GfxColorSpace *colorSpace;
+  int i, j;
     }
+    
+    void
+ProfileData::addElement (double elapsed) {
+	if (count == 0) {
+		min = elapsed;
+		max = elapsed;
+	} else {
+		if (elapsed < min)
+			min = elapsed;
+		if (elapsed > max)
+			max = elapsed;
+	}
+	total += elapsed;
+	count ++;
+}
+    
+    
+    {  return ret;
+}
+    
+      // split rowset into two
+  inline void AddSplit(unsigned node_id,
+                       size_t iLeft,
+                       unsigned left_node_id,
+                       unsigned right_node_id) {
+    Elem e = elem_of_each_node_[node_id];
+    }
+    
+    RegTree ConstructTree() {
+  RegTree tree;
+  tree.ExpandNode(
+      /*nid=*/0, /*split_index=*/0, /*split_value=*/0.0f,
+      /*default_left=*/true,
+      0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+  auto left = tree[0].LeftChild();
+  auto right = tree[0].RightChild();
+  tree.ExpandNode(
+      /*nid=*/left, /*split_index=*/1, /*split_value=*/1.0f,
+      /*default_left=*/false,
+      0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+  tree.ExpandNode(
+      /*nid=*/right, /*split_index=*/2, /*split_value=*/2.0f,
+      /*default_left=*/false,
+      0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+  return tree;
+}
+    
+    SEXP XGDMatrixSliceDMatrix_R(SEXP handle, SEXP idxset) {
+  SEXP ret;
+  R_API_BEGIN();
+  int len = length(idxset);
+  std::vector<int> idxvec(len);
+  for (int i = 0; i < len; ++i) {
+    idxvec[i] = INTEGER(idxset)[i] - 1;
+  }
+  DMatrixHandle res;
+  CHECK_CALL(XGDMatrixSliceDMatrixEx(R_ExternalPtrAddr(handle),
+                                     BeginPtr(idxvec), len,
+                                     &res,
+                                     0));
+  ret = PROTECT(R_MakeExternalPtr(res, R_NilValue, R_NilValue));
+  R_RegisterCFinalizerEx(ret, _DMatrixFinalizer, TRUE);
+  R_API_END();
+  UNPROTECT(1);
+  return ret;
+}
+    
+    /*! \brief Mini batch used in XGBoost Data Iteration */
+typedef struct {  // NOLINT(*)
+  /*! \brief number of rows in the minibatch */
+  size_t size;
+  /*! \brief row pointer to the rows in the data */
+#ifdef __APPLE__
+  /* Necessary as Java on MacOS defines jlong as long int
+   * and gcc defines int64_t as long long int. */
+  long* offset; // NOLINT(*)
+#else
+  int64_t* offset;  // NOLINT(*)
+#endif  // __APPLE__
+  /*! \brief labels of each instance */
+  float* label;
+  /*! \brief weight of each instance, can be NULL */
+  float* weight;
+  /*! \brief feature index */
+  int* index;
+  /*! \brief feature values */
+  float* value;
+} XGBoostBatchCSR;
+    
+    namespace xgboost {
+namespace obj {
+    }
+    }
+    
+      vals_in.clear(); ss.flush(); ss.clear(); ss.str('');
+  ss << '1a';
+  ss >> vals_in;
+  EXPECT_NE(vals_in, vals);
+    
+        LocalOplogInfo(const LocalOplogInfo&) = delete;
+    LocalOplogInfo& operator=(const LocalOplogInfo&) = delete;
+    LocalOplogInfo() = default;
+    
+    public:
+    /**
+     * Delegates invocation of the Task to this executor
+     *
+     * Execution of the Task can happen in one of three contexts:
+     * * By default, on an execution context maintained by the OutOfLineExecutor (i.e. a thread).
+     * * During shutdown, on the execution context of shutdown/join/dtor for the OutOfLineExecutor.
+     * * Post-shutdown, on the execution context of the calling code.
+     *
+     * The Task will be passed a Status schedStatus that is either:
+     * * schedStatus.isOK() if the function is run in an out-of-line context
+     * * isCancelationError(schedStatus.code()) if the function is run in an inline context
+     *
+     * All of this is to say: CHECK YOUR STATUS.
+     */
+    virtual void schedule(Task func) = 0;
+    
+        static const char* kStageType;
+    
+        if (other.fPatternString == NULL) {
+        fPatternString = NULL;
+        fPattern = utext_clone(fPattern, other.fPattern, FALSE, TRUE, &fDeferredStatus);
+    } else {
+        fPatternString = new UnicodeString(*(other.fPatternString));
+        if (fPatternString == NULL) {
+            fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
+        } else {
+            fPattern = utext_openConstUnicodeString(NULL, fPatternString, &fDeferredStatus);
+        }
+    }
+    if (U_FAILURE(fDeferredStatus)) {
+        return *this;
+    }
+    
+        UnicodeString &displayScripts(UnicodeString &dest) const; // append script names to dest string.
+    ScriptSet & parseScripts(const UnicodeString &scriptsString, UErrorCode &status);  // Replaces ScriptSet contents.
+    
+    #if !UCONFIG_NO_BREAK_ITERATION
+    
+    #ifndef __SHARED_DATEFORMATSYMBOLS_H__
+#define __SHARED_DATEFORMATSYMBOLS_H__
+    
+      sb.printf('%s%s%s %s %s{\n',
+            GetModifier(info, s_final).data(),
+            GetModifier(info, s_abstract).data(),
+            info[s_interface].toBoolean() ? 'interface' : 'class',
+            info[s_name].toString().data(),
+            parent.data());
+    }
+    
+    //////  Runs a request thread's PSPs.                                //////
+struct RunPspCommand : public VSCommand {
+  VS_COMMAND_COMMON_IMPL(RunPspCommand, CommandTarget::WorkItem, false);
+    }
+    
+    bool InfoCommand::executeImpl(
+  DebuggerSession* /*session*/,
+  folly::dynamic* responseMsg
+) {
+  VMRegAnchor regAnchor;
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    
+      // taking care of the displacement, in case it is > 16bits
+  Vreg disp_reg;
+  bool patched_disp = patchImm(Immed(p.disp), v, disp_reg);
+  switch (mode) {
+    case AddressModes::Base:
+    case AddressModes::IndexBase:
+      // ppc64 can handle these address modes. Nothing to do here.
+      break;
+    }
+    
+    #include 'hphp/runtime/base/array-common.h'
+#include 'hphp/runtime/base/array-data.h'
+#include 'hphp/runtime/base/header-kind.h'
+#include 'hphp/runtime/base/tv-val.h'
+#include 'hphp/runtime/base/sort-flags.h'
+#include 'hphp/runtime/base/typed-value.h'
+    
+    #define CGET_PROP_HELPER_TABLE(m)                       \
+  /* name            keyType       mode  */             \
+  m(cGetPropCQuiet,  KeyType::Any, MOpMode::None)      \
+  m(cGetPropSQuiet,  KeyType::Str, MOpMode::None)      \
+  m(cGetPropC,       KeyType::Any, MOpMode::Warn)      \
+  m(cGetPropS,       KeyType::Str, MOpMode::Warn)      \
