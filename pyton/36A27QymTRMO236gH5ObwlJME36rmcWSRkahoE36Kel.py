@@ -1,198 +1,218 @@
 
         
-        data_train_truth, data_valid_truth = split_list_by_inds(truth_data_e,
-                                                        train_inds,
-                                                        valid_inds)
-data_train_spiking, data_valid_spiking = split_list_by_inds(spiking_data_e,
-                                                            train_inds,
-                                                            valid_inds)
+        from .compat import is_py2, builtin_str, str
     
-    x0s = []
-condition_labels = []
-condition_number = 0
-for c in range(C):
-  x0 = FLAGS.x0_std * rng.randn(N, 1)
-  x0s.append(np.tile(x0, nreplications))
-  for ns in range(nreplications):
-    condition_labels.append(condition_number)
-  condition_number += 1
-x0s = np.concatenate(x0s, axis=1)
+    import urllib3
+import chardet
+import warnings
+from .exceptions import RequestsDependencyWarning
+    
+        def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = []
+        self.test_suite = True
+    
+            if not client.is_authenticated:
+            self.module.fail_json(msg='Heroku authentication failure, please check your API Key')
+    
+        @staticmethod
+    def _get_aa_policy_id_of_server(clc, module, alias, server_id):
+        '''
+        retrieves the anti affinity policy id of the server based on the CLC server id
+        :param clc: the clc-sdk instance to use
+        :param module: the AnsibleModule object
+        :param alias: the CLC account alias
+        :param server_id: the CLC server id
+        :return: aa_policy_id: The anti affinity policy id
+        '''
+        aa_policy_id = None
+        try:
+            result = clc.v2.API.Call(
+                method='GET', url='servers/%s/%s/antiAffinityPolicy' %
+                (alias, server_id))
+            aa_policy_id = result.get('id')
+        except APIFailedResponse as ex:
+            if ex.response_status_code != 404:
+                module.fail_json(msg='Unable to fetch anti affinity policy for server '{0}'. {1}'.format(
+                    server_id, str(ex.response_text)))
+        return aa_policy_id
     
     
-def GAN_loss_matrix(dis_predictions):
-  '''Computes the cross entropy loss for G.
+@api_wrapper
+def update_pool(module, system, pool):
+    '''Update Pool'''
+    changed = False
     
-          next context state: `context_state`, this decoder function does not
-      modify the given context state. The context state could be modified when
-      applying e.g. beam search.
-    '''
-    with tf.name_scope(
-        name, 'attention_decoder_fn_train',
-        [time, cell_state, cell_input, cell_output, context_state]):
-      if cell_state is None:  # first call, return encoder_state
-        cell_state = encoder_state
+    EXAMPLES = '''
+# Add a user to a password file and ensure permissions are set
+- htpasswd:
+    path: /etc/nginx/passwdfile
+    name: janedoe
+    password: '9s36?;fyNp'
+    owner: root
+    group: www-data
+    mode: 0640
     
-    match_output = '''
-Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
-Hit:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease
-Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
-Hit:4 http://security.ubuntu.com/ubuntu zesty-security InRelease
-Hit:5 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
-Hit:6 https://download.docker.com/linux/ubuntu zesty InRelease
-Hit:7 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
-Fetched 89.2 kB in 0s (122 kB/s)
-Reading package lists... Done
-Building dependency tree
-Reading state information... Done
-8 packages can be upgraded. Run 'apt list --upgradable' to see them.
-'''
+    EXAMPLES = '''
+# Create an issue in the my hosted Taiga environment and attach an error log
+- taiga_issue:
+    taiga_host: https://mytaigahost.example.com
+    project: myproject
+    subject: An error has been found
+    issue_type: Bug
+    priority: High
+    status: New
+    severity: Important
+    description: An error has been found. Please check the attached error log for details.
+    attachment: /path/to/error.log
+    attachment_description: Error log file
+    tags:
+      - Error
+      - Needs manual check
+    state: present
     
-        new_command = get_new_command(Command('sudo apt list --upgradable', match_output))
-    assert new_command == 'sudo apt upgrade'
+        def add(self):
+        ''' If self.dn does not exist, returns a callable that will add it. '''
+        def _add():
+            self.connection.add_s(self.dn, modlist)
+    
+    
+if __name__ == '__main__':
+    main()
 
     
+                # try to get existing record
+            record_exists = False
+            for r in all_records:
+                if r == record:
+                    record_exists = True
+                    record = r
     
-@parametrize_extensions
-@parametrize_filename
-@parametrize_script
-def test_match(ext, tar_error, filename, unquoted, quoted, script, fixed):
-    tar_error(unquoted.format(ext))
-    assert match(Command(script.format(filename.format(ext)), ''))
+        # create a client object
+    client = MatrixClient(module.params['hs_url'])
+    if module.params['token'] is not None:
+        client.api.token = module.params['token']
+    else:
+        client.login(module.params['user_id'], module.params['password'], sync=False)
     
-        # Raises
-        ValueError: in case of invalid `label_mode`.
+    RETURN = '''
+powerstate:
+    description: The current power state of the machine.
+    returned: success
+    type: str
+    sample: on
+'''
+    
     '''
-    if label_mode not in ['fine', 'coarse']:
-        raise ValueError('`label_mode` must be one of `'fine'`, `'coarse'`.')
+Benchmark for SGD regression
     
-    from ..utils.data_utils import get_file
-import numpy as np
+        # the training data folder must be passed as first argument
+    movie_reviews_data_folder = sys.argv[1]
+    dataset = load_files(movie_reviews_data_folder, shuffle=False)
+    print('n_samples: %d' % len(dataset.data))
     
-        def __init__(self, l1=0., l2=0.):
-        self.l1 = K.cast_to_floatx(l1)
-        self.l2 = K.cast_to_floatx(l2)
+    # To apply a classifier on this data, we need to flatten the image, to
+# turn the data in a (samples, feature) matrix:
+n_samples = len(digits.images)
+data = digits.images.reshape((n_samples, -1))
     
-        out1 = utils.preprocess_input(x, 'channels_last')
-    out1int = utils.preprocess_input(xint, 'channels_last')
-    out2 = utils.preprocess_input(np.transpose(x, (0, 3, 1, 2)),
-                                  'channels_first')
-    out2int = utils.preprocess_input(np.transpose(xint, (0, 3, 1, 2)),
-                                     'channels_first')
-    assert_allclose(out1, out2.transpose(0, 2, 3, 1))
-    assert_allclose(out1int, out2int.transpose(0, 2, 3, 1))
+    plt.subplot(3, 4, 10)
+plt.imshow(np.reshape(agglo.labels_, images[0].shape),
+           interpolation='nearest', cmap=plt.cm.nipy_spectral)
+plt.xticks(())
+plt.yticks(())
+plt.title('Labels')
+plt.show()
+
     
+    # equal bins face
+regular_values = np.linspace(0, 256, n_clusters + 1)
+regular_labels = np.searchsorted(regular_values, face) - 1
+regular_values = .5 * (regular_values[1:] + regular_values[:-1])  # mean
+regular_face = np.choose(regular_labels.ravel(), regular_values, mode='clip')
+regular_face.shape = face.shape
+plt.figure(3, figsize=(3, 2.2))
+plt.imshow(regular_face, cmap=plt.cm.gray, vmin=vmin, vmax=vmax)
     
-def test_categorical_hinge():
-    y_pred = K.variable(np.array([[0.3, 0.2, 0.1],
-                                  [0.1, 0.2, 0.7]]))
-    y_true = K.variable(np.array([[0, 1, 0],
-                                  [1, 0, 0]]))
-    expected_loss = ((0.3 - 0.2 + 1) + (0.7 - 0.1 + 1)) / 2.0
-    loss = K.eval(losses.categorical_hinge(y_true, y_pred))
-    assert np.isclose(expected_loss, np.mean(loss))
+    The second plot demonstrate one single run of the ``MiniBatchKMeans``
+estimator using a ``init='random'`` and ``n_init=1``. This run leads to
+a bad convergence (local optimum) with estimated centers stuck
+between ground truth clusters.
     
-    # Build the Autoencoder Model
-# First build the Encoder Model
-inputs = Input(shape=input_shape, name='encoder_input')
-x = inputs
-# Stack of Conv2D blocks
-# Notes:
-# 1) Use Batch Normalization before ReLU on deep networks
-# 2) Use MaxPooling2D as alternative to strides>1
-# - faster but not as good as strides>1
-for filters in layer_filters:
-    x = Conv2D(filters=filters,
-               kernel_size=kernel_size,
-               strides=2,
-               activation='relu',
-               padding='same')(x)
+    import numpy as np
+import matplotlib.pyplot as plt
     
-    print('Evaluate IRNN...')
-model = Sequential()
-model.add(SimpleRNN(hidden_units,
-                    kernel_initializer=initializers.RandomNormal(stddev=0.001),
-                    recurrent_initializer=initializers.Identity(gain=1.0),
-                    activation='relu',
-                    input_shape=x_train.shape[1:]))
-model.add(Dense(num_classes))
-model.add(Activation('softmax'))
-rmsprop = RMSprop(lr=learning_rate)
-model.compile(loss='categorical_crossentropy',
-              optimizer=rmsprop,
-              metrics=['accuracy'])
-    
-    from __future__ import print_function
-    
+        def report_out_of_quota(self, appid):
+        self.logger.warn('report_out_of_quota:%s', appid)
+        with self.lock:
+            if appid not in self.out_of_quota_appids:
+                self.out_of_quota_appids.append(appid)
             try:
-            response = self.client.delete_rule(Name=self.name)
-        except (botocore.exceptions.BotoCoreError, botocore.exceptions.ClientError) as e:
-            self.module.fail_json_aws(e, msg='Could not delete rule %s' % self.name)
-        self.changed = True
-        return response
-    
-        for app in module.params['apps']:
-        if app not in client.apps():
-            module.fail_json(msg='App {0} does not exist'.format(app))
-    
-        def dnszone_add(self, zone_name=None, details=None):
-        return self._post_json(
-            method='dnszone_add',
-            name=zone_name,
-            item={}
-        )
-    
-    from __future__ import absolute_import, division, print_function
-__metaclass__ = type
-    
-                if re.search('already enabled', out) is None:
-                change_applied = True
-        else:
-            if rc == 0:
-                change_applied = True
-            # RC is not 0 for this already disabled feature, handle it as no change applied
-            elif re.search('Cannot disable feature '%s'. Target file .* does not exist' % self.feature_name, out):
-                change_applied = False
-            else:
-                self.module.fail_json(msg='Failed to disable feature. Command returns %s' % out)
-    
-        params = {}
-    params['message'] = msg
-    if annotated_by:
-        params['annotated_by'] = annotated_by
-    if level:
-        params['level'] = level
-    if instance_id:
-        params['instance_id'] = instance_id
-    if event_epoch:
-        params['event_epoch'] = event_epoch
-    
-        # 保存结果
-    # 每个结果为一个二元组 [label, score] 分别保存每个样本所在的簇及距离质心的距离
-    ret = np.array([[-1, np.inf]] * n)
-    
-    from ..activations import relu
-from ..utils import get_wb, get_shape
+                self.working_appid_list.remove(appid)
+            except:
+                pass
     
     
-def get_wb(shape,
-           w_initializer=truncated_normal,
-           b_initializer=zeros,
-           w_regularizer=l2_regularizer,
-           b_regularizer=None,  # 一般不对偏置做权重惩罚，可能会导致欠拟合
-           name=None):
-    ''''''
-    name = '' if name is None else name + '_'
-    W = tf.get_variable(name + 'W', shape=shape,
-                        dtype=tf_float, initializer=w_initializer, regularizer=w_regularizer)
-    b = tf.get_variable(name + 'b', shape=shape[-1:],
-                        dtype=tf_float, initializer=b_initializer, regularizer=b_regularizer)
-    return W, b
     
-    # 可以通过相同的方式获取每个单词以及任一个 n-gram 的向量
-print(model.wv['hello'])
-print(model.wv['<h'])
-'''
-[-0.03481839  0.00606661  0.02581969  0.00188777  0.0325358 ]
-[ 0.04481247 -0.1784363  -0.03192253  0.07162753  0.16744071]
-'''
-print()
+                    if c >= self.min[s] and c <= self.max[s]:
+                    # move to next state
+                    snext = self.transition[s][c-self.min[s]]
+                    #print 'in range, next state = %d' % snext
+                    
+                    if snext < 0:
+                        #print 'not a normal transition'
+                        # was in range but not a normal transition
+                        # must check EOT, which is like the else clause.
+                        # eot[s]>=0 indicates that an EOT edge goes to another
+                        # state.
+                        if self.eot[s] >= 0: # EOT Transition to accept state?
+                            #print 'EOT trans to accept state %d' % self.eot[s]
+                            
+                            s = self.eot[s]
+                            input.consume()
+                            # TODO: I had this as return accept[eot[s]]
+                            # which assumed here that the EOT edge always
+                            # went to an accept...faster to do this, but
+                            # what about predicated edges coming from EOT
+                            # target?
+                            continue
+    
+            self.markDepth = marker-1
+    
+        print('`{}` was processed'.format(data))
+    
+        def test_object(queue):
+        pool = ObjectPool(queue, True)
+        print('Inside func: {}'.format(pool.item))
+    
+    
+class Delegator(object):
+    '''
+    >>> delegator = Delegator(Delegate())
+    >>> delegator.p1
+    123
+    >>> delegator.p2
+    Traceback (most recent call last):
+    ...
+    AttributeError: 'Delegate' object has no attribute 'p2'
+    >>> delegator.do_something('nothing')
+    'Doing nothing'
+    >>> delegator.do_anything()
+    Traceback (most recent call last):
+    ...
+    AttributeError: 'Delegate' object has no attribute 'do_anything'
+    '''
+    
+    '''
+*What is this pattern about?
+The composite pattern describes a group of objects that is treated the
+same way as a single instance of the same type of object. The intent of
+a composite is to 'compose' objects into tree structures to represent
+part-whole hierarchies. Implementing the composite pattern lets clients
+treat individual objects and compositions uniformly.
+    
+    *Where is the pattern used practically?
+This pattern can be seen in the Python standard library when we use
+the isdir function. Although a user simply uses this function to know
+whether a path refers to a directory, the system makes a few
+operations and calls other modules (e.g., os.stat) to give the result.
