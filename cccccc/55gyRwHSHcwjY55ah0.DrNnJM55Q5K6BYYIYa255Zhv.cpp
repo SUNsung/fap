@@ -1,289 +1,319 @@
 
         
-        #include 'KeyChord.g.cpp'
+        struct Pix;
+struct TBLOB;
+struct TPOINT;
     
-    MyComputedHashes::Writer::~Writer() {
-}
-    
-    namespace content {
-class RenderView;
-}
-    
-    base::string16 MenuDelegate::GetLabelForCommandId(int command_id) const {
-  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  return item->label_;
-}
-    
-    
-void MenuItem::UpdateKeys(GtkAccelGroup *gtk_accel_group){
-  this->gtk_accel_group = gtk_accel_group;
-  if (enable_shortcut && GTK_IS_ACCEL_GROUP(gtk_accel_group)){
-    gtk_widget_add_accelerator(
-      menu_item_,
-      'activate',
-      gtk_accel_group,
-      keyval,
-      modifiers_mask,
-      GTK_ACCEL_VISIBLE);
+    bool ParagraphModel::ValidBodyLine(int lmargin, int lindent,
+                                   int rindent, int rmargin) const {
+  switch (justification_) {
+    case JUSTIFICATION_LEFT:
+      return NearlyEqual(lmargin + lindent, margin_ + body_indent_,
+                         tolerance_);
+    case JUSTIFICATION_RIGHT:
+      return NearlyEqual(rmargin + rindent, margin_ + body_indent_,
+                         tolerance_);
+    case JUSTIFICATION_CENTER:
+      return NearlyEqual(lindent, rindent, tolerance_ * 2);
+    default:
+      // shouldn't happen
+      return false;
   }
-  if (submenu_ != NULL){
-    submenu_->UpdateKeys(gtk_accel_group);
-  }
-  return;
 }
     
-    bool NwAppClearCacheFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  content::BrowsingDataRemover* remover = content::BrowserContext::GetBrowsingDataRemover(
-      Profile::FromBrowserContext(context_));
+    // Computes the Otsu threshold(s) for the given histogram.
+// Also returns H = total count in histogram, and
+// omega0 = count of histogram below threshold.
+int OtsuStats(const int* histogram, int* H_out, int* omega0_out);
+    
+    // A smart pointer class that implements a double-ended pointer. Each end
+// points to the other end. The copy constructor and operator= have MOVE
+// semantics, meaning that the relationship with the other end moves to the
+// destination of the copy, leaving the source unattached.
+// For this reason both the copy constructor and the operator= take a non-const
+// reference argument, and the const reference versions cannot be used.
+// DoublePtr is useful to incorporate into structures that are part of a
+// collection such as GenericVector or STL containers, where reallocs can
+// relocate the members. DoublePtr is also useful in a GenericHeap, where it
+// can correctly maintain the pointer to an element of the heap despite it
+// getting moved around on the heap.
+class DoublePtr {
+ public:
+  DoublePtr() : other_end_(nullptr) {}
+  // Copy constructor steals the partner off src and is therefore a non
+  // const reference arg.
+  // Copying a const DoublePtr generates a compiler error.
+  DoublePtr(DoublePtr& src) {
+    other_end_ = src.other_end_;
+    if (other_end_ != nullptr) {
+      other_end_->other_end_ = this;
+      src.other_end_ = nullptr;
+    }
+  }
+  // Operator= steals the partner off src, and therefore needs src to be a non-
+  // const reference.
+  // Assigning from a const DoublePtr generates a compiler error.
+  void operator=(DoublePtr& src) {
+    Disconnect();
+    other_end_ = src.other_end_;
+    if (other_end_ != nullptr) {
+      other_end_->other_end_ = this;
+      src.other_end_ = nullptr;
+    }
+  }
     }
     
-          std::string encoded_image_base64;
-      std::string encoded_image_str(encoded_image.data(), encoded_image.data() + encoded_image.size());
-      base::Base64Encode(encoded_image_str, &encoded_image_base64);
+      // Simple accessors.
+  bool empty() const {
+    return heap_.empty();
+  }
+  int size() const {
+    return heap_.size();
+  }
+  int size_reserved() const {
+    return heap_.size_reserved();
+  }
+  void clear() {
+    // Clear truncates to 0 to keep the number reserved in tact.
+    heap_.truncate(0);
+  }
+  // Provides access to the underlying vector.
+  // Caution! any changes that modify the keys will invalidate the heap!
+  GenericVector<Pair>* heap() {
+    return &heap_;
+  }
+  // Provides read-only access to an element of the underlying vector.
+  const Pair& get(int index) const {
+    return heap_[index];
+  }
     
-    #include <vector>
+      // Main worker method that retrieves the next number in the sequence.
+  // Returns kInvalidVal if called more than N times after object initialization
+  int GetVal() {
+    const int kInvalidVal = -1;
+    const int kMaxNaturalNumberValue = 1 << num_bits_;
+    if (next_num_ >= kMaxNaturalNumberValue)
+      return kInvalidVal;
+    int n = next_num_;
+    }
     
-    #endif   // CAFFE_UTIL_HDF5_H_
-#endif   // USE_HDF5
+      // Free up any currently unused dawgs.
+  void DeleteUnusedDawgs() {
+    dawgs_.DeleteUnusedObjects();
+  }
+    
+     private:
+  struct CancelState {
+    std::atomic_bool callback_invoked{false};
+  };
+  void EchoNonDelayed(ServerContext* context, const EchoRequest* request,
+                      EchoResponse* response,
+                      experimental::ServerCallbackRpcController* controller,
+                      CancelState* cancel_state);
+    
+    #endif  // GRPC_TEST_CPP_INTEROP_CLIENT_HELPER_H
 
     
     
-    {}  // namespace caffe
-#endif  // USE_HDF5
+    {}  // namespace grpc_impl
 
     
-      if (reshape) {
-    blob->Reshape(blob_dims);
+    typedef struct {
+  grpc_closure* on_done;
+  gpr_mu mu;
+  grpc_winsocket* socket;
+  grpc_timer alarm;
+  grpc_closure on_alarm;
+  char* addr_name;
+  int refs;
+  grpc_closure on_connect;
+  grpc_endpoint** endpoint;
+  grpc_channel_args* channel_args;
+} async_connect;
+    
+    
+    {  gpr_setenv(name, value);
+  retrieved_value = gpr_getenv(name);
+  GPR_ASSERT(retrieved_value != nullptr);
+  GPR_ASSERT(strcmp(value, retrieved_value) == 0);
+  gpr_free(retrieved_value);
+}
+    
+    static void test_strdup(void) {
+  static const char* src1 = 'hello world';
+  char* dst1;
+    }
+    
+    TEST(GlobalConfigTest, StringTest) {
+  grpc_core::UniquePtr<char> value;
+    }
+    
+    namespace grpc_impl {
+    }
+    
+    int main(int argc, char** argv) {
+  grpc::testing::TestEnvironment env(argc, argv);
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}
+
+    
+      void DoEcho() {
+    ClientContext context;
+    EchoRequest request;
+    EchoResponse response;
+    request.set_message('hello world');
+    Status s = stub_->Echo(&context, request, &response);
+    EXPECT_EQ(request.message(), response.message());
+    EXPECT_TRUE(s.ok());
+  }
+    
+    
+    { protected:
+  std::unique_ptr<Server> server_;
+  std::unique_ptr<grpc::testing::EchoTestService::Stub> stub_;
+  std::unique_ptr<ProtoReflectionDescriptorDatabase> desc_db_;
+  std::unique_ptr<protobuf::DescriptorPool> desc_pool_;
+  std::unordered_set<string> known_files_;
+  std::unordered_set<string> known_types_;
+  const protobuf::DescriptorPool* ref_desc_pool_;
+  int port_;
+  reflection::ProtoServerReflectionPlugin plugin_;
+};
+    
+    int main(int argc, char** argv) {
+  // Change the backup poll interval from 5s to 100ms to speed up the
+  // ReconnectChannel test
+  grpc::testing::TestEnvironment env(argc, argv);
+  ::testing::InitGoogleTest(&argc, argv);
+  int ret = RUN_ALL_TESTS();
+  return ret;
+}
+
+    
+    TEST(CorruptionTest, CompactionInputError) {
+  Build(10);
+  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
+  dbi->TEST_CompactMemTable();
+  const int last = config::kMaxMemCompactLevel;
+  ASSERT_EQ(1, Property('leveldb.num-files-at-level' + NumberToString(last)));
+    }
+    
+      WritableFile* dest_;
+  int block_offset_;  // Current offset in block
+    
+      // Position at the first key in the source.  The iterator is Valid()
+  // after this call iff the source is not empty.
+  virtual void SeekToFirst() = 0;
+    
+    #include 'leveldb/export.h'
+#include 'leveldb/slice.h'
+    
+    // A Table is a sorted map from strings to strings.  Tables are
+// immutable and persistent.  A Table may be safely accessed from
+// multiple threads without external synchronization.
+class LEVELDB_EXPORT Table {
+ public:
+  // Attempt to open the table that is stored in bytes [0..file_size)
+  // of 'file', and read the metadata entries necessary to allow
+  // retrieving data from the table.
+  //
+  // If successful, returns ok and sets '*table' to the newly opened
+  // table.  The client should delete '*table' when no longer needed.
+  // If there was an error while initializing the table, sets '*table'
+  // to nullptr and returns a non-ok status.  Does not take ownership of
+  // '*source', but the client must ensure that 'source' remains live
+  // for the duration of the returned table's lifetime.
+  //
+  // *file must remain live while this Table is in use.
+  static Status Open(const Options& options, RandomAccessFile* file,
+                     uint64_t file_size, Table** table);
+    }
+    
+    #include <stdint.h>
+    
+    
+    {}  // namespace leveldb
+    
+    TEST(CacheTest, HeavyEntries) {
+  // Add a bunch of light and heavy entries and then count the combined
+  // size of items still in the cache, which must be approximately the
+  // same as the total capacity.
+  const int kLight = 1;
+  const int kHeavy = 10;
+  int added = 0;
+  int index = 0;
+  while (added < 2 * kCacheSize) {
+    const int weight = (index & 1) ? kLight : kHeavy;
+    Insert(index, 1000 + index, weight);
+    added += weight;
+    index++;
+  }
+    }
+    
+    TEST(EnvTest, ReopenWritableFile) {
+  std::string test_dir;
+  ASSERT_OK(env_->GetTestDirectory(&test_dir));
+  std::string test_file_name = test_dir + '/reopen_writable_file.txt';
+  env_->DeleteFile(test_file_name);
+    }
+    
+    void BlockBuilder::Add(const Slice& key, const Slice& value) {
+  Slice last_key_piece(last_key_);
+  assert(!finished_);
+  assert(counter_ <= options_->block_restart_interval);
+  assert(buffer_.empty()  // No values yet?
+         || options_->comparator->Compare(key, last_key_piece) > 0);
+  size_t shared = 0;
+  if (counter_ < options_->block_restart_interval) {
+    // See how much sharing to do with previous string
+    const size_t min_length = std::min(last_key_piece.size(), key.size());
+    while ((shared < min_length) && (last_key_piece[shared] == key[shared])) {
+      shared++;
+    }
   } else {
-    if (blob_dims != blob->shape()) {
-      // create shape string for error message
-      ostringstream stream;
-      int count = 1;
-      for (int i = 0; i < blob_dims.size(); ++i) {
-        stream << blob_dims[i] << ' ';
-        count = count * blob_dims[i];
-      }
-      stream << '(' << count << ')';
-      string source_shape_string = stream.str();
-    }
-    }
-    
-      Dtype min = this->layer_param_.clip_param().min();
-  Dtype max = this->layer_param_.clip_param().max();
-    
-    TYPED_TEST(NeuronLayerTest, TestPReLUParam) {
-  typedef typename TypeParam::Dtype Dtype;
-  LayerParameter layer_param;
-  PReLULayer<Dtype> layer(layer_param);
-  layer.SetUp(this->blob_bottom_vec_, this->blob_top_vec_);
-  const Dtype* slopes = layer.blobs()[0]->cpu_data();
-  int count = layer.blobs()[0]->count();
-  for (int i = 0; i < count; ++i, ++slopes) {
-    EXPECT_EQ(*slopes, 0.25);
+    // Restart compression
+    restarts_.push_back(buffer_.size());
+    counter_ = 0;
   }
-}
-    
-      /**
-   * @brief Reshape all layers from bottom to top.
-   *
-   * This is useful to propagate changes to layer sizes without running
-   * a forward pass, e.g. to compute output feature size.
-   */
-  void Reshape();
-    
-    // TODO(Yangqing): Is there a faster way to do pooling in the channel-first
-// case?
-template <typename Dtype>
-void PoolingLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top) {
-  const Dtype* bottom_data = bottom[0]->cpu_data();
-  Dtype* top_data = top[0]->mutable_cpu_data();
-  const int top_count = top[0]->count();
-  // We'll output the mask to top[1] if it's of size >1.
-  const bool use_top_mask = top.size() > 1;
-  int* mask = NULL;  // suppress warnings about uninitialized variables
-  Dtype* top_mask = NULL;
-  // Different pooling methods. We explicitly do the switch outside the for
-  // loop to save time, although this results in more code.
-  switch (this->layer_param_.pooling_param().pool()) {
-  case PoolingParameter_PoolMethod_MAX:
-    // Initialize
-    if (use_top_mask) {
-      top_mask = top[1]->mutable_cpu_data();
-      caffe_set(top_count, Dtype(-1), top_mask);
-    } else {
-      mask = max_idx_.mutable_cpu_data();
-      caffe_set(top_count, -1, mask);
-    }
-    caffe_set(top_count, Dtype(-FLT_MAX), top_data);
-    // The main loop
-    for (int n = 0; n < bottom[0]->num(); ++n) {
-      for (int c = 0; c < channels_; ++c) {
-        for (int ph = 0; ph < pooled_height_; ++ph) {
-          for (int pw = 0; pw < pooled_width_; ++pw) {
-            int hstart = ph * stride_h_ - pad_h_;
-            int wstart = pw * stride_w_ - pad_w_;
-            int hend = min(hstart + kernel_h_, height_);
-            int wend = min(wstart + kernel_w_, width_);
-            hstart = max(hstart, 0);
-            wstart = max(wstart, 0);
-            const int pool_index = ph * pooled_width_ + pw;
-            for (int h = hstart; h < hend; ++h) {
-              for (int w = wstart; w < wend; ++w) {
-                const int index = h * width_ + w;
-                if (bottom_data[index] > top_data[pool_index]) {
-                  top_data[pool_index] = bottom_data[index];
-                  if (use_top_mask) {
-                    top_mask[pool_index] = static_cast<Dtype>(index);
-                  } else {
-                    mask[pool_index] = index;
-                  }
-                }
-              }
-            }
-          }
-        }
-        // compute offset
-        bottom_data += bottom[0]->offset(0, 1);
-        top_data += top[0]->offset(0, 1);
-        if (use_top_mask) {
-          top_mask += top[0]->offset(0, 1);
-        } else {
-          mask += top[0]->offset(0, 1);
-        }
-      }
-    }
-    break;
-  case PoolingParameter_PoolMethod_AVE:
-    for (int i = 0; i < top_count; ++i) {
-      top_data[i] = 0;
-    }
-    // The main loop
-    for (int n = 0; n < bottom[0]->num(); ++n) {
-      for (int c = 0; c < channels_; ++c) {
-        for (int ph = 0; ph < pooled_height_; ++ph) {
-          for (int pw = 0; pw < pooled_width_; ++pw) {
-            int hstart = ph * stride_h_ - pad_h_;
-            int wstart = pw * stride_w_ - pad_w_;
-            int hend = min(hstart + kernel_h_, height_ + pad_h_);
-            int wend = min(wstart + kernel_w_, width_ + pad_w_);
-            int pool_size = (hend - hstart) * (wend - wstart);
-            hstart = max(hstart, 0);
-            wstart = max(wstart, 0);
-            hend = min(hend, height_);
-            wend = min(wend, width_);
-            for (int h = hstart; h < hend; ++h) {
-              for (int w = wstart; w < wend; ++w) {
-                top_data[ph * pooled_width_ + pw] +=
-                    bottom_data[h * width_ + w];
-              }
-            }
-            top_data[ph * pooled_width_ + pw] /= pool_size;
-          }
-        }
-        // compute offset
-        bottom_data += bottom[0]->offset(0, 1);
-        top_data += top[0]->offset(0, 1);
-      }
-    }
-    break;
-  case PoolingParameter_PoolMethod_STOCHASTIC:
-    NOT_IMPLEMENTED;
-    break;
-  default:
-    LOG(FATAL) << 'Unknown pooling method.';
-  }
-}
-    
-    // Return the function that the solver can use to find out if a snapshot or
-// early exit is being requested.
-ActionCallback SignalHandler::GetActionFunction() {
-  return boost::bind(&SignalHandler::CheckForSignals, this);
-}
-    
-      caffe::Datum datum;
-  datum.set_channels(2);  // one channel for each image in the pair
-  datum.set_height(rows);
-  datum.set_width(cols);
-  LOG(INFO) << 'A total of ' << num_items << ' items.';
-  LOG(INFO) << 'Rows: ' << rows << ' Cols: ' << cols;
-  for (int itemid = 0; itemid < num_items; ++itemid) {
-    int i = caffe::caffe_rng_rand() % num_items;  // pick a random  pair
-    int j = caffe::caffe_rng_rand() % num_items;
-    read_image(&image_file, &label_file, i, rows, cols,
-        pixels, &label_i);
-    read_image(&image_file, &label_file, j, rows, cols,
-        pixels + (rows * cols), &label_j);
-    datum.set_data(pixels, 2*rows*cols);
-    if (label_i  == label_j) {
-      datum.set_label(1);
-    } else {
-      datum.set_label(0);
-    }
-    datum.SerializeToString(&value);
-    std::string key_str = caffe::format_int(itemid, 8);
-    db->Put(leveldb::WriteOptions(), key_str, value);
-  }
-    
-    class Context
-{
-public:
-    Context(size_t stack_size, coroutine_func_t fn, void* private_data);
-    ~Context();
-    bool swap_in();
-    bool swap_out();
-#if !defined(SW_NO_USE_ASM_CONTEXT) && defined(SW_LOG_TRACE_OPEN)
-    ssize_t get_stack_usage();
-#endif
-    inline bool is_end()
-    {
-        return end_;
-    }
-    static void context_func(void* arg);
+  const size_t non_shared = key.size() - shared;
     }
     
-    bool Context::swap_out()
-{
-    jump_fcontext(&ctx_, swap_ctx_, (intptr_t) this, true);
-    return true;
-}
+    // -----------------------------------------------------------------------
+// MaskMissingColumnsTo() -- function to set gaps to zero or NaN
+// -----------------------------------------------------------------------
     
-    Context::Context(size_t stack_size, coroutine_func_t fn, void* private_data) :
-        fn_(fn), stack_size_(stack_size), private_data_(private_data)
-{
-    if (-1 == getcontext(&ctx_))
-    {
-        swoole_throw_error(SW_ERROR_CO_GETCONTEXT_FAILED);
-        return;
-    }
-    }
+                    fstream.GetMarker(FileMarker::fileMarkerBeginSection, L'BMomentumAsTimeConstant');
+                fstream >> m_blockMomentumAsTimeConstantPerWorker;
+                fstream.GetMarker(FileMarker::fileMarkerEndSection, L'EMomentumAsTimeConstant');
+    
+    template <>
+int NDLNode<half>::s_nameCounter = 0;
+template <>
+int NDLNode<float>::s_nameCounter = 0;
+template <>
+int NDLNode<double>::s_nameCounter = 0;
+    
+                w = builder.Mean(input, L'MeanOfFeatures');
+            static_pointer_cast<PreComputedNodeBase<ElemType>>(w)->SideLoadFromMatrix(contextMean);
+            w->SetLearningRateMultiplier(0);
+    
+        bool m_needAveMultiplier;
+    double m_L2RegWeight;
+    double m_L1RegWeight;
+    
+    #include 'Basics.h'
+#include 'MPIWrapper.h'
+#include 'Matrix.h'
+#include 'SimpleDistGradAggregatorHelper.h'
+#include 'DistGradHeader.h'
+#include 'IDistGradAggregator.h'
+#include 'SimpleDistGradAggregator.h'
+#include 'V2SimpleDistGradAggregator.h'
     
     
-    {
-    {        ret = chan.pop(0.001);
-        ASSERT_EQ(ret, nullptr);
-    });
-}
-
-    
-    
-    
-    
-    {    sigemptyset(&curset);
-    sigprocmask(SIG_BLOCK, NULL, &curset);
-    ret = sigismember(&curset,SIGUSR1);
-    ASSERT_EQ(ret, 0);
-}
-#endif
-
-    
-        friend
-    void RedisQtCleanup(void * adapter) {
-        RedisQtAdapter * a = static_cast<RedisQtAdapter *>(adapter);
-        a->cleanup();
-    }
-    
-        private:
-        void finish() { emit finished(); }
-    
-    #endif // OPENPOSE_CORE_RECTANGLE_HPP
+    {    // Only used for controlling frequency of measuring/showing gradient aggregation perf stats
+    int m_syncStatsTrace;
+    size_t m_iterationCount;
+    bool m_initialized;
+};
