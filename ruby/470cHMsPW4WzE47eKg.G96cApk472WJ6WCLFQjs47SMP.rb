@@ -1,177 +1,171 @@
 
         
-                a_length = a_split.length
-        b_length = b_split.length
-    
-        def initialize
+            def initialize
       @pages = {}
     end
     
-            if at_css('.api-type-label.module')
-          at_css('h1').content = subpath.remove('api/')
-        end
+            css('br', 'hr', '.material-icons', '.header-link', '.breadcrumb').remove
     
-            css('p > code:first-child:last-child', 'td > code:first-child:last-child').each do |node|
-          next if node.previous.try(:content).present? || node.next.try(:content).present?
-          node.inner_html = node.inner_html.squish.gsub(/<br(\ \/)?>\s*/, '\n')
-          node.content = node.content.strip
-          node.name = 'pre' if node.content =~ /\s/
-          node.parent.before(node.parent.children).remove if node.parent.name == 'p'
-        end
+      it { is_expected.to change(Notification, :count).by(1) }
     
-          private
+        @account = account
+    @poll    = poll
+    @choices = choices
+    @votes   = []
     
-            if uri 
-          path = remove_domain_from_uri(uri)
-          path = add_fragment_back_to_path(uri, path)
+          expect(response).to redirect_to(settings_preferences_other_path)
+      user.reload
+      expect(user.locale).to eq 'en'
+      expect(user.chosen_languages).to eq ['es', 'fr']
+    end
     
-    module Devise
-  module Controllers
-    # Create url helpers to be used with resource/scope configuration. Acts as
-    # proxies to the generated routes created by devise.
-    # Resource param can be a string or symbol, a class, or an instance object.
-    # Example using a :user resource:
-    #
-    #   new_session_path(:user)      => new_user_session_path
-    #   session_path(:user)          => user_session_path
-    #   destroy_session_path(:user)  => destroy_user_session_path
-    #
-    #   new_password_path(:user)     => new_user_password_path
-    #   password_path(:user)         => user_password_path
-    #   edit_password_path(:user)    => edit_user_password_path
-    #
-    #   new_confirmation_path(:user) => new_user_confirmation_path
-    #   confirmation_path(:user)     => user_confirmation_path
-    #
-    # Those helpers are included by default to ActionController::Base.
-    #
-    # In case you want to add such helpers to another class, you can do
-    # that as long as this new class includes both url_helpers and
-    # mounted_helpers. Example:
-    #
-    #     include Rails.application.routes.url_helpers
-    #     include Rails.application.routes.mounted_helpers
-    #
-    module UrlHelpers
-      def self.remove_helpers!
-        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
-          remove_method method
-        end
-      end
-    
-              # Ensure that vendored static frameworks and libraries are not linked
-          # twice to the aggregate target, which shares the xcconfig of the user
-          # target.
-          #
-          def custom_build_settings
-            settings = {
-              'CODE_SIGN_IDENTITY[sdk=appletvos*]' => '',
-              'CODE_SIGN_IDENTITY[sdk=iphoneos*]'  => '',
-              'CODE_SIGN_IDENTITY[sdk=watchos*]'   => '',
-              'MACH_O_TYPE'                        => 'staticlib',
-              'OTHER_LDFLAGS'                      => '',
-              'OTHER_LIBTOOLFLAGS'                 => '',
-              'PODS_ROOT'                          => '$(SRCROOT)',
-              'PRODUCT_BUNDLE_IDENTIFIER'          => 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}',
-              'SKIP_INSTALL'                       => 'YES',
-    }
-    
-              it 'adds the architectures to the custom build configurations of the user target' do
-            @installer.send(:add_target).resolved_build_setting('ARCHS').should == {
-              'Release' => ['$(ARCHS_STANDARD_64_BIT)'],
-              'Debug' => ['$(ARCHS_STANDARD_64_BIT)'],
-              'AppStore' => ['$(ARCHS_STANDARD_64_BIT)'],
-              'Test' => ['$(ARCHS_STANDARD_64_BIT)'],
-            }
-          end
-    
-            it 'compares unequal build types as unequal' do
-          BuildType.new(:linkage => :dynamic, :packaging => :framework).should != BuildType.new(:linkage => :dynamic, :packaging => :library)
-          BuildType.new(:linkage => :static, :packaging => :library).should != BuildType.new(:linkage => :dynamic, :packaging => :library)
-        end
-      end
-    
-    Given(/^servers with the roles app and web$/) do
-  begin
-    vagrant_cli_command('up')
-  rescue
-    nil
+          expect(response).to redirect_to(settings_preferences_notifications_path)
+      user.reload
+      expect(user.settings['notification_emails']['follow']).to be true
+      expect(user.settings['interactions']['must_be_follower']).to be false
+    end
   end
 end
-    
-        def add_cmdline_filter(type, values)
-      cmdline_filters << Filter.new(type, values)
-    end
-    
-          private
-    
-          # Runs all validation rules registered for the given key against the
-      # user-supplied value for that variable. If no validator raises an
-      # exception, the value is assumed to be valid.
-      def assert_valid_now(key, value)
-        validators[key].each do |validator|
-          validator.call(key, value)
-        end
-      end
-    
-      describe 'GET /:username/:slug' do
-    context 'when story is an article' do
-      it 'renders to appropriate page' do
-        get article.path
-        expect(response.body).to include CGI.escapeHTML(article.title)
-      end
-    
-        class Mgr
-      attr_reader :latest_error
-      attr_reader :mutex
-      attr_reader :cond
-      def initialize
-        @mutex = ::Mutex.new
-        @cond = ::ConditionVariable.new
-      end
-      def processor_died(inst, err)
-        @latest_error = err
-        @mutex.synchronize do
-          @cond.signal
-        end
-      end
-      def processor_stopped(inst)
-        @mutex.synchronize do
-          @cond.signal
-        end
-      end
-      def options
-        { :concurrency => 3, :queues => ['default'] }
-      end
-    end
-    
-          Time.stub(:now, Time.now - 9) do
-        dead_set.kill(Sidekiq.dump_json(jid: '000102', class: 'MyWorker2', args: []))
-      end
-    
-      def self.io_adapters
-    @io_adapters ||= Paperclip::AdapterRegistry.new
-  end
-    
-          attr_reader :status, :message, :headers
-    
-          # Set or get a cookie
-      #
-      # @example
-      #   cookies[:mycookie] = 'mycookie val'
-      #   cookies['mycookie-string'] = 'mycookie string val'
-      #   cookies[:more] = { value: '123', expires: Time.at(0) }
-      #   cookies.delete :more
-      #
-      def cookies
-        @cookies ||= Cookies.new
-      end
-    
-    task default: %i[rubocop spec]
 
     
-        def read(request)
-      request.cookies.each do |name, value|
-        @cookies[name.to_s] = value
+          if resource.blank?
+        resource = new(email: attributes[:mail].first, agreement: true, account_attributes: { username: attributes[Devise.ldap_uid.to_sym].first })
+        resource.ldap_setup(attributes)
       end
+    
+        old_account.update!(uri: 'https://example.org/alice', domain: 'example.org', protocol: :activitypub, inbox_url: 'https://example.org/inbox')
+    new_account.update!(uri: 'https://example.com/alice', domain: 'example.com', protocol: :activitypub, inbox_url: 'https://example.com/inbox', also_known_as: [old_account.uri])
+    
+          before do
+        subject.perform
+      end
+    
+      expect(status).to be_success
+end
+    
+          OptionParser.new do |opts|
+        opts.banner = 'See full documentation at http://capistranorb.com/.'
+        opts.separator ''
+        opts.separator 'Install capistrano in a project:'
+        opts.separator '    bundle exec cap install [STAGES=qa,staging,production,...]'
+        opts.separator ''
+        opts.separator 'Show available tasks:'
+        opts.separator '    bundle exec cap -T'
+        opts.separator ''
+        opts.separator 'Invoke (or simulate invoking) a task:'
+        opts.separator '    bundle exec cap [--dry-run] STAGE TASK'
+        opts.separator ''
+        opts.separator 'Advanced options:'
+    
+          def trusted_keys
+        @trusted_keys.dup
+      end
+    
+        it { expect(alias_node.new_identifier.sym_type?).to be(true) }
+    it { expect(alias_node.new_identifier.children.first).to eq(:foo) }
+  end
+    
+          it { expect(class_node.body.send_type?).to be(true) }
     end
+    
+      describe '.new' do
+    let(:source) do
+      'class << self; end'
+    end
+    
+      context 'when a variable is assigned and unreferenced in a class' do
+    it 'registers an offense' do
+      expect_offense(<<~RUBY)
+        1.times do
+          foo = 1
+          puts foo
+          class SomeClass
+            foo = 2
+            ^^^ Useless assignment to variable - `foo`.
+            bar = 3
+            puts bar
+          end
+        end
+      RUBY
+    end
+  end
+    
+        expect(new_source).to eq(<<~RUBY)
+      def foo
+        raise(<<-FAIL) if true
+          boop
+        FAIL
+    
+          # Checks whether this `block` literal belongs to a lambda.
+      #
+      # @return [Boolean] whether the `block` literal belongs to a lambda
+      def lambda?
+        send_node.method?(:lambda)
+      end
+    
+            if obj && obj.errors[method].present?
+          errors = safe_join(obj.errors[method], '<br />'.html_safe)
+          content_tag(:span, errors, class: 'formError')
+        else
+          ''
+        end
+      end
+    
+          # users should be able to set price when importing orders via api
+      def permitted_line_item_attributes
+        if @current_user_roles.include?('admin')
+          super + [:price, :variant_id, :sku]
+        else
+          super
+        end
+      end
+    
+            def address_params
+          params.require(:address).permit(permitted_address_attributes)
+        end
+    
+            def inventory_unit
+          @inventory_unit ||= InventoryUnit.accessible_by(current_ability, :show).find(params[:id])
+        end
+    
+            def destroy
+          @option_type = Spree::OptionType.accessible_by(current_ability, :destroy).find(params[:id])
+          @option_type.destroy
+          render plain: nil, status: 204
+        end
+    
+            def destroy
+          @option_value = scope.accessible_by(current_ability, :destroy).find(params[:id])
+          @option_value.destroy
+          render plain: nil, status: 204
+        end
+    
+            def find_order
+          @order = Spree::Order.find_by!(number: order_id)
+          authorize! :show, @order, order_token
+        end
+    
+            def update
+          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
+          if @return_authorization.update(return_authorization_params)
+            respond_with(@return_authorization, default_template: :show)
+          else
+            invalid_resource!(@return_authorization)
+          end
+        end
+    
+              Spree::Dependencies.cart_remove_item_service.constantize.call(order: @shipment.order,
+                                                                        variant: variant,
+                                                                        quantity: quantity,
+                                                                        options: { shipment: @shipment })
+    
+            private
+    
+            def update
+          authorize! :update, taxon
+          if taxon.update(taxon_params)
+            respond_with(taxon, status: 200, default_template: :show)
+          else
+            invalid_resource!(taxon)
+          end
+        end
