@@ -1,210 +1,170 @@
 
         
-                selector = 'div.highlighter-coderay>div.CodeRay>div.code>pre'
-        refute result.css(selector).empty?, 'pre tag should exist'
-      end
-    end
-    
-          Jekyll.logger.info 'Total allocated: #{total_allocated_output} (#{report.total_allocated} objects)'.cyan
-      Jekyll.logger.info 'Total retained:  #{total_retained_output} (#{report.total_retained} objects)'.cyan
+                  # `mathjax` emgine is bundled within kramdown-2.x and will be handled by
+          # kramdown itself.
+          if (math_engine = @config['math_engine']) && math_engine != 'mathjax'
+            Jekyll::External.require_with_graceful_fail('kramdown-math-#{math_engine}')
+          end
+        end
     
     #############################################################################
 #
-# Standard tasks
+# Helper functions
 #
 #############################################################################
     
-    CONTENT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+    Benchmark.ips do |x|
+  x.report('local-require') { local_require }
+  x.report('global-require') { global_require }
+  x.report('graceful-require') { graceful_require }
+  x.compare!
+end
+
     
-        def upload_watch_icon(app_version, upload_file, content_provider_id, sso_token_for_image)
-      upload_file(app_version: app_version, upload_file: upload_file, path: '/upload/image', content_provider_id: content_provider_id, sso_token: sso_token_for_image, du_validation_rule_set: 'MZPFT.GizmoAppIcon')
-    end
+    def native_relative
+  DOC_PATH.sub('#{COL_PATH}/', '')
+end
     
-        def itc_stub_app_submissions_invalid
-      # Start app submission
-      stub_request(:get, 'https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/apps/898536088/versions/812106519/submit/summary').
-        to_return(status: 200, body: itc_read_fixture_file('app_submission/start_failed.json'), headers: { 'Content-Type' => 'application/json' })
-    end
+    Jekyll::Deprecator.process(ARGV)
     
-        it 'raises an exception when the version is commented-out in podspec' do
-      test_content = '# s.version = '1.3.2''
-      expect do
-        Fastlane::Helper::PodspecHelper.new.parse(test_content)
-      end.to raise_error('Could not find version in podspec content '#{test_content}'')
-    end
-    
-    describe DefaultScenarioImporter do
-  let(:user) { users(:bob) }
-  describe '.import' do
-    it 'imports a set of agents to get the user going when they are first created' do
-      mock(DefaultScenarioImporter).seed(is_a(User))
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'true' }
-      DefaultScenarioImporter.import(user)
-    end
-    
-        it 'optionally supports treating values that start with '$' as raw JSONPath' do
-      expect(Utils.interpolate_jsonpaths('$.there.world', payload)).to eq('$.there.world')
-      expect(Utils.interpolate_jsonpaths('$.there.world', payload, :leading_dollarsign_is_jsonpath => true)).to eq('WORLD')
-    end
-  end
-    
-      describe '#that checker should be valid' do
-    it 'should check that the aftership object is valid' do
-      expect(@checker).to be_valid
-    end
-    
-      def sign_in_params
-    devise_parameter_sanitizer.sanitize(:sign_in)
-  end
-    
-    require 'uri'
-    
-    module Devise
-  module Models
-    # Timeoutable takes care of verifying whether a user session has already
-    # expired or not. When a session expires after the configured time, the user
-    # will be asked for credentials again, it means, they will be redirected
-    # to the sign in page.
-    #
-    # == Options
-    #
-    # Timeoutable adds the following options to devise_for:
-    #
-    #   * +timeout_in+: the interval to timeout the user session without activity.
-    #
-    # == Examples
-    #
-    #   user.timedout?(30.minutes.ago)
-    #
-    module Timeoutable
-      extend ActiveSupport::Concern
-    
-    # Configure VAGRANT_CWD so that the tests never find an actual
-# Vagrantfile anywhere, or at least this minimizes those chances.
-ENV['VAGRANT_CWD'] = VAGRANT_TEST_CWD
-    
-          # Setup the default private key
-      @default_private_key_path = @home_path.join('insecure_private_key')
-      copy_insecure_private_key
-    
-            widths = {}
-        widths[:id] = 8
-        widths[:name] = 6
-        widths[:provider] = 6
-        widths[:state] = 6
-        widths[:vagrantfile_path] = 35
-    
-        it 'should include the machine id' do
-      expect($stdout).to receive(:puts).with(/,machine-id,/).twice
-    end
-    
-      config.vm.define 'arch' do |arch|
-    arch.vm.box = 'jfredett/arch-puppet'
-  end
-    
-    # enable logging
-FPM::Util.send :module_function, :logger
-FPM::Util.logger.level = :info
-FPM::Util.logger.subscribe STDERR
-    
-        npm_flags = []
-    settings.each do |key, value|
-      # npm lets you specify settings in a .npmrc but the same key=value settings
-      # are valid as '--key value' command arguments to npm. Woo!
-      logger.debug('Configuring npm', key => value)
-      npm_flags += [ '--#{key}', value ]
-    end
-    
-      option '--identifier-prefix', 'IDENTIFIER_PREFIX',
-    'Reverse domain prefix prepended to package identifier, ' \
-    'ie. 'org.great.my'. If this is omitted, the identifer ' \
-    'will be the package name.'
-  option '--payload-free', :flag, 'Define no payload, assumes use of script options.',
-    :default => false
-  option '--ownership', 'OWNERSHIP',
-    '--ownership option passed to pkgbuild. Defaults to 'recommended'. ' \
-    'See pkgbuild(1).', :default => 'recommended' do |value|
-    if !OWNERSHIP_OPTIONS.include?(value)
-      raise ArgumentError, 'osxpkg-ownership value of '#{value}' is invalid. ' \
-        'Must be one of #{OWNERSHIP_OPTIONS.join(', ')}'
-    end
-    value
-  end
-    
-        # do channel-discover if required
-    if !attributes[:pear_channel].nil?
-      logger.info('Custom channel specified', :channel => attributes[:pear_channel])
-      channel_list = safesystemout('pear', '-c', config, 'list-channels')
-      if channel_list !~ /#{Regexp.quote(attributes[:pear_channel])}/
-        logger.info('Discovering new channel', :channel => attributes[:pear_channel])
-        safesystem('pear', '-c', config, 'channel-discover', attributes[:pear_channel])
-      end
-      input_package = '#{attributes[:pear_channel]}/#{input_package}'
-      logger.info('Prefixing package name with channel', :package => input_package)
-    end
-    
-      option '--name', 'SERVICE_NAME', 'The name of the service you are creating'
-  option '--chdir', 'CHDIR', 'The working directory used by the service'
-    
-      option '--install-bin', 'BIN_PATH', 'The path to where python scripts ' \
-    'should be installed to.'
-  option '--install-lib', 'LIB_PATH', 'The path to where python libs ' \
-    'should be installed to (default depends on your python installation). ' \
-    'Want to find out what your target platform is using? Run this: ' \
-    'python -c 'from distutils.sysconfig import get_python_lib; ' \
-    'print get_python_lib()''
-  option '--install-data', 'DATA_PATH', 'The path to where data should be ' \
-    'installed to. This is equivalent to 'python setup.py --install-data ' \
-    'DATA_PATH'
-  option '--dependencies', :flag, 'Include requirements defined in setup.py' \
-    ' as dependencies.', :default => true
-  option '--obey-requirements-txt', :flag, 'Use a requirements.txt file ' \
-    'in the top-level directory of the python package for dependency ' \
-    'detection.', :default => false
-  option '--scripts-executable', 'PYTHON_EXECUTABLE', 'Set custom python ' \
-    'interpreter in installing scripts. By default distutils will replace ' \
-    'python interpreter in installing scripts (specified by shebang) with ' \
-    'current python interpreter (sys.executable). This option is equivalent ' \
-    'to appending 'build_scripts --executable PYTHON_EXECUTABLE' arguments ' \
-    'to 'setup.py install' command.'
-  option '--disable-dependency', 'python_package_name',
-    'The python package name to remove from dependency list',
-    :multivalued => true, :attribute_name => :python_disable_dependency,
-    :default => []
-  option '--setup-py-arguments', 'setup_py_argument',
-    'Arbitrary argument(s) to be passed to setup.py',
-    :multivalued => true, :attribute_name => :python_setup_py_arguments,
-    :default => []
-    
-      # Returns the path to the tar file containing the packed up staging directory
-  def payload
-    payload_tar = build_path('payload.tar')
-    logger.info('Creating payload tar ', :path => payload_tar)
-    
-        def _send_target(e)
-      _send_keys(tmux_window_and_pane_target, e)
-    end
-    
-      describe '#global_project' do
-    let(:directory) { described_class.directory }
-    let(:base) { '#{directory}/sample.yml' }
-    let(:first_dup) { '#{home_config_dir}/dup/local-dup.yml' }
-    let(:yaml) { '#{directory}/yaml.yaml' }
-    
-          it 'returns false' do
-        expect(described_class.editor?).to be_falsey
+          def print_summary(features)
+        @io.puts
+        print_stats(features, @options)
+        print_snippets(@options)
+        print_passing_wip(@options)
       end
     end
   end
+end
+    
+              new_theme_name = args.join('_')
+          theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
+          Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.' if theme.path.exist?
+    
+        it 'returns a Glyphicon icon element with an addidional class' do
+      icon = icon_tag('glyphicon-help', class: 'text-info')
+      expect(icon).to be_html_safe
+      expect(Nokogiri(icon).at('span.glyphicon.glyphicon-help.text-info')).to be_a Nokogiri::XML::Element
+    end
+    
+          it 'generates a richer DOT script' do
+        expect(agents_dot(@agents, rich: true)).to match(%r{
+          \A
+          digraph \x20 'Agent \x20 Event \x20 Flow' \{
+            (graph \[ [^\]]+ \];)?
+            node \[ [^\]]+ \];
+            edge \[ [^\]]+ \];
+            (?<foo>\w+) \[label=foo,tooltip='Dot \x20 Foo',URL='#{Regexp.quote(agent_path(@foo))}'\];
+            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
+            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
+            \k<bar1> \[label=bar1,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar1))}'\];
+            \k<bar2> \[label=bar2,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar2))}',style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
+            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
+            \k<bar3> \[label=bar3,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar3))}'\];
+          \}
+          \z
+        }x)
+      end
+    end
+  end
+    
+        it 'works for queued jobs' do
+      expect(status(job)).to eq('<span class='label label-warning'>queued</span>')
+    end
+  end
+    
+            it 'kills no long active workers' do
+          mock.instance_of(HuginnScheduler).run!
+          mock.instance_of(DelayedJobWorker).run!
+          @agent_runner.send(:run_workers)
+          AgentRunner.class_variable_set(:@@agents, [DelayedJobWorker])
+          mock.instance_of(HuginnScheduler).stop!
+          @agent_runner.send(:run_workers)
+        end
+      end
+    
+        it 'should raise an exception when encountering complex JSONPaths' do
+      @agent.options['username_path'] = '$.very.complex[*]'
+      expect { LiquidMigrator.convert_all_agent_options(@agent) }.
+        to raise_error('JSONPath '$.very.complex[*]' is too complex, please check your migration.')
+    end
+    
+        it 'accepts objects as well as strings' do
+      log = AgentLog.log_for_agent(agents(:jane_website_agent), events(:bob_website_agent_event).payload)
+      expect(log.message).to include(''title'=>'foo'')
+    end
+  end
+    
+        stub_request(:get, /trackings/).to_return(
+      :body => File.read(Rails.root.join('spec/data_fixtures/aftership.json')),
+      :status => 200,
+      :headers => {'Content-Type' => 'text/json'}
+    )
+    
+          it 'does not write the headers when with_header is false' do
+        @checker.options['with_header'] = 'false'
+        event = Event.new(payload: { 'data' => {'key' => 'value', 'key2' => 'value2', 'key3' => 'value3'} })
+        expect { @checker.receive([event])}.to change(Event, :count).by(1)
+        expect(Event.last.payload).to eq('data' => '\'value\',\'value2\',\'value3\'\n')
+      end
+    
+          # Initialize a new instance
+      #
+      # @param [Sandbox] sandbox see #sandbox
+      # @param [String] sandbox_root see #sandbox_root
+      # @param [Xcodeproj::Project] pods_project see #pods_project
+      # @param [Array<UmbrellaTargetDescription>] umbrella_targets see #umbrella_targets
+      #
+      def initialize(sandbox, sandbox_root, pods_project, umbrella_targets)
+        @sandbox = sandbox
+        @sandbox_root = sandbox_root
+        @pods_project = pods_project
+        @umbrella_targets = umbrella_targets
+      end
+    
+        # Checks that the podfile exists.
+    #
+    # @raise  If the podfile does not exists.
+    #
+    # @return [void]
+    #
+    def verify_podfile_exists!
+      unless config.podfile
+        raise Informative, 'No `Podfile' found in the project directory.'
+      end
+    end
+    
+            # @private
+        # @return [Hash<PodVariant, String>]
+        #
+        def scope_by_linkage
+          scope_if_necessary(group_by { |v| v.build_type.linkage }.map(&:scope_by_platform)) do |variant|
+            variant.build_type.linkage
+          end
+        end
+    
+              # Creates the group that holds the references to the support files
+          # generated by this installer.
+          #
+          # @return [void]
+          #
+          def create_support_files_group
+            parent = project.support_files_group
+            name = target.name
+            dir = target.support_files_dir
+            @support_files_group = parent.new_group(name, dir)
+          end
+    
+            # Cleans up projects before writing.
+        #
+        def cleanup_projects(projects)
+          projects.each do |project|
+            [project.pods, project.support_files_group,
+             project.development_pods, project.dependencies_group].each { |group| group.remove_from_project if group.empty? }
+            project.sort(:groups_position => :below)
+          end
+        end
+      end
+    end
+  end
+end
