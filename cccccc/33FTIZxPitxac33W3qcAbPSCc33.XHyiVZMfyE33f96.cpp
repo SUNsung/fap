@@ -1,263 +1,185 @@
 
         
-                    // Initialize the necessary startup info struct        
-            STARTUPINFOEX startupInfo{};
-            if (S_OK == InitializeStartupInfoAttachedToPseudoConsole(&startupInfo, hPC))
-            {
-                // Launch ping to emit some text back via the pipe
-                PROCESS_INFORMATION piClient{};
-                hr = CreateProcess(
-                    NULL,                           // No module name - use Command Line
-                    szCommand,                      // Command Line
-                    NULL,                           // Process handle not inheritable
-                    NULL,                           // Thread handle not inheritable
-                    FALSE,                          // Inherit handles
-                    EXTENDED_STARTUPINFO_PRESENT,   // Creation flags
-                    NULL,                           // Use parent's environment block
-                    NULL,                           // Use parent's starting directory 
-                    &startupInfo.StartupInfo,       // Pointer to STARTUPINFO
-                    &piClient)                      // Pointer to PROCESS_INFORMATION
-                    ? S_OK
-                    : GetLastError();
-    }
+                buf_lock_t sindex_block(superblock->expose_buf(),
+                                superblock->get_sindex_block_id(),
+                                access_t::read);
     
-    /// A flag which, if set, causes access tracking to be suspended.
-/// Accesses which begin while this flag is set will not be tracked,
-/// will not cause exclusivity failures, and do not need to be ended.
-///
-/// This is here to support tools like debuggers.  Debuggers need to
-/// be able to run code at breakpoints that does things like read
-/// from a variable while there are ongoing formal accesses to it.
-/// Such code may also crash, and we need to be able to recover
-/// without leaving various objects in a permanent 'accessed'
-/// state.  (We also need to not leave references to scratch
-/// buffers on the stack sitting around in the runtime.)
-SWIFT_RUNTIME_EXPORT
-bool _swift_disableExclusivityChecking;
+                    bool sindex_exists = store.acquire_sindex_superblock_for_write(
+                    name,
+                    '',
+                    super_block.get(),
+                    &sindex_super_block,
+                    &sindex_uuid);
+                ASSERT_TRUE(sindex_exists);
     
-      /// A zero relative offset encodes a null reference.
-  bool isNull() const & {
-    return RelativeOffset == 0;
+    // The following macros are useful for writing death tests.
+    
+      // The c'tor sets this object as the test part result reporter used
+  // by Google Test.  The 'result' parameter specifies where to report the
+  // results. This reporter will only catch failures generated in the current
+  // thread. DEPRECATED
+  explicit ScopedFakeTestPartResultReporter(TestPartResultArray* result);
+    
+    #endif  // 0
+    
+      // Clears the results of all tests in this test case.
+  void ClearResult();
+    
+    // Finds the first element in the iterator range [begin, end) that
+// equals elem.  Element may be a native array type itself.
+template <typename Iter, typename Element>
+Iter ArrayAwareFind(Iter begin, Iter end, const Element& elem) {
+  for (Iter it = begin; it != end; ++it) {
+    if (internal::ArrayEq(*it, elem))
+      return it;
   }
-    
-      /// Return a callable function for swift_release_n.
-  Constant *getReleaseN(CallInst *OrigI) {
-    if (ReleaseN)
-      return ReleaseN.get();
-    auto *ObjectPtrTy = getObjectPtrTy();
-    auto *Int32Ty = Type::getInt32Ty(getModule().getContext());
-    auto *VoidTy = Type::getVoidTy(getModule().getContext());
-    }
-    
-    
-    {  /// This class provides a non-trivial .cxx_destruct method, but
-  /// its .cxx_construct is trivial.  For backwards compatibility,
-  /// when setting this flag, HasCXXStructors must be set as well.
-  HasCXXDestructorOnly = 0x00100
-};
-inline ObjCClassFlags &operator|=(ObjCClassFlags &lhs, ObjCClassFlags rhs) {
-  lhs = ObjCClassFlags(uint32_t(lhs) | uint32_t(rhs));
-  return lhs;
-}
-inline ObjCClassFlags operator|(ObjCClassFlags lhs, ObjCClassFlags rhs) {
-  return (lhs |= rhs);
+  return end;
 }
     
-    class DiagnosticConsumer;
-class DiagnosticEngine;
+      // Take over ownership of a raw pointer.  This should happen as soon as
+  // possible after the object is created.
+  explicit linked_ptr(T* ptr = NULL) { capture(ptr); }
+  ~linked_ptr() { depart(); }
     
-    // Summary: The ExperimentalDependency* files contain infrastructure for a
-// dependency system that, in the future, will be finer-grained than the current
-// dependency system. At present--12/5/18--they are using the same input
-// information as the current system and expected to produce the same results.
-// In future, we'll gather more information, feed it into this dependency
-// framework and get more selective recompilation.
-//
-// The frontend uses the information from the compiler to built a
-// SourceFileDepGraph consisting of SourceFileDepGraphNodes.
-// ExperimentalDependencies.* define these structures, and
-// ExperimentalDependenciesProducer has the frontend-unique code used to build
-// the SourceFileDepGraph.
-//
-// The driver reads the SourceFileDepGraph and integrates it into its dependency
-// graph, a ModuleDepGraph consisting of ModuleDepGraphNodes.
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32, typename T33, typename T34, typename T35,
+    typename T36, typename T37, typename T38, typename T39, typename T40,
+    typename T41, typename T42, typename T43, typename T44, typename T45,
+    typename T46, typename T47, typename T48, typename T49, typename T50>
+class ValueArray50 {
+ public:
+  ValueArray50(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
+      T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17,
+      T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23, T24 v24, T25 v25,
+      T26 v26, T27 v27, T28 v28, T29 v29, T30 v30, T31 v31, T32 v32, T33 v33,
+      T34 v34, T35 v35, T36 v36, T37 v37, T38 v38, T39 v39, T40 v40, T41 v41,
+      T42 v42, T43 v43, T44 v44, T45 v45, T46 v46, T47 v47, T48 v48, T49 v49,
+      T50 v50) : v1_(v1), v2_(v2), v3_(v3), v4_(v4), v5_(v5), v6_(v6), v7_(v7),
+      v8_(v8), v9_(v9), v10_(v10), v11_(v11), v12_(v12), v13_(v13), v14_(v14),
+      v15_(v15), v16_(v16), v17_(v17), v18_(v18), v19_(v19), v20_(v20),
+      v21_(v21), v22_(v22), v23_(v23), v24_(v24), v25_(v25), v26_(v26),
+      v27_(v27), v28_(v28), v29_(v29), v30_(v30), v31_(v31), v32_(v32),
+      v33_(v33), v34_(v34), v35_(v35), v36_(v36), v37_(v37), v38_(v38),
+      v39_(v39), v40_(v40), v41_(v41), v42_(v42), v43_(v43), v44_(v44),
+      v45_(v45), v46_(v46), v47_(v47), v48_(v48), v49_(v49), v50_(v50) {}
+    }
     
-      /// Encapsulate the invariant between where the node resides in
-  /// nodesBySwiftDepsFile and the swiftDeps node instance variable here.
-  void addToMap(ModuleDepGraphNode *n) {
-    nodeMap.insert(n->getSwiftDeps().getValueOr(std::string()), n->getKey(), n);
-  }
-    
-      /// In Single-threaded WMO mode, all inputs are used
-  /// both for importing and compiling.
-  bool IsSingleThreadedWMO = false;
-    
-        // use strings to print preset names in the perf test results:
-    String preset_string = get<0>(params);
-    int preset = DISOpticalFlow::PRESET_FAST;
-    if (preset_string == 'PRESET_ULTRAFAST')
-        preset = DISOpticalFlow::PRESET_ULTRAFAST;
-    else if (preset_string == 'PRESET_FAST')
-        preset = DISOpticalFlow::PRESET_FAST;
-    else if (preset_string == 'PRESET_MEDIUM')
-        preset = DISOpticalFlow::PRESET_MEDIUM;
-    Size sz = get<1>(params);
-    
-    #include <ImfFloatVectorAttribute.h>
-    
-    
-OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_EXIT
-    
-    using namespace IMATH_NAMESPACE;
-#include 'ImfNamespace.h'
-    
-    struct StreamIO
+    template <class ElemType>
+template <class ValueType>
+shared_ptr<ComputationNode<ValueType>> ComputationNetworkBuilder<ElemType>::TypedCreateSparseInputNode(const std::wstring& inputName, const TensorShape& imageLayout, const wstring& dynamicAxisName)
 {
-    static void
-    writeChars (OStream &os, const char c[/*n*/], int n)
-    {
-        os.write (c, n);
-    }
-    }
-    
-    namespace python {
-    }
-    
-    #include <google/protobuf/stubs/logging.h>
-#include <google/protobuf/stubs/common.h>
-#include <google/protobuf/compiler/plugin.pb.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/stubs/strutil.h>
-    
-    TEST_F(CppMetadataTest, CapturesEnumNames) {
-  FileDescriptorProto file;
-  GeneratedCodeInfo info;
-  std::string pb_h;
-  atu::AddFile('test.proto', kSmallTestFile);
-  EXPECT_TRUE(
-      CaptureMetadata('test.proto', &file, &pb_h, &info, NULL, NULL, NULL));
-  EXPECT_EQ('Enum', file.enum_type(0).name());
-  std::vector<int> enum_path;
-  enum_path.push_back(FileDescriptorProto::kEnumTypeFieldNumber);
-  enum_path.push_back(0);
-  const GeneratedCodeInfo::Annotation* enum_annotation =
-      atu::FindAnnotationOnPath(info, 'test.proto', enum_path);
-  EXPECT_TRUE(NULL != enum_annotation);
-  EXPECT_TRUE(atu::AnnotationMatchesSubstring(pb_h, enum_annotation, 'Enum'));
+    return net.AddNodeToNetWithElemType(New<SparseInputValue<ValueType>>(net.GetDeviceId(), inputName, imageLayout, dynamicAxisName));
 }
-    
-    // Author: kenton@google.com (Kenton Varda)
-//  Based on original Protocol Buffers design by
-//  Sanjay Ghemawat, Jeff Dean, and others.
-    
-    #include <google/protobuf/compiler/java/java_generator_factory.h>
-    
-    VARIANT_ENUM_CAST(XMLParser::NodeType);
-    
-    // Shorthands
-typedef unsigned int	U;
-typedef unsigned char	U1;
-    
-    	enum EmissionMode {
-		EMISSION_MODE_SOLID,
-		EMISSION_MODE_BORDER,
-		EMISSION_MODE_BORDER_DIRECTED
-	};
     
     
     {
     {
-    {		} break;
-	}
-}
+    {
+    {       static double TimeConstant2Momentum(double timeConstant, size_t syncPeroid)
+       {
+           return exp(-((double)syncPeroid) / timeConstant);
+       }
+       static double Momentum2TimeConstant(double bm, size_t syncPeroid)
+       {
+           if (bm >= 1.0 || bm < 0.0)
+           {
+               InvalidArgument('Unexpected block momentum (%.2f). Block momentum should be in the range of [0,1)\n', bm);
+           }
+           return -(double)syncPeroid / log(bm); 
+       }
+    };
+} } }
+
     
-    	ConfirmationDialog *emission_mask;
-	OptionButton *emission_mask_mode;
-	CheckBox *emission_colors;
+                    // Subtract it from the previous model
+                auto blockGrad = std::make_shared<Matrix<ElemType>>(prevWeight, CPUDEVICE);
+                *blockGrad -= currentWeight;                                              // matW becomes local block gradient (of one worker)
     
-    		float cMax = MAX(cRed, MAX(cGreen, cBlue));
-    
-    public:
-	int get_width() const; ///< Get image width
-	int get_height() const; ///< Get image height
-	Vector2 get_size() const;
-	bool has_mipmaps() const;
-	int get_mipmap_count() const;
-    
-    #include 'core/io/networked_multiplayer_peer.h'
-#include 'core/reference.h'
+    // declare the static variables from the classes
+template <>
+NDLScript<half> NDLScript<half>::s_global{};
+template <>
+NDLScript<float> NDLScript<float>::s_global{};
+template <>
+NDLScript<double> NDLScript<double>::s_global{};
     
     
-    {		Vector3 normal;
-		int indices[3];
-	};
-    
-    	ERR_FAIL_COND(!custom_code_map.has(p_code_id));
-	if (conditional_version.code_version == p_code_id) {
-		conditional_version.code_version = 0; //do not keep using a version that is going away
-		unbind();
-	}
-    
-    template<typename DType>
-struct MultiAllFiniteKernelParam {
-  static const int N = 200;
-  int count;
-  size_t max_size;
-  size_t sizes[N];
-  DType *arrays[N];
-};
-    
-    inline void AllFiniteCPU(const nnvm::NodeAttrs& attrs,
-                         const OpContext &ctx,
-                         const std::vector<TBlob> &inputs,
-                         const std::vector<OpReqType> &req,
-                         const std::vector<TBlob> &outputs) {
-  using namespace mxnet_op;
-  Stream<cpu>* s = ctx.get_stream<cpu>();
-  const AllFiniteParam& op_param = nnvm::get<AllFiniteParam>(attrs.parsed);
-  Tensor<cpu, 2, float> out = outputs[0].FlatTo2D<cpu, float>(s);
-  if (op_param.init_output) {
-    out = 1.;
-  }
-  MSHADOW_REAL_TYPE_SWITCH(inputs[0].type_flag_, DType, {
-    Tensor<cpu, 2, DType> in = inputs[0].FlatTo2D<cpu, DType>(s);
-    const int n = in.shape_.Size();
-    Kernel<AllFiniteCPUKernel<DType>, cpu>::Launch(s, n, in.dptr_, out.dptr_);
-  });
-}
-    
-    using nnvm::Node;
-using nnvm::NodePtr;
-using nnvm::Graph;
-    
-    int MXSetIsNumpyShape(int is_np_shape, int* prev) {
-  API_BEGIN();
-  *prev = Imperative::Get()->set_is_np_shape(static_cast<bool>(is_np_shape));
-  API_END();
-}
-    
-      mxnet::TShape dshape = (*in_attrs)[0];
-  for (size_t i = 1; i < 3; ++i) {
-    SHAPE_ASSIGN_CHECK(*in_attrs, i, mxnet::TShape(1, 1));
-  }
-    
-    inline void IndexArrayBuildSelectedAxesWorkspace(const mxnet::Tuple<int> &axes,
-                                                 const std::vector<int64_t> &index_products,
-                                                 int64_t* workspace,
-                                                 const int ndim) {
-  for (int i = 0; i < axes.ndim(); i++) {
-    // Make sure that the axis is between 0 and ndim.
-    const int axis = ((axes[i] % ndim) + ndim) % ndim;
-    }
+    {        return sortedEvalOrder;
     }
     
-                auto wx_md_n = mkldnn::memory::desc(
-                { weights_layer_tz }, mkldnn_dtype, mkldnn::memory::format::ldgoi);
-            DType* wx_n = bias_n + (L - 1) * ngates * H;  //  (L - 1) * ngates * H * H
-            auto wx_memory_n =
-                mkldnn::memory({ wx_md_n, cpu_engine }, wx_n);
-            DType* wh_n = wx_n + (L - 1) * ngates * H * H;  //  (L - 1) * ngates * H * H
-            auto wh_md_n = mkldnn::memory::desc(
-                { weights_iter_tz }, mkldnn_dtype, mkldnn::memory::format::ldgoi);
-            auto wh_memory_n =
-                mkldnn::memory({ wh_md_n, cpu_engine }, wh_n);
+    
+    {    for (const auto& n : nodes)
+    {
+        inputLayouts.push_back(ToVariableLayout(n));
+    }
+    return inputLayouts;
+}
+    
+    
+#ifndef CPUONLY
+#include <cuda_runtime.h>
+#pragma comment (lib, 'cudart.lib')     // for cudaMemcpyAsync()
+#endif
+    
+    #include 'Basics.h'
+#include 'ComputationNetwork.h'
+#include 'SimpleEvaluator.h'
+#include 'DataReader.h'
+#include 'ScriptableObjects.h'
+#include 'Criterion.h'
+#include <vector>
+#include <string>
+#include <stdexcept>
+#include 'fileutil.h'
+#include 'Config.h'
+#include <chrono>
+#include <random>
+#include 'Profiler.h'
+#include 'MASGD.h'
+#include 'ASGDHelper.h'
+#include <map>
+using namespace std; // ugh! TODO: get rid of this from .h files!!!
+    
+    template <typename ElemType>
+void AggregateAccumulatorValuesAndUpdateEpochEvaluation(
+    std::shared_ptr<ComputationNetwork> net,
+    std::set<std::shared_ptr<ComputationNodeBase>> evalNodesWhichAccumulateResult,
+    std::shared_ptr<DistGradHeader> gradHeader,
+    std::shared_ptr<MPIWrapper> mpi,
+    std::vector<EpochCriterion>& epochEvalErrors,
+    const std::vector<ComputationNodeBasePtr>& evaluationNodes,
+    CriterionAccumulatorBase& localEpochEvalErrors,
+    std::function<bool(ComputationNodeBasePtr)> containsAccumulatedResult,
+    size_t packThresholdSizeInBytes = DEFAULT_PACK_THRESHOLD_SIZE_IN_BYTES)
+{
+    // Each node contains accumulated values for part of the data set, we have to aggregate accumulated values.
+    AggregateAccumulatorValuesAndUpdateEvaluation<ElemType>(net, evalNodesWhichAccumulateResult, gradHeader, mpi, packThresholdSizeInBytes);
+    }
+    
+    namespace aria2 {
+    }
+    
+      virtual std::shared_ptr<DHTTask>
+  createPeerLookupTask(const std::shared_ptr<DownloadContext>& ctx,
+                       uint16_t tcpPort,
+                       const std::shared_ptr<PeerStorage>& peerStorage) = 0;
+    
+    std::shared_ptr<DHTTask>
+DHTTaskFactoryImpl::createPeerAnnounceTask(const unsigned char* infoHash)
+{
+  // TODO
+  return nullptr;
+}
+    
+      virtual void addPeriodicTask1(const std::shared_ptr<DHTTask>& task) = 0;
+    
+    DHTTokenTracker::~DHTTokenTracker() = default;
+    
+    #include 'TimeBasedCommand.h'
+    
+      DNSCache& operator=(const DNSCache& c);
