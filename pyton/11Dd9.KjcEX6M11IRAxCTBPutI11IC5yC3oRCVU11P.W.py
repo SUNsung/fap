@@ -1,96 +1,96 @@
 
         
-        
-class FileModeWarning(RequestsWarning, DeprecationWarning):
-    '''A file was opened in text mode, but Requests determined its binary length.'''
-    pass
+                final_headers[name] = value
+    return final_headers
     
-        def __iter__(self):
-        return (casedkey for casedkey, mappedvalue in self._store.values())
+        def __init__(self, **kwargs):
+        '''
+        Use keyword arguments to overwrite
+        any of the class attributes for this instance.
     
-        return inner
+            status_line = 'HTTP/{version} {status} {reason}'.format(
+            version=version,
+            status=original.status,
+            reason=original.reason
+        )
+        headers = [status_line]
+        try:
+            # `original.msg` is a `http.client.HTTPMessage` on Python 3
+            # `_headers` is a 2-tuple
+            headers.extend(
+                '%s: %s' % header for header in original.msg._headers)
+        except AttributeError:
+            # and a `httplib.HTTPMessage` on Python 2.x
+            # `headers` is a list of `name: val<CRLF>`.
+            headers.extend(h.strip() for h in original.msg.headers)
     
-        def test_repr(self):
-        assert repr(self.lookup_dict) == '<lookup 'test'>'
-    
-            Comment:                   'italic #8f5902', # class: 'c'
-        Comment.Preproc:           'noitalic',       # class: 'cp'
-    
-    # -------
-# Pythons
-# -------
-    
-    # TODO: response is the only one
-    
-    This module contains the primary objects that power Requests.
-'''
-    
-        Handles decoding/encoding between RFC3339 strings and aware (not
-    naive) `datetime.datetime` objects
-    (e.g. ``datetime.datetime.now(pytz.utc)``).
-    
-    # http://docs.readthedocs.org/en/latest/theme.html#how-do-i-use-this-locally-and-on-read-the-docs
-# on_rtd is whether we are on readthedocs.org
-on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
-if not on_rtd:  # only import and set the theme if we're building docs locally
-    import sphinx_rtd_theme
-    html_theme = 'sphinx_rtd_theme'
-    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
-# otherwise, readthedocs.org uses their theme by default, so no need to specify it
-    
-        def step(self, action):
-        assert self.action_space.contains(action)
-        if self.np_random.rand() < self.slip:
-            action = not action  # agent slipped, reverse action taken
-        if action:  # 'backwards': go back to the beginning, get small reward
-            reward = self.small
-            self.state = 0
-        elif self.state < self.n - 1:  # 'forwards': go up along the chain
-            reward = 0
-            self.state += 1
-        else:  # 'forwards': stay at the end of the chain, collect large reward
-            reward = self.large
-        done = False
-        return self.state, reward, done, {}
-    
-    # TODO: don't hardcode sizeof_int here
-def _bigint_from_bytes(bytes):
-    sizeof_int = 4
-    padding = sizeof_int - len(bytes) % sizeof_int
-    bytes += b'\0' * padding
-    int_count = int(len(bytes) / sizeof_int)
-    unpacked = struct.unpack('{}I'.format(int_count), bytes)
-    accum = 0
-    for i, val in enumerate(unpacked):
-        accum += 2 ** (sizeof_int * 8 * i) * val
-    return accum
-    
-        def test_reversed_addition_3rows(self):
-        env = alg.reversed_addition.ReversedAdditionEnv(base=3, rows=3)
-        input_expected = [
-            ([[1,1,0],[0,1,1]], [2, 2]),
-            ([[1,1,2],[0,1,1]], [1,0,1]),
-        ]
-        for (input_grid, expected_target) in input_expected:
-            self.assertEqual(env.target_from_input_data(input_grid), expected_target)
-    
-                # Physically correct is to always apply friction_limit until speed is equal.
-            # But dt is finite, that will lead to oscillations if difference is already near zero.
-            f_force *= 205000*SIZE*SIZE  # Random coefficient to cut oscillations in few steps (have no effect on friction_limit)
-            p_force *= 205000*SIZE*SIZE
-            force = np.sqrt(np.square(f_force) + np.square(p_force))
-    
-      if use_tpu:
-    optimizer = tf.contrib.tpu.CrossShardOptimizer(optimizer)
-    
-      return model_fn
+        '''
+    color = b'\x1b['
+    encoding = outfile.encoding
+    for chunk in stream:
+        if color in chunk:
+            outfile.write(chunk.decode(encoding))
+        else:
+            outfile.buffer.write(chunk)
+        if flush:
+            outfile.flush()
     
     
-def write_instance_to_example_files(instances, tokenizer, max_seq_length,
-                                    max_predictions_per_seq, output_files):
-  '''Create TF example files from `TrainingInstance`s.'''
-  writers = []
-  for output_file in output_files:
-    writers.append(tf.python_io.TFRecordWriter(output_file))
+ENTRY_POINT_NAMES = [
+    'httpie.plugins.auth.v1',
+    'httpie.plugins.formatter.v1',
+    'httpie.plugins.converter.v1',
+    'httpie.plugins.transport.v1',
+]
     
-    test_ci = functools.partial(__check_path__, './ci')
+    
+with codecs.open(JSON_FILE_PATH, encoding='utf8') as f:
+    JSON_FILE_CONTENT = f.read()
+    
+        def test_implicit_POST_stdin(self, httpbin):
+        with open(FILE_PATH) as f:
+            env = MockEnvironment(stdin_isatty=False, stdin=f)
+            r = http('--form', httpbin.url + '/post', env=env)
+        assert HTTP_OK in r
+    
+    
+@mock.patch('httpie.core.get_response')
+def test_timeout(get_response):
+    def error(msg, *args, **kwargs):
+        global error_msg
+        error_msg = msg % args
+    
+                    if channels < self.group:
+                    raise ValueError('Input channels should be larger than group size' +
+                                     '; Received input channels: ' + str(channels) +
+                                     '; Group size: ' + str(self.group))
+    
+        def get_erosion_kernel(self, mask):
+        ''' Get the erosion kernel '''
+        erosion_ratio = self.config['erosion'] / 100
+        mask_radius = np.sqrt(np.sum(mask)) / 2
+        kernel_size = max(1, int(abs(erosion_ratio * mask_radius)))
+        erosion_kernel = cv2.getStructuringElement(  # pylint: disable=no-member
+            cv2.MORPH_ELLIPSE,  # pylint: disable=no-member
+            (kernel_size, kernel_size))
+        logger.trace('erosion_kernel shape: %s', erosion_kernel.shape)
+        return erosion_kernel
+    
+        def set_defaults(self):
+        ''' Set the default values for config '''
+        logger.debug('Setting defaults')
+        current_dir = os.path.dirname(__file__)
+        for dirpath, _, filenames in os.walk(current_dir):
+            default_files = [fname for fname in filenames if fname.endswith('_defaults.py')]
+            if not default_files:
+                continue
+            base_path = os.path.dirname(os.path.realpath(sys.argv[0]))
+            import_path = '.'.join(full_path_split(dirpath.replace(base_path, ''))[1:])
+            plugin_type = import_path.split('.')[-1]
+            for filename in default_files:
+                self.load_module(filename, import_path, plugin_type)
+    
+            if self.detector.supports_plaidml and self.aligner.supports_plaidml:
+            logger.debug('Both aligner and detector support plaidML. Disabling parallel '
+                         'processing.')
+            return False
