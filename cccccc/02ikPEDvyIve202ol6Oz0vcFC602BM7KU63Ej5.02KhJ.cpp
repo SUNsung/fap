@@ -1,249 +1,149 @@
 
         
-          //----- initialization and control
+        	memdelete(f);
     
-    //========================================================================
-//
-// Modified under the Poppler project - http://poppler.freedesktop.org
-//
-// All changes made under the Poppler project to this file are licensed
-// under GPL version 2 or later
-//
-// Copyright (C) 2006 Scott Turner <scotty1024@mac.com>
-//
-// To see a description of the changes please see the Changelog file that
-// came with your tarball or type make ChangeLog if you are building from git
-//
-//========================================================================
+    	void _send_rpc(Node *p_from, int p_to, bool p_unreliable, bool p_set, const StringName &p_name, const Variant **p_arg, int p_argcount);
+	bool _send_confirm_path(NodePath p_path, PathSentCache *psc, int p_target);
     
-    void Page::display(OutputDev *out, double hDPI, double vDPI,
-		   int rotate, GBool useMediaBox, GBool crop,
-		   GBool printing, Catalog *catalog,
-		   GBool (*abortCheckCbk)(void *data),
-		   void *abortCheckCbkData,
-                   GBool (*annotDisplayDecideCbk)(Annot *annot, void *user_data),
-                   void *annotDisplayDecideCbkData) {
-  displaySlice(out, hDPI, vDPI, rotate, useMediaBox, crop, -1, -1, -1, -1, printing, catalog,
-	       abortCheckCbk, abortCheckCbkData,
-               annotDisplayDecideCbk, annotDisplayDecideCbkData);
-}
-    
-    class Parser {
-public:
+    	struct Triangle {
     }
     
-    class PopplerObjectCache
+    	VersionKey key;
+	key.code_version = p_code_id;
+	for (Set<uint32_t>::Element *E = custom_code_map[p_code_id].versions.front(); E; E = E->next()) {
+		key.version = E->get();
+		ERR_CONTINUE(!version_map.has(key));
+		Version &v = version_map[key];
+    }
+    
+    			chart.vertices.push_back(used_rect.position);
+			chart.vertices.push_back(used_rect.position + Vector2(used_rect.size.x, 0));
+			chart.vertices.push_back(used_rect.position + Vector2(used_rect.size.x, used_rect.size.y));
+			chart.vertices.push_back(used_rect.position + Vector2(0, used_rect.size.y));
+			EditorAtlasPacker::Chart::Face f;
+			f.vertex[0] = 0;
+			f.vertex[1] = 1;
+			f.vertex[2] = 2;
+			chart.faces.push_back(f);
+			f.vertex[0] = 0;
+			f.vertex[1] = 2;
+			f.vertex[2] = 3;
+			chart.faces.push_back(f);
+			chart.can_transpose = false;
+			pack_data.chart_vertices.push_back(chart.vertices);
+			pack_data.chart_pieces.push_back(charts.size());
+			charts.push_back(chart);
+    
+    #ifndef NDEBUG  // sync point is not included with DNDEBUG build
+TEST_F(DBTestXactLogIterator, TransactionLogIteratorRace) {
+  static const int LOG_ITERATOR_RACE_TEST_COUNT = 2;
+  static const char* sync_points[LOG_ITERATOR_RACE_TEST_COUNT][4] = {
+      {'WalManager::GetSortedWalFiles:1',  'WalManager::PurgeObsoleteFiles:1',
+       'WalManager::PurgeObsoleteFiles:2', 'WalManager::GetSortedWalFiles:2'},
+      {'WalManager::GetSortedWalsOfType:1',
+       'WalManager::PurgeObsoleteFiles:1',
+       'WalManager::PurgeObsoleteFiles:2',
+       'WalManager::GetSortedWalsOfType:2'}};
+  for (int test = 0; test < LOG_ITERATOR_RACE_TEST_COUNT; ++test) {
+    // Setup sync point dependency to reproduce the race condition of
+    // a log file moved to archived dir, in the middle of GetSortedWalFiles
+    rocksdb::SyncPoint::GetInstance()->LoadDependency(
+      { { sync_points[test][0], sync_points[test][1] },
+        { sync_points[test][2], sync_points[test][3] },
+      });
+    }
+    }
+    
+      Status NewRandomAccessFile(const std::string& fname,
+                             std::unique_ptr<RandomAccessFile>* result,
+                             const EnvOptions& options) override {
+    PERF_TIMER_GUARD(env_new_random_access_file_nanos);
+    return EnvWrapper::NewRandomAccessFile(fname, result, options);
+  }
+    
+    
+    {    return true;
+  }
+    
+    std::shared_ptr<TransactionDBMutex>
+TransactionDBMutexFactoryImpl::AllocateMutex() {
+  return std::shared_ptr<TransactionDBMutex>(new TransactionDBMutexImpl());
+}
+    
+    
+    {  return Merge(key_slice, value_slice);
+}
+    
+    // WriteController is controlling write stalls in our write code-path. Write
+// stalls happen when compaction can't keep up with write rate.
+// All of the methods here (including WriteControllerToken's destructors) need
+// to be called while holding DB mutex
+class WriteController {
+ public:
+  explicit WriteController(uint64_t _delayed_write_rate = 1024u * 1024u * 32u,
+                           int64_t low_pri_rate_bytes_per_sec = 1024 * 1024)
+      : total_stopped_(0),
+        total_delayed_(0),
+        total_compaction_pressure_(0),
+        bytes_left_(0),
+        last_refill_time_(0),
+        low_pri_rate_limiter_(
+            NewGenericRateLimiter(low_pri_rate_bytes_per_sec)) {
+    set_max_delayed_write_rate(_delayed_write_rate);
+  }
+  ~WriteController() = default;
+    }
+    
+      // verify the values are still there
+  std::string value;
+  for (int i = 1000; i < 99999; ++i) {
+    db->Get(ReadOptions(), std::to_string(i),
+                           &value);
+    assert(value == std::string(500, 'a' + (i % 26)));
+  }
+    
+      // Read a key OUTSIDE this transaction. Does not affect txn.
+  s = db->Get(read_options, 'abc', &value);
+    
+      // Do a write outside of the transaction to key 'y'
+  s = txn_db->Put(write_options, 'y', 'y');
+    
+     private:
+  void Init(
+      const std::string& lua_script,
+      const std::vector<std::shared_ptr<RocksLuaCustomLibrary>>& libraries) {
+    if (lua_state_) {
+      luaL_openlibs(lua_state_);
+      for (const auto& library : libraries) {
+        luaL_openlib(lua_state_, library->Name(), library->Lib(), 0);
+        library->CustomSetup(lua_state_);
+      }
+      luaL_dostring(lua_state_, lua_script.c_str());
+    }
+  }
+    
+    TEST(coroutine_gethostbyname, resolve_without_cache)
 {
-  public:
-    PopplerObjectCache (int cacheSizeA, XRef *xrefA);
-    ~PopplerObjectCache();
-    }
-    
-      //----- text drawing
-  virtual void beginStringOp(GfxState *state);
-  virtual void endStringOp(GfxState *state);
-  virtual GBool beginType3Char(GfxState *state, double x, double y,
-			       double dx, double dy,
-			       CharCode code, Unicode *u, int uLen);
-  virtual void endType3Char(GfxState *state);
-    
-    
-    {  void addElement (double elapsed);
-  int getCount () { return count; }
-  double getTotal () { return total; }
-  double getMin () { return max; }
-  double getMax () { return max; }
-private:
-  int count;			// size of <elems> array
-  double total;			// number of elements in array
-  double min;			// reference count
-  double max;			// reference count
-};
-    
-    MediaRendition::~MediaRendition() {
-  if (fileName)
-    delete fileName;
-  if (contentType)
-    delete contentType;
-    }
-    
-    
-    {  Object encryptDict;
-  XpdfSecurityHandler *xsh;
-  void *docData;
-  int permFlags;
-  Guchar fileKey[16];
-  int fileKeyLength;
-  int encVersion;
-  CryptAlgorithm encAlgorithm;
-  GBool ok;
-};
-#endif // ENABLE_PLUGINS
-    
-        auto queryObj = cmd.getQuery();
-    if (!queryObj.isEmpty()) {
-        BSONObjBuilder matchBuilder(pipelineBuilder.subobjStart());
-        matchBuilder.append('$match', queryObj);
-        matchBuilder.doneFast();
-    }
-    
-    void TemporaryKVRecordStore::deleteTemporaryTable(OperationContext* opCtx) {
-    // Need at least Global IS before calling into the storage engine, to protect against it being
-    // destructed while we're using it.
-    invariant(opCtx->lockState()->isReadLocked());
-    }
-    
-        enum class LockType {
-        ReadLocked,
-        WriteLocked,
-        NotLocked,
-    };
-    
-    namespace {
-    }
-    
-    /**
-  *  UText, replace entire contents of the destination UText with a substring of the source UText.
-  *
-  *     @param src    The source UText
-  *     @param dest   The destination UText. Must be writable.
-  *                   May be NULL, in which case a new UText will be allocated.
-  *     @param start  Start index of source substring.
-  *     @param limit  Limit index of source substring.
-  *     @param status An error code.
-  */
-static UText *utext_extract_replace(UText *src, UText *dest, int64_t start, int64_t limit, UErrorCode *status) {
-    if (U_FAILURE(*status)) {
-        return dest;
-    }
-    if (start == limit) {
-        if (dest) {
-            utext_replace(dest, 0, utext_nativeLength(dest), NULL, 0, status);
-            return dest;
-        } else {
-            return utext_openUChars(NULL, NULL, 0, status);
-        }
-    }
-    int32_t length = utext_extract(src, start, limit, NULL, 0, status);
-    if (*status != U_BUFFER_OVERFLOW_ERROR && U_FAILURE(*status)) {
-        return dest;
-    }
-    *status = U_ZERO_ERROR;
-    MaybeStackArray<UChar, 40> buffer;
-    if (length >= buffer.getCapacity()) {
-        UChar *newBuf = buffer.resize(length+1);   // Leave space for terminating Nul.
-        if (newBuf == NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
-        }
-    }
-    utext_extract(src, start, limit, buffer.getAlias(), length+1, status);
-    if (dest) {
-        utext_replace(dest, 0, utext_nativeLength(dest), buffer.getAlias(), length, status);
-        return dest;
+    coro_test([](void *arg)
+    {
+        System::set_dns_cache_capacity(0);
     }
     }
     
-    UBool ScriptSet::contains(const ScriptSet &other) const {
-    ScriptSet t(*this);
-    t.intersect(other);
-    return (t == other);
-}
-    
-    #define LOW_A             ((UChar)0x0061)
-#define LOW_B             ((UChar)0x0062)
-#define LOW_C             ((UChar)0x0063)
-#define LOW_D             ((UChar)0x0064)
-#define LOW_E             ((UChar)0x0065)
-#define LOW_F             ((UChar)0x0066)
-#define LOW_G             ((UChar)0x0067)
-#define LOW_H             ((UChar)0x0068)
-#define LOW_I             ((UChar)0x0069)
-#define LOW_J             ((UChar)0x006a)
-#define LOW_K             ((UChar)0x006B)
-#define LOW_L             ((UChar)0x006C)
-#define LOW_M             ((UChar)0x006D)
-#define LOW_N             ((UChar)0x006E)
-#define LOW_O             ((UChar)0x006F)
-#define LOW_P             ((UChar)0x0070)
-#define LOW_Q             ((UChar)0x0071)
-#define LOW_R             ((UChar)0x0072)
-#define LOW_S             ((UChar)0x0073)
-#define LOW_T             ((UChar)0x0074)
-#define LOW_U             ((UChar)0x0075)
-#define LOW_V             ((UChar)0x0076)
-#define LOW_W             ((UChar)0x0077)
-#define LOW_X             ((UChar)0x0078)
-#define LOW_Y             ((UChar)0x0079)
-#define LOW_Z             ((UChar)0x007A)
-    
-    SharedBreakIterator::SharedBreakIterator(
-        BreakIterator *biToAdopt) : ptr(biToAdopt) { }
-    
-    
-class U_I18N_API SharedDateFormatSymbols : public SharedObject {
+    class Exception
+{
 public:
-    SharedDateFormatSymbols(
-            const Locale &loc, const char *type, UErrorCode &status)
-            : dfs(loc, type, status) { }
-    virtual ~SharedDateFormatSymbols();
-    const DateFormatSymbols &get() const { return dfs; }
-private:
-    DateFormatSymbols dfs;
-    SharedDateFormatSymbols(const SharedDateFormatSymbols &);
-    SharedDateFormatSymbols &operator=(const SharedDateFormatSymbols &);
-};
+    int code;
+    const char *msg;
+    }
     
-    
-    {private:
-    MessageHandler_t cb_handler_;
-    T cb_func_;
-    Mutex mutex_;
-    bool valid_;
-};
-    
-    template<class F>
-MessagePost_t  AsyncInvokePeriod(int64_t _after, int64_t _period, const F& _func, const MessageTitle_t& _title, const MessageHandler_t& _handlerid = DefAsyncInvokeHandler(), const std::string& _msg_name = 'default_name') {
-    return PostMessage(_handlerid, Message(_title, _func, _msg_name), MessageTiming(kPeriod, _after, _period));
-}
-    //~title
-//---~with message name
-/*
-template<class F>
-MessagePost_t AsyncInvoke(const F& _func, const MessageHandler_t& _handlerid = DefAsyncInvokeHandler()) {
-    return PostMessage(_handlerid, Message(0, _func));
-}
-    
-    #endif /* SRC_SHORTLINK_INTERFACE_H_ */
-
-    
-    int ScopeJEnv::Status() {
-    return status_;
-}
-
-    
-        jobject ret_obj = JNU_CallStaticMethodByMethodInfo(env, KC2Java_getAccountInfo).l;
- 	if (NULL == ret_obj) {
- 		return std::string();
- 	}
-    
-        bool oldisactive = isactive_;
-    isactive_ = true;
-    isforeground_ = _isforeground;
-    lastforegroundchangetime_ = ::gettickcount();
-    alarm_.Cancel();
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    
-    {    return Select(_sec * 1000 + _usec / 1000);
-}
-    
-    //
-//  boost_exception.cpp
-//  comm
-//
-//  Created by yanguoyue on 16/5/20.
-//
+        for (i = 1; i < 1024; i++)
+    {
+        uint32_t key = (rand() % (20000 * 37));
+        if (key % 37 == 0)
+        {
+            continue;
+        }
+        int ret = (int) (long) swRbtree_find(tree, key);
+        ASSERT_EQ(ret, 0);
+    }
