@@ -1,110 +1,142 @@
 
         
-            BLACKJACK = 21
+        - We start with input sequences from a domain (e.g. English sentences)
+    and corresponding target sequences from another domain
+    (e.g. French sentences).
+- An encoder LSTM turns input sequences to 2 state vectors
+    (we keep the last LSTM state and discard the outputs).
+- A decoder LSTM is trained to turn the target sequences into
+    the same sequence but offset by one timestep in the future,
+    a training process called 'teacher forcing' in this context.
+    It uses as initial state the state vectors from the encoder.
+    Effectively, the decoder learns to generate `targets[t+1...]`
+    given `targets[...t]`, conditioned on the input sequence.
+- In inference mode, when we want to decode unknown input sequences, we:
+    - Encode the input sequence into state vectors
+    - Start with a target sequence of size 1
+        (just the start-of-sequence character)
+    - Feed the state vectors and 1-char target sequence
+        to the decoder to produce predictions for the next character
+    - Sample the next character using these predictions
+        (we simply use argmax).
+    - Append the sampled character to the target sequence
+    - Repeat until we generate the end-of-sequence character or we
+        hit the character limit.
     
-        def test_how_to_configure(self, shell):
-        assert shell.how_to_configure() is None
+        # Generate empty target sequence of length 1.
+    target_seq = np.zeros((1, 1, num_decoder_tokens))
+    # Populate the first character of target sequence with the start character.
+    target_seq[0, 0, target_token_index['\t']] = 1.
     
-    import pytest
-from thefuck.shells import Powershell
+    Run the script with:
+```python
+python deep_dream.py path_to_your_base_image.jpg prefix_for_results
+```
+e.g.:
+```python
+python deep_dream.py img/mypic.jpg results/dream
+```
+'''
+from __future__ import print_function
     
-        def test_info(self, shell, Popen):
-        Popen.return_value.stdout.read.side_effect = [
-            b'tcsh 6.20.00 (Astron) 2016-11-24 (unknown-unknown-bsd44) \n']
-        assert shell.info() == 'Tcsh 6.20.00'
-        assert Popen.call_args[0][0] == ['tcsh', '--version']
+    - RNNs are tricky. Choice of batch size is important,
+choice of loss and optimizer is critical, etc.
+Some configurations won't converge.
     
-        assert not match(Command(script, output))
+        # check that output changes after states are reset
+    # (even though the model itself didn't change)
+    layer.reset_states()
+    out3 = model.predict(np.ones_like(inputs))
+    assert(out2.max() != out3.max())
     
+        with pytest.raises(ValueError):
+        conv_utils.normalize_tuple(None, 2, 'kernel_size')
+    with pytest.raises(ValueError):
+        conv_utils.normalize_tuple([2, 3, 4], 2, 'kernel_size')
+    with pytest.raises(ValueError):
+        conv_utils.normalize_tuple(['str', 'impossible'], 2, 'kernel_size')
     
-@pytest.fixture(autouse=True)
-def Popen(mocker):
-    mock = mocker.patch('thefuck.rules.pyenv_no_such_command.Popen')
-    mock.return_value.stdout.readlines.return_value = (
-        b'--version\nactivate\ncommands\ncompletions\ndeactivate\nexec_\n'
-        b'global\nhelp\nhooks\ninit\ninstall\nlocal\nprefix_\n'
-        b'realpath.dylib\nrehash\nroot\nshell\nshims\nuninstall\nversion_\n'
-        b'version-file\nversion-file-read\nversion-file-write\nversion-name_\n'
-        b'version-origin\nversions\nvirtualenv\nvirtualenv-delete_\n'
-        b'virtualenv-init\nvirtualenv-prefix\nvirtualenvs_\n'
-        b'virtualenvwrapper\nvirtualenvwrapper_lazy\nwhence\nwhich_\n'
-    ).split()
-    return mock
-    
-    
-def _get_operations(app):
-    proc = subprocess.Popen([app, '--help'],
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE)
-    lines = proc.stdout.readlines()
-    
-            # Removing index on 'EventTag', fields ['group_id', 'key', 'value']
-        db.delete_index(u'tagstore_eventtag', ['group_id', 'key_id', 'value_id'])
-    
-            # Changing field 'GroupTagKey.group_id'
-        db.alter_column(u'tagstore_grouptagkey', 'group_id', self.gf(
-            'sentry.db.models.fields.bounded.BoundedBigIntegerField')())
-    
-        # list of integers
-    result = s.iloc[[0, 2, 3, 4, 5]]
-    expected = s.reindex(s.index[[0, 2, 3, 4, 5]])
-    assert_series_equal(result, expected)
-    
-    
-def rand_(left, right):
-    return operator.and_(right, left)
-    
-    
-    
-    
-def list_of_tuples(arr):
-    return [(i, -i) for i in arr]
-    
-        def test_unsubscribe_without_arn_should_error(self):
-        sns = sns_listener.ProxyListenerSNS()
-        error = sns.forward_request('POST', '/', 'Action=Unsubscribe', '')
-        self.assertTrue(error is not None)
-        self.assertEqual(error.status_code, 400)
-    
-            ddb_deserializer = TypeDeserializer()
-        if ddb.get('OldImage'):
-            result['old_image'] = ddb_deserializer.deserialize({'M': ddb.get('OldImage')})
-        if ddb.get('NewImage'):
-            result['new_image'] = ddb_deserializer.deserialize({'M': ddb.get('NewImage')})
-    
-        # get domain status
-    status = es_client.describe_elasticsearch_domain(DomainName=TEST_DOMAIN_NAME)
-    assert_equal(status['DomainStatus']['DomainName'], TEST_DOMAIN_NAME)
-    assert_true(status['DomainStatus']['Created'])
-    assert_false(status['DomainStatus']['Processing'])
-    assert_false(status['DomainStatus']['Deleted'])
-    assert_equal(status['DomainStatus']['Endpoint'], aws_stack.get_elasticsearch_endpoint())
-    assert_true(status['DomainStatus']['EBSOptions']['EBSEnabled'])
-    
-        def test_multiple_strong_etag_not_match(self):
-        computed_etag = ''xyzzy''
-        etags = ''xyzzy1', 'xyzzy2''
-        self.check_url(
-            '/cache/' + computed_etag, method='GET',
-            headers=[('If-None-Match', etags)],
-            expected_status=200)
+        def __iter__(self):
+        return iter(self.callbacks)
     
     
-@gen.coroutine
-def c1():
-    for i in range(10):
-        yield c2()
+class Sequential(Model):
+    '''Linear stack of layers.
     
-    # os.execv is broken on Windows and can't properly parse command line
-# arguments and executable name if they contain whitespaces. subprocess
-# fixes that behavior.
-_has_execv = sys.platform != 'win32'
+            params = self._canonical_to_params(
+            weights=[
+                self.kernel_r,
+                self.kernel_z,
+                self.kernel_h,
+                self.recurrent_kernel_r,
+                self.recurrent_kernel_z,
+                self.recurrent_kernel_h,
+            ],
+            biases=[
+                self.bias_r_i,
+                self.bias_z_i,
+                self.bias_h_i,
+                self.bias_r,
+                self.bias_z,
+                self.bias_h,
+            ],
+        )
+        outputs, h = self._cudnn_gru(
+            inputs,
+            input_h=input_h,
+            params=params,
+            is_training=True)
     
-        def make_current(self) -> None:
-        if not self.is_current:
-            try:
-                self.old_asyncio = asyncio.get_event_loop()
-            except (RuntimeError, AssertionError):
-                self.old_asyncio = None  # type: ignore
-            self.is_current = True
-        asyncio.set_event_loop(self.asyncio_loop)
+        long_description = README,
+    
+    def dailymotion_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    '''Downloads Dailymotion videos by URL.
+    '''
+    
+    __all__ = ['giphy_download']
+    
+        stream_types = [
+        {'id': 'original'},
+        {'id': 'thumbnail'},
+    ]
+    
+    from ycm.tests.test_utils import MockVimModule
+MockVimModule()
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+    from ycm.client.base_request import BaseRequest
+    
+      keywords = []
+  for word in words:
+    if nextgroup_at_start and word in SYNTAX_NEXTGROUP_ARGUMENTS:
+      continue
+    
+    
+def HandlePollResponse_NoMessages_test():
+  assert_that( _HandlePollResponse( True, None ), equal_to( True ) )
+    
+      # We don't want the requests to actually be sent to the server, just have it
+  # return success.
+  with patch( 'ycm.client.completer_available_request.'
+              'CompleterAvailableRequest.PostDataToHandler',
+              return_value = True ):
+    with patch( 'ycm.client.completion_request.CompletionRequest.'
+                'PostDataToHandlerAsync',
+                return_value = MagicMock( return_value=True ) ):
+    
+            Returns:
+            An iterator equivalent to: map(func, *iterables) but the calls may
+            be evaluated out-of-order.
