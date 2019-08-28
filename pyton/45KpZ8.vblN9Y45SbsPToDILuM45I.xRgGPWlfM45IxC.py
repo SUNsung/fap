@@ -1,215 +1,224 @@
 
         
-            def env(self):
-        '''
-        Return an environment.
+        def giphy_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html(url)
     
-            `stdout` is represented by the instance itself (print r)
-        `stderr`: text written to stderr
-        `exit_status`: the exit status
-        `json`: decoded JSON (if possible) or `None`
+        stream_id_pattern = r'id='html_stream' value='(\w+)''
+    stream_id = match1(html, stream_id_pattern)
     
+    def ifeng_download_by_id(id, title = None, output_dir = '.', merge = True, info_only = False):
+    assert r1(r'([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', id), id
+    url = 'http://vxml.ifengimg.com/video_info_new/%s/%s/%s.xml' % (id[-2], id[-2:], id)
+    xml = get_html(url, 'utf-8')
+    title = r1(r'Name='([^']+)'', xml)
+    title = unescape_html(title)
+    url = r1(r'VideoPlayUrl='([^']+)'', xml)
+    from random import randint
+    r = randint(10, 19)
+    url = url.replace('http://wideo.ifeng.com/', 'http://ips.ifeng.com/wideo.ifeng.com/')
+    type, ext, size = url_info(url)
     
-setup(
-    name='httpie',
-    version=httpie.__version__,
-    description=httpie.__doc__.strip(),
-    long_description=long_description(),
-    url='http://httpie.org/',
-    download_url='https://github.com/jakubroztocil/httpie',
-    author=httpie.__author__,
-    author_email='jakub@roztocil.co',
-    license=httpie.__licence__,
-    packages=find_packages(),
-    entry_points={
-        'console_scripts': [
-            'http = httpie.__main__:main',
-        ],
-    },
-    extras_require=extras_require,
-    install_requires=install_requires,
-    tests_require=tests_require,
-    cmdclass={'test': PyTest},
-    classifiers=[
-        'Development Status :: 5 - Production/Stable',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.1',
-        'Programming Language :: Python :: 3.2',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Environment :: Console',
-        'Intended Audience :: Developers',
-        'Intended Audience :: System Administrators',
-        'License :: OSI Approved :: BSD License',
-        'Topic :: Internet :: WWW/HTTP',
-        'Topic :: Software Development',
-        'Topic :: System :: Networking',
-        'Topic :: Terminals',
-        'Topic :: Text Processing',
-        'Topic :: Utilities'
-    ],
-)
-
+            else:
+            # gallery image
+            content = get_content(self.url)
+            image = json.loads(match1(content, r'image\s*:\s*({.*}),'))
+            ext = image['ext']
+            self.streams = {
+                'original': {
+                    'src': ['http://i.imgur.com/%s%s' % (image['hash'], ext)],
+                    'size': image['size'],
+                    'container': ext[1:]
+                },
+                'thumbnail': {
+                    'src': ['http://i.imgur.com/%ss%s' % (image['hash'], '.jpg')],
+                    'container': 'jpg'
+                }
+            }
+            self.title = image['title'] or image['hash']
     
-        def __init__(self, **kwargs):
-        '''
-        Use keyword arguments to overwrite
-        any of the class attributes for this instance.
+            # Adding model 'GroupTagKey'
+        db.create_table(u'tagstore_grouptagkey', (
+            ('id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(primary_key=True)),
+            ('project_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(db_index=True)),
+            ('group_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(db_index=True)),
+            ('_key', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                to=orm['tagstore.TagKey'], db_column='key_id')),
+            ('values_seen', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(default=0)),
+        ))
+        db.send_create_signal('tagstore', ['GroupTagKey'])
     
+            # Changing field 'GroupTagValue.group_id'
+        db.alter_column(u'tagstore_grouptagvalue', 'group_id', self.gf(
+            'sentry.db.models.fields.bounded.BoundedPositiveIntegerField')())
     
-class Conversion(object):
-    
-        # Set to `False` to make it possible to invoke this auth
-    # plugin without requiring the user to specify credentials
-    # through `--auth, -a`.
-    auth_require = True
-    
-    
-def humanize_bytes(n, precision=2):
-    # Author: Doug Latornell
-    # Licence: MIT
-    # URL: http://code.activestate.com/recipes/577081/
-    '''Return a humanized string representation of a number of bytes.
-    
-    
-class ContentDecodingError(RequestException, BaseHTTPError):
-    '''Failed to decode response content'''
-    
-        styles = {
-        # No corresponding class for the following:
-        #Text:                     '', # class:  ''
-        Whitespace:                'underline #f8f8f8',      # class: 'w'
-        Error:                     '#a40000 border:#ef2929', # class: 'err'
-        Other:                     '#000000',                # class 'x'
+        models = {
+        'tagstore.eventtag': {
+            'Meta': {'unique_together': '(('project_id', 'event_id', 'key', 'value'),)', 'object_name': 'EventTag', 'index_together': '(('project_id', 'key', 'value'), ('group_id', 'key', 'value'))'},
+            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'db_index': 'True'}),
+            'event_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {}),
+            'group_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {}),
+            'value': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagValue']', 'db_column': ''value_id''})
+        },
+        'tagstore.grouptagkey': {
+            'Meta': {'unique_together': '(('project_id', 'group_id', '_key'),)', 'object_name': 'GroupTagKey'},
+            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            'group_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
+            'values_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
+        },
+        'tagstore.grouptagvalue': {
+            'Meta': {'unique_together': '(('project_id', 'group_id', '_key', '_value'),)', 'object_name': 'GroupTagValue', 'index_together': '(('project_id', '_key', '_value', 'last_seen'),)'},
+            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            '_value': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagValue']', 'db_column': ''value_id''}),
+            'first_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'group_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'last_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
+            'times_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
+        },
+        'tagstore.tagkey': {
+            'Meta': {'unique_together': '(('project_id', 'environment_id', 'key'),)', 'object_name': 'TagKey'},
+            'environment_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'key': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
+            'status': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'}),
+            'values_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
+        },
+        'tagstore.tagvalue': {
+            'Meta': {'unique_together': '(('project_id', '_key', 'value'),)', 'object_name': 'TagValue', 'index_together': '(('project_id', '_key', 'last_seen'),)'},
+            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            'data': ('sentry.db.models.fields.gzippeddict.GzippedDictField', [], {'null': 'True', 'blank': 'True'}),
+            'first_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'last_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
+            'times_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'}),
+            'value': ('django.db.models.fields.CharField', [], {'max_length': '200'})
+        }
     }
     
-    
-def test_idna_without_version_attribute(mocker):
-    '''Older versions of IDNA don't provide a __version__ attribute, verify
-    that if we have such a package, we don't blow up.
-    '''
-    mocker.patch('requests.help.idna', new=None)
-    assert info()['idna'] == {'version': ''}
-    
-        def get(self, key, default=None):
-        return self.__dict__.get(key, default)
-
-    
-        def test_cookielib_cookiejar_on_redirect(self, httpbin):
-        '''Tests resolve_redirect doesn't fail when merging cookies
-        with non-RequestsCookieJar cookiejar.
-    
-    First, we fix a training set and increase the number of
-samples. Then we plot the computation time as function of
-the number of samples.
-    
-        An example with a long-untouched module that everyone has
-    >>> _linkcode_resolve('py', {'module': 'tty',
-    ...                          'fullname': 'setraw'},
-    ...                   package='tty',
-    ...                   url_fmt='http://hg.python.org/cpython/file/'
-    ...                           '{revision}/Lib/{package}/{path}#L{lineno}',
-    ...                   revision='xxxx')
-    'http://hg.python.org/cpython/file/xxxx/Lib/tty/tty.py#L18'
-    '''
-    
-    '''
-# Author: Olivier Grisel <olivier.grisel@ensta.org>
-# License: Simplified BSD
-    
-    The data is generated with the ``make_checkerboard`` function, then
-shuffled and passed to the Spectral Biclustering algorithm. The rows
-and columns of the shuffled matrix are rearranged to show the
-biclusters found by the algorithm.
-    
-    This example is commented in the
-:ref:`tutorial section of the user manual <introduction>`.
-    
-    import argparse
-import h5py
-import json
-import os
-import scipy.misc
-import sys
+            # Adding unique constraint on 'UserSocialAuth', fields ['provider', 'uid']
+        db.create_unique('social_auth_usersocialauth', ['provider', 'uid'])
     
     
-def evaluate_proposal_file(dataset, proposal_file, output_dir):
-    '''Evaluate box proposal average recall.'''
-    roidb = dataset.get_roidb(gt=True, proposal_file=proposal_file)
-    results = task_evaluation.evaluate_box_proposals(dataset, roidb)
-    task_evaluation.log_box_proposal_results(results)
-    recall_file = os.path.join(output_dir, 'rpn_proposal_recall.pkl')
-    save_object(results, recall_file)
-    return results
-
-    
-    
-def get_rpn_blob_names(is_training=True):
-    '''Blob names used by RPN.'''
-    # im_info: (height, width, image scale)
-    blob_names = ['im_info']
-    if is_training:
-        # gt boxes: (batch_idx, x1, y1, x2, y2, cls)
-        blob_names += ['roidb']
-        if cfg.FPN.FPN_ON and cfg.FPN.MULTILEVEL_RPN:
-            # Same format as RPN blobs, but one per FPN level
-            for lvl in range(cfg.FPN.RPN_MIN_LEVEL, cfg.FPN.RPN_MAX_LEVEL + 1):
-                blob_names += [
-                    'rpn_labels_int32_wide_fpn' + str(lvl),
-                    'rpn_bbox_targets_wide_fpn' + str(lvl),
-                    'rpn_bbox_inside_weights_wide_fpn' + str(lvl),
-                    'rpn_bbox_outside_weights_wide_fpn' + str(lvl)
-                ]
-        else:
-            # Single level RPN blobs
-            blob_names += [
-                'rpn_labels_int32_wide',
-                'rpn_bbox_targets_wide',
-                'rpn_bbox_inside_weights_wide',
-                'rpn_bbox_outside_weights_wide'
-            ]
-    return blob_names
-    
-        def enqueue_blobs(self, gpu_id, blob_names, blobs):
-        '''Put a mini-batch on a BlobsQueue.'''
-        assert len(blob_names) == len(blobs)
-        t = time.time()
-        dev = c2_utils.CudaDevice(gpu_id)
-        queue_name = 'gpu_{}/{}'.format(gpu_id, self._blobs_queue_name)
-        blob_names = ['gpu_{}/{}'.format(gpu_id, b) for b in blob_names]
-        for (blob_name, blob) in zip(blob_names, blobs):
-            workspace.FeedBlob(blob_name, blob, device_option=dev)
-        logger.debug(
-            'enqueue_blobs {}: workspace.FeedBlob: {}'.
-            format(gpu_id, time.time() - t)
-        )
-        t = time.time()
-        op = core.CreateOperator(
-            'SafeEnqueueBlobs', [queue_name] + blob_names,
-            blob_names + [queue_name + '_enqueue_status'],
-            device_option=dev
-        )
-        workspace.RunOperatorOnce(op)
-        logger.debug(
-            'enqueue_blobs {}: workspace.RunOperatorOnce: {}'.
-            format(gpu_id, time.time() - t)
-        )
-    
-        # Override config with the one saved in the detections file
-    if args.cfg_file is not None:
-        core_config.merge_cfg_from_cfg(core_config.load_cfg(dets['cfg']))
+cdef const char** CBeginPtr(vector[const char*]& vec):
+    if (vec.size() != 0):
+        return &vec[0]
     else:
-        core_config._merge_a_into_b(core_config.load_cfg(dets['cfg']), cfg)
-    results = task_evaluation.evaluate_all(
-        dataset,
-        dets['all_boxes'],
-        dets['all_segms'],
-        dets['all_keyps'],
-        output_dir,
-        use_matlab=args.matlab_eval
-    )
-    task_evaluation.log_copy_paste_friendly_results(results)
+        return NULL
+    
+    
+def test_incomplete_infer_convolution():
+    a = mx.sym.Variable('a', shape=(0, 10, 0, 0))
+    b = mx.sym.Convolution(data=a, num_filter=21, kernel=(3, 3), dilate=(1, 1), pad=(1, 1))
+    c = mx.sym.Variable('c', shape=(5, 21, 32, 32))
+    d = b + c
+    arg_shapes, _, _ = d.infer_shape()
+    arg_names = d.list_arguments()
+    arg_shapes = {k: v for k, v in zip(arg_names, arg_shapes)}
+    assert arg_shapes['a'] == (5, 10, 32, 32)
+    
+            str_list = []
+        for index in range(self.num_images):
+            progress_bar(index, self.num_images)
+            label = self.label_from_index(index)
+            if label.size < 1:
+                continue
+            path = self.image_path_from_index(index)
+            if root:
+                path = osp.relpath(path, root)
+            str_list.append('\t'.join([str(index), str(2), str(label.shape[1])] \
+              + ['{0:.4f}'.format(x) for x in label.ravel()] + [path,]) + '\n')
+        if str_list:
+            if shuffle:
+                import random
+                random.shuffle(str_list)
+            if not fname:
+                fname = self.name + '.lst'
+            with open(fname, 'w') as f:
+                for line in str_list:
+                    f.write(line)
+        else:
+            raise RuntimeError('No image in imdb')
+    
+    def parse_frame_resize(x):
+    if not x:
+        return x
+    x = list(map(float, x.strip().split(',')))
+    assert len(x) >= 1 and len(x) <= 2, 'frame_resize should be a float scaling factor or a tuple of w,h pixels'
+    if len(x) == 1:
+        x = x[0]
+    return x
+    
+        from caffe.proto import caffe_pb2
+    from google.protobuf import text_format
+    from collections import OrderedDict
+    
+    
+def main():
+    parser = argparse.ArgumentParser(description='Caffe prototxt to mxnet model parameter converter.\
+                    Note that only basic functions are implemented. You are welcomed to contribute to this file.')
+    parser.add_argument('mean_image_proto', help='The protobuf file in Caffe format')
+    parser.add_argument('save_name', help='The name of the output file prefix')
+    args = parser.parse_args()
+    nd = protoBlobFileToND(args.mean_image_proto)
+    mx.nd.save(args.save_name + '.nd', {'mean_image': nd})
+    
+        Returns:
+    ----------
+    Imdb
+    '''
+    image_set = [y.strip() for y in image_set.split(',')]
+    assert image_set, 'No image_set specified'
+    year = [y.strip() for y in year.split(',')]
+    assert year, 'No year specified'
+    
+        def put_point(self, col, row, char=None, color=None, background=None):
+        '''
+        Puts character with color and background color on the field.
+        Char can be a Point or a character.
+        '''
+    
+    def _sanitize_dirnames(filename, restore=False):
+    '''
+    Remove (or add) leading _ in the directories names in `filename`
+    The `restore` param means that the path name should be restored from the queryname,
+    i.e. conversion should be done in the opposite direction
+    '''
+    parts = filename.split('/')
+    newparts = []
+    for part in parts[:-1]:
+        if restore:
+            newparts.append('_'+part)
+            continue
+        if part.startswith('_'):
+            newparts.append(part[1:])
+        else:
+            newparts.append(part)
+    newparts.append(parts[-1])
+    
+        path.internal.bin.upstream
+'''
+    
+            # this part should be generalized
+        # currently we just remove the name of the adapter from the path
+        if topic == self.__section_name:
+            return self._starting_page(topic)
+    
+        answers = [
+        postprocessing.postprocess(
+            answer, keyword, search_options, request_options=request_options)
+        for answer in answers
+    ]
+    
+            if len(answers_found) > CONFIG['search.limit']:
+            answers_found.append(
+                _limited_entry()
+            )
+            break
