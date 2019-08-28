@@ -1,219 +1,174 @@
 
         
-        # Let's roll!
-SUITE.each do |key, text|
-  Benchmark.ips do |x|
-    x.report('always thru liquid - #{key}') { always_liquid(text) }
-    x.report('conditional liquid - #{key}') { conditional_liquid(text) }
-    x.compare!
+        class BugTest < Minitest::Test
+  def test_stuff
+    assert 'zomg'.present?
+    refute ''.present?
   end
 end
 
     
-      Jekyll::External.require_if_present(Jekyll::External.blessed_gems) do |g, ver_constraint|
-    cmd = g.split('-').last
-    p.command(cmd.to_sym) do |c|
-      c.syntax cmd
-      c.action do
-        Jekyll.logger.abort_with 'You must install the '#{g}' gem' \
-          ' version #{ver_constraint} to use the 'jekyll #{cmd}' command.'
-      end
-    end
-  end
+      # Eager load code on boot. This eager loads most of Rails and
+  # your application in memory, allowing both threaded web servers
+  # and those relying on copy on write to perform better.
+  # Rake tasks automatically ignore this option for performance.
+  config.eager_load = true
     
-            def start(opts)
-          @thread = Thread.new do
-            # Use epoll if the kernel supports it
-            EM.epoll
-            EM.run do
-              EM.error_handler { |e| log_error(e) }
-    
-          [
-        FastlaneCore::ConfigItem.new(key: :username,
-                                     short_option: '-u',
-                                     env_name: 'DELIVER_USERNAME',
-                                     description: 'Your Apple ID Username',
-                                     default_value: user,
-                                     default_value_dynamic: true),
-        FastlaneCore::ConfigItem.new(key: :app_identifier,
-                                     short_option: '-a',
-                                     env_name: 'DELIVER_APP_IDENTIFIER',
-                                     description: 'The bundle identifier of your app',
-                                     optional: true,
-                                     code_gen_sensitive: true,
-                                     default_value: CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier),
-                                     default_value_dynamic: true),
-        # version
-        FastlaneCore::ConfigItem.new(key: :app_version,
-                                     short_option: '-z',
-                                     description: 'The version that should be edited or created',
-                                     optional: true),
-    
-        describe 'Screenshots' do
-      it 'properly parses all the screenshots' do
-        v = app.live_version
-    
-            # Check each device to see if it is an iOS device
-        all_ios = devices.map do |device|
-          device = device.downcase
-          device.include?('iphone') || device.include?('ipad')
+          private
+        def run_rake_routes
+          Dir.chdir(app_path) { `bin/rake routes` }
         end
-        # Return true if all devices are iOS devices
-        return true unless all_ios.include?(false)
-    
-          def_node_matcher :find_output_method, <<-PATTERN
-        (defs (self) :output ...)
-      PATTERN
-    
-                @data_by_language[language] ||= {}
-            @data_by_language[language][output_name] ||= []
-    
-      def create_desktopini
-    ini=''
-    ini << '[.ShellClassInfo]\n'
-    ini << 'IconFile=\\\\#{datastore['LHOST']}\\icon.ico\n'
-    ini << 'IconIndex=1337'
-    
-    start = -1
-min = -1
-max = 0
-for segment in macho.segments
-  next if segment.segname == MachO::LoadCommands::SEGMENT_NAMES[:SEG_PAGEZERO]
-  puts 'segment: #{segment.segname} #{segment.vmaddr.to_s(16)}'
-  if min == -1 or min > segment.vmaddr
-    min = segment.vmaddr
-  end
-  if max < segment.vmaddr + segment.vmsize
-    max = segment.vmaddr + segment.vmsize
-  end
-end
-    
-          result = client.kiwi.password_change(opts)
-    
-        register_advanced_options(
-      [
-        OptString.new('LnkComment', [true, 'The comment to use in the generated LNK file', 'Manage Flash Player Settings']),
-        OptString.new('LnkDisplayName', [true, 'The display name to use in the generated LNK file', 'Flash Player'])
-      ]
-    )
-  end
-    
-        print_status('Complete')
+    end
   end
 end
 
     
-        print_good 'Finished!'
-  end
-end
-
+          delegate_to Type
     
-          res
+        it 'returns a hash with the flare tag's bg_color_hex' do
+      expect(described_class.new(valid_article).tag_hash.value?('#f3f3f3')).to be true
     end
     
-      def test_file_exists(path)
-    exists?('f', path)
-  end
+        context 'when organization is present' do
+      let(:organization) { create(:organization) }
     
-    %i(git_strategy hg_strategy svn_strategy).each do |strategy|
-  validate(strategy) do |key, _value|
-    warn(
-      '[Deprecation Warning] #{key} is deprecated and will be removed in '\
-      'Capistrano 3.7.0.\n'\
-      'https://github.com/capistrano/capistrano/blob/master/UPGRADING-3.7.md'
-    )
-  end
-end
-    
-          context 'with no interpolation' do
-        let(:src) { URI::DEFAULT_PARSER.make_regexp.inspect }
-    
-      describe '#body' do
-    context 'with a single expression body' do
-      let(:source) do
-        'class << self; bar; end'
+          def is_create_page
+        true
       end
     
-            it_behaves_like 'multiple capture'
-      end
-    
-    
-    {      # Checks whether the `hash` literal is delimited by curly braces.
+          # Finds header node inside Nokogiri::HTML document.
       #
-      # @return [Boolean] whether the `hash` literal is enclosed in braces
-      def braces?
-        loc.end&.is?('}')
-      end
-    end
-  end
-end
-
-    
-          def next_link
-        label = 'Next &raquo;'
-        if @versions.size == Gollum::Page.per_page
-          link = '/history/#{@page.name}?page=#{@page_num+1}'
-          %(<a href='#{link}' hotkey='l'>#{label}</a>)
-        else
-          %(<span class='disabled'>#{label}</span>)
+      def find_header_node(doc)
+        case @page.format
+          when :asciidoc
+            doc.css('div#gollum-root > h1:first-child')
+          when :org
+            doc.css('div#gollum-root > p.title:first-child')
+          when :pod
+            doc.css('div#gollum-root > a.dummyTopAnchor:first-child + h1')
+          when :rest
+            doc.css('div#gollum-root > div > div > h1:first-child')
+          else
+            doc.css('div#gollum-root > h1:first-child')
         end
       end
-    end
-  end
-end
-
     
-          def allow_editing
-        @allow_editing
+        @wiki.write_page(page, :markdown, text,
+                     { :name => 'user1', :email => 'user1' });
+    
+    context 'Precious::Helpers' do
+  include Precious::Helpers
+    
+          page_dir = settings.wiki_options[:page_file_dir].to_s
+      unless page_dir.empty?
+        # --page-file-dir docs
+        # /docs/Home should be created in /Home
+        # not /docs/Home because write_page will append /docs
+        @path = @path.sub(page_dir, '/') if @path.start_with? page_dir
+      end
+      @path = clean_path(@path)
+    
+        # returns the formatted price for the specified variant as a difference from product price
+    def variant_price_diff(variant)
+      variant_amount = variant.amount_in(current_currency)
+      product_amount = variant.product.amount_in(current_currency)
+      return if variant_amount == product_amount || product_amount.nil?
+    
+          I18N_PLURAL_MANY_COUNT = 2.1
+      def plural_resource_name(resource_class)
+        resource_class.model_name.human(count: I18N_PLURAL_MANY_COUNT)
       end
     
-        assert_match /Edit Page/,             last_response.body, ''Edit Page' link is blocked in compare template'
-    assert_match /Revert Changes/,        last_response.body, ''Revert Changes' link is blocked in compare template'
+          def void_transaction!
+        return true if void?
+    
+              if completed_at = params.delete(:completed_at)
+            order.completed_at = completed_at
+            order.state = 'complete'
+          end
+    
+            def new; end
+    
+            def new; end
+    
+            def index
+          @product_properties = @product.product_properties.accessible_by(current_ability).
+                                ransack(params[:q]).result.
+                                page(params[:page]).per(params[:per_page])
+          respond_with(@product_properties)
+        end
+    
+    def blog_url(user, project, source_dir)
+  cname = '#{source_dir}/CNAME'
+  url = if File.exists?(cname)
+    'http://#{IO.read(cname).strip}'
+  else
+    'http://#{user.downcase}.github.io'
   end
+  url += '/#{project}' unless project == ''
+  url
+end
     
-      test 'create sets the correct path for a relative path subdirectory with the page file directory set' do
-    Precious::App.set(:wiki_options, { :page_file_dir => 'foo' })
-    dir  = 'bardir'
-    name = '#{dir}/baz'
-    get '/create/foo/#{name}'
-    assert_match(/\/#{dir}/, last_response.body)
-    assert_no_match(/[^\/]#{dir}/, last_response.body)
-    # reset page_file_dir
-    Precious::App.set(:wiki_options, { :page_file_dir => nil })
-  end
-    
-      test 'h1 title can be disabled' do
-    title = 'H1'
-    @wiki.write_page(title, :markdown, '# 1 & 2 <script>alert('js')</script>' + '\n # 3', commit_details)
-    page = @wiki.page(title)
-    
-        # Remove all slashes from the start of string.
-    # Remove all double slashes
-    def clean_url url
-      return url if url.nil?
-      url.gsub('%2F', '/').gsub(/^\/+/, '').gsub('//', '/')
+        def render(context)
+      quote = paragraphize(super)
+      author = '<strong>#{@by.strip}</strong>' if @by
+      if @source
+        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
+        parts = []
+        url.each do |part|
+          if (parts + [part]).join('/').length < 32
+            parts << part
+          end
+        end
+        source = parts.join('/')
+        source << '/&hellip;' unless source == @source
+      end
+      if !@source.nil?
+        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
+      elsif !@title.nil?
+        cite = ' <cite>#{@title}</cite>'
+      end
+      blockquote = if @by.nil?
+        quote
+      elsif cite
+        '#{quote}<footer>#{author + cite}</footer>'
+      else
+        '#{quote}<footer>#{author}</footer>'
+      end
+      '<blockquote>#{blockquote}</blockquote>'
     end
     
-    # external
-require 'github/markup'
-require 'sanitize'
-    
-      end
-end
-
-    
-      before_action :login_required
-  before_action :verified_email_required
-  before_action :set_timezone
-    
-      def destroy
-    @domain.destroy
-    redirect_to_with_json [organization, @server, :domains]
+      def set_checkbox(value) # rubocop:disable Naming/AccessorMethodName
+    if value && !native['checked']
+      native['checked'] = 'checked'
+    elsif !value && native['checked']
+      native.remove_attribute('checked')
+    end
   end
     
-      def destroy
-    @ip_pool.destroy
-    redirect_to_with_json :ip_pools, :notice => 'IP pool has been removed successfully.'
-  rescue ActiveRecord::DeleteRestrictionError => e
-    redirect_to_with_json [:edit, @ip_pool], :alert => 'IP pool cannot be removed because it is still assigned to servers/rules.'
+    Capybara.register_driver :selenium_safari_not_clear_storage do |app|
+  safari_options = {
+    browser: :safari,
+    options: browser_options
+  }
+  Capybara::Selenium::Driver.new(app, safari_options.merge(clear_local_storage: false, clear_session_storage: false))
+end
+    
+          def negative_failure_message
+        failure_message_helper(' not')
+      end
+    
+          def included(base)
+        warn 'including Capybara::DSL in the global scope is not recommended!' if base == Object
+        if defined?(::RSpec::Matchers) && base.include?(::RSpec::Matchers)
+          base.send(:include, ::Capybara::RSpecMatcherProxies)
+        end
+        super
+      end
+    end
+  end
+    
+      it 'should check query options' do
+    @session.visit('/with_js?test=test')
+    expect(@session).to have_current_path('/with_js?test=test')
   end
