@@ -1,121 +1,131 @@
 
         
-            @pytest.fixture(autouse=True)
-    def history(self, mocker):
-        return mocker.patch('thefuck.shells.shell.get_history',
-                            return_value=['le cat', 'fuck', 'ls cat',
-                                          'diff x', 'nocommand x', u'café ô'])
+            return wrapper
     
-        @pytest.mark.parametrize('side_effect, expected_version, call_args', [
-        ([b'''Major  Minor  Build  Revision
------  -----  -----  --------
-5      1      17763  316     \n'''], 'PowerShell 5.1.17763.316', ['powershell.exe']),
-        ([IOError, b'PowerShell 6.1.2\n'], 'PowerShell 6.1.2', ['powershell.exe', 'pwsh'])])
-    def test_info(self, side_effect, expected_version, call_args, shell, Popen):
-        Popen.return_value.stdout.read.side_effect = side_effect
-        assert shell.info() == expected_version
-        assert Popen.call_count == len(call_args)
-        assert all([Popen.call_args_list[i][0][0][0] == call_arg for i, call_arg in enumerate(call_args)])
+        def test_app_alias(self, shell):
+        assert 'function fuck' in shell.app_alias('fuck')
+        assert 'function FUCK' in shell.app_alias('FUCK')
+        assert 'thefuck' in shell.app_alias('fuck')
+        assert 'TF_SHELL=fish' in shell.app_alias('fuck')
+        assert 'TF_ALIAS=fuck PYTHONIOENCODING' in shell.app_alias('fuck')
+        assert 'PYTHONIOENCODING=utf-8 thefuck' in shell.app_alias('fuck')
+        assert ARGUMENT_PLACEHOLDER in shell.app_alias('fuck')
     
-        @pytest.fixture(autouse=True)
-    def Popen(self, mocker):
-        mock = mocker.patch('thefuck.shells.tcsh.Popen')
-        mock.return_value.stdout.read.return_value = (
-            b'fuck\teval $(thefuck $(fc -ln -1))\n'
-            b'l\tls -CF\n'
-            b'la\tls -A\n'
-            b'll\tls -alF')
-        return mock
+        def _get_overridden_aliases(self):
+        overridden = os.environ.get('THEFUCK_OVERRIDDEN_ALIASES',
+                                    os.environ.get('TF_OVERRIDDEN_ALIASES', ''))
+        default = {'cd', 'grep', 'ls', 'man', 'open'}
+        for alias in overridden.split(','):
+            default.add(alias.strip())
+        return sorted(default)
     
+        def get_aliases(self):
+        return {}
     
-class Fish(Generic):
-    friendly_name = 'Fish Shell'
+        iterkeys = lambda d: iter(d.keys())
+    itervalues = lambda d: iter(d.values())
+    iteritems = lambda d: iter(d.items())
     
-        import sys
-    from mymodule import entry_function
-    sys.exit(entry_function())
+        def set_stop_words(self, stop_words_path):
+        abs_path = _get_abs_path(stop_words_path)
+        if not os.path.isfile(abs_path):
+            raise Exception('jieba: file does not exist: ' + abs_path)
+        content = open(abs_path, 'rb').read().decode('utf-8')
+        for line in content.splitlines():
+            self.stop_words.add(line)
     
+    Force_Split_Words = set([])
+def load_model():
+    start_p = pickle.load(get_module_res('finalseg', PROB_START_P))
+    trans_p = pickle.load(get_module_res('finalseg', PROB_TRANS_P))
+    emit_p = pickle.load(get_module_res('finalseg', PROB_EMIT_P))
+    return start_p, trans_p, emit_p
     
-no_suggestions = '''\
-az provider: error: the following arguments are required: _subcommand
-usage: az provider [-h] {list,show,register,unregister,operation} ...
-'''
+    import jieba
+import jieba.posseg
+import jieba.analyse
     
+    file_name = args[0]
     
-def rev_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
-    ref = 'http://hg.scrapy.org/scrapy/changeset/' + text
-    set_classes(options)
-    node = nodes.reference(rawtext, 'r' + text, refuri=ref, **options)
-    return [node], []
-
+        In this implementation, we default to the paper settings of $25, 60% odds, wealth cap
+    of $250, and 300 rounds. To specify the action space in advance, we multiply the
+    wealth cap (in dollars) by 100 (to allow for all penny bets); should one attempt to
+    bet more money than one has, it is rounded down to one's net worth. (Alternately, a
+    mistaken bet could end the episode immediately; it's not clear to me which version
+    would be better.) For a harder version which randomizes the 3 key parameters, see the
+    Generalized Kelly coinflip game.'''
+    metadata = {'render.modes': ['human']}
     
-    # Read lines from the linkcheck output file
-try:
-    with open('build/linkcheck/output.txt') as out:
-        output_lines = out.readlines()
-except IOError:
-    print('linkcheck output not found; please run linkcheck first.')
-    exit(1)
-    
-    from scrapy.spiders import Spider
-from scrapy.http import Request
-    
-        def run(self, args, opts):
-        if len(args) != 1 or not is_url(args[0]):
-            raise UsageError()
-        cb = lambda x: self._print_response(x, opts)
-        request = Request(args[0], callback=cb, dont_filter=True)
-        # by default, let the framework handle redirects,
-        # i.e. command handles all codes expect 3xx
-        if not opts.no_redirect:
-            request.meta['handle_httpstatus_list'] = SequenceExclude(range(300, 400))
+            ctrlrange = self.sim.model.actuator_ctrlrange
+        actuation_range = (ctrlrange[:, 1] - ctrlrange[:, 0]) / 2.
+        if self.relative_control:
+            actuation_center = np.zeros_like(action)
+            for i in range(self.sim.data.ctrl.shape[0]):
+                actuation_center[i] = self.sim.data.get_joint_qpos(
+                    self.sim.model.actuator_names[i].replace(':A_', ':'))
+            for joint_name in ['FF', 'MF', 'RF', 'LF']:
+                act_idx = self.sim.model.actuator_name2id(
+                    'robot0:A_{}J1'.format(joint_name))
+                actuation_center[act_idx] += self.sim.data.get_joint_qpos(
+                    'robot0:{}J0'.format(joint_name))
         else:
-            request.meta['handle_httpstatus_all'] = True
+            actuation_center = (ctrlrange[:, 1] + ctrlrange[:, 0]) / 2.
+        self.sim.data.ctrl[:] = actuation_center + action * actuation_range
+        self.sim.data.ctrl[:] = np.clip(self.sim.data.ctrl, ctrlrange[:, 0], ctrlrange[:, 1])
+    
+        def step(self, action):
+        #self.hull.ApplyForceToCenter((0, 20), True) -- Uncomment this to receive a bit of stability help
+        control_speed = False  # Should be easier as well
+        if control_speed:
+            self.joints[0].motorSpeed = float(SPEED_HIP  * np.clip(action[0], -1, 1))
+            self.joints[1].motorSpeed = float(SPEED_KNEE * np.clip(action[1], -1, 1))
+            self.joints[2].motorSpeed = float(SPEED_HIP  * np.clip(action[2], -1, 1))
+            self.joints[3].motorSpeed = float(SPEED_KNEE * np.clip(action[3], -1, 1))
+        else:
+            self.joints[0].motorSpeed     = float(SPEED_HIP     * np.sign(action[0]))
+            self.joints[0].maxMotorTorque = float(MOTORS_TORQUE * np.clip(np.abs(action[0]), 0, 1))
+            self.joints[1].motorSpeed     = float(SPEED_KNEE    * np.sign(action[1]))
+            self.joints[1].maxMotorTorque = float(MOTORS_TORQUE * np.clip(np.abs(action[1]), 0, 1))
+            self.joints[2].motorSpeed     = float(SPEED_HIP     * np.sign(action[2]))
+            self.joints[2].maxMotorTorque = float(MOTORS_TORQUE * np.clip(np.abs(action[2]), 0, 1))
+            self.joints[3].motorSpeed     = float(SPEED_KNEE    * np.sign(action[3]))
+            self.joints[3].maxMotorTorque = float(MOTORS_TORQUE * np.clip(np.abs(action[3]), 0, 1))
     
     
-def _import_file(filepath):
-    abspath = os.path.abspath(filepath)
-    dirname, file = os.path.split(abspath)
-    fname, fext = os.path.splitext(file)
-    if fext != '.py':
-        raise ValueError('Not a Python source file: %s' % abspath)
-    if dirname:
-        sys.path = [dirname] + sys.path
-    try:
-        module = import_module(fname)
-    finally:
-        if dirname:
-            sys.path.pop(0)
-    return module
-    
-        default_settings = {'LOG_ENABLED': False,
-                        'SPIDER_LOADER_WARN_ONLY': True}
-    
-            cookiejarkey = request.meta.get('cookiejar')
-        jar = self.jars[cookiejarkey]
-        cookies = self._get_request_cookies(jar, request)
-        for cookie in cookies:
-            jar.set_cookie_if_ok(cookie, request)
-    
-            for fmt, func in six.iteritems(self._formats):
-            new_response = func(response)
-            if new_response:
-                logger.debug('Decompressed response with format: %(responsefmt)s',
-                             {'responsefmt': fmt}, extra={'spider': spider})
-                return new_response
-        return response
-
-    
-    See documentation in docs/topics/downloader-middleware.rst
-'''
-    
-        def process_request(self, request, spider):
-        auth = getattr(self, 'auth', None)
-        if auth and b'Authorization' not in request.headers:
-            request.headers[b'Authorization'] = auth
-
-    
-        DOWNLOAD_EXCEPTIONS = (defer.TimeoutError, TimeoutError, DNSLookupError,
-                           ConnectionRefusedError, ConnectionDone, ConnectError,
-                           ConnectionLost, TCPTimedOutError, ResponseFailed,
-                           IOError)
+def rk4(derivs, y0, t, *args, **kwargs):
+    '''
+    Integrate 1D or ND system of ODEs using 4-th order Runge-Kutta.
+    This is a toy implementation which may be useful if you find
+    yourself stranded on a system w/o scipy.  Otherwise use
+    :func:`scipy.integrate`.
+    *y0*
+        initial state vector
+    *t*
+        sample times
+    *derivs*
+        returns the derivative of the system and has the
+        signature ``dy = derivs(yi, ti)``
+    *args*
+        additional arguments passed to the derivative function
+    *kwargs*
+        additional keyword arguments passed to the derivative function
+    Example 1 ::
+        ## 2D system
+        def derivs6(x,t):
+            d1 =  x[0] + 2*x[1]
+            d2 =  -3*x[0] + 4*x[1]
+            return (d1, d2)
+        dt = 0.0005
+        t = arange(0.0, 2.0, dt)
+        y0 = (1,2)
+        yout = rk4(derivs6, y0, t)
+    Example 2::
+        ## 1D system
+        alpha = 2
+        def derivs(x,t):
+            return -alpha*x + exp(-t)
+        y0 = 1
+        yout = rk4(derivs, y0, t)
+    If you have access to scipy, you should probably be using the
+    scipy.integrate tools rather than this function.
+    '''
