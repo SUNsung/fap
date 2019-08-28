@@ -1,505 +1,412 @@
 
         
-        CholeskyThunk::CholeskyThunk(const CholeskyOptions& options,
-                             BufferAllocation::Slice a_buffer,
-                             BufferAllocation::Slice workspace_buffer,
-                             BufferAllocation::Slice info_buffer,
-                             PrimitiveType type, int64 batch_size, int64 n,
-                             const HloInstruction* hlo)
-    : Thunk(Kind::kCholesky, hlo),
-      uplo_(options.lower() ? se::blas::UpperLower::kLower
-                            : se::blas::UpperLower::kUpper),
-      a_buffer_(a_buffer),
-      workspace_buffer_(workspace_buffer),
-      info_buffer_(info_buffer),
-      type_(type),
-      batch_size_(batch_size),
-      a_batch_stride_(n * n *
-                      ShapeUtil::ByteSizeOfPrimitiveType(
-                          hlo->operand(0)->shape().element_type())),
-      n_(n) {}
-    
-    #include 'tensorflow/compiler/xla/service/gpu/copy_thunk.h'
-    
-      {
-    // The infeed buffer has an extra outer tuple with a token. Adjust the index
-    // accordingly.
-    ShapeIndex index = {0};
-    std::function<void(std::vector<void*>*)> copy_tuple_contents =
-        [&](std::vector<void*>* tuple_element_addresses) {
-          const Shape& shape = ShapeUtil::GetSubshape(infeed_buffers.shape(),
-                                                      ShapeIndexView(index, 1));
-          // For the leaf buffers of the tuple copy the elements directly.
-          if (shape.IsArray()) {
-            const BufferAllocation::Slice& tuple_element_buffer =
-                infeed_slices_.element(index);
-            se::DeviceMemoryBase tuple_element_address =
-                buffer_allocations.GetDeviceAddress(tuple_element_buffer);
-    }
-    }
+        class App {
+ public:
+  static void Call(const std::string& method,
+                   const base::ListValue& arguments);
     }
     
-    #include <string>
+      bool delay_destruction() { return delay_destruction_; }
+  void set_delay_destruction(bool val) { delay_destruction_ = val; }
+  bool pending_destruction() { return pending_destruction_; }
+  void set_pending_destruction (bool val) { pending_destruction_ = val; }
+ protected:
+  int id_;
+  bool delay_destruction_;
+  bool pending_destruction_;
+  base::WeakPtr<ObjectManager> object_manager_;
     
-      Status ExecuteOnStream(const ExecuteParams& params) override;
-    
-      /// Get the function name mangled for use with PGO.
-  StringRef getPGOFuncName() const { return PGOFuncName; }
-    
-    
-    {
-    {
-    {
-    {          // Get the file-name to group map if parsing correctly.
-          pMap = Parser.getParsedMap();
-        }
-      }
-      if (!pMap)
-        return NullGroupName;
-      StringRef FileName = llvm::sys::path::filename(FullPath);
-      auto Found = pMap->find(FileName);
-      if (Found == pMap->end()) {
-        Ctx.Diags.diagnose(SourceLoc(), diag::error_no_group_info, FileName);
-        return NullGroupName;
-      }
-      return Found->second;
-    }
-  };
-    
-    static _Unwind_Reason_Code SwiftUnwindFrame(struct _Unwind_Context *context, void *arg) {
-  struct UnwindState *state = static_cast<struct UnwindState *>(arg);
-  if (state->current == state->end) {
-    return _URC_END_OF_STACK;
-  }
-    }
-    
-    #if defined(_WIN32)
-#define WIN32_LEAN_AND_MEAN
-// Avoid defining macro max(), min() which conflict with std::max(), std::min()
-#define NOMINMAX
-#include <windows.h>
-#else
-#if !defined(__HAIKU__)
-#include <sys/errno.h>
-#else
-#include <errno.h>
-#endif
-#include <sys/resource.h>
-#include <unistd.h>
-#endif
-#include <climits>
-#include <clocale>
-#include <cstdarg>
-#include <cstdint>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#if defined(__CYGWIN__) || defined(_WIN32) || defined(__HAIKU__)
-#include <sstream>
-#include <cmath>
-#elif defined(__ANDROID__)
-#include <locale.h>
-    
-    /// A value for `SymbolNamespace` which indicates that this type came
-/// from a C `typedef` that was imported as a distinct type instead
-/// of a `typealias`.  This can happen for reasons like:
-///
-/// - the `typedef` was declared with the `swift_wrapper` attribute
-/// - the `typedef` is a CF type
-constexpr static const char CTypedef[] = 't';
-    
-    	HKEY command;
-	FAIL_ON_ERROR(RegCreateKeyEx(cmderKey, L'command', 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &command, NULL));
-    
-    
-    {
-    {void SparsePageWriter::Alloc(std::shared_ptr<SparsePage>* out_page) {
-  CHECK(*out_page == nullptr);
-  if (num_free_buffer_ != 0) {
-    out_page->reset(new SparsePage());
-    --num_free_buffer_;
-  } else {
-    CHECK(qrecycle_.Pop(out_page));
-  }
+    Menu::Menu(int id,
+           const base::WeakPtr<ObjectManager>& object_manager,
+           const base::DictionaryValue& option,
+           const std::string& extension_id)
+  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
+  Create(option);
 }
-}  // namespace data
-}  // namespace xgboost
-    
-      GpuIdType const n_devices_visible = AllVisible().Size();
-  CHECK_LE(n_gpus, n_devices_visible);
-  if (n_devices_visible == 0 || n_gpus == 0 || n_rows == 0) {
-    LOG(DEBUG) << 'Runing on CPU.';
-    return Empty();
-  }
     
     
-/*!
- * \brief Callback to set the data to handle,
- * \param handle The handle to the callback.
- * \param batch The data content to be set.
- */
-XGB_EXTERN_C typedef int XGBCallbackSetData(  // NOLINT(*)
-    DataHolderHandle handle, XGBoostBatchCSR batch);
+    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return false;
+  return item->is_modified_;
+}
     
-    struct SquaredLogError {
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
-  XGBOOST_DEVICE static bool CheckLabel(bst_float label) {
-    return label > -1;
+      for(auto* item: menu_items_) {
+    item->RemoveKeys();
   }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    predt = fmaxf(predt, -1 + 1e-6);  // ensure correct value for log1p
-    return (std::log1p(predt) - std::log1p(label)) / (predt + 1);
-  }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    predt = fmaxf(predt, -1 + 1e-6);
-    float res = (-std::log1p(predt) + std::log1p(label) + 1) /
-                std::pow(predt + 1, 2);
-    res = fmaxf(res, 1e-6f);
-    return res;
-  }
-  static bst_float ProbToMargin(bst_float base_score) { return base_score; }
-  static const char* LabelErrorMsg() {
-    return 'label must be greater than -1 for rmsle so that log(label + 1) can be valid.';
-  }
-  static const char* DefaultEvalMetric() { return 'rmsle'; }
+    
+    ExtensionFunction::ResponseAction
+NwAppCloseAllWindowsFunction::Run() {
+  AppWindowRegistry* registry = AppWindowRegistry::Get(browser_context());
+  if (!registry)
+    return RespondNow(Error(''));
+  base::MessageLoopCurrent::Get()->task_runner()->PostTask(
+        FROM_HERE,
+        base::Bind(&NwAppCloseAllWindowsFunction::DoJob, registry, extension()->id()));
+    }
+    
+    
+    {  return true;
+}
+    
+    
+    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.clearSync', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwClipboardClearSyncFunction);
 };
     
-    /*!
- * \brief define regression tree to be the most common tree model.
- *  This is the data structure used in xgboost's major tree models.
- */
-class RegTree {
+    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
  public:
-  /*! \brief auxiliary statistics of node to help tree building */
-  using SplitCondT = bst_float;
-  /*! \brief tree node */
-  class Node {
-   public:
-    Node()  {
-      // assert compact alignment
-      static_assert(sizeof(Node) == 4 * sizeof(int) + sizeof(Info),
-                    'Node: 64 bit align');
-    }
-    /*! \brief index of left child */
-    XGBOOST_DEVICE int LeftChild() const {
-      return this->cleft_;
-    }
-    /*! \brief index of right child */
-    XGBOOST_DEVICE int RightChild() const {
-      return this->cright_;
-    }
-    /*! \brief index of default child when feature is missing */
-    XGBOOST_DEVICE int DefaultChild() const {
-      return this->DefaultLeft() ? this->LeftChild() : this->RightChild();
-    }
-    /*! \brief feature index of split condition */
-    XGBOOST_DEVICE unsigned SplitIndex() const {
-      return sindex_ & ((1U << 31) - 1U);
-    }
-    /*! \brief when feature is unknown, whether goes to left child */
-    XGBOOST_DEVICE bool DefaultLeft() const {
-      return (sindex_ >> 31) != 0;
-    }
-    /*! \brief whether current node is leaf node */
-    XGBOOST_DEVICE bool IsLeaf() const {
-      return cleft_ == -1;
-    }
-    /*! \return get leaf value of leaf node */
-    XGBOOST_DEVICE bst_float LeafValue() const {
-      return (this->info_).leaf_value;
-    }
-    /*! \return get split condition of the node */
-    XGBOOST_DEVICE SplitCondT SplitCond() const {
-      return (this->info_).split_cond;
-    }
-    /*! \brief get parent of the node */
-    XGBOOST_DEVICE int Parent() const {
-      return parent_ & ((1U << 31) - 1);
-    }
-    /*! \brief whether current node is left child */
-    XGBOOST_DEVICE bool IsLeftChild() const {
-      return (parent_ & (1U << 31)) != 0;
-    }
-    /*! \brief whether this node is deleted */
-    XGBOOST_DEVICE bool IsDeleted() const {
-      return sindex_ == std::numeric_limits<unsigned>::max();
-    }
-    /*! \brief whether current node is root */
-    XGBOOST_DEVICE bool IsRoot() const { return parent_ == -1; }
-    /*!
-     * \brief set the left child
-     * \param nid node id to right child
-     */
-    XGBOOST_DEVICE void SetLeftChild(int nid) {
-      this->cleft_ = nid;
-    }
-    /*!
-     * \brief set the right child
-     * \param nid node id to right child
-     */
-    XGBOOST_DEVICE void SetRightChild(int nid) {
-      this->cright_ = nid;
-    }
-    /*!
-     * \brief set split condition of current node
-     * \param split_index feature index to split
-     * \param split_cond  split condition
-     * \param default_left the default direction when feature is unknown
-     */
-    XGBOOST_DEVICE void SetSplit(unsigned split_index, SplitCondT split_cond,
-                          bool default_left = false) {
-      if (default_left) split_index |= (1U << 31);
-      this->sindex_ = split_index;
-      (this->info_).split_cond = split_cond;
-    }
-    /*!
-     * \brief set the leaf value of the node
-     * \param value leaf value
-     * \param right right index, could be used to store
-     *        additional information
-     */
-    XGBOOST_DEVICE void SetLeaf(bst_float value, int right = -1) {
-      (this->info_).leaf_value = value;
-      this->cleft_ = -1;
-      this->cright_ = right;
-    }
-    /*! \brief mark that this node is deleted */
-    XGBOOST_DEVICE void MarkDelete() {
-      this->sindex_ = std::numeric_limits<unsigned>::max();
-    }
-    /*! \brief Reuse this deleted node. */
-    XGBOOST_DEVICE void Reuse() {
-      this->sindex_ = 0;
-    }
-    // set parent
-    XGBOOST_DEVICE void SetParent(int pidx, bool is_left_child = true) {
-      if (is_left_child) pidx |= (1U << 31);
-      this->parent_ = pidx;
-    }
-    bool operator==(const Node& b) const {
-      return parent_ == b.parent_ && cleft_ == b.cleft_ &&
-             cright_ == b.cright_ && sindex_ == b.sindex_ &&
-             info_.leaf_value == b.info_.leaf_value;
-    }
-    }
+  NwMenuGetNSStringFWithFixupFunction() {}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    
+ protected:
+  ~NwMenuGetNSStringFWithFixupFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
+};
+    
+    ExtensionFunction::ResponseAction
+NwObjCallObjectMethodAsyncFunction::Run() {
+  EXTENSION_FUNCTION_VALIDATE(args_);
+  base::ListValue* arguments = nullptr;
+  int id = 0;
+  std::string type, method;
+  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(2, &method));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetList(3, &arguments));
     }
     
     
-    {    return retval;
-}
-#endif
+    {} // extensions
+
     
-    bool Context::swap_out()
-{
-    return 0 == swapcontext(&ctx_, &swap_ctx_);
-}
+      protected:
+    ~NwScreenStartMonitorFunction() override {}
+    DECLARE_EXTENSION_FUNCTION('nw.Screen.startMonitor', UNKNOWN)
     
-        ret = p.write(&p, (void*) SW_STRS('hello world1'));
-    ASSERT_GT(ret, 0);
-    ret = p.write(&p, (void*) SW_STRS('hello world2'));
-    ASSERT_GT(ret, 0);
-    ret = p.write(&p, (void*) SW_STRS('hello world3'));
-    ASSERT_GT(ret, 0);
+    class CPUParticles2DEditorPlugin : public EditorPlugin {
+    }
+    
+    class CPUParticlesEditorPlugin : public EditorPlugin {
+    }
     
     
-    {    coro_test_wait(&complete_num, args.size());
-}
+    {		Map<int, NodeInfo> nodes;
+	};
     
-        DataBuffer(const char *str)
+    
+    {	PluginConfigDialog();
+	~PluginConfigDialog();
+};
+    
+    #include 'core/io/resource_loader.h'
+#include 'core/math/delaunay.h'
+#include 'core/os/input.h'
+#include 'core/os/keyboard.h'
+#include 'core/project_settings.h'
+#include 'scene/animation/animation_blend_tree.h'
+#include 'scene/animation/animation_player.h'
+#include 'scene/gui/menu_button.h'
+#include 'scene/gui/panel.h'
+#include 'scene/main/viewport.h'
+    
+    
     {
-        copy((void *) str, strlen(str));
+    {    if (feature_set_level_.count(depth) == 0) {
+      // Level sampling, level does not yet exist so generate it
+      feature_set_level_[depth] = ColSample(feature_set_tree_, colsample_bylevel_);
+    }
+    if (colsample_bynode_ == 1.0f) {
+      // Level sampling
+      return feature_set_level_[depth];
+    }
+    // Need to sample for the node individually
+    return ColSample(feature_set_level_[depth], colsample_bynode_);
+  }
+};
+    
+    namespace xgboost {
+namespace metric {
+    }
     }
     
-        fd1 = socket(AF_UNIX,SOCK_DGRAM,0);
-    strncpy(un1.sun_path, sock1_path, sizeof(un1.sun_path) - 1); 
-    bind(fd1,(struct sockaddr *)&un1,sizeof(un1));
+        // Implementation of Blockwise Model Update and Filtering (BMUF, a.k.a. block momentum) 
+    // For detail, see the following paper
+    // Kai Chen and Qiang Huo, 'Scalable training of deep learning machines by incremental block training 
+    // with intra-block parallel optimization and blockwise model-update filtering', 
+    // in International Conference on Acoustics, Speech and Signal Processing , March 2016, Shanghai, China. 
     
-        sigemptyset(&curset);
-    sigprocmask(SIG_BLOCK, NULL, &curset);
-    ret = sigismember(&curset,SIGUSR1);
-    ASSERT_EQ(ret, 1);
+            nodeParamCount = 1;
+        nodeParamStart = 2;
     
-    const char* swoole_strerror(int code)
-{
-    if (code < SW_ERROR_START)
+        // construct NDLScript from a ConfigValue, propogate the config Name
+    // configValue - the body of the macro
+    // oneLineDefinition - this macro definition is all on one line, names optional
+    // macroName - if the macro has a name, the name - this is used to get parameter info
+    NDLScript(const ConfigValue& configValue, std::string macroName, bool oneLineDefinition)
+        : ConfigParser(';', configValue.Name())
     {
-        return strerror(code);
+        m_noDefinitions = oneLineDefinition;
+        m_definingMacro = true;
+        m_macroNode = NULL;
+        m_scriptString = configValue;
+        NDLNode<ElemType>* ndlNode = s_global.CheckName(macroName, true);
+        if (ndlNode == NULL)
+            RuntimeError('Invalid macro definition, %s not found', macroName.c_str());
     }
-    /* swstrerror {{{*/
-    switch(code)
-    {
-    case SW_ERROR_MALLOC_FAIL:
-        return 'Malloc fail';
-    case SW_ERROR_SYSTEM_CALL_FAIL:
-        return 'System call fail';
-    case SW_ERROR_PHP_FATAL_ERROR:
-        return 'PHP fatal error';
-    case SW_ERROR_NAME_TOO_LONG:
-        return 'Name too long';
-    case SW_ERROR_INVALID_PARAMS:
-        return 'Invalid params';
-    case SW_ERROR_QUEUE_FULL:
-        return 'Queue full';
-    case SW_ERROR_OPERATION_NOT_SUPPORT:
-        return 'Operation not support';
-    case SW_ERROR_FILE_NOT_EXIST:
-        return 'File not exist';
-    case SW_ERROR_FILE_TOO_LARGE:
-        return 'File too large';
-    case SW_ERROR_FILE_EMPTY:
-        return 'File empty';
-    case SW_ERROR_DNSLOOKUP_DUPLICATE_REQUEST:
-        return 'DNS Lookup duplicate request';
-    case SW_ERROR_DNSLOOKUP_RESOLVE_FAILED:
-        return 'DNS Lookup resolve failed';
-    case SW_ERROR_DNSLOOKUP_RESOLVE_TIMEOUT:
-        return 'DNS Lookup resolve timeout';
-    case SW_ERROR_BAD_IPV6_ADDRESS:
-        return 'Bad ipv6 address';
-    case SW_ERROR_UNREGISTERED_SIGNAL:
-        return 'Unregistered signal';
-    case SW_ERROR_SESSION_CLOSED_BY_SERVER:
-        return 'Session closed by server';
-    case SW_ERROR_SESSION_CLOSED_BY_CLIENT:
-        return 'Session closed by client';
-    case SW_ERROR_SESSION_CLOSING:
-        return 'Session closing';
-    case SW_ERROR_SESSION_CLOSED:
-        return 'Session closed';
-    case SW_ERROR_SESSION_NOT_EXIST:
-        return 'Session not exist';
-    case SW_ERROR_SESSION_INVALID_ID:
-        return 'Session invalid id';
-    case SW_ERROR_SESSION_DISCARD_TIMEOUT_DATA:
-        return 'Session discard timeout data';
-    case SW_ERROR_OUTPUT_BUFFER_OVERFLOW:
-        return 'Output buffer overflow';
-    case SW_ERROR_SSL_NOT_READY:
-        return 'SSL not ready';
-    case SW_ERROR_SSL_CANNOT_USE_SENFILE:
-        return 'SSL cannot use senfile';
-    case SW_ERROR_SSL_EMPTY_PEER_CERTIFICATE:
-        return 'SSL empty peer certificate';
-    case SW_ERROR_SSL_VEFIRY_FAILED:
-        return 'SSL vefiry failed';
-    case SW_ERROR_SSL_BAD_CLIENT:
-        return 'SSL bad client';
-    case SW_ERROR_SSL_BAD_PROTOCOL:
-        return 'SSL bad protocol';
-    case SW_ERROR_PACKAGE_LENGTH_TOO_LARGE:
-        return 'Package length too large';
-    case SW_ERROR_DATA_LENGTH_TOO_LARGE:
-        return 'Data length too large';
-    case SW_ERROR_TASK_PACKAGE_TOO_BIG:
-        return 'Task package too big';
-    case SW_ERROR_TASK_DISPATCH_FAIL:
-        return 'Task dispatch fail';
-    case SW_ERROR_HTTP2_STREAM_ID_TOO_BIG:
-        return 'Http2 stream id too big';
-    case SW_ERROR_HTTP2_STREAM_NO_HEADER:
-        return 'Http2 stream no header';
-    case SW_ERROR_HTTP2_STREAM_NOT_FOUND:
-        return 'Http2 stream not found';
-    case SW_ERROR_AIO_BAD_REQUEST:
-        return 'Aio bad request';
-    case SW_ERROR_AIO_CANCELED:
-        return 'Aio canceled';
-    case SW_ERROR_CLIENT_NO_CONNECTION:
-        return 'Client no connection';
-    case SW_ERROR_SOCKET_CLOSED:
-        return 'Socket closed';
-    case SW_ERROR_SOCKS5_UNSUPPORT_VERSION:
-        return 'Socks5 unsupport version';
-    case SW_ERROR_SOCKS5_UNSUPPORT_METHOD:
-        return 'Socks5 unsupport method';
-    case SW_ERROR_SOCKS5_AUTH_FAILED:
-        return 'Socks5 auth failed';
-    case SW_ERROR_SOCKS5_SERVER_ERROR:
-        return 'Socks5 server error';
-    case SW_ERROR_HTTP_PROXY_HANDSHAKE_ERROR:
-        return 'Http proxy handshake error';
-    case SW_ERROR_HTTP_INVALID_PROTOCOL:
-        return 'Http invalid protocol';
-    case SW_ERROR_WEBSOCKET_BAD_CLIENT:
-        return 'Websocket bad client';
-    case SW_ERROR_WEBSOCKET_BAD_OPCODE:
-        return 'Websocket bad opcode';
-    case SW_ERROR_WEBSOCKET_UNCONNECTED:
-        return 'Websocket unconnected';
-    case SW_ERROR_WEBSOCKET_HANDSHAKE_FAILED:
-        return 'Websocket handshake failed';
-    case SW_ERROR_SERVER_MUST_CREATED_BEFORE_CLIENT:
-        return 'Server must created before client';
-    case SW_ERROR_SERVER_TOO_MANY_SOCKET:
-        return 'Server too many socket';
-    case SW_ERROR_SERVER_WORKER_TERMINATED:
-        return 'Server worker terminated';
-    case SW_ERROR_SERVER_INVALID_LISTEN_PORT:
-        return 'Server invalid listen port';
-    case SW_ERROR_SERVER_TOO_MANY_LISTEN_PORT:
-        return 'Server too many listen port';
-    case SW_ERROR_SERVER_PIPE_BUFFER_FULL:
-        return 'Server pipe buffer full';
-    case SW_ERROR_SERVER_NO_IDLE_WORKER:
-        return 'Server no idle worker';
-    case SW_ERROR_SERVER_ONLY_START_ONE:
-        return 'Server only start one';
-    case SW_ERROR_SERVER_SEND_IN_MASTER:
-        return 'Server send in master';
-    case SW_ERROR_SERVER_INVALID_REQUEST:
-        return 'Server invalid request';
-    case SW_ERROR_SERVER_CONNECT_FAIL:
-        return 'Server connect fail';
-    case SW_ERROR_SERVER_WORKER_EXIT_TIMEOUT:
-        return 'Server worker exit timeout';
-    case SW_ERROR_CO_OUT_OF_COROUTINE:
-        return 'Coroutine out of coroutine';
-    case SW_ERROR_CO_HAS_BEEN_BOUND:
-        return 'Coroutine has been bound';
-    case SW_ERROR_CO_MUTEX_DOUBLE_UNLOCK:
-        return 'Coroutine mutex double unlock';
-    case SW_ERROR_CO_BLOCK_OBJECT_LOCKED:
-        return 'Coroutine block object locked';
-    case SW_ERROR_CO_BLOCK_OBJECT_WAITING:
-        return 'Coroutine block object waiting';
-    case SW_ERROR_CO_YIELD_FAILED:
-        return 'Coroutine yield failed';
-    case SW_ERROR_CO_GETCONTEXT_FAILED:
-        return 'Coroutine getcontext failed';
-    case SW_ERROR_CO_SWAPCONTEXT_FAILED:
-        return 'Coroutine swapcontext failed';
-    case SW_ERROR_CO_MAKECONTEXT_FAILED:
-        return 'Coroutine makecontext failed';
-    case SW_ERROR_CO_IOCPINIT_FAILED:
-        return 'Coroutine iocpinit failed';
-    case SW_ERROR_CO_PROTECT_STACK_FAILED:
-        return 'Coroutine protect stack failed';
-    case SW_ERROR_CO_STD_THREAD_LINK_ERROR:
-        return 'Coroutine std thread link error';
-    case SW_ERROR_CO_DISABLED_MULTI_THREAD:
-        return 'Coroutine disabled multi thread';
-    default:
-        static char buffer[32];
-#ifndef __MACH__
-        snprintf(buffer, sizeof(buffer), 'Unknown error %d', code);
-#else
-        snprintf(buffer, sizeof(buffer), 'Unknown error: %d', code);
-#endif
-        return buffer;
-    }
-/*}}}*/
-}
     
-            ~RedisQtAdapter() {
-            if (m_ctx != 0) {
-                m_ctx->ev.data = NULL;
-            }
+            for (size_t i = offset; i < m_layerSizes.size(); i++)
+        {
+            // add direct connect from each layers' output to the layer before the output layer
+            output = BuildDirectConnect(randomSeed, i, (i > 1) ? m_layerSizes[i] : ((offset == 0) ? m_layerSizes[i] : m_layerSizes[i] * m_lookupTableOrder), m_layerSizes[numHiddenLayers], outputFromEachLayer[i], input);
+            if (output != nullptr)
+                input = output;
         }
     
-    void ExampleQt::run() {
+    
+    {        // this section is for back compat only, skip over
+        if (fstream.TryGetMarker(FileMarker::fileMarkerBeginSection, L'BPairNodes'))
+        {
+            fstream >> num;
+            if (num > 0)
+                RuntimeError('Read: PairNodes are no longer supported');
+            fstream.GetMarker(FileMarker::fileMarkerEndSection, L'EPairNodes');
+        }
+    }
+    fstream.GetMarker(FileMarker::fileMarkerEndSection, L'ERootNodes');
+    
+    protected:                // TODO: should be fully encapsulated here
+    bool m_needsGradient; // true if this node or any children need a gradient to be computed (for own consumption or propagation to somewhere in the child tree)
+    bool m_needsDynamicValidation;
+    
+                    Timer threadTimer;
+                threadTimer.Restart();
+                for (int widx = 0; widx < m_tableCount; widx++)
+                {
+                    ElemType * px = m_deltaArray + m_tableOffsets[widx];
+                    // GPU buffer -> CPU buffer
+                    CUDA_CALL(cudaMemcpyAsync(px,
+                        m_gpuAsyncBuffer[m_bufferIndexInUse][widx].Data(),
+                        m_gpuAsyncBuffer[m_bufferIndexInUse][widx].GetNumElements() * sizeof(ElemType),
+                        cudaMemcpyDeviceToHost,
+                        _commStream));
+                }
+                // waiting copy from GPU to CPU has finished
+                CUDA_CALL(cudaStreamSynchronize(_commStream));
+                threadTimer.Stop();
+    
+        public:
+        MASGDPerfStats(size_t myRank, size_t numWorkers):
+            m_numWorkers(numWorkers), m_myRank(myRank), m_numSyncPerformedInCurrentEpoch(0), m_reportFrequency(1), 
+            m_totalSamplesProcessedSinceLastReport(0), m_localSamplesProcessedSinceLastReport(0)
+        {
+            m_Timer.Start();
+        }
+    
+    protected:
+    template<class ElemType2 = ElemType>
+    void ClipGradient(Matrix<ElemType2>& gradient, const size_t actualMBSize) const;
+    
+            // Make sure there is no pending async aggregation
+        if (m_pendingAsyncAggregation.valid())
+            LogicError('Unexpected pending async gradient aggregation found when resetting aggregator state!');
+    
+    #pragma warning(push)
+#pragma warning(disable : 4996) // Due to multiple unsafe functions in fileutil.h
+#include 'ComputationNetwork.h'
+#include 'Criterion.h'
+#include 'DistGradHeader.h'
+#include 'LinearAlgebraNodes.h'
+#include 'MPIWrapper.h'
+#include 'Matrix.h'
+#include 'SimpleDistGradAggregator.h'
+#include 'V2SimpleDistGradAggregator.h'
+#include 'SimpleDistGradAggregatorHelper.h'
+    
+      _OutputStream &operator<< (const _ISerializable<Type> &v) {
+    v.serialize(*this);
+    return *this;
+  }
+    
+          tmp = get_node(fault->children, 'faultactor');
+      if (tmp != nullptr && tmp->children != nullptr) {
+        Variant zv =
+          master_to_zval(get_conversion(dataTypeToSoap(KindOfString)), tmp);
+        faultactor = zv.toString();
+      }
+    
+    #include 'hphp/util/assertions.h'
+#include <atomic>
+#include <folly/portability/SysMman.h>
+    
+    void HostHealthMonitor::notifyObservers(HealthLevel newStatus) {
+  if (newStatus != m_status) {
+    Logger::Warning('Health level (lower is better) changes from %d to %d.',
+                    static_cast<int>(m_status), static_cast<int>(newStatus));
+    }
     }
     
-        private:
-        const char * m_value;
-        redisAsyncContext * m_ctx;
-        RedisQtAdapter m_adapter;
+      void wait();
+  bool wait(long seconds); // false if timed out
+  bool wait(long seconds, long long nanosecs); // false if timed out
+  void notify();
+  void notifyAll();
+    
+      if (m_sendStarted) {
+    Logger::Error('trying to add header '%s: %s' after 1st chunk',
+                  name, value);
+    return;
+  }
+    
+    ArrayData* ArrayCommon::ToKeyset(ArrayData* a, bool) {
+  auto const size = a->size();
+  if (!size) return staticEmptyKeysetArray();
+  KeysetInit init{size};
+  IterateVNoInc(
+    a,
+    [&](TypedValue v) {
+      if (UNLIKELY(isRefType(v.m_type))) {
+        if (v.m_data.pref->isReferenced()) {
+          throwRefInvalidArrayValueException(init.toArray());
+        }
+        v = *v.m_data.pref->cell();
+        assertx(!isRefType(v.m_type));
+      }
+    }
+    }
+    
+    //////////////////////////////////////////////////////////////////////
+    
+          for (auto param_offset : recurse_template_params) {
+        FTRACE(9, 'linkage: {} depends on template param {}\n',
+               offset, param_offset);
+        env.linkage_dependents[param_offset].template_uses.emplace(offset);
+      }
+      if (parent_offset) {
+        FTRACE(9, 'linkage: {} depends on child {}\n',
+               *parent_offset, offset);
+        env.linkage_dependents[*parent_offset].children.emplace(offset);
+      }
+      break;
+    }
+    case DW_TAG_namespace: {
+      // Record the namespace in the scope and recurse. If this is an unnamed
+      // namespace, that means any type found in child DIEs will have internal
+      // linkage.
+      auto name = dwarf.getDIEName(die);
+      name.empty() ?
+        scope.pushUnnamedNamespace() :
+        scope.pushNamespace(std::move(name));
+      SCOPE_EXIT { scope.pop(); };
+      recurse();
+      break;
+    }
+    case DW_TAG_variable: {
+      // Normally we don't care about variables since we're only looking for
+      // types. However, certain aspects of object types can't be completely
+      // inferred at the declaration site (mainly static variable linkage
+      // related things like linkage name and address). We need a definition for
+      // that, so record all the variable definitions along with their
+      // specification, which we can consult later.
+    
+    /*
+ * This routine attempts to find the Func* that will be statically called for
+ * a given target Class and function name, when called from ctxFunc.
+ *
+ * If exactClass is true, the class we are targeting is assumed to be
+ * exactly `cls', and the returned Func* is definitely the one called.
+ *
+ * If exactClass is false, the class we are targeting may be a subclass of
+ * `cls`, and the returned Func* may be overridden in a subclass.
+ *
+ * The returned Func* may be used in a request-insensitive way, i.e. it is
+ * suitable for burning into the TC as a pointer.
+ *
+ * It's the caller's responsibility to ensure that the Class* is usable -
+ * is AttrUnique, an instance of the ctx or guarded in some way.
+ *
+ * Returns nullptr if we can't determine the Func*.
+ */
+const Func* lookupImmutableClsMethod(const Class* cls, const StringData* name,
+                                     const Func* ctxFunc, bool exactClass);
+    
+    
+static void check_and_die(int interval, int grace) noexcept {
+  assert(interval > 0);
+  assert(grace > 0);
+  for (;;) {
+    // when we get reparented
+    // exit immediately
+    if (getppid() == 1) {
+      sleep(static_cast<unsigned>(grace));
+      exit(20);
+    }
+    sleep(static_cast<unsigned>(interval));
+  }
+}
+    
+    
+    {  inited.store(true, std::memory_order_release);
+}
+    
+    /*
+ * Unique identifier for this hhvm binary, determined at build-time. Unlike
+ * compilerId(), this is computed based on the contents of the executable and
+ * thus varies depending on the type of build. It cannot be overridden and
+ * serves as an id for anything relying on an exact binary.
+ */
+folly::StringPiece buildId();
+    
+    bool DEBUG_ONLY checkParams(const php::Func& f) {
+  assert(f.params.size() <= f.locals.size());
+  for (uint32_t i = 0; i < f.locals.size(); ++i) {
+    assert(f.locals[i].id == i);
+  }
+    }
+    
+     protected:
+  /**
+   * @brief Call the genConfig method of the config retriever plugin.
+   *
+   * This may perform a resource load such as TCP request or filesystem read.
+   * If a non-zero value is passed to --config_refresh, this starts a thread
+   * that periodically calls genConfig to reload config state
+   */
+  Status refresh();
+    
+      // For the remaining tests, we exercise all of the valid platform values.
+  fpack.platform_ = 'darwin';
+  if (isPlatform(PlatformType::TYPE_OSX)) {
+    EXPECT_TRUE(fpack.checkPlatform());
+  } else {
+    EXPECT_FALSE(fpack.checkPlatform());
+  }
+    
+    #include <rocksdb/db.h>
+    
+      /** @brief Virtual method which should implement custom logging.
+   *
+   *  LoggerPlugin::logString should be implemented by a subclass of
+   *  LoggerPlugin which needs to log a string in a custom way.
+   *
+   *  @return an instance of osquery::Status which indicates the success or
+   *  failure of the operation.
+   */
+  virtual Status logString(const std::string& s) = 0;
+    
+      /// The plugin may publish route info (other than registry type and name).
+  virtual PluginResponse routeInfo() const {
+    return PluginResponse();
+  }
+    
+    TEST_F(RocksdbDatabaseTest, test_open) {
+  auto path = randomDBPath();
+  auto db = std::make_unique<RocksdbDatabase>('test', path_);
+  auto result = db->open();
+  EXPECT_TRUE(result);
+  db->close();
+}
