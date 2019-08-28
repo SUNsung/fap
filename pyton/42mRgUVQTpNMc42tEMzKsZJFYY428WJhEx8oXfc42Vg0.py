@@ -1,91 +1,107 @@
 
         
-          Args:
-    logits: A tensor containing the predicted logits for each user. The shape
-      of logits is (num_users_per_batch * (1 + NUM_EVAL_NEGATIVES),) Logits
-      for a user are grouped, and the last element of the group is the true
-      element.
+            def prepare_value(self, value):
+        if isinstance(value, datetime.datetime):
+            value = to_current_timezone(value)
+        return value
     
-      Returns:
-    float tensor of shape [1, 1, length, length]
-  '''
-  neg_inf = _NEG_INF_FP16 if dtype == tf.float16 else _NEG_INF_FP32
-  with tf.name_scope('decoder_self_attention_bias'):
-    valid_locs = tf.linalg.band_part(tf.ones([length, length], dtype=dtype),
-                                     -1, 0)
-    valid_locs = tf.reshape(valid_locs, [1, 1, length, length])
-    decoder_bias = neg_inf * (1.0 - valid_locs)
-  return decoder_bias
+        def as_oracle(self, compiler, connection, **extra_context):
+        if self.output_field.get_internal_type() == 'DurationField':
+            expression = self.get_source_expressions()[0]
+            options = self._get_repr_options()
+            from django.db.backends.oracle.functions import IntervalToSeconds, SecondsToInterval
+            return compiler.compile(
+                SecondsToInterval(self.__class__(IntervalToSeconds(expression), **options))
+            )
+        return super().as_sql(compiler, connection, **extra_context)
     
-        Args:
-      bleu_min: minimum expected uncased bleu. default is SOTA.
-      bleu_max: max expected uncased bleu. default is a high number.
+        def test_filtered_aggregate_ref_subquery_annotation(self):
+        aggs = Author.objects.annotate(
+            earliest_book_year=Subquery(
+                Book.objects.filter(
+                    contact__pk=OuterRef('pk'),
+                ).order_by('pubdate').values('pubdate__year')[:1]
+            ),
+        ).aggregate(
+            cnt=Count('pk', filter=Q(earliest_book_year=2008)),
+        )
+        self.assertEqual(aggs['cnt'], 2)
+
+    
+        def test_get_version(self):
+        expect = '1.0.0'
+        ops = FakePostGISOperations(expect)
+        actual = ops.postgis_lib_version()
+        self.assertEqual(expect, actual)
+    
+        def test_no_location_enabled(self):
+        '''Behavior is correct if --no-location switch is specified. See #16903.'''
+        management.call_command('makemessages', locale=[LOCALE], verbosity=0, no_location=True)
+        self.assertTrue(os.path.exists(self.PO_FILE))
+        self.assertLocationCommentNotPresent(self.PO_FILE, None, 'test.html')
+    
+        @classmethod
+    def ensure_registered(cls):
+        '''
+        Attempt to register all the data source drivers.
+        '''
+        # Only register all if the driver counts are 0 (or else all drivers
+        # will be registered over and over again)
+        if not vcapi.get_driver_count():
+            vcapi.register_all()
+        if not rcapi.get_driver_count():
+            rcapi.register_all()
+    
+        @property
+    def value(self):
+        'Return an integer contained in this field.'
+        return self.as_int(self._bit64)
+    
+            content += new_content
+    
+    if is_py2:
+    from urllib import (
+        quote, unquote, quote_plus, unquote_plus, urlencode, getproxies,
+        proxy_bypass, proxy_bypass_environment, getproxies_environment)
+    from urlparse import urlparse, urlunparse, urljoin, urlsplit, urldefrag
+    from urllib2 import parse_http_list
+    import cookielib
+    from Cookie import Morsel
+    from StringIO import StringIO
+    # Keep OrderedDict for backwards compatibility.
+    from collections import Callable, Mapping, MutableMapping, OrderedDict
+    
+            # Verify Authorization is sent correctly again, and return 200 OK.
+        request_content = consume_socket_content(sock, timeout=0.5)
+        assert expected_digest in request_content
+        sock.send(text_200)
+    
+                sock.close()
+    
+    from .compat import StringIO, cStringIO
+    
+        :param url: URL for the new :class:`Request` object.
+    :param \*\*kwargs: Optional arguments that ``request`` takes. If
+        `allow_redirects` is not provided, it will be set to `False` (as
+        opposed to the default :meth:`request` behavior).
+    :return: :class:`Response <Response>` object
+    :rtype: requests.Response
     '''
-    start_time_sec = time.time()
-    stats = transformer_main.run_transformer(flags.FLAGS)
-    wall_time_sec = time.time() - start_time_sec
-    self._report_benchmark(stats,
-                           wall_time_sec,
-                           bleu_min=bleu_min,
-                           bleu_max=bleu_max)
     
-      def _report_benchmark(self,
-                        stats,
-                        wall_time_sec,
-                        top_1_max=None,
-                        top_1_min=None,
-                        log_steps=None,
-                        total_batch_size=None,
-                        warmup=1):
-    '''Report benchmark results by writing to local protobuf file.
+    Also, by evaluating log marginal likelihood (L) of
+these models, we can determine which one is better.
+It can be concluded that the model with larger L is more likely.
+'''
+print(__doc__)
     
-        if FLAGS.quantize_delay_step >= 0:
-      tf.contrib.quantize.create_eval_graph()
+        m : int
+        Index of the row of X to be swapped.
     
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+                tstart = time()
+            clf.fit(X_train, y_train)
+            sgd_results[i, j, 0] = mean_squared_error(clf.predict(X_test),
+                                                      y_test)
+            sgd_results[i, j, 1] = time() - tstart
     
-      def _ComputeVlad(self,
-                   features,
-                   codebook,
-                   use_l2_normalization=True,
-                   num_assignments=1):
-    '''Compute VLAD representation.
-    
-      def testComputeUnnormalizedVladWorks(self):
-    # Construct inputs.
-    # 3 2-D features.
-    features = np.array([[1.0, 0.0], [-1.0, 0.0], [1.0, 2.0]], dtype=float)
-    config = aggregation_config_pb2.AggregationConfig()
-    config.codebook_size = 5
-    config.feature_dimensionality = 2
-    config.aggregation_type = aggregation_config_pb2.AggregationConfig.VLAD
-    config.use_l2_normalization = False
-    config.codebook_path = self._codebook_path
-    config.num_assignments = 1
-    
-      Returns:
-    escaped string
-  '''
-  token = token.replace(u'\\', u'\\\\').replace(u'_', u'\\u')
-  ret = [c if c in alphabet and c != u'\n' else r'\%d;' % ord(c) for c in token]
-  return u''.join(ret) + '_'
-    
-            next_sentence_log_probs = tf.reshape(
-            next_sentence_log_probs, [-1, next_sentence_log_probs.shape[-1]])
-        next_sentence_predictions = tf.argmax(
-            next_sentence_log_probs, axis=-1, output_type=tf.int32)
-        next_sentence_labels = tf.reshape(next_sentence_labels, [-1])
-        next_sentence_accuracy = tf.metrics.accuracy(
-            labels=next_sentence_labels, predictions=next_sentence_predictions)
-        next_sentence_mean_loss = tf.metrics.mean(
-            values=next_sentence_example_loss)
-    
-      model_fn = model_fn_builder(
-      num_labels=len(label_list),
-      learning_rate=FLAGS.learning_rate,
-      num_train_steps=num_train_steps,
-      num_warmup_steps=num_warmup_steps,
-      use_tpu=FLAGS.use_tpu,
-      bert_hub_module_handle=FLAGS.bert_hub_module_handle)
+    '''
+print(__doc__)
