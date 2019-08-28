@@ -1,146 +1,161 @@
 
         
-        import sys
-import os
-import textwrap
+        
+class Inner4TabularInline(admin.TabularInline):
+    model = Inner4Tabular
+    show_change_link = True
     
-        def test_youtube_subtitles_ttml_format(self):
-        self.DL.params['writesubtitles'] = True
-        self.DL.params['subtitlesformat'] = 'ttml'
-        subtitles = self.getSubtitles()
-        self.assertEqual(md5(subtitles['en']), 'e306f8c42842f723447d9f63ad65df54')
-    
-    
-@pytest.mark.parametrize(
-    ('username', 'password', 'message'),
-    (('a', 'test', b'Incorrect username.'), ('test', 'a', b'Incorrect password.')),
-)
-def test_login_validate_input(auth, username, password, message):
-    response = auth.login(username, password)
-    assert message in response.data
-    
-        def main(self, *args, **kwargs):
-        # Set a global flag that indicates that we were invoked from the
-        # command line interface. This is detected by Flask.run to make the
-        # call into a no-op. This is necessary to avoid ugly errors when the
-        # script that is loaded here also attempts to start a server.
-        os.environ['FLASK_RUN_FROM_CLI'] = 'true'
-    
-    
-def attach_enctype_error_multidict(request):
-    '''Since Flask 0.8 we're monkeypatching the files object in case a
-    request is detected that does not use multipart form data but the files
-    object is accessed.
-    '''
-    oldcls = request.files.__class__
-    
-    
-init_bashrc = u'''echo '
-export SHELL=/bin/bash
-export PS1='$ '
-echo > $HISTFILE
-eval $(thefuck --alias {})
-echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
-' > ~/.bashrc'''
-    
-    
-@pytest.mark.parametrize('command, packages, which', [
-    (Command('a_bad_cmd', 'a_bad_cmd: command not found'),
-     [], None),
-    (Command('vim', ''), [], None),
-    (Command('', ''), [], None),
-    (Command('vim', 'vim: command not found'),
-     ['vim'], '/usr/bin/vim'),
-    (Command('sudo vim', 'vim: command not found'),
-     ['vim'], '/usr/bin/vim')])
-def test_not_match(mocker, command, packages, which):
-    mocker.patch('thefuck.rules.apt_get.which', return_value=which)
-    mocker.patch('thefuck.rules.apt_get._get_packages',
-                 create=True, return_value=packages)
-    
-    
-@pytest.mark.parametrize('script, output', [
-    ('apt', invalid_operation('saerch')),
-    ('apt-get', invalid_operation('isntall')),
-    ('apt-cache', invalid_operation('rumove'))])
-def test_match(script, output):
-    assert match(Command(script, output))
-    
-        new_command = get_new_command(Command('sudo apt list --upgradable', match_output))
-    assert new_command == 'sudo apt upgrade'
+        def test_template_mixin_without_template(self):
+        '''
+        We want to makes sure that if you use a template mixin, but forget the
+        template, it still tells you it's ImproperlyConfigured instead of
+        TemplateDoesNotExist.
+        '''
+        view = views.TemplateResponseWithoutTemplate()
+        msg = (
+            'TemplateResponseMixin requires either a definition of '
+            ''template_name' or an implementation of 'get_template_names()''
+        )
+        with self.assertRaisesMessage(ImproperlyConfigured, msg):
+            view.get_template_names()
 
     
+        def as_postgresql(self, compiler, connection, **extra_context):
+        # Cast FloatField to DecimalField as PostgreSQL doesn't support the
+        # following function signatures:
+        # - LOG(double, double)
+        # - MOD(double, double)
+        output_field = DecimalField(decimal_places=sys.float_info.dig, max_digits=1000)
+        clone = self.copy()
+        clone.set_source_expressions([
+            Cast(expression, output_field) if isinstance(expression.output_field, FloatField)
+            else expression for expression in self.get_source_expressions()
+        ])
+        return clone.as_sql(compiler, connection, **extra_context)
     
-Invalid choice: 'dynamdb', maybe you meant:
+        def test_deconstruction(self):
+        index = HashIndex(fields=['title'], name='test_title_hash', fillfactor=80)
+        path, args, kwargs = index.deconstruct()
+        self.assertEqual(path, 'django.contrib.postgres.indexes.HashIndex')
+        self.assertEqual(args, ())
+        self.assertEqual(kwargs, {'fields': ['title'], 'name': 'test_title_hash', 'fillfactor': 80})
     
+        @property
+    def fields(self):
+        'Return a list of fields in the Feature.'
+        return [
+            force_str(
+                capi.get_field_name(capi.get_field_defn(self._layer._ldefn, i)),
+                self.encoding,
+                strings_only=True
+            ) for i in range(self.num_fields)
+        ]
     
-@pytest.mark.skipif(_is_not_okay_to_test(),
-                    reason='No need to run if there\'s no formula')
-def test_get_new_command(brew_no_available_formula):
-    assert get_new_command(Command('brew install elsticsearch',
-                                   brew_no_available_formula))\
-        == 'brew install elasticsearch'
+        strings = []
+    with open(filepath, 'r') as f:
     
-        fpath = os.path.join(path, 'train')
-    x_train, y_train = load_batch(fpath, label_key=label_mode + '_labels')
+                if 'index' not in kwargs:
+                self.p(stream_id)
+            else:
+                self.p_i(stream_id)
     
-        out1 = utils.preprocess_input(x, 'channels_last')
-    out1int = utils.preprocess_input(xint, 'channels_last')
-    out2 = utils.preprocess_input(np.transpose(x, (0, 3, 1, 2)),
-                                  'channels_first')
-    out2int = utils.preprocess_input(np.transpose(xint, (0, 3, 1, 2)),
-                                     'channels_first')
-    assert_allclose(out1, out2.transpose(0, 2, 3, 1))
-    assert_allclose(out1int, out2int.transpose(0, 2, 3, 1))
-    
-        y = np.array(y, dtype='int')
-    input_shape = y.shape
-    if input_shape and input_shape[-1] == 1 and len(input_shape) > 1:
-        input_shape = tuple(input_shape[:-1])
-    y = y.ravel()
-    if not num_classes:
-        num_classes = np.max(y) + 1
-    n = y.shape[0]
-    categorical = np.zeros((n, num_classes), dtype=dtype)
-    categorical[np.arange(n), y] = 1
-    output_shape = input_shape + (num_classes,)
-    categorical = np.reshape(categorical, output_shape)
-    return categorical
-    
-        # Input shape
-        5D tensor with shape:
-        `(samples, timesteps, channels, rows, cols)` if data_format='channels_first'
-        or 5D tensor with shape:
-        `(samples, timesteps, rows, cols, channels)` if data_format='channels_last'.
-    
-    # Generate corrupted MNIST images by adding noise with normal dist
-# centered at 0.5 and std=0.5
-noise = np.random.normal(loc=0.5, scale=0.5, size=x_train.shape)
-x_train_noisy = x_train + noise
-noise = np.random.normal(loc=0.5, scale=0.5, size=x_test.shape)
-x_test_noisy = x_test + noise
-    
-    history = model.fit(x_train, y_train,
-                    batch_size=batch_size,
-                    epochs=epochs,
-                    verbose=1,
-                    validation_data=(x_test, y_test))
-score = model.evaluate(x_test, y_test, verbose=0)
-print('Test loss:', score[0])
-print('Test accuracy:', score[1])
-
-    
-    if K.image_data_format() == 'channels_first':
-    input_shape = (1, img_rows, img_cols)
-else:
-    input_shape = (img_rows, img_cols, 1)
+    def baomihua_download_by_id(id, title=None, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html('http://play.baomihua.com/getvideourl.aspx?flvid=%s&devicetype=phone_app' % id)
+    host = r1(r'host=([^&]*)', html)
+    assert host
+    type = r1(r'videofiletype=([^&]*)', html)
+    assert type
+    vid = r1(r'&stream_name=([^&]*)', html)
+    assert vid
+    dir_str = r1(r'&dir=([^&]*)', html).strip()
+    url = 'http://%s/%s/%s.%s' % (host, dir_str, vid, type)
+    _, ext, size = url_info(url)
+    print_info(site_info, title, type, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir, merge = merge)
     
     
-def test_conv_input_length():
-    assert conv_utils.conv_input_length(None, 7, 'same', 1) is None
-    assert conv_utils.conv_input_length(112, 7, 'same', 1) == 112
-    assert conv_utils.conv_input_length(112, 7, 'same', 2) == 223
-    assert conv_utils.conv_input_length(28, 5, 'valid', 1) == 32
-    assert conv_utils.conv_input_length(14, 5, 'valid', 2) == 31
-    assert conv_utils.conv_input_length(36, 5, 'full', 1) == 32
-    assert conv_utils.conv_input_length(18, 5, 'full', 2) == 31
+class CNTV(VideoExtractor):
+    name = 'CNTV.com'
+    stream_types = [
+        {'id': '1', 'video_profile': '1280x720_2000kb/s', 'map_to': 'chapters4'},
+        {'id': '2', 'video_profile': '1280x720_1200kb/s', 'map_to': 'chapters3'},
+        {'id': '3', 'video_profile': '640x360_850kb/s', 'map_to': 'chapters2'},
+        {'id': '4', 'video_profile': '480x270_450kb/s', 'map_to': 'chapters'},
+        {'id': '5', 'video_profile': '320x180_200kb/s', 'map_to': 'lowChapters'},
+    ]
+    
+    __all__ = ['dailymotion_download']
+    
+    
+def FlagCxx14Features(filename, clean_lines, linenum, error):
+  '''Flag those C++14 features that we restrict.
+    
+            # Adding unique constraint on 'EventTag', fields ['event_id', 'key', 'value']
+        db.create_unique(u'tagstore_eventtag', ['event_id', 'key_id', 'value_id'])
+    
+            # Changing field 'GroupTagKey.project_id'
+        db.alter_column(u'tagstore_grouptagkey', 'project_id', self.gf(
+            'sentry.db.models.fields.bounded.BoundedPositiveIntegerField')())
+    
+            # Changing field 'TagKey.environment_id'
+        db.alter_column(u'tagstore_tagkey', 'environment_id', self.gf(
+            'sentry.db.models.fields.bounded.BoundedBigIntegerField')(default=0))
+    
+    
+class OmniCompleter( Completer ):
+  def __init__( self, user_options ):
+    super( OmniCompleter, self ).__init__( user_options )
+    self._omnifunc = None
+    
+    
+@YouCompleteMeInstance( { 'g:ycm_cache_omnifunc': 1,
+                          'g:ycm_semantic_triggers': TRIGGERS } )
+def OmniCompleter_GetCompletions_Cache_ObjectList_Unicode_test( ycm ):
+  def Omnifunc( findstart, base ):
+    if findstart:
+      return 12
+    return [
+      {
+        'word': 'ålpha∫et',
+        'abbr': 'å∫∫®',
+        'menu': 'µ´~¨á',
+        'info': '^~fo',
+        'kind': '˚'
+      },
+      {
+        'word': 'π†´ß†π',
+        'abbr': 'ÅııÂÊ‰ÍÊ',
+        'menu': '˜‰ˆËÊ‰ÍÊ',
+        'info': 'ÈˆÏØÊ‰ÍÊ',
+        'kind': 'Ê'
+      }
+    ]
+    
+        if compiler is not None:
+      for filter_config in _ListOf( config[ filter_type ] ):
+        compiledFilter = compiler( filter_config )
+        filters.append( compiledFilter )
+    
+    
+  def Start( self ):
+    self._keepalive_thread.start()
+    
+    
+def ExtractKeywordsFromGroup_Basic_test():
+  assert_that( syntax_parse._ExtractKeywordsFromGroup(
+                 syntax_parse.SyntaxGroup( '', [
+                   'foo bar',
+                   'zoo goo',
+                 ] ) ),
+               contains_inanyorder( 'foo', 'bar', 'zoo', 'goo' ) )
+    
+                if work_item.future.set_running_or_notify_cancel():
+                call_queue.put(_CallItem(work_id,
+                                         work_item.fn,
+                                         work_item.args,
+                                         work_item.kwargs),
+                               block=True)
+            else:
+                del pending_work_items[work_id]
+                continue
