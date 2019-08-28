@@ -1,131 +1,187 @@
 
         
-            return wrapper
+            # register the database commands
+    from flaskr import db
     
-        def test_app_alias(self, shell):
-        assert 'function fuck' in shell.app_alias('fuck')
-        assert 'function FUCK' in shell.app_alias('FUCK')
-        assert 'thefuck' in shell.app_alias('fuck')
-        assert 'TF_SHELL=fish' in shell.app_alias('fuck')
-        assert 'TF_ALIAS=fuck PYTHONIOENCODING' in shell.app_alias('fuck')
-        assert 'PYTHONIOENCODING=utf-8 thefuck' in shell.app_alias('fuck')
-        assert ARGUMENT_PLACEHOLDER in shell.app_alias('fuck')
-    
-        def _get_overridden_aliases(self):
-        overridden = os.environ.get('THEFUCK_OVERRIDDEN_ALIASES',
-                                    os.environ.get('TF_OVERRIDDEN_ALIASES', ''))
-        default = {'cd', 'grep', 'ls', 'man', 'open'}
-        for alias in overridden.split(','):
-            default.add(alias.strip())
-        return sorted(default)
-    
-        def get_aliases(self):
-        return {}
-    
-        iterkeys = lambda d: iter(d.keys())
-    itervalues = lambda d: iter(d.values())
-    iteritems = lambda d: iter(d.items())
-    
-        def set_stop_words(self, stop_words_path):
-        abs_path = _get_abs_path(stop_words_path)
-        if not os.path.isfile(abs_path):
-            raise Exception('jieba: file does not exist: ' + abs_path)
-        content = open(abs_path, 'rb').read().decode('utf-8')
-        for line in content.splitlines():
-            self.stop_words.add(line)
-    
-    Force_Split_Words = set([])
-def load_model():
-    start_p = pickle.load(get_module_res('finalseg', PROB_START_P))
-    trans_p = pickle.load(get_module_res('finalseg', PROB_TRANS_P))
-    emit_p = pickle.load(get_module_res('finalseg', PROB_EMIT_P))
-    return start_p, trans_p, emit_p
-    
-    import jieba
-import jieba.posseg
-import jieba.analyse
-    
-    file_name = args[0]
-    
-        In this implementation, we default to the paper settings of $25, 60% odds, wealth cap
-    of $250, and 300 rounds. To specify the action space in advance, we multiply the
-    wealth cap (in dollars) by 100 (to allow for all penny bets); should one attempt to
-    bet more money than one has, it is rounded down to one's net worth. (Alternately, a
-    mistaken bet could end the episode immediately; it's not clear to me which version
-    would be better.) For a harder version which randomizes the 3 key parameters, see the
-    Generalized Kelly coinflip game.'''
-    metadata = {'render.modes': ['human']}
-    
-            ctrlrange = self.sim.model.actuator_ctrlrange
-        actuation_range = (ctrlrange[:, 1] - ctrlrange[:, 0]) / 2.
-        if self.relative_control:
-            actuation_center = np.zeros_like(action)
-            for i in range(self.sim.data.ctrl.shape[0]):
-                actuation_center[i] = self.sim.data.get_joint_qpos(
-                    self.sim.model.actuator_names[i].replace(':A_', ':'))
-            for joint_name in ['FF', 'MF', 'RF', 'LF']:
-                act_idx = self.sim.model.actuator_name2id(
-                    'robot0:A_{}J1'.format(joint_name))
-                actuation_center[act_idx] += self.sim.data.get_joint_qpos(
-                    'robot0:{}J0'.format(joint_name))
-        else:
-            actuation_center = (ctrlrange[:, 1] + ctrlrange[:, 0]) / 2.
-        self.sim.data.ctrl[:] = actuation_center + action * actuation_range
-        self.sim.data.ctrl[:] = np.clip(self.sim.data.ctrl, ctrlrange[:, 0], ctrlrange[:, 1])
-    
-        def step(self, action):
-        #self.hull.ApplyForceToCenter((0, 20), True) -- Uncomment this to receive a bit of stability help
-        control_speed = False  # Should be easier as well
-        if control_speed:
-            self.joints[0].motorSpeed = float(SPEED_HIP  * np.clip(action[0], -1, 1))
-            self.joints[1].motorSpeed = float(SPEED_KNEE * np.clip(action[1], -1, 1))
-            self.joints[2].motorSpeed = float(SPEED_HIP  * np.clip(action[2], -1, 1))
-            self.joints[3].motorSpeed = float(SPEED_KNEE * np.clip(action[3], -1, 1))
-        else:
-            self.joints[0].motorSpeed     = float(SPEED_HIP     * np.sign(action[0]))
-            self.joints[0].maxMotorTorque = float(MOTORS_TORQUE * np.clip(np.abs(action[0]), 0, 1))
-            self.joints[1].motorSpeed     = float(SPEED_KNEE    * np.sign(action[1]))
-            self.joints[1].maxMotorTorque = float(MOTORS_TORQUE * np.clip(np.abs(action[1]), 0, 1))
-            self.joints[2].motorSpeed     = float(SPEED_HIP     * np.sign(action[2]))
-            self.joints[2].maxMotorTorque = float(MOTORS_TORQUE * np.clip(np.abs(action[2]), 0, 1))
-            self.joints[3].motorSpeed     = float(SPEED_KNEE    * np.sign(action[3]))
-            self.joints[3].maxMotorTorque = float(MOTORS_TORQUE * np.clip(np.abs(action[3]), 0, 1))
-    
-    
-def rk4(derivs, y0, t, *args, **kwargs):
+        .. versionchanged:: 0.10
+       This function's return value is now always safe for HTML usage, even
+       if outside of script tags or if used in XHTML.  This rule does not
+       hold true when using this function in HTML attributes that are double
+       quoted.  Always single quote attributes if you use the ``|tojson``
+       filter.  Alternatively use ``|tojson|forceescape``.
     '''
-    Integrate 1D or ND system of ODEs using 4-th order Runge-Kutta.
-    This is a toy implementation which may be useful if you find
-    yourself stranded on a system w/o scipy.  Otherwise use
-    :func:`scipy.integrate`.
-    *y0*
-        initial state vector
-    *t*
-        sample times
-    *derivs*
-        returns the derivative of the system and has the
-        signature ``dy = derivs(yi, ti)``
-    *args*
-        additional arguments passed to the derivative function
-    *kwargs*
-        additional keyword arguments passed to the derivative function
-    Example 1 ::
-        ## 2D system
-        def derivs6(x,t):
-            d1 =  x[0] + 2*x[1]
-            d2 =  -3*x[0] + 4*x[1]
-            return (d1, d2)
-        dt = 0.0005
-        t = arange(0.0, 2.0, dt)
-        y0 = (1,2)
-        yout = rk4(derivs6, y0, t)
-    Example 2::
-        ## 1D system
-        alpha = 2
-        def derivs(x,t):
-            return -alpha*x + exp(-t)
-        y0 = 1
-        yout = rk4(derivs, y0, t)
-    If you have access to scipy, you should probably be using the
-    scipy.integrate tools rather than this function.
+    rv = (
+        dumps(obj, **kwargs)
+        .replace(u'<', u'\\u003c')
+        .replace(u'>', u'\\u003e')
+        .replace(u'&', u'\\u0026')
+        .replace(u''', u'\\u0027')
+    )
+    if not _slash_escape:
+        rv = rv.replace('\\/', '/')
+    return rv
+    
+            connect = connect_via = connected_to = temporarily_connected_to = _fail
+        disconnect = _fail
+        has_receivers_for = receivers_for = _fail
+        del _fail
+    
+                if isinstance(args[0], werkzeug.test.EnvironBuilder):
+                environ.update(args[0].get_environ())
+            else:
+                environ.update(args[0])
+    
+            The arguments passed to :meth:`as_view` are forwarded to the
+        constructor of the class.
+        '''
+    
+        @property
+    def max_content_length(self):
+        '''Read-only view of the ``MAX_CONTENT_LENGTH`` config key.'''
+        if current_app:
+            return current_app.config['MAX_CONTENT_LENGTH']
+    
+        assert cleanup_stuff == [None]
+    
+    
+def test_config_from_file():
+    app = flask.Flask(__name__)
+    app.config.from_pyfile(__file__.rsplit('.', 1)[0] + '.py')
+    common_object_test(app)
+    
+    
+def test_uninstalled_module_paths(modules_tmpdir, purge_module):
+    app = modules_tmpdir.join('config_module_app.py').write(
+        'import os\n'
+        'import flask\n'
+        'here = os.path.abspath(os.path.dirname(__file__))\n'
+        'app = flask.Flask(__name__)\n'
+    )
+    purge_module('config_module_app')
+    
+            def to_json(self, value):
+            return self.serializer.tag(value.data)
+    
+        def check_range(self, request):
+        if self.start <= request < self.end:
+            print('request {} handled in handler 1'.format(request))
+            return True
+    
+    
+class Cat(object):
+    def speak(self):
+        return 'meow'
+    
+    *Where is the pattern used practically?
+    
+    *What does this example do?
+When the number of prototypes in an application can vary, it can be
+useful to keep a Dispatcher (aka, Registry or Manager). This allows
+clients to query the Dispatcher for a prototype before cloning a new
+instance.
+    
     '''
+Reference: https://en.wikipedia.org/wiki/Delegation_pattern
+Author: https://github.com/IuryAlves
+    
+    *References:
+https://sourcemaking.com/design_patterns/facade
+https://fkromer.github.io/python-pattern-references/design/#facade
+http://python-3-patterns-idioms-test.readthedocs.io/en/latest/ChangeInterface.html#facade
+    
+    def check_live_url(url):
+    
+        The purpose is to have agents optimise their exploration parameters (e.g. how far to
+    explore from previous actions) based on previous experience. Because the goal changes
+    each episode a state-value or action-value function isn't able to provide any additional
+    benefit apart from being able to tell whether to increase or decrease the next guess.
+    
+        Blackjack is a card game where the goal is to obtain cards that sum to as
+    near as possible to 21 without going over.  They're playing against a fixed
+    dealer.
+    Face cards (Jack, Queen, King) have point value 10.
+    Aces can either count as 11 or 1, and it's called 'usable' at 11.
+    This game is placed with an infinite deck (or with replacement).
+    The game starts with each (player and dealer) having one face up and one
+    face down card.
+    
+        def _get_obs(self, pos=None):
+        '''Return an observation corresponding to the given read head position
+        (or the current read head position, if none is given).'''
+        raise NotImplementedError
+    
+    bogus_mnist = \
+[[
+' **** ',
+'*    *',
+'*    *',
+'*    *',
+'*    *',
+' **** '
+], [
+'  **  ',
+' * *  ',
+'   *  ',
+'   *  ',
+'   *  ',
+'  *** '
+], [
+' **** ',
+'*    *',
+'     *',
+'  *** ',
+'**    ',
+'******'
+], [
+' **** ',
+'*    *',
+'   ** ',
+'     *',
+'*    *',
+' **** '
+], [
+' *  * ',
+' *  * ',
+' *  * ',
+' **** ',
+'    * ',
+'    * '
+], [
+' **** ',
+' *    ',
+' **** ',
+'    * ',
+'    * ',
+' **** '
+], [
+'  *** ',
+' *    ',
+' **** ',
+' *  * ',
+' *  * ',
+' **** '
+], [
+' **** ',
+'    * ',
+'   *  ',
+'   *  ',
+'  *   ',
+'  *   '
+], [
+' **** ',
+'*    *',
+' **** ',
+'*    *',
+'*    *',
+' **** '
+], [
+' **** ',
+'*    *',
+'*    *',
+' *****',
+'     *',
+' **** '
+]]
+    
+    from gym import utils
+from gym.envs.toy_text import discrete
