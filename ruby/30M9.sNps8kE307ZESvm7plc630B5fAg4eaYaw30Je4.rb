@@ -1,90 +1,102 @@
 
         
-        set :vmware_utility_name, 'vagrant-vmware-utility'
-set :vmware_utility_version, '1.0.7'
-    
-                  if cache.file?
-                @logger.info('Loading cached node_name...')
-                @config.node_name = cache.read.strip
-              end
-            end
-          end
-        end
-    
-        it 'returns true if installed' do
-      expect(machine.communicate).to receive(:test).
-        with(command, sudo: true).and_return(true)
-      subject.chef_installed(machine, 'chef_solo', version)
-    end
-    
-    # Add the test directory to the load path
-$:.unshift File.expand_path('../../', __FILE__)
-    
-            port_name = '#{@machine.config.ssh.guest_port}/tcp'
-        network   = driver.inspect_container(@machine.id)['NetworkSettings']
-    
-        it 'raises an exception if virtualbox is not available' do
-      allow(VagrantPlugins::ProviderVirtualBox::Driver::Meta).to receive(:new).
-        and_raise(Vagrant::Errors::VirtualBoxNotDetected)
-    
-              filter.each do |trigger|
-            index = nil
-            match = false
-            if trigger.only_on
-              trigger.only_on.each do |o|
-                if o.match(guest_name.to_s)
-                  # trigger matches on current guest, so we're fine to use it
-                  match = true
-                  break
-                end
-              end
-              # no matches found, so don't use trigger for guest
-              index = triggers.index(trigger) unless match == true
-            end
-    
-          subject.action(machine, 'up')
-      subject.run
-    end
-    
-        it 'fails if it encounters an error' do
-      allow(machine.state).to receive(:id).and_return(:running)
-      allow(provision).to receive(:provision).and_raise('Nope!')
-      allow(VagrantPlugins::Shell::Provisioner).to receive(:new).
-        and_return(provision)
-    
-        context 'when using '%' in a private_key_path' do
-      let(:private_key_path) { '/tmp/percent%folder' }
-      let(:ssh_info) {{
-        host: 'localhost',
-        port: 2222,
-        username: 'vagrant',
-        private_key_path: [private_key_path],
-        compression: true,
-        dsa_authentication: true
-      }}
-    
-              @env.ui.info('')
-        end
-    
-        ScratchPad.record []
-    while true
-      begin
-        ScratchPad << enum.next
-      rescue StopIteration
-        break
-      end
-    end
-    
-      before :each do
-    @data = '12345abcde'
-    @zip = [31, 139, 8, 0, 44, 220, 209, 71, 0, 3, 51, 52, 50, 54, 49, 77,
-            76, 74, 78, 73, 5, 0, 157, 5, 0, 36, 10, 0, 0, 0].pack('C*')
-    @io = StringIO.new @zip
-    ScratchPad.clear
+          def test_render_json
+    get :one
+    assert_response :success
+    assert_equal({ a: 'b' }.to_json, @response.body)
+    assert_equal 'application/json', @response.media_type
   end
     
-        describe 'with a multi-byte character' do
-      it 'prepends the character to the stream' do
-        @gz.ungetc 'ŷ'
-        @gz.read.should == 'ŷ12345abcde'
+      def setup
+    # enable a logger so that (e.g.) the benchmarking stuff runs, so we can get
+    # a more accurate simulation of what happens in 'real life'.
+    super
+    @controller.logger = ActiveSupport::Logger.new(nil)
+  end
+    
+              if formula_tap == 'homebrew-core' && (depends_on?('veclibfort') || depends_on?('lapack'))
+            problem 'Formulae should use OpenBLAS as the default serial linear algebra library.'
+          end
+    
+        it 'hardcoded g++ compiler system' do
+      expect_offense(<<~'RUBY')
+        class Foo < Formula
+          desc 'foo'
+          url 'https://brew.sh/foo-1.0.tgz'
+          def install
+            system '/usr/bin/g++', '-o', 'foo', 'foo.cc'
+                    ^^^^^^^^^^^^ Use '#{ENV.cxx}' instead of hard-coding 'g++'
+          end
+        end
+      RUBY
+    end
+    
+          alias generic_find_matching_tag find_matching_tag
+    
+        it 'returns nil if empty' do
+      expect(subject.fetch_checksum_for(:foo)).to be nil
+    end
+    
+      it 'prints the file used to cache the Cask' do
+    transmission_location = CurlDownloadStrategy.new(
+      local_transmission.url.to_s, local_transmission.token, local_transmission.version,
+      cache: Cask::Cache.path, **local_transmission.url.specs
+    ).cached_location
+    caffeine_location = CurlDownloadStrategy.new(
+      local_caffeine.url.to_s, local_caffeine.token, local_caffeine.version,
+      cache: Cask::Cache.path, **local_caffeine.url.specs
+    ).cached_location
+    
+        def downloader
+      @downloader ||= begin
+        strategy = DownloadStrategyDetector.detect(cask.url.to_s, cask.url.using)
+        strategy.new(cask.url.to_s, cask.token, cask.version, cache: Cache.path, **cask.url.specs)
       end
+    end
+    
+          metadata_master_container_path.join(cask_version)
+    end
+    
+        # define the file location
+    if smb_share == 'ADMIN$'
+      file_location = '%SYSTEMROOT%\\#{filename}'
+    elsif smb_share =~ /^[a-zA-Z]\$$/
+      file_location = smb_share.slice(0,1) +  ':\\#{filename}'
+    else
+      file_location = '\\\\127.0.0.1\\#{smbshare}\\#{fileprefix}\\#{filename}'
+    end
+    
+    
+    {          This module was tested on Horde versions 5.2.22 and 5.2.17 running Horde Form subcomponent < 2.0.19.
+        },
+      'License'         => MSF_LICENSE,
+      'Author'          =>
+        [
+          'Ratiosec',
+        ],
+      'References'      =>
+        [
+          ['CVE', '2019-9858'],
+          ['URL', 'https://www.ratiosec.com/2019/horde-groupware-webmail-authenticated-arbitrary-file-injection-to-rce/'],
+        ],
+      'DisclosureDate'  => 'Mar 24 2019',
+      'Platform'        => 'php',
+      'Arch'            => ARCH_PHP,
+      'Targets'         =>
+        [
+          ['Automatic', { }],
+        ],
+      'DefaultTarget'   => 0
+    ))
+    
+    require 'rex/proto/ipmi/utils'
+    
+                seq_asn1 = OpenSSL::ASN1::ASN1Data.new([seq], AP_REQ, :APPLICATION)
+    
+                res = ''
+            case etype
+            when RC4_HMAC
+              res = encrypt_rc4_hmac(data, key, 5)
+            else
+              raise ::NotImplementedError, 'EncryptedData schema is not supported'
+            end
