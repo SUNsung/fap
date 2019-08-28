@@ -1,174 +1,215 @@
 
         
-                # Non Localised
-        FastlaneCore::ConfigItem.new(key: :app_icon,
-                                     description: 'Metadata: The path to the app icon',
-                                     optional: true,
-                                     short_option: '-l',
-                                     verify_block: proc do |value|
-                                       UI.user_error!('Could not find png file at path '#{File.expand_path(value)}'') unless File.exist?(value)
-                                       UI.user_error!(''#{value}' doesn't seem to be one of the supported files. supported: #{Deliver::UploadAssets::SUPPORTED_ICON_EXTENSIONS.join(',')}') unless Deliver::UploadAssets::SUPPORTED_ICON_EXTENSIONS.include?(File.extname(value).downcase)
-                                     end),
-        FastlaneCore::ConfigItem.new(key: :apple_watch_app_icon,
-                                     description: 'Metadata: The path to the Apple Watch app icon',
-                                     optional: true,
-                                     short_option: '-q',
-                                     verify_block: proc do |value|
-                                       UI.user_error!('Could not find png file at path '#{File.expand_path(value)}'') unless File.exist?(value)
-                                       UI.user_error!(''#{value}' doesn't seem to be one of the supported files. supported: #{Deliver::UploadAssets::SUPPORTED_ICON_EXTENSIONS.join(',')}') unless Deliver::UploadAssets::SUPPORTED_ICON_EXTENSIONS.include?(File.extname(value).downcase)
-                                     end),
-        FastlaneCore::ConfigItem.new(key: :copyright,
-                                     description: 'Metadata: The copyright notice',
-                                     optional: true,
-                                     is_string: true),
-        FastlaneCore::ConfigItem.new(key: :primary_category,
-                                     description: 'Metadata: The english name of the primary category (e.g. `Business`, `Books`)',
-                                     optional: true,
-                                     is_string: true),
-        FastlaneCore::ConfigItem.new(key: :secondary_category,
-                                     description: 'Metadata: The english name of the secondary category (e.g. `Business`, `Books`)',
-                                     optional: true,
-                                     is_string: true),
-        FastlaneCore::ConfigItem.new(key: :primary_first_sub_category,
-                                     description: 'Metadata: The english name of the primary first sub category (e.g. `Educational`, `Puzzle`)',
-                                     optional: true,
-                                     is_string: true),
-        FastlaneCore::ConfigItem.new(key: :primary_second_sub_category,
-                                     description: 'Metadata: The english name of the primary second sub category (e.g. `Educational`, `Puzzle`)',
-                                     optional: true,
-                                     is_string: true),
-        FastlaneCore::ConfigItem.new(key: :secondary_first_sub_category,
-                                     description: 'Metadata: The english name of the secondary first sub category (e.g. `Educational`, `Puzzle`)',
-                                     optional: true,
-                                     is_string: true),
-        FastlaneCore::ConfigItem.new(key: :secondary_second_sub_category,
-                                     description: 'Metadata: The english name of the secondary second sub category (e.g. `Educational`, `Puzzle`)',
-                                     optional: true,
-                                     is_string: true),
-        FastlaneCore::ConfigItem.new(key: :trade_representative_contact_information,
-                                     description: 'Metadata: A hash containing the trade representative contact information',
-                                     optional: true,
-                                     is_string: false,
-                                     type: Hash),
-        FastlaneCore::ConfigItem.new(key: :app_review_information,
-                                     description: 'Metadata: A hash containing the review information',
-                                     optional: true,
-                                     is_string: false,
-                                     type: Hash),
-        FastlaneCore::ConfigItem.new(key: :app_review_attachment_file,
-                                     description: 'Metadata: Path to the app review attachment file',
-                                     optional: true,
-                                     is_string: true),
-        # Localised
-        FastlaneCore::ConfigItem.new(key: :description,
-                                     description: 'Metadata: The localised app description',
-                                     optional: true,
-                                     is_string: false),
-        FastlaneCore::ConfigItem.new(key: :name,
-                                     description: 'Metadata: The localised app name',
-                                     optional: true,
-                                     is_string: false),
-        FastlaneCore::ConfigItem.new(key: :subtitle,
-                                     description: 'Metadata: The localised app subtitle',
-                                     optional: true,
-                                     is_string: false,
-                                     type: Hash,
-                                     verify_block: proc do |value|
-                                       UI.user_error!(':subtitle must be a hash, with the language being the key') unless value.kind_of?(Hash)
-                                     end),
-        FastlaneCore::ConfigItem.new(key: :keywords,
-                                     description: 'Metadata: An array of localised keywords',
-                                     optional: true,
-                                     is_string: false,
-                                     type: Hash,
-                                     verify_block: proc do |value|
-                                       UI.user_error!(':keywords must be a hash, with the language being the key') unless value.kind_of?(Hash)
-                                       value.each do |language, keywords|
-                                         # Auto-convert array to string
-                                         keywords = keywords.join(', ') if keywords.kind_of?(Array)
-                                         value[language] = keywords
+            def purge_tombstone(grace_period)
+    end
     
-          # Load localised data
-      ignore_validation = options[:ignore_language_directory_validation]
-      Loader.language_folders(options[:metadata_path], ignore_validation).each do |lang_folder|
-        language = File.basename(lang_folder)
-        (LOCALISED_VERSION_VALUES + LOCALISED_APP_VALUES).each do |key|
-          path = File.join(lang_folder, '#{key}.txt')
-          next unless File.exist?(path)
+        it 'should import from ssh url' do
+      Discourse::Utils.expects(:execute_command).with({
+        'GIT_SSH_COMMAND' => 'ssh -i #{@ssh_folder}/id_rsa -o StrictHostKeyChecking=no'
+      }, 'git', 'clone', ssh_url, @temp_folder)
     
-          def build_settings
-        config = Snapshot.config
+      describe '.overrides_by_locale' do
+    it 'should cache overrides for each locale' do
+      override_translation('en', 'got', 'summer')
+      override_translation('zh_TW', 'got', '冬季')
     
-            return File.join(containing, file_name)
+        unless @topic.topic_allowed_users.where(user_id: @user.id).exists?
+      unless @topic.topic_allowed_groups.where('group_id IN (
+                                              SELECT group_id FROM group_users where user_id = ?
+                                           )', @user.id).exists?
+        @topic.topic_allowed_users.create!(user_id: @user.id)
+      end
+    end
+  end
+    
+          @s3_helper.ensure_cors!([rule])
+    end
+    
+    require_dependency 'reviewable_score_type_serializer'
+    
+          # Now it's time to merge the (potentially) existing mapping
+      #   (e.g. coming from `provisioningProfiles` of the `export_options` or from previous match calls)
+      # with the secondary hash we just created (or was provided as parameter).
+      # Both might include information about what profile to use
+      # This is important as it might not be clear for the user that they have to call match for each app target
+      # before adding this code, we'd only either use whatever we get from match, or what's defined in the Xcode project
+      # With the code below, we'll make sure to take the best of it:
+      #
+      #   1) A provisioning profile is defined in the `primary_mapping`
+      #   2) A provisioning profile is defined in the `secondary_mapping`
+      #   3) On a conflict (app identifier assigned both in xcode and match)
+      #     3.1) we'll choose whatever matches what's defined as the `export_method`
+      #     3.2) If both include the right `export_method`, we'll prefer the one from `primary_mapping`
+      #     3.3) If none has the right export_method, we'll use whatever is defined in the Xcode project
+      #
+      # To get a better sense of this, check out code_signing_spec.rb for some test cases
+    
+          # Path to the project or workspace as parameter
+      # This will also include the scheme (if given)
+      # @return [Array] The array with all the components to join
+      def project_path_array
+        proj = Snapshot.project.xcodebuild_parameters
+        return proj if proj.count > 0
+        UI.user_error!('No project/workspace found')
+      end
+    
+          def self.available_options
+        [
+          FastlaneCore::ConfigItem.new(key: :fallback_changelog,
+                                       description: 'Fallback changelog if there is not one on Jenkins, or it couldn't be read',
+                                       optional: true,
+                                       default_value: ''),
+          FastlaneCore::ConfigItem.new(key: :include_commit_body,
+                                       description: 'Include the commit body along with the summary',
+                                       optional: true,
+                                       is_string: false,
+                                       default_value: true)
+        ]
+      end
+    
+          def self.category
+        :code_signing
       end
     end
   end
 end
 
     
-      Match.environments.each do |env|
-    describe ':#{env} option handling' do
-      it 'can use the git_url short flag from tool options' do
-        stub_commander_runner_args([env, '-r', 'git@github.com:you/your_repo.git'])
-    
-              # Store the number in the shared hash
-          Actions.lane_context[SharedValues::BUILD_NUMBER] = build_number
+            desc 'Requests access for the authenticated user to a #{source_type}.' do
+          detail 'This feature was introduced in GitLab 8.11.'
+          success Entities::AccessRequester
         end
-        return build_number
-      rescue => ex
-        return false if params[:hide_error_when_versioning_disabled]
-        UI.error('Before being able to increment and read the version number from your Xcode project, you first need to setup your project properly. Please follow the guide at https://developer.apple.com/library/content/qa/qa1827/_index.html')
-        raise ex
+        post ':id/access_requests' do
+          source = find_source(source_type, params[:id])
+          access_requester = source.request_access(current_user)
+    
+        # The path used after unlocking the resource
+    def after_unlock_path_for(resource)
+      new_session_path(resource)  if is_navigational_format?
+    end
+    
+              if mod.const_defined?('ClassMethods')
+            class_mod = mod.const_get('ClassMethods')
+            extend class_mod
+    
+          def test_on_event5
+        ev = WIN32OLE_EVENT.new(@db, 'ConnectionEvents')
+        ev.on_event {|*args| default_handler(*args)}
+        ev.on_event('WillConnect'){|*args| handler3(*args)}
+        @db.open
+        message_loop
+        assert_match(/ConnectComplete/, @event)
+        assert(/WillConnect/ !~ @event)
+        assert_equal(CONNSTR, @event3)
       end
     
-            Actions.lane_context[SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING] = mapping
+      it 'calls the given block for each line in the stream, passing the line as an argument' do
+    ScratchPad.record []
+    @gzreader.send(@method) { |b| ScratchPad << b }
+    
+    describe 'GzipWriter#write' do
+  before :each do
+    @data = '12345abcde'
+    @zip = [31, 139, 8, 0, 44, 220, 209, 71, 0, 3, 51, 52, 50, 54, 49, 77,
+            76, 74, 78, 73, 5, 0, 157, 5, 0, 36, 10, 0, 0, 0].pack('C*')
+    @io = StringIO.new ''.b
+  end
+    
+      before do
+    @zeros    = Zlib::Deflate.deflate('0' * 100_000)
+    @inflator = Zlib::Inflate.new
+    @chunks   = []
+    
+          it 'returns scopes by built types, versioned platform names and subspec names' do
+        variants = PodVariantSet.new([
+          PodVariant.new([@root_spec, @default_subspec], [], [], Platform.new(:ios, '7.0')),
+          PodVariant.new([@root_spec, @default_subspec], [], [], Platform.ios),
+          PodVariant.new([@root_spec, @default_subspec], [], [], Platform.osx, Target::BuildType.dynamic_framework),
+          PodVariant.new([@root_spec, @default_subspec, @foo_subspec], [], [], Platform.osx, Target::BuildType.dynamic_framework),
+        ])
+        variants.scope_suffixes.values.should == %w(
+          library-iOS7.0
+          library-iOS
+          framework
+          .default-Foo
+        )
       end
     
-          def output_method?(node)
-        _definee, method_name, _args, _body = *node
-        method_name.to_s == 'output'
+    - (BOOL)application:(UIApplication *)__unused application didFinishLaunchingWithOptions:(NSDictionary *)__unused launchOptions
+{
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.rootViewController = [UIViewController new];
+    }
+    
+            # Cleans up projects before writing.
+        #
+        def cleanup_projects(projects)
+          projects.each do |project|
+            [project.pods, project.support_files_group,
+             project.development_pods, project.dependencies_group].each { |group| group.remove_from_project if group.empty? }
+            project.sort(:groups_position => :below)
+          end
+        end
       end
     end
   end
 end
 
     
-      match do
-    result = is_pane
+    @@ login
+<form action='/'>
+  <label for='user'>User Name:</label>
+  <input name='user' value='' />
+  <input type='submit' value='GO!' />
+</form>
     
-      yield
+          def unmasked_token?(token)
+        token.length == TOKEN_LENGTH
+      end
     
-        desc 'completions [arg1 arg2]', COMMANDS[:completions]
-    
-    describe Tmuxinator::Window do
-  let(:project) { double }
-  let(:panes) { ['vim', nil, 'top'] }
-  let(:window_name) { 'editor' }
-  let(:synchronize) { false }
-  let(:yaml) do
-    {
-      window_name => {
-        'pre' => [
-          'echo 'I get run in each pane.  Before each pane command!'',
-          nil
-        ],
-        'synchronize' => synchronize,
-        'layout' => 'main-vertical',
-        'panes' => panes
-      }
-    }
+          def call(env)
+        status, headers, body = @app.call(env)
+        header = options[:report_only] ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'
+        headers[header] ||= csp_policy if html? headers
+        [status, headers, body]
+      end
+    end
   end
-  let(:yaml_root) do
-    {
-      'editor' => {
-        'root' => '/project/override',
-        'root?' => true,
-        'pre' => [
-          'echo 'I get run in each pane.  Before each pane command!'',
-          nil
-        ],
-        'layout' => 'main-vertical',
-        'panes' => panes
-      }
-    }
+end
+
+    
+      it 'accepts post form requests with correct authenticity_token field' do
+    post('/', {'authenticity_token' => token}, 'rack.session' => session)
+    expect(last_response).to be_ok
+  end
+    
+    end
+
+    
+      it 'allows middleware to abruptly stop processing rest of chain' do
+    recorder = []
+    chain = Sidekiq::Middleware::Chain.new
+    chain.add NonYieldingMiddleware
+    chain.add CustomMiddleware, 1, recorder
+    
+          assert SomeScheduledWorker.perform_in(1.month, 'mike')
+      assert_equal 2, ss.size
+    
+        assert_raises InlineError do
+      Sidekiq::Client.enqueue(InlineWorker, false)
+    end
+  end
+    
+        ## Write the results to a file
+    ## Requires railsexpress patched MRI build
+    # brew install qcachegrind
+    #File.open('callgrind.profile', 'w') do |f|
+      #RubyProf::CallTreePrinter.new(result).print(f, :min_percent => 1)
+    #end
+  end
+end
+    
+        msg = 'Actual pane does not match expected'
+    msg << '\n  Expected #{@commands} but has #{actual.commands}' if @commands
+    msg << '\n  Expected pane to have #{@expected_attrs}' if @expected_attrs
   end
