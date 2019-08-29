@@ -1,196 +1,201 @@
 
         
-          # ==> ORM configuration
-  # Load and configure the ORM. Supports :active_record (default) and
-  # :mongoid (bson_ext recommended) by default. Other ORMs may be
-  # available as additional gems.
-  require 'devise/orm/<%= options[:orm] %>'
+              # `{{ site.related_posts }}` is how posts can get posts related to
+      # them, either through LSI if it's enabled, or through the most
+      # recent posts.
+      # We should remove this in 4.0 and switch to `{{ post.related_posts }}`.
+      def related_posts
+        return nil unless @current_document.is_a?(Jekyll::Document)
     
-        # The path used after confirmation.
-    def after_confirmation_path_for(resource_name, resource)
-      if signed_in?(resource_name)
-        signed_in_root_path(resource)
-      else
-        new_session_path(resource_name)
+                problem 'Dir([\'#{string_content(path)}\']) is unnecessary; just use \'#{match[0]}\''
+          end
+    
+              find_method_with_args(body_node, :system, 'xcodebuild') do
+            problem %q(use 'xcodebuild *args' instead of 'system 'xcodebuild', *args')
+          end
+    
+        it 'When plist_options are not defined when using a formula-defined plist', :ruby23 do
+      expect_offense(<<~RUBY)
+        class Foo < Formula
+          url 'https://brew.sh/foo-1.0.tgz'
+          homepage 'https://brew.sh'
+    
+        checksum, tag = spec.checksum_for(Utils::Bottles.tag)
+    
+        it 'acts like #depends_on' do
+      f = formula 'foo' do
+        url 'foo-1.0'
+    
+          expect(spec.deps).to be_empty
+    end
+    
+      it 'properly handles Casks that are not present' do
+    expect {
+      described_class.run('notacask')
+    }.to raise_error(Cask::CaskUnavailableError)
+  end
+end
+
+    
+        case val
+    when nil     then Version.detect(url, specs)
+    when String  then Version.create(val)
+    when Version then val
+    else
+      raise TypeError, 'version '#{val.inspect}' should be a string'
+    end
+  end
+    
+      def show
+    render json: @poll, serializer: REST::PollSerializer, include_results: true
+  end
+    
+        return if skip_distribution?
+    
+        return unless @account.present? && @status.distributable?
+    
+      # ID to add for error notification helper.
+  # config.error_notification_id = nil
+    
+        def pam_conflict(_attributes)
+      # Block pam login tries on traditional account
+    end
+    
+          it 'processes payload with actor if valid signature exists' do
+        payload['signature'] = { 'type' => 'RsaSignature2017' }
+    
+    # create and write to opml file
+xml = Builder::XmlMarkup.new(indent: 2)
+xml.instruct! :xml, version: '1.0', encoding: 'UTF-8'
+xml.tag!('opml', version: '1.0') do
+  # head
+  xml.tag!('head') do
+    xml.title TITLE
+  end
+    
+      task :publishing do
+    invoke 'deploy:symlink:release'
+  end
+    
+        def hostfilter
+      ['--hosts HOSTS', '-z',
+       'Run SSH commands only on matching hosts',
+       lambda do |value|
+         Configuration.env.add_cmdline_filter(:host, value)
+       end]
+    end
+    
+        private
+    
+          def call
+        ask_question
+        value_or_default
+      end
+    
+    set_if_empty :local_user, -> { ENV['USER'] || ENV['LOGNAME'] || ENV['USERNAME'] }
+
+    
+      def autocorrect_source_file(source)
+    Tempfile.open('tmp') { |f| autocorrect_source(source, f) }
+  end
+    
+            rhs
       end
     end
-    
-        def translation_scope
-      'devise.unlocks'
-    end
+  end
 end
 
     
-        def unlock_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :unlock_instructions, opts)
-    end
+            def outermost_send_on_same_line(heredoc)
+          previous = heredoc
+          current = previous.parent
+          until send_missing_closing_parens?(current, previous, heredoc)
+            previous = current
+            current = current.parent
+            return unless previous && current
+          end
+          current
+        end
     
-      before_action :authenticate_user!
-    
-          # Stores the provided location to redirect the user after signing in.
-      # Useful in combination with the `stored_location_for` helper.
-      #
-      # Example:
-      #
-      #   store_location_for(:user, dashboard_path)
-      #   redirect_to user_facebook_omniauth_authorize_path
-      #
-      def store_location_for(resource_or_scope, location)
-        session_key = stored_location_key_for(resource_or_scope)
-        
-        path = extract_path_from_location(location)
-        session[session_key] = path if path
+        context 'correct + opposite' do
+      it 'registers an offense' do
+        inspect_source(source)
+        expect(cop.offenses.size).to eq(1)
+        expect(cop.messages.first)
+          .to eq('`end` at 7, 4 is not aligned with `foo def` at 5, 0.')
+        expect(cop.highlights.first).to eq('end')
+        expect(cop.config_to_allow_offenses).to eq('Enabled' => false)
       end
     
-      def test_change_class_name
-    eval('class C3; def _dump(s); 'foo'; end; end')
-    m = Marshal.dump(C3.new)
-    assert_raise(TypeError) { Marshal.load(m) }
-    eval('C3 = nil')
-    assert_raise(TypeError) { Marshal.load(m) }
-  end
-    
-      def self.scroll_down(val)
-    return if val.zero?
-    scroll_rectangle = [0, val, get_screen_size.first, get_screen_size.last].pack('s4')
-    destination_origin = 0 # y * 65536 + x
-    fill = [' '.ord, 0].pack('SS')
-    @@ScrollConsoleScreenBuffer.call(@@hConsoleHandle, scroll_rectangle, nil, destination_origin, fill)
-  end
-    
-        ScratchPad.record []
-    gz.each_byte { |b| ScratchPad << b }
-    
-      before :each do
-    @data = '12345abcde'
-    @zip = [31, 139, 8, 0, 44, 220, 209, 71, 0, 3, 51, 52, 50, 54, 49, 77,
-            76, 74, 78, 73, 5, 0, 157, 5, 0, 36, 10, 0, 0, 0].pack('C*')
-    @io = StringIO.new @zip
-  end
-    
-      before :each do
-    @data = 'firstline\nsecondline\n\nforthline'
-    @zip = [31, 139, 8, 0, 244, 125, 128, 88, 2, 255, 75, 203, 44, 42, 46, 201,
-            201, 204, 75, 229, 42, 78, 77, 206, 207, 75, 1, 51, 185, 210,242,
-            139, 74, 50, 64, 76, 0, 180, 54, 61, 111, 31, 0, 0, 0].pack('C*')
-    
-        assert_equal obj.attribute, Psych.load(Psych.dump(obj)).attribute
-  end
-end
-
-    
-        it 'allows angry developers to express their emotional constitution and remedies it' do
-      Sidekiq.❨╯°□°❩╯︵┻━┻
-      assert_equal 'Calm down, yo.\n', $stdout.string
-    end
-  end
-    
-      class DirectWorker
-    include Sidekiq::Worker
-    def perform(a, b)
-      a + b
-    end
-  end
-    
-    class TimedWorker
-  include Sidekiq::Worker
-    
-    post '/msg' do
-  SinatraWorker.perform_async params[:msg]
-  redirect to('/')
-end
-    
-    class SinatraStaticServer < Sinatra::Base
-    
-    Liquid::Template.register_tag('blockquote', Jekyll::Blockquote)
-
-    
-            Dir.chdir(includes_dir) do
-          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
-          if choices.include?(file)
-            source = File.read(file)
-            partial = Liquid::Template.parse(source)
-            context.stack do
-              rtn = rtn + partial.render(context)
+            expect(new_source).to eq(<<~RUBY)
+          def func
+            {a: 1, b: 2, c: 3}.each do |(a, b)|
+              puts a, b
             end
-          else
-            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
           end
-        end
+        RUBY
       end
-      rtn
-    end
-  end
     
-      class IncludeCodeTag < Liquid::Tag
-    def initialize(tag_name, markup, tokens)
-      @title = nil
-      @file = nil
-      if markup.strip =~ /\s*lang:(\S+)/i
-        @filetype = $1
-        markup = markup.strip.sub(/lang:\S+/i,'')
-      end
-      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
-        @title = $1 || nil
-        @file = $3
-      end
-      super
-    end
+      before { inspect_source(source) }
     
-          Dir.chdir(file_path) do
-        contents = file.read
-        if contents =~ /\A-{3}.+[^\A]-{3}\n(.+)/m
-          contents = $1.lstrip
-        end
-        contents = pre_filter(contents)
-        if @raw
-          contents
+          # Checks whether this node body is a void context.
+      # Always `true` for `for`.
+      #
+      # @return [true] whether the `for` node body is a void context
+      def void_context?
+        true
+      end
+    
+          # Returns the inverse delimiter of the `pair` as a string.
+      #
+      # @param [Boolean] with_spacing whether to include spacing
+      # @return [String] the inverse delimiter of the `pair`
+      def inverse_delimiter(with_spacing = false)
+        if with_spacing
+          hash_rocket? ? SPACED_COLON : SPACED_HASH_ROCKET
         else
-          partial = Liquid::Template.parse(contents)
-          context.stack do
-            partial.render(context)
-          end
+          hash_rocket? ? COLON : HASH_ROCKET
         end
       end
-    end
-  end
-end
     
-        def render(context)
-      output = super
-      types = {
-        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
-        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
-        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
-      }
-      if @videos.size > 0
-        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
-        @videos.each do |v|
-          video << '<source src='#{v}' #{types[File.extname(v)]}>'
-        end
-        video += '</video>'
-      else
-        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
+          params = add_dead('jid-with-hyphen')
+      post '/morgue/#{job_params(*params)}', 'retry' => 'Retry'
+      assert_equal 302, last_response.status
+      assert_equal 0, Sidekiq::DeadSet.new.size
+    
+        it 'handles symbols and strings' do
+      q = Sidekiq::Queue.new('bar')
+      assert_equal 0, q.size
+      assert SetWorker.set('queue' => 'bar', :retry => 11).perform_async(1)
+      job = q.first
+      assert_equal 'bar', job['queue']
+      assert_equal 11, job['retry']
+    
+        it 'shows empty retries' do
+      r = Sidekiq::RetrySet.new
+      assert_equal 0, r.size
+    end
+    
+    describe Sidekiq::ExceptionHandler do
+  describe 'with mock logger' do
+    before do
+      @old_logger = Sidekiq.logger
+      @str_logger = StringIO.new
+      Sidekiq.logger = Logger.new(@str_logger)
+    end
+    
+      describe 'I18n' do
+    before do
+      require 'i18n'
+      I18n.enforce_available_locales = false
+      require 'sidekiq/middleware/i18n'
+    end
+    
+          Time.stub(:now, created_time) do
+        @retry.schedule (enqueued_time - 60).to_f, @error_1.merge!('created_at' => created_time.to_f)
+        @retry.schedule (enqueued_time - 50).to_f, @error_2.merge!('created_at' => created_time.to_f)
+        @retry.schedule (enqueued_time + 60).to_f, @error_3.merge!('created_at' => created_time.to_f)
+        @scheduled.schedule (enqueued_time - 60).to_f, @future_1.merge!('created_at' => created_time.to_f)
+        @scheduled.schedule (enqueued_time - 50).to_f, @future_2.merge!('created_at' => created_time.to_f)
+        @scheduled.schedule (enqueued_time + 60).to_f, @future_3.merge!('created_at' => created_time.to_f)
       end
-    end
-    
-    end
-
-    
-      private
-    
-      include WithinOrganization
-    
-      def create
-    login(User.authenticate(params[:email_address], params[:password]))
-    flash[:remember_login] = true
-    redirect_to_with_return_to root_path
-  rescue Postal::Errors::AuthenticationError => e
-    flash.now[:alert] = 'The credentials you've provided are incorrect. Please check and try again.'
-    render 'new'
-  end
-    
-      def safe_params
-    params.require(:smtp_endpoint).permit(:name, :hostname, :port, :ssl_mode)
-  end
