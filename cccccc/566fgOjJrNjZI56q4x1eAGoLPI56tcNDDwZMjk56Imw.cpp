@@ -1,233 +1,270 @@
 
         
-        REGISTER_OP('Add').Doc(R'doc(
-An op to test that duplicate registrations don't override previously
-registered ops.
-)doc');
+        void MyComputedHashes::ComputeHashesForContent(const std::string& contents,
+                                             size_t block_size,
+                                             std::vector<std::string>* hashes) {
+  size_t offset = 0;
+  // Even when the contents is empty, we want to output at least one hash
+  // block (the hash of the empty string).
+  do {
+    const char* block_start = contents.data() + offset;
+    DCHECK(offset <= contents.size());
+    size_t bytes_to_read = std::min(contents.size() - offset, block_size);
+    std::unique_ptr<crypto::SecureHash> hash(
+        crypto::SecureHash::Create(crypto::SecureHash::SHA256));
+    hash->Update(block_start, bytes_to_read);
+    }
+    }
     
     
-    {  DCHECK(PyDict_Check(code_to_exc_type_map));
-  PyObject* key;
-  PyObject* value;
-  Py_ssize_t pos = 0;
-  while (PyDict_Next(code_to_exc_type_map, &pos, &key, &value)) {
-    TF_Code code = static_cast<TF_Code>(PyLong_AsLong(key));
-    singleton_->exc_types_[code] = value;
-    // The exception classes should also have the lifetime of the process, but
-    // incref just in case.
-    Py_INCREF(value);
-  }
+    {  RenderThread::Get()->Send(new ShellViewHostMsg_Allocate_Object(
+      routing_id,
+      object_id,
+      type,
+      *static_cast<base::DictionaryValue*>(value_option.get())));
+  return v8::Undefined(isolate);
 }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
-    
-        http://www.apache.org/licenses/LICENSE-2.0
+    #include 'base/compiler_specific.h'
+#include 'content/nw/src/api/base/base.h'
     
     
     {
-    {}  // namespace host
-}  // namespace stream_executor
+    {    if (zoom_controller) {
+      double zoom_factor = content::ZoomLevelToZoomFactor(zoom_controller->GetZoomLevel());
+      if (zoom_factor > content::kMaximumZoomFactor) {
+        zoom_factor = content::kMaximumZoomFactor;
+      }
+      if (zoom_factor < content::kMinimumZoomFactor) {
+        zoom_factor = content::kMinimumZoomFactor;
+      }
+      x *= zoom_factor;
+      y *= zoom_factor;
+    }
+    
+    Popup(x, y, rvh);
+  } else if (method == 'EnableShowEvent') {
+    arguments.GetBoolean(0, &enable_show_event_);
+  } else {
+    NOTREACHED() << 'Invalid call to Menu method:' << method
+                 << ' arguments:' << arguments;
+  }
+}
+    
+    
+    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return;
+  item->OnClick();
+}
+    
+    
+    {  // Convert from content coordinates to window coordinates.
+  // This code copied from chrome_web_contents_view_delegate_views.cc
+  aura::Window* target_window = GetActiveNativeView(rfh);
+  aura::Window* root_window = target_window->GetRootWindow();
+  views::Widget* top_level_widget =
+    views::Widget::GetTopLevelWidgetForNativeView(target_window);
+  aura::client::ScreenPositionClient* screen_position_client =
+        aura::client::GetScreenPositionClient(root_window);
+  if (screen_position_client) {
+    screen_position_client->ConvertPointToScreen(target_window,
+             &screen_point);
+  }
+  set_delay_destruction(true);
+  menu_runner_.reset(new views::MenuRunner(menu_model_.get(), views::MenuRunner::CONTEXT_MENU,
+                                           base::Bind(&Menu::OnMenuClosed, base::Unretained(this))));
+  menu_runner_->RunMenuAt(top_level_widget,
+                       nullptr,
+                       gfx::Rect(screen_point, gfx::Size()),
+                          views::MenuAnchorPosition::kTopRight,
+                       ui::MENU_SOURCE_NONE);
+  // It is possible for the same MenuMessageLoopAura to start a nested
+  // message-loop while it is already running a nested loop. So make
+  // sure the quit-closure gets reset to the outer loop's quit-closure
+  // once the innermost loop terminates.
+  {
+    base::AutoReset<base::Closure> reset_quit_closure(&message_loop_quit_,
+                                                      base::Closure());
+  
+    //base::MessageLoop* loop = base::MessageLoop::current();
+    base::MessageLoopCurrent::ScopedNestableTaskAllower allow;
+    base::RunLoop run_loop;
+    message_loop_quit_ = run_loop.QuitClosure();
+  
+    run_loop.Run();
+  }
+  set_delay_destruction(false);
+  if (pending_destruction())
+    object_manager_->OnDeallocateObject(id_);
+}
+    
+    namespace nw {
+    }
+    
+    void MenuItem::UpdateKeys(views::FocusManager *focus_manager){
+  if (focus_manager == NULL){
+    return ;
+  } else {
+    focus_manager_ = focus_manager;
+    if (enable_shortcut_){
+      focus_manager->RegisterAccelerator(
+        accelerator_,
+        ui::AcceleratorManager::kHighPriority,
+        this);
+    }
+    if (submenu_ != NULL){
+      submenu_->UpdateKeys(focus_manager);
+    }
+  }
+}
+    
+    #include <vector>
+    
+        bool ReadRTF(ClipboardData& data) {
+      DCHECK(data.type == TYPE_RTF);
+      std::string text;
+      clipboard_->ReadRTF(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
+      data.data.reset(new std::string(text));
+      return true;
+    }
+    
+    #include 'extensions/browser/extension_function.h'
+    
+      void ModifySendMessage(const void* message) override {
+    GPR_CODEGEN_ASSERT(
+        false &&
+        'It is illegal to call ModifySendMessage on a method which '
+        'has a Cancel notification');
+  }
+    
+    static bool iomgr_platform_add_closure_to_background_poller(
+    grpc_closure* closure, grpc_error* error) {
+  return false;
+}
+    
+    #include 'src/core/lib/iomgr/sockaddr_windows.h'
+    
+    static inline std::shared_ptr<::grpc::Channel> CreateCustomChannel(
+    const grpc::string& target,
+    const std::shared_ptr<ChannelCredentials>& creds,
+    const ChannelArguments& args) {
+  return ::grpc_impl::CreateCustomChannelImpl(target, creds, args);
+}
+    
+    static grpc::internal::GrpcLibraryInitializer g_gli_initializer;
+ChannelCredentials::ChannelCredentials() { g_gli_initializer.summon(); }
+    
+      KillServer();
+    
+    // Add a second service with one async method.
+TEST_F(HybridEnd2endTest, AsyncRequestStreamResponseStream_AsyncDupService) {
+  typedef EchoTestService::WithAsyncMethod_RequestStream<
+      EchoTestService::WithAsyncMethod_ResponseStream<TestServiceImpl>>
+      SType;
+  SType service;
+  duplicate::EchoTestService::AsyncService dup_service;
+  SetUpServer(&service, &dup_service, nullptr, nullptr);
+  ResetStub();
+  std::thread response_stream_handler_thread(HandleServerStreaming<SType>,
+                                             &service, cqs_[0].get());
+  std::thread request_stream_handler_thread(HandleClientStreaming<SType>,
+                                            &service, cqs_[1].get());
+  std::thread echo_handler_thread(
+      HandleEcho<duplicate::EchoTestService::AsyncService>, &dup_service,
+      cqs_[2].get(), true);
+  TestAllMethods();
+  SendEchoToDupService();
+  response_stream_handler_thread.join();
+  request_stream_handler_thread.join();
+  echo_handler_thread.join();
+}
+    
+      send_response_.set_message(recv_request_.message());
+  SerializeToByteBufferInPlace(&send_response_, &send_response_buffer_);
+  srv_stream.Write(send_response_buffer_, tag(3));
+  cli_stream->Read(&recv_response_, tag(4));
+  Verifier().Expect(3, true).Expect(4, true).Verify(cq_.get());
+  EXPECT_EQ(send_response_.message(), recv_response_.message());
+    
+    #define DEFINE_JSON_OUTPUT_TYPE(type) \
+  struct type { \
+    typedef _OutputStream<type>  OutputStream; \
+    typedef _MapStream<type>     MapStream; \
+    typedef _ListStream<type>    ListStream; \
+    typedef _ISerializable<type> ISerializable; \
+  }
+    
+    #endif
 
     
-    // Generate param traits log methods.
-#include 'ipc/param_traits_log_macros.h'
-namespace IPC {
-#include 'content/nw/src/common/common_message_generator.h'
-}  // namespace IPC
-
+    /**
+ * API methods to call at property resolution (from `object-data`).
+ * Example: Native::getProp(this, propName);
+ */
+Variant getProp(const Object& obj, const String& name);
+Variant setProp(const Object& obj, const String& name, const Variant& value);
+Variant issetProp(const Object& obj, const String& name);
+Variant unsetProp(const Object& obj, const String& name);
     
-    void App::SetProxyConfig(content::RenderProcessHost* render_process_host,
-                         const std::string& proxy_config) {
-  net::ProxyConfig config;
-  config.proxy_rules().ParseFromString(proxy_config);
-  net::URLRequestContextGetter* context_getter =
-    render_process_host->GetBrowserContext()->
-    GetRequestContextForRenderProcess(render_process_host->GetID());
-    }
-    
-    void MenuItem::SetSubmenu(Menu* menu) {
-  if (submenu_) submenu_->RemoveKeys();
-    }
-    
-    
-    {  for (AppWindow* window : windows) {
-    if (window->NWCanClose())
-      window->GetBaseWindow()->Close();
-  }
-}
-    
-    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
- public:
-  NwMenuGetNSStringFWithFixupFunction() {}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    
- protected:
-  ~NwMenuGetNSStringFWithFixupFunction() override {}
-    
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
-};
-    
-    
-    {  nw::ObjectManager* manager = nw::ObjectManager::Get(browser_context());
-  manager->OnDeallocateObject(id);
-  return true;
-}
-    
-      kFullType = 1,
-    
-    class Writer {
- public:
-  // Create a writer that will append data to '*dest'.
-  // '*dest' must be initially empty.
-  // '*dest' must remain live while this Writer is in use.
-  explicit Writer(WritableFile* dest);
-    }
-    
-    #ifndef STORAGE_LEVELDB_DB_MEMTABLE_H_
-#define STORAGE_LEVELDB_DB_MEMTABLE_H_
-    
-      // If non-null, use the specified cache for blocks.
-  // If null, leveldb will automatically create and use an 8MB internal cache.
-  Cache* block_cache = nullptr;
-    
-    
-    {  Insert(1, 100);
-  ASSERT_EQ(-1, Lookup(1));
-}
-    
-      double min_;
-  double max_;
-  double num_;
-  double sum_;
-  double sum_squares_;
-    
-    int PSTokenizer::lookChar() {
-  if (charBuf < 0) {
-    charBuf = (*getCharFunc)(data);
-  }
-  return charBuf;
-}
-    
-    #include <config.h>
-#include <limits.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <assert.h>
-    
-      check(state->getFillColorSpace(), state->getFillColor(),
-	state->getFillOpacity(), state->getBlendMode());
-  gdi = gFalse;
-  if ((level == psLevel1 || level == psLevel1Sep) &&
-      state->getFillColorSpace()->getMode() == csPattern) {
-    level1PSBug = gTrue;
+      RangeState& getRangeState() {
+    return m_state;
   }
     
-      //----- image drawing
-  virtual void drawImageMask(GfxState *state, Object *ref, Stream *str,
-			     int width, int height, GBool invert,
-			     GBool interpolate, GBool inlineImg);
-  virtual void drawImage(GfxState *state, Object *ref, Stream *str,
-			 int width, int height, GfxImageColorMap *colorMap,
-			 GBool interpolate, int *maskColors, GBool inlineImg);
-  virtual void drawMaskedImage(GfxState *state, Object *ref, Stream *str,
-			       int width, int height,
-			       GfxImageColorMap *colorMap,
-			       GBool interpolate,
-			       Stream *maskStr, int maskWidth, int maskHeight,
-			       GBool maskInvert, GBool maskInterpolate);
-  virtual void drawSoftMaskedImage(GfxState *state, Object *ref, Stream *str,
-				   int width, int height,
-				   GfxImageColorMap *colorMap,
-				   GBool interpolate,
-				   Stream *maskStr,
-				   int maskWidth, int maskHeight,
-				   GfxImageColorMap *maskColorMap,
-				   GBool maskInterpolate);
+    // Try to create a temporary directory and mount a hugetlbfs with 1G page size
+// there.  Return whether the operation succeeded.
+bool auto_mount_hugetlbfs();
     
-      virtual void *makeAuthData(GooString *ownerPassword,
-			     GooString *userPassword);
-  virtual void *getAuthData();
-  virtual void freeAuthData(void *authData);
-  virtual GBool authorize(void *authData);
-  virtual int getPermissionFlags() { return permFlags; }
-  virtual GBool getOwnerPasswordOk() { return gFalse; }
-  virtual Guchar *getFileKey() { return fileKey; }
-  virtual int getFileKeyLength() { return fileKeyLength; }
-  virtual int getEncVersion() { return encVersion; }
-  virtual CryptAlgorithm getEncAlgorithm() { return encAlgorithm; }
-    
-      //----- update graphics state
-  virtual void updateAll(GfxState *state);
-  virtual void updateCTM(GfxState *state, double m11, double m12,
-			 double m21, double m22, double m31, double m32);
-  virtual void updateLineDash(GfxState *state);
-  virtual void updateFlatness(GfxState *state);
-  virtual void updateLineJoin(GfxState *state);
-  virtual void updateLineCap(GfxState *state);
-  virtual void updateMiterLimit(GfxState *state);
-  virtual void updateLineWidth(GfxState *state);
-  virtual void updateStrokeAdjust(GfxState *state);
-  virtual void updateFillColor(GfxState *state);
-  virtual void updateStrokeColor(GfxState *state);
-  virtual void updateBlendMode(GfxState *state);
-  virtual void updateFillOpacity(GfxState *state);
-  virtual void updateStrokeOpacity(GfxState *state);
-    
-    #ifdef _WIN32
-  setmode(fileno(stdin), O_BINARY);
-#endif
-    
-    // Temporary data for one destination ImFont* (multiple source fonts can be merged into one destination ImFont)
-struct ImFontBuildDstDataFT
-{
-    int                 SrcCount;           // Number of source fonts targeting this destination font.
-    int                 GlyphsHighest;
-    int                 GlyphsCount;
-    ImBoolVector        GlyphsSet;          // This is used to resolve collision when multiple sources are merged into a same destination font.
-};
+      Type getType() const { return m_type; }
+  const Class::Prop* getProp() const {
+    assertx(m_type == Instance);
+    return m_prop;
+  }
+  const Class::SProp* getSProp() const {
+    assertx(m_type == Static);
+    return m_sprop;
+  }
     
     
-    {
-    {
-    {                // Bind texture, Draw
-                ID3D11ShaderResourceView* texture_srv = (ID3D11ShaderResourceView*)pcmd->TextureId;
-                ctx->PSSetShaderResources(0, 1, &texture_srv);
-                ctx->DrawIndexed(pcmd->ElemCount, pcmd->IdxOffset + global_idx_offset, pcmd->VtxOffset + global_vtx_offset);
-            }
-        }
-        global_idx_offset += cmd_list->IdxBuffer.Size;
-        global_vtx_offset += cmd_list->VtxBuffer.Size;
+    {  auto const data = packedData(ad);
+  auto const stop = data + ad->m_size;
+  for (auto ptr = data; ptr != stop; ++ptr) {
+    RegisterUncountedTvAllocations(*ptr, rootAPCHandle);
+  }
+  assertx(RuntimeOption::EvalGCForAPC);
+  APCGCManager::getInstance().registerAllocation(ad,
+                                        (char*)ad + PackedArray::heapSize(ad),
+                                        rootAPCHandle);
+}
+    
+      static ArrayData* ToShape(ArrayData*, bool);
+    
+    /**
+ * @brief Docker UNIX domain socket path.
+ *
+ * By default docker creates UNIX domain socket at /var/run/docker.sock. If
+ * docker domain is configured to use a different path specify that path.
+ */
+FLAG(string,
+     docker_socket,
+     '/var/run/docker.sock',
+     'Docker UNIX domain socket path');
+    
+    bool validate_value_using_flags(const std::string& value,
+                                                      int flags) {
+  if ((flags & NonEmpty) > 0) {
+    if (value.length() == 0) {
+      return false;
+    }
+  }
     }
     
-        // Render command lists
-    for (int n = 0; n < draw_data->CmdListsCount; n++)
-    {
-        const ImDrawList* cmd_list = draw_data->CmdLists[n];
-        const ImDrawIdx* idx_buffer = cmd_list->IdxBuffer.Data;
-        const int nVert = cmd_list->VtxBuffer.Size;
-        CIwFVec2* pVertStream = IW_GX_ALLOC(CIwFVec2, nVert);
-        CIwFVec2* pUVStream = IW_GX_ALLOC(CIwFVec2, nVert);
-        CIwColour* pColStream = IW_GX_ALLOC(CIwColour, nVert);
+      auto formatMemPerms = [](unsigned long perm) {
+    std::vector<std::string> perms;
+    for (const auto& kv : kMemoryConstants) {
+      if (kv.first & perm) {
+        perms.push_back(kv.second);
+      }
     }
-    
-    void    ImGui_ImplWin32_NewFrame()
-{
-    ImGuiIO& io = ImGui::GetIO();
-    IM_ASSERT(io.Fonts->IsBuilt() && 'Font atlas not built! It is generally built by the renderer back-end. Missing call to renderer _NewFrame() function? e.g. ImGui_ImplOpenGL3_NewFrame().');
-    }
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-        glfwDestroyWindow(window);
-    glfwTerminate();
+    return osquery::join(perms, ' | ');
+  };
