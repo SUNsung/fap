@@ -1,118 +1,99 @@
 
         
-                fields = object.preferences.keys.map do |key|
-          if object.has_preference?(key)
-            form.label('preferred_#{key}', Spree.t(key) + ': ') +
-              preference_field_for(form, 'preferred_#{key}', type: object.preference_type(key))
-          end
-        end
-        safe_join(fields, '<br />'.html_safe)
-      end
+        describe ApplicationHelper do
+  describe '#icon_tag' do
+    it 'returns a Glyphicon icon element' do
+      icon = icon_tag('glyphicon-help')
+      expect(icon).to be_html_safe
+      expect(Nokogiri(icon).at('span.glyphicon.glyphicon-help')).to be_a Nokogiri::XML::Element
+    end
     
-            def option_type_params
-          params.require(:option_type).permit(permitted_option_type_attributes)
-        end
-      end
+        it 'can not be turned off' do
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'true' }
+      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
     end
   end
 end
 
     
-            def scope
-          @scope ||= if params[:option_type_id]
-                       Spree::OptionType.find(params[:option_type_id]).option_values.accessible_by(current_ability, :show)
-                     else
-                       Spree::OptionValue.accessible_by(current_ability, :show).load
-                     end
-        end
-    
-            def new; end
-    
-            def create
-          authorize! :create, StockLocation
-          @stock_location = StockLocation.new(stock_location_params)
-          if @stock_location.save
-            respond_with(@stock_location, status: 201, default_template: :show)
-          else
-            invalid_resource!(@stock_location)
-          end
-        end
-    
-            def show
-          respond_with(taxonomy)
-        end
-    
-            def taxon
-          @taxon ||= taxonomy.taxons.accessible_by(current_ability, :show).find(params[:id])
-        end
-    
-            # The lazyloaded associations here are pretty much attached to which nodes
-        # we render on the view so we better update it any time a node is included
-        # or removed from the views.
-        def index
-          @variants = scope.includes(*variant_includes).for_currency_and_available_price_amount.
-                      ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
-          respond_with(@variants)
-        end
-    
-            def update
-          authorize! :update, zone
-          if zone.update(zone_params)
-            respond_with(zone, status: 200, default_template: :show)
-          else
-            invalid_resource!(zone)
-          end
-        end
-    
-    end
-    
-        # Creates an instance of CategoryIndex for each category page, renders it, and
-    # writes the output to a file.
-    #
-    #  +category_dir+ is the String path to the category folder.
-    #  +category+     is the category currently being processed.
-    def write_category_index(category_dir, category)
-      index = CategoryIndex.new(self, self.source, category_dir, category)
-      index.render(self.layouts, site_payload)
-      index.write(self.dest)
-      # Record the fact that this page has been added, otherwise Site::cleanup will remove it.
-      self.pages << index
-    
-      it 'creates an instance' do
-    expect(subject).to be_a(Tmuxinator::Pane)
-  end
-    
-        context 'as number' do
-      it 'will gracefully handle a name given as a number' do
-        rendered = project_with_number_as_name
-        expect(rendered.name.to_i).to_not equal 0
-      end
-    end
-    
-    formatters = [
-  SimpleCov::Formatter::HTMLFormatter,
-  Coveralls::SimpleCov::Formatter
-]
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(formatters)
-SimpleCov.start do
-  add_filter 'vendor/cache'
-end
-    
-          it 'should load and validate the project' do
-        project_config = File.join(fixtures_dir, 'sample.yml')
-        expect(described_class.validate(project_config: project_config)).to \
-          be_a Tmuxinator::Project
-      end
-    
-          it 'returns false' do
-        expect(described_class.shell?).to be_falsey
-      end
-    end
-  end
-end
-
-    
-        context 'command is a string' do
+        context 'running workers' do
       before do
-        yaml['editor'] = 'vim'
+        AgentRunner.class_variable_set(:@@agents, [HuginnScheduler, DelayedJobWorker])
+        stub.instance_of(HuginnScheduler).setup
+        stub.instance_of(DelayedJobWorker).setup
       end
+    
+    describe HuginnScheduler do
+  before(:each) do
+    @rufus_scheduler = Rufus::Scheduler.new
+    @scheduler = HuginnScheduler.new
+    stub(@scheduler).setup {}
+    @scheduler.setup!(@rufus_scheduler, Mutex.new)
+  end
+    
+      let :valid_options do
+    {
+      'name' => 'XKCD',
+      'expected_update_period_in_days' => '2',
+      'type' => 'html',
+      'url' => '{{ url | default: 'http://xkcd.com/' }}',
+      'mode' => 'on_change',
+      'extract' => old_extract,
+      'template' => old_template
+    }
+  end
+    
+          AgentLog.log_for_agent(agents(:jane_website_agent), 'some message', :level => 4, :outbound_event => events(:jane_website_agent_event))
+      expect(agents(:jane_website_agent).reload.last_error_log_at.to_i).to be_within(2).of(Time.now.to_i)
+    end
+    
+        it 'should generate the correct events url' do
+      expect(@checker.send(:event_url)).to eq('https://api.aftership.com/v4/trackings')
+    end
+    
+          let(:valid_params) {
+        {
+          name: 'Example',
+          schedule: 'never',
+          options: {
+            'action' => '{% if target.id == agent_id %}configure{% endif %}',
+            'configure_options' => {
+              'rules' => [
+                {
+                  'type' => 'field<value',
+                  'value' => '{{price}}',
+                  'path' => 'price',
+                }
+              ]
+            }
+          },
+          user: users(:bob),
+          control_targets: [target, real_target]
+        }
+      }
+    
+          it 'writes headers when with_header is true' do
+        event = Event.new(payload: { 'data' => {'key' => 'value', 'key2' => 'value2', 'key3' => 'value3'} })
+        expect { @checker.receive([event])}.to change(Event, :count).by(1)
+        expect(Event.last.payload).to eq('data' => '\'key\',\'key2\',\'key3\'\n\'value\',\'value2\',\'value3\'\n')
+      end
+    
+        # advance scanner to pos after the next match of pattern and return the match
+    def scan_next(pattern)
+      return unless @s.scan_until(pattern)
+      @s.matched
+    end
+    
+            field_options.merge!(readonly: options[:readonly],
+                             disabled: options[:disabled],
+                             size: options[:size])
+      end
+    
+          private
+    
+            def destroy
+          @return_authorization = order.return_authorizations.accessible_by(current_ability, :destroy).find(params[:id])
+          @return_authorization.destroy
+          respond_with(@return_authorization, status: 204)
+        end
