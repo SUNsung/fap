@@ -1,25 +1,29 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+        CholeskyThunk::CholeskyThunk(const CholeskyOptions& options,
+                             BufferAllocation::Slice a_buffer,
+                             BufferAllocation::Slice workspace_buffer,
+                             BufferAllocation::Slice info_buffer,
+                             PrimitiveType type, int64 batch_size, int64 n,
+                             const HloInstruction* hlo)
+    : Thunk(Kind::kCholesky, hlo),
+      uplo_(options.lower() ? se::blas::UpperLower::kLower
+                            : se::blas::UpperLower::kUpper),
+      a_buffer_(a_buffer),
+      workspace_buffer_(workspace_buffer),
+      info_buffer_(info_buffer),
+      type_(type),
+      batch_size_(batch_size),
+      a_batch_stride_(n * n *
+                      ShapeUtil::ByteSizeOfPrimitiveType(
+                          hlo->operand(0)->shape().element_type())),
+      n_(n) {}
     
-    namespace xla {
-namespace gpu {
-    }
-    }
+    #endif  // TENSORFLOW_COMPILER_XLA_SERVICE_GPU_CONVOLUTION_THUNK_H_
+
     
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    class GpuExecutable;
-    
-      const int lda = side_ == se::blas::Side::kLeft ? m_ : n_;
-  const int ldb = m_;
+    #ifndef TENSORFLOW_COMPILER_XLA_SERVICE_GPU_COPY_THUNK_H_
+#define TENSORFLOW_COMPILER_XLA_SERVICE_GPU_COPY_THUNK_H_
     
     Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an 'AS IS' BASIS,
@@ -28,187 +32,227 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
     
+      VLOG(3) << 'uplo=' << se::blas::UpperLowerString(uplo_)
+          << ' side=' << se::blas::SideString(side_)
+          << ' diagonal=' << se::blas::DiagonalString(unit_diagonal_)
+          << ' batch_size=' << batch_size_ << ' m=' << m_ << ' n=' << n_
+          << ' a_batch_stride=' << a_batch_stride_
+          << ' b_batch_stride=' << b_batch_stride_;
     
-    {
-    {    // We measure the time of one execution of the while body computation. The
-    // while body may be executed more than once, the last measurement 'wins'.
-    profiler.StartHloComputation();
-    VLOG(3) << 'Executing body computation';
-    // Invoke thunk sequence for while 'body' computation, and pass on
-    // 'profiler' to measure the timing of the thunks in 'body_thunk_sequence_'.
-    TF_RETURN_IF_ERROR(body_thunk_sequence_->ExecuteOnStream(params));
-    profiler.FinishHloComputation(hlo_instruction()->while_body());
-  }
-  return Status::OK();
+    Status WhileThunk::ExecuteOnStream(const ExecuteParams& params) {
+  auto& profiler = *params.profiler;
+  auto& stream = *params.stream;
+    }
+    
+    namespace content {
+class RenderFrameHost;
 }
     
     
-    {
-    {
-    {    // Here, 5 is a empirical factor of cost_per_unit.
-    auto worker_threads = *(context->device()->tensorflow_cpu_worker_threads());
-    Shard(worker_threads.num_threads, worker_threads.workers, size, 5,
-          subDiagPart);
-    return Status::OK();
+    {}  // namespace remote
+    
+    namespace remote {
+    }
+    
+      ~EventListener() override;
+    
+    bool MenuDelegate::GetIconForCommandId(int command_id,
+                                       gfx::Image* icon) const {
+  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return false;
+  if (item->icon_.IsEmpty())
+    return false;
+    }
+    
+    void MenuItem::Call(const std::string& method,
+                    const base::ListValue& arguments,
+                    content::RenderFrameHost* rvh) {
+  if (method == 'SetLabel') {
+    std::string label;
+    arguments.GetString(0, &label);
+    SetLabel(label);
+  } else if (method == 'SetIcon') {
+    std::string icon;
+    arguments.GetString(0, &icon);
+    SetIcon(icon);
+  } else if (method == 'SetIconIsTemplate') {
+    bool isTemplate;
+    arguments.GetBoolean(0, &isTemplate);
+    SetIconIsTemplate(isTemplate);
+  } else if (method == 'SetTooltip') {
+    std::string tooltip;
+    arguments.GetString(0, &tooltip);
+    SetTooltip(tooltip);
+  } else if (method == 'SetEnabled') {
+    bool enabled = true;
+    arguments.GetBoolean(0, &enabled);
+    SetEnabled(enabled);
+  } else if (method == 'SetChecked') {
+    bool checked = false;
+    arguments.GetBoolean(0, &checked);
+    SetChecked(checked);
+  } else if (method == 'SetSubmenu') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    SetSubmenu(object_manager()->GetApiObject<Menu>(object_id));
+#if defined(OS_MACOSX)
+  } else if (method == 'SetKey') {
+    std::string key;
+    arguments.GetString(0, &key);
+    SetKey(key);
+  } else if (method == 'SetModifiers') {
+    std::string mod;
+    arguments.GetString(0, &mod);
+    SetModifiers(mod);
+#endif
+  } else {
+    NOTREACHED() << 'Invalid call to MenuItem method:' << method
+                 << ' arguments:' << arguments;
   }
-};
-}  // namespace functor
+}
     
-    class binary_blob_t;
+        // The number of documents that we still need to skip.
+    long long _leftToSkip;
     
-    #endif  // RDB_PROTOCOL_STORE_HPP_
+            BSONElement a = fixed['a'];
+        ASSERT(o['a'].type() == bsonTimestamp);
+        ASSERT(o['a'].timestampValue() == 0);
+        ASSERT(a.type() == bsonTimestamp);
+        ASSERT(a.timestampValue() > 0);
+    
+    #include 'unicode/utypes.h'
+    
+    U_NAMESPACE_BEGIN
+    
+    UBool
+SelectFormat::operator==(const Format& other) const {
+    if (this == &other) {
+        return TRUE;
+    }
+    if (!Format::operator==(other)) {
+        return FALSE;
+    }
+    const SelectFormat& o = (const SelectFormat&)other;
+    return msgPattern == o.msgPattern;
+}
+    
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
+    
+    
+    {    // Create SwapChain, RenderPass, Framebuffer, etc.
+    IM_ASSERT(g_MinImageCount >= 2);
+    ImGui_ImplVulkanH_CreateWindow(g_Instance, g_PhysicalDevice, g_Device, wd, g_QueueFamily, g_Allocator, width, height, g_MinImageCount);
+}
+    
+            // Rendering
+        ImGui::Render();
+        IwGxSetColClear(clear_color.x * 255, clear_color.y * 255, clear_color.z * 255, clear_color.w * 255);
+        IwGxClear();
+        ImGui_Marmalade_RenderDrawData(ImGui::GetDrawData());
+        IwGxSwapBuffers();
+    
+    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
+// You can also handle inputs yourself and use those as a reference.
+IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
 
     
+    IMGUI_IMPL_API bool     ImGui_ImplGlfw_InitForOpenGL(GLFWwindow* window, bool install_callbacks);
+IMGUI_IMPL_API bool     ImGui_ImplGlfw_InitForVulkan(GLFWwindow* window, bool install_callbacks);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplGlfw_NewFrame();
     
-    {  std::string pathname_;
-};  // class FilePath
+        // Main loop
+    bool running = true;
+    while (running)
+    {
+        // Poll and handle events (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        ALLEGRO_EVENT ev;
+        while (al_get_next_event(queue, &ev))
+        {
+            ImGui_ImplAllegro5_ProcessEvent(&ev);
+            if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+                running = false;
+            if (ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE)
+            {
+                ImGui_ImplAllegro5_InvalidateDeviceObjects();
+                al_acknowledge_resize(display);
+                ImGui_ImplAllegro5_CreateDeviceObjects();
+            }
+        }
+    }
     
-      // Creates a UTF-16 wide string from the given ANSI string, allocating
-  // memory using new. The caller is responsible for deleting the return
-  // value using delete[]. Returns the wide string, or NULL if the
-  // input is NULL.
-  //
-  // The wide string is created using the ANSI codepage (CP_ACP) to
-  // match the behaviour of the ANSI versions of Win32 calls and the
-  // C runtime.
-  static LPCWSTR AnsiToUtf16(const char* c_str);
+    IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_Init();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_RenderDrawData(ImDrawData* draw_data);
     
-    template <class ElemType>
-shared_ptr<ComputationNode<ElemType>> ComputationNetworkBuilder<ElemType>::AveragePooling(const ComputationNodePtr inputValues,
-                                                                                          const size_t windowWidth, const size_t windowHeight, const size_t horizontalSubsample, const size_t verticalSubsample, ImageLayoutKind imageLayoutKind,
-                                                                                          const std::wstring nodeName)
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+    void CleanupDeviceD3D()
 {
-    return net.AddNodeToNetAndAttachInputs(New<AveragePoolingNode<ElemType>>(net.GetDeviceId(), nodeName, windowWidth, windowHeight, horizontalSubsample, verticalSubsample, imageLayoutKind), { inputValues });
+    CleanupRenderTarget();
+    if (g_pSwapChain) { g_pSwapChain->Release(); g_pSwapChain = NULL; }
+    if (g_hSwapChainWaitableObject != NULL) { CloseHandle(g_hSwapChainWaitableObject); }
+    for (UINT i = 0; i < NUM_FRAMES_IN_FLIGHT; i++)
+        if (g_frameContext[i].CommandAllocator) { g_frameContext[i].CommandAllocator->Release(); g_frameContext[i].CommandAllocator = NULL; }
+    if (g_pd3dCommandQueue) { g_pd3dCommandQueue->Release(); g_pd3dCommandQueue = NULL; }
+    if (g_pd3dCommandList) { g_pd3dCommandList->Release(); g_pd3dCommandList = NULL; }
+    if (g_pd3dRtvDescHeap) { g_pd3dRtvDescHeap->Release(); g_pd3dRtvDescHeap = NULL; }
+    if (g_pd3dSrvDescHeap) { g_pd3dSrvDescHeap->Release(); g_pd3dSrvDescHeap = NULL; }
+    if (g_fence) { g_fence->Release(); g_fence = NULL; }
+    if (g_fenceEvent) { CloseHandle(g_fenceEvent); g_fenceEvent = NULL; }
+    if (g_pd3dDevice) { g_pd3dDevice->Release(); g_pd3dDevice = NULL; }
 }
     
-    // NDLBuilderImpl
-// TODO JC Refactor eligible methods and members into abstract base class.
-template <typename ElemType>
-class NDLBuilderImpl
-{
-public:
-    NDLBuilderImpl(DEVICEID_TYPE deviceId, unsigned long randomSeedOffset = 0)
-    {
-        m_computationNetwork = make_shared<ComputationNetwork>(deviceId);
-        m_computationNetwork->SetRandomSeedOffset(randomSeedOffset);
-        m_nodeEvaluator = new NDLNodeEvaluatorImpl<ElemType>(m_computationNetwork);
+        const float line_height = size;
+    const float scale = size / FontSize;
+    
+    namespace apollo {
+namespace planning {
     }
     }
     
-        shared_ptr<SGD<ElemType>> optimizer;
-    if (config.Exists(L'optimizer'))
-    {
-        optimizer = CreateObject<SGD<ElemType>>(config, L'optimizer');
-    }
-    else // legacy CNTK config syntax: needs a record called 'SGD'
-    {
-        const ConfigRecordType& configSGD(config(L'SGD'));
-        optimizer = make_shared<SGD<ElemType>>(configSGD);
+    /**
+ * @file
+ **/
+    
+    Chassis GemController::chassis() {
+  chassis_.Clear();
     }
     
-        // subgraph eval/output/criteria
-    fstream << L'subgraph {\n';
-    fstream << L'\t\t rank=sink ; ';
-    line.clear();
-    for (const auto& x : m_criterionNodes)
-        line = line + msra::strfun::wstrprintf(L'\'%ls\' ', x->GetName().c_str());
-    for (const auto& x : m_outputNodes)
-        line = line + msra::strfun::wstrprintf(L'\'%ls\' ', x->GetName().c_str());
-    for (const auto& x : m_evaluationNodes)
-        line = line + msra::strfun::wstrprintf(L'\'%ls\' ', x->GetName().c_str());
-    }
+    #include 'cyber/common/file.h'
+#include 'cyber/common/log.h'
+#include 'modules/planning/common/planning_gflags.h'
     
-    class ComputationNetwork :
-    public ScriptableObjects::Object,
-    public ScriptableObjects::HasToString,
-    public ScriptableObjects::CustomConfigRecord
-{
-public:
-    typedef shared_ptr<ComputationNetwork> ComputationNetworkPtr;
-    }
-    
-      /// Try if the configuration has started an auto-refresh thread.
-  bool started_thread_{false};
-    
-      const std::string kConfigTestNonBlacklistQuery{'pack_unrestricted_pack_process_heartbeat'};
-    
-    #include <gtest/gtest.h>
-    
-    #include <map>
-#include <string>
-    
-    Expected<int32_t, DatabaseError> Database::getInt32Or(
-    const std::string& domain,
-    const std::string& key,
-    const int32_t default_value) {
-  auto result = getInt32(domain, key);
-  if (!result && result.getError() == DatabaseError::KeyNotFound) {
-    return default_value;
-  }
-  return result;
-}
-    
-    ExpectedSuccess<DatabaseError> RocksdbDatabase::putRawBytesInternal(
-    Handle* handle, const std::string& key, const std::string& value) {
-  auto status = db_->Put(default_write_options_, handle, key, value);
-  if (!status.ok()) {
-    return createError(DatabaseError::FailToWriteData) << status.ToString();
-  }
-  return Success();
-}
-    
-     private:
-  rocksdb::Options getOptions();
-  std::vector<rocksdb::ColumnFamilyDescriptor> createDefaultColumnFamilies(
-      const rocksdb::Options& options);
-  ExpectedSuccess<DatabaseError> openInternal(
-      const rocksdb::Options& options, const boost::filesystem::path& path);
-  Expected<std::string, DatabaseError> getRawBytesInternal(
-      Handle* handle, const std::string& key);
-  ExpectedSuccess<DatabaseError> putRawBytesInternal(Handle* handle,
-                                                     const std::string& key,
-                                                     const std::string& value);
-  ExpectedSuccess<DatabaseError> checkDbConnection();
-  Expected<std::shared_ptr<Handle>, DatabaseError> getHandle(
-      const std::string& domain);
-    
-    
-    {    if (drop_src_data) {
-      VLOG(1) << 'Destroying db at path: ' << src_path;
-      rocksdb::DestroyDB(src_path, rocksdb::Options());
-    }
-    drop_src_data = true;
-    src_path = dst_path;
-    dst_path = randomOutputPath();
-  }
-    
-    #include <map>
-#include <string>
-#include <vector>
-    
-        if (serv.gs->start == 0)
-    {
-        swWarn('server is not running');
-        return retval;
-    }
-    
-    enum
-{
-    EVENT_onStart = 1u << 1,
-    EVENT_onShutdown = 1u << 2,
-    EVENT_onWorkerStart = 1u << 3,
-    EVENT_onWorkerStop = 1u << 4,
-    EVENT_onConnect = 1u << 5,
-    EVENT_onReceive = 1u << 6,
-    EVENT_onPacket = 1u << 7,
-    EVENT_onClose = 1u << 8,
-    EVENT_onTask = 1u << 9,
-    EVENT_onFinish = 1u << 10,
-    EVENT_onPipeMessage = 1u << 11,
-};
-    
-    typedef struct
-{
-    std::thread *thread;
-    swPipe pipe;
-} ThreadObject;
+      PredictionThreadPool::ForEach(real.begin(), real.end(), [](int& input) {
+    EXPECT_EQ(1, PredictionThreadPool::s_thread_pool_level);
+    std::vector<int> vec = {1, 2, 3, 4};
+    PredictionThreadPool::ForEach(vec.begin(), vec.end(), [](int& v) {
+      ++v;
+      EXPECT_EQ(2, PredictionThreadPool::s_thread_pool_level);
+    });
+    input = std::accumulate(vec.begin(), vec.end(), input);
+  });
