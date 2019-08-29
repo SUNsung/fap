@@ -1,153 +1,43 @@
 
         
-          items_by_user:     [[10, 20, 20],
-                      [30, 40, 40]]
+            def reducer(self, key, values):
+        '''Sum values for each key.
     
-      Args:
-    data: NumPy array.
-    file_path: Path to file that will be written.
-  '''
-  serialized_data = SerializeToString(data)
-  with tf.gfile.GFile(file_path, 'w') as f:
-    f.write(serialized_data)
+        def categorize(self, transaction):
+        if transaction.seller in self.seller_category_map:
+            return self.seller_category_map[transaction.seller]
+        if transaction.seller in self.seller_category_overrides_map:
+            seller_category_map[transaction.seller] = \
+                self.manual_overrides[transaction.seller].peek_min()
+            return self.seller_category_map[transaction.seller]
+        return None
     
-      def Conversion3dTestWithType(self, dtype):
-    original_data = np.arange(24).reshape(2, 3, 4).astype(dtype)
-    serialized = datum_io.SerializeToString(original_data)
-    retrieved_data = datum_io.ParseFromString(serialized)
-    self.assertTrue(np.array_equal(original_data, retrieved_data))
+        def extract_year_month(self, line):
+        '''Return the year and month portions of the timestamp.'''
+        pass
     
-        # Run tested function.
-    with tf.Graph().as_default() as g, self.session(graph=g) as sess:
-      extractor = feature_aggregation_extractor.ExtractAggregatedRepresentation(
-          sess, config)
-      rasmk_star, visual_words = extractor.Extract(features,
-                                                   num_features_per_region)
+        def reducer(self, key, values):
+        total = sum(values)
+        if total == 1:
+            yield key, total
     
     
-def main(unused_argv):
-  tf.gfile.MakeDirs(FLAGS.output_dir)
-  _convert_dataset(
-      'train', FLAGS.train_image_folder, FLAGS.train_image_label_folder)
-  _convert_dataset('val', FLAGS.val_image_folder, FLAGS.val_image_label_folder)
+class Root(Resource):
     
-        # Set up config.
-    config = delf_config_pb2.DelfConfig(
-        max_image_size=max_image_size, min_image_size=min_image_size)
+        default_settings = {
+        'LOG_LEVEL': 'INFO',
+        'LOGSTATS_INTERVAL': 1,
+        'CLOSESPIDER_TIMEOUT': 10,
+    }
     
-        def __init__(self, dtype=None,
-                 shape=None,
-                 ndim=None,
-                 max_ndim=None,
-                 min_ndim=None,
-                 axes=None):
-        self.dtype = dtype
-        self.shape = shape
-        if shape is not None:
-            self.ndim = len(shape)
-        else:
-            self.ndim = ndim
-        self.max_ndim = max_ndim
-        self.min_ndim = min_ndim
-        self.axes = axes or {}
+            cookiejarkey = request.meta.get('cookiejar')
+        jar = self.jars[cookiejarkey]
+        cookies = self._get_request_cookies(jar, request)
+        for cookie in cookies:
+            jar.set_cookie_if_ok(cookie, request)
     
-            methods = read_page_data(page_data, 'methods')
-    
-        # this will be our label
-    image_class = Input(shape=(1,), dtype='int32')
-    
-    
-# Playing with these hyperparameters will also allow you to achieve new effects
-step = 0.01  # Gradient ascent step size
-num_octave = 3  # Number of scales at which to run gradient ascent
-octave_scale = 1.4  # Size ratio between scales
-iterations = 20  # Number of ascent steps per scale
-max_loss = 10.
-    
-    model.compile(loss='binary_crossentropy',
-              optimizer='adam',
-              metrics=['accuracy'])
-    
-    
-@pytest.mark.parametrize('data_format', ['channels_first', 'channels_last'])
-@pytest.mark.parametrize('return_sequences', [True, False])
-@pytest.mark.parametrize('use_mask', [True, False])
-def test_convolutional_recurrent(data_format, return_sequences, use_mask):
-    
-    
-def test_conv_input_length():
-    assert conv_utils.conv_input_length(None, 7, 'same', 1) is None
-    assert conv_utils.conv_input_length(112, 7, 'same', 1) == 112
-    assert conv_utils.conv_input_length(112, 7, 'same', 2) == 223
-    assert conv_utils.conv_input_length(28, 5, 'valid', 1) == 32
-    assert conv_utils.conv_input_length(14, 5, 'valid', 2) == 31
-    assert conv_utils.conv_input_length(36, 5, 'full', 1) == 32
-    assert conv_utils.conv_input_length(18, 5, 'full', 2) == 31
-    
-        @threadsafe_generator
-    def custom_generator():
-        batch_size = 10
-        n_samples = 50
-    
-    
-def get(identifier):
-    if isinstance(identifier, dict):
-        config = {'class_name': str(identifier), 'config': {}}
-        return deserialize(config)
-    elif isinstance(identifier, six.string_types):
-        return deserialize(str(identifier))
-    elif callable(identifier):
-        return identifier
-    else:
-        raise ValueError('Could not interpret '
-                         'metric function identifier:', identifier)
-
-    
-    '''
-import hashlib
-import requests
-    
-        @property
-    def config(self):
-        if not hasattr(self, '_config'):
-            self._config = Config(directory=self.config_dir)
-            if self._config.is_new():
-                self._config.save()
-            else:
-                self._config.load()
-        return self._config
-    
-            request_line = '{method} {path}{query} HTTP/1.1'.format(
-            method=self._orig.method,
-            path=url.path or '/',
-            query='?' + url.query if url.query else ''
-        )
-    
-    
-MIME_RE = re.compile(r'^[^/]+/[^/]+$')
-    
-    
-def humanize_bytes(n, precision=2):
-    # Author: Doug Latornell
-    # Licence: MIT
-    # URL: http://code.activestate.com/recipes/577081/
-    '''Return a humanized string representation of a number of bytes.
-    
-            if self.url and not self.vid:
-            html = get_html(self.url)
-            tvid = r1(r'#curid=(.+)_', self.url) or \
-                   r1(r'tvid=([^&]+)', self.url) or \
-                   r1(r'data-player-tvid='([^']+)'', html) or r1(r'tv(?:i|I)d=(.+?)\&', html) or r1(r'param\[\'tvid\'\]\s*=\s*'(.+?)'', html)
-            videoid = r1(r'#curid=.+_(.*)$', self.url) or \
-                      r1(r'vid=([^&]+)', self.url) or \
-                      r1(r'data-player-videoid='([^']+)'', html) or r1(r'vid=(.+?)\&', html) or r1(r'param\[\'vid\'\]\s*=\s*'(.+?)'', html)
-            self.vid = (tvid, videoid)
-            info_u = 'http://pcw-api.iqiyi.com/video/video/playervideoinfo?tvid=' + tvid
-            json_res = get_content(info_u)
-            self.title = json.loads(json_res)['data']['vn']
-        tvid, videoid = self.vid
-        info = getVMS(tvid, videoid)
-        assert info['code'] == 'A00000', 'can't play this video'
+        def __init__(self, stats):
+        self.stats = stats
     
     def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
     html = get_html(url)
@@ -157,43 +47,41 @@ def humanize_bytes(n, precision=2):
     assert id
     baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
     
-    site_info = 'CBS.com'
-download = cbs_download
-download_playlist = playlist_not_supported('cbs')
-
+    import json
+import re
     
+    #----------------------------------------------------------------------
+def makeMimi(upid):
+    '''From http://cdn37.atwikiimg.com/sitescript/pub/dksitescript/FC2.site.js
+    Also com.hps.util.fc2.FC2EncrptUtil.makeMimiLocal
+    L110'''
+    strSeed = 'gGddgPfeaf_gzyr'
+    prehash = upid + '_' + strSeed
+    return md5(prehash.encode('utf-8')).hexdigest()
     
-_DEFAULTS = {
-    'threshold': {
-        'default': 99.0,
-        'info': 'Adjust the threshold for histogram matching. Can reduce extreme colors '
-                'leaking in by filtering out colors at the extreme ends of the histogram '
-                'spectrum.',
-        'datatype': float,
-        'rounding': 1,
-        'min_max': (90.0, 100.0),
-        'choices': [],
-        'gui_radio': False,
-        'fixed': True,
-    }
-}
-
+    __all__ = ['giphy_download']
     
-        The following variables should be defined:
-        _HELPTEXT: A string describing what this plugin does
-        _DEFAULTS: A dictionary containing the options, defaults and meta information. The
-                   dictionary should be defined as:
-                       {<option_name>: {<metadata>}}
+    def ifeng_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+# old pattern /uuid.shtml
+# now it could be #uuid
+    id = r1(r'([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', url)
+    if id:
+        return ifeng_download_by_id(id, None, output_dir = output_dir, merge = merge, info_only = info_only)
     
+            the output mask will be <mask_type>.mask
+        channels: 1, 3 or 4:
+                    1 - Returns a single channel mask
+                    3 - Returns a 3 channel mask
+                    4 - Returns the original image with the mask in the alpha channel '''
     
-class Adjustment():
-    ''' Parent class for scaling adjustments '''
-    def __init__(self, configfile=None, config=None):
-        logger.debug('Initializing %s: (configfile: %s, config: %s)',
-                     self.__class__.__name__, configfile, config)
-        self.config = self.set_config(configfile, config)
-        logger.debug('config: %s', self.config)
-        logger.debug('Initialized %s', self.__class__.__name__)
+            mask = BlurMask(self.config['type'],
+                        mask,
+                        self.config['radius'],
+                        self.config['passes']).blurred
+        logger.debug('Built box mask. Shape: %s', mask.shape)
+        return mask
+    
+    logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
     
         The following variables should be defined:
         _HELPTEXT: A string describing what this plugin does
@@ -201,45 +89,145 @@ class Adjustment():
                    dictionary should be defined as:
                        {<option_name>: {<metadata>}}
     
-        The following keys are expected for the _DEFAULTS <metadata> dict:
-        datatype:  [required] A python type class. This limits the type of data that can be
-                   provided in the .ini file and ensures that the value is returned in the
-                   correct type to faceswap. Valid datatypes are: <class 'int'>, <class 'float'>,
-                   <class 'str'>, <class 'bool'>.
-        default:   [required] The default value for this option.
-        info:      [required] A string describing what this option does.
-        choices:   [optional] If this option's datatype is of <class 'str'> then valid
-                   selections can be defined here. This validates the option and also enables
-                   a combobox / radio option in the GUI.
-        gui_radio: [optional] If <choices> are defined, this indicates that the GUI should use
-                   radio buttons rather than a combobox to display this option.
-        min_max:   [partial] For <class 'int'> and <class 'float'> datatypes this is required
-                   otherwise it is ignored. Should be a tuple of min and max accepted values.
-                   This is used for controlling the GUI slider range. Values are not enforced.
-        rounding:  [partial] For <class 'int'> and <class 'float'> datatypes this is
-                   required otherwise it is ignored. Used for the GUI slider. For floats, this
-                   is the number of decimal places to display. For ints this is the step size.
-        fixed:     [optional] [train only]. Training configurations are fixed when the model is
-                   created, and then reloaded from the state file. Marking an item as fixed=False
-                   indicates that this value can be changed for existing models, and will override
-                   the value saved in the state file with the updated value in config. If not
-                   provided this will default to True.
-'''
+            if event is None:
+            logger.debug('Launched Detector')
+            return
     
-    import logging
-import os
-import sys
+        c = Controller(blackboard)
+    contributions = c.run_loop()
     
-        Defaults files should be named <plugin_name>_defaults.py
-    Any items placed into this file will automatically get added to the relevant config .ini files
-    within the faceswap/config folder.
+    Request receiver in simple form keeps a reference to a single successor.
+As a variation some receivers may be capable of sending requests out
+in several directions, forming a `tree of responsibility`.
     
-            sorted_similarity transforms a distance matrix into a sorted distance matrix according to
-        the order implied by the hierarchical tree (dendrogram)
-        '''
-        logger.info('Sorting face distances. Depending on your dataset this may take some time...')
-        num_predictions = predictions.shape[0]
-        result_linkage = linkage(predictions, method=method, preserve_input=False)
-        result_order = self.seriation(result_linkage,
-                                      num_predictions,
-                                      num_predictions + num_predictions - 2)
+    Request receiver in simple form keeps a reference to a single successor.
+As a variation some receivers may be capable of sending requests out
+in several directions, forming a `tree of responsibility`.
+    
+    
+class NumObj(object):
+    def __init__(self, value):
+        self.value = value
+    
+        >>> Order(1000, discount_strategy=on_sale_discount)
+    <Price: 1000, price after discount: 730.0>
+    '''
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+    
+    
+def main():
+    '''
+    >>> Jhon = Person('Jhon', 'Coder')
+    
+        >>> print(objects[0].original_dict())
+    {'name': 'Dog'}
+    
+        graphic.add(graphic1)
+    graphic.add(graphic2)
+    
+        # Vim may not be able to convert the 'errors' entry to its internal format
+    # so we remove it from the response.
+    errors = response.pop( 'errors', [] )
+    for e in errors:
+      exception = MakeServerException( e )
+      _logger.error( exception )
+      DisplayServerException( exception, truncate_message = True )
+    
+    OMNIFUNC_RETURNED_BAD_VALUE = 'Omnifunc returned bad value to YCM!'
+OMNIFUNC_NOT_LIST = ( 'Omnifunc did not return a list or a dict with a 'words' '
+                     ' list when expected.' )
+    
+    
+def tearDownPackage():
+  warnings.resetwarnings()
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+    
+def _FormatYcmdDebugInfo( ycmd ):
+  python = ycmd[ 'python' ]
+  clang = ycmd[ 'clang' ]
+  message = ( 'Server Python interpreter: {0}\n'
+              'Server Python version: {1}\n'
+              'Server has Clang support compiled in: {2}\n'
+              'Clang version: {3}\n'.format( python[ 'executable' ],
+                                             python[ 'version' ],
+                                             clang[ 'has_support' ],
+                                             clang[ 'version' ] ) )
+  extra_conf = ycmd[ 'extra_conf' ]
+  extra_conf_path = extra_conf[ 'path' ]
+  if not extra_conf_path:
+    message += 'No extra configuration file found\n'
+  elif not extra_conf[ 'is_loaded' ]:
+    message += ( 'Extra configuration file found but not loaded\n'
+                 'Extra configuration path: {0}\n'.format( extra_conf_path ) )
+  else:
+    message += ( 'Extra configuration file found and loaded\n'
+                 'Extra configuration path: {0}\n'.format( extra_conf_path ) )
+  return message
+    
+    
+  def Response( self ):
+    if self._cached_response:
+      return self._cached_response
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+      AddToGroupMap( 'Function', identifier_group )
+    
+    
+def FormatDebugInfoResponse_Completer_ServerNotRunningWithNoLogfiles_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'completer' ][ 'servers' ][ 0 ].update( {
+    'is_running': False,
+    'logfiles': []
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Completer name completer debug information:\n'
+      '  Server name not running\n'
+      '  Server name executable: /path/to/executable\n'
+      '  No logfiles available\n'
+      '  Server name key: value\n'
+      '  Key: value\n'
+    )
+  )
+
+    
+      _assert_accepts( f, { 'text' : 'This is an IMPORTANT taco',
+                        'kind' : 'WARNING' } )
+  _assert_rejects( f, { 'text' : 'This taco will NOT be shown',
+                        'kind' : 'ERROR' } )
+    
+        # Parse and validate the field names.  Validation serves two purposes,
+    # generating informative error messages and preventing template injection attacks.
+    if isinstance(field_names, basestring):
+        field_names = field_names.replace(',', ' ').split() # names separated by whitespace and/or commas
+    field_names = tuple(map(str, field_names))
+    for name in (typename,) + field_names:
+        if not all(c.isalnum() or c=='_' for c in name):
+            raise ValueError('Type names and field names can only contain alphanumeric characters and underscores: %r' % name)
+        if _iskeyword(name):
+            raise ValueError('Type names and field names cannot be a keyword: %r' % name)
+        if name[0].isdigit():
+            raise ValueError('Type names and field names cannot start with a number: %r' % name)
+    seen_names = set()
+    for name in field_names:
+        if name.startswith('_'):
+            raise ValueError('Field names cannot start with an underscore: %r' % name)
+        if name in seen_names:
+            raise ValueError('Encountered duplicate field name: %r' % name)
+        seen_names.add(name)
