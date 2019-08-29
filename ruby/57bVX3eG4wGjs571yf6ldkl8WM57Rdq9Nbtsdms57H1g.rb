@@ -1,204 +1,309 @@
 
         
-              agent = Agent.find_by(name: 'Test Weather Agent')
-    
-        it 'works for running jobs' do
-      job.locked_at = Time.now
-      job.locked_by = 'test'
-      expect(status(job)).to eq('<span class='label label-info'>running</span>')
+            should 'allow dots in the filename' do
+      assert_equal '_with.dots', @collection.relative_directory
     end
     
-        it 'is turned off for existing instances of Huginn' do
-      stub(DefaultScenarioImporter).seed { fail 'seed should not have been called'}
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { nil }
-      DefaultScenarioImporter.import(user)
+        should 'acceptable limit post is 0' do
+      clear_dest
+      assert(
+        fixture_site('limit_posts' => 0),
+        'Couldn't create a site with limit_posts=0.'
+      )
+    end
+  end
+end
+
+    
+          def [](key)
+        if key != 'posts' && @obj.collections.key?(key)
+          @obj.collections[key].docs
+        else
+          super(key)
+        end
+      end
+    
+    def docs_folder
+  'docs'
+end
+    
+    def global_require
+  JSON.pretty_generate(DATA)
+end
+    
+          # @return (String) Trade Representative Contact Information Postal Code
+      attr_accessor :trade_representative_postal_code
+    
+            case bump_type
+        when 'patch'
+          patch += 1
+        when 'minor'
+          minor += 1
+          patch = 0
+        when 'major'
+          major += 1
+          minor = 0
+          patch = 0
+        end
+    
+          it 'returns the current version once parsed with prerelease' do
+        test_content = 'spec.version = '1.3.2-SNAPSHOT''
+        result = @version_podspec_file.parse(test_content)
+        expect(result).to eq('1.3.2-SNAPSHOT')
+        expect(@version_podspec_file.version_value).to eq('1.3.2-SNAPSHOT')
+        expect(@version_podspec_file.version_match[:major]).to eq('1')
+        expect(@version_podspec_file.version_match[:minor]).to eq('3')
+        expect(@version_podspec_file.version_match[:patch]).to eq('2')
+        expect(@version_podspec_file.version_match[:prerelease]).to eq('SNAPSHOT')
+      end
+    
+        # Override configuration for a specific lane. If received lane name does not
+    # match the lane name available as environment variable, no changes will
+    # be applied.
+    #
+    # @param lane_name Symbol representing a lane name.
+    # @yield Block to run for overriding configuration values.
+    #
+    def for_lane(lane_name)
+      if ENV['FASTLANE_LANE_NAME'] == lane_name.to_s
+        with_a_clean_config_merged_when_complete do
+          yield
+        end
+      end
     end
     
-        it 'should generate the correct projects url' do
-      expect(@checker.send(:projects_url)).to eq('https://basecamp.com/12345/api/v1/projects.json')
+        it 'should fail to create a nil device UDID' do
+      expect do
+        Spaceship::Device.create!(name: 'Demo Device', udid: nil)
+      end.to raise_error('You cannot create a device without a device_id (UDID) and name')
     end
     
-          let(:valid_params) {
-        {
-          name: 'Example',
-          schedule: 'never',
-          options: {
-            'action' => '{% if target.id == agent_id %}configure{% endif %}',
-            'configure_options' => {
-              'rules' => [
-                {
-                  'type' => 'field<value',
-                  'value' => '{{price}}',
-                  'path' => 'price',
-                }
-              ]
+          def self.example_code
+        [
+          'register_devices(
+            devices: {
+              'Luka iPhone 6' => '1234567890123456789012345678901234567890',
+              'Felix iPad Air 2' => 'abcdefghijklmnopqrstvuwxyzabcdefghijklmn'
             }
-          },
-          user: users(:bob),
-          control_targets: [target, real_target]
-        }
-      }
+          ) # Simply provide a list of devices as a Hash',
+          'register_devices(
+            devices_file: './devices.txt'
+          ) # Alternatively provide a standard UDID export .txt file, see the Apple Sample (http://devimages.apple.com/downloads/devices/Multiple-Upload-Samples.zip)',
+          'register_devices(
+            devices_file: './devices.txt', # You must pass in either `devices_file` or `devices`.
+            team_id: 'XXXXXXXXXX',         # Optional, if you're a member of multiple teams, then you need to pass the team ID here.
+            username: 'luka@goonbee.com'   # Optional, lets you override the Apple Member Center username.
+          )',
+          'register_devices(
+            devices: {
+              'Luka MacBook' => '12345678-1234-1234-1234-123456789012',
+              'Felix MacBook Pro' => 'ABCDEFGH-ABCD-ABCD-ABCD-ABCDEFGHIJKL'
+            },
+            platform: 'mac'
+          ) # Register devices for Mac'
+        ]
+      end
     
-      include Msf::Exploit::Remote::HttpClient
-  include Msf::Exploit::FileDropper
+            command = [
+          command_prefix,
+          'agvtool',
+          'what-version',
+          '-terse'
+        ].join(' ')
     
-      #
-  # Returns the hardcore alias for the HTTP service
-  #
-  def self.hardcore_alias(*args)
-    '#{(args[0] || '')}#{(args[1] || '')}'
+            # The args we will build with
+        # Maps nice developer build parameters to Shenzhen args
+        build_args = params_to_build_args(params)
+    
+          self
+    end
+    
+      def test_marshal_load_extended_class_crash
+    assert_separately([], '#{<<-'begin;'}\n#{<<-'end;'}')
+    begin;
+      assert_raise_with_message(ArgumentError, /undefined/) do
+        Marshal.load('\x04\be:\x0F\x00omparableo:\vObject\x00')
+      end
+    end;
   end
     
-    module Rex
-module Proto
-module IPMI
-  require 'rex/proto/ipmi/channel_auth_reply'
-  require 'rex/proto/ipmi/open_session_reply'
-  require 'rex/proto/ipmi/rakp2'
-    
-                data_encrypt = Rex::Text::rand_text(8) + data
-    
-        def resolve_inheritance(path, hash, file, debug)
-      inherited_files = Array(hash['inherit_from'])
-      base_configs(path, inherited_files, file)
-        .reverse.each_with_index do |base_config, index|
-        base_config.each do |k, v|
-          next unless v.is_a?(Hash)
-    
-      def parse_source(source, file = nil)
-    if file&.respond_to?(:write)
-      file.write(source)
-      file.rewind
-      file = file.path
+        def setup
+      @obj = Object.new
     end
     
-        def add_unneeded_disables(file, offenses, source)
-      if check_for_unneeded_disables?(source)
-        config = @config_store.for(file)
-        if config.for_cop(Cop::Lint::UnneededCopDisableDirective)
-                 .fetch('Enabled')
-          cop = Cop::Lint::UnneededCopDisableDirective.new(config, @options)
-          if cop.relevant_file?(file)
-            cop.check(offenses, source.disabled_line_ranges, source.comments)
-            offenses += cop.offenses
-            autocorrect_unneeded_disables(source, cop)
+      it 'returns true when at EOF with the exact length of uncompressed data' do
+    gz = Zlib::GzipReader.new @io
+    gz.eof?.should be_false
+    gz.read(10)
+    gz.eof?.should be_true
+  end
+    
+    describe 'GzipReader#pos' do
+    
+      if rss_url.nil?
+    puts '#{name}: GETTING'
+    rss_check_url = 'http://ajax.googleapis.com/ajax/services/feed/lookup?v=1.0&q=#{web_url}'
+    uri = URI.parse(rss_check_url)
+    response = JSON.parse(Net::HTTP.get(uri))
+    rss_url = response['responseData']['url'] if response['responseData'] && response['responseData'].has_key?('url')
+    
+        return true unless resource&.otp_required_for_login?
+    
+      has_many :share_visibilities
+    
+      def user_search
+    if params[:admins_controller_user_search]
+      search_params = params.require(:admins_controller_user_search)
+                            .permit(:username, :email, :guid, :under13)
+      @search = UserSearch.new(search_params)
+      @users = @search.perform
+    end
+    
+          rescue_from Rack::OAuth2::Server::Authorize::BadRequest,
+                  JSON::JWT::InvalidFormat, JSON::JWK::UnknownAlgorithm do |e|
+        logger.info e.backtrace[0, 10].join('\n')
+        render json: {error: :invalid_request, error_description: e.message, status: 400}
+      end
+      rescue_from JSON::JWT::VerificationFailed do |e|
+        logger.info e.backtrace[0, 10].join('\n')
+        render json: {error: :invalid_grant, error_description: e.message, status: 400}
+      end
+    end
+  end
+end
+
+    
+      rescue_from Diaspora::NotMine do
+    render plain: I18n.t('aspect_memberships.destroy.forbidden'), status: 403
+  end
+end
+
+    
+      private
+    
+      def index
+    comments = comment_service.find_for_post(params[:post_id])
+    respond_with do |format|
+      format.json { render json: CommentPresenter.as_collection(comments), status: 200 }
+      format.mobile { render layout: false, locals: {comments: comments} }
+    end
+  end
+    
+          attr_reader :key, :default, :options
+    
+          ServerKey = Struct.new(:hostname, :port)
+    
+          def untrusted!
+        @trusted = false
+        yield
+      ensure
+        @trusted = true
+      end
+    
+          it { expect(self_class_node.body).to be(nil) }
+    end
+  end
+end
+
+    
+              if node.blockarg_type?
+            correct_for_blockarg_type(node)
+          else
+            lambda do |corrector|
+              variable_name = if node.optarg_type?
+                                node.node_parts[0]
+                              else
+                                # Extract only a var name without splat (`*`)
+                                node.source.gsub(/\A\*+/, '')
+                              end
+              corrector.replace(node.loc.name, '_#{variable_name}')
+            end
           end
         end
-        offenses
-      end
     
-                do_something
+            # Returns true if running with --auto-correct would remove the braces
+        # of the last argument.
+        def braces_will_be_removed?(args)
+          brace_config = config.for_cop('Style/BracesAroundHashParameters')
+          return false unless brace_config.fetch('Enabled')
+          return false if brace_config['AutoCorrect'] == false
     
-                ret
-          end
-        RUBY
+      it 'does not register offense when guard clause is before `else`' do
+    expect_no_offenses(<<~RUBY)
+      def foo
+        if cond
+          return another_object if something_different?
+        else
+          bar
+        end
       end
-    end
-    
-          def compatible_external_encoding_for?(src)
-        src = src.dup if RUBY_ENGINE == 'jruby'
-        src.force_encoding(Encoding.default_external).valid_encoding?
-      end
-    end
+    RUBY
   end
-end
-
-    
-        context 'with a non-lambda method' do
-      let(:source) { 'foo.bar' }
-    
-        context 'when using safe navigation operator' do
-      it 'does not break' do
-        expect_no_offenses(<<~RUBY)
-          def func
-            [1, 2, 3]&.each { |n| puts n }
-          end
-        RUBY
-      end
-    end
-  end
-end
-
     
           # Checks whether this node body is a void context.
-      # Always `true` for `for`.
       #
-      # @return [true] whether the `for` node body is a void context
+      # @return [Boolean] whether the `block` node body is a void context
       def void_context?
+        VOID_CONTEXT_METHODS.include?(method_name)
+      end
+    end
+  end
+end
+
+    
+          def formats
+        super(:markdown)
+      end
+    
+          def is_edit_page
         true
       end
     
-          # Checks whether the method is an enumerator method.
-      #
-      # @return [Boolean] whether the method is an enumerator
-      def enumerator_method?
-        ENUMERATOR_METHODS.include?(method_name) ||
-          method_name.to_s.start_with?('each_')
+          def mathjax_config
+        @mathjax_config
       end
     
-          now = Time.current
-      @user.onboarding_package_requested_again = true if @user.onboarding_package_requested
-      @user.onboarding_package_requested = true
-      @user.onboarding_package_form_submmitted_at = now
-      @user.personal_data_updated_at = now
-      @user.shipping_validated_at = now if user_params[:shipping_validated] == '1'
-      if @user.save!
-        format.html { redirect_to '/freestickers/edit' }
-        format.json { render :show, status: :ok, location: @user }
-      else
-        format.html { render :edit }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+    exec         = {}
+options      = {
+  :port => 4567,
+  :bind => '0.0.0.0',
+}
+wiki_options = {
+  :live_preview  => false,
+  :allow_uploads => false,
+  :allow_editing => true,
+}
+    
+        def not_found(msg = nil)
+      @message = msg || 'The requested page does not exist.'
+      status 404
+      return mustache :error
     end
-  end
     
-      def index
-    @pages = Page.all
-  end
-    
-            begin
-          Component.new.handle_exception exception
-          pass
-        rescue StandardError
-          flunk 'failed handling a nil backtrace'
+            def destroy
+          @option_value = scope.accessible_by(current_ability, :destroy).find(params[:id])
+          @option_value.destroy
+          render plain: nil, status: 204
         end
-      end
-    end
-  end
     
-          I18n.enforce_available_locales = false
-      I18n.available_locales = nil
-    end
-  end
-end
-
+            def create
+          @order.validate_payments_attributes([payment_params])
+          @payment = @order.payments.build(payment_params)
+          if @payment.save
+            respond_with(@payment, status: 201, default_template: :show)
+          else
+            invalid_resource!(@payment)
+          end
+        end
     
-        it 'generates random intervals that target a configured average' do
-      with_sidekiq_option(:poll_interval_average, 10) do
-        i = 500
-        intervals = Array.new(i){ @poller.send(:random_poll_interval) }
+            def product_property
+          if @product
+            @product_property ||= @product.product_properties.find_by(id: params[:id])
+            @product_property ||= @product.product_properties.includes(:property).where(spree_properties: { name: params[:id] }).first
+            raise ActiveRecord::RecordNotFound unless @product_property
     
-          assert SomeScheduledWorker.perform_in(TimeDuck.new, 'samwise')
-      assert_equal 6, ss.size
-    end
+            private
     
-    @@ index
-  <h1>Sinatra + Sidekiq Example</h1>
-  <h2>Failed: <%= @failed %></h2>
-  <h2>Processed: <%= @processed %></h2>
-    
-      def send_sinatra_file(path, &missing_file_block)
-    file_path = File.join(File.dirname(__FILE__), 'public',  path)
-    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
-    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
-  end
-    
-      class Blockquote < Liquid::Block
-    FullCiteWithTitle = /(\S.*)\s+(https?:\/\/)(\S+)\s+(.+)/i
-    FullCite = /(\S.*)\s+(https?:\/\/)(\S+)/i
-    AuthorTitle = /([^,]+),([^,]+)/
-    Author =  /(.+)/
-    
-          get_web_content(redirected_url)
-    end
+            def new
+          authorize! :admin, ReturnAuthorization
+        end
