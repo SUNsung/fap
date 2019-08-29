@@ -1,280 +1,499 @@
 
         
-          // This is a substitution function from the generic parameters of the
-  // conforming type to the synthetic environment.
-  //
-  // For structs, enums and protocols, this is a 1:1 mapping; for classes,
-  // we increase the depth of each generic parameter by 1 so that we can
-  // introduce a class-bound 'Self' parameter.
-  //
-  // This is a raw function rather than a substitution map because we need to
-  // keep generic parameters as generic, even if the conformanceSig (the best
-  // way to create the substitution map) equates them to concrete types.
-  auto conformanceToSyntheticTypeFn = [&](SubstitutableType *type) {
-    auto *genericParam = cast<GenericTypeParamType>(type);
-    if (covariantSelf) {
-      return GenericTypeParamType::get(genericParam->getDepth() + 1,
-                                       genericParam->getIndex(), ctx);
+        namespace xla {
+namespace gpu {
     }
     }
     
-    #endif // SWIFT_AST_SUBSTITUTION_MAP_STORAGE_H
-
+    #include 'tensorflow/compiler/xla/service/gpu/buffer_allocations.h'
+#include 'tensorflow/compiler/xla/service/gpu/hlo_execution_profiler.h'
+#include 'tensorflow/compiler/xla/service/gpu/thunk.h'
     
-      char *oldBegin = Begin;
-  char *oldEnd = End;
-  std::size_t oldSize = (std::size_t) (oldEnd - oldBegin);
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    {  OutLines.append(Lines.begin(), Lines.end());
-}
-
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    bool ArgsToFrontendInputsConverter::forAllFilesInFilelist(
-    Arg const *const pathArg, llvm::function_ref<void(StringRef)> fn) {
-  if (!pathArg)
-    return false;
-  StringRef path = pathArg->getValue();
-  llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>> filelistBufferOrError =
-      llvm::MemoryBuffer::getFile(path);
-  if (!filelistBufferOrError) {
-    Diags.diagnose(SourceLoc(), diag::cannot_open_file, path,
-                   filelistBufferOrError.getError().message());
-    return true;
-  }
-  for (auto file :
-       llvm::make_range(llvm::line_iterator(*filelistBufferOrError->get()),
-                        llvm::line_iterator()))
-    fn(file);
-  ConfigurationFileBuffers.push_back(std::move(*filelistBufferOrError));
-  return false;
-}
-    
-      /// Returns the newly set-up FrontendInputsAndOutputs, as well as a set of
-  /// any unused primary files (those that do not correspond to an input).
-  std::pair<FrontendInputsAndOutputs, std::set<StringRef>>
-  createInputFilesConsumingPrimaries(std::set<StringRef> primaryFiles);
+    REGISTER_XLA_OP(Name('ScatterNd').CompileTimeConstantInput('shape'),
+                ScatterNdOp);
     
     
-    {/// Emit a Swift-style dependencies file for \p SF.
-bool emitReferenceDependencies(DiagnosticEngine &diags, SourceFile *SF,
-                               const DependencyTracker &depTracker,
-                               StringRef outputPath);
-} // end namespace swift
+    {}  // namespace mate
     
-    // Returns the number of misfit blob tops in this word.
-int Tesseract::CountMisfitTops(WERD_RES *word_res) {
-  int bad_blobs = 0;
-  int num_blobs = word_res->rebuild_word->NumBlobs();
-  for (int blob_id = 0; blob_id < num_blobs; ++blob_id) {
-    TBLOB* blob = word_res->rebuild_word->blobs[blob_id];
-    UNICHAR_ID class_id = word_res->best_choice->unichar_id(blob_id);
-    if (unicharset.get_isalpha(class_id) || unicharset.get_isdigit(class_id)) {
-      int top = blob->bounding_box().top();
-      if (top >= INT_FEAT_RANGE)
-        top = INT_FEAT_RANGE - 1;
-      int min_bottom, max_bottom, min_top, max_top;
-      unicharset.get_top_bottom(class_id, &min_bottom, &max_bottom,
-                                &min_top, &max_top);
-      if (max_top - min_top > kMaxCharTopRange)
-        continue;
-      bool bad =  top < min_top - x_ht_acceptance_tolerance ||
-                  top > max_top + x_ht_acceptance_tolerance;
-      if (bad)
-        ++bad_blobs;
-      if (debug_x_ht_level >= 1) {
-        tprintf('Class %s is %s with top %d vs limits of %d->%d, +/-%d\n',
-                unicharset.id_to_unichar(class_id),
-                bad ? 'Misfit' : 'OK', top, min_top, max_top,
-                static_cast<int>(x_ht_acceptance_tolerance));
-      }
-    }
-  }
-  return bad_blobs;
-}
     
-    // Update the other members if the cost is lower.
-void DPPoint::UpdateIfBetter(int64_t cost, int32_t steps, const DPPoint* prev,
-                             int32_t n, int32_t sig_x, int64_t sig_xsq) {
-  if (cost < total_cost_) {
-    total_cost_ = cost;
-    total_steps_ = steps;
-    best_prev_ = prev;
-    n_ = n;
-    sig_x_ = sig_x;
-    sig_xsq_ = sig_xsq;
-  }
-}
-    
-    template <typename T> class GenericVector;
-    
-    #ifndef TESSERACT_CCSTRUCT_OCRPARA_H_
-#define TESSERACT_CCSTRUCT_OCRPARA_H_
-    
-      REJMAP(const REJMAP &rejmap) { *this = rejmap; }
-    
-    // A useful base class to facilitate the common operation of sorting a vector
-// of owned pointer data using a separate key. This class owns its data pointer,
-// deleting it when it has finished with it, and providing copy constructor and
-// operator= that have move semantics so that the data does not get copied and
-// only a single instance of KDPtrPair holds a specific data pointer.
-template <typename Key, typename Data>
-class KDPtrPair {
- public:
-  KDPtrPair() : data_(nullptr) {}
-  KDPtrPair(Key k, Data* d) : data_(d), key_(k) {}
-  // Copy constructor steals the pointer from src and nulls it in src, thereby
-  // moving the (single) ownership of the data.
-  KDPtrPair(KDPtrPair& src) : data_(src.data_), key_(src.key_) {
-    src.data_ = nullptr;
-  }
-  // Destructor deletes data, assuming it is the sole owner.
-  ~KDPtrPair() {
-    delete this->data_;
-    this->data_ = nullptr;
-  }
-  // Operator= steals the pointer from src and nulls it in src, thereby
-  // moving the (single) ownership of the data.
-  void operator=(KDPtrPair& src) {
-    delete this->data_;
-    this->data_ = src.data_;
-    src.data_ = nullptr;
-    this->key_ = src.key_;
-  }
-    }
-    
-    #include <cmath>
-    
-    // Converts a streamable value to an std::string.  A NULL pointer is
-// converted to '(null)'.  When the input value is a ::string,
-// ::std::string, ::wstring, or ::std::wstring object, each NUL
-// character in it is replaced with '\\0'.
-template <typename T>
-std::string StreamableToString(const T& streamable) {
-  return (Message() << streamable).GetString();
-}
-    
-    INSTANTIATE_TEST_CASE_P(InstantiationName,
-                        FooTest,
-                        Values('meeny', 'miny', 'moe'));
-    
-    // Makes a failed assertion result with the given failure message.
-// Deprecated; use AssertionFailure() << msg.
-GTEST_API_ AssertionResult AssertionFailure(const Message& msg);
-    
-    template <GTEST_10_TYPENAMES_(T)>
-struct TupleElement<true, 1, GTEST_10_TUPLE_(T) > {
-  typedef T1 type;
+    {  DISALLOW_COPY_AND_ASSIGN(GlobalShortcut);
 };
     
+    #include 'shell/browser/api/event_emitter.h'
     
-    {  // n has no integer factor in the range (1, n), and thus is prime.
-  return true;
+    // KSI: This function is possibly stupid: it's nonsensical to talk about the entire
+// cache being snapshotted -- we want some subtree to be snapshotted, at least.
+// However, if you quickly release the superblock, you'll release any snapshotting of
+// secondary index nodes that you could not possibly access.
+void get_btree_superblock_and_txn_for_reading(
+        cache_conn_t *cache_conn,
+        cache_snapshotted_t snapshotted,
+        scoped_ptr_t<real_superblock_t> *got_superblock_out,
+        scoped_ptr_t<txn_t> *txn_out) {
+    txn_t *txn = new txn_t(cache_conn, read_access_t::read);
+    txn_out->init(txn);
+    }
+    
+        for (const auto &pair : name_changes) {
+        secondary_index_t definition;
+        bool success = get_secondary_index(
+            &sindex_block, sindex_name_t(pair.first), &definition);
+        guarantee(success);
+        success = delete_secondary_index(&sindex_block, sindex_name_t(pair.first));
+        guarantee(success);
+    }
+    
+    // Like ASSERT_DEATH, but continues on to successive tests in the
+// test case, if any:
+# define EXPECT_DEATH(statement, regex) \
+    EXPECT_EXIT(statement, ::testing::internal::ExitedUnsuccessfully, regex)
+    
+    // Google Test - The Google C++ Testing Framework
+//
+// This file implements a universal value printer that can print a
+// value of any type T:
+//
+//   void ::testing::internal::UniversalPrinter<T>::Print(value, ostream_ptr);
+//
+// A user can teach this function how to print a class type T by
+// defining either operator<<() or PrintTo() in the namespace that
+// defines T.  More specifically, the FIRST defined function in the
+// following list will be used (assuming T is defined in namespace
+// foo):
+//
+//   1. foo::PrintTo(const T&, ostream*)
+//   2. operator<<(ostream&, const T&) defined in either foo or the
+//      global namespace.
+//
+// If none of the above is defined, it will print the debug string of
+// the value if it is a protocol buffer, or print the raw bytes in the
+// value otherwise.
+//
+// To aid debugging: when T is a reference type, the address of the
+// value is also printed; when T is a (const) char pointer, both the
+// pointer value and the NUL-terminated string it points to are
+// printed.
+//
+// We also provide some convenient wrappers:
+//
+//   // Prints a value to a string.  For a (const or not) char
+//   // pointer, the NUL-terminated string (but not the pointer) is
+//   // printed.
+//   std::string ::testing::PrintToString(const T& value);
+//
+//   // Prints a value tersely: for a reference type, the referenced
+//   // value (but not the address) is printed; for a (const or not) char
+//   // pointer, the NUL-terminated string (but not the pointer) is
+//   // printed.
+//   void ::testing::internal::UniversalTersePrint(const T& value, ostream*);
+//
+//   // Prints value using the type inferred by the compiler.  The difference
+//   // from UniversalTersePrint() is that this function prints both the
+//   // pointer and the NUL-terminated string for a (const or not) char pointer.
+//   void ::testing::internal::UniversalPrint(const T& value, ostream*);
+//
+//   // Prints the fields of a tuple tersely to a string vector, one
+//   // element for each field. Tuple support must be enabled in
+//   // gtest-port.h.
+//   std::vector<string> UniversalTersePrintTupleFieldsToStrings(
+//       const Tuple& value);
+//
+// Known limitation:
+//
+// The print primitives print the elements of an STL-style container
+// using the compiler-inferred type of *iter where iter is a
+// const_iterator of the container.  When const_iterator is an input
+// iterator but not a forward iterator, this inferred type may not
+// match value_type, and the print output may be incorrect.  In
+// practice, this is rarely a problem as for most containers
+// const_iterator is a forward iterator.  We'll fix this if there's an
+// actual need for it.  Note that this fix cannot rely on value_type
+// being defined as many user-defined container types don't have
+// value_type.
+    
+    // When this flag is specified, tests' order is randomized on every iteration.
+GTEST_DECLARE_bool_(shuffle);
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28>
+class ValueArray28 {
+ public:
+  ValueArray28(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
+      T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17,
+      T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23, T24 v24, T25 v25,
+      T26 v26, T27 v27, T28 v28) : v1_(v1), v2_(v2), v3_(v3), v4_(v4), v5_(v5),
+      v6_(v6), v7_(v7), v8_(v8), v9_(v9), v10_(v10), v11_(v11), v12_(v12),
+      v13_(v13), v14_(v14), v15_(v15), v16_(v16), v17_(v17), v18_(v18),
+      v19_(v19), v20_(v20), v21_(v21), v22_(v22), v23_(v23), v24_(v24),
+      v25_(v25), v26_(v26), v27_(v27), v28_(v28) {}
+    }
+    
+    template <GTEST_1_TYPENAMES_(T)>
+class GTEST_1_TUPLE_(T) {
+ public:
+  template <int k> friend class gtest_internal::Get;
+    }
+    
+    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
+    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
+    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
+    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
+    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
+    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
+    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
+    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
+    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27,
+    GTEST_TEMPLATE_ T28>
+struct Templates28 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates27<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
+      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27,
+      T28> Tail;
+};
+    
+    TEST(AutoCompactTest, ReadHalf) { DoReads(kCount / 2); }
+    
+      // Return an iterator that yields the contents of the memtable.
+  //
+  // The caller must ensure that the underlying MemTable remains live
+  // while the returned iterator is live.  The keys returned by this
+  // iterator are internal keys encoded by AppendInternalKey in the
+  // db/format.{h,cc} module.
+  Iterator* NewIterator();
+    
+    template <typename Key, class Comparator>
+void SkipList<Key, Comparator>::Insert(const Key& key) {
+  // TODO(opt): We can use a barrier-free variant of FindGreaterOrEqual()
+  // here since Insert() is externally synchronized.
+  Node* prev[kMaxHeight];
+  Node* x = FindGreaterOrEqual(key, prev);
+    }
+    
+    #include 'db/dbformat.h'
+#include 'leveldb/cache.h'
+#include 'leveldb/table.h'
+#include 'port/port.h'
+    
+      // Number of keys between restart points for delta encoding of keys.
+  // This parameter can be changed dynamically.  Most clients should
+  // leave this parameter alone.
+  int block_restart_interval = 16;
+    
+    
+    {}  // namespace leveldb
+    
+    class Block {
+ public:
+  // Initialize the block with the specified contents.
+  explicit Block(const BlockContents& contents);
+    }
+    
+    static const int kVerbose = 1;
+    
+    TEST(CacheTest, NewId) {
+  uint64_t a = cache_->NewId();
+  uint64_t b = cache_->NewId();
+  ASSERT_NE(a, b);
+}
+    
+        // Finish and check for builder errors
+    s = builder->Finish();
+    if (s.ok()) {
+      meta->file_size = builder->FileSize();
+      assert(meta->file_size > 0);
+    }
+    delete builder;
+    
+                Platform::String ^ GetEnglishValueFromLocalizedDigits(const std::wstring& localizedString) const
+            {
+                if (m_resolvedName == L'en-US')
+                {
+                    return ref new Platform::String(localizedString.c_str());
+                }
+    }
+    
+    void CHistoryCollector::AddOpenBraceToHistory()
+{
+    AddCommand(std::make_shared<CParentheses>(IDC_OPENP));
+    int ichOpndStart = IchAddSzToEquationSz(CCalcEngine::OpCodeToString(IDC_OPENP), -1);
+    PushLastOpndStart(ichOpndStart);
+    }
+    
+    
+    {
+    {        m_maxDecimalValueStrings[i] = maxVal.ToString(10, FMT_FLOAT, m_precision);
+    }
+}
+    
+    
+    {
+    {    private:
+        bool m_hasExponent;
+        bool m_hasDecimal;
+        size_t m_decPtIndex;
+        wchar_t m_decSymbol;
+        CalcNumSec m_base;
+        CalcNumSec m_exponent;
+    };
 }
 
     
-    // In this example, we test the MyString class (a simple string).
+        res = ncclAllReduce(inputbuffer, outputbuffer, count, s_ncclTypeLookup.Lookup(dtype), ncclRedOpFromMpiOp(op), m_ncclComm, m_stream);
     
-    U_NAMESPACE_BEGIN
-    
-    int32_t ScriptSet::nextSetBit(int32_t fromIndex) const {
-    // TODO: Wants a better implementation.
-    if (fromIndex < 0) {
-        return -1;
+        template <typename classType>
+    static void ForwardPropImpl(classType& c, const FrameRange& fr, bool allowBroadcast)
+    {
+        size_t rank = c.DetermineElementwiseTensorRank();
+        auto result =             c.ValueTensorFor(rank, fr);
+        auto input0 = c.InputRef(0).ValueTensorFor(rank, allowBroadcast ? fr.AllowBroadcast() : fr);
+        auto input1 = c.InputRef(1).ValueTensorFor(rank, allowBroadcast ? fr.AllowBroadcast() : fr);
+        result.AssignElementwiseProductOf(input0, input1);
     }
-    UErrorCode status = U_ZERO_ERROR;
-    for (int32_t scriptIndex = fromIndex; scriptIndex < (int32_t)sizeof(bits)*8; scriptIndex++) {
-        if (test((UScriptCode)scriptIndex, status)) {
-            return scriptIndex;
+    
+    // -----------------------------------------------------------------------
+// Wrapped<T> -- wraps non-class primitive C++ type into a class, like 'double'.
+// (It can also be used for class types, but better use BoxOf<> below directly.)
+// -----------------------------------------------------------------------
+    
+                }
+            else if (parameter.size() == 7)
+            {
+                int id = 2; // skip weightNode and inputValueNode
+    
+        virtual ComputationNetworkPtr BuildNetworkFromDescription(ComputationNetwork* = nullptr)
+    {
+        if (m_net->GetTotalNumberOfNodes() < 1) // not built yet
+            LoadNetworkFromConfig(m_networkConfig);
+        else
+            m_net->ResetEvalTimeStamps();
+        return m_net;
+    }
+    
+    // copy constructor, creates a new disconnected copy of this node
+// doesn't copy everything, so use for macro expansion only (it's private)
+// copyMe - node to copy
+template <typename ElemType>
+NDLNode<ElemType>::NDLNode(const NDLNode<ElemType>& copyMe)
+{
+    m_name        = copyMe.m_name;        // value on the left of the equals
+    m_value       = copyMe.m_value;       // value on the right of the equals (CN node name, or value)
+    m_parent      = copyMe.m_parent;      // parent script
+    m_type        = copyMe.m_type;        // type of node
+    m_paramString = copyMe.m_paramString; // parameter of a function/array
+    m_paramMacro  = copyMe.m_paramMacro;  // parameter of a macro (the variables used in the macro definition)
+    // don't copy over m_parameters, they will be reparsed after the copy
+    }
+    
+    bool ComputationNetwork::IsTypicalCriterionNode(ComputationNodeBasePtr nodePtr)
+{
+    // TODO: just use return!
+    if (nodePtr->OperationName() == OperationNameOf(SquareErrorNode) ||
+        nodePtr->OperationName() == OperationNameOf(LogisticNode) ||
+        nodePtr->OperationName() == OperationNameOf(CrossEntropyWithSoftmaxNode) ||
+        nodePtr->OperationName() == OperationNameOf(SequenceWithSoftmaxNode) ||
+        nodePtr->OperationName() == OperationNameOf(LatticeSequenceWithSoftmaxNode) ||
+        nodePtr->OperationName() == OperationNameOf(CrossEntropyNode) ||
+        nodePtr->OperationName() == OperationNameOf(ClassBasedCrossEntropyWithSoftmaxNode) ||
+        nodePtr->OperationName() == OperationNameOf(ClassificationErrorNode) ||
+        nodePtr->OperationName() == OperationNameOf(ForwardBackwardNode) ||
+#ifdef COMING_SOON
+        nodePtr->OperationName() == OperationNameOf(CRFNode) ||
+#endif
+        nodePtr->OperationName() == OperationNameOf(DummyCriterionNode))
+        return true;
+    }
+    
+    public:
+    // -----------------------------------------------------------------------
+    // evaluation: traversal
+    // These three functions create and cache traversal orders of the network.
+    // -----------------------------------------------------------------------
+    
+        template <class InputNodeType>
+    shared_ptr<ComputationNode<ElemType>> CreateCastNode(const std::wstring& nodeName);
+    
+    
+    {    // call the evaluator
+    SimpleOutputWriter<ElemType> eval(this->m_net);
+    eval.WriteOutput(*m_writer, outNodeNames);
+}
+    
+        inline void transpose(ElemType *src, ElemType *dst, const int N, const int M)
+    {
+        for (auto n = 0; n < N*M; n++) {
+            auto i = n / N;
+            auto j = n%N;
+            dst[n] = src[M*j + i];
         }
     }
-    return -1;
-}
     
-    #ifndef __SCRIPTSET_H__
-#define __SCRIPTSET_H__
+    #endif // D_DHT_RESPONSE_MESSAGE_H
+
     
-    UBool
-SelectFormat::operator==(const Format& other) const {
-    if (this == &other) {
-        return TRUE;
-    }
-    if (!Format::operator==(other)) {
-        return FALSE;
-    }
-    const SelectFormat& o = (const SelectFormat&)other;
-    return msgPattern == o.msgPattern;
-}
-    
-    U_NAMESPACE_BEGIN
-    
-    
-    {    BreakIterator *get() const { return ptr; }
-    BreakIterator *operator->() const { return ptr; }
-    BreakIterator &operator*() const { return *ptr; }
-private:
-    BreakIterator *ptr;
-    SharedBreakIterator(const SharedBreakIterator &);
-    SharedBreakIterator &operator=(const SharedBreakIterator &);
-};
-    
-    class U_I18N_API SharedPluralRules : public SharedObject {
-public:
-    SharedPluralRules(PluralRules *prToAdopt) : ptr(prToAdopt) { }
-    virtual ~SharedPluralRules();
-    const PluralRules *operator->() const { return ptr; }
-    const PluralRules &operator*() const { return *ptr; }
-private:
-    PluralRules *ptr;
-    SharedPluralRules(const SharedPluralRules &);
-    SharedPluralRules &operator=(const SharedPluralRules &);
-};
-    
-    
-    
-    
-/**
- * A formatter for small, positive integers.
- */
-class U_I18N_API SmallIntFormatter : public UMemory {
-public:
-    /**
-     * Estimates the actual digit count needed to format positiveValue
-     * using the given range of digit counts.
-     * Returns a value that is at least the actual digit count needed.
-     *
-     * @param positiveValue the value to format
-     * @param range the acceptable range of digit counts.
-     */
-    static int32_t estimateDigitCount(
-            int32_t positiveValue, const IntDigitCountRange &range);
-    }
-    
-    
-//------------------------------------------------------------------------------
-//
-//   smpdtfmt_cleanup     Memory cleanup function, free/delete all
-//                      cached memory.  Called by ICU's u_cleanup() function.
-//
-//------------------------------------------------------------------------------
-UBool
-SimpleDateFormatStaticSets::cleanup(void)
+    void DHTRoutingTable::getClosestKNodes(
+    std::vector<std::shared_ptr<DHTNode>>& nodes,
+    const unsigned char* key) const
 {
-    delete gStaticSets;
-    gStaticSets = NULL;
-    gSimpleDateFormatStaticSetsInitOnce.reset();
-    return TRUE;
+  dht::findClosestKNodes(nodes, root_.get(), key);
 }
     
-    U_NAMESPACE_BEGIN
-    
-    int32_t StandardPlural::indexFromString(const UnicodeString &keyword, UErrorCode &errorCode) {
-    if (U_FAILURE(errorCode)) { return OTHER; }
-    int32_t i = indexOrNegativeFromString(keyword);
-    if (i >= 0) {
-        return i;
-    } else {
-        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return OTHER;
+    void DHTTaskExecutor::update()
+{
+  execTasks_.erase(std::remove_if(execTasks_.begin(), execTasks_.end(),
+                                  std::mem_fn(&DHTTask::finished)),
+                   execTasks_.end());
+  int r;
+  if (static_cast<size_t>(numConcurrent_) > execTasks_.size()) {
+    r = numConcurrent_ - execTasks_.size();
+  }
+  else {
+    r = 0;
+  }
+  while (r && !queue_.empty()) {
+    std::shared_ptr<DHTTask> task = queue_.front();
+    queue_.pop_front();
+    task->startup();
+    if (!task->finished()) {
+      execTasks_.push_back(task);
+      --r;
     }
+  }
+  A2_LOG_DEBUG(fmt('Executing %u Task(s). Queue has %u task(s).',
+                   static_cast<unsigned int>(getExecutingTaskSize()),
+                   static_cast<unsigned int>(getQueueSize())));
 }
+    
+      size_t getExecutingTaskSize() const { return execTasks_.size(); }
+    
+      void setRoutingTable(DHTRoutingTable* routingTable);
+    
+    DNSCache::DNSCache(const DNSCache& c) = default;
+    
+        CacheEntry(const std::string& hostname, uint16_t port);
+    CacheEntry(const CacheEntry& c);
+    ~CacheEntry();
+    
+    /*
+ * Class:     org_rocksdb_CompactionJobStats
+ * Method:    largestOutputKeyPrefix
+ * Signature: (J)[B
+ */
+jbyteArray Java_org_rocksdb_CompactionJobStats_largestOutputKeyPrefix(
+    JNIEnv* env, jclass, jlong jhandle) {
+  auto* compact_job_stats =
+      reinterpret_cast<rocksdb::CompactionJobStats*>(jhandle);
+  return rocksdb::JniUtil::copyBytes(env,
+      compact_job_stats->largest_output_key_prefix);
+}
+    
+    /*
+ * Class:     org_rocksdb_CompactionOptionsUniversal
+ * Method:    setSizeRatio
+ * Signature: (JI)V
+ */
+void Java_org_rocksdb_CompactionOptionsUniversal_setSizeRatio(
+    JNIEnv*, jobject, jlong jhandle, jint jsize_ratio) {
+  auto* opt = reinterpret_cast<rocksdb::CompactionOptionsUniversal*>(jhandle);
+  opt->size_ratio = static_cast<unsigned int>(jsize_ratio);
+}
+    
+      jobject jusage_by_type = rocksdb::HashMapJni::construct(
+      env, static_cast<uint32_t>(usage_by_type.size()));
+  if (jusage_by_type == nullptr) {
+    // exception occurred
+    return nullptr;
+  }
+  const rocksdb::HashMapJni::FnMapKV<const rocksdb::MemoryUtil::UsageType, const uint64_t, jobject, jobject>
+      fn_map_kv =
+      [env](const std::pair<rocksdb::MemoryUtil::UsageType, uint64_t>& pair) {
+        // Construct key
+        const jobject jusage_type =
+            rocksdb::ByteJni::valueOf(env, rocksdb::MemoryUsageTypeJni::toJavaMemoryUsageType(pair.first));
+        if (jusage_type == nullptr) {
+          // an error occurred
+          return std::unique_ptr<std::pair<jobject, jobject>>(nullptr);
+        }
+        // Construct value
+        const jobject jusage_value =
+            rocksdb::LongJni::valueOf(env, pair.second);
+        if (jusage_value == nullptr) {
+          // an error occurred
+          return std::unique_ptr<std::pair<jobject, jobject>>(nullptr);
+        }
+        // Construct and return pointer to pair of jobjects
+        return std::unique_ptr<std::pair<jobject, jobject>>(
+            new std::pair<jobject, jobject>(jusage_type,
+                                            jusage_value));
+      };
+    
+    /*
+ * Class:     org_rocksdb_ThreadStatus
+ * Method:    microsToStringNative
+ * Signature: (J)Ljava/lang/String;
+ */
+jstring Java_org_rocksdb_ThreadStatus_microsToStringNative(
+    JNIEnv* env, jclass, jlong jmicros) {
+  auto str =
+      rocksdb::ThreadStatus::MicrosToString(static_cast<uint64_t>(jmicros));
+  return rocksdb::JniUtil::toJavaString(env, &str, true);
+}
+    
+    namespace rocksdb {
+TraceWriterJniCallback::TraceWriterJniCallback(
+    JNIEnv* env, jobject jtrace_writer)
+    : JniCallback(env, jtrace_writer) {
+  m_jwrite_proxy_methodid =
+      AbstractTraceWriterJni::getWriteProxyMethodId(env);
+  if(m_jwrite_proxy_methodid == nullptr) {
+    // exception thrown: NoSuchMethodException or OutOfMemoryError
+    return;
+  }
+    }
+    }
+    
+    #include <jni.h>
+#include <memory>
+    
+    /*
+ * Class:     org_rocksdb_TransactionDB
+ * Method:    open
+ * Signature: (JJLjava/lang/String;)J
+ */
+jlong Java_org_rocksdb_TransactionDB_open__JJLjava_lang_String_2(
+    JNIEnv* env, jclass, jlong joptions_handle,
+    jlong jtxn_db_options_handle, jstring jdb_path) {
+  auto* options = reinterpret_cast<rocksdb::Options*>(joptions_handle);
+  auto* txn_db_options =
+      reinterpret_cast<rocksdb::TransactionDBOptions*>(jtxn_db_options_handle);
+  rocksdb::TransactionDB* tdb = nullptr;
+  const char* db_path = env->GetStringUTFChars(jdb_path, nullptr);
+  if (db_path == nullptr) {
+    // exception thrown: OutOfMemoryError
+    return 0;
+  }
+  rocksdb::Status s =
+      rocksdb::TransactionDB::Open(*options, *txn_db_options, db_path, &tdb);
+  env->ReleaseStringUTFChars(jdb_path, db_path);
+    }
