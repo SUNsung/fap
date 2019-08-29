@@ -1,140 +1,160 @@
 
         
-        def rabinMiller(num):
-    s = num - 1
-    t = 0
+        
+class TestLocalhostShorthand:
+    def test_expand_localhost_shorthand(self):
+        args = parser.parse_args(args=[':'], env=MockEnvironment())
+        assert args.url == 'http://localhost'
     
+        def test_filename_from_url(self):
+        assert 'foo.txt' == filename_from_url(
+            url='http://example.org/foo',
+            content_type='text/plain'
+        )
+        assert 'foo.html' == filename_from_url(
+            url='http://example.org/foo',
+            content_type='text/html; charset=utf8'
+        )
+        assert 'foo' == filename_from_url(
+            url='http://example.org/foo',
+            content_type=None
+        )
+        assert 'foo' == filename_from_url(
+            url='http://example.org/foo',
+            content_type='x-foo/bar'
+        )
     
-class HashTable:
-    '''
-        Basic Hash Table example with open addressing and linear probing
-    '''
-    
-        score = np.sqrt(mean_square_diff)
-    
-            a += a
-        b >>= 1
-    
-    letters = [letter for letter in string.ascii_letters]
-digits = [digit for digit in string.digits]
-symbols = [symbol for symbol in string.punctuation]
-chars = letters + digits + symbols
-random.shuffle(chars)
-    
-                # the (n+1)th request fails
-            with pytest.raises(requests.exceptions.ConnectionError):
-                r = requests.get(server_url)
-    
-    from .structures import LookupDict
-    
-        return urlunparse((scheme, netloc, path, params, query, ''))
-    
-            # Adding unique constraint on 'TagKey', fields ['project_id', 'environment_id', 'key']
-        db.create_unique(u'tagstore_tagkey', ['project_id', 'environment_id', 'key'])
-    
-        # Flag to indicate if this migration is too risky
-    # to run online and needs to be coordinated for offline
-    is_dangerous = True
-    
-        return results
-    
-            for platform, project_id in queryset:
-            platform = platform.lower()
-            if platform not in VALID_PLATFORMS:
-                continue
-            ProjectPlatform.objects.create_or_update(
-                project_id=project_id,
-                platform=platform,
-                values={
-                    'last_seen': now,
-                },
-            )
-        min_project_id += step
-    
-    import logging
-    
-    
-def main():
-    parse_command_line()
-    t = Timer(e1)
-    results = t.timeit(options.num) / options.num
-    print('engine: %0.3f ms per iteration' % (results * 1000))
-    t = Timer(c1)
-    results = t.timeit(options.num) / options.num
-    print('coroutine: %0.3f ms per iteration' % (results * 1000))
-    
-        url = options.url + '/updateReports?agent=%s' % options.name
-    update_ws = yield websocket_connect(url, None)
-    msg = yield update_ws.read_message()
-    assert msg is None
-    IOLoop.instance().stop()
-    
-        @gen.coroutine
-    def resolve(
-        self, host: str, port: int, family: int = 0
-    ) -> 'Generator[Any, Any, List[Tuple[int, Any]]]':
-        if is_valid_ip(host):
-            addresses = [host]
-        else:
-            # gethostbyname doesn't take callback as a kwarg
-            fut = Future()  # type: Future[Tuple[Any, Any]]
-            self.channel.gethostbyname(
-                host, family, lambda result, error: fut.set_result((result, error))
-            )
-            result, error = yield fut
-            if error:
-                raise IOError(
-                    'C-Ares returned error %s: %s while resolving %s'
-                    % (error, pycares.errno.strerror(error), host)
+        '''
+    headers = []
+    data = []
+    files = []
+    params = []
+    for item in items:
+        value = item.value
+        if item.sep == SEP_HEADERS:
+            if value == '':
+                # No value => unset the header
+                value = None
+            target = headers
+        elif item.sep == SEP_HEADERS_EMPTY:
+            if item.value:
+                raise ParseError(
+                    'Invalid item '%s' '
+                    '(to specify an empty header use `Header;`)'
+                    % item.orig
                 )
-            addresses = result.addresses
-        addrinfo = []
-        for address in addresses:
-            if '.' in address:
-                address_family = socket.AF_INET
-            elif ':' in address:
-                address_family = socket.AF_INET6
-            else:
-                address_family = socket.AF_UNSPEC
-            if family != socket.AF_UNSPEC and family != address_family:
-                raise IOError(
-                    'Requested socket family %d but got %d' % (family, address_family)
-                )
-            addrinfo.append((typing.cast(int, address_family), (address, port)))
-        return addrinfo
+            target = headers
+        elif item.sep == SEP_QUERY:
+            target = params
+        elif item.sep == SEP_FILES:
+            try:
+                with open(os.path.expanduser(value), 'rb') as f:
+                    value = (os.path.basename(value),
+                             BytesIO(f.read()),
+                             get_content_type(value))
+            except IOError as e:
+                raise ParseError(''%s': %s' % (item.orig, e))
+            target = files
+    
+                # >leading or trailing LWS MAY be removed without
+            # >changing the semantics of the field value'
+            # -https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html
+            # Also, requests raises `InvalidHeader` for leading spaces.
+            value = value.strip()
+    
+            status_line = 'HTTP/{version} {status} {reason}'.format(
+            version=version,
+            status=original.status,
+            reason=original.reason
+        )
+        headers = [status_line]
+        try:
+            # `original.msg` is a `http.client.HTTPMessage` on Python 3
+            # `_headers` is a 2-tuple
+            headers.extend(
+                '%s: %s' % header for header in original.msg._headers)
+        except AttributeError:
+            # and a `httplib.HTTPMessage` on Python 2.x
+            # `headers` is a list of `name: val<CRLF>`.
+            headers.extend(h.strip() for h in original.msg.headers)
+    
+        >>> humanize_bytes(1)
+    '1 B'
+    >>> humanize_bytes(1024, precision=1)
+    '1.0 kB'
+    >>> humanize_bytes(1024 * 123, precision=1)
+    '123.0 kB'
+    >>> humanize_bytes(1024 * 12342, precision=1)
+    '12.1 MB'
+    >>> humanize_bytes(1024 * 12342, precision=2)
+    '12.05 MB'
+    >>> humanize_bytes(1024 * 1234, precision=2)
+    '1.21 MB'
+    >>> humanize_bytes(1024 * 1234 * 1111, precision=2)
+    '1.31 GB'
+    >>> humanize_bytes(1024 * 1234 * 1111, precision=1)
+    '1.3 GB'
+    
+        plugin_manager.register(Plugin)
+    try:
+        r = http(
+            httpbin + BASIC_AUTH_URL,
+            '--auth-type',
+            Plugin.auth_type,
+            '--auth',
+            BASIC_AUTH_HEADER_VALUE,
+        )
+        assert HTTP_OK in r
+        assert r.json == AUTH_OK
+    finally:
+        plugin_manager.unregister(Plugin)
+    
+    
+def test_default_options(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http(httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['form'] == {'foo': 'bar'}
+    
+    This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+'''
+    
+    
+_DEFAULTS = {
+    'threshold': {
+        'default': 99.0,
+        'info': 'Adjust the threshold for histogram matching. Can reduce extreme colors '
+                'leaking in by filtering out colors at the extreme ends of the histogram '
+                'spectrum.',
+        'datatype': float,
+        'rounding': 1,
+        'min_max': (90.0, 100.0),
+        'choices': [],
+        'gui_radio': False,
+        'fixed': True,
+    }
+}
 
     
-        def test_ioloop_close_leak(self):
-        orig_count = len(IOLoop._ioloop_for_asyncio)
-        for i in range(10):
-            # Create and close an AsyncIOLoop using Tornado interfaces.
-            loop = AsyncIOLoop()
-            loop.close()
-        new_count = len(IOLoop._ioloop_for_asyncio) - orig_count
-        self.assertEqual(new_count, 0)
+    logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
     
-            self._last_char[0] = byte_str[-1]
+        Defaults files should be named <plugin_name>_defaults.py
+    Any items placed into this file will automatically get added to the relevant config .ini files
+    within the faceswap/config folder.
     
-        def __init__(self, model, reversed=False, name_prober=None):
-        super(SingleByteCharSetProber, self).__init__()
-        self._model = model
-        # TRUE if we need to reverse every pair in the model lookup
-        self._reversed = reversed
-        # Optional auxiliary prober for name decision
-        self._name_prober = name_prober
-        self._last_order = None
-        self._seq_counters = None
-        self._total_seqs = None
-        self._total_char = None
-        self._freq_char = None
-        self.reset()
+    import tkinter as tk
+from tkinter import ttk
     
-        @property
-    def language(self):
-        return 'Japanese'
+            if not obs_states:
+            obs_states = prev_states_expect_next if prev_states_expect_next else all_states
     
-        def __init__(self):
-        super(UTF8Prober, self).__init__()
-        self.coding_sm = CodingStateMachine(UTF8_SM_MODEL)
-        self._num_mb_chars = None
-        self.reset()
+    parser = OptionParser(USAGE)
+parser.add_option('-k', dest='topK')
+opt, args = parser.parse_args()
+    
+    
+'''
