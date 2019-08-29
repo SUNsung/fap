@@ -1,151 +1,196 @@
 
         
-        
-@pytest.mark.usefixtures('no_memoize', 'os_environ_pathsep')
-@pytest.mark.parametrize('path, pathsep', [
-    ('/foo:/bar:/baz:/foo/bar', ':'),
-    (r'C:\\foo;C:\\bar;C:\\baz;C:\\foo\\bar', ';')])
-def test_get_all_executables_pathsep(path, pathsep):
-    with patch('thefuck.utils.Path') as Path_mock:
-        get_all_executables()
-        Path_mock.assert_has_calls([call(p) for p in path.split(pathsep)], True)
+            if tuple(FLAGS.eval_scales) == (1.0,):
+      tf.logging.info('Performing single-scale test.')
+      predictions = model.predict_labels(
+          samples[common.IMAGE],
+          model_options=model_options,
+          image_pyramid=FLAGS.image_pyramid)
+    else:
+      tf.logging.info('Performing multi-scale test.')
+      if FLAGS.quantize_delay_step >= 0:
+        raise ValueError(
+            'Quantize mode is not supported with multi-scale test.')
+      predictions = model.predict_labels_multi_scale(
+          samples[common.IMAGE],
+          model_options=model_options,
+          eval_scales=FLAGS.eval_scales,
+          add_flipped_images=FLAGS.add_flipped_images)
+    predictions = predictions[common.OUTPUT_TYPE]
     
-        @pytest.mark.parametrize('side_effect, expected_info, warn', [
-        ([u'3.5.9'], u'Generic Shell 3.5.9', False),
-        ([OSError], u'Generic Shell', True),
-    ])
-    def test_info(self, side_effect, expected_info, warn, shell, mocker):
-        warn_mock = mocker.patch('thefuck.shells.generic.warn')
-        shell._get_version = mocker.Mock(side_effect=side_effect)
-        assert shell.info() == expected_info
-        assert warn_mock.called is warn
-        assert shell._get_version.called
+    
+def SerializePairToString(arr_1, arr_2):
+  '''Converts pair of NumPy arrays to serialized DatumPairProto.
+    
+    tf.app.flags.DEFINE_string(
+    'train_image_folder',
+    './ADE20K/ADEChallengeData2016/images/training',
+    'Folder containing trainng images')
+tf.app.flags.DEFINE_string(
+    'train_image_label_folder',
+    './ADE20K/ADEChallengeData2016/annotations/training',
+    'Folder containing annotations for trainng images')
+    
+      names_ids_and_boxes = []
+  with tf.Graph().as_default():
+    with tf.Session() as sess:
+      # Initialize variables, construct detector and DELF extractor.
+      init_op = tf.global_variables_initializer()
+      sess.run(init_op)
+      detector_fn = detector.MakeDetector(
+          sess, detector_model_dir, import_scope='detector')
+      delf_extractor_fn = extractor.MakeExtractor(
+          sess, config, import_scope='extractor_delf')
+    
+        features_filename = index_list[i] + _DELF_EXTENSION
+    features_fullpath = os.path.join(cmd_args.features_dir, features_filename)
+    _, _, features, _, _ = feature_io.ReadFromFile(features_fullpath)
+    if features.size != 0:
+      assert features.shape[1] == _DELF_DIM
+    for feature in features:
+      features_for_clustering.append(feature)
+    
+      Args:
+    sess: TensorFlow session to use.
+    model_dir: Directory where SavedModel is located.
+    import_scope: Optional scope to use for model.
+    
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+    
+      # Mean precision@k.
+  print('**********************************************')
+  public_precisions = 100.0 * metrics.MeanPrecisions(public_predictions,
+                                                     public_solution)
+  private_precisions = 100.0 * metrics.MeanPrecisions(private_predictions,
+                                                      private_solution)
+  print('(Public)  Mean precisions: P@1: %.2f, P@5: %.2f, P@10: %.2f, '
+        'P@50: %.2f, P@100: %.2f' %
+        (public_precisions[0], public_precisions[4], public_precisions[9],
+         public_precisions[49], public_precisions[99]))
+  print('(Private) Mean precisions: P@1: %.2f, P@5: %.2f, P@10: %.2f, '
+        'P@50: %.2f, P@100: %.2f' %
+        (private_precisions[0], private_precisions[4], private_precisions[9],
+         private_precisions[49], private_precisions[99]))
+    
+        def test_multiple_text_fields_with_same_field_name(self):
+        items = input.parse_items(
+            [self.key_value('text_field=a'),
+             self.key_value('text_field=b')],
+            data_class=DataDict
+        )
+        assert items.data['text_field'] == ['a', 'b']
+        assert list(items.data.items()) == [
+            ('text_field', 'a'),
+            ('text_field', 'b'),
+        ]
+    
+            # Make a request modifying the session data.
+        r3 = http('--follow', '--session=test', '--auth=username:password2',
+                  'GET', httpbin.url + '/cookies/set?hello=world2',
+                  'Hello:World2',
+                  env=self.env())
+        assert HTTP_OK in r3
+    
+    
+def main():
+    package_meta_map = {
+        package_name: get_package_meta(package_name)
+        for package_name in PACKAGES
+    }
+    httpie_meta = package_meta_map.pop('httpie')
+    print()
+    print('  url '{url}''.format(url=httpie_meta['url']))
+    print('  sha256 '{sha256}''.format(sha256=httpie_meta['sha256']))
+    print()
+    for dep_meta in package_meta_map.values():
+        print('  resource '{name}' do'.format(name=dep_meta['name']))
+        print('    url '{url}''.format(url=dep_meta['url']))
+        print('    sha256 '{sha256}''.format(sha256=dep_meta['sha256']))
+        print('  end')
+        print('')
+    
+    
+FORM_CONTENT_TYPE = 'application/x-www-form-urlencoded; charset=utf-8'
+JSON_CONTENT_TYPE = 'application/json'
+JSON_ACCEPT = '{0}, */*'.format(JSON_CONTENT_TYPE)
+DEFAULT_UA = 'HTTPie/%s' % __version__
+    
+        def get_converter(self, mime):
+        if is_valid_mime(mime):
+            for converter_class in plugin_manager.get_converters():
+                if converter_class.supports(mime):
+                    return converter_class(mime)
+    
+    
+class AuthPlugin(BasePlugin):
+    '''
+    Base auth plugin class.
+    
+        # noinspection PyMethodOverriding
+    def get_auth(self, username, password):
+        return requests.auth.HTTPDigestAuth(username, password)
 
     
-        def _get_history_line(self, command_script):
-        return u'- cmd: {}\n   when: {}\n'.format(command_script, int(time()))
+        def unregister(self, plugin):
+        self._plugins.remove(plugin)
     
     
-@for_app('pyenv')
-def match(command):
-    return 'pyenv: no such command' in command.output
+@mock.patch('httpie.input.AuthCredentials._getpass',
+            new=lambda self, prompt: 'password')
+def test_password_prompt(httpbin):
+    r = http('--auth', 'user',
+             'GET', httpbin.url + '/basic-auth/user/password')
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
     
-    The most similar choice to 'lis' is:
-    list
-'''
+        def test_GET_explicit_JSON_explicit_headers(self, httpbin):
+        r = http('--json', 'GET', httpbin.url + '/headers',
+                 'Accept:application/xml',
+                 'Content-Type:application/xml')
+        assert HTTP_OK in r
+        assert ''Accept': 'application/xml'' in r
+        assert ''Content-Type': 'application/xml'' in r
     
+        exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR
+    assert error_msg == (
+        'ConnectionError: '
+        'Connection aborted while doing GET request to URL: '
+        'http://www.google.com')
     
-@eager
-def _parse_apt_get_and_cache_operations(help_text_lines):
-    is_commands_list = False
-    for line in help_text_lines:
-        line = line.decode().strip()
-        if is_commands_list:
-            if not line:
-                return
+    # Note: This isn't exactly the same as a 'percent match'. The scale isn't linear. But you can assume that images with a
+# smaller distance are more similar to each other than ones with a larger distance.
     
-    import numpy as np
+        # Load image file and find face locations
+    X_img = face_recognition.load_image_file(X_img_path)
+    X_face_locations = face_recognition.face_locations(X_img)
     
-        # simulate file handle
-    json = '{'a': 'foo”', 'b': 'bar'}\n{'a': 'foo', 'b': 'bar'}\n'
-    json = StringIO(json)
-    result = read_json(json, lines=True)
-    expected = DataFrame([['foo\u201d', 'bar'], ['foo', 'bar']], columns=['a', 'b'])
-    assert_frame_equal(result, expected)
+    # Load the jpg file into a numpy array
+image = face_recognition.load_image_file('biden.jpg')
     
-    import logging
-from tornado.curl_httpclient import CurlAsyncHTTPClient
-from tornado.simple_httpclient import SimpleAsyncHTTPClient
-from tornado.ioloop import IOLoop
-from tornado.options import define, options, parse_command_line
-from tornado.web import RequestHandler, Application
-    
-    # These benchmarks are delicate.  They hit various fast-paths in the gen
-# machinery in order to stay synchronous so we don't need an IOLoop.
-# This removes noise from the results, but it's easy to change things
-# in a way that completely invalidates the results.
-    
-        def finish_tree(self, tree, filename):
-        if self.found_future_import:
-            return
-        if not isinstance(tree, pytree.Node):
-            # Empty files (usually __init__.py) show up as a single Leaf
-            # instead of a Node, so leave them alone
-            return
-        first_stmt = tree.children[0]
-        if is_docstring(first_stmt):
-            # Skip a line and add the import after the docstring
-            tree.insert_child(1, Newline())
-            pos = 2
-        elif first_stmt.prefix:
-            # No docstring, but an initial comment (perhaps a #! line).
-            # Transfer the initial comment to a new blank line.
-            newline = Newline()
-            newline.prefix = first_stmt.prefix
-            first_stmt.prefix = ''
-            tree.insert_child(0, newline)
-            pos = 1
-        else:
-            # No comments or docstring, just insert at the start
-            pos = 0
-        tree.insert_child(pos, self.new_future_import(None))
-        tree.insert_child(pos + 1, Newline())  # terminates the import stmt
+            print('I see someone named {}!'.format(name))
 
     
+    else:
+    text_type = str
+    string_types = (str,)
+    xrange = range
     
-class OpenCoroutineHandler(TestWebSocketHandler):
-    def initialize(self, test, **kwargs):
-        super(OpenCoroutineHandler, self).initialize(**kwargs)
-        self.test = test
-        self.open_finished = False
-    
-    
-def _check_file(modify_times: Dict[str, float], path: str) -> None:
-    try:
-        modified = os.stat(path).st_mtime
-    except Exception:
-        return
-    if path not in modify_times:
-        modify_times[path] = modified
-        return
-    if modify_times[path] != modified:
-        gen_log.info('%s modified; restarting server', path)
-        _reload()
-    
-        def add_callback_from_signal(
-        self, callback: Callable, *args: Any, **kwargs: Any
-    ) -> None:
-        try:
-            self.asyncio_loop.call_soon_threadsafe(
-                self._run_callback, functools.partial(callback, *args, **kwargs)
-            )
-        except RuntimeError:
-            pass
-    
-    
-def _is_punctuation(char):
-  '''Checks whether `chars` is a punctuation character.'''
-  cp = ord(char)
-  # We treat all non-letter/number ASCII as punctuation.
-  # Characters such as '^', '$', and '`' are not in the Unicode
-  # Punctuation class but we treat them as punctuation anyways, for
-  # consistency.
-  if ((cp >= 33 and cp <= 47) or (cp >= 58 and cp <= 64) or
-      (cp >= 91 and cp <= 96) or (cp >= 123 and cp <= 126)):
-    return True
-  cat = unicodedata.category(char)
-  if cat.startswith('P'):
-    return True
-  return False
+    print(','.join(tags))
 
     
-          # Only the last two dimensions are relevant (`seq_length` and `width`), so
-      # we broadcast among the first dimensions, which is typically just
-      # the batch size.
-      position_broadcast_shape = []
-      for _ in range(num_dims - 2):
-        position_broadcast_shape.append(1)
-      position_broadcast_shape.extend([seq_length, width])
-      position_embeddings = tf.reshape(position_embeddings,
-                                       position_broadcast_shape)
-      output += position_embeddings
+    print(','.join(tags))
+
+    
+    print('transform')
+counts = count_vect.fit_transform(docs)
+tfidf = TfidfTransformer().fit_transform(counts)
+print(tfidf.shape)
+    
+    log_f = open('1.log','w')
+log_f.write(' / '.join(map(str, words)))
