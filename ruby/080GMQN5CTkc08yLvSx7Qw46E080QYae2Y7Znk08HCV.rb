@@ -1,226 +1,203 @@
 
         
-          def test_localized_template_has_correct_header_with_no_format_in_template_name
-    I18n.locale = :it
-    get :hello_world
-    assert_equal 'Ciao Mondo', @response.body
-    assert_equal 'text/html',  @response.media_type
+                @version_value = '#{major}.#{minor}.#{patch}'
+      end
+    
+          def initialize(wrapped_ex, options)
+        @wrapped_exception = wrapped_ex
+        @recovered_options = options
+      end
+    end
+    
+          def self.allowed_services_description
+        return Produce::DeveloperCenter::ALLOWED_SERVICES.map do |k, v|
+          '#{k}: (#{v.join('|')})(:on|:off)(true|false)'
+        end.join(', ')
+      end
+    
+      before do
+    # Use a simple client for all data models
+    allow(Spaceship::TestFlight::Base).to receive(:client).and_return(mock_client)
+    allow(mock_client).to receive(:team_id).and_return('')
+  end
+    
+            raise ex
+      end
+    end
+    
+      describe :find_build do
+    context 'one build' do
+      let(:fake_builds) { make_fake_builds(1) }
+      it 'finds the one build' do
+        only_build = fake_builds.first
+        expect(review_submitter.find_build(fake_builds)).to eq(only_build)
+      end
+    end
+    
+          def options(language, locale)
+        config = Snapshot.config
+        result_bundle_path = resolve_result_bundle_path(language, locale) if config[:result_bundle]
+    
+          def self.is_supported?(platform)
+        [:ios, :mac].include?(platform)
+      end
+    
+            Actions.lane_context[SharedValues::PODSPEC_VERSION_NUMBER] = version_podspec_file.version_value
+      end
+    
+        SPLIT_INTS = /(?<=\d)\.(?=[\s\d])/.freeze
+    
+        def push(*names)
+      @filters.push *filter_const(names)
+    end
+    
+            css('br', 'hr', '.material-icons', '.header-link', '.breadcrumb').remove
+    
+            css('h1').each_with_index do |node, i|
+          next if i == 0
+          node.name = 'h2'
+        end
+    
+      # When true, warn user if they just used next-to-last attempt of authentication
+  mattr_accessor :last_attempt_warning
+  @@last_attempt_warning = true
+    
+    module Devise
+  module Controllers
+    # Provide the ability to store a location.
+    # Used to redirect back to a desired path after sign in.
+    # Included by default in all controllers.
+    module StoreLocation
+      # Returns and delete (if it's navigational format) the url stored in the session for
+      # the given scope. Useful for giving redirect backs after sign up:
+      #
+      # Example:
+      #
+      #   redirect_to stored_location_for(:user) || root_path
+      #
+      def stored_location_for(resource_or_scope)
+        session_key = stored_location_key_for(resource_or_scope)
+    
+        if record.timedout?(last_request_at) &&
+        !env['devise.skip_timeout'] &&
+        !proxy.remember_me_is_active?(record)
+      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
+      throw :warden, scope: scope, message: :timeout
+    end
+    
+          klass.devise_modules.each do |mod|
+        constant = const_get(mod.to_s.classify)
+    
+              find_method_with_args(body_node, :system, 'go', 'get') do
+            problem 'Do not use `go get`. Please ask upstream to implement Go vendoring'
+          end
+    
+      def initialize
+    @rebuild = 0
+    @prefix = Homebrew::DEFAULT_PREFIX
+    @cellar = Homebrew::DEFAULT_CELLAR
+    @collector = Utils::Bottles::Collector.new
+    @root_url_specs = {}
+  end
+    
+    describe SoftwareSpec do
+  subject(:spec) { described_class.new }
+    
+      describe '#cached_location' do
+    it 'returns the path of the cached resource' do
+      allow_any_instance_of(described_class).to receive(:cache_tag).and_return('foo')
+      downloader = described_class.new(url, 'baz', version)
+      expect(downloader.cached_location).to eq(HOMEBREW_CACHE/'baz--foo')
+    end
+  end
+end
+    
+      context do
+    let(:asshole)  { Fabricate(:account, username: 'asshole') }
+    let(:reply_to) { Fabricate(:status, account: asshole) }
+    let(:activity) { Fabricate(:mention, account: recipient, status: Fabricate(:status, account: sender, thread: reply_to)) }
+    
+      def show
+    render json: @poll, serializer: REST::PollSerializer, include_results: true
+  end
+    
+      describe 'GET #show' do
+    let(:poll) { Fabricate(:poll, status: Fabricate(:status, visibility: visibility)) }
+    
+    require 'open-uri'
+require 'json'
+require 'strscan'
+require 'forwardable'
+require 'term/ansicolor'
+require 'fileutils'
+    
+        it 'fetches the correct path for ruby' do
+      ruby_path = File.basename(Executable.which('ruby'))
+      ruby_path.should == 'ruby'
+    end
+    
+    def fixture_pod_target(spec_or_name, host_requires_frameworks = false, user_build_configurations = {}, archs = [],
+                       platform = Pod::Platform.new(:ios, '6.0'), target_definitions = [], scope_suffix = nil, build_type: nil)
+  spec = spec_or_name.is_a?(Pod::Specification) ? spec_or_name : fixture_spec(spec_or_name)
+  fixture_pod_target_with_specs([spec], host_requires_frameworks, user_build_configurations, archs, platform,
+                                target_definitions, scope_suffix, :build_type => build_type)
+end
+    
+    module Pod
+  class Target
+    describe BuildType do
+      describe '#initialize' do
+        it 'returns static library by default' do
+          BuildType.new.should == BuildType.static_library
+        end
+    
+          def all_paths
+        [source_path, dsym_path, bcsymbolmap_paths].flatten.compact
+      end
+    end
   end
 end
 
     
-    module ActionView
-  class Template #:nodoc:
-    class Types
-      class Type
-        SET = Struct.new(:symbols).new([ :html, :text, :js, :css, :xml, :json ])
-    
-        # identifies the resolution of a video using `ffmpeg`
-    # @param video_path (String) the path to the video file
-    # @return [Array] the resolution of the video
-    def video_resolution(video_path)
-      command = 'ffmpeg -i \'#{video_path}\' 2>&1'
-      # puts 'COMMAND: #{command}'
-      output = `#{command}`
-      # Note: ffmpeg exits with 1 if no output specified
-      # raise 'Failed to find video information from #{video_path} (using #{command})' unless $CHILD_STATUS.to_i == 0
-      output = output.force_encoding('BINARY')
-      video_infos = output.split('\n').select { |l| l =~ /Stream.*Video/ }
-      raise 'Unable to find Stream Video information from ffmpeg output of #{command}' if video_infos.count == 0
-      video_info = video_infos[0]
-      res = video_info.match(/.* ([0-9]+)x([0-9]+).*/)
-      raise 'Unable to parse resolution information from #{video_info}' if res.size < 3
-      [res[1].to_i, res[2].to_i]
+            # Cleans up projects before writing.
+        #
+        def cleanup_projects(projects)
+          projects.each do |project|
+            [project.pods, project.support_files_group,
+             project.development_pods, project.dependencies_group].each { |group| group.remove_from_project if group.empty? }
+            project.sort(:groups_position => :below)
+          end
+        end
+      end
     end
-    
-          # Push all changes that were made back to App Store Connect
-      def save!
-        client.update_app_version!(application.apple_id, self.version_id, raw_data)
-      end
-    
-          def self.available_options
-        [
-          FastlaneCore::ConfigItem.new(key: :fallback_changelog,
-                                       description: 'Fallback changelog if there is not one on Jenkins, or it couldn't be read',
-                                       optional: true,
-                                       default_value: ''),
-          FastlaneCore::ConfigItem.new(key: :include_commit_body,
-                                       description: 'Include the commit body along with the summary',
-                                       optional: true,
-                                       is_string: false,
-                                       default_value: true)
-        ]
-      end
-    
-            version_podspec_file = Helper::PodspecHelper.new(podspec_path, params[:require_variable_prefix])
-    
-            consts = extract_const_assignment(node)
-        consts.each { |const| self.shared_values_constants << const.to_s }
-      end
-    
-    lib = File.expand_path('../lib', __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'capistrano/version'
-    
-    Then(/^references in the remote repo are listed$/) do
-  expect(@output).to include('refs/heads/master')
-end
-    
-        stdout.strip
   end
 end
+
     
-            if echo?
-          $stdin.gets
-        else
-          $stdin.noecho(&:gets).tap { $stdout.print '\n' }
-        end
-      rescue Errno::EIO
-        # when stdio gets closed
-        return
-      end
-    
-    RSpec.describe 'StoriesShow', type: :request do
-  let(:user)         { create(:user) }
-  let(:article)      { create(:article, user_id: user.id) }
-    
-        Rails.cache.fetch(cache_key, expires_in: 1.hour) do
-      src = GeneratedImage.new(article).social_image
-      return src if src.start_with? 'https://res.cloudinary.com/'
-    
-    module URI
-  ;
-  class << self
-# Does the char code correspond to an alpha-numeric char.
-# isAlphaNumeric('a'.ord) => true
-# isAlphaNumeric(''.ord) => false
-    def isAlphaNumeric(cc)
-      # a - z
-      if (97 <= cc && cc <= 122);
-        return true
-      end
-      # A - Z
-      if (65 <= cc && cc <= 90);
-        return true
-      end
-      # 0 - 9
-      if (48 <= cc && cc <= 57);
-        return true
-      end
-    
-          @right_diff_line_number = nil
-    
-          def previous_link
-        label = '&laquo; Previous'
-        if @page_num == 1
-          %(<span class='disabled'>#{label}</span>)
-        else
-          link = url('/history/#{@page.name}?page=#{@page_num-1}')
-          %(<a href='#{link}' hotkey='h'>#{label}</a>)
+          def ensure_external_podspecs_present!
+        return unless config.podfile
+        config.podfile.dependencies.each do |dep|
+          next if dep.external_source.nil?
+          unless config.sandbox.specification(dep.root_name)
+            raise Informative, 'You must run `pod install` first to ensure that the ' \
+              'podspec for `#{dep.root_name}` has been fetched.'
+          end
         end
       end
-    
-        assert_no_match /Edit Page/,             last_response.body, ''Edit Page' link not blocked in compare template'
-    assert_no_match /Revert Changes/,        last_response.body, ''Revert Changes' link not blocked in compare template'
+    end
   end
+end
+
     
-    context 'Precious::Helpers' do
-  include Precious::Helpers
+      class VagrantSSHCommandError < RuntimeError; end
     
-      # determine file list from git ls-files
-  files = `git ls-files`.
-    split('\n').
-    sort.
-    reject { |file| file =~ /^\./ }.
-    reject { |file| file =~ /^(rdoc|pkg|test|Home\.md|\.gitattributes)/ }.
-    map { |file| '    #{file}' }.
-    join('\n')
+        def configure_sshkit_output(sshkit)
+      format_args = [fetch(:format)]
+      format_args.push(fetch(:format_options)) if any?(:format_options)
     
-      begin
-    require 'gollum-lib'
-    wiki = Gollum::Wiki.new(gollum_path, wiki_options)
-    if !wiki.exist? then
-      raise Gollum::InvalidGitRepositoryError
-    end
-    if wiki_options[:plantuml_url]
-      Gollum::Filter::PlantUML.configure do |config|
-        puts 'Using #{wiki_options[:plantuml_url]} as PlantUML endpoint'
-        config.url = wiki_options[:plantuml_url]
+        require 'capistrano/scm/git'
+    install_plugin Capistrano::SCM::Git
+    
+          def trusted_keys
+        @trusted_keys.dup
       end
-    end
-    puts
-    puts 'Loaded Gollum wiki at:'
-    puts '#{File.expand_path(gollum_path).inspect}'
-    puts
-    puts 'Example API calls:'
-    puts %(    page = wiki.page('page-name'))
-    puts %(    # => <Gollum::Page>)
-    puts
-    puts %(    page.raw_data)
-    puts %(    # => '# My wiki page')
-    puts
-    puts %(    page.formatted_data)
-    puts %(    # => '<h1>My wiki page</h1>')
-    puts
-    puts 'Full API documentation at:'
-    puts 'https://github.com/gollum/gollum-lib'
-    puts
-    IRB.start_session(binding)
-  rescue Gollum::InvalidGitRepositoryError, Gollum::NoSuchPathError
-    puts 'Invalid Gollum wiki at #{File.expand_path(gollum_path).inspect}'
-    exit 0
-  end
-else
-  require 'gollum/app'
-  Precious::App.set(:gollum_path, gollum_path)
-  Precious::App.set(:wiki_options, wiki_options)
-  Precious::App.settings.mustache[:templates] = wiki_options[:template_dir] if wiki_options[:template_dir]
-    
-            page_dir = settings.wiki_options[:page_file_dir].to_s
-        redirect to('/#{clean_url(::File.join(encodeURIComponent(page_dir), encodeURIComponent(path), encodeURIComponent(name)))}')
-      rescue Gollum::DuplicatePageError => e
-        @message = 'Duplicate page: #{e.message}'
-        mustache :error
-      end
-    end
-    
-    require 'rubocop/rake_task'
-RuboCop::RakeTask.new
-    
-          module ClassMethods
-        # Add helper methods that will be accessible from any
-        # endpoint within this namespace (and child namespaces).
-        #
-        # When called without a block, all known helpers within this scope
-        # are included.
-        #
-        # @param [Array] new_modules optional array of modules to include
-        # @param [Block] block optional block of methods to include
-        #
-        # @example Define some helpers.
-        #
-        #     class ExampleAPI < Grape::API
-        #       helpers do
-        #         def current_user
-        #           User.find_by_id(params[:token])
-        #         end
-        #       end
-        #     end
-        #
-        # @example Include many modules
-        #
-        #     class ExampleAPI < Grape::API
-        #       helpers Authentication, Mailer, OtherModule
-        #     end
-        #
-        def helpers(*new_modules, &block)
-          include_new_modules(new_modules) if new_modules.any?
-          include_block(block) if block_given?
-          include_all_in_scope if !block_given? && new_modules.empty?
-        end
-    
-            # Specify additional content-types, e.g.:
-        #   content_type :xls, 'application/vnd.ms-excel'
-        def content_type(key, val)
-          namespace_stackable(:content_types, key.to_sym => val)
-        end
