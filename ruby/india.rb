@@ -1,204 +1,176 @@
 
         
-          it 'can dynamically generate a poll' do
+        module VagrantPlugins
+  module Kernel_V2
+    # Represents a single configured provisioner for a VM.
+    class VagrantConfigTrigger < Vagrant.plugin('2', :config)
+      # Defaults
+      DEFAULT_ON_ERROR = :halt
+      DEFAULT_EXIT_CODE = 0
+      VALID_TRIGGER_TYPES = [:command, :action, :hook].freeze
     
-        def handle_bounce(e)
-      # never reply to bounced emails
-      log_email_process_failure(@mail, e)
-      set_incoming_email_rejection_message(@receiver.incoming_email, I18n.t('emails.incoming.errors.bounced_email_error'))
-    end
+    module VagrantPlugins
+  module Chef
+    module Provisioner
+      # This class is a base class where the common functionality shared between
+      # chef-solo and chef-client provisioning are stored. This is **not an actual
+      # provisioner**. Instead, {ChefSolo} or {ChefServer} should be used.
+      class Base < Vagrant.plugin('2', :provisioner)
+        include Vagrant::Util
+        include Vagrant::Util::Presence
     
-      def create_list(filter, options = {}, topics = nil)
-    topics ||= default_results(options)
-    topics = yield(topics) if block_given?
+    # Add the test directory to the load path
+$:.unshift File.expand_path('../../', __FILE__)
     
-      PRIVATE_IP ||= /^(127\.)|(192\.168\.)|(10\.)|(172\.1[6-9]\.)|(172\.2[0-9]\.)|(172\.3[0-1]\.)|(::1$)|([fF][cCdD])/
+          @aliases_path = Pathname.new(ENV['VAGRANT_ALIAS_FILE']).expand_path if ENV.key?('VAGRANT_ALIAS_FILE')
+      @aliases_path ||= @home_path.join('aliases')
     
-          auto_close
-    end
+          # Check if this machine has a local box metadata file
+      # describing the existing guest. If so, load it and
+      # set the box name and version to allow the actual
+      # box in use to be discovered.
+      if data_path
+        meta_file = data_path.join('box_meta')
+        if meta_file.file?
+          box_meta = JSON.parse(meta_file.read)
+          config.vm.box = box_meta['name']
+          config.vm.box_version = box_meta['version']
+        end
+      end
     
-        context 'with a category restriction' do
-      fab!(:category) { Fabricate(:category, read_restricted: true) }
-      let(:topic) { Fabricate(:topic, category: category) }
-      let(:post) { Fabricate(:post, topic: topic) }
-      fab!(:moderator) { Fabricate(:moderator) }
-      fab!(:admin) { Fabricate(:admin) }
+        it 'configures with the proper box version' do
+      register_provider('foo')
     
-        def remote?
-      true
-    end
+              # If we forked during the process run, we need to do a hard
+          # exit here. Ruby's fork only copies the running process (which
+          # would be us), so if we return from this thread, it results
+          # in a zombie Ruby process.
+          if Process.pid != start_pid
+            # We forked.
     
+          # Find all specs installed to plugins directory that are not
+      # found within the solution set.
+      plugin_specs.delete_if do |spec|
+        solution_full_names.include?(spec.full_name)
+      end
+    
+    Then(/^git wrapper permissions are 0700$/) do
+  permissions_test = %Q([ $(stat -c '%a' #{TestApp.git_wrapper_path.shellescape}) == '700' ])
+  _stdout, _stderr, status = vagrant_cli_command('ssh -c #{permissions_test.shellescape}')
+    
+            if Rake::Task.task_defined?('deploy:set_current_revision')
+          before 'deploy:set_current_revision',
+                 '#{scm_name}:set_current_revision'
+        end
+      end
+      # rubocop:enable Style/GuardClause
+    
+          def roles_for(names)
+        options = extract_options(names)
+        s = Filter.new(:role, names).filter(servers_by_key.values)
+        s.select { |server| server.select?(options) }
+      end
+    
+          # Register a validation rule for the given key.
+      def validate(key, &validator)
+        vs = (validators[key] || [])
+        vs << validator
+        validators[key] = vs
+      end
+    
+            it 'returns true' do
+          expect(node.pure?).to be(true)
+        end
+      end
+    
+              next unless ancestor.send_type?
+    
+        context 'with doubled ellipsis' do
+      let(:pattern) { '(send ... ...)' }
+    
+          def extract_rhs(node)
+        if node.casgn_type?
+          _scope, _lhs, rhs = *node
+        elsif node.op_asgn_type?
+          _lhs, _op, rhs = *node
+        elsif node.call_type?
+          rhs = node.last_argument
+        elsif node.assignment?
+          _lhs, rhs = *node
         end
     
-          json = JSON.parse(response.body)
-      expect(response.status).to eq(200)
-      expect(json['staff_action_logs'].length).to eq(3)
-      expect(json['staff_action_logs'][0]['new_value']).to eq('value 4')
+          def remove_oldest_files(files, dirs, cache_root, verbose)
+        # Add 1 to half the number of files, so that we remove the file if
+        # there's only 1 left.
+        remove_count = 1 + files.length / 2
+        if verbose
+          puts 'Removing the #{remove_count} oldest files from #{cache_root}'
+        end
+        sorted = files.sort_by { |path| File.mtime(path) }
+        remove_files(sorted, dirs, remove_count)
+      rescue Errno::ENOENT
+        # This can happen if parallel RuboCop invocations try to remove the
+        # same files. No problem.
+        puts $ERROR_INFO if verbose
+      end
     
-        module_function :content_type, :grab_video_preview, :portrait?, :resolution, :video_resolution, :md5digest
+    module RuboCop
+  module AST
+    # A node extension for `for` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `for` nodes within RuboCop.
+    class ForNode < Node
+      # Returns the keyword of the `for` statement as a string.
+      #
+      # @return [String] the keyword of the `until` statement
+      def keyword
+        'for'
+      end
+    
+          a = $count
+      p.process_one
+      b = $count
+      assert_equal a + 1, b
+    end
+    
+        it 'logs the exception to Sidekiq.logger' do
+      Component.new.invoke_exception(:a => 1)
+      @str_logger.rewind
+      log = @str_logger.readlines
+      assert_match(/'a':1/, log[0], 'didn't include the context')
+      assert_match(/Something didn't work!/, log[1], 'didn't include the exception message')
+      assert_match(/test\/test_exception_handler.rb/, log[2], 'didn't include the backtrace')
+    end
+    
+          def perform
+        self.class.count += 1 if foo == :bar
+      end
+    end
+    
+          def log(type)
+        data = begin
+                 execute :get_log, {}, type: type.to_s
+               rescue ::Selenium::WebDriver::Error::UnknownCommandError
+                 execute :get_log_legacy, {}, type: type.to_s
+               end
+    
+      get '/host' do
+    'Current host is #{request.scheme}://#{request.host}:#{request.port}'
+  end
+    
+          expect(@session.driver).to have_received(:save_screenshot).with(File.expand_path(custom_path, alternative_path), {})
+    end
   end
 end
 
     
-            # Gets actual simctl device type from device name
-        return device_names.map do |device_name|
-          device = SimCtl.device(name: device_name)
-          if device
-            device.devicetype.name
-          end
-        end.compact
+            response.finish
       end
-    end
-  end
+    
+    Capybara.register_driver :selenium_safari_not_clear_storage do |app|
+  safari_options = {
+    browser: :safari,
+    options: browser_options
+  }
+  Capybara::Selenium::Driver.new(app, safari_options.merge(clear_local_storage: false, clear_session_storage: false))
 end
-
-    
-            [
-          FastlaneCore::ConfigItem.new(key: :name,
-                                       env_name: 'FL_REGISTER_DEVICE_NAME',
-                                       description: 'Provide the name of the device to register as'),
-          FastlaneCore::ConfigItem.new(key: :udid,
-                                       env_name: 'FL_REGISTER_DEVICE_UDID',
-                                       description: 'Provide the UDID of the device to register as'),
-          FastlaneCore::ConfigItem.new(key: :team_id,
-                                     env_name: 'REGISTER_DEVICE_TEAM_ID',
-                                     code_gen_sensitive: true,
-                                     default_value: CredentialsManager::AppfileConfig.try_fetch_value(:team_id),
-                                       default_value_dynamic: true,
-                                     description: 'The ID of your Developer Portal team if you're in multiple teams',
-                                     optional: true,
-                                     verify_block: proc do |value|
-                                       ENV['FASTLANE_TEAM_ID'] = value.to_s
-                                     end),
-          FastlaneCore::ConfigItem.new(key: :team_name,
-                                       env_name: 'REGISTER_DEVICE_TEAM_NAME',
-                                       description: 'The name of your Developer Portal team if you're in multiple teams',
-                                       optional: true,
-                                       code_gen_sensitive: true,
-                                       default_value: CredentialsManager::AppfileConfig.try_fetch_value(:team_name),
-                                       default_value_dynamic: true,
-                                       verify_block: proc do |value|
-                                         ENV['FASTLANE_TEAM_NAME'] = value.to_s
-                                       end),
-          FastlaneCore::ConfigItem.new(key: :username,
-                                       env_name: 'DELIVER_USER',
-                                       description: 'Optional: Your Apple ID',
-                                       default_value: user,
-                                       default_value_dynamic: true)
-        ]
-      end
-    
-            expected_options = FastlaneCore::Configuration.create(available_options, { git_branch: 'my-branch' })
-    
-          def self.is_supported?(platform)
-        platform == :android
-      end
-    
-          def self.get_target!(project, target_name)
-        targets = project.targets
-    
-          it 'updates an existing user' do
-        visit edit_admin_user_path(users(:bob))
-        check 'Admin'
-        click_on 'Update User'
-        expect(page).to have_text('User 'bob' was successfully updated.')
-        visit edit_admin_user_path(users(:bob))
-        expect(page).to have_checked_field('Admin')
-      end
-    
-    describe LiquidMigrator do
-  describe 'converting JSONPath strings' do
-    it 'should work' do
-      expect(LiquidMigrator.convert_string('$.data', true)).to eq('{{data}}')
-      expect(LiquidMigrator.convert_string('$.data.test', true)).to eq('{{data.test}}')
-      expect(LiquidMigrator.convert_string('$first_title', true)).to eq('{{first_title}}')
-    end
-    
-      let :agent do
-    Agents::WebsiteAgent.create!(
-      user: users(:bob),
-      name: 'xkcd',
-      options: valid_options,
-      keep_events_for: 2.days
-    )
-  end
-    
-        describe 'with an integer' do
-      it 'prepends the corresponding character to the stream' do
-        @gz.ungetc 0x21
-        @gz.read.should == '!12345abcde'
-      end
-    
-          gzio.mtime.should == Time.at(1)
-    end
-    
-    describe 'GzipWriter#write' do
-  before :each do
-    @data = '12345abcde'
-    @zip = [31, 139, 8, 0, 44, 220, 209, 71, 0, 3, 51, 52, 50, 54, 49, 77,
-            76, 74, 78, 73, 5, 0, 157, 5, 0, 36, 10, 0, 0, 0].pack('C*')
-    @io = StringIO.new ''.b
-  end
-    
-      after :each do
-    @z.close unless @z.closed?
-  end
-    
-        before do
-      @inflator.inflate(@zeros) do |chunk|
-        @chunks << chunk
-        break
-      end
-    end
-    
-      def contacts_by_type(type)
-    order = ['profiles.first_name ASC', 'profiles.last_name ASC', 'profiles.diaspora_handle ASC']
-    contacts = case type
-      when 'all'
-        order.unshift 'receiving DESC'
-        current_user.contacts
-      when 'only_sharing'
-        current_user.contacts.only_sharing
-      when 'receiving'
-        current_user.contacts.receiving
-      when 'by_aspect'
-        order.unshift 'contact_id IS NOT NULL DESC'
-        contacts_by_aspect(@aspect.id)
-      else
-        raise ArgumentError, 'unknown type #{type}'
-      end
-    contacts.includes(person: :profile)
-            .order(order)
-  end
-    
-        respond_to do |format|
-      format.html
-      format.xml { render :xml => @notifications.to_xml }
-      format.json {
-        render json: render_as_json(@unread_notification_count, @grouped_unread_notification_counts, @notifications)
-      }
-    end
-  end
-    
-    Then(/^directory symlinks are created in the new release$/) do
-  pending
-  TestApp.linked_dirs.each do |dir|
-    run_vagrant_command(test_symlink_exists(TestApp.release_path.join(dir)))
-  end
-end
-    
-        def any?(key)
-      value = fetch(key)
-      if value && value.respond_to?(:any?)
-        begin
-          return value.any?
-        rescue ArgumentError # rubocop:disable Lint/HandleExceptions
-          # Gracefully ignore values whose `any?` method doesn't accept 0 args
-        end
-      end
-    
-          def assert_value_or_block_not_both(value, block)
-        return if value.nil? || block.nil?
-        raise Capistrano::ValidationError,
-              'Value and block both passed to Configuration#set'
-      end
