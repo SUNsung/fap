@@ -1,470 +1,420 @@
 
         
-        
-    {
-    {}  // namespace gpu
-}  // namespace xla
-    
-      Status ExecuteOnStream(const ExecuteParams& params) override;
-    
-    #include 'absl/memory/memory.h'
-#include 'tensorflow/compiler/xla/service/gpu/hlo_execution_profiler.h'
-#include 'tensorflow/compiler/xla/util.h'
-#include 'tensorflow/core/lib/core/errors.h'
-    
-    
-    {
-    {}  // namespace gpu
-}  // namespace xla
-    
-    Status MemzeroThunk::ExecuteOnStream(const ExecuteParams& params) {
-  se::DeviceMemoryBase dest_data =
-      params.buffer_allocations->GetDeviceAddress(dest_);
-  auto op_profiler =
-      params.profiler->MakeScopedInstructionProfiler(hlo_instruction());
-  params.stream->ThenMemZero(&dest_data, dest_data.size());
-  return Status::OK();
-}
-    
-      Status ExecuteOnStream(const ExecuteParams& params) override;
-    
-    #include 'tensorflow/compiler/xla/service/gpu/outfeed_thunk.h'
-#include 'tensorflow/compiler/xla/literal.h'
-#include 'tensorflow/compiler/xla/service/gpu/hlo_execution_profiler.h'
-#include 'tensorflow/compiler/xla/service/gpu/outfeed_manager.h'
-#include 'tensorflow/compiler/xla/util.h'
-#include 'tensorflow/core/platform/stream_executor_no_cuda.h'
-    
-    namespace xla {
-namespace gpu {
-    }
-    }
-    
-    Unless required by applicable law or agreed to in writing, software
+        Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an 'AS IS' BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
     
+    #include 'tensorflow/compiler/xla/service/buffer_assignment.h'
+#include 'tensorflow/compiler/xla/service/gpu/buffer_allocations.h'
+#include 'tensorflow/compiler/xla/service/gpu/hlo_execution_profiler.h'
+#include 'tensorflow/compiler/xla/service/gpu/thunk.h'
+#include 'tensorflow/compiler/xla/service/hlo_instruction.h'
+#include 'tensorflow/core/platform/stream_executor_no_cuda.h'
+#include 'tensorflow/core/platform/types.h'
+    
+    #include <memory>
+#include <string>
+#include <vector>
+    
     
     {
     {}  // namespace gpu
 }  // namespace xla
+
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+    #include 'tensorflow/compiler/xla/service/gpu/while_thunk.h'
     
-    class TensorScatterAddOp : public XlaOpKernel {
- public:
-  explicit TensorScatterAddOp(OpKernelConstruction* context)
-      : XlaOpKernel(context) {}
+    class IndexDataConsumer {
+  virtual void anchor();
     }
     
-    Promise::~Promise() {}
+    #endif // SWIFT_RUNTIME_THREADLOCALSTORAGE_H
+
     
-      static bool FromV8(v8::Isolate* isolate,
-                     v8::Local<v8::Value> val,
-                     ScopedPersistent<T>* out) {
-    v8::Local<T> converted;
-    if (!Converter<v8::Local<T>>::FromV8(isolate, val, &converted))
-      return false;
+    
+    {    // If the low bit is set, then this is an indirect address. Otherwise,
+    // it's direct.
+    if (offsetPlusIndirect & 1) {
+      return *reinterpret_cast<const ValueTy * const *>(address);
+    } else {
+      return reinterpret_cast<const ValueTy *>(address);
     }
-    
-      static void FirstWeakCallback(
-      const v8::WeakCallbackInfo<WrappableBase>& data);
-  static void SecondWeakCallback(
-      const v8::WeakCallbackInfo<WrappableBase>& data);
-    
-    void GlobalMenuBarRegistrarX11::OnProxyCreated(GObject* source,
-                                               GAsyncResult* result) {
-  GError* error = nullptr;
-  GDBusProxy* proxy = g_dbus_proxy_new_for_bus_finish(result, &error);
-  if (error) {
-    g_error_free(error);
-    return;
   }
-    }
     
-      if (_stricmp(info->szDll, 'iojs.exe') != 0 &&
-      _stricmp(info->szDll, 'node.exe') != 0)
-    return NULL;
-    
-    // Generate destructors.
-#include 'ipc/struct_destructor_macros.h'
-#include 'content/nw/src/common/common_message_generator.h'
-    
-    class Base {
- public:
-  Base(int id,
-       const base::WeakPtr<ObjectManager>& manager,
-       const base::DictionaryValue& option,
-       const std::string& extension_id);
-  virtual ~Base();
-    }
-    
-      scoped_ptr<base::Value> value_args(
-      converter->FromV8Value(args, isolate->GetCurrentContext()));
-  if (!value_args.get() ||
-      !value_args->IsType(base::Value::TYPE_LIST))
-    return isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate,
-        'Unable to convert 'args' passed to CallObjectMethod')));
-    
-    #include 'base/strings/string_piece.h'
-#include 'v8/include/v8.h'
-    
-    EventListener::~EventListener() {
-  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
-    delete i->second;
+    /// Header layout for a key path's data buffer header.
+class KeyPathBufferHeader {
+  uint32_t Data;
+  
+  constexpr KeyPathBufferHeader(unsigned Data) : Data(Data) {}
+  
+  static constexpr uint32_t validateSize(uint32_t size) {
+    return assert(size <= _SwiftKeyPathBufferHeader_SizeMask
+                  && 'size too big!'),
+           size;
   }
-}
-    
-    
-    {protected:
-  BaseEvent(){}
-  virtual ~BaseEvent(){}
-};
-    
-    #include 'base/values.h'
-#include 'components/zoom/zoom_controller.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/public/browser/web_contents.h'
-#include 'content/public/common/page_zoom.h'
-#include 'ui/views/controls/menu/menu_runner.h'
-    
-    bool MenuDelegate::IsCommandIdEnabled(int command_id) const {
-  if (command_id < 0)
-    return false;
-    }
-    
-    void Menu::Remove(MenuItem* menu_item, int pos) {
-  if (pos < 0 || pos >= (int)menu_items_.size()) return;
-    }
-    
-    
-    {
-    {    // build keyboard code
-    ui::DomCode domCode = ui::KeycodeConverter::CodeStringToDomCode(keyName.c_str());
-    retval = ui::DomCodeToUsLayoutKeyboardCode(domCode);
-  }
-  return retval;
-}
-    
-    
-    {  return RespondNow(NoArguments());
-}
-    
-          std::string decoded_str;
-      if (!base::Base64Decode(content, &decoded_str)) {
-        error_ = 'Bad base64 string';
-        return false;
-      }
-    
-    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
- public:
-  NwMenuGetNSStringWithFixupFunction(){}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    
- protected:
-  ~NwMenuGetNSStringWithFixupFunction() override {}
-    
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
-};
-    
-    int orientation_and_script_detection(STRING& filename,
-                                     OSResults*,
-                                     tesseract::Tesseract*);
-    
-    
-    {  int delta = this - prev;
-  int32_t n = prev->n_ + 1;
-  int32_t sig_x = prev->sig_x_ + delta;
-  int64_t sig_xsq = prev->sig_xsq_ + delta * delta;
-  int64_t cost = (sig_xsq - sig_x * sig_x / n) / n;
-  cost += prev->total_cost_;
-  UpdateIfBetter(cost, prev->total_steps_ + 1, prev, n, sig_x, sig_xsq);
-  return cost;
-}
-    
-    class LLSQ {
- public:
-  LLSQ() {  // constructor
-    clear();  // set to zeros
-  }
-  void clear();  // initialize
-    }
-    
-      // Creates a report of the error rate. The report_level controls the detail
-  // that is reported to stderr via tprintf:
-  // 0   -> no output.
-  // >=1 -> bottom-line error rate.
-  // >=3 -> font-level error rate.
-  // boosting_mode determines the return value. It selects which (un-weighted)
-  // error rate to return.
-  // The fontinfo_table from MasterTrainer provides the names of fonts.
-  // The it determines the current subset of the training samples.
-  // If not nullptr, the top-choice unichar error rate is saved in unichar_error.
-  // If not nullptr, the report string is saved in fonts_report.
-  // (Ignoring report_level).
-  double ReportErrors(int report_level, CountTypes boosting_mode,
-                      const FontInfoTable& fontinfo_table,
-                      const SampleIterator& it,
-                      double* unichar_error,
-                      STRING* fonts_report);
-    
-      // Setup the map for the given indexed_features that have been indexed by
-  // feature_map. After use, use Set(..., false) to reset to the initial state
-  // as this is faster than calling Init for sparse spaces.
-  void Set(const GenericVector<int>& indexed_features,
-           int canonical_count, bool value);
-    
-    
-    {}  // namespace caffe
-    
-    INSTANTIATE_CLASS(InnerProductLayer);
-REGISTER_LAYER_CLASS(InnerProduct);
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    void convert_dataset(const char* image_filename, const char* label_filename,
-        const char* db_filename) {
-  // Open files
-  std::ifstream image_file(image_filename, std::ios::in | std::ios::binary);
-  std::ifstream label_file(label_filename, std::ios::in | std::ios::binary);
-  CHECK(image_file) << 'Unable to open file ' << image_filename;
-  CHECK(label_file) << 'Unable to open file ' << label_filename;
-  // Read the magic and the meta data
-  uint32_t magic;
-  uint32_t num_items;
-  uint32_t num_labels;
-  uint32_t rows;
-  uint32_t cols;
-    }
-    
-    // A simple macro to mark codes that are not implemented, so that when the code
-// is executed we will see a fatal log.
-#define NOT_IMPLEMENTED LOG(FATAL) << 'Not Implemented Yet'
-    
-    	// move until end of comment reached
-	while (count) {
-		if (*P == '>')
-			--count;
-		else if (*P == '<')
-			++count;
-    }
-    
-    
-    {
-    {			current_material_library = l.replace('mtllib', '').strip_edges();
-			if (!material_map.has(current_material_library)) {
-				Map<String, Ref<SpatialMaterial> > lib;
-				Error err = _parse_material_library(current_material_library, lib, r_missing_deps);
-				if (err == ERR_CANT_OPEN) {
-					String dir = p_path.get_base_dir();
-					err = _parse_material_library(dir.plus_file(current_material_library), lib, r_missing_deps);
-				}
-				if (err == OK) {
-					material_map[current_material_library] = lib;
-				}
-			}
-		}
-	}
-    
-    		case Vector3::AXIS_X: {
-			SortArray<BVH *, BVHCmpX> sort_x;
-			sort_x.nth_element(0, p_size, p_size / 2, &p_bb[p_from]);
-			//sort_x.sort(&p_bb[p_from],p_size);
-		} break;
-		case Vector3::AXIS_Y: {
-			SortArray<BVH *, BVHCmpY> sort_y;
-			sort_y.nth_element(0, p_size, p_size / 2, &p_bb[p_from]);
-			//sort_y.sort(&p_bb[p_from],p_size);
-		} break;
-		case Vector3::AXIS_Z: {
-			SortArray<BVH *, BVHCmpZ> sort_z;
-			sort_z.nth_element(0, p_size, p_size / 2, &p_bb[p_from]);
-			//sort_z.sort(&p_bb[p_from],p_size);
-    }
-    
-    			// We have to recompute the center of mass
-			center_of_mass_local.zero();
-    
-    
-    {	ClassDB::bind_method('_menu_option', &CPUParticlesEditor::_menu_option);
-}
-    
-    	struct BVHCmpX {
-    }
-    
-    #endif
-    
-    void ArrayPropertyEdit::_notif_change() {
-	_change_notify();
-}
-void ArrayPropertyEdit::_notif_changev(const String &p_v) {
-    }
-    
-    inline size_t GetRNNReserveSpaceSize(int num_layer,
-                                     int direction,
-                                     int seq_length,
-                                     int batch_size,
-                                     int hidden_size,
-                                     int mode) {
-  size_t size = 0;
-  switch (mode) {
-    case rnn_enum::kLstm:
-      size = direction * seq_length * batch_size * hidden_size * (num_layer * 7 - 1);
-      break;
-    case rnn_enum::kGru:
-      size = seq_length * batch_size * hidden_size * direction * (num_layer * 9 - 1) +
-          batch_size * hidden_size * direction * 9 + hidden_size * seq_length * 6 +
-          seq_length * batch_size * 7 * hidden_size * direction;
-      break;
-    case rnn_enum::kRnnRelu:
-    case rnn_enum::kRnnTanh:
-      size = seq_length * batch_size * hidden_size * direction * (num_layer * 6 - 1) +
-          batch_size * hidden_size * direction * 3 + hidden_size * seq_length * 2 +
-          seq_length * batch_size * 2 * hidden_size * direction;
-      break;
-    default:
-      LOG(FATAL) << 'unknown RNN mode ' << mode;
-      break;
-  }
-  return size;
-}
-    
-    /*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * 'License'); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * 'AS IS' BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-    
-      const Context &ctx = handle.ctx;
-  auto&& device = storage_managers_.at(ctx.dev_type);
-  std::shared_ptr<storage::StorageManager> manager = device.Get(
-      ctx.real_dev_id(), []() {
-        LOG(FATAL) <<  'Cannot Free space to a device you have not allocated';
-        return nullptr;
-      });
-    
-        for (index_t col_c = (offset_c / 2); col_c < channel_per_group; col_c += col_step) {
-      const index_t col_pos = ((col_c * height_col) + h) * width_col + w;
-      const index_t bp_dir = offset_c % 2;
-    }
-    
-    
-    {
-    {    MXNET_ASSIGN_REQ_SWITCH(req[0], req_type, {
-      Kernel<IndexArrayKernel<req_type>, cpu>::Launch(stream, in_data.Size(),
-          out_data.dptr<int64_t>(), naxes, workspace.dptr_);
-    });
-  } else {
-    MXNET_ASSIGN_REQ_SWITCH(req[0], req_type, {
-      Kernel<IndexArrayDefaultKernel<req_type>, cpu>::Launch(stream, in_data.Size(),
-          out_data.dptr<int64_t>(), ndim, inshape.data());
-    });
-  }
-}
-    
-    
-    {  DMLC_DECLARE_PARAMETER(CaffeDataParam) {
-    DMLC_DECLARE_FIELD(prototxt).set_default('layer{}')
-      .describe('Caffe's layer parameter');
-    DMLC_DECLARE_FIELD(flat).set_default(false)
-      .describe('Augmentation Param: Whether to flat the data into 1D.');
-    DMLC_DECLARE_FIELD(num_examples).set_lower_bound(1).set_default(10000)
-      .describe('Number of examples in the epoch.');
-  }
-};
-    
-    // specialize define for Layer Parameter
-template<>
-class FieldEntry<caffe::LayerParameter>
-    : public FieldEntryBase<FieldEntry<caffe::LayerParameter>, caffe::LayerParameter> {
- public:
-  // parent class
-  typedef FieldEntryBase<FieldEntry<caffe::LayerParameter>, caffe::LayerParameter> Parent;
-    }
-    
-    /**
- * This structure contains per-service-context state related to the oplog.
- */
-class LocalOplogInfo {
 public:
-    static LocalOplogInfo* get(ServiceContext& service);
-    static LocalOplogInfo* get(ServiceContext* service);
-    static LocalOplogInfo* get(OperationContext* opCtx);
+  constexpr KeyPathBufferHeader(unsigned size,
+                                bool trivialOrInstantiableInPlace,
+                                bool hasReferencePrefix)
+    : Data((validateSize(size) & _SwiftKeyPathBufferHeader_SizeMask)
+           | (trivialOrInstantiableInPlace ? _SwiftKeyPathBufferHeader_TrivialFlag : 0)
+           | (hasReferencePrefix ? _SwiftKeyPathBufferHeader_HasReferencePrefixFlag : 0)) 
+  {
+  }
+  
+  constexpr KeyPathBufferHeader withSize(unsigned size) const {
+    return (Data & ~_SwiftKeyPathBufferHeader_SizeMask) | validateSize(size);
+  }
+  
+  constexpr KeyPathBufferHeader withIsTrivial(bool isTrivial) const {
+    return (Data & ~_SwiftKeyPathBufferHeader_TrivialFlag)
+      | (isTrivial ? _SwiftKeyPathBufferHeader_TrivialFlag : 0);
+  }
+  constexpr KeyPathBufferHeader withIsInstantiableInPlace(bool isTrivial) const {
+    return (Data & ~_SwiftKeyPathBufferHeader_TrivialFlag)
+      | (isTrivial ? _SwiftKeyPathBufferHeader_TrivialFlag : 0);
+  }
     }
     
-        size_t getNumOps() const {
-        return _writes.size();
+    namespace swift {
     }
     
-    TemporaryKVRecordStore::~TemporaryKVRecordStore() {
-    invariant(_recordStoreHasBeenDeleted);
+      /// 'Mark' this node only.
+  bool markIntransitive(const driver::Job *);
+    
+    
+    {}  // namespace tesseract.
+
+    
+    // Given a MutableIterator to the start of a block, run DetectParagraphs on
+// that block and commit the results to the underlying ROW and BLOCK structs,
+// saving the ParagraphModels in models.  Caller owns the models.
+// We use unicharset during the function to answer questions such as 'is the
+// first letter of this word upper case?'
+void DetectParagraphs(int debug_level,
+                      bool after_text_recognition,
+                      const MutableIterator *block_start,
+                      GenericVector<ParagraphModel *> *models);
+    
+      // Transforms the given coords one step forward to normalized space, without
+  // using any block rotation or predecessor.
+  void LocalNormTransform(const TPOINT& pt, TPOINT* transformed) const;
+  void LocalNormTransform(const FCOORD& pt, FCOORD* transformed) const;
+  // Transforms the given coords forward to normalized space using the
+  // full transformation sequence defined by the block rotation, the
+  // predecessors, deepest first, and finally this. If first_norm is not nullptr,
+  // then the first and deepest transformation used is first_norm, ending
+  // with this, and the block rotation will not be applied.
+  void NormTransform(const DENORM* first_norm, const TPOINT& pt,
+                     TPOINT* transformed) const;
+  void NormTransform(const DENORM* first_norm, const FCOORD& pt,
+                     FCOORD* transformed) const;
+  // Transforms the given coords one step back to source space, without
+  // using to any block rotation or predecessor.
+  void LocalDenormTransform(const TPOINT& pt, TPOINT* original) const;
+  void LocalDenormTransform(const FCOORD& pt, FCOORD* original) const;
+  // Transforms the given coords all the way back to source image space using
+  // the full transformation sequence defined by this and its predecessors
+  // recursively, shallowest first, and finally any block re_rotation.
+  // If last_denorm is not nullptr, then the last transformation used will
+  // be last_denorm, and the block re_rotation will never be executed.
+  void DenormTransform(const DENORM* last_denorm, const TPOINT& pt,
+                       TPOINT* original) const;
+  void DenormTransform(const DENORM* last_denorm, const FCOORD& pt,
+                       FCOORD* original) const;
+    
+    #ifndef TESSERACT_CCUTIL_DOUBLEPTR_H_
+#define TESSERACT_CCUTIL_DOUBLEPTR_H_
+    
+    namespace tesseract {
+    }
+    
+      // Create an empty UNICHARMAP
+  UNICHARMAP();
+    
+    // helper functions
+// set handle
+void setHandle(JNIEnv *jenv, jlongArray jhandle, void* handle) {
+#ifdef __APPLE__
+  jlong out = (long) handle;
+#else
+  int64_t out = (int64_t) handle;
+#endif
+  jenv->SetLongArrayRegion(jhandle, 0, 1, &out);
 }
     
-    using namespace mongo;
+    template<typename DType>
+inline void CompressArray<DType>::Compress(int chunk_id, bool use_hc) {
+  CHECK_LT(static_cast<size_t>(chunk_id + 1), raw_chunks_.size());
+  std::string& buf = out_buffer_[chunk_id];
+  size_t raw_chunk_size = (raw_chunks_[chunk_id + 1] - raw_chunks_[chunk_id]) * sizeof(DType);
+  int bound = LZ4_compressBound(raw_chunk_size);
+  CHECK_NE(bound, 0);
+  buf.resize(bound);
+  int encoded_size;
+  if (use_hc) {
+    encoded_size = LZ4_compress_HC(
+        reinterpret_cast<char*>(dmlc::BeginPtr(data) + raw_chunks_[chunk_id]),
+        dmlc::BeginPtr(buf), raw_chunk_size, buf.length(), 9);
+  } else {
+    encoded_size = LZ4_compress_default(
+        reinterpret_cast<char*>(dmlc::BeginPtr(data) + raw_chunks_[chunk_id]),
+        dmlc::BeginPtr(buf), raw_chunk_size, buf.length());
+  }
+  CHECK_NE(encoded_size, 0);
+  CHECK_LE(static_cast<size_t>(encoded_size), buf.length());
+  buf.resize(encoded_size);
+}
     
-        virtual ~CountBase() {
-        dbtests::WriteContextForTests ctx(&_opCtx, ns());
-        _client.dropCollection(ns());
+    
+    { private:
+  /*! \brief external memory column offset */
+  std::vector<size_t> disk_offset_;
+};
+    
+      /*! \brief get node statistics given nid */
+  RTreeNodeStat& Stat(int nid) {
+    return stats_[nid];
+  }
+  /*! \brief get node statistics given nid */
+  const RTreeNodeStat& Stat(int nid) const {
+    return stats_[nid];
+  }
+  /*!
+   * \brief load model from stream
+   * \param fi input stream
+   */
+  void Load(dmlc::Stream* fi) {
+    CHECK_EQ(fi->Read(&param, sizeof(TreeParam)), sizeof(TreeParam));
+    nodes_.resize(param.num_nodes);
+    stats_.resize(param.num_nodes);
+    CHECK_NE(param.num_nodes, 0);
+    CHECK_EQ(fi->Read(dmlc::BeginPtr(nodes_), sizeof(Node) * nodes_.size()),
+             sizeof(Node) * nodes_.size());
+    CHECK_EQ(fi->Read(dmlc::BeginPtr(stats_), sizeof(RTreeNodeStat) * stats_.size()),
+             sizeof(RTreeNodeStat) * stats_.size());
+    // chg deleted nodes
+    deleted_nodes_.resize(0);
+    for (int i = param.num_roots; i < param.num_nodes; ++i) {
+      if (nodes_[i].IsDeleted()) deleted_nodes_.push_back(i);
     }
+    CHECK_EQ(static_cast<int>(deleted_nodes_.size()), param.num_deleted);
+  }
+  /*!
+   * \brief save model to stream
+   * \param fo output stream
+   */
+  void Save(dmlc::Stream* fo) const {
+    CHECK_EQ(param.num_nodes, static_cast<int>(nodes_.size()));
+    CHECK_EQ(param.num_nodes, static_cast<int>(stats_.size()));
+    fo->Write(&param, sizeof(TreeParam));
+    CHECK_NE(param.num_nodes, 0);
+    fo->Write(dmlc::BeginPtr(nodes_), sizeof(Node) * nodes_.size());
+    fo->Write(dmlc::BeginPtr(stats_), sizeof(RTreeNodeStat) * nodes_.size());
+  }
     
-    #include 'remtrans.h'
-#include 'unicode/unifilt.h'
     
+    {
+    {// use R's PRNG to replacd
+CustomGlobalRandomEngine::result_type
+CustomGlobalRandomEngine::operator()() {
+  return static_cast<result_type>(
+      std::floor(unif_rand() * CustomGlobalRandomEngine::max()));
+}
+}  // namespace common
+}  // namespace xgboost
+
     
-int32_t SelectFormat::findSubMessage(const MessagePattern& pattern, int32_t partIndex,
-                                     const UnicodeString& keyword, UErrorCode& ec) {
-    if (U_FAILURE(ec)) {
-        return 0;
-    }
-    UnicodeString other(FALSE, SELECT_KEYWORD_OTHER, 5);
-    int32_t count = pattern.countParts();
-    int32_t msgStart=0;
-    // Iterate over (ARG_SELECTOR, message) pairs until ARG_LIMIT or end of select-only pattern.
+    /*! \brief namespace of base64 decoding and encoding table */
+namespace base64 {
+const char DecodeTable[] = {
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  62,  // '+'
+  0, 0, 0,
+  63,  // '/'
+  52, 53, 54, 55, 56, 57, 58, 59, 60, 61,  // '0'-'9'
+  0, 0, 0, 0, 0, 0, 0,
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  // 'A'-'Z'
+  0, 0, 0, 0, 0, 0,
+  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
+  39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // 'a'-'z'
+};
+static const char EncodeTable[] =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+}  // namespace base64
+/*! \brief the stream that reads from base64, note we take from file pointers */
+class Base64InStream: public dmlc::Stream {
+ public:
+  explicit Base64InStream(dmlc::Stream *fs) : reader_(256) {
+    reader_.set_stream(fs);
+    num_prev = 0; tmp_ch = 0;
+  }
+  /*!
+   * \brief initialize the stream position to beginning of next base64 stream
+   * call this function before actually start read
+   */
+  inline void InitPosition(void) {
+    // get a character
     do {
-        const MessagePattern::Part& part=pattern.getPart(partIndex++);
-        const UMessagePatternPartType type=part.getType();
-        if(type==UMSGPAT_PART_TYPE_ARG_LIMIT) {
-            break;
+      tmp_ch = reader_.GetChar();
+    } while (isspace(tmp_ch));
+  }
+  /*! \brief whether current position is end of a base64 stream */
+  inline bool IsEOF(void) const {
+    return num_prev == 0 && (tmp_ch == EOF || isspace(tmp_ch));
+  }
+  virtual size_t Read(void *ptr, size_t size) {
+    using base64::DecodeTable;
+    if (size == 0) return 0;
+    // use tlen to record left size
+    size_t tlen = size;
+    unsigned char *cptr = static_cast<unsigned char*>(ptr);
+    // if anything left, load from previous buffered result
+    if (num_prev != 0) {
+      if (num_prev == 2) {
+        if (tlen >= 2) {
+          *cptr++ = buf_prev[0];
+          *cptr++ = buf_prev[1];
+          tlen -= 2;
+          num_prev = 0;
+        } else {
+          // assert tlen == 1
+          *cptr++ = buf_prev[0]; --tlen;
+          buf_prev[0] = buf_prev[1];
+          num_prev = 1;
         }
-        // part is an ARG_SELECTOR followed by a message
-        if(pattern.partSubstringMatches(part, keyword)) {
-            // keyword matches
-            return partIndex;
-        } else if(msgStart==0 && pattern.partSubstringMatches(part, other)) {
-            msgStart=partIndex;
+      } else {
+        // assert num_prev == 1
+        *cptr++ = buf_prev[0]; --tlen; num_prev = 0;
+      }
+    }
+    if (tlen == 0) return size;
+    int nvalue;
+    // note: everything goes with 4 bytes in Base64
+    // so we process 4 bytes a unit
+    while (tlen && tmp_ch != EOF && !isspace(tmp_ch)) {
+      // first byte
+      nvalue = DecodeTable[tmp_ch] << 18;
+      {
+        // second byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
+        nvalue |= DecodeTable[tmp_ch] << 12;
+        *cptr++ = (nvalue >> 16) & 0xFF; --tlen;
         }
-        partIndex=pattern.getLimitPartIndex(partIndex);
-    } while(++partIndex<count);
-    return msgStart;
+      {
+        // third byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
+        // handle termination
+        if (tmp_ch == '=') {
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == '=') << 'invalid base64 format';
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == EOF || isspace(tmp_ch))
+              << 'invalid base64 format';
+          break;
+        }
+        nvalue |= DecodeTable[tmp_ch] << 6;
+        if (tlen) {
+          *cptr++ = (nvalue >> 8) & 0xFF; --tlen;
+        } else {
+          buf_prev[num_prev++] = (nvalue >> 8) & 0xFF;
+        }
+      }
+      {
+        // fourth byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch))
+            << 'invalid base64 format';
+        if (tmp_ch == '=') {
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == EOF || isspace(tmp_ch))
+              << 'invalid base64 format';
+          break;
+        }
+        nvalue |= DecodeTable[tmp_ch];
+        if (tlen) {
+          *cptr++ = nvalue & 0xFF; --tlen;
+        } else {
+          buf_prev[num_prev ++] = nvalue & 0xFF;
+        }
+      }
+      // get next char
+      tmp_ch = reader_.GetChar();
+    }
+    if (kStrictCheck) {
+      CHECK_EQ(tlen, 0) << 'Base64InStream: read incomplete';
+    }
+    return size - tlen;
+  }
+  virtual void Write(const void *ptr, size_t size) {
+    LOG(FATAL) << 'Base64InStream do not support write';
+  }
+    }
+    
+    SEXP XGDMatrixSetInfo_R(SEXP handle, SEXP field, SEXP array) {
+  R_API_BEGIN();
+  int len = length(array);
+  const char *name = CHAR(asChar(field));
+  if (!strcmp('group', name)) {
+    std::vector<unsigned> vec(len);
+    #pragma omp parallel for schedule(static)
+    for (int i = 0; i < len; ++i) {
+      vec[i] = static_cast<unsigned>(INTEGER(array)[i]);
+    }
+    CHECK_CALL(XGDMatrixSetGroup(R_ExternalPtrAddr(handle), BeginPtr(vec), len));
+  } else {
+    std::vector<float> vec(len);
+    #pragma omp parallel for schedule(static)
+    for (int i = 0; i < len; ++i) {
+      vec[i] = REAL(array)[i];
+    }
+    CHECK_CALL(XGDMatrixSetFloatInfo(R_ExternalPtrAddr(handle),
+                                   CHAR(asChar(field)),
+                                   BeginPtr(vec), len));
+  }
+  R_API_END();
+  return R_NilValue;
 }
     
-    #ifndef __SHARED_DATEFORMATSYMBOLS_H__
-#define __SHARED_DATEFORMATSYMBOLS_H__
     
-        //! \brief Return type of the functor
-    typedef Event result_type;
+    // exception type_error.304
+    try
+    {
+        // use at() on a non-array type
+        json str = 'I am a string';
+        str.at(0) = 'Another string';
+    }
+    catch (json::type_error& e)
+    {
+        std::cout << e.what() << '\n';
+    }
     
-            void track(Array<float>& poseKeypoints, Array<long long>& poseIds, const cv::Mat& cvMatInput);
+        // out_of_range.109
+    try
+    {
+        // try to use an array index that is not a number
+        json::reference ref = j.at('/array/one'_json_pointer);
+    }
+    catch (json::parse_error& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+    
+        // create values of different integer types
+    short n_short = 42;
+    int n_int = -23;
+    long n_long = 1024;
+    int_least32_t n_int_least32_t = -17;
+    uint8_t n_uint8_t = 8;
+    
+    
+    {    std::cout << null << '\n';
+    std::cout << *res2.first << ' ' << std::boolalpha << res2.second << '\n';
+}
