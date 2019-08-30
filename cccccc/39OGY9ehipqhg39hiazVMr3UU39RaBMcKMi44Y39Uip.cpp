@@ -1,530 +1,529 @@
 
         
-            /** Return a field of the currently selected entry as a QString. Does nothing if nothing
-        is selected.
-       @param[in] column  Data column to extract from the model
-       @see  TransactionView::copyLabel, TransactionView::copyAmount, TransactionView::copyAddress
-     */
-    QList<QModelIndex> getEntryData(QAbstractItemView *view, int column);
-    
-    #endif // BITCOIN_QT_PLATFORMSTYLE_H
-    
-    int secp256k1_ecdsa_sign_recoverable(const secp256k1_context* ctx, secp256k1_ecdsa_recoverable_signature *signature, const unsigned char *msg32, const unsigned char *seckey, secp256k1_nonce_function noncefp, const void* noncedata) {
-    secp256k1_scalar r, s;
-    secp256k1_scalar sec, non, msg;
-    int recid;
-    int ret = 0;
-    int overflow = 0;
-    VERIFY_CHECK(ctx != NULL);
-    ARG_CHECK(secp256k1_ecmult_gen_context_is_built(&ctx->ecmult_gen_ctx));
-    ARG_CHECK(msg32 != NULL);
-    ARG_CHECK(signature != NULL);
-    ARG_CHECK(seckey != NULL);
-    if (noncefp == NULL) {
-        noncefp = secp256k1_nonce_function_default;
-    }
+        // Advertises our menu bars to Unity.
+//
+// GlobalMenuBarX11 is responsible for managing the DbusmenuServer for each
+// XID. We need a separate object to own the dbus channel to
+// com.canonical.AppMenu.Registrar and to register/unregister the mapping
+// between a XID and the DbusmenuServer instance we are offering.
+class GlobalMenuBarRegistrarX11 {
+ public:
+  static GlobalMenuBarRegistrarX11* GetInstance();
     }
     
-        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 0));
-    CHECK(!secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
-    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 1));
-    CHECK(secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
-    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 2));
-    CHECK(!secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
-    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 3));
-    CHECK(!secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
+    template <typename P1, typename P2, typename P3, typename P4, typename P5>
+inline WrappableBase* InvokeFactory(
+    Arguments* args,
+    const base::Callback<WrappableBase*(P1, P2, P3, P4, P5)>& callback) {
+  typename CallbackParamTraits<P1>::LocalType a1;
+  typename CallbackParamTraits<P2>::LocalType a2;
+  typename CallbackParamTraits<P3>::LocalType a3;
+  typename CallbackParamTraits<P4>::LocalType a4;
+  typename CallbackParamTraits<P5>::LocalType a5;
+  if (!GetNextArgument(args, 0, true, &a1) ||
+      !GetNextArgument(args, 0, false, &a2) ||
+      !GetNextArgument(args, 0, false, &a3) ||
+      !GetNextArgument(args, 0, false, &a4) ||
+      !GetNextArgument(args, 0, false, &a5))
+    return nullptr;
+  return callback.Run(a1, a2, a3, a4, a5);
+}
     
-        UniValue obj2(UniValue::VOBJ);
-    BOOST_CHECK(obj2.pushKV('cat1', 9000));
-    BOOST_CHECK(obj2.pushKV('cat2', 12345));
+      v8::Local<v8::Object> GetHandle() const override;
     
-    #endif // BITCOIN_BECH32_H
+    
+    {  return args[0];
+}
+    
+    bool IsUrlArg(const base::CommandLine::CharType* arg) {
+  // the first character must be a letter for this to be a URL
+  auto c = *arg;
+  if (('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z')) {
+    for (auto* p = arg + 1; *p; ++p) {
+      c = *p;
+    }
+    }
+    }
+    
+    #endif  // SHELL_APP_COMMAND_LINE_ARGS_H_
 
     
+    #ifndef SHELL_BROWSER_API_ATOM_API_AUTO_UPDATER_H_
+#define SHELL_BROWSER_API_ATOM_API_AUTO_UPDATER_H_
     
-    {  if (ok) {
-    if (miter->Valid() != dbiter->Valid()) {
-      fprintf(stderr, 'step %d: Mismatch at end of iterators: %d vs. %d\n',
-              step, miter->Valid(), dbiter->Valid());
-      ok = false;
-    }
+      /// Change the DeclContext of any contained parameters to the specified
+  /// DeclContext.
+  void setDeclContextOfParamDecls(DeclContext *DC);
+  
+  
+  /// Flags used to indicate how ParameterList cloning should operate.
+  enum CloneFlags {
+    /// The cloned ParamDecls should be marked implicit.
+    Implicit = 0x01,
+    /// The cloned pattern is for an inherited constructor; mark default
+    /// arguments as inherited, and mark unnamed arguments as named.
+    Inherited = 0x02,
+    /// The cloned pattern will strip type information.
+    WithoutTypes = 0x04,
+  };
+    
+    // Crash due to an unowned retain count overflow.
+// FIXME: can't pass the object's address from InlineRefCounts without hacks
+void swift::swift_abortUnownedRetainOverflow() {
+  swift::fatalError(FatalErrorFlags::ReportBacktrace,
+                    'Fatal error: Object's unowned reference was retained too many times');
+}
+    
+    #if defined(_WIN32)
+template <>
+const char *
+_swift_stdlib_strtoX_clocale_impl<float>(const char *str, float *result) {
+  if (swift_stringIsSignalingNaN(str)) {
+    *result = std::numeric_limits<float>::signaling_NaN();
+    return str + std::strlen(str);
   }
-  fprintf(stderr, '%d entries compared: ok=%d\n', count, ok);
-  delete miter;
-  delete dbiter;
-  return ok;
+    }
+    
+      switch (Action) {
+  case ActionType::DumpReflectionSections:
+    // Dump everything
+    Context.getBuilder().dumpAllSections(OS);
+    break;
+  case ActionType::DumpTypeLowering: {
+    for (std::string Line; std::getline(std::cin, Line);) {
+      if (Line.empty())
+        continue;
+    }
+    }
+    }
+    
+      /// Set if the type doesn't come from the default symbol namespace for
+  /// its kind and source language.  (Source language can be determined
+  /// from the parent context.)
+  ///
+  /// Some languages (most importantly, C/C++/Objective-C) have different
+  /// symbol namespaces in which types can be declared; for example,
+  /// `struct A` and `typedef ... A` can be declared in the same scope and
+  /// resolve to unrelated types.  When these declarations are imported,
+  /// there are several possible ways to distinguish them in Swift, e.g.
+  /// by implicitly renaming them; however, the external name used for
+  /// mangling and metadata must be stable and so is based on the original
+  /// declared name.  Therefore, in these languages, we privilege one
+  /// symbol namespace as the default (although which may depend on the
+  /// type kind), and declarations from the other(s) must be marked in
+  /// order to differentiate them.
+  ///
+  /// C, C++, and Objective-C
+  /// -----------------------
+  ///
+  /// C, C++, and Objective-C have several different identifier namespaces
+  /// that can declare types: the ordinary namespace (`typedef`s and ObjC
+  /// `@interface`s), the tag namespace (`struct`s, `enum`s, `union`s, and
+  /// C++ `class`es), and the ObjC protocol namespace (ObjC `@protocol`s).
+  /// The languages all forbid multiple types from being declared in a given
+  /// scope and namespace --- at least, they do within a translation unit,
+  /// and for the most part we have to assume in Swift that that applies
+  /// across translation units as well.
+  //
+  /// Swift's default symbol-namespace rules for C/C++/ObjC are as follows:
+  /// - Protocols are assumed to come from the ObjC protocol namespace.
+  /// - Classes are assumed to come from the ordinary namespace (as an
+  ///   Objective-C class would).
+  /// - Structs and enums are assumed to come from the tag namespace
+  ///   (as a C `struct`, `union`, or `enum` would).
+  //;
+  /// Note that there are some special mangling rules for types imported
+  /// from C tag types in addition to the symbol-namespace rules.
+  StringType SymbolNamespace;
+    
+      ASTMangler(bool DWARFMangling = false)
+    : DWARFMangling(DWARFMangling) {}
+    
+    namespace Ui {
+    class OpenURIDialog;
 }
     
-    #endif  // STORAGE_LEVELDB_DB_DBFORMAT_H_
+    
+    {    /* Test r/s equal to zero */
+    {
+        /* (1,1) encoded in DER. */
+        unsigned char sigcder[8] = {0x30, 0x06, 0x02, 0x01, 0x01, 0x02, 0x01, 0x01};
+        unsigned char sigc64[64] = {
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01,
+        };
+        secp256k1_pubkey pubkeyc;
+        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigc64, 0) == 1);
+        CHECK(secp256k1_ecdsa_recover(ctx, &pubkeyc, &rsig, msg32) == 1);
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder, sizeof(sigcder)) == 1);
+        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyc) == 1);
+        sigcder[4] = 0;
+        sigc64[31] = 0;
+        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigc64, 0) == 1);
+        CHECK(secp256k1_ecdsa_recover(ctx, &pubkeyb, &rsig, msg32) == 0);
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder, sizeof(sigcder)) == 1);
+        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyc) == 0);
+        sigcder[4] = 1;
+        sigcder[7] = 0;
+        sigc64[31] = 1;
+        sigc64[63] = 0;
+        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigc64, 0) == 1);
+        CHECK(secp256k1_ecdsa_recover(ctx, &pubkeyb, &rsig, msg32) == 0);
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder, sizeof(sigcder)) == 1);
+        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyc) == 0);
+    }
+}
+    
+    static std::string ShortSuccessor(const std::string& s) {
+  std::string result = s;
+  InternalKeyComparator(BytewiseComparator()).FindShortSuccessor(&result);
+  return result;
+}
+    
+    void FaultInjectionTestEnv::UntrackFile(const std::string& f) {
+  MutexLock l(&mutex_);
+  db_file_state_.erase(f);
+  new_files_since_last_dir_sync_.erase(f);
+}
+    
+    TEST(FileNameTest, Construction) {
+  uint64_t number;
+  FileType type;
+  std::string fname;
+    }
+    
+    namespace google {
+namespace protobuf {
+namespace util {
+namespace {
+    }
+    }
+    }
+    }
+    
+    #endif  // TESSERACT_CCSTRUCT_DEBUGPIXA_H_
 
     
-    TEST(FormatTest, InternalKeyShortestSuccessor) {
-  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
-            ShortSuccessor(IKey('foo', 100, kTypeValue)));
-  ASSERT_EQ(IKey('\xff\xff', 100, kTypeValue),
-            ShortSuccessor(IKey('\xff\xff', 100, kTypeValue)));
-}
+    #include <cstdio>
     
-        Mat displacement_field(Size(dst_frame1.cols / (1 << OF_scale), dst_frame1.rows / (1 << OF_scale)),
-                           CV_32FC2);
-    randn(displacement_field, 0.0, sigma);
-    resize(displacement_field, displacement_field, dst_frame2.size(), 0.0, 0.0, INTER_CUBIC);
-    for (int i = 0; i < displacement_field.rows; i++)
-        for (int j = 0; j < displacement_field.cols; j++)
-            displacement_field.at<Vec2f>(i, j) += Vec2f((float)j, (float)i);
+      // Accessors.
+  const Key& key() const {
+    return key_;
+  }
+  void set_key(const Key& new_key) {
+    key_ = new_key;
+  }
+  const Data* data() const {
+    return data_;
+  }
+  // Sets the data pointer, taking ownership of the data.
+  void set_data(Data* new_data) {
+    delete data_;
+    data_ = new_data;
+  }
+  // Relinquishes ownership of the data pointer (setting it to nullptr).
+  Data* extract_data() {
+    Data* result = data_;
+    data_ = nullptr;
+    return result;
+  }
     
-    
-    {    for (int i = 0; i < n; ++i)
-       Xdr::read <StreamIO> (is, _value[i]);
-}
-    
-    // attributes used in headers are TypedAttributes
-class Attribute;
-    
-    OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_ENTER
-    
-    #include 'ImfGenericOutputFile.h'
-    
-    
-void
-hufBuildEncTable
-    (Int64*	frq,	// io: input frequencies [HUF_ENCSIZE], output table
-     int*	im,	//  o: min frq index
-     int*	iM)	//  o: max frq index
-{
-    //
-    // This function assumes that when it is called, array frq
-    // indicates the frequency of all possible symbols in the data
-    // that are to be Huffman-encoded.  (frq[i] contains the number
-    // of occurrences of symbol i in the data.)
-    //
-    // The loop below does three things:
-    //
-    // 1) Finds the minimum and maximum indices that point
-    //    to non-zero entries in frq:
-    //
-    //     frq[im] != 0, and frq[i] == 0 for all i < im
-    //     frq[iM] != 0, and frq[i] == 0 for all i > iM
-    //
-    // 2) Fills array fHeap with pointers to all non-zero
-    //    entries in frq.
-    //
-    // 3) Initializes array hlink such that hlink[i] == i
-    //    for all array entries.
-    //
+      std::string fname = TableFileName(dbname, meta->number);
+  if (iter->Valid()) {
+    WritableFile* file;
+    s = env->NewWritableFile(fname, &file);
+    if (!s.ok()) {
+      return s;
+    }
     }
     
-    
-void
-InputPart::rawPixelDataToBuffer (int scanLine, char *pixelData, int &pixelDataSize) const
-{
-    file->rawPixelDataToBuffer(scanLine, pixelData, pixelDataSize);
-}
-    
-    
-    {    InputStreamMutex()
-    {
-        is = 0;
-        currentPosition = 0;
+    TEST(RecoveryTest, MultipleMemTables) {
+  // Make a large log.
+  const int kNum = 1000;
+  for (int i = 0; i < kNum; i++) {
+    char buf[100];
+    snprintf(buf, sizeof(buf), '%050d', i);
+    ASSERT_OK(Put(buf, buf));
+  }
+  ASSERT_EQ(0, NumTables());
+  Close();
+  ASSERT_EQ(0, NumTables());
+  ASSERT_EQ(1, NumLogs());
+  uint64_t old_log_file = FirstLogFile();
     }
+    
+    class SnapshotList;
+    
+    
+    {  struct Rep;
+  Rep* rep_;
 };
     
-      if (!return_list) {
-    return Item(pself, from);
-  }
+    #if defined(_WIN32)
+// The leveldb::Env class below contains a DeleteFile method.
+// At the same time, <windows.h>, a fairly popular header
+// file for Windows applications, defines a DeleteFile macro.
+//
+// Without any intervention on our part, the result of this
+// unfortunate coincidence is that the name of the
+// leveldb::Env::DeleteFile method seen by the compiler depends on
+// whether <windows.h> was included before or after the LevelDB
+// headers.
+//
+// To avoid headaches, we undefined DeleteFile (if defined) and
+// redefine it at the bottom of this file. This way <windows.h>
+// can be included before this file (or not at all) and the
+// exported method will always be leveldb::Env::DeleteFile.
+#if defined(DeleteFile)
+#undef DeleteFile
+#define LEVELDB_DELETEFILE_UNDEFINED
+#endif  // defined(DeleteFile)
+#endif  // defined(_WIN32)
     
-    static PyObject* GetData(PyUnknownFieldRef* self, void *closure) {
-  const UnknownField* field = GetUnknownField(self);
-  if (field == NULL) {
-    return NULL;
-  }
-  PyObject* data = NULL;
-  switch (field->type()) {
-    case UnknownField::TYPE_VARINT:
-      data = PyInt_FromLong(field->varint());
-      break;
-    case UnknownField::TYPE_FIXED32:
-      data = PyInt_FromLong(field->fixed32());
-      break;
-    case UnknownField::TYPE_FIXED64:
-      data = PyInt_FromLong(field->fixed64());
-      break;
-    case UnknownField::TYPE_LENGTH_DELIMITED:
-      data = PyBytes_FromStringAndSize(field->length_delimited().data(),
-                                       field->GetLengthDelimitedSize());
-      break;
-    case UnknownField::TYPE_GROUP:
-      data = PyUnknownFields_FromUnknownFieldSet(
-          self->parent, field->group());
-      break;
-  }
-  return data;
+    /*
+ * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
+ * Method:    XGDMatrixSetGroup
+ * Signature: (J[I)V
+ */
+JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_XGDMatrixSetGroup
+  (JNIEnv * jenv, jclass jcls, jlong jhandle, jintArray jarray) {
+  DMatrixHandle handle = (DMatrixHandle) jhandle;
+  jint* array = jenv->GetIntArrayElements(jarray, NULL);
+  bst_ulong len = (bst_ulong)jenv->GetArrayLength(jarray);
+  int ret = XGDMatrixSetGroup(handle, (unsigned int const *)array, len);
+  //release
+  jenv->ReleaseIntArrayElements(jarray, array, 0);
+  return ret;
 }
     
-    void AnyMetadata::PackFrom(const Message& message) {
-  PackFrom(message, kTypeGoogleApisComPrefix);
+    /*!
+ * \brief create a matrix content from CSR format
+ * \param indptr pointer to row headers
+ * \param indices findex
+ * \param data fvalue
+ * \param nindptr number of rows in the matrix + 1
+ * \param nelem number of nonzero elements in the matrix
+ * \param num_col number of columns; when it's set to 0, then guess from data
+ * \param out created dmatrix
+ * \return 0 when success, -1 when failure happens
+ */
+XGB_DLL int XGDMatrixCreateFromCSREx(const size_t* indptr,
+                                     const unsigned* indices,
+                                     const float* data,
+                                     size_t nindptr,
+                                     size_t nelem,
+                                     size_t num_col,
+                                     DMatrixHandle* out);
+/*!
+ * \brief create a matrix content from CSC format
+ * \param col_ptr pointer to col headers
+ * \param indices findex
+ * \param data fvalue
+ * \param nindptr number of rows in the matrix + 1
+ * \param nelem number of nonzero elements in the matrix
+ * \param num_row number of rows; when it's set to 0, then guess from data
+ * \param out created dmatrix
+ * \return 0 when success, -1 when failure happens
+ */
+XGB_DLL int XGDMatrixCreateFromCSCEx(const size_t* col_ptr,
+                                     const unsigned* indices,
+                                     const float* data,
+                                     size_t nindptr,
+                                     size_t nelem,
+                                     size_t num_row,
+                                     DMatrixHandle* out);
+    
+    /*!
+ * \brief Find the maximum iterator within the iterators
+ * \param begin The begining iterator.
+ * \param end The end iterator.
+ * \return the iterator point to the maximum value.
+ * \tparam Iterator The type of the iterator.
+ */
+template<typename Iterator>
+XGBOOST_DEVICE inline Iterator FindMaxIndex(Iterator begin, Iterator end) {
+  Iterator maxit = begin;
+  for (Iterator it = begin; it != end; ++it) {
+    if (*it > *maxit) maxit = it;
+  }
+  return maxit;
 }
     
-    // Defined in this file.
-class CodeGenerator;
-class GeneratorContext;
     
-      // Generate non-inline methods related to the enum, such as IsValidValue().
-  // Goes in the .cc file. EnumDescriptors are stored in an array, idx is
-  // the index in this array that corresponds with this enum.
-  void GenerateMethods(int idx, io::Printer* printer);
+    { private:
+  // the chunk split of the data, by number of elements
+  std::vector<bst_uint> raw_chunks_;
+  // the encoded chunk, by number of bytes
+  std::vector<bst_uint> encoded_chunks_;
+  // output buffer of compression.
+  std::vector<std::string> out_buffer_;
+  // input buffer of data.
+  std::string in_buffer_;
+};
     
-    void ExtensionGenerator::GenerateDefinition(io::Printer* printer) {
-  // If we are building for lite with implicit weak fields, we want to skip over
-  // any custom options (i.e. extensions of messages from descriptor.proto).
-  // This prevents the creation of any unnecessary linker references to the
-  // descriptor messages.
-  if (options_.lite_implicit_weak_fields &&
-      descriptor_->containing_type()->file()->name() ==
-          'net/proto2/proto/descriptor.proto') {
-    return;
-  }
+    
+    { private:
+  /*! \brief number of allocated pages */
+  size_t num_free_buffer_;
+  /*! \brief clock_pointer */
+  size_t clock_ptr_;
+  /*! \brief writer threads */
+  std::vector<std::unique_ptr<std::thread> > workers_;
+  /*! \brief recycler queue */
+  dmlc::ConcurrentBlockingQueue<std::shared_ptr<SparsePage> > qrecycle_;
+  /*! \brief worker threads */
+  std::vector<dmlc::ConcurrentBlockingQueue<std::shared_ptr<SparsePage> > > qworkers_;
+};
+#endif  // DMLC_ENABLE_STD_THREAD
+    
+      /**
+   * \brief Initialise this object before use.
+   *
+   * \param num_col
+   * \param colsample_bynode
+   * \param colsample_bylevel
+   * \param colsample_bytree
+   * \param skip_index_0      (Optional) True to skip index 0.
+   */
+  void Init(int64_t num_col, float colsample_bynode, float colsample_bylevel,
+            float colsample_bytree, bool skip_index_0 = false) {
+    colsample_bylevel_ = colsample_bylevel;
+    colsample_bytree_ = colsample_bytree;
+    colsample_bynode_ = colsample_bynode;
     }
     
-    TEST(GENERATED_MESSAGE_TEST_NAME, TestConflictingMessageNames) {
-  protobuf_unittest::NULL_ message;
-  message.set_int_(123);
-  EXPECT_EQ(message.int_(), 123);
-}
-    
-        if (pb_h != NULL && pb_h_info != NULL) {
-      GOOGLE_CHECK_OK(
-          File::GetContents(output_base + '.pb.h', pb_h, true));
-      if (!atu::DecodeMetadata(output_base + '.pb.h.meta', pb_h_info)) {
-        return false;
+    /*! \brief namespace of base64 decoding and encoding table */
+namespace base64 {
+const char DecodeTable[] = {
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  62,  // '+'
+  0, 0, 0,
+  63,  // '/'
+  52, 53, 54, 55, 56, 57, 58, 59, 60, 61,  // '0'-'9'
+  0, 0, 0, 0, 0, 0, 0,
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  // 'A'-'Z'
+  0, 0, 0, 0, 0, 0,
+  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
+  39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // 'a'-'z'
+};
+static const char EncodeTable[] =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+}  // namespace base64
+/*! \brief the stream that reads from base64, note we take from file pointers */
+class Base64InStream: public dmlc::Stream {
+ public:
+  explicit Base64InStream(dmlc::Stream *fs) : reader_(256) {
+    reader_.set_stream(fs);
+    num_prev = 0; tmp_ch = 0;
+  }
+  /*!
+   * \brief initialize the stream position to beginning of next base64 stream
+   * call this function before actually start read
+   */
+  inline void InitPosition(void) {
+    // get a character
+    do {
+      tmp_ch = reader_.GetChar();
+    } while (isspace(tmp_ch));
+  }
+  /*! \brief whether current position is end of a base64 stream */
+  inline bool IsEOF(void) const {
+    return num_prev == 0 && (tmp_ch == EOF || isspace(tmp_ch));
+  }
+  virtual size_t Read(void *ptr, size_t size) {
+    using base64::DecodeTable;
+    if (size == 0) return 0;
+    // use tlen to record left size
+    size_t tlen = size;
+    unsigned char *cptr = static_cast<unsigned char*>(ptr);
+    // if anything left, load from previous buffered result
+    if (num_prev != 0) {
+      if (num_prev == 2) {
+        if (tlen >= 2) {
+          *cptr++ = buf_prev[0];
+          *cptr++ = buf_prev[1];
+          tlen -= 2;
+          num_prev = 0;
+        } else {
+          // assert tlen == 1
+          *cptr++ = buf_prev[0]; --tlen;
+          buf_prev[0] = buf_prev[1];
+          num_prev = 1;
+        }
+      } else {
+        // assert num_prev == 1
+        *cptr++ = buf_prev[0]; --tlen; num_prev = 0;
       }
     }
-    
-      Tensor<xpu, 2, DType> wmat = in_data[fullc::kWeight].get<xpu, 2, DType>(s);
-  Tensor<xpu, 2, DType> data, out;
-  if (!param.flatten) {
-    data = in_data[fullc::kData].get_with_shape<xpu, 2, DType>(
-        Shape2(ishape.ProdShape(0, ishape.ndim()-1), ishape[ishape.ndim()-1]), s);
-    out = out_data[fullc::kOut].get_with_shape<xpu, 2, DType>(
-        Shape2(oshape.ProdShape(0, oshape.ndim()-1), oshape[oshape.ndim()-1]), s);
-  } else {
-    data = in_data[fullc::kData].get_with_shape<xpu, 2, DType>(
-        Shape2(ishape[0], ishape.ProdShape(1, ishape.ndim())), s);
-    out = out_data[fullc::kOut].get_with_shape<xpu, 2, DType>(
-        Shape2(oshape[0], oshape.ProdShape(1, oshape.ndim())), s);
-  }
-    
-    int MXProfileDurationStart(ProfileHandle duration_handle) {
-  mxnet::IgnoreProfileCallScope ignore;
-  API_BEGIN();
-    CHECK_NOTNULL(duration_handle);
-    static_cast<profiler::ProfileDuration *>(duration_handle)->start();
-  API_END();
-}
-    
-    template<typename xpu>
-void L2NormComputeImpl(mshadow::Stream<xpu> *s,
-                       const TBlob& input,
-                       const OpReqType req,
-                       const TBlob& output) {
-  MSHADOW_REAL_TYPE_SWITCH(output.type_flag_, DType, {
-    // assign_req switch exits immediately for null req
-    MXNET_ASSIGN_REQ_SWITCH(req, Req, {
-      mshadow::Tensor<xpu, 1, DType> out = output.get_with_shape<xpu, 1, DType>(
-        mshadow::Shape1(output.shape_.Size()), s);
-      mshadow::Tensor<xpu, 1, DType> in = input.get_with_shape<xpu, 1, DType>(
-        mshadow::Shape1(input.shape_.Size()), s);
-      mshadow::VectorDot(out, in, in);
-      DType* out_data = output.dptr<DType>();
-      using namespace mxnet_op;
-      Kernel<op_with_req<mshadow_op::square_root, Req>, xpu>::Launch(
-        s, output.Size(), out_data, out_data);
-    });
-  });
-}
-    
-    template <typename DType>
-inline DType im2col_bilinear_cpu(const DType* data,
-                                 const index_t height,
-                                 const index_t width,
-                                 DType h, DType w) {
-  index_t h_low = floor(h);
-  index_t w_low = floor(w);
-  index_t h_high;
-  index_t w_high;
-    }
-    
-    template<typename DType, typename Rand>
-void ShuffleND(DType* const out, const index_t size, const index_t first_axis_len,
-                Rand* const prnd, const OpContext& ctx) {
-  // Fisher-Yates shuffling
-  using namespace mxnet_op;
-  const index_t stride = size / first_axis_len;
-  auto rand_n = [prnd](index_t n) {
-    std::uniform_int_distribution<index_t> dist(0, n - 1);
-    return dist(*prnd);
-  };
-  CHECK_GT(first_axis_len, 0U);
-  const size_t stride_bytes = sizeof(DType) * stride;
-  Tensor<cpu, 1, char> buf =
-    ctx.requested[1].get_space_typed<cpu, 1, char>(Shape1(stride_bytes), ctx.get_stream<cpu>());
-  for (index_t i = first_axis_len - 1; i > 0; --i) {
-    const index_t j = rand_n(i + 1);
-    if (i != j) {
-      std::memcpy(buf.dptr_, out + stride * i, stride_bytes);
-      std::memcpy(out + stride * i, out + stride * j, stride_bytes);
-      std::memcpy(out + stride * j, buf.dptr_, stride_bytes);
-    }
-  }
-}
-    
-    template <typename DType>
-static void MKLDNNRNNForward(bool state_outputs,
-                             const int L,
-                             const int D,
-                             const int T,
-                             const int N,
-                             const int I,
-                             const int H,
-                             DType* x_ptr,
-                             DType* hx_ptr,
-                             DType* cx_ptr,
-                             DType* w_ptr,
-                             DType* b_ptr,
-                             DType* y_ptr,
-                             DType* hy_ptr,
-                             DType* cy_ptr,
-                             std::vector<mkldnn::memory> *concat_weight_memory,
-                             std::vector<mkldnn::memory> *concat_iter_memory,
-                             std::vector<mkldnn::memory> *x_memory,
-                             std::vector<mkldnn::memory> *hcx_memory,
-                             std::vector<mkldnn::memory> *wx_memory,
-                             std::vector<mkldnn::memory> *wh_memory,
-                             std::vector<mkldnn::memory> *bias_memory,
-                             std::vector<mkldnn::memory> *y_memory,
-                             std::vector<mkldnn::memory> *hcy_memory,
-                             std::vector<primitive> *rnn_forward_prim,
-                             bool *has_cache,
-                             int dtype,
-                             bool is_train,
-                             int mode) {
-  int ngates = 0, nstates = 0;
-  GetMKLDNNRNNAlgo(mode, &ngates, &nstates);
-  const int b_size = 2 * H * ngates * D;
-  const int cell_size = N * H * D;
-  //  First layer
-  int w_size = (I + H) * H * ngates * D;
-  auto cpu_engine = CpuEngine::Get()->get_engine();
-  auto null_memory_ = null_memory(cpu_engine);
-  DType* tmpNull = NULL;
-  // when D = 1 and I == H, L layers can be fused together
-  if (D == 1 && I == H) {
-    MKLDNNRNNForwardUnidi(state_outputs, L, T, N, I, H, x_ptr, &null_memory_,
-        hx_ptr, cx_ptr, w_ptr, b_ptr, y_ptr, hy_ptr, cy_ptr, concat_weight_memory,
-        concat_iter_memory, x_memory, hcx_memory, wx_memory, wh_memory,
-        bias_memory, y_memory, hcy_memory, rnn_forward_prim,
-        0, has_cache, dtype, is_train, mode);
-  } else {
-    auto user_src_layer_memory_l = null_memory_;
-    if (D == 2) {
-      MKLDNNRNNForwardSingleLayerBi(state_outputs, T, N, I, H, x_ptr, &user_src_layer_memory_l,
-          hx_ptr, cx_ptr, w_ptr, b_ptr, y_ptr, hy_ptr, cy_ptr, concat_weight_memory,
-          concat_iter_memory, x_memory, hcx_memory, wx_memory, wh_memory,
-          bias_memory, y_memory, hcy_memory, rnn_forward_prim,
-          0, has_cache, 0, dtype, is_train, mode);
-    } else {
-      MKLDNNRNNForwardUnidi(state_outputs, 1, T, N, I, H, x_ptr, &user_src_layer_memory_l,
-          hx_ptr, cx_ptr, w_ptr, b_ptr, y_ptr, hy_ptr, cy_ptr, concat_weight_memory,
-          concat_iter_memory, x_memory, hcx_memory, wx_memory, wh_memory,
-          bias_memory, y_memory, hcy_memory, rnn_forward_prim,
-          0, has_cache, dtype, is_train, mode);
-    }
-    if (L > 1) {
-      user_src_layer_memory_l = (*y_memory)[0];
-      //  go to next L - 1 layers.
-      //  If D = 2, do it layer by layer. If D = 1, fused L - 1 layers
-      w_ptr += w_size;
-      b_ptr += b_size;
-      if (D == 2) {
-        w_size = (H * D + H) * H * ngates * D;
-        for (int l = 0; l < L - 1; l++) {
-          if (state_outputs) {
-            hy_ptr += cell_size;
-            if (mode == rnn_enum::kLstm) {
-              cy_ptr += cell_size;
-            }
-          }
-          hx_ptr += cell_size;
-          if (mode == rnn_enum::kLstm) {
-            cx_ptr += cell_size;
-          }
-          MKLDNNRNNForwardSingleLayerBi(state_outputs, T, N, D * H, H, tmpNull,
-              &user_src_layer_memory_l, hx_ptr, cx_ptr, w_ptr, b_ptr, y_ptr, hy_ptr,
-              cy_ptr, concat_weight_memory, concat_iter_memory, x_memory,
-              hcx_memory, wx_memory, wh_memory, bias_memory,
-              y_memory, hcy_memory, rnn_forward_prim,
-              1, has_cache, l + 1, dtype, is_train, mode);
-          user_src_layer_memory_l = (*y_memory)[1];
-          w_ptr += w_size;
-          b_ptr += b_size;
+    if (tlen == 0) return size;
+    int nvalue;
+    // note: everything goes with 4 bytes in Base64
+    // so we process 4 bytes a unit
+    while (tlen && tmp_ch != EOF && !isspace(tmp_ch)) {
+      // first byte
+      nvalue = DecodeTable[tmp_ch] << 18;
+      {
+        // second byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
+        nvalue |= DecodeTable[tmp_ch] << 12;
+        *cptr++ = (nvalue >> 16) & 0xFF; --tlen;
+        }
+      {
+        // third byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
+        // handle termination
+        if (tmp_ch == '=') {
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == '=') << 'invalid base64 format';
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == EOF || isspace(tmp_ch))
+              << 'invalid base64 format';
+          break;
+        }
+        nvalue |= DecodeTable[tmp_ch] << 6;
+        if (tlen) {
+          *cptr++ = (nvalue >> 8) & 0xFF; --tlen;
+        } else {
+          buf_prev[num_prev++] = (nvalue >> 8) & 0xFF;
         }
       }
-      if (D == 1) {
-        if (state_outputs) {
-          hy_ptr += cell_size;
-          if (mode == rnn_enum::kLstm) {
-            cy_ptr += cell_size;
-          }
+      {
+        // fourth byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch))
+            << 'invalid base64 format';
+        if (tmp_ch == '=') {
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == EOF || isspace(tmp_ch))
+              << 'invalid base64 format';
+          break;
         }
-        w_size = (H + H) * H * ngates;
-        MKLDNNRNNForwardUnidi(state_outputs, L - 1, T, N, H, H, tmpNull, &user_src_layer_memory_l,
-            hx_ptr, cx_ptr, w_ptr, b_ptr, y_ptr, hy_ptr, cy_ptr, concat_weight_memory,
-            concat_iter_memory, x_memory, hcx_memory, wx_memory,
-            wh_memory, bias_memory, y_memory, hcy_memory,
-            rnn_forward_prim, 1, has_cache, dtype, is_train, mode);
+        nvalue |= DecodeTable[tmp_ch];
+        if (tlen) {
+          *cptr++ = nvalue & 0xFF; --tlen;
+        } else {
+          buf_prev[num_prev ++] = nvalue & 0xFF;
+        }
       }
+      // get next char
+      tmp_ch = reader_.GetChar();
     }
+    if (kStrictCheck) {
+      CHECK_EQ(tlen, 0) << 'Base64InStream: read incomplete';
+    }
+    return size - tlen;
   }
-  *has_cache = true;
-}
-    
-    
-    {  DType* wx_l = wx;
-  DType* wh_l = wh;
-  DType* bx_l = bx;
-  DType* bh_l = bh;
-  Tensor<cpu, 3, DType> hx(hx_ptr, Shape3(D * L, N, H));
-  DType* hy_l = hy_ptr;
-  for (int l = 0; l < L; l++) {
-    Tensor<cpu, 2, DType> x_l(y_l, Shape2(T * N, I));
-    if ((L + l) % 2) {
-      y_l = y_ptr;
-    } else {
-      y_l = y_tmp;
-    }
-    Tensor<cpu, 2, DType> hx_l = hx[D * l];
-    GruForwardInferenceSingleLayer<DType>(ws2, tmp_buf, state_outputs, D, T, N, I, H,
-                                        x_l, hx_l, wx_l, wh_l, bx_l, bh_l, y_l, hy_l);
-    hy_l = hy_l + D * N * H;
-    bx_l = bx_l + 3 * H * D * 2;
-    bh_l = bh_l + 3 * H * D * 2;
-    wx_l = wx_l + I * H * 3 * D + H * H * 3 * D;
-    if (l == 0) {
-      I = D * H;
-    }
-    wh_l = wx_l + I * 3 * H;
+  virtual void Write(const void *ptr, size_t size) {
+    LOG(FATAL) << 'Base64InStream do not support write';
   }
-}
-    
-        static void Clear(const nnvm::NodePtr& node) {
-      if (node == nullptr || node->info.empty()) return;
-      AGInfo& info = Get(node);
-      if (info.grad_req != kNullOp) return;
-      node->info.clear();
-    }
-    
-      if (*outputs == nullptr) {
-    ret->ret_handles.clear();
-    ret->ret_handles.reserve(*num_outputs);
-    for (int i = 0; i < *num_outputs; ++i) {
-      ret->ret_handles.push_back(ndoutputs[i]);
-    }
-    *outputs = dmlc::BeginPtr(ret->ret_handles);
-  }
-    
-    template<typename AttrType, typename FInfer>
-bool ApplyOpInferAttr(const nnvm::Graph& g,
-                      const FInfer& finfer,
-                      const NodeAttrs& attrs,
-                      const uint32_t nid,
-                      std::vector<AttrType>* in_attrs,
-                      std::vector<AttrType>* out_attrs,
-                      DispatchMode* dispatch_mode) {
-  return finfer(attrs, in_attrs, out_attrs);
-}
-    
-        virtual void /*ComputationNode::*/ ForwardProp(const FrameRange& fr) override
-    {
-        size_t rank = DetermineElementwiseTensorRank();
-        auto result =             ValueTensorFor(rank, fr);
-        auto input0 = InputRef(0).ValueTensorFor(rank, fr.AllowBroadcast());
-        auto input1 = InputRef(1).ValueTensorFor(rank, fr.AllowBroadcast());
-        result.AssignSumOf(input0, input1);
-    }
-    
-    // ++ operator for this enum, so loops work
-NDLPass& operator++(NDLPass& ndlPass);
-    
-            ComputationNodePtr input, w, b, u, e, pastValue, output, label, prior;
-        ComputationNodePtr Wxo, Who, Wco, bo, Wxi, Whi, Wci, bi;
-        ComputationNodePtr clslogpostprob;
-        ComputationNodePtr clsweight;
-    
-        // parse a 'key=value' pair and insert in the ConfigDictionary
-    std::string::size_type ParseValue(const std::string& stringParse,
-                                      std::string::size_type tokenStart,
-                                      std::string::size_type tokenEnd)
-    {
-        // skip leading spaces
-        tokenStart = stringParse.find_first_not_of(' \t', tokenStart);
-        auto keyEnd = stringParse.find_first_of('=' OPENBRACES, tokenStart);
-        std::string value;
-    }
-    
-        // ////////////////////////////////////////////////////////////////////////
-    //    specify arc connections
-    // ////////////////////////////////////////////////////////////////////////
-    for (auto x = arcs.begin(); x != arcs.end(); x++)
-    {
-        ComputationNodeBasePtr src = (*x).first;
-        ComputationNodeBasePtr des = (*x).second;
-    }
-    
-        // dump all nodes in the network to file
-    void DumpAllNodesToFile(const bool printValues,
-                            const bool printMetadata,
-                            const std::wstring outputFile)
-    {
-        File fstream(outputFile,
-                     FileOptions::fileOptionsText | FileOptions::fileOptionsWrite);
-    }
-    
-    #include 'Basics.h'
-#include 'ComputationNode.h'
-#include 'ComputationNetwork.h'
-#include 'TrainingNodes.h'      // for NCEEvalMode
-#include 'ConvolutionalNodes.h' // for PoolKind
-#include 'ScriptableObjects.h'
-#include 'TensorShape.h'
-#include <string>
-    
-    template <>
-std::shared_ptr<IDistGradAggregator<half>> GetSimpleDistGradAggregator<half>(
-    const MPIWrapperPtr& mpi,
-    bool useAsyncAggregation,
-    int deviceId,
-    int syncStatsTrace,
-    size_t packThresholdSizeInBytes,
-    bool useFP16AllReduce)
-{
-    if (Globals::UseV2Aggregator())
-        return std::make_shared<V2SimpleDistGradAggregator<half>>(
-            mpi,
-            useAsyncAggregation,
-            deviceId,
-            syncStatsTrace,
-            ::CNTK::MPICommunicator(packThresholdSizeInBytes, useFP16AllReduce));
-    else
-        RuntimeError('SGD - half not supported when useV2Aggregator is false!');
-}
-    
-        // Update output values of accumulator nodes.
-    for (auto& accumulatorNode : allEpochAccumulatorNodes)
-    {
-        auto node = dynamic_pointer_cast<EpochAccumulatorNode<ElemType>>(accumulatorNode);
-        node->SetNumberOfSamples(gradHeader->numSamples);
-        node->BeginForwardProp();
-        node->CopyAccumulatorToValue();
-        node->EndForwardProp();
-        node->BumpEvalTimeStamp();
     }
