@@ -1,202 +1,126 @@
 
         
-            # Live videos get deleted soon. See http://www.cbsnews.com/live/ for the latest examples
-    _TEST = {
-        'url': 'http://www.cbsnews.com/live/video/clinton-sanders-prepare-to-face-off-in-nh/',
-        'info_dict': {
-            'id': 'clinton-sanders-prepare-to-face-off-in-nh',
-            'ext': 'mp4',
-            'title': 'Clinton, Sanders Prepare To Face Off In NH',
-            'duration': 334,
-        },
-        'skip': 'Video gone',
-    }
+        for shape in successive_shapes:
+    print('Processing image shape', shape)
+    img = resize_img(img, shape)
+    img = gradient_ascent(img,
+                          iterations=iterations,
+                          step=step,
+                          max_loss=max_loss)
+    upscaled_shrunk_original_img = resize_img(shrunk_original_img, shape)
+    same_size_original = resize_img(original_img, shape)
+    lost_detail = same_size_original - upscaled_shrunk_original_img
     
+    print('Loading data...')
+(x_train, y_train), (x_test, y_test) = imdb.load_data(num_words=max_features)
+print(len(x_train), 'train sequences')
+print(len(x_test), 'test sequences')
     
-class RedBullTVRrnContentIE(InfoExtractor):
-    _VALID_URL = r'https?://(?:www\.)?redbull(?:\.tv|\.com(?:/[^/]+)?(?:/tv)?)/(?:video|live)/rrn:content:[^:]+:(?P<id>[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12})'
-    _TESTS = [{
-        'url': 'https://www.redbull.com/int-en/tv/video/rrn:content:live-videos:e3e6feb4-e95f-50b7-962a-c70f8fd13c73/mens-dh-finals-fort-william',
-        'only_matching': True,
-    }, {
-        'url': 'https://www.redbull.com/int-en/tv/video/rrn:content:videos:a36a0f36-ff1b-5db8-a69d-ee11a14bf48b/tn-ts-style?playlist=rrn:content:event-profiles:83f05926-5de8-5389-b5e4-9bb312d715e8:extras',
-        'only_matching': True,
-    }]
+        assert np.array_equal(before, after)
     
-        ie_htmls = []
-    for ie in youtube_dl.list_extractors(age_limit=None):
-        ie_html = '<b>{}</b>'.format(ie.IE_NAME)
-        ie_desc = getattr(ie, 'IE_DESC', None)
-        if ie_desc is False:
-            continue
-        elif ie_desc is not None:
-            ie_html += ': {}'.format(ie.IE_DESC)
-        if not ie.working():
-            ie_html += ' (Currently broken)'
-        ie_htmls.append('<li>{}</li>'.format(ie_html))
+        def compute_output_shape(self, input_shape):
+        return None, self.num_capsule, self.dim_capsule
     
-    module_contents = [
-    module_template + '\n' + getsource(InfoExtractor.suitable) + '\n',
-    'class LazyLoadSearchExtractor(LazyLoadExtractor):\n    pass\n']
+        with pytest.raises(ValueError):
+        conv_utils.normalize_tuple(None, 2, 'kernel_size')
+    with pytest.raises(ValueError):
+        conv_utils.normalize_tuple([2, 3, 4], 2, 'kernel_size')
+    with pytest.raises(ValueError):
+        conv_utils.normalize_tuple(['str', 'impossible'], 2, 'kernel_size')
     
-    with io.open(README_FILE, 'w', encoding='utf-8') as f:
-    f.write(header)
-    f.write(options)
-    f.write(footer)
-
+    __version__ = '${version}'
     
-        The following variables should be defined:
-        _HELPTEXT: A string describing what this plugin does
-        _DEFAULTS: A dictionary containing the options, defaults and meta information. The
-                   dictionary should be defined as:
-                       {<option_name>: {<metadata>}}
+            if matching_issue_list_len == 0:
+            # The issue does not exist in the project
+            if state == 'present':
+                # This implies a change
+                changed = True
+                if not check_mode:
+                    # Create the issue
+                    new_issue = project.add_issue(issue_subject, priority_id, status_id, type_id, severity_id, tags=issue_tags, description=issue_description)
+                    if issue_attachment:
+                        new_issue.attach(issue_attachment, description=issue_attachment_description)
+                        issue['attachment'] = issue_attachment
+                        issue['attachment_description'] = issue_attachment_description
+                return (True, changed, 'Issue created', issue)
     
-        def write(self, filename, image):
-        logger.trace('Outputting: (filename: '%s'', filename)
-        filename = self.output_filename(filename)
-        try:
-            with open(filename, 'wb') as outfile:
-                outfile.write(image.read())
-        except Exception as err:  # pylint: disable=broad-except
-            logger.error('Failed to save image '%s'. Original Error: %s', filename, err)
-    
-        # Vim may not be able to convert the 'errors' entry to its internal format
-    # so we remove it from the response.
-    errors = response.pop( 'errors', [] )
-    for e in errors:
-      exception = MakeServerException( e )
-      _logger.error( exception )
-      DisplayServerException( exception, truncate_message = True )
-    
-        @YouCompleteMeInstance( { 'log_level': 'debug',
-                              'keep_logfiles': 1 } )
-    def Debug_test( ycm ):
-        ...
-  '''
-  def Decorator( test ):
-    @functools.wraps( test )
-    def Wrapper( *args, **kwargs ):
-      with UserOptions( custom_options ):
-        ycm = YouCompleteMe()
-        WaitUntilReady()
-        ycm.CheckIfServerIsReady()
-        try:
-          test( ycm, *args, **kwargs )
-        finally:
-          StopServer( ycm )
-    return Wrapper
-  return Decorator
-
-    
-    
-@YouCompleteMeInstance()
-def SendCommandRequest_IgnoreFileTypeOption_test( ycm, *args ):
-  current_buffer = VimBuffer( 'buffer' )
-  with MockVimBuffers( [ current_buffer ], [ current_buffer ] ):
-    expected_args = (
-      [ 'GoTo' ],
-      '',
-      'same-buffer',
-      {
-        'options': {
-          'tab_size': 2,
-          'insert_spaces': True
-        },
-      }
-    )
-    
-    
-def KeywordsFromSyntaxListOutput_StatementAndTypeGroups_test():
-  assert_that( syntax_parse._KeywordsFromSyntaxListOutput( '''
-foogroup xxx foo bar
-             links to Statement
-bargroup xxx zoo goo
-             links to Type''' ),
-               contains_inanyorder( 'foo', 'bar', 'zoo', 'goo' ) )
-    
-        try:
-      result = self.fn( *self.args, **self.kwargs )
-    except BaseException:
-      e = sys.exc_info()[ 1 ]
-      self.future.set_exception( e )
-    else:
-      self.future.set_result( result )
-    
-    def _create_and_install_waiters(fs, return_when):
-    if return_when == _AS_COMPLETED:
-        waiter = _AsCompletedWaiter()
-    elif return_when == FIRST_COMPLETED:
-        waiter = _FirstCompletedWaiter()
-    else:
-        pending_count = sum(
-                f._state not in [CANCELLED_AND_NOTIFIED, FINISHED] for f in fs)
-    
-        # Execute the template string in a temporary namespace and
-    # support tracing utilities by setting a value for frame.f_globals['__name__']
-    namespace = dict(_itemgetter=_itemgetter, __name__='namedtuple_%s' % typename,
-                     _property=property, _tuple=tuple)
-    try:
-        exec(template, namespace)
-    except SyntaxError:
-        e = _sys.exc_info()[1]
-        raise SyntaxError(e.message + ':\n' + template)
-    result = namespace[typename]
+        def __init__(self, additional_arg_spec=None, validate_etag_support=False):
+        '''
+        OneViewModuleBase constructor.
     
     
 def main():
-    parse_command_line()
-    t = Timer(e1)
-    results = t.timeit(options.num) / options.num
-    print('engine: %0.3f ms per iteration' % (results * 1000))
-    t = Timer(c1)
-    results = t.timeit(options.num) / options.num
-    print('coroutine: %0.3f ms per iteration' % (results * 1000))
+    module = AnsibleModule(
+        argument_spec=gen_specs(passwd=dict(no_log=True)),
+        supports_check_mode=True,
+    )
+    
+        def appid_exist(self, appids):
+        for appid in appids.split('|'):
+            if appid == '':
+                continue
+            if appid in self.config.GAE_APPIDS:
+                return True
+        return False
     
     
-@gen.engine
-def run_tests():
-    url = options.url + '/getCaseCount'
-    control_ws = yield websocket_connect(url, None)
-    num_tests = int((yield control_ws.read_message()))
-    logging.info('running %d cases', num_tests)
-    msg = yield control_ws.read_message()
-    assert msg is None
+class CheckIp(front_base.check_ip.CheckIp):
+    def check_response(self, response):
+        server_type = response.headers.get('Server', '')
+        self.logger.debug('status:%d', response.status)
+        self.logger.debug('Server type:%s', server_type)
     
-            ws.ping('hello')
-        resp = yield ws.read_message()
-        # on_ping always sees bytes.
-        self.assertEqual(resp, b'hello')
+        def getUnexpectedToken(self):
+        return self.token
+    
+            stat => ID '=' expr ';'
+             => ID '=' atom ('+' atom)* ';'
+             => ID '=' '(' expr ')' ('+' atom)* ';'
+             => ID '=' '(' atom ')' ('+' atom)* ';'
+             => ID '=' '(' INT ')' ('+' atom)* ';'
+             => ID '=' '(' INT ')' ';'
+    
+                    # throw exception unless disjoint or identical
+                disjoint = (prevRop.lastIndex < rop.index
+                            or prevRop.index > rop.lastIndex)
+                same = (prevRop.index == rop.index
+                        and prevRop.lastIndex == rop.lastIndex)
+                if not disjoint and not same:
+                    raise ValueError(
+                        'replace op boundaries of %s overlap with previous %s'
+                        % (rop, prevRop))
+    
+    '''
+http://code.activestate.com/recipes/131499-observer-pattern/
+    
+        root_specification = UserSpecification().and_specification(SuperUserSpecification())
+    
+        def scan(self):
+        '''Scan the dial to the next station'''
+        self.pos += 1
+        if self.pos == len(self.stations):
+            self.pos = 0
+        print(u'Scanning... Station is %s %s' % (self.stations[self.pos], self.name))
+    
+        print('rm1: {0}'.format(rm1))
+    print('rm2: {0}'.format(rm2))
+    print('rm3: {0}'.format(rm3))
+    
+            def wrapper(*args, **kwargs):
+            return attr(*args, **kwargs)
+        return wrapper
+    
+        products = {
+        'milk': {'price': 1.50, 'quantity': 10},
+        'eggs': {'price': 0.20, 'quantity': 100},
+        'cheese': {'price': 2.00, 'quantity': 10},
+    }
     
     
-class BaseAsyncIOLoop(IOLoop):
-    def initialize(  # type: ignore
-        self, asyncio_loop: asyncio.AbstractEventLoop, **kwargs: Any
-    ) -> None:
-        self.asyncio_loop = asyncio_loop
-        # Maps fd to (fileobj, handler function) pair (as in IOLoop.add_handler)
-        self.handlers = {}  # type: Dict[int, Tuple[Union[int, _Selectable], Callable]]
-        # Set of fds listening for reads/writes
-        self.readers = set()  # type: Set[int]
-        self.writers = set()  # type: Set[int]
-        self.closing = False
-        # If an asyncio loop was closed through an asyncio interface
-        # instead of IOLoop.close(), we'd never hear about it and may
-        # have left a dangling reference in our map. In case an
-        # application (or, more likely, a test suite) creates and
-        # destroys a lot of event loops in this way, check here to
-        # ensure that we don't have a lot of dead loops building up in
-        # the map.
-        #
-        # TODO(bdarnell): consider making self.asyncio_loop a weakref
-        # for AsyncIOMainLoop and make _ioloop_for_asyncio a
-        # WeakKeyDictionary.
-        for loop in list(IOLoop._ioloop_for_asyncio):
-            if loop.is_closed():
-                del IOLoop._ioloop_for_asyncio[loop]
-        IOLoop._ioloop_for_asyncio[asyncio_loop] = self
-    
-            # Make sure the tornado module under test is available to the test
-        # application
-        pythonpath = os.getcwd()
-        if 'PYTHONPATH' in os.environ:
-            pythonpath += os.pathsep + os.environ['PYTHONPATH']
+# Refined Abstraction
+class CircleShape(object):
+    def __init__(self, x, y, radius, drawing_api):
+        self._x = x
+        self._y = y
+        self._radius = radius
+        self._drawing_api = drawing_api
