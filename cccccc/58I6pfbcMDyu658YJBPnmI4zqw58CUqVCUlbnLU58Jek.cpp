@@ -1,415 +1,451 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+            for (int inputIdx = 0; inputIdx < def_.input_size() / kNumTensorsPerInput;
+         ++inputIdx) {
+      input_blob_names.push_back(I(inputIdx * kNumTensorsPerInput));
+      input_blob_names.push_back(I(inputIdx * kNumTensorsPerInput + 2));
+      output_blob_names.push_back(GI(inputIdx * kNumTensorsPerInput + 3));
+    }
+    input_blob_names.push_back(GO(3));
     
-      // Support dtype(bfloat16)
-  if (PyDict_SetItemString(PyBfloat16_Type.tp_dict, 'dtype',
-                           reinterpret_cast<PyObject*>(&NPyBfloat16_Descr)) <
-      0) {
-    return false;
-  }
+    // TODO: Write gradient for this when needed
+GRADIENT_NOT_IMPLEMENTED_YET(Floor);
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+    Example 1:
+  DATA  = [1, 2, 3, 4, 5, 6, 7, 8]
+  RANGES = [
+    [
+      [2, 4],
+      [0, 2],
+    ],
+    [
+      [0, 0],
+      [6, 2],
+    ]
+  ]
+  lengths = [4, 2]
+  OUTPUT[0] = [[3, 4, 5, 6], [0, 0, 0, 0]]
+  OUTPUT[1] = [[1, 2], [7, 8]]
     
-    // Indicates a set of options for a device's usage, which generally must be
-// provided at StreamExecutor device-initialization time.
-//
-// These are intended to be useful-but-not-mandatorily-supported options for
-// using devices on the underlying platform. Presently, if the option requested
-// is not available on the target platform, a warning will be emitted.
-struct DeviceOptions {
+    template <typename T, class Context>
+class BernoulliJSDOp final : public Operator<Context> {
  public:
-  // When it is observed that more memory has to be allocated for thread stacks,
-  // this flag prevents it from ever being deallocated. Potentially saves
-  // thrashing the thread stack memory allocation, but at the potential cost of
-  // some memory space.
-  static const unsigned kDoNotReclaimStackAllocation = 0x1;
+  USE_SIMPLE_CTOR_DTOR(BernoulliJSDOp);
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
+  bool RunOnDevice() override;
+};
+    
+    namespace caffe {
     }
     
-      // Computes real-to-complex FFT in forward direction.
-  virtual bool DoFft(Stream *stream, Plan *plan,
-                     const DeviceMemory<float> &input,
-                     DeviceMemory<std::complex<float>> *output) = 0;
-  virtual bool DoFft(Stream *stream, Plan *plan,
-                     const DeviceMemory<double> &input,
-                     DeviceMemory<std::complex<double>> *output) = 0;
-    
-    #include 'tensorflow/stream_executor/host/host_platform_id.h'
-    
-    #endif  // TENSORFLOW_STREAM_EXECUTOR_HOST_HOST_PLATFORM_ID_H_
-
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    namespace stream_executor {
-    }
-    
-    #if PY_MAJOR_VERSION >= 3
-  #define PyString_FromStringAndSize PyUnicode_FromStringAndSize
-  #if PY_VERSION_HEX < 0x03030000
-    #error 'Python 3.0 - 3.2 are not supported.'
-  #endif
-#define PyString_AsStringAndSize(ob, charpp, sizep)                           \
-  (PyUnicode_Check(ob) ? ((*(charpp) = const_cast<char*>(                     \
-                               PyUnicode_AsUTF8AndSize(ob, (sizep)))) == NULL \
-                              ? -1                                            \
-                              : 0)                                            \
-                       : PyBytes_AsStringAndSize(ob, (charpp), (sizep)))
-#endif
-    
-      // Largest of two values.
-  // Works correctly for special floating point values.
-  // Note: 0.0 and -0.0 are not differentiated by Max (Max(0.0, -0.0) is -0.0),
-  // which should be OK because, although they (can) have different
-  // bit representation, they are observably the same when examined
-  // with arithmetic and (in)equality operators.
-  template<typename T>
-  static T Max(const T x, const T y) {
-    return MathLimits<T>::IsNaN(x) || x > y ? x : y;
+    template <>
+void hdf5_save_nd_dataset<float>(
+    const hid_t file_id, const string& dataset_name, const Blob<float>& blob,
+    bool write_diff) {
+  int num_axes = blob.num_axes();
+  hsize_t *dims = new hsize_t[num_axes];
+  for (int i = 0; i < num_axes; ++i) {
+    dims[i] = blob.shape(i);
   }
-    
-    
-    {  // Moving messages on two different arenas should lead to a copy.
-  *message2_on_arena = std::move(*message1_on_arena);
-  EXPECT_NE(nested, &message2_on_arena->optional_nested_message());
-  TestUtil::ExpectAllFieldsSet(*message1_on_arena);
-  TestUtil::ExpectAllFieldsSet(*message2_on_arena);
-}
-    
-    string Status::ToString() const {
-  if (error_code_ == error::OK) {
-    return 'OK';
+  const float* data;
+  if (write_diff) {
+    data = blob.cpu_diff();
   } else {
-    if (error_message_.empty()) {
-      return error::CodeEnumToString(error_code_);
-    } else {
-      return error::CodeEnumToString(error_code_) + ':' +
-          error_message_;
-    }
+    data = blob.cpu_data();
   }
+  herr_t status = H5LTmake_dataset_float(
+      file_id, dataset_name.c_str(), num_axes, dims, data);
+  CHECK_GE(status, 0) << 'Failed to make float dataset ' << dataset_name;
+  delete[] dims;
 }
     
-    // ----
-// Author: lar@google.com (Laramie Leavitt)
-//
-// Template metaprogramming utility functions.
-//
-// This code is compiled directly on many platforms, including client
-// platforms like Windows, Mac, and embedded systems.  Before making
-// any changes here, make sure that you're not breaking any platforms.
-//
-//
-// The names chosen here reflect those used in tr1 and the boost::mpl
-// library, there are similar operations used in the Loki library as
-// well.  I prefer the boost names for 2 reasons:
-// 1.  I think that portions of the Boost libraries are more likely to
-// be included in the c++ standard.
-// 2.  It is not impossible that some of the boost libraries will be
-// included in our own build in the future.
-// Both of these outcomes means that we may be able to directly replace
-// some of these with boost equivalents.
-//
-#ifndef GOOGLE_PROTOBUF_TEMPLATE_UTIL_H_
-#define GOOGLE_PROTOBUF_TEMPLATE_UTIL_H_
-    
-    
-    {  return CreateHashes(base::FilePath(FILE_PATH_LITERAL('payload.json')),
-                      base::FilePath(FILE_PATH_LITERAL('.'))) ? 1 : 0;
-}
-
-    
-    // static
-void App::Call(Shell* shell,
-               const std::string& method,
-               const base::ListValue& arguments,
-               base::ListValue* result,
-               DispatcherHost* dispatcher_host) {
-  if (method == 'GetDataPath') {
-    ShellBrowserContext* browser_context =
-      static_cast<ShellBrowserContext*>(shell->web_contents()->GetBrowserContext());
-    result->AppendString(browser_context->GetPath().value());
-    return;
-  }else if (method == 'GetArgv') {
-    nw::Package* package = shell->GetPackage();
-    CommandLine* command_line = CommandLine::ForCurrentProcess();
-    CommandLine::StringVector args = command_line->GetArgs();
-    CommandLine::StringVector argv = command_line->original_argv();
+    template <typename Dtype>
+void ClipLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& top,
+    const vector<bool>& propagate_down,
+    const vector<Blob<Dtype>*>& bottom) {
+  if (propagate_down[0]) {
+    const Dtype* bottom_data = bottom[0]->cpu_data();
+    const Dtype* top_diff = top[0]->cpu_diff();
+    Dtype* bottom_diff = bottom[0]->mutable_cpu_diff();
+    const int count = bottom[0]->count();
     }
     }
     
-    void Base::CallSync(const std::string& method,
-                    const base::ListValue& arguments,
-                    base::ListValue* result) {
-  NOTREACHED() << 'Uncatched callAsync in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
+    TYPED_TEST(NeuronLayerTest, TestExpGradientBase2Shift1Scale3) {
+  typedef typename TypeParam::Dtype Dtype;
+  const Dtype kBase = 2;
+  const Dtype kScale = 3;
+  const Dtype kShift = 1;
+  this->TestExpGradient(kBase, kScale, kShift);
 }
     
-    namespace nwapi {
+    template <typename Dtype>
+void Solver<Dtype>::Step(int iters) {
+  const int start_iter = iter_;
+  const int stop_iter = iter_ + iters;
+  int average_loss = this->param_.average_loss();
+  losses_.clear();
+  smoothed_loss_ = 0;
+  iteration_timer_.Start();
+    }
+    
+      // Set the signal handlers to the default.
+  void UnhookHandler() {
+    if (already_hooked_up) {
+      struct sigaction sa;
+      // Setup the sighup handler
+      sa.sa_handler = SIG_DFL;
+      // Restart the system call, if at all possible
+      sa.sa_flags = SA_RESTART;
+      // Block every signal during the handler
+      sigfillset(&sa.sa_mask);
+      // Intercept SIGHUP and SIGINT
+      if (sigaction(SIGHUP, &sa, NULL) == -1) {
+        LOG(FATAL) << 'Cannot uninstall SIGHUP handler.';
+      }
+      if (sigaction(SIGINT, &sa, NULL) == -1) {
+        LOG(FATAL) << 'Cannot uninstall SIGINT handler.';
+      }
+    }
     }
     
      protected:
-  ~NwAppSetProxyConfigFunction() override;
-    
-    NwObjCallObjectMethodFunction::NwObjCallObjectMethodFunction() {
-}
-    
-    #define FAIL_ON_ERROR(x) { DWORD ec; if ((ec = (x)) != ERROR_SUCCESS) { ShowErrorAndExit(ec, __WFUNCTION__, __LINE__); } }
-    
-        size_t* begin = const_cast<size_t*>(e.begin);
-    size_t* split_pt = begin + iLeft;
-    
-      template <typename ParamT>
-  XGBOOST_DEVICE inline double CalcSplitGain(const ParamT &param, int constraint,
-                              GradStats left, GradStats right) const {
-    const double negative_infinity = -std::numeric_limits<double>::infinity();
-    double wleft = CalcWeight(param, left);
-    double wright = CalcWeight(param, right);
-    double gain =
-        CalcGainGivenWeight<ParamT, float>(param, left.sum_grad, left.sum_hess, wleft) +
-        CalcGainGivenWeight<ParamT, float>(param, right.sum_grad, right.sum_hess, wright);
-    if (constraint == 0) {
-      return gain;
-    } else if (constraint > 0) {
-      return wleft <= wright ? gain : negative_infinity;
-    } else {
-      return wleft >= wright ? gain : negative_infinity;
-    }
-  }
-    
-      std::string Quantitive(RegTree const& tree, int32_t nid, uint32_t depth) override {
-    static std::string const kQuantitiveTemplate =
-        '{tabs}{nid}:[{fname}<{cond}] yes={left},no={right},missing={missing}';
-    auto cond = tree[nid].SplitCond();
-    return SplitNodeImpl(tree, nid, kQuantitiveTemplate, SuperT::ToStr(cond), depth);
-  }
-    
-      loss_chg = 50.0;
-  sum_hess = 10.0;
-  base_weight = 30.0;
-  leaf_child_cnt = 0;
-  fo->Write(&loss_chg, sizeof(float));
-  fo->Write(&sum_hess, sizeof(float));
-  fo->Write(&base_weight, sizeof(float));
-  fo->Write(&leaf_child_cnt, sizeof(int));
-  fo.reset();
-  std::unique_ptr<dmlc::Stream> fi(dmlc::Stream::Create(tmp_file.c_str(), 'r'));
-    
-      GpuIdType const n_available_devices = n_devices_visible - gpu_id;
-    
-    TEST(ConfigParser, NormalizeConfigEOL) {
-  // Test whether strings with NL are loaded correctly.
-  dmlc::TemporaryDirectory tempdir;
-  const std::string tmp_file = tempdir.path + '/my.conf';
-  /* Old Mac OS uses \r for line ending */
-  {
-    std::string const input = 'foo\rbar\rdog\r';
-    std::string const output = 'foo\nbar\ndog\n';
-    {
-      std::ofstream fp(
-          tmp_file,
-          std::ios_base::out | std::ios_base::trunc | std::ios_base::binary);
-      fp << input;
-    }
-    {
-      ConfigParser parser(tmp_file);
-      auto content = parser.LoadConfigFile(tmp_file);
-      content = parser.NormalizeConfigEOL(content);
-      ASSERT_EQ(content, output);
-    }
-  }
-  /* Windows uses \r\n for line ending */
-  {
-    std::string const input = 'foo\r\nbar\r\ndog\r\n';
-    std::string const output = 'foo\n\nbar\n\ndog\n\n';
-    {
-      std::ofstream fp(tmp_file,
-                       std::ios_base::out | std::ios_base::trunc | std::ios_base::binary);
-      fp << input;
-    }
-    {
-      ConfigParser parser(tmp_file);
-      auto content = parser.LoadConfigFile(tmp_file);
-      content = parser.NormalizeConfigEOL(content);
-      ASSERT_EQ(content, output);
-    }
-  }
-}
-    
-    #define TRANSFORM_GPU_RANGE GPUSet::Range(0, 1)
-#define TRANSFORM_GPU_DIST GPUDistribution::Block(GPUSet::Range(0, 1))
-    
-      devices = GPUSet::Range(1, 0);
-  EXPECT_EQ(devices.Size(), 0);
-  EXPECT_TRUE(devices.IsEmpty());
-    
-      /*!
-   * \brief get maximum depth
+   /**
+   * @brief Generates a random integer from Uniform({0, 1, ..., n-1}).
+   *
+   * @param n
+   *    The upperbound (exclusive) value of the random number.
+   * @return
+   *    A uniformly random integer value from ({0, 1, ..., n-1}).
    */
-  int MaxDepth() {
-    int maxd = 0;
-    for (int i = 0; i < param.num_roots; ++i) {
-      maxd = std::max(maxd, MaxDepth(i));
-    }
-    return maxd;
-  }
+  virtual int Rand(int n);
     
-        /**
-     * Fills a BatchCommandRequest from a TargetedWriteBatch for this BatchWriteOp.
-     */
-    BatchedCommandRequest buildBatchRequest(const TargetedWriteBatch& targetedBatch) const;
-    
-    StatusWith<BSONObj> countCommandAsAggregationCommand(const CountCommand& cmd,
-                                                     const NamespaceString& nss) {
-    BSONObjBuilder aggregationBuilder;
-    aggregationBuilder.append('aggregate', nss.coll());
+    /**
+ * This structure contains per-service-context state related to the oplog.
+ */
+class LocalOplogInfo {
+public:
+    static LocalOplogInfo* get(ServiceContext& service);
+    static LocalOplogInfo* get(ServiceContext* service);
+    static LocalOplogInfo* get(OperationContext* opCtx);
     }
     
-        /**
-     * Used when there is a canonical query but no query solution (e.g. idhack queries, queries
-     * against a NULL collection, queries using the subplan stage).
-     */
-    static StatusWith<std::unique_ptr<PlanExecutor, PlanExecutor::Deleter>> make(
-        OperationContext* opCtx,
-        std::unique_ptr<WorkingSet> ws,
-        std::unique_ptr<PlanStage> rt,
-        std::unique_ptr<CanonicalQuery> cq,
-        const Collection* collection,
-        YieldPolicy yieldPolicy);
+    
+    {}  // namespace mongo
+
+    
+    void Top::record(OperationContext* opCtx,
+                 StringData ns,
+                 LogicalOp logicalOp,
+                 LockType lockType,
+                 long long micros,
+                 bool command,
+                 Command::ReadWriteType readWriteType) {
+    if (ns[0] == '?')
+        return;
+    }
     
     
+    {    ASSERT_EQUALS(MatchExpression::TEXT, expr->matchType());
+    std::unique_ptr<TextMatchExpression> textExpr(
+        static_cast<TextMatchExpression*>(expr.release()));
+    ASSERT_EQUALS(textExpr->getFTSQuery().getDiacriticSensitive(), true);
+}
+    
+    #include 'mongo/client/dbclient_cursor.h'
+#include 'mongo/db/catalog/collection.h'
+#include 'mongo/db/catalog/database.h'
+#include 'mongo/db/catalog/index_catalog.h'
+#include 'mongo/db/client.h'
+#include 'mongo/db/db_raii.h'
+#include 'mongo/db/dbdirectclient.h'
+#include 'mongo/db/exec/collection_scan.h'
+#include 'mongo/db/exec/count_scan.h'
+#include 'mongo/db/exec/working_set.h'
+#include 'mongo/db/json.h'
+#include 'mongo/db/matcher/expression_parser.h'
+#include 'mongo/dbtests/dbtests.h'
+#include 'mongo/util/fail_point.h'
+#include 'mongo/util/fail_point_registry.h'
+#include 'mongo/util/fail_point_service.h'
+    
+    
+RegexMatcher::RegexMatcher(const UnicodeString &regexp,
+                           uint32_t flags, UErrorCode &status) {
+    init(status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+    UParseError    pe;
+    fPatternOwned      = RegexPattern::compile(regexp, flags, pe, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+    fPattern           = fPatternOwned;
+    init2(RegexStaticSets::gStaticSets->fEmptyText, status);
+}
+    
+    U_NAMESPACE_BEGIN
+    
+    CollationKey &
+RuleBasedCollator::getCollationKey(const UnicodeString &s, CollationKey &key,
+                                   UErrorCode &errorCode) const {
+    return getCollationKey(s.getBuffer(), s.length(), key, errorCode);
+}
+    
+    int32_t SearchIterator::next(UErrorCode &status)
+{
+    if (U_SUCCESS(status)) {
+        int32_t offset = getOffset();
+        int32_t matchindex  = m_search_->matchedIndex;
+        int32_t     matchlength = m_search_->matchedLength;
+        m_search_->reset = FALSE;
+        if (m_search_->isForwardSearching == TRUE) {
+            int32_t textlength = m_search_->textLength;
+            if (offset == textlength || matchindex == textlength || 
+                (matchindex != USEARCH_DONE && 
+                matchindex + matchlength >= textlength)) {
+                // not enough characters to match
+                setMatchNotFound();
+                return USEARCH_DONE; 
+            }
+        }
+        else {
+            // switching direction. 
+            // if matchedIndex == USEARCH_DONE, it means that either a 
+            // setOffset has been called or that previous ran off the text
+            // string. the iterator would have been set to offset 0 if a 
+            // match is not found.
+            m_search_->isForwardSearching = TRUE;
+            if (m_search_->matchedIndex != USEARCH_DONE) {
+                // there's no need to set the collation element iterator
+                // the next call to next will set the offset.
+                return matchindex;
+            }
+        }
+    }
+    }
+    
+    class BreakIterator;
+    
+    IMGUI_IMPL_API bool     ImGui_ImplDX10_Init(ID3D10Device* device);
+IMGUI_IMPL_API void     ImGui_ImplDX10_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplDX10_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data);
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    
+        // Setup Platform/Renderer bindings
+    ImGui_ImplGlfw_InitForVulkan(window, true);
+    ImGui_ImplVulkan_InitInfo init_info = {};
+    init_info.Instance = g_Instance;
+    init_info.PhysicalDevice = g_PhysicalDevice;
+    init_info.Device = g_Device;
+    init_info.QueueFamily = g_QueueFamily;
+    init_info.Queue = g_Queue;
+    init_info.PipelineCache = g_PipelineCache;
+    init_info.DescriptorPool = g_DescriptorPool;
+    init_info.Allocator = g_Allocator;
+    init_info.MinImageCount = g_MinImageCount;
+    init_info.ImageCount = wd->ImageCount;
+    init_info.CheckVkResultFn = check_vk_result;
+    ImGui_ImplVulkan_Init(&init_info, wd->RenderPass);
+    
+        // Setup GLUT display function
+    // We will also call ImGui_ImplGLUT_InstallFuncs() to get all the other functions installed for us,
+    // otherwise it is possible to install our own functions and call the imgui_impl_glut.h functions ourselves.
+    glutDisplayFunc(glut_display_func);
+    
+            // Rendering
+        ImGui::Render();
+        g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
+        g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, (float*)&clear_color);
+        ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+    
+    
+    {    switch (msg)
     {
-    {        StatusWith<BSONObj> fixed = fixDocumentForInsert(_opCtx.getServiceContext(), x);
-        ASSERT(fixed.isOK());
-        x = fixed.getValue();
-        ASSERT(x['_id'].type() == jstOID);
-        ASSERT(collection->insertDocument(&_opCtx, InsertStatement(x), nullOpDebug, true).isOK());
-        wunit.commit();
+    case WM_SIZE:
+        if (g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
+        {
+            CleanupRenderTarget();
+            g_pSwapChain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam), DXGI_FORMAT_UNKNOWN, 0);
+            CreateRenderTarget();
+        }
+        return 0;
+    case WM_SYSCOMMAND:
+        if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
+            return 0;
+        break;
+    case WM_DESTROY:
+        ::PostQuitMessage(0);
+        return 0;
     }
+    return ::DefWindowProc(hWnd, msg, wParam, lParam);
+}
+
+    
+    
+    {    g_hSwapChainWaitableObject = g_pSwapChain->GetFrameLatencyWaitableObject();
+    assert(g_hSwapChainWaitableObject != NULL);
+}
+    
+        // Upload texture to graphics system
+    g_FontTexture = NULL;
+    if (g_pd3dDevice->CreateTexture(width, height, 1, D3DUSAGE_DYNAMIC, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &g_FontTexture, NULL) < 0)
+        return false;
+    D3DLOCKED_RECT tex_locked_rect;
+    if (g_FontTexture->LockRect(0, &tex_locked_rect, NULL, 0) != D3D_OK)
+        return false;
+    for (int y = 0; y < height; y++)
+        memcpy((unsigned char *)tex_locked_rect.pBits + tex_locked_rect.Pitch * y, pixels + (width * bytes_per_pixel) * y, (width * bytes_per_pixel));
+    g_FontTexture->UnlockRect(0);
+    
+    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
+// You can also handle inputs yourself and use those as a reference.
+IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
+
+    
+    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
+// **Prefer using the code in imgui_impl_opengl3.cpp**
+// This code is mostly provided as a reference to learn how ImGui integration works, because it is shorter to read.
+// If your code is using GL3+ context or any semi modern OpenGL calls, using this is likely to make everything more
+// complicated, will require your code to reset every single OpenGL attributes to their initial state, and might
+// confuse your GPU driver.
+// The GL2 code is unable to reset attributes or even call e.g. 'glUseProgram(0)' because they don't exist in that API.
+    
+    void DHTReplaceNodeTask::onReceived(const DHTPingReplyMessage* message)
+{
+  A2_LOG_INFO(fmt('ReplaceNode: Ping reply received from %s.',
+                  message->getRemoteNode()->toString().c_str()));
+  setFinished(true);
+}
+    
+    DHTRoutingTable::~DHTRoutingTable() = default;
+    
+    #include 'DHTNode.h'
+#include 'DlAbortEx.h'
+#include 'DHTConstants.h'
+#include 'bittorrent_helper.h'
+#include 'Logger.h'
+#include 'a2netcompat.h'
+#include 'util.h'
+#include 'TimeA2.h'
+#include 'fmt.h'
+#include 'File.h'
+#include 'LogFactory.h'
+#include 'BufferedFile.h'
+    
+      virtual std::shared_ptr<DHTTask>
+  createPingTask(const std::shared_ptr<DHTNode>& remoteNode,
+                 int numRetry = 0) = 0;
+    
+    class DHTTaskFactoryImpl : public DHTTaskFactory {
+private:
+  std::shared_ptr<DHTNode> localNode_;
+    }
+    
+    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
+                                             std::chrono::seconds interval)
+    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
+{
+}
+    
+        // out_of_range.109
+    try
+    {
+        // try to use an array index that is not a number
+        json::const_reference ref = j.at('/array/one'_json_pointer);
+    }
+    catch (json::parse_error& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+    
+    // Delete Filter Factory which ignores snapshots
+class DeleteISFilterFactory : public CompactionFilterFactory {
+ public:
+  std::unique_ptr<CompactionFilter> CreateCompactionFilter(
+      const CompactionFilter::Context& context) override {
+    if (context.is_manual_compaction) {
+      return std::unique_ptr<CompactionFilter>(new DeleteISFilter());
+    } else {
+      return std::unique_ptr<CompactionFilter>(nullptr);
+    }
+  }
+    }
+    
+    
+    { private:
+  BlobCompactionContext context_;
+  const uint64_t current_time_;
+  Statistics* statistics_;
+  // It is safe to not using std::atomic since the compaction filter, created
+  // from a compaction filter factroy, will not be called from multiple threads.
+  mutable uint64_t expired_count_ = 0;
+  mutable uint64_t expired_size_ = 0;
+  mutable uint64_t evicted_count_ = 0;
+  mutable uint64_t evicted_size_ = 0;
 };
     
-    
-    {                if (success) {
-                    fp->fInputIdx = inputIterator.getIndex();
-                } else {
-                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
-                }
-            }
-            break;
-    
-        UnicodeString patStr;
-    for (UChar32 c = utext_next32From(fPattern, 0); c != U_SENTINEL; c = utext_next32(fPattern)) {
-        patStr.append(c);
-    }
-    printf('Original Pattern:  \'%s\'\n', CStr(patStr)());
-    printf('   Min Match Length:  %d\n', fMinMatchLen);
-    printf('   Match Start Type:  %s\n', START_OF_MATCH_STR(fStartType));
-    if (fStartType == START_STRING) {
-        UnicodeString initialString(fLiteralText,fInitialStringIdx, fInitialStringLen);
-        printf('   Initial match string: \'%s\'\n', CStr(initialString)());
-    } else if (fStartType == START_SET) {
-        UnicodeString s;
-        fInitialChars->toPattern(s, TRUE);
-        printf('    Match First Chars: %s\n', CStr(s)());
-    }
-    
-    ScientificNumberFormatter *ScientificNumberFormatter::createSuperscriptInstance(
-            DecimalFormat *fmtToAdopt, UErrorCode &status) {
-    return createInstance(fmtToAdopt, new SuperscriptStyle(), status);
-}
-    
-           // helper function to save/load map<wstring, shared_ptr<Matrix<ElemType>> structure 
-       void SaveParameters(File& f, const map<wstring, shared_ptr<Matrix<ElemType>>>& parameters) const
-        {
-            // save sizeof(ElemType)
-            unsigned int size = sizeof(ElemType);
-            f << size;
-            // save number of pairs 
-            unsigned int numPairs = parameters.size();
-            f << numPairs;
-            for (auto& x : parameters)
-            {
-                f << x.first;
-                f << *x.second;
-            }
-            f.Flush();
-            return;
-        }
-    
-        ComputationNetworkPtr LoadNetworkFromConfig(const wstring& configFilePaths, bool forceLoad = true)
-    {
-        if (m_net->GetTotalNumberOfNodes() == 0 || forceLoad) // not built or force load
-            LoadFromConfig(configFilePaths);
-        else
-            m_net->ResetEvalTimeStamps();
-        return m_net;
-    }
-    
-    #ifndef let
-#define let const auto
-#endif
-    
-    
-    {        RedirectStdErr(logpath, config(L'appendLogFile', false));
-        LOGPRINTF(stderr, '%ls\n', startupMessage.c_str());
-        ::CNTK::Internal::PrintBuiltInfo();
+    // Simple implementation of SlicePart variants of Put().  Child classes
+// can override these method with more performant solutions if they choose.
+Status WriteBatchBase::Put(ColumnFamilyHandle* column_family,
+                           const SliceParts& key, const SliceParts& value) {
+  std::string key_buf, value_buf;
+  Slice key_slice(key, &key_buf);
+  Slice value_slice(value, &value_buf);
     }
     
     
-    {    // model version
-    size_t modelVersion = CNTK_MODEL_VERSION_1; // if version info is not there it is version 1
-    if (fstream.TryGetMarker(FileMarker::fileMarkerBeginSection, L'BVersion'))
-    {
-        fstream >> modelVersion;
-        fstream.GetMarker(FileMarker::fileMarkerEndSection, L'EVersion');
-    }
-    if (modelVersion > CURRENT_CNTK_MODEL_VERSION)
-        InvalidArgument('Read: The model file has a newer format version (%d) than this CNTK version can handle (%d).', (int)modelVersion, (int)CURRENT_CNTK_MODEL_VERSION);
+    {}  //  namespace rocksdb
+
     
-    return modelVersion;
-}
+    #if !defined(ROCKSDB_LITE) && !defined(OS_WIN)
     
-        size_t i = 0;
-    for (auto& inputNode : m_inputNodes)
-    {
-        // const cast: The matrix class takes this over without copying and could theoretically change the contents,
-        // though it doesn't in this case.
-        auto& buffer = const_cast<ValueBuffer<ElemType, ValueContainer>&>(inputs[i]);
-        auto matrix = dynamic_pointer_cast<Matrix<ElemType>>(inputNode->ValuePtr());
-        auto type = matrix->GetMatrixType();
-        size_t numRows = inputNode->GetSampleLayout().GetNumElements();
-    }
+      // destroy and open DB
+  DB* db;
+  Status s = DestroyDB(kDBPath, Options(db_opt, cf_descs[0].options));
+  assert(s.ok());
+  s = DB::Open(Options(db_opt, cf_descs[0].options), kDBPath, &db);
+  assert(s.ok());
     
-                    if (m_traceLevel > 3)
-                {
-                    double time = threadTimer.ElapsedSeconds();
-                    fprintf(stderr, '\t\t -- pullAndRequest, GPU -> CPU time %lf \n', time);
-                }
-    
-    BOOST_AUTO_TEST_CASE(EvalScalarTimesDualOutputTest)
+    bool Context::swap_out()
 {
-    std::string modelDefinition =
-        'deviceId = -1 \n'
-        'precision = \'float\' \n'
-        'traceLevel = 1 \n'
-        'run=NDLNetworkBuilder \n'
-        'NDLNetworkBuilder=[ \n'
-        'i1 = Input(1) \n'
-        'i2 = Input(1) \n'
-        'o1 = Times(Constant(3), i1, tag=\'output\') \n'
-        'o2 = Times(Constant(5), i1, tag=\'output\') \n'
-        'FeatureNodes = (i1) \n'
-        '] \n';
-    }
+    return 0 == swapcontext(&ctx_, &swap_ctx_);
+}
+    
+    bool zend::eval(std::string code, std::string filename)
+{
+    return zend_eval_stringl((char*) code.c_str(), code.length(), nullptr, (char *) filename.c_str()) == SUCCESS;
+}
+
+    
+        ret = swSocket_unix_sendto(fd1,sock2_path,test_data,strlen(test_data));
+    ASSERT_GT(ret, 0);
+    
+    static swThreadPool pool;
+static int _pipe;
+const static int N = 10000;
+    
+        private slots:
+        void read() { redisAsyncHandleRead(m_ctx); }
+        void write() { redisAsyncHandleWrite(m_ctx); }
+    
+        Q_OBJECT
+    
+        cache.set('test1', val1);
+    ASSERT_EQ(cache.get('test1').get(), val1.get());
+    val1.reset();
+    ASSERT_EQ(dtor_num, 0);
