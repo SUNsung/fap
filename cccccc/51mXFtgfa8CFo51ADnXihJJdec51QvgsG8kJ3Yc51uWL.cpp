@@ -1,209 +1,196 @@
 
         
-        
-    {  if (parent_->notification_callback_.Run(argv, base::FilePath(current_dir))) {
-    // Send back 'ACK' message to prevent the client process from starting up.
-    reader->FinishWithACK(kACKToken, base::size(kACKToken) - 1);
-  } else {
-    LOG(WARNING) << 'Not handling interprocess notification as browser'
-                    ' is shutting down';
-    // Send back 'SHUTDOWN' message, so that the client process can start up
-    // without killing this process.
-    reader->FinishWithACK(kShutdownToken, base::size(kShutdownToken) - 1);
-    return;
-  }
+        #include 'src/core/lib/gpr/env.h'
+#include 'src/core/lib/gprpp/global_config_env.h'
+#include 'src/core/lib/gprpp/memory.h'
+    
+    TEST(GlobalConfigTest, BoolTest) {
+  EXPECT_FALSE(GPR_GLOBAL_CONFIG_GET(bool_var));
+  GPR_GLOBAL_CONFIG_SET(bool_var, true);
+  EXPECT_TRUE(GPR_GLOBAL_CONFIG_GET(bool_var));
 }
     
-    void GlobalMenuBarRegistrarX11::OnWindowMapped(unsigned long xid) {
-  live_xids_.insert(xid);
+    namespace experimental {
     }
     
     
-    {}  // namespace electron
+    {}  // namespace grpc
     
+    // Here's what happens when an ASSERT_DEATH* or EXPECT_DEATH* is
+// executed:
+//
+//   1. It generates a warning if there is more than one active
+//   thread.  This is because it's safe to fork() or clone() only
+//   when there is a single thread.
+//
+//   2. The parent process clone()s a sub-process and runs the death
+//   test in it; the sub-process exits with code 0 at the end of the
+//   death test, if it hasn't exited already.
+//
+//   3. The parent process waits for the sub-process to terminate.
+//
+//   4. The parent process checks the exit code and error message of
+//   the sub-process.
+//
+// Examples:
+//
+//   ASSERT_DEATH(server.SendMessage(56, 'Hello'), 'Invalid port number');
+//   for (int i = 0; i < 5; i++) {
+//     EXPECT_DEATH(server.ProcessRequest(i),
+//                  'Invalid request .* in ProcessRequest()')
+//                  << 'Failed to die on request ' << i;
+//   }
+//
+//   ASSERT_EXIT(server.ExitNow(), ::testing::ExitedWithCode(0), 'Exiting');
+//
+//   bool KilledBySIGHUP(int exit_code) {
+//     return WIFSIGNALED(exit_code) && WTERMSIG(exit_code) == SIGHUP;
+//   }
+//
+//   ASSERT_EXIT(client.HangUpServer(), KilledBySIGHUP, 'Hanging up!');
+//
+// On the regular expressions used in death tests:
+//
+//   On POSIX-compliant systems (*nix), we use the <regex.h> library,
+//   which uses the POSIX extended regex syntax.
+//
+//   On other platforms (e.g. Windows), we only support a simple regex
+//   syntax implemented as part of Google Test.  This limited
+//   implementation should be enough most of the time when writing
+//   death tests; though it lacks many features you can find in PCRE
+//   or POSIX extended regex syntax.  For example, we don't support
+//   union ('x|y'), grouping ('(xy)'), brackets ('[xy]'), and
+//   repetition count ('x{5,7}'), among others.
+//
+//   Below is the syntax that we do support.  We chose it to be a
+//   subset of both PCRE and POSIX extended regex, so it's easy to
+//   learn wherever you come from.  In the following: 'A' denotes a
+//   literal character, period (.), or a single \\ escape sequence;
+//   'x' and 'y' denote regular expressions; 'm' and 'n' are for
+//   natural numbers.
+//
+//     c     matches any literal character c
+//     \\d   matches any decimal digit
+//     \\D   matches any character that's not a decimal digit
+//     \\f   matches \f
+//     \\n   matches \n
+//     \\r   matches \r
+//     \\s   matches any ASCII whitespace, including \n
+//     \\S   matches any character that's not a whitespace
+//     \\t   matches \t
+//     \\v   matches \v
+//     \\w   matches any letter, _, or decimal digit
+//     \\W   matches any character that \\w doesn't match
+//     \\c   matches any literal character c, which must be a punctuation
+//     .     matches any single character except \n
+//     A?    matches 0 or 1 occurrences of A
+//     A*    matches 0 or many occurrences of A
+//     A+    matches 1 or many occurrences of A
+//     ^     matches the beginning of a string (not that of each line)
+//     $     matches the end of a string (not that of each line)
+//     xy    matches x followed by y
+//
+//   If you accidentally use PCRE or POSIX extended regex features
+//   not implemented by us, you will get a run-time failure.  In that
+//   case, please try to rewrite your regular expression within the
+//   above syntax.
+//
+//   This implementation is *not* meant to be as highly tuned or robust
+//   as a compiled regex library, but should perform well enough for a
+//   death test, which already incurs significant overhead by launching
+//   a child process.
+//
+// Known caveats:
+//
+//   A 'threadsafe' style death test obtains the path to the test
+//   program from argv[0] and re-executes it in the sub-process.  For
+//   simplicity, the current implementation doesn't search the PATH
+//   when launching the sub-process.  This means that the user must
+//   invoke the test program via a path that contains at least one
+//   path separator (e.g. path/to/foo_test and
+//   /absolute/path/to/bar_test are fine, but foo_test is not).  This
+//   is rarely a problem as people usually don't put the test binary
+//   directory in PATH.
+//
+// TODO(wan@google.com): make thread-safe death tests search the PATH.
     
-    {}  // namespace electron
+    // The Message class works like an ostream repeater.
+//
+// Typical usage:
+//
+//   1. You stream a bunch of values to a Message object.
+//      It will remember the text in a stringstream.
+//   2. Then you stream the Message object to an ostream.
+//      This causes the text in the Message to be streamed
+//      to the ostream.
+//
+// For example;
+//
+//   testing::Message foo;
+//   foo << 1 << ' != ' << 2;
+//   std::cout << foo;
+//
+// will print '1 != 2'.
+//
+// Message is not intended to be inherited from.  In particular, its
+// destructor is not virtual.
+//
+// Note that stringstream behaves differently in gcc and in MSVC.  You
+// can stream a NULL char pointer to it in the former, but not in the
+// latter (it causes an access violation if you do).  The Message
+// class hides this difference by treating a NULL char pointer as
+// '(null)'.
+class GTEST_API_ Message {
+ private:
+  // The type of basic IO manipulators (endl, ends, and flush) for
+  // narrow streams.
+  typedef std::ostream& (*BasicNarrowIoManip)(std::ostream&);
+    }
+    
+    // Now the tricky part: you need to register all test patterns before
+// you can instantiate them.  The first argument of the macro is the
+// test case name; the rest are the names of the tests in this test
+// case.
+REGISTER_TYPED_TEST_CASE_P(FooTest,
+                           DoesBlah, HasPropertyA);
+    
+    // A class representing the parsed contents of the
+// --gtest_internal_run_death_test flag, as it existed when
+// RUN_ALL_TESTS was called.
+class InternalRunDeathTestFlag {
+ public:
+  InternalRunDeathTestFlag(const std::string& a_file,
+                           int a_line,
+                           int an_index,
+                           int a_write_fd)
+      : file_(a_file), line_(a_line), index_(an_index),
+        write_fd_(a_write_fd) {}
+    }
+    
+    #include 'gtest/internal/gtest-port.h'
+    
+      GTEST_DECLARE_TUPLE_AS_FRIEND_
+    
+    #endif // D_DHT_RESPONSE_MESSAGE_H
 
     
-      if (!agent_host_) {
-    promise.RejectWithErrorMessage('No target available');
-    return handle;
-  }
+    DHTTokenTracker::~DHTTokenTracker() = default;
     
-    void Initialize(v8::Local<v8::Object> exports,
-                v8::Local<v8::Value> unused,
-                v8::Local<v8::Context> context,
-                void* priv) {
-#if defined(OS_MACOSX)
-  v8::Isolate* isolate = context->GetIsolate();
-  mate::Dictionary dict(isolate, exports);
-  dict.Set('inAppPurchase', InAppPurchase::Create(isolate));
-  dict.Set('InAppPurchase', InAppPurchase::GetConstructor(isolate)
-                                ->GetFunction(context)
-                                .ToLocalChecked());
-#endif
+      virtual void preProcess() CXX11_OVERRIDE;
+    
+    DHTUnknownMessage::DHTUnknownMessage(const std::shared_ptr<DHTNode>& localNode,
+                                     const unsigned char* data, size_t length,
+                                     const std::string& ipaddr, uint16_t port)
+    : DHTMessage(localNode, std::shared_ptr<DHTNode>()),
+      length_(length),
+      ipaddr_(ipaddr),
+      port_(port)
+{
+  if (length_ == 0) {
+    data_ = nullptr;
+  }
+  else {
+    data_ = new unsigned char[length];
+    memcpy(data_, data, length);
+  }
 }
-    
-      // Create an offscreen window for receiving broadcast messages for the
-  // session lock and unlock events.
-  window_ = CreateWindow(MAKEINTATOM(atom_), 0, 0, 0, 0, 0, 0, HWND_MESSAGE, 0,
-                         instance_, 0);
-  gfx::CheckWindowCreated(window_);
-  gfx::SetWindowUserData(window_, this);
-    
-      auto IndirectResultArgIter = AI.getIndirectSILResults().begin();
-  for (auto ResultTy : substConv.getIndirectSILResultTypes()) {
-    NewArgs.push_back(
-        castValueToABICompatibleType(&B, Loc, *IndirectResultArgIter,
-                                     IndirectResultArgIter->getType(), ResultTy));
-    ++IndirectResultArgIter;
-  }
-    
-      /// Return the Clang node associated with this function if it has one.
-  ClangNode getClangNode() const {
-    return (ClangNodeOwner ? ClangNodeOwner->getClangNode() : ClangNode());
-  }
-  const clang::Decl *getClangDecl() const {
-    return (ClangNodeOwner ? ClangNodeOwner->getClangDecl() : nullptr);
-  }
-    
-        bool shouldSerializeDoc(Decl *D) {
-      // When building the stdlib we intend to serialize unusual comments.
-      // This situation is represented by GroupContext.isEnable().  In that
-      // case, we perform more serialization to keep track of source order.
-      if (GroupContext.isEnable())
-        return true;
-    }
-    
-    
-    {  uintptr_t pc;
-#if defined(__arm__)
-  // ARM r15 is PC.  UNW_REG_PC is *not* the same value, and using that will
-  // result in abnormal behaviour.
-  _Unwind_VRS_Get(context, _UVRSC_CORE, 15, _UVRSD_UINT32, &pc);
-  // Clear the ISA bit during the reporting.
-  pc &= ~(uintptr_t)0x1;
-#else
-  pc = _Unwind_GetIP(context);
-#endif
-  if (pc) {
-    *state->current++ = reinterpret_cast<void *>(pc);
-  }
-  return _URC_NO_REASON;
-}
-#endif
-    
-    llvm::Expected<Type>
-InheritedTypeRequest::evaluate(
-    Evaluator &evaluator, llvm::PointerUnion<TypeDecl *, ExtensionDecl *> decl,
-    unsigned index,
-    TypeResolutionStage stage) const {
-  // Figure out how to resolve types.
-  TypeResolutionOptions options = None;
-  DeclContext *dc;
-  if (auto typeDecl = decl.dyn_cast<TypeDecl *>()) {
-    if (auto nominal = dyn_cast<NominalTypeDecl>(typeDecl)) {
-      dc = nominal;
-    }
-    }
-    }
-    
-    namespace swift {
-namespace reflection {
-    }
-    }
-    
-    public:
-  FieldRecord() = delete;
-    
-      proto2diff_.set_w('foo');
-    
-    #include <google/protobuf/stubs/logging.h>
-#include <google/protobuf/stubs/common.h>
-    
-    // Copyright 2008 Google Inc. All Rights Reserved.
-// Author: xpeng@google.com (Peter Peng)
-    
-    int main(int argc, char *argv[]) {
-  if (argc % 2 == 0 || argc == 1) {
-    std::cerr << 'Usage: [input_files] [output_file_names] where ' <<
-        'input_files are one to one mapping to output_file_names.' <<
-        std::endl;
-    return 1;
-  }
-    }
-    
-    workspace.ResetWorkspace()
-    
-    Each feature has fixed lengths which are passed as lengths argument and a
-separate tensor will be produced for each feature.
-i.e. DATA.dim(1) = len(lengths) = NumOuptuts.
-    
-    #ifndef PSTOKENIZER_H
-#define PSTOKENIZER_H
-    
-      // get stream start position
-  lexer->skipToNextLine();
-  pos = lexer->getPos();
-    
-    #include 'Object.h'
-    
-      //----- image drawing
-  virtual void drawImageMask(GfxState *state, Object *ref, Stream *str,
-			     int width, int height, GBool invert,
-			     GBool interpolate, GBool inlineImg);
-  virtual void drawImage(GfxState *state, Object *ref, Stream *str,
-			 int width, int height, GfxImageColorMap *colorMap,
-			 GBool interpolate, int *maskColors, GBool inlineImg);
-  virtual void drawMaskedImage(GfxState *state, Object *ref, Stream *str,
-			       int width, int height,
-			       GfxImageColorMap *colorMap,
-			       GBool interpolate,
-			       Stream *maskStr, int maskWidth, int maskHeight,
-			       GBool maskInvert, GBool maskInterpolate);
-  virtual void drawSoftMaskedImage(GfxState *state, Object *ref, Stream *str,
-				   int width, int height,
-				   GfxImageColorMap *colorMap,
-				   GBool interpolate,
-				   Stream *maskStr,
-				   int maskWidth, int maskHeight,
-				   GfxImageColorMap *maskColorMap,
-				   GBool maskInterpolate);
-    
-      StandardSecurityHandler(PDFDoc *docA, Object *encryptDictA);
-  virtual ~StandardSecurityHandler();
-    
-    class GooString;
-class Object;
-class Stream;
-    
-        // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-    
-    
-    {        ImGui::Render();
-    }
-    
-                ImGui::Begin('Hello, world!');                          // Create a window called 'Hello, world!' and append into it.
-    
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
-    
-    apollo::cyber::PyReader *pr = nullptr;
-    
-    using apollo::common::Status;
-    
-    #include <string>
-#include <vector>
-    
-    using apollo::common::VehicleConfigHelper;
-using apollo::hdmap::HDMapUtil;
-    
-      std::string choreography_processor_policy_;
-  std::string pool_processor_policy_;
