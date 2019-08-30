@@ -11,255 +11,242 @@
     }
     }
     
-    #ifndef CPU_ONLY
-template <typename Dtype>
-void sgd_update_gpu(int N, Dtype* g, Dtype* h, Dtype momentum,
-    Dtype local_rate);
-#endif
+    #include 'ImfIO.h'
+#include 'ImfHeader.h'
+#include 'ImfNamespace.h'
+#include 'ImfExport.h'
     
     
-    {
-    {    LOG(INFO) << 'Iteration ' << iter_ << ', loss = ' << smoothed_loss_;
-  }
-  if (param_.test_interval() && iter_ % param_.test_interval() == 0) {
-    TestAll();
-  }
-  LOG(INFO) << 'Optimization Done.';
-}
-    
-      virtual inline const char* type() const { return 'Pooling'; }
-  virtual inline int ExactNumBottomBlobs() const { return 1; }
-  virtual inline int MinTopBlobs() const { return 1; }
-  // MAX POOL layers can output an extra top blob for the mask;
-  // others can only output the pooled inputs.
-  virtual inline int MaxTopBlobs() const {
-    return (this->layer_param_.pooling_param().pool() ==
-            PoolingParameter_PoolMethod_MAX) ? 2 : 1;
-  }
-    
-    /* Boolean */
-#define GLU_FALSE                          0
-#define GLU_TRUE                           1
-    
-      PSOutputFunc outputFunc;
-  void *outputStream;
-  PSFileType fileType;		// file / pipe / stdout
-  GBool manualCtrl;
-  int seqPage;			// current sequential page number
-  void (*underlayCbk)(PSOutputDev *psOut, void *data);
-  void *underlayCbkData;
-  void (*overlayCbk)(PSOutputDev *psOut, void *data);
-  void *overlayCbkData;
-    
-      // Get the next object from the input stream.
-  Object *getObj(Object *obj, Guchar *fileKey = NULL,
-		 CryptAlgorithm encAlgorithm = cryptRC4, int keyLength = 0,
-		 int objNum = 0, int objGen = 0);
-  
-  Object *getObj(Object *obj, Guchar *fileKey,
-     CryptAlgorithm encAlgorithm, int keyLength,
-     int objNum, int objGen, std::set<int> *fetchOriginatorNums);
-    
-    void PopplerCache::put(PopplerCacheKey *key, PopplerCacheItem *item)
+inline Header::ConstIterator 		
+Header::ConstIterator::operator ++ (int)
 {
-  int movingStartIndex = lastValidCacheIndex + 1;
-  if (lastValidCacheIndex == cacheSize - 1) {
-    delete keys[lastValidCacheIndex];
-    delete items[lastValidCacheIndex];
-    movingStartIndex = cacheSize - 1;
-  } else {
-    lastValidCacheIndex++;
-  }
-  for (int i = movingStartIndex; i > 0; i--) {
-    keys[i] = keys[i - 1];
-    items[i] = items[i - 1];
-  }
-  keys[0] = key;
-  items[0] = item;
+    ConstIterator tmp = *this;
+    ++_i;
+    return tmp;
 }
     
+    const int SHORT_ZEROCODE_RUN = 59;
+const int LONG_ZEROCODE_RUN  = 63;
+const int SHORTEST_LONG_RUN  = 2 + LONG_ZEROCODE_RUN - SHORT_ZEROCODE_RUN;
+const int LONGEST_LONG_RUN   = 255 + SHORTEST_LONG_RUN;
     
-    {  if (!(core = (WinPDFCore *)doc->getGUIData()) ||
-      !(password = core->getPassword())) {
-    return NULL;
-  }
-  return new StandardAuthData(password, password->copy());
-#else
-  return NULL;
-#endif
-}
+    /// Options for the `BatchNorm` module.
+struct TORCH_API BatchNormOptions {
+  /* implicit */ BatchNormOptions(int64_t features);
+  /// The number of features of the input tensor.
+  /// Changing this parameter after construction __has no effect__.
+  TORCH_ARG(int64_t, features);
+  /// Whether to learn a scale and bias that are applied in an affine
+  /// transformation on the input.
+  /// Changing this parameter after construction __has no effect__.
+  TORCH_ARG(bool, affine) = true;
+  /// Whether to store and update batch statistics (mean and variance) in the
+  /// module. If `false`, you should call `pure_forward` and supply those batch
+  /// statistics yourself.
+  /// Changing this parameter after construction __has no effect__.
+  TORCH_ARG(bool, stateful) = true;
+  /// The epsilon value added for numerical stability.
+  /// Changing this parameter after construction __is effective__.
+  TORCH_ARG(double, eps) = 1e-5;
+  /// A momentum multiplier for the mean and variance.
+  /// Changing this parameter after construction __is effective__.
+  TORCH_ARG(double, momentum) = 0.1;
+};
     
-      // Attempt to authorize the document, using the supplied
-  // authorization data (which may be NULL).  Returns true if
-  // successful (i.e., if at least the right to open the document was
-  // granted).
-  virtual GBool authorize(void *authData) = 0;
+    REGISTER_CPU_OPERATOR(Floor, FloorOp<float, CPUContext>);
     
-      newsound->kind = kind;
-  if (fileName) {
-    newsound->fileName = fileName->copy();
-  }
-  newsound->samplingRate = samplingRate;
-  newsound->channels = channels;
-  newsound->bitsPerSample = bitsPerSample;
-  newsound->encoding = encoding;
+              vector<TensorShape> out(1);
+          switch (order) {
+            case StorageOrder::NCHW:
+              out[0] = CreateTensorShape(
+                  vector<int>{N, C * kernel_h * kernel_w, out_h, out_w},
+                  TensorProto::FLOAT);
+              break;
+            case StorageOrder::NHWC:
+              out[0] = CreateTensorShape(
+                  vector<int>{N, out_h, out_w, kernel_h * kernel_w * C},
+                  TensorProto::FLOAT);
+              break;
+            default:
+              CAFFE_THROW('Unknown storage order: ', order);
+          }
     
-      ~SplashOutFontFileID() {}
-    
-    #ifndef SPLASHOUTPUTDEV_H
-#define SPLASHOUTPUTDEV_H
-    
-    #if MXNET_USE_CUDA
-/*!
- * \brief Storage manager with a memory pool on gpu. Memory chunks are reused based on exact size
- * match.
- */
-class GPUPooledStorageManager final : public StorageManager {
+    class AutoCompactTest {
  public:
-  /*!
-   * \brief Default constructor.
-   *
-   * \param initial_context context used by this Storage Manager
-   */
-  explicit GPUPooledStorageManager(Context initial_context) :
-    initial_context_(initial_context) {
-    reserve_ = dmlc::GetEnv('MXNET_GPU_MEM_POOL_RESERVE', 5);
-    page_size_ = dmlc::GetEnv('MXNET_GPU_MEM_POOL_PAGE_SIZE', 4096);
-    large_alloc_round_size_ = dmlc::GetEnv('MXNET_GPU_MEM_LARGE_ALLOC_ROUND_SIZE', 2 * 1024 * 1024);
-    if (large_alloc_round_size_ <= 0) {
-      LOG(FATAL) << 'MXNET_GPU_MEM_LARGE_ALLOC_ROUND_SIZE cannot be set to a value <= 0, found: '
-                 << large_alloc_round_size_;
-    }
-    if (page_size_ < NDEV) {
-      LOG(FATAL) << 'MXNET_GPU_MEM_POOL_PAGE_SIZE cannot be set to a value smaller than ' << NDEV \
-                 << '. Got ' << page_size_ << '.';
-    }
-  }
-  /*!
-   * \brief Default destructor.
-   */
-  ~GPUPooledStorageManager() {
-    ReleaseAll();
+  AutoCompactTest() {
+    dbname_ = test::TmpDir() + '/autocompact_test';
+    tiny_cache_ = NewLRUCache(100);
+    options_.block_cache = tiny_cache_;
+    DestroyDB(dbname_, options_);
+    options_.create_if_missing = true;
+    options_.compression = kNoCompression;
+    ASSERT_OK(DB::Open(options_, dbname_, &db_));
   }
     }
     
-      bool InferShape(mxnet::ShapeVector *in_shape,
-                  mxnet::ShapeVector *out_shape,
-                  mxnet::ShapeVector *aux_shape) const override {
-    using namespace mshadow;
-    if (!param_.no_bias) {
-      CHECK_EQ(in_shape->size(), 4U) << 'Input:[data, offset, weight, bias]';
-    } else {
-      CHECK_EQ(in_shape->size(), 3U) << 'Input:[data, offset, weight]';
-    }
-    out_shape->resize(1, mxnet::TShape());
-    const mxnet::TShape &dshp = (*in_shape)[conv::kData];
-    const mxnet::TShape &oshp = (*in_shape)[conv::kOffset];
-    if (mxnet::op::shape_is_none(dshp)) return false;
-    if (param_.kernel.ndim() == 2) {
-      // 2d conv
-      CHECK_EQ(dshp.ndim(), 4U) \
-        << 'Input data should be 4D in batch-num_filter-y-x';
-      CHECK_EQ(oshp.ndim(), 4U) \
-        << 'Input offset should be 4D in batch-num_filter-y-x';
-      Shape<4> dshape = ConvertLayout(dshp.get<4>(), param_.layout.value(), kNCHW);
-      Shape<4> offsetshape = ConvertLayout(oshp.get<4>(), param_.layout.value(), kNCHW);
-      Shape<4> wshape = Shape4(param_.num_filter / param_.num_group, dshape[1] / param_.num_group,
-        param_.kernel[0], param_.kernel[1]);
-      wshape = ConvertLayout(wshape, kNCHW, param_.layout.value());
-      wshape[0] *= param_.num_group;
-      SHAPE_ASSIGN_CHECK(*in_shape, conv::kWeight, wshape);
-      if (!param_.no_bias) {
-        SHAPE_ASSIGN_CHECK(*in_shape, conv::kBias, Shape1(param_.num_filter));
-      }
-    }
+      // Verify that overwriting an open file will result in the new file data
+  // being read from files opened before the write.
+  Slice result;
+  char scratch[kFileDataLen];
+  ASSERT_OK(rand_file->Read(0, kFileDataLen, &result, scratch));
+  ASSERT_EQ(0, result.compare(kWrite2Data));
+    
+    
+    {}  // namespace leveldb
+    
+    #endif  // STORAGE_LEVELDB_UTIL_ARENA_H_
+
+    
+    TEST(EnvWindowsTest, TestOpenOnRead) {
+  // Write some test data to a single file that will be opened |n| times.
+  std::string test_dir;
+  ASSERT_OK(env_->GetTestDirectory(&test_dir));
+  std::string test_file = test_dir + '/open_on_read.txt';
     }
     
-        nt = gateN + t * N * H;
-    dart = dar + t * N * H;
-    #pragma omp parallel for num_threads(omp_threads)
-    for (int i = 0; i < N; ++i) {
-      for (int j = 0; j < H; ++j) {
-        int id = i * H + j;
-        if (mode == 1) {
-          dart[id] = dht1[id] * (1 - nt[id] * nt[id]);
+    struct Options;
+struct FileMetaData;
+    
+      std::string newClosureName(
+      const std::string &namespaceName,
+      const std::string &className,
+      const std::string &funcName);
+  std::string newAnonClassName(
+      const std::string &prefix,
+      const std::string &namespaceName,
+      const std::string &className,
+      const std::string &funcName);
+    
+    public:
+  static void Record(const std::string &verb, int xactionCount = 0,
+                     const std::string &table = '');
+  static std::string ReportStats();
+    
+      /*
+   * Add an object to the position on the end, and allow lookup by `name'.
+   */
+  void add(const StringData* name, const T& t);
+    
+      bool operator==(const std::string &v) const { return compare(v) == 0;}
+  bool operator!=(const std::string &v) const { return compare(v) != 0;}
+  bool operator>=(const std::string &v) const { return compare(v) >= 0;}
+  bool operator<=(const std::string &v) const { return compare(v) <= 0;}
+  bool operator> (const std::string &v) const { return compare(v) >  0;}
+  bool operator< (const std::string &v) const { return compare(v) <  0;}
+    
+    static entity_table_t ent_iso_8859_5[] = {
+  'nbsp', 'IOcy', 'DJcy', 'GJcy', 'Jukcy', 'DScy', 'Iukcy', 'YIcy',
+  'Jsercy', 'LJcy', 'NJcy', 'TSHcy', 'KJcy', 'shy', 'Ubrcy', 'DZcy',
+  'Acy', 'Bcy', 'Vcy', 'Gcy', 'Dcy', 'IEcy', 'ZHcy', 'Zcy',
+  'Icy', 'Jcy', 'Kcy', 'Lcy', 'Mcy', 'Ncy', 'Ocy', 'Pcy',
+  'Rcy', 'Scy', 'Tcy', 'Ucy', 'Fcy', 'KHcy', 'TScy', 'CHcy',
+  'SHcy', 'SHCHcy', 'HARDcy', 'Ycy', 'SOFTcy', 'Ecy', 'YUcy', 'YAcy',
+  'acy', 'bcy', 'vcy', 'gcy', 'dcy', 'iecy', 'zhcy', 'zcy',
+  'icy', 'jcy', 'kcy', 'lcy', 'mcy', 'ncy', 'ocy', 'pcy',
+  'rcy', 'scy', 'tcy', 'ucy', 'fcy', 'khcy', 'tscy', 'chcy',
+  'shcy', 'shchcy', 'hardcy', 'ycy', 'softcy', 'ecy', 'yucy', 'yacy',
+  'numero', 'iocy', 'djcy', 'gjcy', 'jukcy', 'dscy', 'iukcy', 'yicy',
+  'jsercy', 'ljcy', 'njcy', 'tshcy', 'kjcy', 'sect', 'ubrcy', 'dzcy'
+};
+    
+      HTTPMessage *msg = nullptr;
+  bool newPushOk = (message.m_type == ResponseMessage::Type::HEADERS);
+  HTTPTransaction *txn = getTransaction(message.m_pushId, &msg, newPushOk);
+  if (!txn) {
+    // client is gone, just eat the msg
+    VLOG(4) << 'client is gone, eating the msg';
+    return;
+  }
+  switch (message.m_type) {
+    case ResponseMessage::Type::HEADERS:
+      CHECK(msg);
+      txn->sendHeaders(*msg);
+      if (!message.m_chunk && !message.m_eom) {
+        break;
+      } // else fall through
+    case ResponseMessage::Type::BODY:
+      if (message.m_chunk && m_method != Transport::Method::HEAD) {
+        // TODO: experiment with disabling this chunked flag and letting
+        // proxygen framework do the chunking
+        if (message.m_chunked) {
+          txn->sendChunkHeader(message.m_chunk->length());
+          txn->sendBody(std::move(message.m_chunk));
+          txn->sendChunkTerminator();
         } else {
-          dart[id] = nt[id] > 0.0f ? static_cast<float>(dht1[id]) : 0.0f;
+          txn->sendBody(std::move(message.m_chunk));
         }
-        dht1[id] = 0;
       }
-    }
-    if (req_params != kNullOp) {
-      alpha = 1.0;
-      beta = 1.0;
-      // dht1 = dart * wh    [N, H] = [N, H] * [H, H]
-      Tensor<cpu, 2, DType> d_dht1(dht1, Shape2(N, H));
-      Tensor<cpu, 2, DType> d_dart(dart, Shape2(N, H));
-      linalg_gemm(d_dart, wh, d_dht1, alpha, beta, false, false);
+      if (!message.m_eom) {
+        break;
+      } // else fall through
+    case ResponseMessage::Type::EOM:
+      txn->sendEOM();
+      break;
+    case ResponseMessage::Type::FINISH:
+      // need to make sure the last reference is deleted in this thread
     }
     
-    #if DMLC_USE_CXX11
-class DeformablePSROIPoolingProp : public OperatorProperty {
- public:
-  std::vector<std::string> ListArguments() const override {
-    if (param_.no_trans) {
-      return{ 'data', 'rois' };
-    } else {
-      return{ 'data', 'rois', 'trans' };
-    }
+    void APCGCManager::sweep() {
+  assertx(RuntimeOption::EvalGCForAPC);
+  if (RuntimeOption::ServerExecutionMode()) {
+    return; // Doesn't support server mode yet
   }
+  FTRACE(1, 'Sweep! Pending size:{}\n', apcgcPendingSize());
+  WriteLock l1(candidateListLock);
+  WriteLock l2(rootMapLock);
+  WriteLock l3(visibleFromHeapLock);
     }
     
-    /*!
-+ * \brief The result holder of dispatch mode of each Node in the graph.
-+ * \note Stored under graph.attrs['dispatch_mode'], provided by Pass 'InferStorageType'
-+ *
-+ * \code
-+ *  Graph g = ApplyPass(src_graph, 'InferStorageType');
-+ *  const DispatchModeVector& dispatch_modes = g.GetAttr<DispatchModeVector>('dispatch_mode');
-+ *  // get dispatch mode by entry node id
-+ *  int node_type = dispatch_modes[nid];
-+ * \endcode
-+ *
-+ * \sa FInferStorageType
-+ */
-using DispatchModeVector = std::vector<DispatchMode>;
+    #include <unistd.h>
     
-    #include <caffe/proto/caffe.pb.h>
-#include <dmlc/parameter.h>
-#include <dmlc/base.h>
-#include <dmlc/json.h>
-#include <dmlc/logging.h>
-#include <dmlc/type_traits.h>
-#include <google/protobuf/message.h>
-#include <google/protobuf/text_format.h>
+      /* Code block sizes read from configs. */
+  static uint32_t AHotSize;
+  static uint32_t ASize;
+  static uint32_t AProfSize;
+  static uint32_t AColdSize;
+  static uint32_t AFrozenSize;
     
-        // change element with key 'the bad'
-    object.at('the bad') = 'il cattivo';
-    
-    
-    {    // exception out_of_range.401
-    try
+    class Context
+{
+public:
+    Context(size_t stack_size, coroutine_func_t fn, void* private_data);
+    ~Context();
+    bool swap_in();
+    bool swap_out();
+#if !defined(SW_NO_USE_ASM_CONTEXT) && defined(SW_LOG_TRACE_OPEN)
+    ssize_t get_stack_usage();
+#endif
+    inline bool is_end()
     {
-        // try to write beyond the array limit
-        array.at(5) = 'sixth';
+        return end_;
     }
-    catch (json::out_of_range& e)
-    {
-        std::cout << e.what() << '\n';
+    static void context_func(void* arg);
     }
+    
+    TEST(pipe, unixsock)
+{
+    swPipe p;
+    char buf[1024];
+    bzero(&p, sizeof(p));
+    int ret = swPipeUnsock_create(&p, 1, SOCK_DGRAM);
+    ASSERT_EQ(ret, 0);
+    }
+    
+        char *key;
+    int data;
+    
+    static void thread_read(int i);
+static void thread_write(void);
+static ThreadObject threads[READ_THREAD_N];
+    
+    void swoole_throw_error(int code)
+{
+    throw swoole::Exception(code);
 }
 
     
-    
-    {    // out_of_range.404
-    try
+        for (auto i = lists.begin(); i != lists.end(); i++)
     {
-        // try to use a JSON pointer that cannot be resolved
-        json::reference ref = j.at('/number/foo'_json_pointer);
+        int ret = swRbtree_delete(tree, *i);
+        ASSERT_EQ(ret, 0);
     }
-    catch (json::out_of_range& e)
-    {
-        std::cout << e.what() << '\n';
-    }
-}
