@@ -1,185 +1,422 @@
 
         
-                buf_lock_t sindex_block(superblock->expose_buf(),
-                                superblock->get_sindex_block_id(),
-                                access_t::read);
+        // If the keys are not available from the header, define them ourselves. The values match
+// what tsd_private.h provides.
+# ifndef __PTK_FRAMEWORK_SWIFT_KEY0
+#  define __PTK_FRAMEWORK_SWIFT_KEY0 100
+# endif
+# ifndef __PTK_FRAMEWORK_SWIFT_KEY1
+#  define __PTK_FRAMEWORK_SWIFT_KEY1 101
+# endif
+# ifndef __PTK_FRAMEWORK_SWIFT_KEY2
+#  define __PTK_FRAMEWORK_SWIFT_KEY2 102
+# endif
     
-                    bool sindex_exists = store.acquire_sindex_superblock_for_write(
-                    name,
-                    '',
-                    super_block.get(),
-                    &sindex_super_block,
-                    &sindex_uuid);
-                ASSERT_TRUE(sindex_exists);
+      /// Path to a file which should contain serialized diagnostics for this
+  /// frontend invocation.
+  ///
+  /// This uses the same serialized diagnostics format as Clang, for tools that
+  /// want machine-parseable diagnostics. There's a bit more information on
+  /// how clients might use this in docs/Driver.md.
+  ///
+  /// \sa swift::serialized_diagnostics::createConsumer
+  std::string SerializedDiagnosticsPath;
     
-    // The following macros are useful for writing death tests.
+    #if SWIFT_OBJC_INTEROP
+/// Checked Objective-C-style dynamic cast to a class type.
+///
+/// \param object The object to cast, or nil.
+/// \param targetType The type to which we are casting, which is known to be
+/// a class type, but not necessarily valid type metadata.
+///
+/// \returns the object if the cast succeeds, or null otherwise.
+SWIFT_RUNTIME_EXPORT
+const void *
+swift_dynamicCastObjCClass(const void *object, const ClassMetadata *targetType);
     
-      // The c'tor sets this object as the test part result reporter used
-  // by Google Test.  The 'result' parameter specifies where to report the
-  // results. This reporter will only catch failures generated in the current
-  // thread. DEPRECATED
-  explicit ScopedFakeTestPartResultReporter(TestPartResultArray* result);
-    
-    #endif  // 0
-    
-      // Clears the results of all tests in this test case.
-  void ClearResult();
-    
-    // Finds the first element in the iterator range [begin, end) that
-// equals elem.  Element may be a native array type itself.
-template <typename Iter, typename Element>
-Iter ArrayAwareFind(Iter begin, Iter end, const Element& elem) {
-  for (Iter it = begin; it != end; ++it) {
-    if (internal::ArrayEq(*it, elem))
-      return it;
-  }
-  return end;
+    extern 'C' {
+SWIFT_RUNTIME_LIBRARY_VISIBILITY
+extern struct crashreporter_annotations_t gCRAnnotations;
 }
     
-      // Take over ownership of a raw pointer.  This should happen as soon as
-  // possible after the object is created.
-  explicit linked_ptr(T* ptr = NULL) { capture(ptr); }
-  ~linked_ptr() { depart(); }
+    void GetRenderProcessHosts(std::set<RenderProcessHost*>& rphs) {
+  RenderProcessHost* render_process_host = NULL;
+  std::vector<Shell*> windows = Shell::windows();
+  for (size_t i = 0; i < windows.size(); ++i) {
+    if (!windows[i]->is_devtools()) {
+      render_process_host = windows[i]->web_contents()->GetRenderProcessHost();
+      rphs.insert(render_process_host);
+    }
+  }
+}
     
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36, typename T37, typename T38, typename T39, typename T40,
-    typename T41, typename T42, typename T43, typename T44, typename T45,
-    typename T46, typename T47, typename T48, typename T49, typename T50>
-class ValueArray50 {
+    #include 'base/basictypes.h'
+#include '../dispatcher_host.h'
+    
+    class Base {
  public:
-  ValueArray50(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
-      T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17,
-      T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23, T24 v24, T25 v25,
-      T26 v26, T27 v27, T28 v28, T29 v29, T30 v30, T31 v31, T32 v32, T33 v33,
-      T34 v34, T35 v35, T36 v36, T37 v37, T38 v38, T39 v39, T40 v40, T41 v41,
-      T42 v42, T43 v43, T44 v44, T45 v45, T46 v46, T47 v47, T48 v48, T49 v49,
-      T50 v50) : v1_(v1), v2_(v2), v3_(v3), v4_(v4), v5_(v5), v6_(v6), v7_(v7),
-      v8_(v8), v9_(v9), v10_(v10), v11_(v11), v12_(v12), v13_(v13), v14_(v14),
-      v15_(v15), v16_(v16), v17_(v17), v18_(v18), v19_(v19), v20_(v20),
-      v21_(v21), v22_(v22), v23_(v23), v24_(v24), v25_(v25), v26_(v26),
-      v27_(v27), v28_(v28), v29_(v29), v30_(v30), v31_(v31), v32_(v32),
-      v33_(v33), v34_(v34), v35_(v35), v36_(v36), v37_(v37), v38_(v38),
-      v39_(v39), v40_(v40), v41_(v41), v42_(v42), v43_(v43), v44_(v44),
-      v45_(v45), v46_(v46), v47_(v47), v48_(v48), v49_(v49), v50_(v50) {}
+  Base(int id,
+       const base::WeakPtr<ObjectManager>& manager,
+       const base::DictionaryValue& option,
+       const std::string& extension_id);
+  virtual ~Base();
     }
     
-    template <class ElemType>
-template <class ValueType>
-shared_ptr<ComputationNode<ValueType>> ComputationNetworkBuilder<ElemType>::TypedCreateSparseInputNode(const std::wstring& inputName, const TensorShape& imageLayout, const wstring& dynamicAxisName)
-{
-    return net.AddNodeToNetWithElemType(New<SparseInputValue<ValueType>>(net.GetDeviceId(), inputName, imageLayout, dynamicAxisName));
+    namespace remote {
+    }
+    
+    EventListener::EventListener(int id,
+  const base::WeakPtr<DispatcherHost>& dispatcher_host,
+  const base::DictionaryValue& option) : Base(id, dispatcher_host, option) {
+    }
+    
+    void Menu::Call(const std::string& method,
+                const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  if (method == 'Append') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    Append(object_manager()->GetApiObject<MenuItem>(object_id));
+  } else if (method == 'Insert') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Insert(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Remove') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Remove(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Popup') {
+    int x = 0;
+    arguments.GetInteger(0, &x);
+    int y = 0;
+    arguments.GetInteger(1, &y);
+    content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rvh);
+    DCHECK(web_contents);
+    zoom::ZoomController* zoom_controller = zoom::ZoomController::FromWebContents(web_contents);
+    }
+    }
+    
+    
+    {  *accelerator = item->accelerator_;
+  return true;
+}
+    
+       bool IsItemForCommandIdDynamic(int command_id) const override;
+   base::string16 GetLabelForCommandId(int command_id) const override;
+   bool GetIconForCommandId(int command_id,
+                                   gfx::Image* icon) const override;
+    
+    class NwAppCrashBrowserFunction : public UIThreadExtensionFunction {
+ public:
+  NwAppCrashBrowserFunction() {}
+    }
+    
+      EXPECT_CALL(*rw, Write(_, _))
+      .Times(3)
+      .WillRepeatedly(DoAll(SaveArg<0>(&msg), Return(true)));
+  EXPECT_CALL(*rw, Read(_))
+      .WillOnce(DoAll(WithArg<0>(copy(&msg)), Return(true)))
+      .WillOnce(DoAll(WithArg<0>(copy(&msg)), Return(true)))
+      .WillOnce(DoAll(WithArg<0>(copy(&msg)), Return(true)))
+      .WillOnce(Return(false));
+  EXPECT_CALL(*rw, WritesDone());
+  EXPECT_CALL(*rw, Finish()).WillOnce(Return(Status::OK));
+    
+    
+    {  for (auto it = services.begin(); it != services.end(); ++it) {
+    CompareService(*it);
+  }
 }
     
     
+    {    auto paths = platformGlob((files_to_carve_dir_ / '*').string());
+    for (const auto& p : paths) {
+      carvePaths.insert(p);
+    }
+  }
+    
+    Expected<int32_t, DatabaseError> Database::getInt32(const std::string& domain,
+                                                    const std::string& key) {
+  Expected<std::string, DatabaseError> string_value = getString(domain, key);
+  if (string_value) {
+    auto value = tryTo<int32_t>(*string_value);
+    if (value) {
+      return *value;
+    } else {
+      return createError(DatabaseError::FailToReadData, value.takeError())
+             << 'Failed to convert string to int';
+    }
+  } else {
+    return string_value.takeError();
+  }
+}
+    
+    template <typename T>
+Expected<T, DatabaseError> InMemoryDatabase::getValue(const std::string& domain,
+                                                      const std::string& key) {
+  debug_only::verifyTrue(is_open_, 'database is not open');
+  if (!is_open_) {
+    return createError(DatabaseError::DbIsNotOpen) << 'Database is closed';
+  }
+  auto storage_iter = storage_.find(domain);
+  if (storage_iter == storage_.end()) {
+    return domainNotFoundError(domain);
+  }
+  std::lock_guard<std::mutex> lock(storage_iter->second->getMutex());
+  auto result = storage_iter->second->get(key);
+  if (result) {
+    DataType value = result.take();
+    if (value.type() == typeid(T)) {
+      return boost::get<T>(value);
+    } else {
+      auto error = createError(DatabaseError::KeyNotFound)
+                   << 'Requested wrong type for: ' << domain << ':' << key
+                   << ' stored type: ' << value.type().name()
+                   << ' requested type '
+                   << boost::core::demangle(typeid(T).name());
+      LOG(ERROR) << error.getMessage();
+      debug_only::fail(error.getMessage().c_str());
+      return std::move(error);
+    }
+  }
+  return result.takeError();
+}
+    
+    Expected<int32_t, DatabaseError> RocksdbDatabase::getInt32(
+    const std::string& domain, const std::string& key) {
+  Expected<std::string, DatabaseError> buffer = getRawBytes(domain, key);
+  if (buffer) {
+    std::string value = buffer.take();
+    if (BOOST_LIKELY(validateInt32StorageBuffer(value))) {
+      int32_t result = *(reinterpret_cast<const int32_t*>(value.data()));
+      return ntohl(result);
+    } else {
+      auto type_error = createError(RocksdbError::UnexpectedValueType)
+                        << 'Fetching string as integer';
+      auto error =
+          createError(DatabaseError::KeyNotFound, std::move(type_error));
+      assert(false && error.getMessage().c_str());
+      LOG(ERROR) << error.getMessage();
+      debug_only::fail(error.getMessage().c_str());
+      return std::move(error);
+    }
+  }
+  return buffer.takeError();
+}
+    
+      bool validateInt32StorageBuffer(const std::string& buffer);
+    
+    enum class RocksdbMigrationError {
+  InvalidArgument = 1,
+  FailToOpen = 2,
+  FailToGetVersion = 3,
+  NoMigrationFromCurrentVersion = 5,
+  MigrationLogicError = 6,
+  FailToOpenSrcDatabase = 7,
+  FailMoveDatabase = 8,
+};
+    
+    /**
+ * @brief An internal severity set mapping to Glog's LogSeverity levels.
+ */
+enum StatusLogSeverity {
+  O_INFO = 0,
+  O_WARNING = 1,
+  O_ERROR = 2,
+  O_FATAL = 3,
+};
+    
+    
     {
     {
-    {
-    {       static double TimeConstant2Momentum(double timeConstant, size_t syncPeroid)
-       {
-           return exp(-((double)syncPeroid) / timeConstant);
-       }
-       static double Momentum2TimeConstant(double bm, size_t syncPeroid)
-       {
-           if (bm >= 1.0 || bm < 0.0)
-           {
-               InvalidArgument('Unexpected block momentum (%.2f). Block momentum should be in the range of [0,1)\n', bm);
-           }
-           return -(double)syncPeroid / log(bm); 
-       }
-    };
-} } }
+    {}  // namespace math
+}  // namespace common
+}  // namespace apollo
 
     
-                    // Subtract it from the previous model
-                auto blockGrad = std::make_shared<Matrix<ElemType>>(prevWeight, CPUDEVICE);
-                *blockGrad -= currentWeight;                                              // matW becomes local block gradient (of one worker)
-    
-    // declare the static variables from the classes
-template <>
-NDLScript<half> NDLScript<half>::s_global{};
-template <>
-NDLScript<float> NDLScript<float>::s_global{};
-template <>
-NDLScript<double> NDLScript<double>::s_global{};
-    
-    
-    {        return sortedEvalOrder;
+    namespace apollo {
+namespace drivers {
+namespace gnss {
+    }
+    }
     }
     
+    #pragma once
     
-    {    for (const auto& n : nodes)
-    {
-        inputLayouts.push_back(ToVariableLayout(n));
-    }
-    return inputLayouts;
+    void DstManager::FodCheck(DstCommonData *dst_data) {
+  uint64_t fod = 0;
+  for (auto fod_subset : dst_data->fod_subsets_) {
+    fod |= fod_subset;
+  }
+  dst_data->fod_loc_ = dst_data->fod_subsets_.size();
+  auto find_res = dst_data->subsets_ind_map_.insert(
+      std::make_pair(fod, dst_data->fod_subsets_.size()));
+  if (find_res.second) {
+    dst_data->fod_subsets_.push_back(fod);
+  } else {
+    dst_data->fod_loc_ = find_res.first->second;
+  }
 }
     
+    void TrackObjectDistance::QueryProjectedVeloCtOnCamera(
+    const SensorObjectConstPtr& velodyne64, const SensorObjectConstPtr& camera,
+    const Eigen::Matrix4d& lidar2camera_pose, Eigen::Vector3d* projected_ct) {
+  double time_diff = camera->GetTimestamp() - velodyne64->GetTimestamp();
+  Eigen::Vector3d offset =
+      velodyne64->GetBaseObject()->velocity.cast<double>() * time_diff;
+  const Eigen::Vector3d& velo_ct = velodyne64->GetBaseObject()->center;
+  Eigen::Vector4d projected_ct_4d =
+      static_cast<Eigen::Matrix<double, 4, 1, 0, 4, 1>>(
+          lidar2camera_pose * Eigen::Vector4d(velo_ct[0] + offset[0],
+                                              velo_ct[1] + offset[1],
+                                              velo_ct[2] + offset[2], 1.0));
+  *projected_ct = projected_ct_4d.head(3);
+}
     
-#ifndef CPUONLY
-#include <cuda_runtime.h>
-#pragma comment (lib, 'cudart.lib')     // for cudaMemcpyAsync()
+      Eigen::Affine3d sensor2world_pose;
+  bool status = sensor_manager->GetPose(sensor_id, measurement_timestamp,
+                                        &sensor2world_pose);
+  auto max_dist_it = options_.camera_max_valid_dist_.find(sensor_id);
+  if (max_dist_it == options_.camera_max_valid_dist_.end()) {
+    AWARN << boost::format(
+                 'There is no pre-defined max valid camera'
+                 ' dist for sensor type: %s') %
+                 sensor_id;
+  }
+  if (status && max_dist_it != options_.camera_max_valid_dist_.end()) {
+    SensorObjectConstPtr lidar_object = track_ref_->GetLatestLidarObject();
+    SensorObjectConstPtr radar_object = track_ref_->GetLatestRadarObject();
+    double camera_max_dist = max_dist_it->second;
+    if (lidar_object != nullptr) {
+      in_view_ratio = ObjectInCameraView(
+          lidar_object, camera_model, sensor2world_pose, measurement_timestamp,
+          camera_max_dist, true, false);
+    } else if (radar_object != nullptr) {
+      in_view_ratio = ObjectInCameraView(
+          radar_object, camera_model, sensor2world_pose, measurement_timestamp,
+          camera_max_dist, false, false);
+    }
+  }
+    
+    using cyber::common::GetAbsolutePath;
+    
+     private:
+  // Returns status and expanded absolute path including the chroot directory.
+  // Checks whether the provided path breaks out of the chroot. If it returns
+  // non-OK status, the returned path should not be used.
+  std::pair<Status, std::string> EncodePath(const std::string& path) {
+    if (path.empty() || path[0] != '/') {
+      return {Status::InvalidArgument(path, 'Not an absolute path'), ''};
+    }
+    std::pair<Status, std::string> res;
+    res.second = chroot_dir_ + path;
+#if defined(OS_AIX)
+    char resolvedName[PATH_MAX];
+    char* normalized_path = realpath(res.second.c_str(), resolvedName);
+#else
+    char* normalized_path = realpath(res.second.c_str(), nullptr);
 #endif
-    
-    #include 'Basics.h'
-#include 'ComputationNetwork.h'
-#include 'SimpleEvaluator.h'
-#include 'DataReader.h'
-#include 'ScriptableObjects.h'
-#include 'Criterion.h'
-#include <vector>
-#include <string>
-#include <stdexcept>
-#include 'fileutil.h'
-#include 'Config.h'
-#include <chrono>
-#include <random>
-#include 'Profiler.h'
-#include 'MASGD.h'
-#include 'ASGDHelper.h'
-#include <map>
-using namespace std; // ugh! TODO: get rid of this from .h files!!!
-    
-    template <typename ElemType>
-void AggregateAccumulatorValuesAndUpdateEpochEvaluation(
-    std::shared_ptr<ComputationNetwork> net,
-    std::set<std::shared_ptr<ComputationNodeBase>> evalNodesWhichAccumulateResult,
-    std::shared_ptr<DistGradHeader> gradHeader,
-    std::shared_ptr<MPIWrapper> mpi,
-    std::vector<EpochCriterion>& epochEvalErrors,
-    const std::vector<ComputationNodeBasePtr>& evaluationNodes,
-    CriterionAccumulatorBase& localEpochEvalErrors,
-    std::function<bool(ComputationNodeBasePtr)> containsAccumulatedResult,
-    size_t packThresholdSizeInBytes = DEFAULT_PACK_THRESHOLD_SIZE_IN_BYTES)
-{
-    // Each node contains accumulated values for part of the data set, we have to aggregate accumulated values.
-    AggregateAccumulatorValuesAndUpdateEvaluation<ElemType>(net, evalNodesWhichAccumulateResult, gradHeader, mpi, packThresholdSizeInBytes);
+    if (normalized_path == nullptr) {
+      res.first = Status::NotFound(res.second, strerror(errno));
+    } else if (strlen(normalized_path) < chroot_dir_.size() ||
+               strncmp(normalized_path, chroot_dir_.c_str(),
+                       chroot_dir_.size()) != 0) {
+      res.first = Status::IOError(res.second,
+                                  'Attempted to access path outside chroot');
+    } else {
+      res.first = Status::OK();
     }
+#if !defined(OS_AIX)
+    free(normalized_path);
+#endif
+    return res;
+  }
     
-    namespace aria2 {
-    }
+    #include 'include/org_rocksdb_CompactionOptionsFIFO.h'
+#include 'rocksdb/advanced_options.h'
     
-      virtual std::shared_ptr<DHTTask>
-  createPeerLookupTask(const std::shared_ptr<DownloadContext>& ctx,
-                       uint16_t tcpPort,
-                       const std::shared_ptr<PeerStorage>& peerStorage) = 0;
-    
-    std::shared_ptr<DHTTask>
-DHTTaskFactoryImpl::createPeerAnnounceTask(const unsigned char* infoHash)
-{
-  // TODO
-  return nullptr;
+    /*
+ * Class:     org_rocksdb_EnvOptions
+ * Method:    useMmapReads
+ * Signature: (J)Z
+ */
+jboolean Java_org_rocksdb_EnvOptions_useMmapReads(
+    JNIEnv*, jobject, jlong jhandle) {
+  return ENV_OPTIONS_GET(jhandle, use_mmap_reads);
 }
     
-      virtual void addPeriodicTask1(const std::shared_ptr<DHTTask>& task) = 0;
+    /*
+ * Class:     org_rocksdb_RocksDB
+ * Method:    getLongProperty
+ * Signature: (JJLjava/lang/String;I)J
+ */
+jlong Java_org_rocksdb_RocksDB_getLongProperty(
+    JNIEnv* env, jobject, jlong jdb_handle, jlong jcf_handle,
+    jstring jproperty, jint jproperty_len) {
+  const char* property = env->GetStringUTFChars(jproperty, nullptr);
+  if (property == nullptr) {
+    // exception thrown: OutOfMemoryError
+    return 0;
+  }
+  rocksdb::Slice property_name(property, jproperty_len);
+    }
     
-    DHTTokenTracker::~DHTTokenTracker() = default;
+    namespace rocksdb {
+TableFilterJniCallback::TableFilterJniCallback(
+    JNIEnv* env, jobject jtable_filter)
+    : JniCallback(env, jtable_filter) {
+  m_jfilter_methodid =
+      AbstractTableFilterJni::getFilterMethod(env);
+  if(m_jfilter_methodid == nullptr) {
+    // exception thrown: NoSuchMethodException or OutOfMemoryError
+    return;
+  }
+    }
+    }
     
-    #include 'TimeBasedCommand.h'
+    http://www.cocos2d-x.org
     
-      DNSCache& operator=(const DNSCache& c);
+        //
+    // Overrides
+    //
+    virtual ProgressTo* clone() const override;
+    virtual ProgressTo* reverse() const override;
+    virtual void startWithTarget(Node *target) override;
+    virtual void update(float time) override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    ProgressTo() {}
+    virtual ~ProgressTo() {}
+    
+        /** The alpha threshold.
+     * The content is drawn only where the stencil have pixel with alpha greater than the alphaThreshold.
+     * Should be a float between 0 and 1.
+     * This default to 1 (so alpha test is disabled).
+     *
+     * @return The alpha threshold value,Should be a float between 0 and 1.
+     */
+    GLfloat getAlphaThreshold() const;
+    
+    /** Set the alpha threshold. 
+     * 
+     * @param alphaThreshold The alpha threshold.
+     */
+    void setAlphaThreshold(GLfloat alphaThreshold);
+    
+    /** Inverted. If this is set to true,
+     * the stencil is inverted, so the content is drawn where the stencil is NOT drawn.
+     * This default to false.
+     *
+     * @return If the clippingNode is Inverted, it will be return true.
+     */
+    bool isInverted() const;
+    
+    /** Set the ClippingNode whether or not invert.
+     *
+     * @param inverted A bool Type,to set the ClippingNode whether or not invert.
+     */
+    void setInverted(bool inverted);
