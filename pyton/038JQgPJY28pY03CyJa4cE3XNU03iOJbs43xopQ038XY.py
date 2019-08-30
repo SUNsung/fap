@@ -1,73 +1,56 @@
 
         
-            return render_template('blog/create.html')
+            def __init__(self, module):
+        '''
+        Construct module
+        '''
+        self.module = module
+        self.policy_dict = {}
     
-    from flaskr import create_app
-from flaskr.db import get_db
-from flaskr.db import init_db
+    #
+# Copyright (c) 2015 CenturyLink
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
     
+    - name: Delete Public IP from Server
+  hosts: localhost
+  gather_facts: False
+  connection: local
+  tasks:
+    - name: Create Public IP For Servers
+      clc_publicip:
+        server_ids:
+          - UC1TEST-SVR01
+          - UC1TEST-SVR02
+        state: absent
+      register: clc
     
-def test_login(client, auth):
-    # test that viewing the page renders without template errors
-    assert client.get('/auth/login').status_code == 200
+        try:
+        if state == 'present':
+            (msg, changed) = present(path, username, password, crypt_scheme, create, check_mode)
+        elif state == 'absent':
+            if not os.path.exists(path):
+                module.exit_json(msg='%s not present' % username,
+                                 warnings='%s does not exist' % path, changed=False)
+            (msg, changed) = absent(path, username, check_mode)
+        else:
+            module.fail_json(msg='Invalid state: %s' % state)
     
-            rv = client.get('/', headers={'Range': 'bytes=4-'})
-        assert rv.status_code == 206
-        with app.open_resource('static/index.html') as f:
-            assert rv.data == f.read()[4:]
-        rv.close()
-    
-    plt.tight_layout()
-plt.show()
-
-    
-    run_time = time.time() - t0
-print('Example run in %.3f s' % run_time)
-plt.show()
-
-    
-    # The digits dataset
-digits = datasets.load_digits()
-    
-        def reset_model(self):
-        self.set_state(
-            self.init_qpos + self.np_random.uniform(low=-.005, high=.005, size=self.model.nq),
-            self.init_qvel + self.np_random.uniform(low=-.005, high=.005, size=self.model.nv)
-        )
-        return self._get_obs()
-    
-        def random_color(self):
-        return np.array([
-            self.np_random.randint(low=0, high=255),
-            self.np_random.randint(low=0, high=255),
-            self.np_random.randint(low=0, high=255),
-            ]).astype('uint8')
-    
-    class Connector(object):
+        :arg list original_list: original list.
+    :arg list updated_list: list with changes.
+    :arg str key: unique identifier.
+    :arg list ignore_when_null: list with the keys from the updated items that should be ignored in the merge,
+        if its values are null.
+    :return: list: Lists merged.
     '''
-    This class defines generic dbms protocol functionalities for plugins.
-    '''
+    ignore_when_null = [] if ignore_when_null is None else ignore_when_null
     
-        def search(self):
-        warnMsg = 'on Informix search option is not available'
-        logger.warn(warnMsg)
+        if not layman.is_installed(name):
+        return False
     
-    class InjectionDict(AttribDict):
-    def __init__(self):
-        AttribDict.__init__(self)
-    
-            def run(self):
-            try:
-                self.result = func(*(args or ()), **(kwargs or {}))
-                self.timeout_state = TIMEOUT_STATE.NORMAL
-            except Exception as ex:
-                logger.log(CUSTOM_LOGGING.TRAFFIC_IN, ex)
-                self.result = default
-                self.timeout_state = TIMEOUT_STATE.EXCEPTION
-    
-                            continue
-    
-    def dependencies():
-    singleTimeWarnMessage('tamper script '%s' is only meant to be run against %s < 5.1' % (os.path.basename(__file__).split('.')[0], DBMS.MYSQL))
-    
-            If a is not None or an int or long, hash(a) is used instead.
+    RETURN = '''
+powerstate:
+    description: The current power state of the machine.
+    returned: success
+    type: str
+    sample: on
+'''
