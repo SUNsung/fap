@@ -1,18 +1,11 @@
 
         
-            open_dry_run_modal(agent)
-    click_on('Dry Run')
-    expect(page).to have_text('Dry Run started')
-    expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabLog']')
-  end
-end
-
+              expect(agent.sources).to eq([bob_weather_agent])
+      expect(agent.receivers).to eq([bob_formatting_agent])
+    end
     
-      it 'requires a URL or file uplaod' do
-    visit new_scenario_imports_path
-    click_on 'Start Import'
-    expect(page).to have_text('Please provide either a Scenario JSON File or a Public Scenario URL.')
-  end
+    describe ScenarioImportsController do
+  let(:user) { users(:bob) }
     
         it 'returns a label 'Yes' if a given agent is working' do
       stub(@agent).working? { true }
@@ -21,159 +14,68 @@ end
       expect(Nokogiri(label).text).to eq 'Yes'
     end
     
-        it 'can not be turned off' do
+      describe '#relative_distance_of_time_in_words' do
+    it 'in the past' do
+      expect(relative_distance_of_time_in_words(Time.now-5.minutes)).to eq('5m ago')
+    end
+    
+        it 'respects an environment variable that specifies a path or URL to a different scenario' do
       stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'true' }
-      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
+      stub(ENV).[]('DEFAULT_SCENARIO_FILE') { File.join(Rails.root, 'spec', 'fixtures', 'test_default_scenario.json') }
+      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(3)
+    end
+    
+    describe LiquidMigrator do
+  describe 'converting JSONPath strings' do
+    it 'should work' do
+      expect(LiquidMigrator.convert_string('$.data', true)).to eq('{{data}}')
+      expect(LiquidMigrator.convert_string('$.data.test', true)).to eq('{{data.test}}')
+      expect(LiquidMigrator.convert_string('$first_title', true)).to eq('{{first_title}}')
+    end
+    
+        def test_send
+      name = noninterned_name
+      e = assert_raise(NoMethodError) {@obj.send(name, Feature5112)}
+      assert_not_interned(name)
+      assert_equal(name, e.name)
+      assert_equal([Feature5112], e.args)
+    end
+    
+      describe 'at the end of the stream' do
+    before :each do
+      @gz = Zlib::GzipReader.new(@io)
+      @gz.read
+    end
+    
+      before do
+    @zeros    = Zlib::Deflate.deflate('0' * 100_000)
+    @inflator = Zlib::Inflate.new
+    @chunks   = []
+    
+          def next_link
+        label = 'Next &raquo;'
+        if @versions.size == Gollum::Page.per_page
+          link = '/history/#{@page.name}?page=#{@page_num+1}'
+          %(<a href='#{link}' hotkey='l'>#{label}</a>)
+        else
+          %(<span class='disabled'>#{label}</span>)
+        end
+      end
     end
   end
 end
 
     
-          it 'loads all workers' do
-        workers = @agent_runner.send(:load_workers)
-        expect(workers).to be_a(Hash)
-        expect(workers.keys).to eq(['HuginnScheduler', 'DelayedJobWorker'])
+          def string_to_code(string)
+        # sha bytes
+        b = [Digest::SHA1.hexdigest(string)[0, 20]].pack('H*').bytes.to_a
+        # Thanks donpark's IdenticonUtil.java for this.
+        # Match the following Java code
+        # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
+        #	 ((b[2] & 0xFF) << 8) | (b[3] & 0xFF)
+    
+          def custom_path
+        '#{@base_url}#{@page_dir.empty? ? '' : '/'}#{@page_dir}'
       end
     
-          expect(@scheduler.scheduler_agent_jobs.map(&:scheduler_agent)).to eq([@agent2])
-    end
-    
-      let :new_extract do
-    {
-      'url' => { 'css' => '#comic img', 'value' => '@src' },
-      'title' => { 'css' => '#comic img', 'value' => '@alt' },
-      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
-    }
-  end
-    
-          def self.generate_helpers!(routes=nil)
-        routes ||= begin
-          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
-          Devise::URL_HELPERS.slice(*mappings)
-        end
-    
-          module ClassMethods
-        # Create the cookie key using the record id and remember_token
-        def serialize_into_cookie(record)
-          [record.to_key, record.rememberable_value, Time.now.utc.to_f.to_s]
-        end
-    
-      def show
-    if subscription.valid?(params['hub.topic'])
-      @account.update(subscription_expires_at: future_expires)
-      render plain: encoded_challenge, status: 200
-    else
-      head 404
-    end
-  end
-    
-          if @user.persisted?
-        sign_in_and_redirect @user, event: :authentication
-        set_flash_message(:notice, :success, kind: provider_id.capitalize) if is_navigational_format?
-      else
-        session['devise.#{provider}_data'] = request.env['omniauth.auth']
-        redirect_to new_user_registration_url
-      end
-    end
-  end
-    
-      private
-    
-      included do
-    before_action :set_user_activity
-  end
-    
-    def await_condition &condition
-  start_time = Time.zone.now
-  until condition.call
-    return false if (Time.zone.now - start_time) > Capybara.default_max_wait_time
-    sleep 0.05
-  end
-  true
-end
-
-    
-        it 'generates the aspects_manage fixture', :fixture => true do
-      get :index, params: {a_id: @aspect.id}
-      save_fixture(html_for('body'), 'aspects_manage')
-    end
-    
-        it 'returns an array of likes for a post' do
-      bob.like!(@message)
-      get :index, params: {post_id: @message.id}
-      expect(JSON.parse(response.body).map {|h| h['id'] }).to match_array(@message.likes.map(&:id))
-    end
-    
-      # In the development environment your application's code is reloaded on
-  # every request. This slows down response time but is perfect for development
-  # since you don't have to restart the web server when you make code changes.
-  config.cache_classes = false
-    
-        pkginfo << '# Generated by fpm\n'
-    pkginfo << 'pkgname = #{@name}\n'
-    pkginfo << 'pkgver = #{to_s('FULLVERSION')}\n'
-    pkginfo << 'arch = #{architecture()}\n'
-    pkginfo << 'pkgdesc = #{description()}\n'
-    pkginfo << 'url = #{url()}\n'
-    pkginfo << 'size = 102400\n' # totally magic, not sure what it's used for.
-    
-        temp_info = pkginfo_template_path
-    
-      def compression_option
-    case self.attributes[:pacman_compression]
-      when nil, 'xz'
-        return '--xz'
-      when 'none'
-        return ''
-      when 'gz'
-        return '-z'
-      when 'bzip2'
-        return '-j'
-      else
-        return '--xz'
-      end
-  end
-    
-      def output(output_path)
-    self.scripts.each do |name, path|
-      case name
-        when 'pre-install'
-          safesystem('cp', path, './preinstall')
-          File.chmod(0755, './preinstall')
-        when 'post-install'
-          safesystem('cp', path, './postinstall')
-          File.chmod(0755, './postinstall')
-        when 'pre-uninstall'
-          raise FPM::InvalidPackageConfiguration.new(
-            'pre-uninstall is not supported by Solaris packages'
-          )
-        when 'post-uninstall'
-          raise FPM::InvalidPackageConfiguration.new(
-            'post-uninstall is not supported by Solaris packages'
-          )
-      end # case name
-    end # self.scripts.each
-    
-      # Generate the proper tar flags based on the path name.
-  def tar_compression_flag(path)
-    case path
-      when /\.tar\.bz2$/
-        return '-j'
-      when /\.tar\.gz$|\.tgz$/
-        return '-z'
-      when /\.tar\.xz$/
-        return '-J'
-      else
-        return nil
-    end
-  end # def tar_compression_flag
-end # class FPM::Package::Tar
-
-    
-      def run_cli
-    require 'fpm'
-    require 'fpm/command'
-    
-          one_to_increment = portion_to_work_with[0].to_i
-      incremented = one_to_increment + 1
+        assert_match /Edit/, last_response.body, ''Edit' link is blocked in history template'
