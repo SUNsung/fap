@@ -1,190 +1,105 @@
 
         
-              migration2 = RemoveIndexMigration2.new
-      migration2.migrate(:up)
-      assert_not migration2.connection.index_exists?(*index_definition)
-    
-        assert_not_equal @previously_updated_at, @developer.updated_at
-  end
-    
-        config.action_mailbox.queues = ActiveSupport::InheritableOptions.new \
-      incineration: :action_mailbox_incineration, routing: :action_mailbox_routing
-    
-      if ENV['RAILS_LOG_TO_STDOUT'].present?
-    logger           = ActiveSupport::Logger.new(STDOUT)
-    logger.formatter = config.log_formatter
-    config.logger    = ActiveSupport::TaggedLogging.new(logger)
-  end
-    
-        def find_app(apple_id: nil, app_identifier: nil)
-      if app_identifier
-        app = Spaceship::ConnectAPI::App.find(app_identifier)
-        UI.user_error!('Could not find an app by #{app_identifier}') unless app
-        return app
+              def html_pages
+        @site_html_pages ||= @obj.pages.select do |page|
+          page.html? || page.url.end_with?('/')
+        end
       end
     
-              has_reader = instance_methods.include?(reader)
-          has_writer = instance_methods.include?(writer)
+    WITH_LIQUID = <<-LIQUID.freeze
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce auctor libero at
+pharetra tempus. {{ author }} et metus fermentum, eu cursus lorem
+mattis. Curabitur vel dui et lacus rutrum suscipit et eget neque.
     
-            resps = Spaceship::ConnectAPI.get_beta_app_localizations(filter: filter, includes: includes, limit: limit, sort: sort).all_pages
-        return resps.map(&:to_models).flatten
-      end
-    
-          def self.type
-        return 'bundleIds'
-      end
-    
-      describe '.find' do
-    it 'finds a template in the Foo category' do
-      create_template!('test-template')
-    
-        def sha256(value)
-      salt = Settings.attr_encrypted_db_key_base_truncated
-      ::Digest::SHA256.base64digest('#{value}#{salt}')
+        def defaults_deprecate_type(old, current)
+      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
+      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
+                        'type: #{current}'.'
     end
-    
-      def chronic_duration_attributes
-    @chronic_duration_attributes ||= {}
-  end
-    
-      #
-  # Returns the connection oriented general handler type, in this case bind.
-  #
-  def self.general_handler_type
-    'bind'
-  end
-    
-        zip = Rex::Zip::Archive.new
-    zip.add_file('/http/' + exe_filename, exe)
-    zip.add_file(contact_full_name + '.contact', xml)
-    zip.save_to(contact_full_name + '.zip')
-    print_good('Created '#{contact_full_name}.zip'')
   end
 end
+
     
-    =begin
- +------+----------------+-------------------------------------------+
-   | HEX  | NAME           | DESCRIPTION                               |
-   +------+----------------+-------------------------------------------+
-   | HEX  | NAME           | DESCRIPTION                               |
-   | 0x01 | CALLED NUMBER  | Number/extension being called             |
-   | 0x02 | CALLING NUMBER | Calling number                            |
-   | 0x03 | CALLING ANI    | Calling number ANI for billing            |
-   | 0x04 | CALLING NAME   | Name of caller                            |
-   | 0x05 | CALLED CONTEXT | Context for number                        |
-   | 0x06 | USERNAME       | Username (peer or user) for               |
-   |      |                | authentication                            |
-   | 0x07 | PASSWORD       | Password for authentication               |
-   | 0x08 | CAPABILITY     | Actual CODEC capability                   |
-   | 0x09 | FORMAT         | Desired CODEC format                      |
-   | 0x0a | LANGUAGE       | Desired language                          |
-   | 0x0b | VERSION        | Protocol version                          |
-   | 0x0c | ADSICPE        | CPE ADSI capability                       |
-   | 0x0d | DNID           | Originally dialed DNID                    |
-   | 0x0e | AUTHMETHODS    | Authentication method(s)                  |
-   | 0x0f | CHALLENGE      | Challenge data for MD5/RSA                |
-   | 0x10 | MD5 RESULT     | MD5 challenge result                      |
-   | 0x11 | RSA RESULT     | RSA challenge result                      |
-   | 0x12 | APPARENT ADDR  | Apparent address of peer                  |
-   | 0x13 | REFRESH        | When to refresh registration              |
-   | 0x14 | DPSTATUS       | Dialplan status                           |
-   | 0x15 | CALLNO         | Call number of peer                       |
-   | 0x16 | CAUSE          | Cause                                     |
-   | 0x17 | IAX UNKNOWN    | Unknown IAX command                       |
-   | 0x18 | MSGCOUNT       | How many messages waiting                 |
-   | 0x19 | AUTOANSWER     | Request auto-answering                    |
-   | 0x1a | MUSICONHOLD    | Request musiconhold with QUELCH           |
-   | 0x1b | TRANSFERID     | Transfer Request Identifier               |
-   | 0x1c | RDNIS          | Referring DNIS                            |
-   | 0x1d | Reserved       | Reserved for future use                   |
-   | 0x1e | Reserved       | Reserved for future use                   |
-   | 0x1f | DATETIME       | Date/Time                                 |
-   | 0x20 | Reserved       | Reserved for future use                   |
-   | 0x21 | Reserved       | Reserved for future use                   |
-   | 0x22 | Reserved       | Reserved for future use                   |
-   | 0x23 | Reserved       | Reserved for future use                   |
-   | 0x24 | Reserved       | Reserved for future use                   |
-   | 0x25 | Reserved       | Reserved for future use                   |
-   | 0x26 | CALLINGPRES    | Calling presentation                      |
-   | 0x27 | CALLINGTON     | Calling type of number                    |
-   | 0x28 | CALLINGTNS     | Calling transit network select            |
-   | 0x29 | SAMPLINGRATE   | Supported sampling rates                  |
-   | 0x2a | CAUSECODE      | Hangup cause                              |
-   | 0x2b | ENCRYPTION     | Encryption format                         |
-   | 0x2c | ENCKEY         | Reserved for future Use                   |
-   | 0x2d | CODEC PREFS    | CODEC Negotiation                         |
-   | 0x2e | RR JITTER      | Received jitter, as in RFC 3550           |
-   | 0x2f | RR LOSS        | Received loss, as in RFC 3550             |
-   | 0x30 | RR PKTS        | Received frames                           |
-   | 0x31 | RR DELAY       | Max playout delay for received frames in  |
-   |      |                | ms                                        |
-   | 0x32 | RR DROPPED     | Dropped frames (presumably by jitter      |
-   |      |                | buffer)                                   |
-   | 0x33 | RR OOO         | Frames received Out of Order              |
-   | 0x34 | OSPTOKEN       | OSP Token Block                           |
-   +------+----------------+-------------------------------------------+
-=end
+        def promote_track
+      version_codes = client.track_version_codes(Supply.config[:track])
+      # the actual value passed for the rollout argument does not matter because it will be ignored by the Google Play API
+      # but it has to be between 0.0 and 1.0 to pass the validity check. So we are passing the default value 0.1
+      client.update_track(Supply.config[:track], 0.1, nil) if Supply.config[:deactivate_on_promote]
+      client.update_track(Supply.config[:track_promote_to], Supply.config[:rollout] || 0.1, version_codes)
+    end
     
-                encoded
-          end
-    
-              # Encodes the renew_time field
-          #
-          # @return [String]
-          def encode_renew_time
-            [renew_till].pack('N')
-          end
-    
-              # Encodes the type
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_type(type)
-            bn = OpenSSL::BN.new(type.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
-    
-    namespace :bower do
-    
-      describe '#body' do
-    context 'with a single expression body' do
-      let(:source) do
-        'module Foo; bar; end'
+            Actions.lane_context[SharedValues::FL_CHANGELOG] = changelog.strip.length > 0 ? changelog : params[:fallback_changelog]
       end
     
-            def correct_for_blockarg_type(node)
-          lambda do |corrector|
-            range = range_with_surrounding_space(range: node.source_range,
-                                                 side: :left)
-            range = range_with_surrounding_comma(range, :left)
-            corrector.remove(range)
-          end
-        end
+          def self.description
+        'Receive the version number from a podspec file'
+      end
+    
+            contains_key = self.shared_values_constants.include?(key.to_s)
+        add_offense(node, :expression, MISSING_CONST_DEFINITION_MSG) unless contains_key
+      end
+    
+          [
+        # app upload info
+        FastlaneCore::ConfigItem.new(key: :username,
+                                     short_option: '-u',
+                                     env_name: 'PILOT_USERNAME',
+                                     description: 'Your Apple ID Username',
+                                     default_value: user,
+                                     default_value_dynamic: true),
+        FastlaneCore::ConfigItem.new(key: :app_identifier,
+                                     short_option: '-a',
+                                     env_name: 'PILOT_APP_IDENTIFIER',
+                                     description: 'The bundle identifier of the app to upload or manage testers (optional)',
+                                     optional: true,
+                                     code_gen_sensitive: true,
+                                     # This incorrect env name is here for backwards compatibility
+                                     default_value: ENV['TESTFLIGHT_APP_IDENTITIFER'] || CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier),
+                                     default_value_dynamic: true),
+        FastlaneCore::ConfigItem.new(key: :app_platform,
+                                     short_option: '-m',
+                                     env_name: 'PILOT_PLATFORM',
+                                     description: 'The platform to use (optional)',
+                                     optional: true,
+                                     default_value: 'ios',
+                                     verify_block: proc do |value|
+                                       UI.user_error!('The platform can only be ios, appletvos, or osx') unless ['ios', 'appletvos', 'osx'].include?(value)
+                                     end),
+        FastlaneCore::ConfigItem.new(key: :apple_id,
+                                     short_option: '-p',
+                                     env_name: 'PILOT_APPLE_ID',
+                                     description: 'Apple ID property in the App Information section in App Store Connect',
+                                     optional: true,
+                                     code_gen_sensitive: true,
+                                     default_value: ENV['TESTFLIGHT_APPLE_ID'],
+                                     default_value_dynamic: true,
+                                     type: String,
+                                     verify_block: proc do |value|
+                                       error_message = '`apple_id` value is incorrect. The correct value should be taken from Apple ID property in the App Information section in App Store Connect.'
+    
+            groups = [custom_tester_group]
+        group_names = groups.map(&:name).join(';')
+        expect(FastlaneCore::UI).to receive(:success).with('Successfully added tester #{fake_tester.email} to app #{fake_app_name} in group(s) #{group_names}')
+    
+          def encode_token(token)
+        Base64.strict_encode64(token)
+      end
+    
+          def call(env)
+        request               = Request.new(env)
+        status, headers, body = app.call(env)
+    
+            post '/', :file => Rack::Test::UploadedFile.new(temp_file.path), :other => '<bar>'
+        expect(body).to eq('_escaped_params_tmp_file\nhello world\n&lt;bar&gt;')
+      ensure
+        File.unlink(temp_file.path)
       end
     end
   end
 end
 
     
-        describe 'invalid' do
-      context 'at the beginning of a sequence' do
-        let(:pattern) { '(<(str $_) (sym $_)> ...)' }
-    
-          it { expect(if_node.elsif?).to be_falsey }
-    end
+      it 'accepts post form requests with correct authenticity_token field' do
+    post('/', {'authenticity_token' => token}, 'rack.session' => session)
+    expect(last_response).to be_ok
   end
-    
-      s.post_install_message = %q{
-    __________________________________________________________
-    ..........................................................
-    }
-    
-    describe Tmuxinator::Pane do
-  let(:klass) { described_class }
-  let(:instance) { klass.new(index, project, window, *commands) }
-  # let(:index) { 'vim' }
-  # let(:project) { 0 }
-  # let(:tab) { nil }
-  # let(:commands) { nil }
-  let(:index) { 0 }
-  let(:project) { double }
-  let(:window) { double }
-  let(:commands) { ['vim', 'bash'] }
