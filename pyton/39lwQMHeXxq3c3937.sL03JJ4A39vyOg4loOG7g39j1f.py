@@ -1,172 +1,139 @@
 
         
-                For actions that occur identically for each frame (e.g. blend_box), constants can
-        be placed into self.func_constants to be compiled at launch, then referenced for
-        each face. '''
-    def __init__(self, mask_type, output_size, predicted_available=False, **kwargs):
-        super().__init__(mask_type, output_size, predicted_available, **kwargs)
-        self.mask = self.get_mask() if not self.skip else None
+            def save(self, fail_silently=False):
+        self['__meta__'] = {
+            'httpie': __version__
+        }
+        if self.helpurl:
+            self['__meta__']['help'] = self.helpurl
     
-        The following variables should be defined:
-        _HELPTEXT: A string describing what this plugin does
-        _DEFAULTS: A dictionary containing the options, defaults and meta information. The
-                   dictionary should be defined as:
-                       {<option_name>: {<metadata>}}
+            # Broken links can't be fixed and
+        # I am not sure what do with the local ones.
+        if errortype.lower() in ['broken', 'local']:
+            print('Not Fixed: ' + line)
+        else:
+            # If this is a new file
+            if newfilename != _filename:
     
+        def _print_headers(self, headers, prefix):
+        for key, values in headers.items():
+            for value in values:
+                self._print_bytes(prefix + b' ' + key + b': ' + value)
     
-class Writer(Output):
-    ''' Images output writer using cv2 '''
-    def __init__(self, output_folder, **kwargs):
-        super().__init__(output_folder, **kwargs)
-        self.extension = '.{}'.format(self.config['format'])
-        self.check_transparency_format()
-        self.args = self.get_save_args()
-    
-    from ._base import Output, logger
-    
-    
-_DEFAULTS = {
-    'format': {
-        'default': 'png',
-        'info': 'Image format to use:'
-                '\n\t bmp: Windows bitmap'
-                '\n\t gif: Graphics Interchange Format (NB: Not animated)'
-                '\n\t jpg: JPEG format'
-                '\n\t jp2: JPEG 2000 format'
-                '\n\t png: Portable Network Graphics'
-                '\n\t ppm: Portable Pixmap Format'
-                '\n\t tif: Tag Image File Format',
-        'datatype': str,
-        'rounding': None,
-        'min_max': None,
-        'choices': ['bmp', 'gif', 'jpg', 'jp2', 'png', 'ppm', 'tif'],
-        'gui_radio': True,
-        'fixed': True,
-    },
-    'draw_transparent': {
-        'default': False,
-        'info': 'Place the swapped face on a transparent layer rather than the original frame.'
-                '\nNB: This is only compatible with images saved in png or tif format. If an '
-                'incompatible format is selected then the image will be saved as a png.',
-        'datatype': bool,
-        'rounding': None,
-        'min_max': None,
-        'choices': [],
-        'gui_radio': False,
-        'fixed': True,
-    },
-    'optimize': {
-        'default': False,
-        'info': '[gif, jpg and png only] If enabled, indicates that the encoder should make '
-                'an extra pass over the image in order to select optimal encoder settings.',
-        'datatype': bool,
-        'rounding': None,
-        'min_max': None,
-        'choices': [],
-        'gui_radio': False,
-        'fixed': True,
-    },
-    'gif_interlace': {
-        'default': True,
-        'info': '[gif only] Set whether to save the gif as interlaced or not.',
-        'datatype': bool,
-        'rounding': None,
-        'min_max': None,
-        'choices': [],
-        'gui_radio': False,
-        'fixed': True,
-    },
-    'jpg_quality': {
-        'default': 75,
-        'info': '[jpg only] Set the jpg quality. 1 is worst 95 is best. Higher quality leads '
-                'to larger file sizes.',
-        'datatype': int,
-        'rounding': 1,
-        'min_max': (1, 95),
-        'choices': [],
-        'gui_radio': False,
-        'fixed': True,
-    },
-    'png_compress_level': {
-        'default': 3,
-        'info': '[png only] ZLIB compression level, 1 gives best speed, 9 gives best '
-                'compression, 0 gives no compression at all. When optimize option is set to '
-                'True this has no effect (it is set to 9 regardless of a value passed).',
-        'datatype': int,
-        'rounding': 1,
-        'min_max': (0, 9),
-        'choices': [],
-        'gui_radio': False,
-        'fixed': True,
-    },
-    'tif_compression': {
-        'default': 'tiff_deflate',
-        'info': '[tif only] The desired compression method for the file.',
-        'datatype': str,
-        'rounding': None,
-        'min_max': None,
-        'choices': [
-            'none',
-            'tiff_ccitt',
-            'group3',
-            'group4',
-            'tiff_jpeg',
-            'tiff_adobe_deflate',
-            'tiff_thunderscan',
-            'tiff_deflate',
-            'tiff_sgilog',
-            'tiff_sgilog24',
-            'tiff_raw_16',
-        ],
-        'gui_radio': False,
-        'fixed': True,
-    },
-}
+        @property
+    def templates_dir(self):
+        _templates_base_dir = self.settings['TEMPLATES_DIR'] or \
+            join(scrapy.__path__[0], 'templates')
+        return join(_templates_base_dir, 'spiders')
 
     
-        def set_defaults(self):
-        ''' Set the default values for config '''
-        logger.debug('Setting defaults')
-        current_dir = os.path.dirname(__file__)
-        for dirpath, _, filenames in os.walk(current_dir):
-            default_files = [fname for fname in filenames if fname.endswith('_defaults.py')]
-            if not default_files:
-                continue
-            base_path = os.path.dirname(os.path.realpath(sys.argv[0]))
-            import_path = '.'.join(full_path_split(dirpath.replace(base_path, ''))[1:])
-            plugin_type = import_path.split('.')[-1]
-            for filename in default_files:
-                self.load_module(filename, import_path, plugin_type)
+            if encoding == b'deflate':
+            try:
+                body = zlib.decompress(body)
+            except zlib.error:
+                # ugly hack to work with raw deflate content that may
+                # be sent by microsoft servers. For more information, see:
+                # http://carsten.codimi.de/gzip.yaws/
+                # http://www.port80software.com/200ok/archive/2005/10/31/868.aspx
+                # http://www.gzip.org/zlib/zlib_faq.html#faq38
+                body = zlib.decompress(body, -15)
+        if encoding == b'br' and b'br' in ACCEPTED_ENCODINGS:
+            body = brotli.decompress(body)
+        return body
+
     
-        - Originally written by vegaseat on 2014.09.09.
+        # Find all the faces and face encodings in the current frame of video
+    face_locations = face_recognition.face_locations(small_frame, model='cnn')
     
-        @staticmethod
-    def find_cosine_similiarity(source_face, test_face):
-        ''' Find the cosine similarity between a source face and a test face '''
-        var_a = np.matmul(np.transpose(source_face), test_face)
-        var_b = np.sum(np.multiply(source_face, source_face))
-        var_c = np.sum(np.multiply(test_face, test_face))
-        return 1 - (var_a / (np.sqrt(var_b) * np.sqrt(var_c)))
+    for i, face_distance in enumerate(face_distances):
+    print('The test image has a distance of {:.2} from known image #{}'.format(face_distance, i))
+    print('- With a normal cutoff of 0.6, would the test image match the known image? {}'.format(face_distance < 0.6))
+    print('- With a very strict cutoff of 0.5, would the test image match the known image? {}'.format(face_distance < 0.5))
+    print()
+
+    
+        # Load the uploaded image file
+    img = face_recognition.load_image_file(file_stream)
+    # Get face encodings for any faces in the uploaded image
+    unknown_face_encodings = face_recognition.face_encodings(img)
+    
+    # To run this, you need a Raspberry Pi 2 (or greater) with face_recognition and
+# the picamera[array] module installed.
+# You can follow this installation instructions to get your RPi set up:
+# https://gist.github.com/ageitgey/1ac8dbe8572f3f533df6269dab35df65
+    
+            self.assertEqual(result.exit_code, 0)
+        self.assertTrue(target_string in result.output)
+    
+      # You shouldn't have a space before a semicolon at the end of the line.
+  # There's a special case for 'for' since the style guide allows space before
+  # the semicolon there.
+  if Search(r':\s*;\s*$', line):
+    error(filename, linenum, 'whitespace/semicolon', 5,
+          'Semicolon defining empty statement. Use {} instead.')
+  elif Search(r'^\s*;\s*$', line):
+    error(filename, linenum, 'whitespace/semicolon', 5,
+          'Line contains only semicolon. If this should be an empty statement, '
+          'use {} instead.')
+  elif (Search(r'\s+;\s*$', line) and
+        not Search(r'\bfor\b', line)):
+    error(filename, linenum, 'whitespace/semicolon', 5,
+          'Extra space before last semicolon. If this should be an empty '
+          'statement, use {} instead.')
+    
+    import os
+import sys
+import glob
+import re
+import markdown
+import argparse
+    
+    def strdecode(sentence):
+    if not isinstance(sentence, text_type):
+        try:
+            sentence = sentence.decode('utf-8')
+        except UnicodeDecodeError:
+            sentence = sentence.decode('gbk', 'ignore')
+    return sentence
     
     
-def main():
-    parse_command_line()
-    if options.dump:
-        print(tmpl.code)
-        sys.exit(0)
-    t = Timer(render)
-    results = t.timeit(options.num) / options.num
-    print('%0.3f ms per iteration' % (results * 1000))
+def ChineseAnalyzer(stoplist=STOP_WORDS, minsize=1, stemfn=stem, cachesize=50000):
+    return (ChineseTokenizer() | LowercaseFilter() |
+            StopFilter(stoplist=stoplist, minsize=minsize) |
+            StemFilter(stemfn=stemfn, ignore=None, cachesize=cachesize))
+
     
-        @gen_test
-    def test_render_message(self):
-        ws = yield self.ws_connect('/render')
-        ws.write_message('hello')
-        response = yield ws.read_message()
-        self.assertEqual(response, '<b>hello</b>')
+        def __cut_detail(self, sentence):
+        blocks = re_han_detail.split(sentence)
+        for blk in blocks:
+            if re_han_detail.match(blk):
+                for word in self.__cut(blk):
+                    yield word
+            else:
+                tmp = re_skip_detail.split(blk)
+                for x in tmp:
+                    if x:
+                        if re_num.match(x):
+                            yield pair(x, 'm')
+                        elif re_eng.match(x):
+                            yield pair(x, 'eng')
+                        else:
+                            yield pair(x, 'x')
     
-        def test_insertion_sort(self):
-        insertion_sort = InsertionSort()
+    import jieba
+import jieba.analyse
+from optparse import OptionParser
     
-        def __repr__(self):
-        return str(self.obj) + ': ' + str(self.key)
+    if opt.topK is None:
+    topK = 10
+else:
+    topK = int(opt.topK)
+    
+    
+class JiebaTestCase(unittest.TestCase):
+    def setUp(self):
+        reload(jieba)
+    
+    parser = OptionParser(USAGE)
+parser.add_option('-k',dest='topK')
+opt, args = parser.parse_args()
