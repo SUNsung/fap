@@ -1,186 +1,228 @@
 
         
-        #if !defined(PREPOSITION) && !defined(VERB)
-#  error define one or more of PREPOSITION, VERB
-#endif
-    
-    
-    {    return name;
-  }
-    
-    #include 'ArgsToFrontendOutputsConverter.h'
-#include 'swift/AST/DiagnosticsFrontend.h'
-#include 'swift/Basic/Defer.h'
-#include 'swift/Frontend/FrontendOptions.h'
-#include 'swift/Option/Options.h'
-#include 'swift/Parse/Lexer.h'
-#include 'swift/Strings.h'
-#include 'llvm/Option/Arg.h'
-#include 'llvm/Option/ArgList.h'
-#include 'llvm/Option/Option.h'
-#include 'llvm/Support/ErrorHandling.h'
-#include 'llvm/Support/FileSystem.h'
-#include 'llvm/Support/LineIterator.h'
-#include 'llvm/Support/Path.h'
-    
-      llvm::Value *getAddressPointer() const { return Addr.getAddress(); }
-  Alignment getAlignment() const { return Addr.getAlignment(); }
-  Address getAddress() const { return Addr; }
-  llvm::Value *getOwner() const { return Owner; }
-    
-    
-// Abbreviations: true_type and false_type are structs that represent boolean
-// true and false values. Also define the boost::mpl versions of those names,
-// true_ and false_.
-typedef integral_constant<bool, true>  true_type;
-typedef integral_constant<bool, false> false_type;
-typedef true_type  true_;
-typedef false_type false_;
-    
-        std::cerr << 'Generating ' << input_file
-        << ' to ' << output_file << std::endl;
-    benchmarks::BenchmarkDataset dataset;
-    Message* message;
-    std::string dataset_payload = ReadFile(input_file);
-    GOOGLE_CHECK(dataset.ParseFromString(dataset_payload))
-      << 'Can' t parse data file ' << input_file;
-    
-    
+            KeyChord::KeyChord(Settings::KeyModifiers const& modifiers, int32_t vkey) :
+        _modifiers{ modifiers },
+        _vkey{ vkey }
     {
-    {    cout << 'Is this a mobile, home, or work phone? ';
-    string type;
-    getline(cin, type);
-    if (type == 'mobile') {
-      phone_number->set_type(tutorial::Person::MOBILE);
-    } else if (type == 'home') {
-      phone_number->set_type(tutorial::Person::HOME);
-    } else if (type == 'work') {
-      phone_number->set_type(tutorial::Person::WORK);
-    } else {
-      cout << 'Unknown phone type.  Using default.' << endl;
-    }
-  }
-  *person->mutable_last_updated() = TimeUtil::SecondsToTimestamp(time(NULL));
-}
-    
-    namespace {
     }
     
-    Github Links:
+    #ifndef INCLUDED_IMF_FLOATVECTOR_ATTRIBUTE_H
+#define INCLUDED_IMF_FLOATVECTOR_ATTRIBUTE_H
     
-    b2Polygon TraceEdge(b2Polygon* p); //For use with self-intersecting polygons, finds outline
-    
-    	// ################################################################################
-	// Block4x4EncodingBits_RGB8
-	// Encoding bits for the RGB portion of ETC1, RGB8, RGB8A1 and RGBA8
-	// ################################################################################
-    
-    		for (unsigned int uiPixel = 0; uiPixel < PIXELS; uiPixel++)
-		{
-			m_afDecodedAlphas[uiPixel] = 1.0f;
-		}
-    
-      bool              m_UseFullRange;
-  EdgeList          m_edges;
-  bool              m_PreserveCollinear;
-  bool              m_HasOpenPaths;
-  PolyOutList       m_PolyOuts;
-  TEdge           *m_ActiveEdges;
-    
-      THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 'AS IS'
-  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
-  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-  POSSIBILITY OF SUCH DAMAGE.*/
-    
-    #define opus_fft_free_arch(_st, arch) \
-   ((void)(arch), opus_fft_free_arm_neon(_st))
-    
-    #endif
-
-    
-    /* a32 + (b32 * (c32 >> 16)) >> 16 */
-#undef silk_SMLAWT
-static OPUS_INLINE opus_int32 silk_SMLAWT_armv5e(opus_int32 a, opus_int32 b,
- opus_int32 c)
+    Rational
+guessExactFps (double fps)
 {
-  int res;
-  __asm__(
-      '#silk_SMLAWT\n\t'
-      'smlawt %0, %1, %2, %3\n\t'
-      : '=r'(res)
-      : 'r'(b), 'r'(c), 'r'(a)
-  );
-  return res;
-}
-#define silk_SMLAWT(a, b, c) (silk_SMLAWT_armv5e(a, b, c))
-    
-        public:
-        PersonIdExtractor(const float confidenceThreshold = 0.1f, const float inlierRatioThreshold = 0.5f,
-                          const float distanceThreshold = 30.f, const int numberFramesToDeletePerson = 10);
-    
-    bool LargeObjectSpace::Contains(HeapObject object) {
-  MemoryChunk* chunk = MemoryChunk::FromHeapObject(object);
-    }
-    
-      bool Empty() {
-    for (int i = 0; i < kStoreBuffers; i++) {
-      if (lazy_top_[i]) {
-        return false;
-      }
-    }
-    return top_ == start_[current_];
-  }
-    
-    double StressScavengeObserver::MaxNewSpaceSizeReached() const {
-  return max_new_space_size_reached_;
+    return guessExactFps (Rational (fps));
 }
     
-    #endif  // V8_HEAP_STRESS_SCAVENGE_OBSERVER_H_
+    class GenericInputFile
+{
+    public:
+        IMF_EXPORT
+        virtual ~GenericInputFile() {}
+    }
+    
+        IMF_EXPORT
+    void			sanityCheck (bool isTiled = false,
+        			             bool isMultipartFile = false) const;
+    
+    
+//-----------------------------------------------------------------------------
+//
+//	Low-level file input and output for OpenEXR.
+//
+//-----------------------------------------------------------------------------
+    
+    void
+InputPart::readPixels (int scanLine)
+{
+    file->readPixels(scanLine);
+}
+    
+            IMF_EXPORT
+        const char *        fileName () const;
+        IMF_EXPORT
+        const Header &      header () const;
+        IMF_EXPORT
+        int                 version () const;
+        IMF_EXPORT
+        void                setFrameBuffer (const FrameBuffer &frameBuffer);
+        IMF_EXPORT
+        const FrameBuffer & frameBuffer () const;
+        IMF_EXPORT
+        bool                isComplete () const;
+        IMF_EXPORT
+        bool                isOptimizationEnabled () const;
+        IMF_EXPORT
+        void                readPixels (int scanLine1, int scanLine2);
+        IMF_EXPORT
+        void                readPixels (int scanLine);
+        IMF_EXPORT
+        void                rawPixelData (int firstScanLine,
+                                          const char *&pixelData,
+                                          int &pixelDataSize);
+    
+    
+OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_EXIT
+    
+    #include 'ImfIO.h'
+#include 'IlmThreadMutex.h'
+#include 'ImfNamespace.h'
+    
+    void QmlUtils::addNewValueToDynamicChart(QtCharts::QXYSeries *series,
+                                         double value) {
+  using namespace QtCharts;
+    }
+    
+    
+    {  emit operationNameChanged();
+  emit connectionNameChanged();
+  emit dbIndexChanged();
+  emit keyPatternChanged();
+  emit operationProgressChanged();
+  emit openDialog(m_operation->getTypeName());
+}
 
     
-      // Fill in the input registers.
-  for (int i = kNumberOfRegisters - 1; i >= 0; i--) {
-    int offset =
-        (i * kSystemPointerSize) + FrameDescription::registers_offset();
-    __ pop(Operand(esi, offset));
-  }
-    
-        case 0xDE:
-      if (modrm_byte  == 0xD9) {
-        mnem = 'fcompp';
-      } else {
-        has_register = true;
-        switch (modrm_byte & 0xF8) {
-          case 0xC0: mnem = 'faddp'; break;
-          case 0xE8: mnem = 'fsubp'; break;
-          case 0xC8: mnem = 'fmulp'; break;
-          case 0xF8: mnem = 'fdivp'; break;
-          default: UnimplementedInstruction();
-        }
-      }
-      break;
-    
-    void TurboAssembler::CallRecordWriteStub(
-    Register object, Register address,
-    RememberedSetAction remembered_set_action, SaveFPRegsMode fp_mode,
-    Handle<Code> code_target, Address wasm_target) {
-  DCHECK_NE(code_target.is_null(), wasm_target == kNullAddress);
-  // TODO(albertnetymk): For now we ignore remembered_set_action and fp_mode,
-  // i.e. always emit remember set and save FP registers in RecordWriteStub. If
-  // large performance regression is observed, we should use these values to
-  // avoid unnecessary work.
+    namespace BulkOperations {
     }
     
-      // Convenience function: Same as above, but takes the fid instead.
-  void CallRuntime(Runtime::FunctionId fid,
-                   SaveFPRegsMode save_doubles = kDontSaveFPRegs) {
-    const Runtime::Function* function = Runtime::FunctionForId(fid);
-    CallRuntime(function, function->nargs, save_doubles);
-  }
+      bool isMetadataValid() const override;
+    
+    class QmlUtils;
+class Events;
+class ConnectionsManager;
+class Updater;
+class KeyFactory;
+class TabViewModel;
+class QPython;
+namespace ValueEditor {
+class TabsModel;
+}
+namespace ValueEditor {
+class ExternalFormattersManager;
+class EmbeddedFormattersManager;
+}  // namespace ValueEditor
+namespace BulkOperations {
+class Manager;
+}
+namespace Console {
+class AutocompleteModel;
+}
+    
+          int have = (ZLIB_CHUNK_SIZE - strm.avail_out);
+    
+     public:
+  enum Roles { name = Qt::UserRole + 1, version, description, cmd };
+    
+    QHash<QString, std::function<void()>>
+ConnectionsTree::TreeItem::eventHandlers() {
+  QHash<QString, std::function<void()>> events;
+  events['cancel'] = [this]() { cancelCurrentOperation(); };
+  return events;
+}
+    
+      void closeDbKeys(QSharedPointer<RedisClient::Connection> connection,
+                   int dbIndex,
+                   const QRegExp& filter = QRegExp('*', Qt::CaseSensitive,
+                                                   QRegExp::Wildcard));
+    
+    std::string Action::description() const
+{
+    return StringUtils::format('<Action | Tag = %d', _tag);
+}
+    
+        /**
+    @brief Get the amplitude of ripple effect.
+    @return The amplitude of ripple effect.
+    */
+    float getAmplitude() const { return _amplitude; }
+    /**
+    @brief Set the amplitude of ripple effect.
+    @param fAmplitude The amplitude of ripple effect.
+    */
+    void setAmplitude(float fAmplitude) { _amplitude = fAmplitude; }
+    
+    void CallFunc::execute()
+{
+    if (_callFunc)
+    {
+        (_selectorTarget->*_callFunc)();
+    } 
+    else if( _function )
+    {
+        _function();
+    }
+}
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+    
+        //
+    // Overrides
+    //
+    virtual ProgressFromTo* clone() const override;
+    virtual ProgressFromTo* reverse() const override;
+    virtual void startWithTarget(Node *target) override;
+    virtual void update(float time) override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    ProgressFromTo() {}
+    virtual ~ProgressFromTo() {}
+    
+    void ClippingRectangleNode::onAfterVisitScissor()
+{
+    if (_clippingEnabled)
+    {
+        glDisable(GL_SCISSOR_TEST);
+    }
+}
+    
+    /**
+@brief Clipping Rectangle Node.
+@details A node that clipped with specified rectangle.
+ The region of ClippingRectangleNode doesn't support any transform except scale.
+@js NA
+*/
+class CC_DLL ClippingRectangleNode : public Node
+{    
+public:
+    /**
+    @brief Create node with specified clipping region.
+    @param clippingRegion Specify the clipping rectangle.
+    @return If the creation success, return a pointer of ClippingRectangleNode; otherwise return nil.
+    */
+    static ClippingRectangleNode* create(const Rect& clippingRegion);
+    /**
+    @brief Create a clipping rectangle node.
+    @return If the creation success, return a pointer of ClippingRectangleNode; otherwise return nil.
+    */
+    static ClippingRectangleNode* create();
+    
+    /**
+    @brief Get the clipping rectangle.
+    @return The clipping rectangle.
+    */
+    const Rect& getClippingRegion() const {
+        return _clippingRegion;
+    }
+    /**
+    @brief Set the clipping rectangle.
+    @param clippingRegion Specify the clipping rectangle.
+    */
+    void setClippingRegion(const Rect& clippingRegion);
+    
+    /**
+    @brief Get whether the clipping is enabled or not.
+    @return Whether the clipping is enabled or not. Default is true.
+    */
+    bool isClippingEnabled() const {
+        return _clippingEnabled;
+    }
+    }
