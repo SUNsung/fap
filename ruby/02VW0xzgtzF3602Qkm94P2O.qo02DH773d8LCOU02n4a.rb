@@ -1,129 +1,194 @@
 
         
-            it 'shows all options for agents that can be scheduled, create and receive events' do
-      select_agent_type('Website Agent scrapes')
-      expect(page).not_to have_content('This type of Agent cannot create events.')
+            it 'returns a Glyphicon icon element with an addidional class' do
+      icon = icon_tag('glyphicon-help', class: 'text-info')
+      expect(icon).to be_html_safe
+      expect(Nokogiri(icon).at('span.glyphicon.glyphicon-help.text-info')).to be_a Nokogiri::XML::Element
     end
     
-        it 'works for running jobs' do
-      job.locked_at = Time.now
-      job.locked_by = 'test'
-      expect(status(job)).to eq('<span class='label label-info'>running</span>')
+    describe JobsHelper do
+  let(:job) { Delayed::Job.new }
+    
+    describe ScenarioHelper do
+  let(:scenario) { users(:bob).scenarios.build(name: 'Scene', tag_fg_color: '#AAAAAA', tag_bg_color: '#000000') }
+    
+        it 'can be turned off' do
+      stub(DefaultScenarioImporter).seed { fail 'seed should not have been called'}
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'false' }
+      DefaultScenarioImporter.import(user)
     end
     
-          it 'runs until stop is called' do
-        mock.instance_of(Rufus::Scheduler).join
-        Thread.new { while @agent_runner.instance_variable_get(:@running) != false do sleep 0.1; @agent_runner.stop end }
-        @agent_runner.run
-      end
+      it_behaves_like AgentControllerConcern
     
-        it 'should revert extract and template options for an updated WebsiteAgent' do
-      expect(agent.options).to include('extract' => new_extract,
-                                       'template' => new_template)
-      ConvertWebsiteAgentTemplateForMerge.new.down
-      agent.reload
-      expect(agent.options).to include('extract' => reverted_extract,
-                                       'template' => reverted_template)
+        SPLIT_INTS = /(?<=\d)\.(?=[\s\d])/.freeze
+    
+        def as_json
+      @pages
     end
-  end
-end
-
     
-      let(:valid_params) {
-    {
-      name: 'Example',
-      schedule: 'every_1h',
-      options: {
-        'action' => 'run',
-      },
-      user: users(:bob),
-      control_targets: [target]
-    }
-  }
-    
-        @checker = Agents::CsvAgent.new(:name => 'somename', :options => @valid_params)
-    @checker.user = users(:jane)
-    @checker.save!
-    @lfa = Agents::LocalFileAgent.new(name: 'local', options: {path: '{{}}', watch: 'false', append: 'false', mode: 'read'})
-    @lfa.user = users(:jane)
-    @lfa.save!
-  end
-    
-        def check_url
-      return unless cask.url
-    
-          # Find a bottle built for a previous version of macOS.
-      def find_older_compatible_tag(tag)
-        begin
-          tag_version = MacOS::Version.from_symbol(tag)
-        rescue ArgumentError
-          return
+            css('code code').each do |node|
+          node.before(node.children).remove
         end
     
-              find_method_with_args(body_node, :system, /^(otool|install_name_tool|lipo)/) do
-            problem 'Use ruby-macho instead of calling #{@offensive_node.source}'
-          end
+            location_badge = at_css('.location-badge')
+        if location_badge && doc.last_element_child != location_badge
+          doc.last_element_child.after(location_badge)
+        end
     
-        return false if args[:before] && OS::Mac.version >= args[:before]
+            subtitle = at_css('.hero-subtitle').try(:content)
+        breadcrumbs = css('.breadcrumbs li').map(&:content)[2..-2]
     
-            uses_from_macos('foo', after: :mojave)
-      end
-    
-        context 'when the sender has no relevance to local activity' do
-      before do
-        subject.perform
-      end
-    
-      def distribute_poll!
-    return if @poll.hide_totals?
-    ActivityPub::DistributePollUpdateWorker.perform_in(3.minutes, @poll.status.id)
-  end
-    
-      def payload
-    @payload ||= Oj.dump(serialize_payload(@status, ActivityPub::ActivitySerializer, signer: @account))
-  end
-    
-    class ActivityPub::UpdateDistributionWorker
-  include Sidekiq::Worker
-  include Payloadable
-    
-        target_account = ActivityPub::FetchRemoteAccountService.new.call(target_uri)
-    
-            subject.call(json, forwarder)
-      end
-    
-    RSpec.describe UnreservedUsernameValidator, type: :validator do
-  describe '#validate' do
-    before do
-      allow(validator).to receive(:reserved_username?) { reserved_username }
-      validator.validate(account)
-    end
-    
-      let(:unordered_config_parts) { ordered_config_parts.shuffle }
-  let(:settings) { LogStash::SETTINGS }
-    
-        desc 'Bootstrap all the VM's used for this tests'
-    task :setup, :platform do |t, args|
-      config   = PlatformConfig.new
-      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
-      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
-    
-      def self.upbuff!(buffer_update_id, admin_id, body_text, status)
-    buffer_update = BufferUpdate.find(buffer_update_id)
-    if status == 'confirmed'
-      buffer_response = send_to_buffer(body_text, buffer_update.buffer_profile_id_code)
-      buffer_update.update!(buffer_response: buffer_response, status: status, approver_user_id: admin_id, body_text: body_text)
+        if resource.errors.empty?
+      set_flash_message! :notice, :unlocked
+      respond_with_navigational(resource){ redirect_to after_unlock_path_for(resource) }
     else
-      buffer_update.update!(status: status, approver_user_id: admin_id)
+      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
     end
   end
     
-      it { expect(subject.tmux_window_and_pane_target).to eql 'foo:0.1' }
+        def password_change(record, opts={})
+      devise_mail(record, :password_change, opts)
+    end
+  end
 end
 
     
-      describe '#directories' do
-    context 'without TMUXINATOR_CONFIG environment' do
-      before do
-        allow(described_class).to receive(:environment?).and_return false
+          def headers_for(action, opts)
+        headers = {
+          subject: subject_for(action),
+          to: resource.email,
+          from: mailer_sender(devise_mapping),
+          reply_to: mailer_reply_to(devise_mapping),
+          template_path: template_paths,
+          template_name: action
+        }.merge(opts)
+    
+    require 'devise/hooks/timeoutable'
+    
+    require 'utils/bottles'
+    
+              def install
+            xcodebuild '-project', 'meow.xcodeproject'
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ xcodebuild should be passed an explicit \'SYMROOT\'
+          end
+        end
+      RUBY
+    end
+    
+          def toolchain_path
+        Pathname.new('#{prefix}/Toolchains/XcodeDefault.xctoolchain')
       end
+    
+        let(:follow)  { double(account: account, errors: errors) }
+    let(:errors)  { double(add: nil) }
+    let(:account) { double(nil?: _nil, local?: local, following_count: 0, followers_count: 0) }
+    let(:_nil)    { true }
+    let(:local)   { false }
+    
+        def quote(field)
+      if @force_quotes
+        quote_field(field)
+      else
+        if field.nil?  # represent +nil+ fields as empty unquoted fields
+          ''
+        else
+          field = String(field)  # Stringify fields
+          # represent empty fields as empty quoted fields
+          if (@quote_empty and field.empty?) or @quotable_pattern.match?(field)
+            quote_field(field)
+          else
+            field  # unquoted field
+          end
+        end
+      end
+    end
+  end
+end
+
+    
+      def test_sqrt
+    assert_equal 1, CMath.sqrt(1)
+    assert_equal CMath.sqrt(1i), CMath.sqrt(1.0i), '[ruby-core:31672]'
+    assert_equal Complex(0,2), CMath.sqrt(-4.0)
+    assert_equal Complex(0,2), CMath.sqrt(-4)
+    assert_equal Complex(0,2), CMath.sqrt(Rational(-4))
+    assert_equal Complex(0,3), CMath.sqrt(-9.0)
+    assert_equal Complex(0,3), CMath.sqrt(-9)
+    assert_equal Complex(0,3), CMath.sqrt(Rational(-9))
+    assert_in_delta (1.272019649514069+0.7861513777574233i), CMath.sqrt(1+2i)
+    assert_in_delta 3.0i, CMath.sqrt(-9)
+    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.sqrt('1') }
+  end
+    
+      it 'increments position before calling the block' do
+    gz = Zlib::GzipReader.new @io
+    
+    end
+
+    
+    describe 'GzipReader#ungetbyte' do
+  before :each do
+    @data = '12345abcde'
+    @zip = [31, 139, 8, 0, 44, 220, 209, 71, 0, 3, 51, 52, 50, 54, 49, 77,
+            76, 74, 78, 73, 5, 0, 157, 5, 0, 36, 10, 0, 0, 0].pack('C*')
+    @io = StringIO.new @zip
+  end
+    
+        private
+    
+      # Specifies the header that your server uses for sending files.
+  # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for apache
+  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
+    
+    get '/stream', :provides => 'text/event-stream' do
+  stream :keep_open do |out|
+    connections << out
+    out.callback { connections.delete(out) }
+  end
+end
+    
+          # Creates a masked version of the authenticity token that varies
+      # on each request. The masking is used to mitigate SSL attacks
+      # like BREACH.
+      def mask_token(token)
+        token = decode_token(token)
+        one_time_pad = SecureRandom.random_bytes(token.length)
+        encrypted_token = xor_byte_strings(one_time_pad, token)
+        masked_token = one_time_pad + encrypted_token
+        encode_token(masked_token)
+      end
+    
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   Cookie Tossing
+    # Supported browsers:: all
+    # More infos::         https://github.com/blog/1466-yummy-cookies-across-domains
+    #
+    # Does not accept HTTP requests if the HTTP_COOKIE header contains more than one
+    # session cookie. This does not protect against a cookie overflow attack.
+    #
+    # Options:
+    #
+    # session_key:: The name of the session cookie (default: 'rack.session')
+    class CookieTossing < Base
+      default_reaction :deny
+    
+            modes       = Array options[:escape]
+        @escaper    = options[:escaper]
+        @html       = modes.include? :html
+        @javascript = modes.include? :javascript
+        @url        = modes.include? :url
+    
+          def react_and_close(env, body)
+        reaction = react(env)
+    
+          get '/', {}, 'HTTP_COOKIE' => '_session=EVIL_SESSION_TOKEN; _session=SESSION_TOKEN'
+      expect(last_response).not_to be_ok
+    end
+  end
+end
+
+    
+      it_behaves_like 'any rack application'
