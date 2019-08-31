@@ -1,273 +1,303 @@
 
         
-        
-    {}  // namespace atom
-    
-    namespace atom {
-    }
-    
-      v8::Local<v8::Value> URLRequest(v8::Isolate* isolate);
-    
-    void Event::RenderFrameDeleted(content::RenderFrameHost* rfh) {
-  if (sender_ != rfh)
-    return;
-  sender_ = nullptr;
-  message_ = nullptr;
-}
-    
-      base::WeakPtrFactory<TrackableObjectBase> weak_factory_;
+        #include <grpc/grpc_security.h>
+#include 'src/core/lib/channel/channel_args.h'
     
     
-    {}  // namespace atom
-
-    
-      // URLRequestJob:
-  void Start() override;
-  void Kill() override;
-  bool GetMimeType(std::string* mime_type) const override;
-    
-      int parent_pid = getppid();
-    
-      // Join an existing circle.
-  void join(linked_ptr_internal const* ptr)
-      GTEST_LOCK_EXCLUDED_(g_linked_ptr_mutex) {
-    MutexLock lock(&g_linked_ptr_mutex);
-    }
-    
-    
-    {  // <TechnicalDetails>
-  //
-  // EXPECT_EQ(expected, actual) is the same as
-  //
-  //   EXPECT_TRUE((expected) == (actual))
-  //
-  // except that it will print both the expected value and the actual
-  // value when the assertion fails.  This is very helpful for
-  // debugging.  Therefore in this case EXPECT_EQ is preferred.
-  //
-  // On the other hand, EXPECT_TRUE accepts any Boolean expression,
-  // and is thus more general.
-  //
-  // </TechnicalDetails>
-}
-    
-    
-    {	CleanUp:
-	
-	float32* xres = new float32[nResultVecs];
-	float32* yres = new float32[nResultVecs];
-	for (int32 i=0; i<nResultVecs; ++i){
-		xres[i] = resultVecs[i].x;
-		yres[i] = resultVecs[i].y;
-	}
-	b2Polygon retval(xres,yres,nResultVecs);
-	delete[] resultVecs;
-	delete[] yres;
-	delete[] xres;
-	delete[] nodes;
-	return retval;
-}
-    
-    
-    {	}
-    
-    		static const unsigned int ROWS = 4;
-		static const unsigned int COLUMNS = 4;
-		static const unsigned int PIXELS = ROWS * COLUMNS;
-    
-    
-#define AF_LATIN_BLUE_ACTIVE      ( 1U << 0 ) /* zone height is <= 3/4px   */
-#define AF_LATIN_BLUE_TOP         ( 1U << 1 ) /* we have a top blue zone   */
-#define AF_LATIN_BLUE_SUB_TOP     ( 1U << 2 ) /* we have a subscript top   */
-                                              /* blue zone                 */
-#define AF_LATIN_BLUE_NEUTRAL     ( 1U << 3 ) /* we have neutral blue zone */
-#define AF_LATIN_BLUE_ADJUSTMENT  ( 1U << 4 ) /* used for scale adjustment */
-                                              /* optimization              */
-    
-    #ifdef FIXED_DEBUG
-#include 'fixed_debug.h'
-#else
-    
-    #define ADD32(a, b) ADD32_(a, b, __FILE__, __LINE__)
-static OPUS_INLINE int ADD32_(opus_int64 a, opus_int64 b, char *file, int line)
-{
-   opus_int64 res;
-   if (!VERIFY_INT(a) || !VERIFY_INT(b))
-   {
-      fprintf (stderr, 'ADD32: inputs are not int: %d %d in %s: line %d\n', (int)a, (int)b, file, line);
-#ifdef FIXED_DEBUG_ASSERT
-      celt_assert(0);
-#endif
-   }
-   res = a+b;
-   if (!VERIFY_INT(res))
-   {
-      fprintf (stderr, 'ADD32: output is not int: %d in %s: line %d\n', (int)res, file, line);
-#ifdef FIXED_DEBUG_ASSERT
-      celt_assert(0);
-#endif
-   }
-   celt_mips+=2;
-   return res;
-}
-    
-    #define silk_LIMIT( a, limit1, limit2)      ((limit1) > (limit2) ? ((a) > (limit1) ? (limit1) : ((a) < (limit2) ? (limit2) : (a))) \
-                                                                 : ((a) > (limit2) ? (limit2) : ((a) < (limit1) ? (limit1) : (a))))
-    
-    using namespace Platform;
-using namespace Platform::Collections;
-using namespace Windows::Foundation;
-using namespace Windows::Foundation::Collections;
-using namespace Windows::Globalization;
-using namespace Windows::Globalization::DateTimeFormatting;
-using namespace Windows::System::UserProfile;
-using namespace Windows::UI::Core;
-using namespace Windows::UI::ViewManagement;
-using namespace Windows::UI::Xaml;
-using namespace Windows::UI::Xaml::Automation;
-using namespace Windows::UI::Xaml::Automation::Peers;
-using namespace Windows::UI::Xaml::Controls;
-using namespace Windows::UI::Xaml::Controls::Primitives;
-using namespace Windows::UI::Xaml::Data;
-using namespace Windows::UI::Xaml::Input;
-using namespace Windows::UI::Xaml::Media;
-using namespace Windows::UI::Xaml::Navigation;
-    
-    NavCategoryGroup^ NavCategoryGroup::CreateCalculatorCategory()
-{
-    return ref new NavCategoryGroup(s_categoryGroupManifest.at(0));
-}
-    
-    
-    {    if (FAILED(hr))
     {
-        return LocalizationService::GetNarratorReadableString(fallbackExpression);
-    }
-    else
     {
-        return ref new String(accExpression.str().c_str());
-    }
-}
-
+    {}  // namespace
+}  // namespace testing
+}  // namespace grpc
     
-    TitleBarHelper::TitleBarHelper(_In_ CoreApplicationViewTitleBar^ coreTitleBar, _In_ FrameworkElement^ customTitleBar) :
-    m_coreTitleBar(coreTitleBar),
-    m_customTitleBar(customTitleBar)
-{
-    RegisterForLayoutChanged();
-    RegisterForVisibilityChanged();
-    SetCustomTitleBar();
-}
-    
-    //
-// CalculatorStandardOperators.xaml.h
-// Declaration of the CalculatorStandardOperators class
-//
-    
-    
-    {    // When the user clears the history list in the overlay view and presses enter, the clickedItem is nullptr
-    if (clickedItem != nullptr)
-    {
-        historyVM->ShowItem(clickedItem);
-    }
+    void grpc_set_default_iomgr_platform() {
+  grpc_set_tcp_client_impl(&grpc_windows_tcp_client_vtable);
+  grpc_set_tcp_server_impl(&grpc_windows_tcp_server_vtable);
+  grpc_set_timer_impl(&grpc_generic_timer_vtable);
+  grpc_set_pollset_vtable(&grpc_windows_pollset_vtable);
+  grpc_set_pollset_set_vtable(&grpc_windows_pollset_set_vtable);
+  grpc_set_resolver_impl(&grpc_windows_resolver_vtable);
+  grpc_set_iomgr_platform_vtable(&vtable);
 }
     
-        private:
-        Windows::Foundation::Rect m_visibleBounds;
-        Windows::Foundation::Rect m_coreBounds;
-        void ListView_ItemClick(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::Controls::ItemClickEventArgs^ e);
-        void OnDeleteMenuItemClicked(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::RoutedEventArgs^ e);
-        void OnDeleteSwipeInvoked(_In_ Microsoft::UI::Xaml::Controls::SwipeItem^ sender, _In_ Microsoft::UI::Xaml::Controls::SwipeItemInvokedEventArgs^ e);
+      ac = (async_connect*)gpr_malloc(sizeof(async_connect));
+  ac->on_done = on_done;
+  ac->socket = socket;
+  gpr_mu_init(&ac->mu);
+  ac->refs = 2;
+  ac->addr_name = grpc_sockaddr_to_uri(addr);
+  ac->endpoint = endpoint;
+  ac->channel_args = grpc_channel_args_copy(channel_args);
+  GRPC_CLOSURE_INIT(&ac->on_connect, on_connect, ac, grpc_schedule_on_exec_ctx);
     
-    void Memory::OnContextRequested(Windows::UI::Xaml::UIElement^ sender, Windows::UI::Xaml::Input::ContextRequestedEventArgs^ e)
-{
-    // Walk up the tree to find the ListViewItem.
-    // There may not be one if the click wasn't on an item.
-    auto requestedElement = safe_cast<FrameworkElement^>(e->OriginalSource);
-    while ((requestedElement != sender) && !dynamic_cast<ListViewItem^>(requestedElement))
-    {
-        requestedElement = safe_cast<FrameworkElement^>(VisualTreeHelper::GetParent(requestedElement));
-    }
-    }
     
-    #include 'pch.h'
-#include 'MemoryListItem.xaml.h'
-#include 'Controls/CalculatorButton.h'
-    
-    ActionCamera * ActionCamera::reverse() const
-{
-    // FIXME: This conversion isn't safe.
-    return (ActionCamera*)ReverseTime::create(const_cast<ActionCamera*>(this));
+    {  value = GPR_GLOBAL_CONFIG_GET(string_var);
+  EXPECT_EQ(0, strcmp(value.get(), 'Test'));
 }
     
-    /* Implementation of CardinalSplineTo
- */
     
-    
-    {    CC_SAFE_DELETE(easeRateAction);
-    return nullptr;
-}
-    
-    bool AccelAmplitude::initWithAction(Action *action, float duration)
-{
-    if (ActionInterval::initWithDuration(duration))
-    {
-        _rate = 1.0f;
-        _other = (ActionInterval*)(action);
-        action->retain();
-    }
-    }
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    NS_CC_BEGIN
-    
-    ActionTween *ActionTween::clone() const
-{
-    return ActionTween::create(_duration, _key, _from, _to);
-}
-    
-    The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-    
-    AnimationFrame* AnimationFrame::create(SpriteFrame* spriteFrame, float delayUnits, const ValueMap& userInfo)
-{
-    auto ret = new (std::nothrow) AnimationFrame();
-    if (ret && ret->initWithSpriteFrame(spriteFrame, delayUnits, userInfo))
-    {
-        ret->autorelease();
-    }
-    else
-    {
-        CC_SAFE_DELETE(ret);
-    }
-    return ret;
-}
-    
-    void SplineSegKernel::CalculateThirdOrderDerivative(const uint32_t num_params) {
-  kernel_third_order_derivative_ =
-      Eigen::MatrixXd::Zero(num_params, num_params);
-  for (int r = 3; r < kernel_third_order_derivative_.rows(); ++r) {
-    for (int c = 3; c < kernel_third_order_derivative_.cols(); ++c) {
-      kernel_third_order_derivative_(r, c) =
-          (r * r - r) * (r - 2) * (c * c - c) * (c - 2) / (r + c - 5.0);
-    }
+    {    CompareType(method_desc->input_type()->full_name());
+    CompareType(method_desc->output_type()->full_name());
   }
+    
+    
+    {} // namespace aria2
+    
+    std::shared_ptr<DHTNode> DHTRoutingTable::getNode(const unsigned char* nodeID,
+                                                  const std::string& ipaddr,
+                                                  uint16_t port) const
+{
+  std::shared_ptr<DHTBucket> bucket = getBucketFor(nodeID);
+  return bucket->getNode(nodeID, ipaddr, port);
 }
     
-    using ::apollo::drivers::canbus::Byte;
+    #endif // D_DHT_TASK_H
+
     
-    // config detail: {'name': 'motor_temperature', 'offset': -40.0,
-// 'precision': 1.0, 'len': 16, 'is_signed_var': True, 'physical_range':
-// '[-32808|32727]', 'bit': 23, 'type': 'int', 'order': 'motorola',
-// 'physical_unit': 'deg C'}
-int Brakemotorrpt271::motor_temperature(const std::uint8_t* bytes,
-                                        int32_t length) const {
-  Byte t0(bytes + 2);
-  int32_t x = t0.get_byte(0, 8);
+    
+    {  size_t getQueueSize() const { return queue_.size(); }
+};
+    
+    void DHTTaskFactoryImpl::setCommonProperty(
+    const std::shared_ptr<DHTAbstractTask>& task)
+{
+  task->setRoutingTable(routingTable_);
+  task->setMessageDispatcher(dispatcher_);
+  task->setMessageFactory(factory_);
+  task->setTaskQueue(taskQueue_);
+  task->setLocalNode(localNode_);
+}
+    
+    
+    {  virtual void addImmediateTask(const std::shared_ptr<DHTTask>& task) = 0;
+};
+    
+    #include 'util.h'
+#include 'bittorrent_helper.h'
+#include 'DlAbortEx.h'
+#include 'DHTConstants.h'
+#include 'MessageDigest.h'
+#include 'message_digest_helper.h'
+#include 'fmt.h'
+    
+    namespace aria2 {
     }
+    
+        // out_of_range.109
+    try
+    {
+        // try to use an array index that is not a number
+        json::reference ref = j.at('/array/one'_json_pointer);
+    }
+    catch (json::parse_error& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+    
+    int main()
+{
+    // ============
+    // object types
+    // ============
+    }
+    
+    namespace apollo {
+namespace drivers {
+namespace canbus {
+    }
+    }
+    }
+    
+    TEST_F(DistanceApproachIPOPTInterfaceTest, eval_f) {
+  int n = 1274;
+  double obj_value = 0.0;
+  double x[1274];
+  std::fill_n(x, n, 1.2);
+  bool res = ptop_->eval_f(n, x, true, obj_value);
+  EXPECT_DOUBLE_EQ(obj_value, 1443.3600000000008) << 'eval_f: ' << obj_value;
+  EXPECT_TRUE(res);
+}
+    
+    class StageApproachingParkingSpot : public Stage {
+ public:
+  explicit StageApproachingParkingSpot(
+      const ScenarioConfig::StageConfig& config)
+      : Stage(config) {}
+    }
+    
+    class PullOverScenarioTest : public ::testing::Test {
+ public:
+  virtual void SetUp() {}
+    }
+    
+    #include 'gtest/gtest.h'
+#include 'modules/planning/proto/planning_config.pb.h'
+    
+     private:
+  void WriteOutputJpgFile(const std::vector<uint8_t>& jpeg_buffer,
+                          const std::string& output_jpg_file) const;
+  std::string GetOutputFile(const int frame_num) const;
+    
+    
+    {  EXPECT_EQ(expect, real);
+}
+    
+    #include 'cyber/croutine/croutine.h'
+#include 'cyber/proto/choreography_conf.pb.h'
+#include 'cyber/scheduler/scheduler.h'
+    
+        bool Has(K key) {
+      Entry *m_target = head_->next.load(std::memory_order_acquire);
+      while (Entry *target = m_target) {
+        if (target->key < key) {
+          m_target = target->next.load(std::memory_order_acquire);
+          continue;
+        } else {
+          return target->key == key;
+        }
+      }
+      return false;
+    }
+    
+        int ret = 0;
+    ret = fscanf(fp, '%254s %f %f %lf %f %f %f %f %f %f %f %lf %lf %lf %f %f',
+                 type, &trash, &trash, &obj->camera_supplement.alpha, &x1, &y1,
+                 &x2, &y2, &obj->size[2], &obj->size[1], &obj->size[0],
+                 &obj->center[0], &obj->center[1], &obj->center[2], &obj->theta,
+                 &score);
+    AINFO << 'fscanf return: ' << ret;
+    if (FLAGS_dist_type == 'H-from-h') {
+      obj->size[0] = static_cast<float>(obj->center[2]);
+    } else if (FLAGS_dist_type == 'H-on-h') {
+      obj->size[0] = static_cast<float>(obj->center[2]) * (y2 - y1);
+    }
+    obj->camera_supplement.box.xmin = std::max<float>(x1, 0);
+    obj->camera_supplement.box.ymin = std::max<float>(y1, 0);
+    obj->camera_supplement.box.xmax =
+        std::min<float>(x2, static_cast<float>(FLAGS_width));
+    obj->camera_supplement.box.ymax =
+        std::min<float>(y2, static_cast<float>(FLAGS_height));
+    obj->camera_supplement.area_id = 5;
+    
+    namespace osquery {
+    }
+    
+    /**
+ * @brief Returns a pointer of where the requested symbol exists
+ */
+void* platformModuleGetSymbol(ModuleHandle module, const std::string& symbol);
+    
+    // clang-format off
+#define WIN32_NO_STATUS
+#include <Windows.h>
+#undef WIN32_NO_STATUS
+#include <ntstatus.h>
+// clang-format on
+#include <iomanip>
+#include <psapi.h>
+#include <stdlib.h>
+#include <tlhelp32.h>
+#include <winternl.h>
+    
+      /*
+   * @brief a variable tracking all of the paths we attempt to carve
+   *
+   * This is a globbed set of file paths that we're expecting will be
+   * carved.
+   */
+  std::set<boost::filesystem::path> carvePaths_;
+    
+    
+    {  rocksdb::Options options = getOptions();
+  auto db_path = boost::filesystem::path(path_).make_preferred();
+  auto destroy_status = rocksdb::DestroyDB(db_path.string(), options);
+  if (!destroy_status.ok()) {
+    return createError(DatabaseError::FailToDestroyDB, 'Fail to destroy db: ')
+           << destroy_status.ToString();
+  }
+  return Success();
+}
+    
+     private:
+  rocksdb::Options getOptions();
+  std::vector<rocksdb::ColumnFamilyDescriptor> createDefaultColumnFamilies(
+      const rocksdb::Options& options);
+  ExpectedSuccess<DatabaseError> openInternal(
+      const rocksdb::Options& options, const boost::filesystem::path& path);
+  Expected<std::string, DatabaseError> getRawBytesInternal(
+      Handle* handle, const std::string& key);
+  ExpectedSuccess<DatabaseError> putRawBytesInternal(Handle* handle,
+                                                     const std::string& key,
+                                                     const std::string& value);
+  ExpectedSuccess<DatabaseError> checkDbConnection();
+  Expected<std::shared_ptr<Handle>, DatabaseError> getHandle(
+      const std::string& domain);
+    
+    
+    {} // namespace osquery
+
+    
+    int Flag::createAlias(const std::string& alias, const FlagDetail& flag) {
+  instance().aliases_.insert(std::make_pair(alias, flag));
+  return 0;
+}
+    
+    
+    {    bzero(data, 256);
+    ret = p.read(&p, data, 255);
+    ASSERT_GT(ret, 0);
+    ASSERT_EQ(strcmp('hello world\n你好中国。\n', data), 0);
+}
+
+    
+        coro_test({
+        make_pair([](void *arg)
+        {
+            auto chan = (Channel *) arg;
+    }
+    }
+    
+    
+    {
+    {
+    {    inline Coroutine* pop_coroutine(enum opcode type)
+    {
+        Coroutine* co;
+        if (type == PRODUCER)
+        {
+            co = producer_queue.front();
+            producer_queue.pop_front();
+            swTraceLog(SW_TRACE_CHANNEL, 'resume producer cid=%ld', co->get_cid());
+        }
+        else // if (type == CONSUMER)
+        {
+            co = consumer_queue.front();
+            consumer_queue.pop_front();
+            swTraceLog(SW_TRACE_CHANNEL, 'resume consumer cid=%ld', co->get_cid());
+        }
+        return co;
+    }
+};
+//-------------------------------------------------------------------------------
+}}
+
+    
+    
+    {    ASSERT_GT(cid, 0);
+    ASSERT_EQ(cid, _cid);
+}
+    
+    namespace swoole
+{
+/**
+ * This cache isn't thread safe
+ */
+class LRUCache
+{
+private:
+    typedef std::pair<time_t, std::shared_ptr<void>> cache_node_t;
+    typedef std::list<std::pair<std::string, cache_node_t>> cache_list_t;
+    }
+    }
+    
+            execute_data = prev = l;
