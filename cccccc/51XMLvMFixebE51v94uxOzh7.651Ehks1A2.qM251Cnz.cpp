@@ -1,274 +1,306 @@
 
         
-          // Methods used during initialization, see the comment at the top of the .cc
-  // file for details.
-  static void DidGetCertDBOnUIThread(net::NSSCertDatabase* cert_db,
-                                     bool is_user_db_available,
-                                     const CreationCallback& callback);
-  static void DidGetCertDBOnIOThread(const CreationCallback& callback,
-                                     net::NSSCertDatabase* cert_db);
-  static void GetCertDBOnIOThread(content::ResourceContext* context,
-                                  const CreationCallback& callback);
+        #include <map>
     
-    CallbackHolderBase::~CallbackHolderBase() {
-  DCHECK(v8_ref_.IsEmpty());
-}
+    #include 'native_mate/arguments.h'
+#include 'native_mate/handle.h'
+#include 'shell/browser/api/event_emitter.h'
+#include 'shell/browser/auto_updater.h'
+#include 'shell/browser/window_list_observer.h'
     
-      template <typename T>
-  void Return(const T& val) {
-    info_->GetReturnValue().Set(ConvertToV8(isolate_, val));
-  }
+      // Convert draggable regions in raw format to SkRegion format.
+  std::unique_ptr<SkRegion> DraggableRegionsToSkRegion(
+      const std::vector<mojom::DraggableRegionPtr>& regions);
     
-      static Promise Create(v8::Isolate* isolate);
-  static Promise Create();
+      // Don't emit unresponsive event when showing menu.
+  electron::UnresponsiveSuppressor suppressor;
     
-      v8::Local<T> NewHandle(v8::Isolate* isolate) const {
-    if (handle_.IsEmpty())
-      return v8::Local<T>();
-    return v8::Local<T>::New(isolate, handle_);
-  }
+    template <> IMF_EXPORT
+void EnvmapAttribute::readValueFrom (OPENEXR_IMF_INTERNAL_NAMESPACE::IStream &,
+                                     int,
+                                     int);
     
-    namespace mate {
-    }
-    
-    ///////////////////////////////////////////////////////////////////////////////
-// ProcessSingleton
-//
-ProcessSingleton::ProcessSingleton(
-    const base::FilePath& user_data_dir,
-    const NotificationCallback& notification_callback)
-    : notification_callback_(notification_callback),
-      current_pid_(base::GetCurrentProcId()) {
-  // The user_data_dir may have not been created yet.
-  base::ThreadRestrictions::ScopedAllowIO allow_io;
-  base::CreateDirectoryAndGetError(user_data_dir, nullptr);
-    }
-    
-    bool CheckCommandLineArguments(int argc, base::CommandLine::CharType** argv);
-    
-    #include 'base/time/time.h'
-#include 'native_mate/dictionary.h'
-#include 'native_mate/object_template_builder.h'
-#include 'shell/browser/browser.h'
-#include 'shell/browser/native_window.h'
-#include 'shell/browser/window_list.h'
-#include 'shell/common/api/event_emitter_caller.h'
-#include 'shell/common/native_mate_converters/callback.h'
-#include 'shell/common/node_includes.h'
-    
-        /** Colorize an icon (given filename) with the text color */
-    QIcon TextColorIcon(const QString& filename) const;
-    
-    #ifndef STORAGE_LEVELDB_DB_DBFORMAT_H_
-#define STORAGE_LEVELDB_DB_DBFORMAT_H_
-    
-        UMat tmp(Size(dst_frame1.cols / (1 << src_scale), dst_frame1.rows / (1 << src_scale)), CV_8U);
-    randu(tmp, 0, 255);
-    resize(tmp, dst_frame1, dst_frame1.size(), 0.0, 0.0, INTER_LINEAR_EXACT);
-    resize(tmp, dst_frame2, dst_frame2.size(), 0.0, 0.0, INTER_LINEAR_EXACT);
-    
-    class FastHufDecoder
-{
-  public:
-    }
-    
-    
-    
-    
-template <>
-void
-FloatVectorAttribute::writeValueTo
-    (OPENEXR_IMF_INTERNAL_NAMESPACE::OStream &os, int version) const
-{
-    int n = _value.size();
-    }
-    
-    
-inline
-FrameBuffer::ConstIterator::ConstIterator (): _i()
-{
-    // empty
-}
-    
-    
-    {    if (!supportsFlags (getFlags (version)))
-    {
-        THROW (IEX_NAMESPACE::InputExc, 'The file format version number's flag field '
-                              'contains unrecognized flags.');
-    }
-}
-    
-    
-#endif /* IMFGENERICINPUTFILE_H_ */
+    #endif 
 
     
-        void		initialize ();
-    void                multiPartInitialize(InputPartData* part);
-    void                compatibilityInitialize(OPENEXR_IMF_INTERNAL_NAMESPACE::IStream& is);
-    TiledInputFile *	tFile ();
     
-    friend void TiledOutputFile::copyPixels (InputFile &);
     
-    Data *		_data;
+    OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_ENTER
     
-    class AdditionalMetadataInterceptor : public experimental::Interceptor {
- public:
-  AdditionalMetadataInterceptor(
-      std::multimap<grpc::string, grpc::string> additional_metadata)
-      : additional_metadata_(std::move(additional_metadata)) {}
+    
+FrameBuffer::ConstIterator
+FrameBuffer::find (const string &name) const
+{
+    return find (name.c_str());
+}
+    
+    	OPENEXR_IMF_INTERNAL_NAMESPACE::Xdr::read <OPENEXR_IMF_INTERNAL_NAMESPACE::StreamIO> (is, Name::MAX_LENGTH, typeName);
+	checkIsNullTerminated (typeName, 'attribute type name');
+	OPENEXR_IMF_INTERNAL_NAMESPACE::Xdr::read <OPENEXR_IMF_INTERNAL_NAMESPACE::StreamIO> (is, size);
+    
+                //
+            // Save the dataWindow information
+            //
+    
+            const Box2i &dataWindow = _data->header.dataWindow();
+            _data->minY = dataWindow.min.y;
+            _data->maxY = dataWindow.max.y;
+    
+    const FrameBuffer &
+InputPart::frameBuffer () const
+{
+    return file->frameBuffer();
+}
+    
+    #ifndef __glu_h__
+#define __glu_h__
+    
+      dict->lookup('Decode', &obj1);
+  if (obj1.isNull()) {
+    obj1.free();
+    dict->lookup('D', &obj1);
+  }
+  colorMap = new GfxImageColorMap(bits, &obj1, colorSpace);
+  obj1.free();
+  if (!colorMap->isOk()) {
+    fprintf (stderr, 'Error: invalid colormap\n');
+    delete colorMap;
+    goto fail1;
+  }
+    
+      void makeBox(double hDPI, double vDPI, int rotate,
+	       GBool useMediaBox, GBool upsideDown,
+	       double sliceX, double sliceY, double sliceW, double sliceH,
+	       PDFRectangle *box, GBool *crop);
+    
+    
+    {  // get rectangular
+  if (dict->lookup('B', &obj)->isBool()) {
+    rectangular = obj.getBool();
+  }
+  obj.free();
+}
+    
+    #ifdef USE_GCC_PRAGMAS
+#pragma implementation
+#endif
+    
+      // Destructor.
+  virtual ~PreScanOutputDev();
+    
+    
+    
+    class StandardSecurityHandler: public SecurityHandler {
+public:
     }
     
-    static void on_alarm(void* acp, grpc_error* error) {
-  async_connect* ac = (async_connect*)acp;
-  gpr_mu_lock(&ac->mu);
-  grpc_winsocket* socket = ac->socket;
-  ac->socket = NULL;
-  if (socket != NULL) {
-    grpc_winsocket_shutdown(socket);
-  }
-  async_connect_unlock_and_cleanup(ac, socket);
+    Sound::~Sound()
+{
+  delete fileName;
+  streamObj->free();
+  delete streamObj;
 }
     
-    #include <grpc/support/alloc.h>
-#include <grpc/support/log.h>
-#include <grpc/support/string_util.h>
+    //------------------------------------------------------------------------
     
-    
-    {  gpr_setenv(name, value);
-  retrieved_value = gpr_getenv(name);
-  GPR_ASSERT(retrieved_value != nullptr);
-  GPR_ASSERT(strcmp(value, retrieved_value) == 0);
-  gpr_free(retrieved_value);
-}
-    
-    static void expect_dump(const char* buf, size_t len, uint32_t flags,
-                        const char* result) {
-  char* got = gpr_dump(buf, len, flags);
-  GPR_ASSERT(0 == strcmp(got, result));
-  gpr_free(got);
-}
-    
-      SecureChannelCredentials* AsSecureCredentials() override { return nullptr; }
-    
-        SendHealthCheckRpc('', Status::OK, HealthCheckResponse::SERVING);
-    SendHealthCheckRpc(kHealthyService, Status::OK,
-                       HealthCheckResponse::SERVING);
-    SendHealthCheckRpc(kUnhealthyService, Status::OK,
-                       HealthCheckResponse::NOT_SERVING);
-    SendHealthCheckRpc(kNotRegisteredService,
-                       Status(StatusCode::NOT_FOUND, ''));
-    
-    
-    {    // If there is a generic callback service, this setup is only successful if
-    // we have an iomgr that can run in the background or are inprocess
-    return !callback_generic_service || grpc_iomgr_run_in_background() ||
-           inproc_;
+      // allocate a cache entry
+  i = (t3GlyphStack->code & (t3Font->cacheSets - 1)) * t3Font->cacheAssoc;
+  for (j = 0; j < t3Font->cacheAssoc; ++j) {
+    if ((t3Font->cacheTags[i+j].mru & 0x7fff) == t3Font->cacheAssoc - 1) {
+      t3Font->cacheTags[i+j].mru = 0x8000;
+      t3Font->cacheTags[i+j].code = t3GlyphStack->code;
+      t3GlyphStack->cacheTag = &t3Font->cacheTags[i+j];
+      t3GlyphStack->cacheData = t3Font->cacheData + (i+j) * t3Font->glyphSize;
+    } else {
+      ++t3Font->cacheTags[i+j].mru;
+    }
   }
     
-            // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
-        }
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    // This is a static filter used for filtering
-// kvs during the compaction process.
-static std::string NEW_VALUE = 'NewValue';
-    
-        ASSERT_OK(dbfull()->Put(writeOpt, handles_[1], 'k3', big_value));
-    ASSERT_TRUE(dbfull()->GetProperty(
-        handles_[1], 'rocksdb.cur-size-active-mem-table', &num));
-    ASSERT_TRUE(dbfull()->GetProperty(handles_[1],
-                                      'rocksdb.num-immutable-mem-table', &num));
-    ASSERT_EQ(num, '2');
-    ASSERT_TRUE(dbfull()->GetProperty(
-        handles_[1], 'rocksdb.num-entries-active-mem-table', &num));
-    ASSERT_EQ(num, '1');
-    ASSERT_TRUE(dbfull()->GetProperty(
-        handles_[1], 'rocksdb.num-entries-imm-mem-tables', &num));
-    ASSERT_EQ(num, '2');
-    get_perf_context()->Reset();
-    Get(1, 'k2');
-    ASSERT_EQ(2, static_cast<int>(get_perf_context()->get_from_memtable_count));
-    get_perf_context()->Reset();
-    Get(1, 'k3');
-    ASSERT_EQ(1, static_cast<int>(get_perf_context()->get_from_memtable_count));
-    get_perf_context()->Reset();
-    Get(1, 'k1');
-    ASSERT_EQ(3, static_cast<int>(get_perf_context()->get_from_memtable_count));
-    
-    Status WriteBatchBase::SingleDelete(ColumnFamilyHandle* column_family,
-                                    const SliceParts& key) {
-  std::string key_buf;
-  Slice key_slice(key, &key_buf);
-  return SingleDelete(column_family, key_slice);
+    SparsePageWriter::~SparsePageWriter() {
+  for (auto& queue : qworkers_) {
+    // use nullptr to signal termination.
+    std::shared_ptr<SparsePage> sig(nullptr);
+    queue.Push(std::move(sig));
+  }
+  for (auto& thread : workers_) {
+    thread->join();
+  }
 }
     
+    struct Monitor {
+ private:
+  struct Statistics {
+    Timer timer;
+    size_t count{0};
+    uint64_t nvtx_id;
+  };
+  std::string label = '';
+  std::map<std::string, Statistics> statistics_map;
+  Timer self_timer;
+    }
     
-    {  // return true if writes with this callback can be batched with other writes
-  virtual bool AllowWriteBatching() = 0;
+    SEXP XGBoosterEvalOneIter_R(SEXP handle, SEXP iter, SEXP dmats, SEXP evnames) {
+  const char *ret;
+  R_API_BEGIN();
+  CHECK_EQ(length(dmats), length(evnames))
+      << 'dmats and evnams must have same length';
+  int len = length(dmats);
+  std::vector<void*> vec_dmats;
+  std::vector<std::string> vec_names;
+  std::vector<const char*> vec_sptr;
+  for (int i = 0; i < len; ++i) {
+    vec_dmats.push_back(R_ExternalPtrAddr(VECTOR_ELT(dmats, i)));
+    vec_names.push_back(std::string(CHAR(asChar(VECTOR_ELT(evnames, i)))));
+  }
+  for (int i = 0; i < len; ++i) {
+    vec_sptr.push_back(vec_names[i].c_str());
+  }
+  CHECK_CALL(XGBoosterEvalOneIter(R_ExternalPtrAddr(handle),
+                                asInteger(iter),
+                                BeginPtr(vec_dmats),
+                                BeginPtr(vec_sptr),
+                                len, &ret));
+  R_API_END();
+  return mkString(ret);
+}
+    
+    /*!
+ * \brief Do inplace softmax transformaton on start to end
+ *
+ * \tparam Iterator Input iterator type
+ *
+ * \param start Start iterator of input
+ * \param end end iterator of input
+ */
+template <typename Iterator>
+XGBOOST_DEVICE inline void Softmax(Iterator start, Iterator end) {
+  static_assert(std::is_same<bst_float,
+                typename std::remove_reference<
+                  decltype(std::declval<Iterator>().operator*())>::type
+                >::value,
+                'Values should be of type bst_float');
+  bst_float wmax = *start;
+  for (Iterator i = start+1; i != end; ++i) {
+    wmax = fmaxf(*i, wmax);
+  }
+  double wsum = 0.0f;
+  for (Iterator i = start; i != end; ++i) {
+    *i = expf(*i - wmax);
+    wsum += *i;
+  }
+  for (Iterator i = start; i != end; ++i) {
+    *i /= static_cast<float>(wsum);
+  }
+}
+    
+    #ifdef __CUDACC__
+#include 'device_helpers.cuh'
+#endif  // __CUDACC__
+    
+    
+    { private:
+  /*! \brief the underlying stream */
+  dmlc::Stream *stream_;
+  /*! \brief buffer to hold data */
+  std::string buffer_;
+  /*! \brief length of valid data in buffer */
+  size_t read_len_;
+  /*! \brief pointer in the buffer */
+  size_t read_ptr_;
 };
     
-      // Load the options file.
-  DBOptions loaded_db_opt;
-  std::vector<ColumnFamilyDescriptor> loaded_cf_descs;
-  s = LoadLatestOptions(kDBPath, Env::Default(), &loaded_db_opt,
-                        &loaded_cf_descs);
-  assert(s.ok());
-  assert(loaded_db_opt.create_if_missing == db_opt.create_if_missing);
-    
-      txn->Rollback();
-    
-    // Simple RAII wrapper class for Snapshot.
-// Constructing this object will create a snapshot.  Destructing will
-// release the snapshot.
-class ManagedSnapshot {
- public:
-  explicit ManagedSnapshot(DB* db);
+    void DHTRoutingTable::showBuckets() const
+{
+  /*
+    for(std::deque<std::shared_ptr<DHTBucket> >::const_iterator itr =
+    buckets_.begin(); itr != buckets_.end(); ++itr) {
+    cerr << 'prefix = ' << (*itr)->getPrefixLength() << ', '
+    << 'nodes = ' << (*itr)->countNode() << endl;
     }
-    
-    #include <stddef.h>
-    
-      enum class RestoreConfigError { DatabaseError = 1 };
-  /**
-   * @brief restoreConfigBackup retrieve backed up config
-   * @return config persisted int the database
-   */
-  static Expected<std::map<std::string, std::string>,
-                  Config::RestoreConfigError>
-  restoreConfigBackup();
-    
-    #include <osquery/config/tests/test_utils.h>
-    
-    Expected<int, DatabaseError> InMemoryDatabase::getInt32(
-    const std::string& domain, const std::string& key) {
-  return getValue<int32_t>(domain, key);
+  */
 }
     
-    ExpectedSuccess<DatabaseError> RocksdbDatabase::checkDbConnection() {
-  if (db_ == nullptr) {
-    return createError(DatabaseError::DbIsNotOpen, 'Database is closed');
+      const std::shared_ptr<DHTNode>& getLocalNode() const { return localNode_; }
+    
+    void DHTRoutingTableSerializer::serialize(const std::string& filename)
+{
+  A2_LOG_INFO(fmt('Saving DHT routing table to %s.', filename.c_str()));
+  std::string filenameTemp = filename;
+  filenameTemp += '__temp';
+  BufferedFile fp(filenameTemp.c_str(), BufferedFile::WRITE);
+  if (!fp) {
+    throw DL_ABORT_EX(
+        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
   }
-  return Success();
-}
+  char header[8];
+  memset(header, 0, sizeof(header));
+  // magic
+  header[0] = 0xa1u;
+  header[1] = 0xa2u;
+  // format ID
+  header[2] = 0x02u;
+  // version
+  header[6] = 0;
+  header[7] = 0x03u;
+    }
     
-    class RocksdbMigration final {
- public:
-  RocksdbMigration(const std::string& path);
-  ExpectedSuccess<RocksdbMigrationError> migrateIfNeeded();
+      ~DHTRoutingTableSerializer();
+    
+    namespace aria2 {
     }
     
     
-    {  value = info.default_value;
-  return Status::success();
+    {} // namespace aria2
+    
+      virtual void addPeriodicTask2(const std::shared_ptr<DHTTask>& task) = 0;
+    
+      virtual ~DHTTaskQueueImpl();
+    
+    int main(int argc, char** argv) {
+#if !defined(ROCKSDB_LITE)
+  rocksdb::port::InstallStackTraceHandler();
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+#else
+  (void) argc;
+  (void) argv;
+  return 0;
+#endif
+}
+
+    
+    #include 'monitoring/perf_context_imp.h'
+#include 'rocksdb/env.h'
+#include 'rocksdb/status.h'
+    
+      void NotifyAll() override { cv_.notify_all(); }
+    
+    #include <string>
+    
+    
+    {  // Sleep just until `num_bytes` is allowed.
+  uint64_t sleep_amount =
+      static_cast<uint64_t>(num_bytes /
+                            static_cast<long double>(delayed_write_rate_) *
+                            kMicrosPerSecond) +
+      sleep_debt;
+  last_refill_time_ = time_now + sleep_amount;
+  return sleep_amount;
 }
     
-    #include 'plugin.h'
+      // atomic write
+  WriteBatch batch;
+  batch.Put(handles[0], Slice('key2'), Slice('value2'));
+  batch.Put(handles[1], Slice('key3'), Slice('value3'));
+  batch.Delete(handles[0], Slice('key'));
+  s = db->Write(WriteOptions(), &batch);
+  assert(s.ok());
+    
+    // Supported only for Leveled compaction
+Status SuggestCompactRange(DB* db, ColumnFamilyHandle* column_family,
+                           const Slice* begin, const Slice* end);
+Status SuggestCompactRange(DB* db, const Slice* begin, const Slice* end);
+    
+      // If true, an error is raised if the database already exists.
+  // Default: false
+  bool error_if_exists;
