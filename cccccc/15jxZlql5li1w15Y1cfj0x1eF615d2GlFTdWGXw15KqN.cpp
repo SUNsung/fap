@@ -1,128 +1,178 @@
 
         
-        struct PyMessageFactory;
-    
-      // Largest of two values.
-  // Works correctly for special floating point values.
-  // Note: 0.0 and -0.0 are not differentiated by Max (Max(0.0, -0.0) is -0.0),
-  // which should be OK because, although they (can) have different
-  // bit representation, they are observably the same when examined
-  // with arithmetic and (in)equality operators.
-  template<typename T>
-  static T Max(const T x, const T y) {
-    return MathLimits<T>::IsNaN(x) || x > y ? x : y;
+        GlobalMenuBarRegistrarX11::~GlobalMenuBarRegistrarX11() {
+  if (registrar_proxy_) {
+    g_signal_handlers_disconnect_by_func(
+        registrar_proxy_, reinterpret_cast<void*>(OnNameOwnerChangedThunk),
+        this);
+    g_object_unref(registrar_proxy_);
   }
+}
     
-    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
-//   can only really compare the output against a golden value, which is a
-//   fairly tedious and fragile testing strategy.  If we want to go that route,
-//   it probably makes sense to bite the bullet and write a test that compares
-//   the whole generated output for unittest.proto against a golden value, with
-//   a very simple script that can be run to regenerate it with the latest code.
-//   This would mean that updates to the golden file would have to be included
-//   in any change to the code generator, which would actually be fairly useful
-//   as it allows the reviewer to see clearly how the generated code is
-//   changing.
     
-    int main(int argc, char *argv[]) {
-  if (argc % 2 == 0 || argc == 1) {
-    std::cerr << 'Usage: [input_files] [output_file_names] where ' <<
-        'input_files are one to one mapping to output_file_names.' <<
-        std::endl;
-    return 1;
-  }
+    {}  // namespace electron
+
+    
+      // base::SingleThreadTaskRunner:
+  bool PostDelayedTask(const base::Location& from_here,
+                       base::OnceClosure task,
+                       base::TimeDelta delay) override;
+  bool RunsTasksInCurrentSequence() const override;
+  bool PostNonNestableDelayedTask(const base::Location& from_here,
+                                  base::OnceClosure task,
+                                  base::TimeDelta delay) override;
+    
+    
+    {}  // namespace electron
+
+    
+      base::WeakPtr<electron::Notification> notification_;
+    
+    
+    
+    #include <ImfFloatVectorAttribute.h>
+    
+    #include <vector>
+    
+    #ifndef INCLUDED_IMF_FORWARD_H
+#define INCLUDED_IMF_FORWARD_H
+    
+    
+FrameBuffer::Iterator
+FrameBuffer::end ()
+{
+    return _map.end();
+}
+    
+    #ifndef IMFGENERICINPUTFILE_H_
+#define IMFGENERICINPUTFILE_H_
+    
+    	//
+	// Read the attribute type and the size of the attribute value.
+	//
+    
+    
+OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_EXIT
+    
+        if (lc > 0)
+	*p++ = (unsigned char) (c << (8 - lc));
+    
+    
+    {    private:
+        InputFile* file;
+    // for internal use - give OutputFile and TiledOutputFile access to file for copyPixels
+    friend void OutputFile::copyPixels(InputPart&);
+    friend void TiledOutputFile::copyPixels(InputPart&);
+    
+};
+    
+    template <class ElemType>
+shared_ptr<ComputationNode<ElemType>> ComputationNetworkBuilder<ElemType>::Crop(const ComputationNodePtr input1, const ComputationNodePtr input2, const ComputationNodePtr eqNode1, const ComputationNodePtr eqNode2, const std::wstring nodeName)
+{
+    return net.AddNodeToNetAndAttachInputs(New<CropNode<ElemType>>(net.GetDeviceId(), nodeName), { input1, input2, eqNode1, eqNode2 });
+}
+    
+    
+    {            if (cnNodeType == OperationNameOf(PastValueNode))
+                nodePtr = builder.PastValue(NULL, defaultHiddenActivity, rows, timeStep, name);
+            else
+                nodePtr = builder.FutureValue(NULL, defaultHiddenActivity, rows, timeStep, name);
+        }
+    }
+    else if (cnNodeType == OperationNameOf(ConvolutionNode) ||
+             cnNodeType == OperationNameOf(PoolingNode) ||
+             cnNodeType == OperationNameOf(MaxUnpoolingNode))
+    {
+        if (parameter.size() != 2 && parameter.size() != 3 && parameter.size() != 7)
+        {
+            if (cnNodeType == OperationNameOf(ConvolutionNode))
+            {
+                RuntimeError('%ls: unexpected parameter count. %ls supports 2 modes: \n'
+                             '1. 2D convolution which takes 7 fixed parameters [weightNodeName, inputValueNodeName, kernelWidth, kernelHeight, outputChannels, horizontalSubsample, verticalSubsample] \n'
+                             'and two optional parameters [zeroPadding = [false|yourvalue], maxTempMemSizeInSamples = [0|yourvalue], imageLayout = \'HWC\'|\'cudnn\']. \n'
+                             '2. ND convolution which takes 3 fixed parameters [weightNodeName, inputValueNodeName, kernelShape] and \n'
+                             '10 optional parameters [mapCount = [0|yourvalue], stride = [1|yourvalue], sharing = [true|yourvalue], autoPadding = [true|yourvalue], lowerPad = [0|yourvalue], upperPad = [0|yourvalue], bool transpose = [false|yourvalue], maxTempMemSizeInSamples = [0|yourvalue], imageLayout = \'cudnn\'|\'HWC\']. \n'
+                             'For ND convolution, parameters kernelShape, mapCount, stride, sharing, autoPadding, lowerPad, upperPad can be arrays, e.g. kernelShape={5, 5, 3}',
+                             cnNodeType.c_str(), cnNodeType.c_str());
+            }
+            else if (cnNodeType == OperationNameOf(PoolingNode))
+            {
+                RuntimeError('%ls: unexpected parameter count. %ls 3 fixed parameters [inputValueNodeName, poolKind, kernelShape] and \n'
+                             '5 optional parameters stride = [1|yourvalue], autoPadding = [true|yourvalue], lowerPad = [0|yourvalue], upperPad = [0|yourvalue], imageLayout = \'cudnn\']. \n'
+                             'Parameters kernelShape, stride, autoPadding, lowerPad, upperPad can be arrays, e.g. kernelShape={5, 5, 3}',
+                             cnNodeType.c_str(), cnNodeType.c_str());
+            }
+            else if (cnNodeType == OperationNameOf(MaxUnpoolingNode))
+            {
+                RuntimeError('%ls: unexpected parameter count. %ls 3 fixed parameters [inputValueNodeName, mask, kernelShape] and \n'
+                             '5 optional parameters stride = [1|yourvalue], autoPadding = [true|yourvalue], lowerPad = [0|yourvalue], upperPad = [0|yourvalue], imageLayout = \'cudnn\']. \n'
+                             'Parameters kernelShape, stride, autoPadding, lowerPad, upperPad can be arrays, e.g. kernelShape={5, 5, 3}',
+                             cnNodeType.c_str(), cnNodeType.c_str());
+            }
+        }
+    
+    
+    {    // FindSymbol - Search the engines symbol table for a fully quantified symbol
+    // symbol - name of the symbol
+    // returns - pointer to the matching EvalValue for that node, of NULL if not found
+    virtual void* FindSymbol(const wstring& /*symbol*/)
+    {
+        return NULL;
+    }
+    // ProcessOptionalParameters - Process the optional parameters of a node
+    // node to process
+    virtual void ProcessOptionalParameters(NDLNode<ElemType>* /*node*/)
+    {
+        return;
+    }
+};
+    
+        void InitAttentionNetworkConfig(const ConfigParameters& config)
+    {
+        m_auxFeatDim = config('auxfeatdim', '20');
     }
     
-    // This structure captures all information needed about a text line for the
-// purposes of paragraph detection.  It is meant to be exceedingly light-weight
-// so that we can easily test paragraph detection independent of the rest of
-// Tesseract.
-class RowInfo {
- public:
-  // Constant data derived from Tesseract output.
-  STRING text;        // the full UTF-8 text of the line.
-  bool ltr;           // whether the majority of the text is left-to-right
-                      // TODO(eger) make this more fine-grained.
+        virtual ~ComputationNetwork()
+    {
+        ClearNetwork(); // This will explicitly remove all nodes. This is needed to break circular references in loops.
     }
     
-      // Adds the given pix to the set of pages in the PDF file, with the given
-  // caption added to the top.
-  void AddPix(const Pix* pix, const char* caption) {
-    int depth = pixGetDepth(const_cast<Pix*>(pix));
-    int color = depth < 8 ? 1 : (depth > 8 ? 0x00ff0000 : 0x80);
-    Pix* pix_debug = pixAddSingleTextblock(
-        const_cast<Pix*>(pix), fonts_, caption, color, L_ADD_BELOW, nullptr);
-    pixaAddPix(pixa_, pix_debug, L_INSERT);
-  }
+            '   mt = ElementTimes(ot, Tanh(ct));\n'
+    
+    template <typename ElemType>
+void AggregateAccumulatorValuesAndUpdateEvaluation(
+    std::shared_ptr<ComputationNetwork> net,
+    std::set<std::shared_ptr<ComputationNodeBase>> evalNodesWhichAccumulateResult,
+    std::shared_ptr<DistGradHeader> gradHeader,
+    std::shared_ptr<MPIWrapper> mpi,
+    size_t packThresholdSizeInBytes)
+{
+    // Accumulator stores mean value and number of samples. Aggregation performs simple summation of values,
+    // so we transfer sum instead of mean, and calculate mean after aggregation is finished.
+    auto allEpochAccumulatorNodes = net->GetNodesWithType(OperationNameOf(EpochAccumulatorNode));
+    std::vector<Matrix<ElemType>*> accumulatorValues;
+    size_t sampleCount =
+        dynamic_pointer_cast<EpochAccumulatorNode<ElemType>>(allEpochAccumulatorNodes.front())->GetNumberOfSamples();
+    // Calculate accumulator sums.
+    for (auto& accumulatorNode : allEpochAccumulatorNodes)
+    {
+        auto node = dynamic_pointer_cast<EpochAccumulatorNode<ElemType>>(accumulatorNode);
+        assert(sampleCount == node->GetNumberOfSamples());
+        Matrix<ElemType>& accumulator = *node->GetAccumulator();
+        accumulator *= (ElemType) sampleCount;
+        accumulatorValues.emplace_back(&accumulator);
+    }
+    }
     
     
-    {  // Stores all the source points in the order they were given and their
-  // halfwidths, if any.
-  GenericVector<PointWidth> pts_;
-  // Stores the computed perpendicular distances of (some of) the pts_ from a
-  // given vector (assuming it goes through the origin, making it a line).
-  // Since the distances may be a subset of the input points, and get
-  // re-ordered by the nth_item function, the original point is stored
-  // along side the distance.
-  GenericVector<DistPointPair> distances_;  // Distances of points.
-  // The squared length of the vector used to compute distances_.
-  double square_length_;
-};
-    
-      STRING ToString() const;
-    
-    // Computes the histogram for the given image rectangle, and the given
-// single channel. Each channel is always one byte per pixel.
-// Histogram is always a kHistogramSize(256) element array to count
-// occurrences of each pixel value.
-void HistogramRect(Pix* src_pix, int channel,
-                   int left, int top, int width, int height,
-                   int* histogram);
-    
-    
-    {  // WARNING! Keep data as the first element! KDPairInc and KDPairDec depend
-  // on the order of these elements so they can downcast pointers appropriately
-  // for use by GenericHeap::Reshuffle.
-  Data data;
-  Key key;
-};
-// Specialization of KDPair to provide operator< for sorting in increasing order
-// and recasting of data pointers for use with DoublePtr.
-template <typename Key, typename Data>
-struct KDPairInc : public KDPair<Key, Data> {
-  KDPairInc() = default;
-  KDPairInc(Key k, Data d) : KDPair<Key, Data>(k, d) {}
-  // Operator< facilitates sorting in increasing order.
-  int operator<(const KDPairInc<Key, Data>& other) const {
-    return this->key < other.key;
-  }
-  // Returns the input Data pointer recast to a KDPairInc pointer.
-  // Just casts a pointer to the first element to a pointer to the whole struct.
-  static KDPairInc* RecastDataPointer(Data* data_ptr) {
-    return reinterpret_cast<KDPairInc*>(data_ptr);
-  }
-};
-// Specialization of KDPair to provide operator< for sorting in decreasing order
-// and recasting of data pointers for use with DoublePtr.
-template <typename Key, typename Data>
-struct KDPairDec : public KDPair<Key, Data> {
-  KDPairDec() = default;
-  KDPairDec(Key k, Data d) : KDPair<Key, Data>(k, d) {}
-  // Operator< facilitates sorting in decreasing order by using operator> on
-  // the key values.
-  int operator<(const KDPairDec<Key, Data>& other) const {
-    return this->key > other.key;
-  }
-  // Returns the input Data pointer recast to a KDPairDec pointer.
-  // Just casts a pointer to the first element to a pointer to the whole struct.
-  static KDPairDec* RecastDataPointer(Data* data_ptr) {
-    return reinterpret_cast<KDPairDec*>(data_ptr);
-  }
-};
-    
-        auto future = m_connection->cmd(
-        {'DUMP', k.toUtf8()}, this, m_dbIndex,
-        [=](const RedisClient::Response& r) {
-          QList<QByteArray> cmd = {'RESTORE', k.toUtf8(), ttl,
-                                   r.value().toByteArray()};
+    {        // accumulate
+        if (numSamples > 0) // (if MB is empty, we must not look at the matrix)
+        {
+            auto criterionValue = node->As<ComputationNode<ElemType>>()->ValueTensorFor(SIZE_MAX, fr);
+            // Note: If criterion is > [1 x 1] then inverse broadcasting will kick in and aggregate.
+            // If count is zero, we lazily consider the numerator as zero as well.
+            criterionAccumulator.DoCopyOf(m_aggregateSampleCounts[i] ? (float)beta : 0, criterionValue, 1);
+        }
+        m_aggregateSampleCounts[i] = m_aggregateSampleCounts[i] * beta + numSamples;
+        return *this;
     }
