@@ -1,140 +1,178 @@
 
         
-                # Use the commands:
-        #     route -n get 8.8.8.8                            -> Google public DNS
-        #     route -n get -inet6 2404:6800:400a:800::1012    -> ipv6.google.com
-        # to find out the default outgoing interface, address, and gateway
+          Returns:
+    Object of same size as frequencies_hertz containing corresponding values
+    on the mel scale.
+  '''
+  return _MEL_HIGH_FREQUENCY_Q * np.log(
+      1.0 + (frequencies_hertz / _MEL_BREAK_FREQUENCY_HERTZ))
     
-    # Copyright (c) 2015 Hewlett-Packard Development Company, L.P.
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+    # Hyperparameters used in feature and example generation.
+SAMPLE_RATE = 16000
+STFT_WINDOW_LENGTH_SECONDS = 0.025
+STFT_HOP_LENGTH_SECONDS = 0.010
+NUM_MEL_BINS = NUM_BANDS
+MEL_MIN_HZ = 125
+MEL_MAX_HZ = 7500
+LOG_OFFSET = 0.01  # Offset used for stabilized log of input mel-spectrogram.
+EXAMPLE_WINDOW_SECONDS = 0.96  # Each example contains 96 10ms frames
+EXAMPLE_HOP_SECONDS = 0.96     # with zero overlap.
     
-    - name: load new acl into device
-  aruba_config:
-    lines:
-      - permit host 10.10.10.10
-      - ipv6 permit host fda9:97d6:32a3:3e59::3333
-    parents: ip access-list standard 1
-    before: no ip access-list standard 1
-    match: exact
-    
-    RETURN = '''
-updates:
-  description: The set of commands that will be pushed to the remote device
-  returned: Only when lines is specified.
-  type: list
-  sample: ['...', '...']
-backup_path:
-  description: The full path to the backup file
-  returned: when backup is yes
-  type: str
-  sample: /playbooks/ansible/backup/enos01.2016-07-16@22:28:34
-'''
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.network.enos.enos import load_config, get_config
-from ansible.module_utils.network.enos.enos import enos_argument_spec
-from ansible.module_utils.network.enos.enos import check_args
-from ansible.module_utils.network.common.config import NetworkConfig, dumps
-    
-    
-def imread(name, flatten=False, mode=None):
-    '''
-    Read an image from a file as an array.
-    
-        accept_sparse : boolean, optional
-        Indicate that func accepts a sparse matrix as input. If validate is
-        False, this has no effect. Otherwise, if accept_sparse is false,
-        sparse matrix inputs will cause an exception to be raised.
-    
-            plot_batch_times(all_times, n_components, batch_sizes, data)
-        plot_batch_errors(all_errors, n_components, batch_sizes, data)
-    
-        xx = np.arange(start_dim, start_dim + n * step, step)
-    plt.subplot(212)
-    plt.title('Learning in high dimensional spaces')
-    plt.plot(xx, scikit_classifier_results, 'g-', label='classification')
-    plt.plot(xx, scikit_regressor_results, 'r-', label='regression')
-    plt.legend(loc='upper left')
-    plt.xlabel('number of dimensions')
-    plt.ylabel('Time (s)')
-    plt.axis('tight')
-    plt.show()
+    print('\nLooks Good To Me!\n')
 
     
-    import time
-import numpy as np
-import matplotlib.pyplot as plt
-from mpl_toolkits.axes_grid1.parasite_axes import host_subplot
-from mpl_toolkits.axisartist.axislines import Axes
-from scipy.sparse.csr import csr_matrix
+    import csv
+import os
+import time
     
-    X_restored = agglo.inverse_transform(X_reduced)
-images_restored = np.reshape(X_restored, images.shape)
-plt.figure(1, figsize=(4, 3.5))
-plt.clf()
-plt.subplots_adjust(left=.01, right=.99, bottom=.01, top=.91)
-for i in range(4):
-    plt.subplot(3, 4, i + 1)
-    plt.imshow(images[i], cmap=plt.cm.gray, vmax=16, interpolation='nearest')
-    plt.xticks(())
-    plt.yticks(())
-    if i == 1:
-        plt.title('Original data')
-    plt.subplot(3, 4, 4 + i + 1)
-    plt.imshow(images_restored[i], cmap=plt.cm.gray, vmax=16,
-               interpolation='nearest')
-    if i == 1:
-        plt.title('Agglomerated data')
-    plt.xticks(())
-    plt.yticks(())
+      features_for_clustering = np.array(features_for_clustering, dtype=np.float32)
+  print('All features were loaded! There are %d features, each with %d '
+        'dimensions' %
+        (features_for_clustering.shape[0], features_for_clustering.shape[1]))
+    
+    The program checks if the aggregated representation for an image already exists,
+and skips computation for those.
+'''
+    
+    _IMAGE_EXTENSION = '.jpg'
+    
+    The images must be in JPG format. The program checks if descriptors already
+exist, and skips computation for those.
+'''
+    
+      # Read solution.
+  print('Reading solution...')
+  public_solution, private_solution, ignored_ids = dataset_file_io.ReadSolution(
+      cmd_args.solution_path, dataset_file_io.RECOGNITION_TASK_ID)
+  print('done!')
     
     
-def IsDecltype(clean_lines, linenum, column):
-  '''Check if the token ending on (linenum, column) is decltype().
+def source_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
+    ref = 'https://github.com/scrapy/scrapy/blob/master/' + text
+    set_classes(options)
+    node = nodes.reference(rawtext, text, refuri=ref, **options)
+    return [node], []
     
-        What it should do it take a markdown file, and split it into more files. A targetfile should have the same
-    number of lines as the original, with source code snippets and markdown non-words removed, for spell-checking.
+    usage:
+    
+    from six.moves.urllib.parse import urlencode
+    
+        def run(self, args, opts):
+        if len(args) < 1:
+            raise UsageError()
+        elif len(args) > 1:
+            raise UsageError('running 'scrapy crawl' with more than one spider is no longer supported')
+        spname = args[0]
+    
+    from scrapy.commands import ScrapyCommand
+from scrapy.exceptions import UsageError
+    
+            if slot.start_requests and not self._needs_backout(spider):
+            try:
+                request = next(slot.start_requests)
+            except StopIteration:
+                slot.start_requests = None
+            except Exception:
+                slot.start_requests = None
+                logger.error('Error while obtaining start requests',
+                             exc_info=True, extra={'spider': spider})
+            else:
+                self.crawl(request, spider)
+    
+        def _is_bzip2(self, response):
+        try:
+            body = bz2.decompress(response.body)
+        except IOError:
+            return
+    
+            # Output from calculations with Decimal should be identical across all
+        # platforms.
+        self.assertEqual(eval(decistmt(s)),
+                         Decimal('-3.217160342717258261933904529E-7'))
+    
+                    It also installs a number of examples and demos.
+                ''',
+            required=False,
+            selected='selected',
+        ),
+        dict(
+            name='PythonUnixTools',
+            long_name='UNIX command-line tools',
+            source='/usr/local/bin',
+            readme='''\
+                This package installs the unix tools in /usr/local/bin for
+                compatibility with older releases of Python. This package
+                is not necessary to use Python.
+                ''',
+            required=False,
+            selected='selected',
+        ),
+        dict(
+            name='PythonDocumentation',
+            long_name='Python Documentation',
+            topdir='/Library/Frameworks/Python.framework/Versions/%(VER)s/Resources/English.lproj/Documentation',
+            source='/pydocs',
+            readme='''\
+                This package installs the python documentation at a location
+                that is useable for pydoc and IDLE.
+                ''',
+            postflight='scripts/postflight.documentation',
+            required=False,
+            selected='selected',
+        ),
+        dict(
+            name='PythonProfileChanges',
+            long_name='Shell profile updater',
+            readme='''\
+                This packages updates your shell profile to make sure that
+                the Python tools are found by your shell in preference of
+                the system provided Python tools.
+    
+        vendor = _java_getprop('java.vendor', vendor)
+    release = _java_getprop('java.version', release)
+    vm_name, vm_release, vm_vendor = vminfo
+    vm_name = _java_getprop('java.vm.name', vm_name)
+    vm_vendor = _java_getprop('java.vm.vendor', vm_vendor)
+    vm_release = _java_getprop('java.vm.version', vm_release)
+    vminfo = vm_name, vm_release, vm_vendor
+    os_name, os_version, os_arch = osinfo
+    os_arch = _java_getprop('java.os.arch', os_arch)
+    os_name = _java_getprop('java.os.name', os_name)
+    os_version = _java_getprop('java.os.version', os_version)
+    osinfo = os_name, os_version, os_arch
+    
+        def test_keywords_args_api(self):
+        self.assertEqual(self.db.guess_type(
+            url='foo.html', strict=True), ('text/html', None))
+        self.assertEqual(self.db.guess_all_extensions(
+            type='image/jpg', strict=True), [])
+        self.assertEqual(self.db.guess_extension(
+            type='image/jpg', strict=False), '.jpg')
+    
+        return calc_ndigits, (50, )
+    
+                    simple body
+    
+        def test_xjust_int_error(self):
+        self.assertRaises(TypeError, self.type2test(b'abc').center, 7, 32)
+        self.assertRaises(TypeError, self.type2test(b'abc').ljust, 7, 32)
+        self.assertRaises(TypeError, self.type2test(b'abc').rjust, 7, 32)
+    
+        return ''.join(result)
+    
+        @property
+    def name(self):
+        try:
+            return self._file.name
+        except AttributeError:
+            return None
     
     
-def rdiv(left, right):
-    return right / left
-    
-            path = os.path.join(HERE, 'data', 'does_not_exist.' + fn_ext)
-        msg1 = r'File (b')?.+does_not_exist\.{}'? does not exist'.format(fn_ext)
-        msg2 = (
-            r'\[Errno 2\] No such file or directory: '.+does_not_exist' r'\.{}''
-        ).format(fn_ext)
-        msg3 = 'Expected object or value'
-        msg4 = 'path_or_buf needs to be a string file path or file-like'
-        msg5 = (
-            r'\[Errno 2\] File .+does_not_exist\.{} does not exist:'
-            r' '.+does_not_exist\.{}''
-        ).format(fn_ext, fn_ext)
-        with pytest.raises(
-            error_class, match=r'({}|{}|{}|{}|{})'.format(msg1, msg2, msg3, msg4, msg5)
-        ):
-            reader(path)
-    
-    
-@pytest.mark.parametrize(
-    'indexer', [lambda s: s[2000, 3, 10], lambda s: s.loc[2000, 3, 10]]
-)
-def test_series_getitem_returns_scalar(
-    multiindex_year_month_day_dataframe_random_data, indexer
-):
-    s = multiindex_year_month_day_dataframe_random_data['A']
-    expected = s.iloc[49]
-    
-            df = pd.DataFrame(
-            {
-                'strings': pd.Series(
-                    tm.makeStringIndex(10000).take(np.random.randint(0, 10000, size=N))
-                ),
-                'floats': np.random.randn(N),
-                'ints': np.arange(N),
-                'dates': pd.date_range('20110101', freq='s', periods=N),
-                'timedeltas': pd.timedelta_range('1 day', freq='s', periods=N),
-            }
-        )
-        df['categories'] = df['strings'].astype('category')
-        df.iloc[10:20] = np.nan
-        return df
+def collect_tkinter(info_add):
+    try:
+        import _tkinter
+    except ImportError:
+        pass
+    else:
+        attributes = ('TK_VERSION', 'TCL_VERSION')
+        copy_attributes(info_add, _tkinter, 'tkinter.%s', attributes)
