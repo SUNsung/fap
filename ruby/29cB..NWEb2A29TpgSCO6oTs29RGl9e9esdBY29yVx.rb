@@ -1,155 +1,98 @@
 
         
-                def list_files_for(dir)
-          dir = '#{dir}/' unless dir.end_with?('/')
-          Dir.glob(File.join(dir, '*#{@extension}')).select { |f| f =~ self.class.filter_regex(@extension) }
-        end
-    
-          it 'updates an existing user' do
-        visit edit_admin_user_path(users(:bob))
-        check 'Admin'
-        click_on 'Update User'
-        expect(page).to have_text('User 'bob' was successfully updated.')
-        visit edit_admin_user_path(users(:bob))
-        expect(page).to have_checked_field('Admin')
+              it 'deactivates an existing user' do
+        visit admin_users_path
+        expect(page).to have_no_text('inactive')
+        find(:css, 'a[href='/admin/users/#{users(:bob).id}/deactivate']').click
+        expect(page).to have_text('inactive')
+        users(:bob).reload
+        expect(users(:bob)).not_to be_active
       end
     
-      describe '#yes_no' do
-    it 'returns a label 'Yes' if any truthy value is given' do
-      [true, Object.new].each { |value|
-        label = yes_no(value)
-        expect(label).to be_html_safe
-        expect(Nokogiri(label).text).to eq 'Yes'
-      }
+      describe '#style_colors' do
+    it 'returns a css style-formated version of the scenario foreground and background colors' do
+      expect(style_colors(scenario)).to eq('color:#AAAAAA;background-color:#000000')
     end
     
-      describe '#relative_distance_of_time_in_words' do
-    it 'in the past' do
-      expect(relative_distance_of_time_in_words(Time.now-5.minutes)).to eq('5m ago')
+        it 'is turned off for existing instances of Huginn' do
+      stub(DefaultScenarioImporter).seed { fail 'seed should not have been called'}
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { nil }
+      DefaultScenarioImporter.import(user)
     end
     
-      after :each do
-    @scheduler.shutdown(:wait)
-    
-        it 'should ignore strings which just contain a JSONPath' do
-      expect(LiquidMigrator.convert_string('$.data')).to eq('$.data')
-      expect(LiquidMigrator.convert_string('$first_title')).to eq('$first_title')
-      expect(LiquidMigrator.convert_string(' $.data', true)).to eq(' $.data')
-      expect(LiquidMigrator.convert_string('lorem $.data', true)).to eq('lorem $.data')
+        it 'requires a message' do
+      @log.message = ''
+      expect(@log).not_to be_valid
+      @log.message = nil
+      expect(@log).not_to be_valid
+      expect(@log).to have(1).error_on(:message)
     end
-    it 'should raise an exception when encountering complex JSONPaths' do
-      expect { LiquidMigrator.convert_string('$.data.test.*', true) }.
-        to raise_error('JSONPath '$.data.test.*' is too complex, please check your migration.')
+    
+      describe '#check' do
+    it 'should not emit events on its first run' do
+      expect { @checker.check }.to change { Event.count }.by(0)
+      expect(@checker.memory[:last_event]).to eq '2014-04-17T10:25:31.000+02:00'
+    end
+    it 'should check that initial run creates an event' do
+      @checker.memory[:last_event] = '2014-04-17T10:25:31.000+02:00'
+      expect { @checker.check }.to change { Event.count }.by(1)
     end
   end
     
-      describe '#value_at' do
-    it 'returns the value at a JSON path' do
-      expect(Utils.value_at({ :foo => { :bar => :baz }}.to_json, 'foo.bar')).to eq('baz')
-      expect(Utils.value_at({ :foo => { :bar => { :bing => 2 } }}, 'foo.bar.bing')).to eq(2)
-      expect(Utils.value_at({ :foo => { :bar => { :bing => 2 } }}, 'foo.bar[?(@.bing == 2)].bing')).to eq(2)
+        it 'should raise error when response says unauthorized' do
+      stub(HTTParty).post { {'Response' => 'Not authorized'} }
+      expect { @checker.send_notification({}) }.to raise_error(StandardError, /Not authorized/)
     end
     
-        it 'should provide the since attribute after the first run' do
-      time = (Time.now-1.minute).iso8601
-      @checker.memory[:last_event] = time
-      @checker.save
-      expect(@checker.reload.send(:query_parameters)).to eq({:query => {:since => time}})
-    end
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   Cookie Tossing
+    # Supported browsers:: all
+    # More infos::         https://github.com/blog/1466-yummy-cookies-across-domains
+    #
+    # Does not accept HTTP requests if the HTTP_COOKIE header contains more than one
+    # session cookie. This does not protect against a cookie overflow attack.
+    #
+    # Options:
+    #
+    # session_key:: The name of the session cookie (default: 'rack.session')
+    class CookieTossing < Base
+      default_reaction :deny
+    
+        post('/', {'csrf_param' => token}, 'rack.session' => {:csrf => token})
+    expect(last_response).to be_ok
   end
     
-            # @return [Array<Specification>] the app specs for the target
-        #
-        attr_reader :app_specs
-    
-              # Creates the group that holds the references to the support files
-          # generated by this installer.
-          #
-          # @return [void]
-          #
-          def create_support_files_group
-            parent = project.support_files_group
-            name = target.name
-            dir = target.support_files_dir
-            @support_files_group = parent.new_group(name, dir)
-          end
-    
-    
-    {          export *
-          module * { export * }
-        }
-      EOS
+        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
+      env = {'HTTP_HOST' => 'foo.com'}
+      subject.options[:allow_empty_referrer] = false
+      expect(subject.referrer(env)).to be_nil
     end
     
-    module Pod
-  class Target
-    describe BuildType do
-      describe '#initialize' do
-        it 'returns static library by default' do
-          BuildType.new.should == BuildType.static_library
-        end
+        it 'denies requests with sneaky encoded session cookies' do
+      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.%73ession=SESSION_TOKEN'
+      expect(last_response).not_to be_ok
+    end
     
-              it 'does not set EMBEDDED_CONTENT_CONTAINS_SWIFT when there is swift, but the target is an extension' do
-            @target.stubs(:requires_host_target?).returns(true)
-            @target_definition.stubs(:swift_version).returns('2.2')
-            @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(true)
-            @generator.generate.to_hash['EMBEDDED_CONTENT_CONTAINS_SWIFT'].should.be.nil
-          end
-    
-              # Script phases can have a limited number of input and output paths due to each one being exported to `env`.
-          # A large number can cause a build failure because of limitations in `env`. See issue
-          # https://github.com/CocoaPods/CocoaPods/issues/7362.
-          #
-          # @param [Array<String>] input_paths
-          #        The input paths to trim.
-          #
-          # @param [Array<String>] output_paths
-          #        The output paths to trim.
-          #
-          # @return [void]
-          #
-          def validate_input_output_path_limit(input_paths, output_paths)
-            if (input_paths.count + output_paths.count) > MAX_INPUT_OUTPUT_PATHS
-              input_paths.clear
-              output_paths.clear
-            end
-          end
-    
-              check(node, node.arguments, 'parameter of %<article>s method call',
-                node.last_argument.source_range.end_pos,
-                node.source_range.end_pos)
-        end
-        alias on_csend on_send
-    
-        context 'with a ternary operator' do
-      let(:source) { 'foo? ? :foo : 42' }
-    
-            def style_parameter_name
-          'EnforcedStyleInsidePipes'
-        end
-    
-      shared_examples 'registers an offense' do |klass|
-    context 'target ruby version < 2.4', :ruby23 do
-      context 'when #{klass}' do
-        context 'without any decorations' do
-          let(:source) { '1.is_a?(#{klass})' }
-    
-      it 'registers an offense for `raise` guard clause not followed by ' \
-     'empty line when `unless` condition is after heredoc' do
-    expect_offense(<<~RUBY)
-      def foo
-        raise ArgumentError, <<-MSG unless path
-          Must be called with mount point
-        MSG
-      ^^^^^ Add empty line after guard clause.
-        bar
+          # Define common settings for one or more parameters
+      # @param (see #requires)
+      # @option (see #requires)
+      def with(*attrs, &block)
+        new_group_scope(attrs.clone, &block)
       end
-    RUBY
-  end
     
-          # Checks whether the `for` node has a `do` keyword.
-      #
-      # @return [Boolean] whether the `for` node has a `do` keyword
-      def do?
-        loc.begin&.is?('do')
+    task :spec
+    
+          # Fetch our current inheritable settings, which are inherited by
+      # nested scopes but not shared across siblings.
+      def inheritable_setting
+        @inheritable_setting ||= Grape::Util::InheritableSetting.new.tap { |new_settings| new_settings.inherit_from top_level_setting }
       end
+    
+            if presenter
+          embeds = { env: env }
+          embeds[:version] = env[Grape::Env::API_VERSION] if env[Grape::Env::API_VERSION]
+          presented_message = presenter.represent(presented_message, embeds).serializable_hash
+        end
