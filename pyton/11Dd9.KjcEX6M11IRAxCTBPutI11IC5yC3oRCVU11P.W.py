@@ -1,180 +1,139 @@
 
         
-        
-@login_required(redirect_field_name='redirect_to')
-def login_protected_view_changed_redirect(request):
-    'A simple view that is login protected with a custom redirect field set'
-    t = Template('This is a login protected test. Username is {{ user.username }}.', name='Login Template')
-    c = Context({'user': request.user})
-    return HttpResponse(t.render(c))
+            self._scales = scales
+    self._aspect_ratios = aspect_ratios
+    self._base_anchor_size = base_anchor_size
+    self._anchor_stride = anchor_stride
+    self._anchor_offset = anchor_offset
     
-        def as_mysql(self, compiler, connection, **extra_context):
-        sql, params = super().as_sql(compiler, connection, **extra_context)
-        if self.output_field.get_internal_type() == 'DurationField':
-            sql = 'CAST(%s AS SIGNED)' % sql
-        return sql, params
+      for layer, scale, scale_next in zip(
+      range(num_layers), scales[:-1], scales[1:]):
+    layer_box_specs = []
+    if layer == 0 and reduce_boxes_in_lowest_layer:
+      layer_box_specs = [(0.1, 1.0), (scale, 2.0), (scale, 0.5)]
+    else:
+      for aspect_ratio in aspect_ratios:
+        layer_box_specs.append((scale, aspect_ratio))
+      # Add one more anchor, with a scale between the current scale, and the
+      # scale for the next layer, with a specified aspect ratio (1.0 by
+      # default).
+      if interpolated_scale_aspect_ratio > 0.0:
+        layer_box_specs.append((np.sqrt(scale*scale_next),
+                                interpolated_scale_aspect_ratio))
+    box_specs_list.append(layer_box_specs)
     
-        def assertMsgId(self, msgid, haystack, use_quotes=True):
-        return self._assertPoKeyword('msgid', msgid, haystack, use_quotes=use_quotes)
+        Updates the field of a box_list with a given value.
     
+      This is a `freezable` batch norm layer that supports setting the `training`
+  parameter in the __init__ method rather than having to set it either via
+  the Keras learning phase or via the `call` method parameter. This layer will
+  forward all other parameters to the default Keras `BatchNormalization`
+  layer
     
-def _update_method_wrapper(_wrapper, decorator):
-    # _multi_decorate()'s bound_method isn't available in this scope. Cheat by
-    # using it on a dummy function.
-    @decorator
-    def dummy(*args, **kwargs):
-        pass
-    update_wrapper(_wrapper, dummy)
+      Args:
+    tensor_dict: a dictionary of tensors to prefetch.
+    capacity: the size of the prefetch queue.
     
-    from django.contrib.gis.gdal.base import GDALBase
-from django.contrib.gis.gdal.error import GDALException
-from django.contrib.gis.gdal.prototypes import ds as vcapi, raster as rcapi
-from django.utils.encoding import force_bytes, force_str
-    
-        Exceptions are propagated.
-    
-                # >leading or trailing LWS MAY be removed without
-            # >changing the semantics of the field value'
-            # -https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html
-            # Also, requests raises `InvalidHeader` for leading spaces.
-            value = value.strip()
-    
-        @property
-    def body(self):
-        body = self._orig.body
-        if isinstance(body, str):
-            # Happens with JSON/form request data parsed from the command line.
-            body = body.encode('utf8')
-        return body or b''
-
-    
-        def get_converter(self, mime):
-        if is_valid_mime(mime):
-            for converter_class in plugin_manager.get_converters():
-                if converter_class.supports(mime):
-                    return converter_class(mime)
-    
-        >>> humanize_bytes(1)
-    '1 B'
-    >>> humanize_bytes(1024, precision=1)
-    '1.0 kB'
-    >>> humanize_bytes(1024 * 123, precision=1)
-    '123.0 kB'
-    >>> humanize_bytes(1024 * 12342, precision=1)
-    '12.1 MB'
-    >>> humanize_bytes(1024 * 12342, precision=2)
-    '12.05 MB'
-    >>> humanize_bytes(1024 * 1234, precision=2)
-    '1.21 MB'
-    >>> humanize_bytes(1024 * 1234 * 1111, precision=2)
-    '1.31 GB'
-    >>> humanize_bytes(1024 * 1234 * 1111, precision=1)
-    '1.3 GB'
-    
-        exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR
-    assert error_msg == (
-        'ConnectionError: '
-        'Connection aborted while doing GET request to URL: '
-        'http://www.google.com')
-    
-                if not bottleneck_ts:
-                raise Exception('unable to find bottleneck tensors! please provide checkpoint '
-                                'nodes manually, or use checkpoints='speed'.')
-    
-    import logging
-import numpy as np
+    tf.app.flags.DEFINE_string(
+    'train_image_folder',
+    './ADE20K/ADEChallengeData2016/images/training',
+    'Folder containing trainng images')
+tf.app.flags.DEFINE_string(
+    'train_image_label_folder',
+    './ADE20K/ADEChallengeData2016/annotations/training',
+    'Folder containing annotations for trainng images')
     
     
-_DEFAULTS = {
-    'threshold': {
-        'default': 99.0,
-        'info': 'Adjust the threshold for histogram matching. Can reduce extreme colors '
-                'leaking in by filtering out colors at the extreme ends of the histogram '
-                'spectrum.',
-        'datatype': float,
-        'rounding': 1,
-        'min_max': (90.0, 100.0),
-        'choices': [],
-        'gui_radio': False,
-        'fixed': True,
-    }
-}
-
+class RedBullTVIE(InfoExtractor):
+    _VALID_URL = r'https?://(?:www\.)?redbull(?:\.tv|\.com(?:/[^/]+)?(?:/tv)?)(?:/events/[^/]+)?/(?:videos?|live)/(?P<id>AP-\w+)'
+    _TESTS = [{
+        # film
+        'url': 'https://www.redbull.tv/video/AP-1Q6XCDTAN1W11',
+        'md5': 'fb0445b98aa4394e504b413d98031d1f',
+        'info_dict': {
+            'id': 'AP-1Q6XCDTAN1W11',
+            'ext': 'mp4',
+            'title': 'ABC of... WRC - ABC of... S1E6',
+            'description': 'md5:5c7ed8f4015c8492ecf64b6ab31e7d31',
+            'duration': 1582.04,
+        },
+    }, {
+        # episode
+        'url': 'https://www.redbull.tv/video/AP-1PMHKJFCW1W11',
+        'info_dict': {
+            'id': 'AP-1PMHKJFCW1W11',
+            'ext': 'mp4',
+            'title': 'Grime - Hashtags S2E4',
+            'description': 'md5:b5f522b89b72e1e23216e5018810bb25',
+            'duration': 904.6,
+        },
+        'params': {
+            'skip_download': True,
+        },
+    }, {
+        'url': 'https://www.redbull.com/int-en/tv/video/AP-1UWHCAR9S1W11/rob-meets-sam-gaze?playlist=playlists::3f81040a-2f31-4832-8e2e-545b1d39d173',
+        'only_matching': True,
+    }, {
+        'url': 'https://www.redbull.com/us-en/videos/AP-1YM9QCYE52111',
+        'only_matching': True,
+    }, {
+        'url': 'https://www.redbull.com/us-en/events/AP-1XV2K61Q51W11/live/AP-1XUJ86FDH1W11',
+        'only_matching': True,
+    }]
     
-        def run(self, new_face):
-        ''' Perform selected adjustment on face '''
-        logger.trace('Performing scaling adjustment')
-        # Remove Mask for processing
-        reinsert_mask = False
-        if new_face.shape[2] == 4:
-            reinsert_mask = True
-            final_mask = new_face[:, :, -1]
-            new_face = new_face[:, :, :3]
-        new_face = self.process(new_face)
-        new_face = np.clip(new_face, 0.0, 1.0)
-        if reinsert_mask and new_face.shape[2] != 4:
-            # Reinsert Mask
-            new_face = np.concatenate((new_face, np.expand_dims(final_mask, axis=-1)), -1)
-        logger.trace('Performed scaling adjustment')
-        return new_face
-
     
-        def close(self):
-        ''' Image writer does not need a close method '''
-        return
-
+class VLiveIE(InfoExtractor):
+    IE_NAME = 'vlive'
+    _VALID_URL = r'https?://(?:(?:www|m)\.)?vlive\.tv/video/(?P<id>[0-9]+)'
+    _NETRC_MACHINE = 'vlive'
+    _TESTS = [{
+        'url': 'http://www.vlive.tv/video/1326',
+        'md5': 'cc7314812855ce56de70a06a27314983',
+        'info_dict': {
+            'id': '1326',
+            'ext': 'mp4',
+            'title': '[V LIVE] Girl's Day's Broadcast',
+            'creator': 'Girl's Day',
+            'view_count': int,
+        },
+    }, {
+        'url': 'http://www.vlive.tv/video/16937',
+        'info_dict': {
+            'id': '16937',
+            'ext': 'mp4',
+            'title': '[V LIVE] 첸백시 걍방',
+            'creator': 'EXO',
+            'view_count': int,
+            'subtitles': 'mincount:12',
+        },
+        'params': {
+            'skip_download': True,
+        },
+    }, {
+        'url': 'https://www.vlive.tv/video/129100',
+        'md5': 'ca2569453b79d66e5b919e5d308bff6b',
+        'info_dict': {
+            'id': '129100',
+            'ext': 'mp4',
+            'title': '[V LIVE] [BTS+] Run BTS! 2019 - EP.71 :: Behind the scene',
+            'creator': 'BTS+',
+            'view_count': int,
+            'subtitles': 'mincount:10',
+        },
+        'skip': 'This video is only available for CH+ subscribers',
+    }]
     
-        def set_defaults(self):
-        ''' Set the default values for config '''
-        logger.debug('Setting defaults')
-        current_dir = os.path.dirname(__file__)
-        for dirpath, _, filenames in os.walk(current_dir):
-            default_files = [fname for fname in filenames if fname.endswith('_defaults.py')]
-            if not default_files:
-                continue
-            base_path = os.path.dirname(os.path.realpath(sys.argv[0]))
-            import_path = '.'.join(full_path_split(dirpath.replace(base_path, ''))[1:])
-            plugin_type = import_path.split('.')[-1]
-            for filename in default_files:
-                self.load_module(filename, import_path, plugin_type)
     
-    import tkinter as tk
-from tkinter import ttk
+def main():
+    with open('supportedsites.html.in', 'r', encoding='utf-8') as tmplf:
+        template = tmplf.read()
     
-            # check if scaling needs to be done to be in new_range
-        if arr_min < new_range[0] or arr_max > new_range[1]:
-            # perform min-max scaling
-            scaled = (new_range[1] - new_range[0]) * (arr - arr_min) / (arr_max -
-                                                                        arr_min) + new_range[0]
-        else:
-            # return array if already in range
-            scaled = arr
+    header = oldreadme[:oldreadme.index('# OPTIONS')]
+footer = oldreadme[oldreadme.index('# CONFIGURATION'):]
     
-            # Adding model 'EventTag'
-        db.create_table(u'tagstore_eventtag', (
-            ('project_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()),
-            ('environment_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()),
-            ('key', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                to=orm['tagstore.TagKey'], db_column='key')),
-            ('event_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()),
-            ('date_added', self.gf('django.db.models.fields.DateTimeField')(
-                db_index=True)),
-            ('group_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()),
-            ('id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(primary_key=True)),
-            ('value', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                to=orm['tagstore.TagValue'], db_column='value')),
-        ))
-        db.send_create_signal('tagstore', ['EventTag'])
-    
-        complete_apps = ['tagstore']
-
-    
-            # Removing index on 'Nonce', fields ['timestamp']
-        db.delete_index('social_auth_nonce', ['timestamp'])
+            self.grammarDecisionDescription = grammarDecisionDescription
+        self.decisionNumber = decisionNumber
+        self.stateNumber = stateNumber
     
         def __init__(self, idf_path=None):
         self.tokenizer = jieba.dt
@@ -188,15 +147,57 @@ if len(args) < 1:
     print(USAGE)
     sys.exit(1)
     
-    
-if len(args) < 1:
-    print(USAGE)
-    sys.exit(1)
-    
     import jieba
+import jieba.analyse
+from optparse import OptionParser
+    
+    for f_name in glob.glob(pattern):
+    with open(f_name) as f:
+        print('read file:', f_name)
+        for line in f: #one line as a document
+            words = ' '.join(jieba.cut(line))
+            docs.append(words)
+    
+    while True:
+    line = sys.stdin.readline()
+    if line=='':
+        break
+    line = line.strip()
+    for word in jieba.cut(line):
+        print(word)
     
     
-
+def deserialize_event(event):
+    # Deserialize into Python dictionary and extract the 'NewImage' (the new version of the full ddb document)
+    ddb = event.get('dynamodb')
+    if ddb:
+        result = {
+            '__action_type': event.get('eventName'),
+        }
     
-    log_f = open('1.log','wb')
-log_f.write(words.encode('utf-8'))
+        def test_list_function_versions(self):
+        with self.app.test_request_context():
+            self._create_function(self.FUNCTION_NAME)
+            lambda_api.publish_version(self.FUNCTION_NAME)
+            lambda_api.publish_version(self.FUNCTION_NAME)
+    
+        @classmethod
+    def tearDownClass(cls):
+        cls.lambda_client.delete_function(FunctionName=TEST_LAMBDA_NAME_1)
+        cls.lambda_client.delete_function(FunctionName=TEST_LAMBDA_NAME_2)
+    
+        for (disposition, part) in _iter_multipart_parts(data_bytes, boundary):
+        if disposition.get('name') == 'key' and b'${filename}' in part:
+            search = boundary + part
+            replace = boundary + part.replace(b'${filename}', filename.encode('utf8'))
+    
+    
+def replay_command(command):
+    function = getattr(requests, command['m'].lower())
+    data = command['d']
+    if data:
+        data = base64.b64decode(data)
+    endpoint = aws_stack.get_local_service_url(command['a'])
+    full_url = (endpoint[:-1] if endpoint.endswith('/') else endpoint) + command['p']
+    result = function(full_url, data=data, headers=command['h'], verify=False)
+    return result
