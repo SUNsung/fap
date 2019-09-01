@@ -1,487 +1,361 @@
 
         
-          std::size_t capacity = End - Allocated;
-  std::size_t requiredCapacity = capacity + needed;
-  do {
-    capacity = 2 * capacity + 16;
-  } while (capacity < requiredCapacity);
-    
-    const uint16_t swift::unicode::ExtendedGraphemeClusterNoBoundaryRulesMatrix[] = {
-% for row in get_extended_grapheme_cluster_rules_matrix(break_table):
-  ${row},
-% end
-};
-    
-    void BackendJobAction::anchor() {}
-    
-    namespace swift {
-namespace driver {
-namespace toolchains {
-    }
-    }
-    }
-    
-    ArgsToFrontendInputsConverter::ArgsToFrontendInputsConverter(
-    DiagnosticEngine &diags, const ArgList &args)
-    : Diags(diags), Args(args),
-      FilelistPathArg(args.getLastArg(options::OPT_filelist)),
-      PrimaryFilelistPathArg(args.getLastArg(options::OPT_primary_filelist)) {}
-    
-    // Generate param traits read methods.
-#include 'ipc/param_traits_read_macros.h'
-namespace IPC {
-#include 'content/nw/src/common/common_message_generator.h'
-}  // namespace IPC
-    
-    IPC_SYNC_MESSAGE_ROUTED3_1(ShellViewHostMsg_Call_Static_Method_Sync,
-                           std::string /* type name */,
-                           std::string /* method name */,
-                           base::ListValue /* arguments */,
-                           base::ListValue /* result */)
-    
-    
-    {}  // namespace nwapi
-    
-    #ifndef CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
-#define CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
-    
-     protected:
-  ~NwObjAllocateIdFunction() override;
-    
-        protected:
-      ~NwScreenGetScreensFunction() override {}
-      DECLARE_EXTENSION_FUNCTION('nw.Screen.getScreens', UNKNOWN)
-    
-    
-/*
- * Given sines and cosines, tells if A's angle is less than B's on -Pi, Pi
- * (in other words, is A 'righter' than B)
- */
-bool IsRighter(float32 sinA, float32 cosA, float32 sinB, float32 cosB){
-	if (sinA < 0){
-		if (sinB > 0 || cosA <= cosB) return true;
-		else return false;
-	} else {
-		if (sinB < 0 || cosA <= cosB) return false;
-		else return true;
-	}
-}
-    
-    int32 remainder(int32 x, int32 modulus);
-int32 TriangulatePolygon(float32* xv, float32* yv, int32 vNum, b2Triangle* results);
-bool IsEar(int32 i, float32* xv, float32* yv, int32 xvLength); //Not for external use
-int32 PolygonizeTriangles(b2Triangle* triangulated, int32 triangulatedLength, b2Polygon* polys, int32 polysLength);
-int32 DecomposeConvex(b2Polygon* p, b2Polygon* results, int32 maxPolys);
-//void DecomposeConvexAndAddTo(b2Polygon* p, b2Body* bd, b2FixtureDef* prototype);
-    
-    	void EncodeMipmaps(float *a_pafSourceRGBA,
-		unsigned int a_uiSourceWidth,
-		unsigned int a_uiSourceHeight,
-		Image::Format a_format,
-		ErrorMetric a_eErrMetric,
-		float a_fEffort,
-		unsigned int a_uiJobs,
-		unsigned int a_uiMaxJobs,
-		unsigned int a_uiMaxMipmaps,
-		unsigned int a_uiMipFilterFlags,
-		RawImage* a_pMipmapImages,
-		int *a_piEncodingTime_ms, 
-		bool a_bVerboseOutput)
-	{
-		auto mipWidth = a_uiSourceWidth;
-		auto mipHeight = a_uiSourceHeight;
-		int totalEncodingTime = 0;
-		for(unsigned int mip = 0; mip < a_uiMaxMipmaps && mipWidth >= 1 && mipHeight >= 1; mip++)
-		{
-			float* pImageData = nullptr;
-			float* pMipImage = nullptr;
-    }
-    }
-    
-    
-    {		case Image::Format::R11:
-		case Image::Format::SIGNED_R11:
-			m_pencoding = new Block4x4Encoding_R11;
-			break;
-		case Image::Format::RG11:
-		case Image::Format::SIGNED_RG11:
-			m_pencoding = new Block4x4Encoding_RG11;
-			break;
-		default:
-			assert(0);
-			break;
-		}
-    
-    
-    {} // namespace Etc
-    
-    
-    {			default:
-				return 0;
-				break;
-			}
-    
-    #define FASTLZ_VERSION_MAJOR     0
-#define FASTLZ_VERSION_MINOR     0
-#define FASTLZ_VERSION_REVISION  0
-    
-    /* Chirp (bandwidth expand) LP AR filter */
-void silk_bwexpander(
-    opus_int16                  *ar,                /* I/O  AR filter to be expanded (without leading 1)                */
-    const opus_int              d,                  /* I    Length of ar                                                */
-    opus_int32                  chirp_Q16           /* I    Chirp factor (typically in the range 0 to 1)                */
-);
-    
-    /* (a32 * (b32 >> 16)) >> 16 */
-#undef silk_SMULWT
-static OPUS_INLINE opus_int32 silk_SMULWT_armv4(opus_int32 a, opus_int32 b)
-{
-  unsigned rd_lo;
-  int rd_hi;
-  __asm__(
-      '#silk_SMULWT\n\t'
-      'smull %0, %1, %2, %3\n\t'
-      : '=&r'(rd_lo), '=&r'(rd_hi)
-      : '%r'(a), 'r'(b&~0xFFFF)
-  );
-  return rd_hi;
-}
-#define silk_SMULWT(a, b) (silk_SMULWT_armv4(a, b))
-    
-    /* (a32 * (opus_int32)((opus_int16)(b32))) >> 16 output have to be 32bit int */
-#undef silk_SMULWB
-static OPUS_INLINE opus_int32 silk_SMULWB_armv5e(opus_int32 a, opus_int16 b)
-{
-  int res;
-  __asm__(
-      '#silk_SMULWB\n\t'
-      'smulwb %0, %1, %2\n\t'
-      : '=r'(res)
-      : 'r'(a), 'r'(b)
-  );
-  return res;
-}
-#define silk_SMULWB(a, b) (silk_SMULWB_armv5e(a, b))
-    
-    #define GTEST_ASSERT_(expression, on_failure) \
-  GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
-  if (const ::testing::AssertionResult gtest_ar = (expression)) \
-    ; \
-  else \
-    on_failure(gtest_ar.failure_message())
-    
-      // Returns true iff the path is ''.
-  bool IsEmpty() const { return pathname_.empty(); }
-    
-      // Returns the fraction bits of this number.
-  Bits fraction_bits() const { return kFractionBitMask & u_.bits_; }
-    
-    template <>
-class Get<0> {
- public:
-  template <class Tuple>
-  static GTEST_ADD_REF_(GTEST_TUPLE_ELEMENT_(0, Tuple))
-  Field(Tuple& t) { return t.f0_; }  // NOLINT
-    }
-    
-    // A unique type used as the default value for the arguments of class
-// template Types.  This allows us to simulate variadic templates
-// (e.g. Types<int>, Type<int, double>, and etc), which C++ doesn't
-// support directly.
-struct None {};
-    
-    // We will track memory used by this class.
-class Water {
- public:
-  // Normal Water declarations go here.
-    }
-    
-      //----- image drawing
-  virtual void drawImageMask(GfxState *state, Object *ref, Stream *str,
-			     int width, int height, GBool invert,
-			     GBool interpolate, GBool inlineImg);
-  virtual void drawImage(GfxState *state, Object *ref, Stream *str,
-			 int width, int height, GfxImageColorMap *colorMap,
-			 GBool interpolate, int *maskColors, GBool inlineImg);
-  virtual void drawMaskedImage(GfxState *state, Object *ref, Stream *str,
-			       int width, int height,
-			       GfxImageColorMap *colorMap,
-			       GBool interpolate,
-			       Stream *maskStr, int maskWidth, int maskHeight,
-			       GBool maskInvert, GBool maskInterpolate);
-  // If current colorspace ist pattern,
-  // need this device special handling for masks in pattern colorspace?
-  // Default is false
-  virtual GBool fillMaskCSPattern(GfxState * state)
-  	{ return state->getFillColorSpace()->getMode() == csPattern && (level != psLevel1 && level != psLevel1Sep); }
-  virtual void endMaskClip(GfxState * /*state*/);
-    
-    
-    {    if (digit_value <= prev_digit_value)
-      value += digit_value;
-    else
-      value += digit_value - prev_digit_value * 2;
-    prev_digit_value = digit_value;
+        template <typename Dtype>
+void SGDSolver<Dtype>::SnapshotSolverStateToHDF5(
+    const string& model_filename) {
+// This code is taken from https://github.com/sh1r0/caffe-android-lib
+#ifdef USE_HDF5
+  string snapshot_filename =
+      Solver<Dtype>::SnapshotFilename('.solverstate.h5');
+  LOG(INFO) << 'Snapshotting solver state to HDF5 file ' << snapshot_filename;
+  hid_t file_hid = H5Fcreate(snapshot_filename.c_str(), H5F_ACC_TRUNC,
+      H5P_DEFAULT, H5P_DEFAULT);
+  CHECK_GE(file_hid, 0)
+      << 'Couldn't open ' << snapshot_filename << ' to save solver state.';
+  hdf5_save_int(file_hid, 'iter', this->iter_);
+  hdf5_save_string(file_hid, 'learned_net', model_filename);
+  hdf5_save_int(file_hid, 'current_step', this->current_step_);
+  hid_t history_hid = H5Gcreate2(file_hid, 'history', H5P_DEFAULT, H5P_DEFAULT,
+      H5P_DEFAULT);
+  CHECK_GE(history_hid, 0)
+      << 'Error saving solver state to ' << snapshot_filename << '.';
+  for (int i = 0; i < history_.size(); ++i) {
+    ostringstream oss;
+    oss << i;
+    hdf5_save_nd_dataset<Dtype>(history_hid, oss.str(), *history_[i]);
   }
+  H5Gclose(history_hid);
+  H5Fclose(file_hid);
+// This code is taken from https://github.com/sh1r0/caffe-android-lib
+#else
+  LOG(FATAL) << 'SnapshotSolverStateToHDF5 requires hdf5;'
+             << ' compile with USE_HDF5.';
+#endif  // USE_HDF5
+}
     
-    //------------------------------------------------------------------------
-// PageTransition
-//------------------------------------------------------------------------
-    
-    // if changed remember to keep in sync with frontend enums
-enum PageTransitionType {
-  transitionReplace = 0,
-  transitionSplit,
-  transitionBlinds,
-  transitionBox,
-  transitionWipe,
-  transitionDissolve,
-  transitionGlitter,
-  transitionFly,
-  transitionPush,
-  transitionCover,
-  transitionUncover,
-  transitionFade
-};
-    
-    //------------------------------------------------------------------------
-// Parser
-//------------------------------------------------------------------------
-    
-    
-    {    Object item;
-};
-    
-    
-    {  private:
-    XRef *xref;
-    PopplerCache *cache;
-};
-    
-    //------------------------------------------------------------------------
-// ProfileData
-//------------------------------------------------------------------------
-    
-    
-    {	  // TODO: D might be a form XObject too
-	} else {
-	  error (-1, 'Invalid Media Clip Data');
-	  ok = gFalse;
-	}
-	obj1.free();
-    
-    #ifdef _WIN32
-#include <fcntl.h> // for O_BINARY
-#include <io.h>    // for setmode
+    // Get pooling layer according to engine.
+template <typename Dtype>
+shared_ptr<Layer<Dtype> > GetPoolingLayer(const LayerParameter& param) {
+  PoolingParameter_Engine engine = param.pooling_param().engine();
+  if (engine == PoolingParameter_Engine_DEFAULT) {
+    engine = PoolingParameter_Engine_CAFFE;
+#ifdef USE_CUDNN
+    engine = PoolingParameter_Engine_CUDNN;
 #endif
-#include <stdio.h>
-    
-    class StdinCacheLoader : public CachedFileLoader {
+  }
+  if (engine == PoolingParameter_Engine_CAFFE) {
+    return shared_ptr<Layer<Dtype> >(new PoolingLayer<Dtype>(param));
+#ifdef USE_CUDNN
+  } else if (engine == PoolingParameter_Engine_CUDNN) {
+    if (param.top_size() > 1) {
+      LOG(INFO) << 'cuDNN does not support multiple tops. '
+                << 'Using Caffe's own pooling layer.';
+      return shared_ptr<Layer<Dtype> >(new PoolingLayer<Dtype>(param));
     }
+    // CuDNN assumes layers are not being modified in place, thus
+    // breaking our index tracking for updates in some cases in Caffe.
+    // Until there is a workaround in Caffe (index management) or
+    // cuDNN, use Caffe layer to max pooling, or don't use in place
+    // layers after max pooling layers
+    if (param.pooling_param().pool() == PoolingParameter_PoolMethod_MAX) {
+        return shared_ptr<Layer<Dtype> >(new PoolingLayer<Dtype>(param));
+    } else {
+        return shared_ptr<Layer<Dtype> >(new CuDNNPoolingLayer<Dtype>(param));
+    }
+#endif
+  } else {
+    LOG(FATAL) << 'Layer ' << param.name() << ' has unknown engine.';
+    throw;  // Avoids missing return warning
+  }
+}
     
-        // Identical-prefix test.
-    int32_t equalPrefixLength = 0;
+    template <typename Dtype>
+void PoolingLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top) {
+  PoolingParameter pool_param = this->layer_param_.pooling_param();
+  if (pool_param.global_pooling()) {
+    CHECK(!(pool_param.has_kernel_size() ||
+      pool_param.has_kernel_h() || pool_param.has_kernel_w()))
+      << 'With Global_pooling: true Filter size cannot specified';
+  } else {
+    CHECK(!pool_param.has_kernel_size() !=
+      !(pool_param.has_kernel_h() && pool_param.has_kernel_w()))
+      << 'Filter size is kernel_size OR kernel_h and kernel_w; not both';
+    CHECK(pool_param.has_kernel_size() ||
+      (pool_param.has_kernel_h() && pool_param.has_kernel_w()))
+      << 'For non-square filters both kernel_h and kernel_w are required.';
+  }
+  CHECK((!pool_param.has_pad() && pool_param.has_pad_h()
+      && pool_param.has_pad_w())
+      || (!pool_param.has_pad_h() && !pool_param.has_pad_w()))
+      << 'pad is pad OR pad_h and pad_w are required.';
+  CHECK((!pool_param.has_stride() && pool_param.has_stride_h()
+      && pool_param.has_stride_w())
+      || (!pool_param.has_stride_h() && !pool_param.has_stride_w()))
+      << 'Stride is stride OR stride_h and stride_w are required.';
+  global_pooling_ = pool_param.global_pooling();
+  round_mode_ = pool_param.round_mode();
+  if (global_pooling_) {
+    kernel_h_ = bottom[0]->height();
+    kernel_w_ = bottom[0]->width();
+  } else {
+    if (pool_param.has_kernel_size()) {
+      kernel_h_ = kernel_w_ = pool_param.kernel_size();
+    } else {
+      kernel_h_ = pool_param.kernel_h();
+      kernel_w_ = pool_param.kernel_w();
+    }
+  }
+  CHECK_GT(kernel_h_, 0) << 'Filter dimensions cannot be zero.';
+  CHECK_GT(kernel_w_, 0) << 'Filter dimensions cannot be zero.';
+  if (!pool_param.has_pad_h()) {
+    pad_h_ = pad_w_ = pool_param.pad();
+  } else {
+    pad_h_ = pool_param.pad_h();
+    pad_w_ = pool_param.pad_w();
+  }
+  if (!pool_param.has_stride_h()) {
+    stride_h_ = stride_w_ = pool_param.stride();
+  } else {
+    stride_h_ = pool_param.stride_h();
+    stride_w_ = pool_param.stride_w();
+  }
+  if (global_pooling_) {
+    CHECK(pad_h_ == 0 && pad_w_ == 0 && stride_h_ == 1 && stride_w_ == 1)
+      << 'With Global_pooling: true; only pad = 0 and stride = 1';
+  }
+  if (pad_h_ != 0 || pad_w_ != 0) {
+    CHECK(this->layer_param_.pooling_param().pool()
+        == PoolingParameter_PoolMethod_AVE
+        || this->layer_param_.pooling_param().pool()
+        == PoolingParameter_PoolMethod_MAX)
+        << 'Padding implemented only for average and max pooling.';
+    CHECK_LT(pad_h_, kernel_h_);
+    CHECK_LT(pad_w_, kernel_w_);
+  }
+}
+    
+    
     {
-        UChar32 leftUnit;
-        UChar32 rightUnit;
-        while((leftUnit = left.next(&left)) == (rightUnit = right.next(&right))) {
-            if(leftUnit < 0) { return UCOL_EQUAL; }
-            ++equalPrefixLength;
-        }
+    {    // Save a snapshot if needed.
+    if ((param_.snapshot()
+         && iter_ % param_.snapshot() == 0
+         && Caffe::root_solver()) ||
+         (request == SolverAction::SNAPSHOT)) {
+      Snapshot();
     }
-    
-    
-    
-        /**
-     * Returns TRUE if this class can format positiveValue using
-     * the given range of digit counts.
-     *
-     * @param positiveValue the value to format
-     * @param range the acceptable range of digit counts.
-     */
-    static UBool canFormat(
-            int32_t positiveValue, const IntDigitCountRange &range);
-    
-    
-class SimpleDateFormatStaticSets : public UMemory
-{
-public:
-    SimpleDateFormatStaticSets(UErrorCode &status);
-    ~SimpleDateFormatStaticSets();
-    
-    static void    initSets(UErrorCode *status);
-    static UBool   cleanup();
-    
-    static UnicodeSet *getIgnorables(UDateFormatField fieldIndex);
-    
-private:
-    UnicodeSet *fDateIgnorables;
-    UnicodeSet *fTimeIgnorables;
-    UnicodeSet *fOtherIgnorables;
-};
-    
-    int ClusterGeneralInfo701::dynprop(const std::uint8_t* bytes,
-                                   int32_t length) const {
-  Byte t0(bytes + 6);
-  uint32_t x = t0.get_byte(0, 3);
-  int ret = x;
-  return ret;
-}
-    
-    
-    {  int ret = x;
-  return ret;
-}
-    
-      MatrixXd mat_golden(20, 10);
-  // clang-format off
-  mat_golden <<
-    -1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-     1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-     2, -1,  0,  0,  0,  0,  0,  0,  0,  0,
-    -2,  1,  0,  0,  0,  0,  0,  0,  0,  0,
-    -1,  2, -1,  0,  0,  0,  0,  0,  0,  0,
-     1, -2,  1,  0,  0,  0,  0,  0,  0,  0,
-     0, -1,  2, -1,  0,  0,  0,  0,  0,  0,
-     0,  1, -2,  1,  0,  0,  0,  0,  0,  0,
-     0,  0, -1,  2, -1,  0,  0,  0,  0,  0,
-     0,  0,  1, -2,  1,  0,  0,  0,  0,  0,
-     0,  0,  0, -1,  2, -1,  0,  0,  0,  0,
-     0,  0,  0,  1, -2,  1,  0,  0,  0,  0,
-     0,  0,  0,  0, -1,  2, -1,  0,  0,  0,
-     0,  0,  0,  0,  1, -2,  1,  0,  0,  0,
-     0,  0,  0,  0,  0, -1,  2, -1,  0,  0,
-     0,  0,  0,  0,  0,  1, -2,  1,  0,  0,
-     0,  0,  0,  0,  0,  0, -1,  2, -1,  0,
-     0,  0,  0,  0,  0,  0,  1, -2,  1,  0,
-     0,  0,  0,  0,  0,  0,  0, -1,  2, -1,
-     0,  0,  0,  0,  0,  0,  0,  1, -2,  1;
-  // clang-format on
-  EXPECT_EQ(mat, mat_golden);
-    
-      kernel.AddReferenceLineKernelMatrix(index_list, pos_list, 10.0);
-    
-    void SplineSegKernel::CalculateFx(const uint32_t num_params) {
-  kernel_fx_ = Eigen::MatrixXd::Zero(num_params, num_params);
-  for (int r = 0; r < kernel_fx_.rows(); ++r) {
-    for (int c = 0; c < kernel_fx_.cols(); ++c) {
-      kernel_fx_(r, c) = 1.0 / (r + c + 1.0);
+    if (SolverAction::STOP == request) {
+      requested_early_exit_ = true;
+      // Break out of training loop.
+      break;
     }
   }
 }
     
-    // config detail: {'name': 'manual_input', 'offset': 0.0, 'precision': 0.001,
-// 'len': 16, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 7,
-// 'type': 'double', 'order': 'motorola', 'physical_unit': '%'}
-double Brakerpt6c::manual_input(const std::uint8_t* bytes,
-                                int32_t length) const {
-  Byte t0(bytes + 0);
-  int32_t x = t0.get_byte(0, 8);
-    }
+      /// @brief Deprecated; use <code>Blob(const vector<int>& shape)</code>.
+  explicit Blob(const int num, const int channels, const int height,
+      const int width);
+  explicit Blob(const vector<int>& shape);
     
+    #ifdef USE_OPENCV
+  /**
+   * @brief Applies the transformation defined in the data layer's
+   * transform_param block to a vector of Mat.
+   *
+   * @param mat_vector
+   *    A vector of Mat containing the data to be transformed.
+   * @param transformed_blob
+   *    This is destination blob. It can be part of top blob's data if
+   *    set_cpu_data() is used. See memory_layer.cpp for an example.
+   */
+  void Transform(const vector<cv::Mat> & mat_vector,
+                Blob<Dtype>* transformed_blob);
     
-    {  auto &brakerpt = chassis_detail.gem().brake_rpt_6c();
-  EXPECT_DOUBLE_EQ(brakerpt.manual_input(), 0.258);
-  EXPECT_DOUBLE_EQ(brakerpt.commanded_value(), 0.772);
-  EXPECT_DOUBLE_EQ(brakerpt.output_value(), 4.37);
-  EXPECT_EQ(brakerpt.brake_on_off(), Brake_rpt_6c::BRAKE_ON_OFF_ON);
+    	ground_bottom_color = Color::hex(0x282f36ff);
+	ground_horizon_color = Color::hex(0x6c655fff);
+	ground_curve = 0.02;
+	ground_energy = 1;
+    
+    godot_pool_byte_array_read_access GDAPI *godot_pool_byte_array_read(const godot_pool_byte_array *p_self) {
+	const PoolVector<uint8_t> *self = (const PoolVector<uint8_t> *)p_self;
+	return (godot_pool_byte_array_read_access *)memnew(PoolVector<uint8_t>::Read(self->read()));
 }
     
-    // config detail: {'name': 'veh_can_timeout', 'offset': 0.0, 'precision': 1.0,
-// 'len': 1, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 2,
-// 'type': 'bool', 'order': 'motorola', 'physical_unit': ''}
-bool Globalrpt6a::veh_can_timeout(const std::uint8_t* bytes,
-                                  int32_t length) const {
-  Byte t0(bytes + 0);
-  int32_t x = t0.get_byte(2, 1);
-    }
-    
-    Lens3D* Lens3D::clone() const
-{
-    // no copy constructor
-    auto a = new (std::nothrow) Lens3D();
-    a->initWithDuration(_duration, _gridSize, _position, _radius);
-    a->autorelease();
-    return a;
+    UPNPDevice::UPNPDevice() {
+	description_url = '';
+	service_type = '';
+	igd_control_url = '';
+	igd_service_type = '';
+	igd_our_addr = '';
+	igd_status = IGD_STATUS_UNKNOWN_ERROR;
 }
     
-    /** @class __CCCallFuncND
- * @deprecated Please use CallFuncN instead.
- * @brief Calls a 'callback' with the node as the first argument and the 2nd argument is data.
- * ND means: Node and Data. Data is void *, so it could be anything.
- * @js NA
- */
-class CC_DLL  __CCCallFuncND : public CallFunc
-{
-public:
-    /** Creates the action with the callback and the data to pass as an argument.
-     *
-     * @param target    A certain target.
-     * @param selector  The callback need to be executed.
-     * @param d Data, is void* type.
-     * @return An autoreleased __CCCallFuncND object.
-     */
-    CC_DEPRECATED_ATTRIBUTE static __CCCallFuncND * create(Ref* target, SEL_CallFuncND selector, void* d);
-    
-    //
-    // Overrides
-    //
-    virtual __CCCallFuncND* clone() const override;
-    virtual void execute() override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    __CCCallFuncND() {}
-    virtual ~__CCCallFuncND() {}
-    
-    /** initializes the action with the callback and the data to pass as an argument */
-    bool initWithTarget(Ref* target, SEL_CallFuncND selector, void* d);
+    class PowerIphone {
+private:
+	int nsecs_left;
+	int percent_left;
+	OS::PowerState power_state;
     }
     
-        /** Removes an action given its tag and the target.
-     *
-     * @param tag       The action's tag.
-     * @param target    A certain target.
-     */
-    virtual void removeActionByTag(int tag, Node *target);
+      void done() {
+    if (m_first) {
+      m_out << '{';
+    }
+    m_out << '}\n';
+  }
     
-    /** Removes all actions given its tag and the target.
-     *
-     * @param tag       The actions' tag.
-     * @param target    A certain target.
-     * @js NA
-     */
-    virtual void removeAllActionsByTag(int tag, Node *target);
     
-    /**
-@brief TurnOffTiles action.
-@details Turn off the target node with many tiles in random order.
+    {
+    {
+    {
+    {          if (!val) {
+            /* TODO: may be 'nil' is not OK? */
+/*
+            add_soap_fault(obj, 'Client', 'Can't find response data');
+            xmlFreeDoc(response);
+            return false;
+*/
+          } else {
+            /* Decoding value of parameter */
+            if (param != nullptr) {
+              tmp = master_to_zval(param->encode, val);
+            } else {
+              tmp = master_to_zval(encodePtr(), val);
+            }
+          }
+          return_value.toArrRef().set(String(param->paramName), tmp);
+          param_count++;
+        }
+      }
+    } else {
+      /* Function hasn't WSDL description */
+      xmlNodePtr val;
+      val = resp->children;
+      while (val != nullptr) {
+        while (val && val->type != XML_ELEMENT_NODE) {
+          val = val->next;
+        }
+        if (val != nullptr) {
+          if (!node_is_equal_ex(val,'result',RPC_SOAP12_NAMESPACE)) {
+            Variant tmp = master_to_zval(encodePtr(), val);
+            if (val->name) {
+              String key((char*)val->name, CopyString);
+              if (return_value.toCArrRef().exists(key)) {
+                auto const lval = return_value.toArrRef().lvalAt(key).unboxed();
+                if (!isArrayLikeType(lval.type())) {
+                  auto const tv = make_tv<KindOfArray>(
+                    tvCastToArrayLikeData(lval.tv())
+                  );
+                  cellMove(tv, lval);
+                }
+                asArrRef(lval).append(tmp);
+              } else if (val->next && get_node(val->next, (char*)val->name)) {
+                Array arr = Array::Create();
+                arr.append(tmp);
+                return_value.toArrRef().set(key, arr);
+              } else {
+                return_value.toArrRef().set(key, tmp);
+              }
+            } else {
+              return_value.toArrRef().append(tmp);
+            }
+            ++param_count;
+          }
+          val = val->next;
+        }
+      }
+    }
+  }
+    
+      // Use a key with non-zero span, because otherwise a key right at the base of
+  // a range will be treated as before the range (bad) rather than within it
+  // (good).
+  PerfMap::Range key{uintptr_t(frame->addr), uintptr_t(frame->addr)+1};
+  auto const& it = m_map.find(key);
+  if (it == m_map.end()) {
+    // Not found.
+    frame->filename = '?';
+    frame->funcname = 'TC?'; // Note HHProf::HandlePProfSymbol() dependency.
+    return true;
+  }
+    
+    #ifndef incl_HPHP_SYNCHRONIZABLE_H_
+#define incl_HPHP_SYNCHRONIZABLE_H_
+    
+    /*
+ * This contains shared stubs used for multiple purposes in the
+ * ArrayData vtable.  Most of the functions used by more than one
+ * kind, or for more than one purpose should be collected here.
+ *
+ * Note: if you have entry points on an array kind that should never
+ * be called, it's generaelly preferable to give them their own unique
+ * functions so it will be obvious which kind was involved in core
+ * files.  We only try to consolidate the common array functions that
+ * should actually be called.
  */
-class CC_DLL TurnOffTiles : public TiledGrid3DAction
-{
-public:
-    /** 
-    * @brief Create the action with the grid size and the duration.
-    * @param duration Specify the duration of the TurnOffTiles action. It's a value in seconds.
-    * @param gridSize Specify the size of the grid.
-    * @return If the creation success, return a pointer of TurnOffTiles action; otherwise, return nil.
-    */
-    static TurnOffTiles* create(float duration, const Size& gridSize);
-    /** 
-    * @brief Create the action with the grid size and the duration.
-    * @param duration Specify the duration of the TurnOffTiles action. It's a value in seconds.
-    * @param gridSize Specify the size of the grid.
-    * @param seed Specify the random seed.
-    * @return If the creation success, return a pointer of TurnOffTiles action; otherwise, return nil.
-    */
-    static TurnOffTiles* create(float duration, const Size& gridSize, unsigned int seed);
+struct ArrayCommon {
+  static ssize_t ReturnInvalidIndex(const ArrayData*);
     }
     
-        /** Returns the tile gid at a given tile coordinate. It also returns the tile flags.
-     * 
-     * @param tileCoordinate The tile coordinate.
-     * @param flags A TMXTileFlags.
-     * @return The tile gid at a given tile coordinate. It also returns the tile flags.
-     */
-    int getTileGIDAt(const Vec2& tileCoordinate, TMXTileFlags* flags = nullptr);
+    /*
+ * Initializes the repo schema id and the compiler id from their special
+ * sections in the hhvm binary.
+ */
+void readBuildInfo() {
+  if (inited.load(std::memory_order_acquire)) return;
+  std::unique_lock<std::mutex> lock(mtx);
+  if (inited.load(std::memory_order_acquire)) return;
+    }
+    
+      // We want to ensure that all code blocks are close to each other so that we
+  // can short jump/point between them. Thus we allocate one slab and divide it
+  // between the various blocks.
+    
+        void* sp = (void*) ((char*) stack_ + stack_size_);
+    
+        tmp = (swFdInfo *) swHashMap_find_int(ht, 36 * 3);
+    ASSERT_EQ((void* )tmp, nullptr);
+    
+    namespace swoole
+{
+    }
     
     
+    {    return app.exec();
+}
+
+    
+            auto iter = cache_map.find(key);
+        if (iter != cache_map.end())
+        {
+            iter->second->second.first = expire_time;
+            iter->second->second.second = val;
+            cache_list.splice(cache_list.begin(), cache_list, iter->second);
+            return;
+        }
+    
+    typedef struct node_t
+{
+    int pri;
+    int val;
+} node_t;
+    
+                    if (ZEND_CALL_KIND_EX((*call_info) >> 24) == ZEND_CALL_TOP_CODE)
+                {
+                    return 0;
+                }
+                else if (ZEND_CALL_KIND_EX(*(call_info) >> 24) == ZEND_CALL_NESTED_CODE)
+                {
+                    memcpy(buf, '[INCLUDE_OR_EVAL]', sizeof('[INCLUDE_OR_EVAL]'));
+                }
+                else
+                {
+                    ZEND_ASSERT(0);
+                }
+            }
+            else
+            {
+                if (0 > trace_get_strz(traced_pid, buf, buf_size, function_name + offsetof(zend_string, val)))
+                {
+                    return -1;
+                }
