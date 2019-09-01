@@ -1,175 +1,241 @@
 
         
-        #include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/op_kernel.h'
-    
-    // This enum represents potential configurations of L1/shared memory when
-// running a particular kernel. These values represent user preference, and
-// the runtime is not required to respect these choices.
-enum class KernelCacheConfig {
-  // Indicates no preference for device L1/shared memory configuration.
-  kNoPreference,
-    }
-    
-    #include <vector>
-    
-    
-#define REGISTER_LAYER_CREATOR(type, creator)                                  \
-  static LayerRegisterer<float> g_creator_f_##type(#type, creator<float>);     \
-  static LayerRegisterer<double> g_creator_d_##type(#type, creator<double>)    \
-    
-    /**
- * @brief Computes the classification accuracy for a one-of-many
- *        classification task.
- */
-template <typename Dtype>
-class AccuracyLayer : public Layer<Dtype> {
- public:
-  /**
-   * @param param provides AccuracyParameter accuracy_param,
-   *     with AccuracyLayer options:
-   *   - top_k (\b optional, default 1).
-   *     Sets the maximum rank @f$ k @f$ at which a prediction is considered
-   *     correct.  For example, if @f$ k = 5 @f$, a prediction is counted
-   *     correct if the correct label is among the top 5 predicted labels.
-   */
-  explicit AccuracyLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    #include <vector>
-    
-    /**
- * @brief Normalizes the input to have 0-mean and/or unit (1) variance across
- *        the batch.
- *
- * This layer computes Batch Normalization as described in [1]. For each channel
- * in the data (i.e. axis 1), it subtracts the mean and divides by the variance,
- * where both statistics are computed across both spatial dimensions and across
- * the different examples in the batch.
- *
- * By default, during training time, the network is computing global
- * mean/variance statistics via a running average, which is then used at test
- * time to allow deterministic outputs for each input. You can manually toggle
- * whether the network is accumulating or using the statistics via the
- * use_global_stats option. For reference, these statistics are kept in the
- * layer's three blobs: (0) mean, (1) variance, and (2) moving average factor.
- *
- * Note that the original paper also included a per-channel learned bias and
- * scaling factor. To implement this in Caffe, define a `ScaleLayer` configured
- * with `bias_term: true` after each `BatchNormLayer` to handle both the bias
- * and scaling factor.
- *
- * [1] S. Ioffe and C. Szegedy, 'Batch Normalization: Accelerating Deep Network
- *     Training by Reducing Internal Covariate Shift.' arXiv preprint
- *     arXiv:1502.03167 (2015).
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
-template <typename Dtype>
-class BatchNormLayer : public Layer<Dtype> {
- public:
-  explicit BatchNormLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    /**
- * @brief Computes the contrastive loss @f$
- *          E = \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
- *              \left(1-y\right) \max \left(margin-d, 0\right)^2
- *          @f$ where @f$
- *          d = \left| \left| a_n - b_n \right| \right|_2 @f$. This can be
- *          used to train siamese networks.
- *
- * @param bottom input Blob vector (length 3)
- *   -# @f$ (N \times C \times 1 \times 1) @f$
- *      the features @f$ a \in [-\infty, +\infty]@f$
- *   -# @f$ (N \times C \times 1 \times 1) @f$
- *      the features @f$ b \in [-\infty, +\infty]@f$
- *   -# @f$ (N \times 1 \times 1 \times 1) @f$
- *      the binary similarity @f$ s \in [0, 1]@f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
- *      the computed contrastive loss: @f$ E =
- *          \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
- *          \left(1-y\right) \max \left(margin-d, 0\right)^2
- *          @f$ where @f$
- *          d = \left| \left| a_n - b_n \right| \right|_2 @f$.
- * This can be used to train siamese networks.
- */
-template <typename Dtype>
-class ContrastiveLossLayer : public LossLayer<Dtype> {
- public:
-  explicit ContrastiveLossLayer(const LayerParameter& param)
-      : LossLayer<Dtype>(param), diff_() {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    template <typename Dtype>
-class CropLayer : public Layer<Dtype> {
- public:
-  explicit CropLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    
-    {}  // namespace caffe
-    
-        // TODO: This could actually be strided?
-    const MaskKind* NDMask::DataBuffer() const
+            void KeyChord::Modifiers(Settings::KeyModifiers const& value)
     {
-        // First make sure that the underlying matrix is on the right device
-        auto matrix = GetMatrix();
-        matrix->TransferToDeviceIfNotThere(AsCNTKImplDeviceId(m_device), true);
-        return (const MaskKind*)(matrix->Data());
+        _modifiers = value;
     }
     
-    public:
-    DeclareConstructorFromConfigWithNumInputs(PerDimMeanVarNormalizationNode);
-    PerDimMeanVarNormalizationNode(DEVICEID_TYPE deviceId, const wstring& name)
-        : Base(deviceId, name)
-    {
-    }
+      void visitInitExistentialValueInst(InitExistentialValueInst *IEVI) {
+    SGM.useConformancesFromType(IEVI->getFormalConcreteType());
+    SGM.useConformancesFromObjectiveCType(IEVI->getFormalConcreteType());
+    for (auto conformance : IEVI->getConformances())
+      SGM.useConformance(conformance);
+  }
     
-            if (Input(2)->NeedsGradient() == true)
-            InvalidArgument('%ls %ls operation needs input type (no gradient) for the 3rd input.', NodeName().c_str(), OperationName().c_str());
+      // If we have a value that is owned, but that we are going to use in as a
+  // guaranteed argument, we need to borrow/unborrow the argument. Otherwise, we
+  // will introduce new consuming uses. In contrast, if we have an owned value,
+  // we are ok due to the forwarding nature of upcasts.
+  SmallVector<SILValue, 8> NewArgBorrows;
     
-        virtual void /*IComputationNode::*/ BeginForwardProp() override
-    {
-        // We are a leaf, so UpdateFunctionValuesSize() won't be called for us.
-        UpdateFunctionValuesSize();
-        Base::BeginForwardProp();
-    }
+    private:
+  /// The ClassDecl mapped to this VTable.
+  ClassDecl *Class;
     
-    template <class ElemType>
-struct MemRequestInfo
-{
-    DEVICEID_TYPE deviceId;                     // which device to allocate data 
-    std::vector<shared_ptr<Matrix<ElemType>>*> pMatrixPtrs;    // memory pointers 
-    size_t matrixSize;                          // memory size 
-    bool mbScale;                               // whether the memory shall be scaled by minibatch size 
-    bool isWorkSpace;                           // workspace memory or not, by workspace we indicate whether a memory space will be released very shortly after allocation 
-    int allocStep;                              // at what step counter memory allocation is requested 
-    int releaseStep;                            // at what step counter memory release is requested  
-    int memoryId;                               // integer indexing the memory buffer ID 
-    MemRequestInfo(DEVICEID_TYPE deviceId, shared_ptr<Matrix<ElemType>>*pMatrixPtr, size_t matrixSize, bool mbScale, bool isWorkSpace, int allocStep)
-        :deviceId(deviceId), matrixSize(matrixSize), mbScale(mbScale), isWorkSpace(isWorkSpace), allocStep(allocStep), releaseStep(INT_MAX), memoryId(-1)
-    {
-        pMatrixPtrs.push_back(pMatrixPtr);
-    }
-    void SetReleaseStep(int step) { releaseStep = step; }
-    void SetMemoryId(int id) { memoryId = id;  }
+    
+    {#ifndef NDEBUG
+  LLVM_ATTRIBUTE_DEPRECATED(void dump(SourceManager &SM, llvm::raw_ostream &OS = llvm::errs(),
+                            unsigned Indent = 0) const,
+                  'only for use in the debugger');
+  LLVM_ATTRIBUTE_DEPRECATED(void dump(SILModule &Mod) const, 'only for use in the debugger');
+#endif
 };
+    
+      const ClosureBindingMetadataSource *
+  createClosureBinding(unsigned Index) {
+    return ClosureBindingMetadataSource::create(*this, Index);
+  }
+    
+    template <typename T> static T unwrap(llvm::Expected<T> value) {
+  if (value)
+    return std::move(value.get());
+  llvm::errs() << 'swift-reflection-test error: ' << toString(value.takeError())
+               << '\n';
+  exit(EXIT_FAILURE);
+}
+    
+      constexpr static KeyPathComponentHeader
+  forStructComponentWithUnresolvedFieldOffset(bool isLet) {
+    return KeyPathComponentHeader(
+      (_SwiftKeyPathComponentHeader_StructTag
+       << _SwiftKeyPathComponentHeader_DiscriminatorShift)
+      | _SwiftKeyPathComponentHeader_UnresolvedFieldOffsetPayload
+      | isLetBit(isLet));
+  }
+  
+  constexpr static KeyPathComponentHeader
+  forClassComponentWithInlineOffset(bool isLet,
+                                    unsigned offset) {
+    return KeyPathComponentHeader(
+      (_SwiftKeyPathComponentHeader_ClassTag
+       << _SwiftKeyPathComponentHeader_DiscriminatorShift)
+      | validateInlineOffset(offset)
+      | isLetBit(isLet));
+  }
+    
+      size_t numTrailingObjects(
+      typename TrailingObjectsIdentifier::template OverloadToken<SourceLoc>)
+      const {
+    return asDerived().hasArgumentLabelLocs() ? asDerived().getNumArguments()
+                                              : 0;
+  }
+    
+    namespace swift {
+struct SupplementaryOutputPaths {
+  /// The path to which we should emit an Objective-C header for the module.
+  ///
+  /// Currently only makes sense when the compiler has whole module knowledge.
+  /// The modes for which it makes sense incuide both WMO and the 'merge
+  /// modules' job that happens after the normal compilation jobs. That's where
+  /// the header is emitted in single-file mode, since it needs whole-module
+  /// information.
+  ///
+  /// \sa swift::printAsObjC
+  std::string ObjCHeaderOutputPath;
+    }
+    }
+    
+    namespace mongo {
+    }
+    
+    #include 'mongo/db/stats/top.h'
+#include 'mongo/unittest/unittest.h'
+    
+        int32_t result;
+    int32_t fastLatinOptions = settings->fastLatinOptions;
+    if(fastLatinOptions >= 0 &&
+            (equalPrefixLength == leftLength ||
+                left[equalPrefixLength] <= CollationFastLatin::LATIN_MAX) &&
+            (equalPrefixLength == rightLength ||
+                right[equalPrefixLength] <= CollationFastLatin::LATIN_MAX)) {
+        if(leftLength >= 0) {
+            result = CollationFastLatin::compareUTF16(data->fastLatinTable,
+                                                      settings->fastLatinPrimaries,
+                                                      fastLatinOptions,
+                                                      left + equalPrefixLength,
+                                                      leftLength - equalPrefixLength,
+                                                      right + equalPrefixLength,
+                                                      rightLength - equalPrefixLength);
+        } else {
+            result = CollationFastLatin::compareUTF16(data->fastLatinTable,
+                                                      settings->fastLatinPrimaries,
+                                                      fastLatinOptions,
+                                                      left + equalPrefixLength, -1,
+                                                      right + equalPrefixLength, -1);
+        }
+    } else {
+        result = CollationFastLatin::BAIL_OUT_RESULT;
+    }
+    
+    U_NAMESPACE_BEGIN
+    
+    U_NAMESPACE_BEGIN
+    
+                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
+    
+    
+    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+            ImGui::End();
+        }
+    
+    
+    {    // Create SwapChain, RenderPass, Framebuffer, etc.
+    IM_ASSERT(g_MinImageCount >= 2);
+    ImGui_ImplVulkanH_CreateWindow(g_Instance, g_PhysicalDevice, g_Device, wd, g_QueueFamily, g_Allocator, width, height, g_MinImageCount);
+}
+    
+    IMGUI_IMPL_API bool     ImGui_ImplGlfw_InitForOpenGL(GLFWwindow* window, bool install_callbacks);
+IMGUI_IMPL_API bool     ImGui_ImplGlfw_InitForVulkan(GLFWwindow* window, bool install_callbacks);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplGlfw_NewFrame();
+    
+            D3D12_RESOURCE_BARRIER barrier = {};
+        barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+        barrier.Flags                  = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+        barrier.Transition.pResource   = g_mainRenderTargetResource[backBufferIdx];
+        barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+        barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
+        barrier.Transition.StateAfter  = D3D12_RESOURCE_STATE_RENDER_TARGET;
+    
+        // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    
+    IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_Init(const char* glsl_version = NULL);
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data);
+    
+    void    ImFontAtlas::GetTexDataAsAlpha8(unsigned char** out_pixels, int* out_width, int* out_height, int* out_bytes_per_pixel)
+{
+    // Build atlas on demand
+    if (TexPixelsAlpha8 == NULL)
+    {
+        if (ConfigData.empty())
+            AddFontDefault();
+        Build();
+    }
+    }
+    
+      static bool s_inited;
+  static hphp_string_map<Verb> s_verbs;
+  static const char *s_verb_names[];
+    
+      T& operator[](V idx);
+  const T& operator[](V idx) const;
+    
+    inline bool isPropHandled(Variant& propResult) {
+  return propResult.isInitialized();
+}
+    
+      bool operator==(unsigned char v) const { return compare(v) == 0;}
+  bool operator!=(unsigned char v) const { return compare(v) != 0;}
+  bool operator>=(unsigned char v) const { return compare(v) >= 0;}
+  bool operator<=(unsigned char v) const { return compare(v) <= 0;}
+  bool operator> (unsigned char v) const { return compare(v) >  0;}
+  bool operator< (unsigned char v) const { return compare(v) <  0;}
+    
+    #if USE_JEMALLOC_EXTENT_HOOKS
+    
+    #endif // incl_HPHP_SYNCHRONIZABLE_H_
+
+    
+    ////////////////////////////////////////////////////////////////////////////////
+    
+        // out_of_range.403
+    try
+    {
+        // try to use a JSON pointer to an nonexistent object key
+        json::const_reference ref = j.at('/foo'_json_pointer);
+    }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+    
+        // print values
+    std::cout << object << '\n';
+    std::cout << *res1.first << ' ' << std::boolalpha << res1.second << '\n';
+    
+    #endif // OPENPOSE_CORE_RECTANGLE_HPP
+
+    
+    
+    {
+    {        // PIMP requires DELETE_COPY & destructor, or extra code
+        // http://oliora.github.io/2015/12/29/pimpl-and-rule-of-zero.html
+        DELETE_COPY(GuiAdam);
+    };
+}
+    
+        template<typename T>
+    Point<T> Point<T>::operator-(const T value) const
+    {
+        try
+        {
+            return Point<T>{T(x - value), T(y - value)};
+        }
+        catch (const std::exception& e)
+        {
+            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
+            return Point<T>{};
+        }
+    }
