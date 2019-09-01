@@ -1,143 +1,76 @@
 
         
-            def test_expand_localhost_shorthand_with_path(self):
-        args = parser.parse_args(args=[':/path'], env=MockEnvironment())
-        assert args.url == 'http://localhost/path'
+        
+def get_function_signature(function, method=True):
+    wrapped = getattr(function, '_original_function', None)
+    if wrapped is None:
+        signature = inspect.getargspec(function)
+    else:
+        signature = inspect.getargspec(wrapped)
+    defaults = signature.defaults
+    if method:
+        args = signature.args[1:]
+    else:
+        args = signature.args
+    if defaults:
+        kwargs = zip(args[-len(defaults):], defaults)
+        args = args[:-len(defaults)]
+    else:
+        kwargs = []
+    st = '%s.%s(' % (clean_module_name(function.__module__), function.__name__)
     
-                    # Any following tokens are part of the value.
-                value += ''.join(tokens[i + 1:])
+    from keras import activations
+from keras import backend as K
+from keras import layers
+from keras import utils
+from keras.datasets import cifar10
+from keras.models import Model
+from keras.preprocessing.image import ImageDataGenerator
     
+                            shape = K.int_shape(w_img)
+                        assert len(shape) == 4 and shape[-1] in [1, 3, 4]
+                        tf.summary.image(mapped_weight_name, w_img)
     
-# bdist_wheel
-extras_require = {
-    # http://wheel.readthedocs.io/en/latest/#defining-conditional-dependencies
-    'python_version == '3.0' or python_version == '3.1'': ['argparse>=1.2.1'],
-    ':sys_platform == 'win32'': ['colorama>=0.2.4'],
-}
+            # Arguments
+            x: input data, as a Numpy array or list of Numpy arrays
+                (if the model has multiple inputs).
+            batch_size: integer.
+            verbose: verbosity mode, 0 or 1.
     
-        def test_POST_form_auto_Content_Type(self, httpbin):
-        r = http('--form', 'POST', httpbin.url + '/post')
-        assert HTTP_OK in r
-        assert ''Content-Type': 'application/x-www-form-urlencoded' in r
+    try:
+    path = get_file('babi-tasks-v1-2.tar.gz',
+                    origin='https://s3.amazonaws.com/text-datasets/'
+                           'babi_tasks_1-20_v1-2.tar.gz')
+except:
+    print('Error downloading dataset, please download it manually:\n'
+          '$ wget http://www.thespermwhale.com/jaseweston/babi/tasks_1-20_v1-2'
+          '.tar.gz\n'
+          '$ mv tasks_1-20_v1-2.tar.gz ~/.keras/datasets/babi-tasks-v1-2.tar.gz')
+    raise
     
-    
-def rst_filenames():
-    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
-        if '.tox' not in root:
-            for filename in fnmatch.filter(filenames, '*.rst'):
-                yield os.path.join(root, filename)
-    
-    
-@pytest.mark.parametrize('follow_flag', ['--follow', '-F'])
-def test_follow_without_all_redirects_hidden(httpbin, follow_flag):
-    r = http(follow_flag, httpbin.url + '/redirect/2')
-    assert r.count('HTTP/1.1') == 1
-    assert HTTP_OK in r
-    
-        def _add_publicip_to_server(self, server, ports_to_expose):
-        result = None
-        try:
-            result = server.PublicIPs().Add(ports_to_expose)
-        except CLCException as ex:
-            self.module.fail_json(msg='Failed to add public ip to the server : {0}. {1}'.format(
-                server.id, ex.response_text
-            ))
-        return result
-    
-    
-@api_wrapper
-def delete_pool(module, pool):
-    '''Delete Pool'''
-    if not module.check_mode:
-        pool.delete()
-    module.exit_json(changed=True)
-    
-            if balancer_member_page[1]['status'] != 200:
-            self.module.fail_json(msg='Could not get balancer_member_page, check for connectivity! ' + balancer_member_page[1])
-        else:
-            try:
-                soup = BeautifulSoup(balancer_member_page[0])
-            except TypeError:
-                self.module.fail_json(msg='Cannot parse balancer_member_page HTML! ' + str(soup))
-            else:
-                subsoup = soup.findAll('table')[1].findAll('tr')
-                keys = subsoup[0].findAll('th')
-                for valuesset in subsoup[1::1]:
-                    if re.search(pattern=self.host, string=str(valuesset)):
-                        values = valuesset.findAll('td')
-                        return dict((keys[x].string, values[x].string) for x in range(0, len(keys)))
+                # Input shape: [128, 5, 32]
+            x = tf.constant(np.arange(10240, dtype=np.float32).reshape([128, 16, 5]))
+            x = InputLayer(x)
     
     
-import os
-import tempfile
-import traceback
-from distutils.version import LooseVersion
-from ansible.module_utils.basic import AnsibleModule, missing_required_lib
-from ansible.module_utils._text import to_native
+# TODO(huay): char_cnn_embedding
+def char_cnn_embedding(x, c_embed_size=8, share_cnn_weights=True, name='char_cnn_embedding', reuse=None):
+    '''
+    In:  [N, max_n_word, max_n_char]
+    Out: [N, max_n_word, c_embed_size]
     
-                # Handle job disable/enable
-            elif (status != self.EXCL_STATE and self.has_state_changed(status)):
-                self.result['changed'] = True
-                if not self.module.check_mode:
-                    self.switch_state()
-    
-            # no differences found
-        return True
+    l1_l2_regularizer = L1L2Regularizer(l1=0.01, l2=0.01)
 
     
-        @staticmethod
-    def get_streams_by_id(account_number, video_id):
-        '''
-        int, int->list
-        
-        Get the height of the videos.
-        
-        Since brightcove is using 3 kinds of links: rtmp, http and https,
-        we will be using the HTTPS one to make it secure.
-        
-        If somehow akamaihd.net is blocked by the Great Fucking Wall,
-        change the 'startswith https' to http.
-        '''
-        endpoint = 'https://edge.api.brightcove.com/playback/v1/accounts/{account_number}/videos/{video_id}'.format(account_number = account_number, video_id = video_id)
-        fake_header_id = fake_headers
-        #is this somehow related to the time? Magic....
-        fake_header_id['Accept'] ='application/json;pk=BCpkADawqM1cc6wmJQC2tvoXZt4mrB7bFfi6zGt9QnOzprPZcGLE9OMGJwspQwKfuFYuCjAAJ53JdjI8zGFx1ll4rxhYJ255AXH1BQ10rnm34weknpfG-sippyQ'
+            self.assertEqual(result['attr1']['DataType'], 'String')
+        self.assertEqual(result['attr1']['StringValue'], 'value1')
+        self.assertEqual(result['attr2']['DataType'], 'Binary')
+        self.assertEqual(result['attr2']['BinaryValue'], 'value2'.encode('utf-8'))
+        self.assertEqual(result['attr3']['DataType'], 'Number')
+        self.assertEqual(result['attr3']['StringValue'], 'value3')
     
-    from ..common import *
-import urllib.parse
-    
-        if title is None:
-      title = url[0]
-    
-    
-class UndirectWeightedGraph:
-    d = 0.85
-    
-    def cut(sentence):
-    sentence = strdecode(sentence)
-    blocks = re_han.split(sentence)
-    for blk in blocks:
-        if re_han.match(blk):
-            for word in __cut(blk):
-                if word not in Force_Split_Words:
-                    yield word
-                else:
-                    for c in word:
-                        yield c
-        else:
-            tmp = re_skip.split(blk)
-            for x in tmp:
-                if x:
-                    yield x
-
-    
-    
-if len(args) < 1:
-    print(USAGE)
-    sys.exit(1)
-    
-    t2 = time.time()
-tm_cost = t2-t1
-    
-    t2 = time.time()
-tm_cost = t2-t1
+        if key:
+        for (disposition, part) in _iter_multipart_parts(data_bytes, boundary):
+            if disposition.get('name') == 'success_action_redirect':
+                _, value = part.split(b'\r\n\r\n', 1)
+                redirect_url = value.rstrip(b'\r\n--').decode('utf8')
