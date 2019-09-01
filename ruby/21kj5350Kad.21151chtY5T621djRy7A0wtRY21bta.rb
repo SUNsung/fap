@@ -1,214 +1,208 @@
 
         
-              # Can't upload both at apk and aab at same time
-      # Need to error out users when there both apks and aabs are detected
-      apk_paths = [Supply.config[:apk], Supply.config[:apk_paths]].flatten.compact
-      could_upload_apk = !apk_paths.empty? && !Supply.config[:skip_upload_apk]
-      could_upload_aab = Supply.config[:aab] && !Supply.config[:skip_upload_aab]
-      if could_upload_apk && could_upload_aab
-        UI.user_error!('Cannot provide both apk(s) and aab - use `skip_upload_apk`, `skip_upload_aab`, or  make sure to remove any existing .apk or .aab files that are no longer needed')
-      end
+              expect(headers['X-Runtime'].to_f).to be > 0
+    end
+  end
+    
+          override_translation('ru', 'got', 'summer')
+      expect(I18n.t('got', default: '')).to eq('winter')
+      expect(I18n.with_locale(:ru) { I18n.t('got', default: '') }).to eq('summer')
     end
     
-        context 'lazy loading attribute' do
-      let(:build) { Spaceship::TestFlight::Build.new('bundleId' => 1, 'appAdamId' => 1) }
-      it 'loads TestInfo' do
-        expect(build).to receive(:reload).once.and_call_original
-        expect(build.test_info).to be_instance_of(Spaceship::TestFlight::TestInfo)
-      end
-      it 'loads BetaReviewInfo' do
-        expect(build).to receive(:reload).once.and_call_original
-        expect(build.beta_review_info).to be_instance_of(Spaceship::TestFlight::BetaReviewInfo)
-      end
-      it 'loads ExportCompliance' do
-        expect(build).to receive(:reload).once.and_call_original
-        expect(build.export_compliance).to be_instance_of(Spaceship::TestFlight::ExportCompliance)
-      end
-    end
-    
-        # Pass a action symbol (e.g. :deliver or :commit_version_bump)
-    # and this method will return a reference to the action class
-    # if it exists. In case the action with this name can't be found
-    # this method will return nil.
-    # This method is being called by `trigger_action_by_name` to see
-    # if a given action is available (either built-in or loaded from a plugin)
-    # and is also being called from the fastlane docs generator
-    def class_reference_from_action_name(method_sym)
-      method_str = method_sym.to_s.delete('?') # as a `?` could be at the end of the method name
-      class_ref = Actions.action_class_ref(method_str)
-    
-      describe :find_build do
-    context 'one build' do
-      let(:fake_builds) { make_fake_builds(1) }
-      it 'finds the one build' do
-        only_build = fake_builds.first
-        expect(review_submitter.find_build(fake_builds)).to eq(only_build)
-      end
-    end
-    
-          def xcodebuild_log_path(device_type: nil, language: nil, locale: nil)
-        name_components = [Snapshot.project.app_name, Snapshot.config[:scheme]]
-    
-          def self.details
-        [
-          'This action will return the current build number set on your project.',
-          'You first have to set up your Xcode project, if you haven't done it already: [https://developer.apple.com/library/ios/qa/qa1827/_index.html](https://developer.apple.com/library/ios/qa/qa1827/_index.html).'
-        ].join('\n')
+            return false
       end
     
-      has_one :person, inverse_of: :owner, foreign_key: :owner_id
-  has_one :profile, through: :person
+            it 'removes the file from s3 on multisite' do
+          test_multisite_connection('default') do
+            upload = build_upload
+            store.expects(:get_depth_for).with(upload.id).returns(0)
+            s3_helper.expects(:s3_bucket).returns(s3_bucket).at_least_once
+            upload.update!(url: '//s3-upload-bucket.s3.dualstack.us-west-1.amazonaws.com/discourse-uploads/uploads/default/original/1X/#{upload.sha1}.png')
+            s3_object = stub
     
-          def handle_authorization_form(auth)
-        if auth
-          process_authorization_consent('true')
+        reviewable = Fabricate(:reviewable_flagged_post, created_by: user, target: post, topic: topic)
+    
+            it 'doesn't lock the wiki posts' do
+          post.wiki = true
+          result = subject.revise!(
+            moderator,
+            raw: 'some new raw content'
+          )
+          expect(result).to eq(true)
+          post.reload
+          expect(post).not_to be_locked
+        end
+    
+      end
+    
+          # The prefix to `module` to prepend in the module map.
+      # Ensures that only framework targets have `framework` prepended.
+      #
+      def module_specifier_prefix
+        if target.build_as_framework?
+          'framework '
         else
-          request_authorization_consent_form
+          ''
         end
       end
     
-          rescue_from OpenIDConnect::HttpError do |e|
-        http_error_page_as_json(e)
+            # @return [Array<Specification>] the app specs for the target
+        #
+        attr_reader :app_specs
+    
+        it 'writes the module map to the disk for a library' do
+      path = temporary_directory + 'BananaLib.modulemap'
+      @pod_target.stubs(:build_type => Target::BuildType.static_library)
+      @gen.save_as(path)
+      path.read.should == <<-EOS.strip_heredoc
+        module BananaLib {
+          umbrella header 'BananaLib-umbrella.h'
+    }
+    
+          it 'returns scopes differentiating build types' do
+        variants = PodVariantSet.new([
+          PodVariant.new([@root_spec, @default_subspec], [], [], Platform.ios),
+          PodVariant.new([@root_spec, @default_subspec], [], [], Platform.ios, Target::BuildType.dynamic_framework),
+          PodVariant.new([@root_spec, @default_subspec], [], [], Platform.ios, Target::BuildType.static_framework),
+        ])
+        variants.scope_suffixes.values.should == %w(
+          library
+          framework-dynamic
+          framework-static
+        )
       end
-    
-      rescue_from Diaspora::NotMine do
-    render plain: I18n.t('aspect_memberships.destroy.forbidden'), status: 403
-  end
-end
-
-    
-      def aspect_params
-    params.require(:aspect).permit(:name, :chat_enabled, :order_id)
-  end
-end
-
-    
-      def contacts_data
-    current_user.contacts.mutual.joins(person: :profile)
-      .pluck(*%w(contacts.id profiles.first_name profiles.last_name people.diaspora_handle))
-      .map {|contact_id, *name_attrs|
-        {value: contact_id, name: ERB::Util.h(Person.name_from_attrs(*name_attrs)) }
-      }
-  end
-end
-
-    
-        redirect_back fallback_location: root_path
-  end
-    
-        @grouped_unread_notification_counts = {}
-    
-    namespace :doc do
-  task :readmes do
-    Dir.glob 'lib/rack/protection/*.rb' do |file|
-      excluded_files = %w[lib/rack/protection/base.rb lib/rack/protection/version.rb]
-      next if excluded_files.include?(file)
-      doc  = File.read(file)[/^  module Protection(\n)+(    #[^\n]*\n)*/m].scan(/^ *#(?!#) ?(.*)\n/).join('\n')
-      file = 'doc/#{file[4..-4].tr('/_', '-')}.rdoc'
-      Dir.mkdir 'doc' unless File.directory? 'doc'
-      puts 'writing #{file}'
-      File.open(file, 'w') { |f| f << doc }
     end
   end
+end
+
     
-          def csp_policy
-        directives = []
+              it 'verify static framework is building a static library' do
+            @target.stubs(:build_type => Target::BuildType.static_framework)
+            @installer.send(:add_target).resolved_build_setting('MACH_O_TYPE').should == {
+              'Release' => 'staticlib',
+              'Debug' => 'staticlib',
+              'Test' => 'staticlib',
+              'AppStore' => 'staticlib',
+            }
+          end
     
-          def call(env)
-        status, headers, body = super
-        response = Rack::Response.new(body, status, headers)
-        request = Rack::Request.new(env)
-        remove_bad_cookies(request, response)
-        response.finish
-      end
+            # Initialize a new instance
+        #
+        # @param  [Hash{Symbol=>String}] pods_by_state
+        #         The name of the pods grouped by their state
+        #         (`:added`, `:removed`, `:changed` or `:unchanged`).
+        #
+        def initialize(pods_by_state = nil)
+          @added     = Set.new
+          @deleted   = Set.new
+          @changed   = Set.new
+          @unchanged = Set.new
     
-          def escape(object)
-        case object
-        when Hash   then escape_hash(object)
-        when Array  then object.map { |o| escape(o) }
-        when String then escape_string(object)
-        when Tempfile then object
-        else nil
+          def left_diff_line_number(id, line)
+        if line =~ /^@@/
+          m, li                  = *line.match(/\-(\d+)/)
+          @left_diff_line_number = li.to_i
+          @current_line_number   = @left_diff_line_number
+          ret                    = '...'
+        elsif line[0] == ?-
+          ret                    = @left_diff_line_number.to_s
+          @left_diff_line_number += 1
+          @current_line_number   = @left_diff_line_number - 1
+        elsif line[0] == ?+
+          ret = ' '
+        else
+          ret                    = @left_diff_line_number.to_s
+          @left_diff_line_number += 1
+          @current_line_number   = @left_diff_line_number - 1
         end
+        ret
       end
     
-          def has_vector?(request, headers)
-        return false if request.xhr?
-        return false if options[:allow_if] && options[:allow_if].call(request.env)
-        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
-        origin(request.env).nil? and referrer(request.env) != request.host
-      end
+      test 'extracting paths from URLs' do
+    assert_nil extract_path('Eye-Of-Sauron')
+    assert_equal 'Mordor', extract_path('Mordor/Sauron')
+    assert_equal 'Mordor/Sauron', extract_path('Mordor/Sauron/Evil')
+  end
     
-        it 'leaves normal params untouched' do
-      mock_app do |env|
-        request = Rack::Request.new(env)
-        [200, {'Content-Type' => 'text/plain'}, [request.params['foo']]]
-      end
-      get '/', :foo => 'bar'
-      expect(body).to eq('bar')
+      setup do
+    @path = cloned_testpath('examples/revert.git')
+    @wiki = Gollum::Wiki.new(@path)
+    Precious::App.set(:gollum_path, @path)
+    Precious::App.set(:wiki_options, {})
+  end
+    
+      if cfg = options[:config]
+    # If the path begins with a '/' it will be considered an absolute path,
+    # otherwise it will be relative to the CWD
+    cfg = File.join(Dir.getwd, cfg) unless cfg.slice(0) == File::SEPARATOR
+    require cfg
+  end
+    
+    module Gollum
+  VERSION = '4.1.4'
+    
+    desc 'Move sass to sass.old, install sass theme updates, replace sass/custom with sass.old/custom'
+task :update_style, :theme do |t, args|
+  theme = args.theme || 'classic'
+  if File.directory?('sass.old')
+    puts 'removed existing sass.old directory'
+    rm_r 'sass.old', :secure=>true
+  end
+  mv 'sass', 'sass.old'
+  puts '## Moved styles into sass.old/'
+  cp_r '#{themes_dir}/'+theme+'/sass/', 'sass', :remove_destination=>true
+  cp_r 'sass.old/custom/.', 'sass/custom/', :remove_destination=>true
+  puts '## Updated Sass ##'
+end
+    
+          # Set the correct feed URL.
+      self.data['feed_url'] = '#{category_dir}/#{name}'
     end
     
-    # usage rake new_post[my-new-post] or rake new_post['my new post'] or rake new_post (defaults to 'new-post')
-desc 'Begin a new post in #{source_dir}/#{posts_dir}'
-task :new_post, :title do |t, args|
-  if args.title
-    title = args.title
-  else
-    title = get_stdin('Enter a title for your post: ')
-  end
-  raise '### You haven't set anything up yet. First run `rake install` to set up an Octopress theme.' unless File.directory?(source_dir)
-  mkdir_p '#{source_dir}/#{posts_dir}'
-  filename = '#{source_dir}/#{posts_dir}/#{Time.now.strftime('%Y-%m-%d')}-#{title.to_url}.#{new_post_ext}'
-  if File.exist?(filename)
-    abort('rake aborted!') if ask('#{filename} already exists. Do you want to overwrite?', ['y', 'n']) == 'n'
-  end
-  puts 'Creating new post: #{filename}'
-  open(filename, 'w') do |post|
-    post.puts '---'
-    post.puts 'layout: post'
-    post.puts 'title: \'#{title.gsub(/&/,'&amp;')}\''
-    post.puts 'date: #{Time.now.strftime('%Y-%m-%d %H:%M:%S %z')}'
-    post.puts 'comments: true'
-    post.puts 'categories: '
-    post.puts '---'
+        def render(context)
+      if @img
+        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
+      else
+        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
+      end
+    end
   end
 end
     
-        def html_output_for(script_url, code)
-      code = CGI.escapeHTML code
-      <<-HTML
-<div><script src='#{script_url}'></script>
-<noscript><pre><code>#{code}</code></pre></noscript></div>
-      HTML
     end
     
-    
-        original.attributes[:snap_yaml] = snap_yaml
-        original.output(target)
-        input.input(target)
+          Dir.chdir(code_path) do
+        code = file.read
+        @filetype = file.extname.sub('.','') if @filetype.nil?
+        title = @title ? '#{@title} (#{file.basename})' : file.basename
+        url = '/#{code_dir}/#{@file}'
+        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
+        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
+        TemplateWrapper::safe_wrap(source)
       end
-    
-        wordsize = case @architecture
-    when nil, 'native'
-      %x{getconf LONG_BIT}.chomp # 'native' is current arch
-    when 'amd64'
-      '64'
-    when 'i386'
-      '32'
-    else
-      %x{getconf LONG_BIT}.chomp # default to native, the current arch
     end
+  end
     
-    # This provides PHP PEAR package support.
-#
-# This provides input support, but not output support.
-class FPM::Package::PEAR < FPM::Package
-  option '--package-name-prefix', 'PREFIX',
-    'Name prefix for pear package', :default => 'php-pear'
+        def sizes
+      attrs = 'width='#{@sizes[0]}'' if @sizes[0]
+      attrs += ' height='#{@sizes[1]}'' if @sizes[1]
+      attrs
+    end
+  end
+end
     
+      describe '#render' do
+    it 'renders the template' do
+      expect(File).to receive(:read).at_least(:once) { 'wemux ls 2>/dev/null' }
     
+      it 'calls Hooks.commands_from' do
+    expect(Tmuxinator::Hooks).to receive(:commands_from).
+      with(kind_of(Tmuxinator::Project), hook_name).once
+    project.send('hook_#{hook_name}')
+  end
     
-      option '--downcase-name', :flag, 'Should the target package name be in ' \
-    'lowercase?', :default => true
-  option '--downcase-dependencies', :flag, 'Should the package dependencies ' \
-    'be in lowercase?', :default => true
+        context 'with project yaml' do
+      it 'gets the project as path to the yaml file' do
+        expect(Tmuxinator::Config.global_project('yaml')).to eq yaml
+      end
+    end
