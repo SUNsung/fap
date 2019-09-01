@@ -1,84 +1,131 @@
 
         
-                def initialize(argv, env)
-          @argv = argv
-          @env  = env
-          @logger = Log4r::Logger.new('vagrant::command::#{self.class.to_s.downcase}')
-        end
-    
-            # Mounts a shared folder.
-        #
-        # This method should create, mount, and properly set permissions
-        # on the shared folder. This method should also properly
-        # adhere to any configuration values such as `shared_folder_uid`
-        # on `config.vm`.
-        #
-        # @param [String] name The name of the shared folder.
-        # @param [String] guestpath The path on the machine which the user
-        #   wants the folder mounted.
-        # @param [Hash] options Additional options for the shared folder
-        #   which can be honored.
-        def mount_shared_folder(name, guestpath, options)
-          raise BaseError, _key: :unsupported_shared_folder
-        end
-    
-            # Registers additional providers to be available.
-        #
-        # @param [Symbol] name Name of the provider.
-        def self.provider(name=UNSET_VALUE, &block)
-          data[:providers] ||= Registry.new
-    
-            def initialize(env, config)
-          @env    = env
-          @config = config
-        end
-    
-        # Get a value by the given key.
-    #
-    # This will evaluate the block given to `register` and return the
-    # resulting value.
-    def get(key)
-      return nil if !@items.key?(key)
-      return @results_cache[key] if @results_cache.key?(key)
-      @results_cache[key] = @items[key].call
+            # The path used after confirmation.
+    def after_confirmation_path_for(resource_name, resource)
+      if signed_in?(resource_name)
+        signed_in_root_path(resource)
+      else
+        new_session_path(resource_name)
+      end
     end
-    alias :[] :get
     
-    puts '\nUnable to find an RSS feed for the following blogs:'
-puts '==================================================='
-unavailable.each do |b|
-  puts '#{b.name} | #{b.web_url}'
+                  define_method method do |resource_or_scope, *args|
+                scope = Devise::Mapping.find_scope!(resource_or_scope)
+                router_name = Devise.mappings[scope].router_name
+                context = router_name ? send(router_name) : _devise_route_context
+                context.send('#{action}#{scope}_#{module_name}_#{path_or_url}', *args)
+              end
+            end
+          end
+        end
+      end
+    
+          module ClassMethods
+        Devise::Models.config(self, :timeout_in)
+      end
+    end
+  end
 end
-puts '==================================================='
 
     
-      # Configure static asset server for tests with Cache-Control for performance.
-  if config.respond_to?(:serve_static_files)
-    # rails >= 4.2
-    config.serve_static_files = true
-  elsif config.respond_to?(:serve_static_assets)
-    # rails < 4.2
-    config.serve_static_assets = true
+          it 'uses the custom arguments if given' do
+        opts[:args] = ['--verbose', '-z']
+    
+        let(:cmd) { 'find /vagrant -path /vagrant/.vagrant -prune -o '!' -type l -a '(' ! -user vagrant -or ! -group vagrant ')' -exec chown vagrant:vagrant '{}' +' }
+    let(:no_exclude_cmd) { 'find /vagrant '!' -type l -a '(' ! -user vagrant -or ! -group vagrant ')' -exec chown vagrant:vagrant '{}' +' }
+    
+        it 'returns all the machines' do
+      configure do |config|
+        config.vm.define 'foo'
+        config.vm.define 'bar', autostart: false
+        config.vm.define 'baz', autostart: true
+      end
+    
+    describe VagrantPlugins::DockerProvider::Driver::Compose do
+  let(:cmd_executed) { @cmd }
+  let(:cid)          { 'side-1-song-10' }
+  let(:docker_yml){ double('docker-yml', path: '/tmp-file') }
+  let(:machine){ double('machine', env: env, name: :docker_1, id: :docker_id, provider_config: provider_config) }
+  let(:compose_configuration){ {} }
+  let(:provider_config) do
+    double('provider-config',
+      compose: true,
+      compose_configuration: compose_configuration
+    )
   end
-  config.static_cache_control = 'public, max-age=3600'
+  let(:env) do
+    double('env',
+      cwd: Pathname.new('/compose/cwd'),
+      local_data_path: local_data_path
+    )
+  end
+  let(:composition_content){ '--- {}\n' }
+  let(:composition_path) do
+    double('composition-path',
+      to_s: 'docker-compose.yml',
+      exist?: true,
+      read: composition_content,
+      delete: true
+    )
+  end
+  let(:data_directory){ double('data-directory', join: composition_path) }
+  let(:local_data_path){ double('local-data-path') }
+  let(:compose_execute_up){ ['docker-compose', '-f', 'docker-compose.yml', '-p', 'cwd', 'up', '--remove-orphans', '-d', {}] }
     
-    Liquid::Template.register_tag('config_tag', ConfigTag)
+      test 'h1 title sanitizes correctly' do
+    title = 'H1'
+    @wiki.write_page(title, :markdown, '# 1 & 2 <script>alert('js')</script>' + '\n # 3', commit_details)
+    page = @wiki.page(title)
     
-        def get_gist_url_for(gist, file)
-      'https://gist.githubusercontent.com/raw/#{gist}/#{file}'
-    end
-    
-      # Removes trailing forward slash from a string for easily appending url segments
-  def strip_slash(input)
-    if input =~ /(.+)\/$|^\/$/
-      input = $1
-    end
-    input
+        # TODO: Remove to_url once write_page changes are merged.
+    @wiki.write_page('ééééé'.to_url, :markdown, '한글 text', commit_details)
+    page = @wiki.page('eeeee')
+    assert_equal '한글 text', utf8(page.raw_data)
   end
     
-        def initialize(tag_name, markup, tokens)
-      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
-      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
-      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
-      super
+    require 'rake/testtask'
+Rake::TestTask.new(:test) do |test|
+  test.libs << 'lib' << 'test' << '.'
+  test.pattern = 'test/**/test_*.rb'
+  test.verbose = true
+end
+    
+      begin
+    require 'gollum-lib'
+    wiki = Gollum::Wiki.new(gollum_path, wiki_options)
+    if !wiki.exist? then
+      raise Gollum::InvalidGitRepositoryError
     end
+    if wiki_options[:plantuml_url]
+      Gollum::Filter::PlantUML.configure do |config|
+        puts 'Using #{wiki_options[:plantuml_url]} as PlantUML endpoint'
+        config.url = wiki_options[:plantuml_url]
+      end
+    end
+    puts
+    puts 'Loaded Gollum wiki at:'
+    puts '#{File.expand_path(gollum_path).inspect}'
+    puts
+    puts 'Example API calls:'
+    puts %(    page = wiki.page('page-name'))
+    puts %(    # => <Gollum::Page>)
+    puts
+    puts %(    page.raw_data)
+    puts %(    # => '# My wiki page')
+    puts
+    puts %(    page.formatted_data)
+    puts %(    # => '<h1>My wiki page</h1>')
+    puts
+    puts 'Full API documentation at:'
+    puts 'https://github.com/gollum/gollum-lib'
+    puts
+    IRB.start_session(binding)
+  rescue Gollum::InvalidGitRepositoryError, Gollum::NoSuchPathError
+    puts 'Invalid Gollum wiki at #{File.expand_path(gollum_path).inspect}'
+    exit 0
+  end
+else
+  require 'gollum/app'
+  Precious::App.set(:gollum_path, gollum_path)
+  Precious::App.set(:wiki_options, wiki_options)
+  Precious::App.settings.mustache[:templates] = wiki_options[:template_dir] if wiki_options[:template_dir]
