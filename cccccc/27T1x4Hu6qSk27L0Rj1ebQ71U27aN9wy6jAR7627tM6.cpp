@@ -1,243 +1,175 @@
 
         
-          // Array holding scores for each orientation id [0,3].
-  // Orientation ids [0..3] map to [0, 270, 180, 90] degree orientations of the
-  // page respectively, where the values refer to the amount of clockwise
-  // rotation to be applied to the page for the text to be upright and readable.
-  float orientations[4];
-  // Script confidence scores for each of 4 possible orientations.
-  float scripts_na[4][kMaxNumberOfScripts];
+        // Forward declarations
+HRESULT CreatePseudoConsoleAndPipes(HPCON*, HANDLE*, HANDLE*);
+HRESULT InitializeStartupInfoAttachedToPseudoConsole(STARTUPINFOEX*, HPCON);
+void __cdecl PipeListener(LPVOID);
     
-      // Adds an element with a weight of 1.
-  void add(double x, double y);
-  // Adds an element with a specified weight.
-  void add(double x, double y, double weight);
-  // Adds a whole LLSQ.
-  void add(const LLSQ& other);
-  // Deletes an element with a weight of 1.
-  void remove(double x, double y);
-  int32_t count() const {  // no of elements
-    return static_cast<int>(total_weight + 0.5);
+    	GDCLASS(Particles2DEditorPlugin, EditorPlugin);
+    
+    		if (pn.find('_') != -1) {
+			//type
+			int idx = pn.get_slicec('/', 1).get_slicec('_', 0).to_int();
+			bool valid;
+			r_ret = arr.get(idx, &valid);
+			if (valid)
+				r_ret = r_ret.get_type();
+			return valid;
+    }
+    
+    
+    {	AudioStreamPreviewGenerator();
+};
+    
+    
+    {	return OK;
+}
+    
+            if (sindex_info.geo != sindex_geo_bool_t::GEO) {
+            res->results_or_error = ql::exc_t(
+                ql::base_exc_t::LOGIC,
+                strprintf(
+                    'Index `%s` is not a geospatial index.  get_nearest can only be '
+                    'used with a geospatial index.',
+                    geo_read.sindex_id.c_str()),
+                ql::backtrace_id_t::empty());
+            return;
+        }
+    
+    
+    {    for (auto it  = created_sindexs.begin(); it != created_sindexs.end(); ++it) {
+        /* Drop the sindex */
+        cond_t non_interruptor;
+        store.sindex_drop(it->name, &non_interruptor);
+    }
+}
+    
+    void _check_keys_are_NOT_present(store_t *store,
+        sindex_name_t sindex_name) {
+    /* Check that we don't have any of the keys (we just deleted them all) */
+    for (int i = 0; i < TOTAL_KEYS_TO_INSERT; ++i) {
+        ql::grouped_t<ql::stream_t> groups =
+            read_row_via_sindex(store, sindex_name, i * i);
+        if (groups.size() != 0) {
+            debugf_print('groups is non-empty', groups);
+        }
+        ASSERT_EQ(0, groups.size());
+    }
+}
+    
+      // Streams a pointer value to this object.
+  //
+  // This function is an overload of the previous one.  When you
+  // stream a pointer to a Message, this definition will be used as it
+  // is more specialized.  (The C++ Standard, section
+  // [temp.func.order].)  If you stream a non-pointer, then the
+  // previous definition will be used.
+  //
+  // The reason for this overload is that streaming a NULL pointer to
+  // ostream is undefined behavior.  Depending on the compiler, you
+  // may get '0', '(nil)', '(null)', or an access violation.  To
+  // ensure consistent result across compilers, we always treat NULL
+  // as '(null)'.
+  template <typename T>
+  inline Message& operator <<(T* const& pointer) {  // NOLINT
+    if (pointer == NULL) {
+      *ss_ << '(null)';
+    } else {
+      *ss_ << pointer;
+    }
+    return *this;
   }
+#endif  // GTEST_OS_SYMBIAN
     
      private:
-  // Free allocated memory and clear pointers.
-  void Clear();
-  // Setup default values.
-  void Init();
+  // Replaces multiple consecutive separators with a single separator.
+  // For example, 'bar///foo' becomes 'bar/foo'. Does not eliminate other
+  // redundancies that might be in a pathname involving '.' or '..'.
+  //
+  // A pathname with multiple consecutive separators may occur either through
+  // user error or as a result of some scripts or APIs that generate a pathname
+  // with a trailing separator. On other platforms the same API or script
+  // may NOT generate a pathname with a trailing '/'. Then elsewhere that
+  // pathname may have another '/' and pathname components added to it,
+  // without checking for the separator already being there.
+  // The script language and operating system may allow paths like 'foo//bar'
+  // but some of the functions in FilePath will not handle that correctly. In
+  // particular, RemoveTrailingPathSeparator() only removes one separator, and
+  // it is called in CreateDirectoriesRecursively() assuming that it will change
+  // a pathname from directory syntax (trailing separator) to filename syntax.
+  //
+  // On Windows this method also replaces the alternate path separator '/' with
+  // the primary path separator '\\', so that for example 'bar\\/\\foo' becomes
+  // 'bar\\foo'.
     
-      // Free up any currently unused dawgs.
-  void DeleteUnusedDawgs() {
-    dawgs_.DeleteUnusedObjects();
-  }
+      // Returns true iff the given string ends with the given suffix, ignoring
+  // case. Any string is considered to end with an empty suffix.
+  static bool EndsWithCaseInsensitive(
+      const std::string& str, const std::string& suffix);
     
+    #endif  // XGBOOST_STRICT_R_MODE && !defined(XGBOOST_USE_CUDA)
     
-    {    float posX = 0;
-    auto lastChild = Children->GetAt(Children->Size - 1);
-    float lastChildWidth = 0;
-    if (Children->Size > 2 && ShouldPrioritizeLastItem())
-    {
-        lastChildWidth = lastChild->DesiredSize.Width;
-    }
-    for (auto item : Children)
-    {
-        auto widthAvailable = finalSize.Width - posX;
-        if (item != lastChild)
-        {
-            widthAvailable -= lastChildWidth;
-        }
-        float itemWidth = item->DesiredSize.Width;
-        if (widthAvailable > 0 && itemWidth <= widthAvailable)
-        {
-            // stack the items horizontally (left to right)
-            item->Arrange(Rect(posX, 0, itemWidth, finalSize.Height));
-            AutomationProperties::SetAccessibilityView(item, ::AccessibilityView::Content);
-            posX += item->RenderSize.Width;
-        }
-        else
-        {
-            // Not display the item
-            item->Arrange(Rect(0, 0, 0, 0));
-            AutomationProperties::SetAccessibilityView(item, ::AccessibilityView::Raw);
-        }
-    }
-    return finalSize;
-}
-
+     public:
+  XGBOOST_DEVICE PackedReduceResult() : residue_sum_{0}, weights_sum_{0} {}
+  XGBOOST_DEVICE PackedReduceResult(double residue, double weight)
+      : residue_sum_{residue}, weights_sum_{weight} {}
     
-    class CCalcEngine
+    template <class ConfigRecordType, typename ElemType>
+function<ComputationNetworkPtr(DEVICEID_TYPE)> GetNetworkFactory(const ConfigRecordType& config)
 {
-public:
-    CCalcEngine(
-        bool fPrecedence,
-        bool fIntegerMode,
-        CalculationManager::IResourceProvider* const pResourceProvider,
-        __in_opt ICalcDisplay* pCalcDisplay,
-        __in_opt std::shared_ptr<IHistoryDisplay> pHistoryDisplay);
-    void ProcessCommand(OpCode wID);
-    void DisplayError(uint32_t nError);
-    std::unique_ptr<CalcEngine::Rational> PersistedMemObject();
-    void PersistedMemObject(CalcEngine::Rational const& memObject);
-    bool FInErrorState()
-    {
-        return m_bError;
-    }
-    bool FInRecordingState()
-    {
-        return m_bRecord;
-    }
-    void SettingsChanged();
-    bool IsCurrentTooBigForTrig();
-    int GetCurrentRadix();
-    std::wstring GetCurrentResultForRadix(uint32_t radix, int32_t precision);
-    void ChangePrecision(int32_t precision)
-    {
-        m_precision = precision;
-        ChangeConstants(m_radix, precision);
-    }
-    std::wstring GroupDigitsPerRadix(std::wstring_view numberString, uint32_t radix);
-    std::wstring GetStringForDisplay(CalcEngine::Rational const& rat, uint32_t radix);
-    void UpdateMaxIntDigits();
-    wchar_t DecimalSeparator() const;
-    }
-    
-    NarratorAnnouncement ^ CalculatorAnnouncement::GetMaxDigitsReachedAnnouncement(String ^ announcement)
-{
-    return ref new NarratorAnnouncement(
-        announcement, CalculatorActivityIds::MaxDigitsReached, AutomationNotificationKind::Other, AutomationNotificationProcessing::ImportantMostRecent);
+    function<ComputationNetworkPtr(DEVICEID_TYPE)> createNetworkFn;
+    bool gotIt = TryGetNetworkFactory<ConfigRecordType, ElemType>(config, createNetworkFn);
+    if (!gotIt)
+        RuntimeError('No network builder found in the config file. NDLNetworkBuilder, SimpleNetworkBuilder, or BrainScriptNetworkBuilder must be specified');
+    else
+        return createNetworkFn;
 }
     
-    /*!
- * \brief Get string attribute from Booster.
- * \param handle handle
- * \param key The key of the attribute.
- * \param out The result attribute, can be NULL if the attribute do not exist.
- * \param success Whether the result is contained in out.
- * \return 0 when success, -1 when failure happens
- */
-XGB_DLL int XGBoosterGetAttr(BoosterHandle handle,
-                             const char* key,
-                             const char** out,
-                             int *success);
-/*!
- * \brief Set or delete string attribute.
- *
- * \param handle handle
- * \param key The key of the attribute.
- * \param value The value to be saved.
- *              If nullptr, the attribute would be deleted.
- * \return 0 when success, -1 when failure happens
- */
-XGB_DLL int XGBoosterSetAttr(BoosterHandle handle,
-                             const char* key,
-                             const char* value);
-/*!
- * \brief Get the names of all attribute from Booster.
- * \param handle handle
- * \param out_len the argument to hold the output length
- * \param out pointer to hold the output attribute stings
- * \return 0 when success, -1 when failure happens
- */
-XGB_DLL int XGBoosterGetAttrNames(BoosterHandle handle,
-                                  bst_ulong* out_len,
-                                  const char*** out);
+    private:
+    // -----------------------------------------------------------------------
+    // the following members are all result of post-processing by CompileNetwork()
+    // -----------------------------------------------------------------------
     
-    // Finally register the objective function.
-// After it succeeds you can try use xgboost with objective=mylogistic
-XGBOOST_REGISTER_OBJECTIVE(MyLogistic, 'mylogistic')
-.describe('User defined logistic regression plugin')
-.set_body([]() { return new MyLogistic(); });
-    
-    XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(lz4hc)
-.describe('Apply LZ4 binary data compression(high compression ratio) for ext memory.')
-.set_body([]() {
-    return new SparsePageLZ4Format<bst_uint>(true);
-  });
-    
-      std::shared_ptr<HostDeviceVector<int>> ColSample(
-      std::shared_ptr<HostDeviceVector<int>> p_features, float colsample) {
-    if (colsample == 1.0f) return p_features;
-    const auto& features = p_features->HostVector();
-    CHECK_GT(features.size(), 0);
-    int n = std::max(1, static_cast<int>(colsample * features.size()));
-    auto p_new_features = std::make_shared<HostDeviceVector<int>>();
-    auto& new_features = *p_new_features;
-    new_features.Resize(features.size());
-    std::copy(features.begin(), features.end(),
-              new_features.HostVector().begin());
-    std::shuffle(new_features.HostVector().begin(),
-                 new_features.HostVector().end(), rng_);
-    new_features.Resize(n);
-    std::sort(new_features.HostVector().begin(),
-              new_features.HostVector().end());
-    }
-    
-      vals_in.clear(); ss.flush(); ss.clear(); ss.str('');
-  ss << '(3L,2L,1L)';
-  ss >> vals_in;
-  EXPECT_EQ(vals_in, vals);
-    
-        void UserPostProcessing::initializationOnThread()
+        template<typename InputType>
+    inline shared_ptr<ComputationNode<InputType>> TypedInput(const size_t inputIndex) const
     {
-        try
-        {
-        }
-        catch (const std::exception& e)
-        {
-            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
-        }
+        if (inputIndex >= m_inputs.size())
+            LogicError('Inputs: inputIndex %d is out of range for %ls %ls operation.', (int)inputIndex, NodeName().c_str(), OperationName().c_str());
     }
     
-        template<typename T>
-    void Rectangle<T>::recenter(const T newWidth, const T newHeight)
-    {
-        try
-        {
-            const auto centerPoint = center();
-            x = centerPoint.x - T(newWidth / 2.f);
-            y = centerPoint.y - T(newHeight / 2.f);
-            width = newWidth;
-            height = newHeight;
-        }
-        catch (const std::exception& e)
-        {
-            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
-        }
+    // Evaluate - Evalute using the model with the given inputs and outputs
+// outputs - map from node name to output vector, outputs vectors need to be preallocated by caller, sizing will happen during evaluation
+template <typename ElemType>
+void CNTKEval<ElemType>::Evaluate(std::map<std::wstring, std::vector<ElemType>*>& outputs)
+{
+    // get the evaluation names from the output string
+    vector<wstring> outNodeNames;
     }
     
-      if (m_affectedKeys.size() == 0) {
-    return returnResults();
+      // Specific value check
+  auto cast_result = tryTo<int64_t>(string);
+  if (cast_result) {
+    // its int, so we can do easy validation
+    int64_t int_value = cast_result.get();
+    return (int_value >= min_ && int_value <= max_);
   }
     
-      for (QString k : m_affectedKeys) {
-    auto future = m_connection->cmd(
-        {'EXPIRE', k.toUtf8(), ttl}, this, m_dbIndex,
-        [this](const RedisClient::Response&) {
-          QMutexLocker l(&m_processedKeysMutex);
-          m_progress++;
-          emit progress(m_progress);
-        },
-        [this, k](const QString& err) {
-          QMutexLocker l(&m_errorsMutex);
-          m_errors.append(
-              QCoreApplication::translate('RDM', 'Cannot set TTL for key ') +
-              QString('%1: %2').arg(k).arg(err));
-        });
-    }
+    // clang-format off
+#include <LM.h>
+// clang-format on
     
-    class TtlOperation : public AbstractOperation {
-  Q_OBJECT
- public:
-  TtlOperation(QSharedPointer<RedisClient::Connection> connection, int dbIndex,
-               OperationCallback callback,
-               QRegExp keyPattern = QRegExp('*', Qt::CaseSensitive,
-                                            QRegExp::Wildcard));
-    }
+    #include <osquery/carver/carver.h>
+#include <osquery/config/tests/test_utils.h>
+#include <osquery/database.h>
+#include <osquery/filesystem/fileops.h>
+#include <osquery/hashing/hashing.h>
+#include <osquery/registry.h>
+#include <osquery/sql.h>
+#include <osquery/system.h>
+#include <osquery/utils/json/json.h>
     
-    
-    {    return callback(filter, processed, e);
-  };
-    
-      virtual void run(QSharedPointer<RedisClient::Connection> targetConnection =
-                       QSharedPointer<RedisClient::Connection>(),
-                   int targetDbIndex = 0);
+    /// no discovery queries, no platform restriction, fake version string
+JSON getPackWithFakeVersion() {
+  auto doc = getExamplePacksConfig();
+  return JSON::newFromValue(doc.doc()['packs']['fake_version_pack']);
+}
