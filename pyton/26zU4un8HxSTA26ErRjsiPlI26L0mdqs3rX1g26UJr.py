@@ -1,259 +1,155 @@
 
         
-        if args.dict:
-    jieba.initialize(args.dict)
-else:
-    jieba.initialize()
-if args.user_dict:
-    jieba.load_userdict(args.user_dict)
-    
-        def __init__(self):
-        self.tokenizer = self.postokenizer = jieba.posseg.dt
-        self.stop_words = self.STOP_WORDS.copy()
-        self.pos_filt = frozenset(('ns', 'n', 'vn', 'v'))
-        self.span = 5
-    
-        def __repr__(self):
-        return 'pair(%r, %r)' % (self.word, self.flag)
-    
-    print('='*40)
-print('3. 关键词提取')
-print('-'*40)
-print(' TF-IDF')
-print('-'*40)
-    
-        def testDefaultCut(self):
-        for content in test_contents:
-            result = jieba.cut(content)
-            assert isinstance(result, types.GeneratorType), 'Test DefaultCut Generator error'
-            result = list(result)
-            assert isinstance(result, list), 'Test DefaultCut error on content: %s' % content
-            print(' , '.join(result), file=sys.stderr)
-        print('testDefaultCut', file=sys.stderr)
-    
-    if opt.topK==None:
-    topK=10
-else:
-    topK = int(opt.topK)
-    
-    print('speed %s bytes/second' % (len(content)/tm_cost))
-    
-    print('speed' , len(content)/tm_cost, ' bytes/second')
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+            def inner(*suffix):
+        return urljoin(httpbin_url, '/'.join(suffix))
     
     
-  def Start( self ):
-    request_data = BuildRequestData( self._buffer_number )
-    if self._extra_data:
-      request_data.update( self._extra_data )
-    request_data[ 'event_name' ] = self._event_name
+class TestLookupDict:
+    
+            Operator:                  '#582800',   # class: 'o'
+        Operator.Word:             'bold #004461',   # class: 'ow' - like keywords
+    
+    ``response``:
+    The response generated from a Request.
+'''
+HOOKS = ['response']
     
     
-def SendShutdownRequest():
-  request = ShutdownRequest()
-  # This is a blocking call.
-  request.Start()
+def test_idna_with_version_attribute(mocker):
+    '''Verify we're actually setting idna version when it should be available.'''
+    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
+    assert info()['idna'] == {'version': '2.6'}
 
     
-          BaseRequest().GetDataFromHandler( 'healthy', display_message = False )
-
+        def get_connection(self, url, proxies=None):
+        '''Returns a urllib3 connection for the given URL. This should not be
+        called from user code, and is only exposed for use when subclassing the
+        :class:`HTTPAdapter <requests.adapters.HTTPAdapter>`.
     
-      f = _CreateFilterForTypes( opts, [ 'java', 'xml' ] )
+            return request_content
     
+    Finally, note that parameters of the models have been here handpicked but
+that in practice they need to be adjusted. In the absence of labelled data,
+the problem is completely unsupervised so model selection can be a challenge.
+'''
     
-def MockAsyncServerResponseException( exception ):
-  '''Return a fake future object that is complete, but raises an exception.
-  Suitable for mocking a response future within a client request. For example:
-    
-    
-def ContentsOfTestFile( test_file ):
-  dir_of_script = os.path.dirname( os.path.abspath( __file__ ) )
-  full_path_to_test_file = os.path.join( dir_of_script, 'testdata', test_file )
-  return ReadFile( full_path_to_test_file )
-    
-        Args:
-        call_queue: A multiprocessing.Queue of _CallItems that will be read and
-            evaluated by the worker.
-        result_queue: A multiprocessing.Queue of _ResultItems that will written
-            to by the worker.
-        shutdown: A multiprocessing.Event that will be set as a signal to the
-            worker that it should exit when call_queue is empty.
     '''
-    while True:
-        call_item = call_queue.get(block=True)
-        if call_item is None:
-            # Wake up queue management thread
-            result_queue.put(None)
-            return
-        try:
-            r = call_item.fn(*call_item.args, **call_item.kwargs)
-        except BaseException:
-            e = sys.exc_info()[1]
-            result_queue.put(_ResultItem(call_item.work_id,
-                                         exception=e))
-        else:
-            result_queue.put(_ResultItem(call_item.work_id,
-                                         result=r))
+=========================================================
+Logistic Regression 3-class Classifier
+=========================================================
     
-        def init_profile_dir(self):
-        '''initialize the profile dir'''
-        self._in_init_profile_dir = True
-        if self.profile_dir is not None:
-            # already ran
-            return
-        if 'ProfileDir.location' not in self.config:
-            # location not specified, find by profile name
-            try:
-                p = ProfileDir.find_profile_dir_by_name(self.ipython_dir, self.profile, self.config)
-            except ProfileDirError:
-                # not found, maybe create it (always create default profile)
-                if self.auto_create or self.profile == 'default':
-                    try:
-                        p = ProfileDir.create_profile_dir_by_name(self.ipython_dir, self.profile, self.config)
-                    except ProfileDirError:
-                        self.log.fatal('Could not create profile: %r'%self.profile)
-                        self.exit(1)
-                    else:
-                        self.log.info('Created profile dir: %r'%p.location)
-                else:
-                    self.log.fatal('Profile %r not found.'%self.profile)
-                    self.exit(1)
-            else:
-                self.log.debug('Using existing profile dir: %r'%p.location)
-        else:
-            location = self.config.ProfileDir.location
-            # location is fully specified
-            try:
-                p = ProfileDir.find_profile_dir(location, self.config)
-            except ProfileDirError:
-                # not found, maybe create it
-                if self.auto_create:
-                    try:
-                        p = ProfileDir.create_profile_dir(location, self.config)
-                    except ProfileDirError:
-                        self.log.fatal('Could not create profile directory: %r'%location)
-                        self.exit(1)
-                    else:
-                        self.log.debug('Creating new profile dir: %r'%location)
-                else:
-                    self.log.fatal('Profile directory %r not found.'%location)
-                    self.exit(1)
-            else:
-                self.log.info('Using existing profile dir: %r'%location)
-            # if profile_dir is specified explicitly, set profile name
-            dir_name = os.path.basename(p.location)
-            if dir_name.startswith('profile_'):
-                self.profile = dir_name[8:]
+        return lasso_results, lars_lasso_results
     
-        # Hack: the 'neutral' colours are not very visible on a dark background on
-    # Windows. Since Windows command prompts have a dark background by default, and
-    # relatively few users are likely to alter that, we will use the 'Linux' colours,
-    # designed for a dark background, as the default on Windows.
-    if os.name == 'nt':
-        ex_colors.add_scheme(ex_colors['Linux'].copy('Neutral'))
     
-    from traitlets.config.configurable import Configurable
-from IPython.utils.path import ensure_dir_exists, compress_user
-from IPython.utils.decorators import undoc
-from traitlets import Instance
+def variable_batch_size_comparison(data):
+    batch_sizes = [i.astype(int) for i in np.linspace(data.shape[0] // 10,
+                                                      data.shape[0], num=10)]
     
-    @undoc
-class DummyDB(object):
-    '''Dummy DB that will act as a black hole for history.
+        print('Generating skeleton for %s' % f)
     
-    Only used in the absence of sqlite'''
-    def execute(*args, **kwargs):
-        return []
+    # Define 'classifiers' to be used
+classifiers = {
+    'Empirical Covariance': EllipticEnvelope(support_fraction=1.,
+                                             contamination=0.261),
+    'Robust Covariance (Minimum Covariance Determinant)':
+    EllipticEnvelope(contamination=0.261),
+    'OCSVM': OneClassSVM(nu=0.261, gamma=0.05)}
+colors = ['m', 'g', 'b']
+legend1 = {}
+legend2 = {}
     
-    def commit(self, *args, **kwargs):
-        pass
+    from sklearn.datasets import make_biclusters
+from sklearn.datasets import samples_generator as sg
+from sklearn.cluster.bicluster import SpectralCoclustering
+from sklearn.metrics import consensus_score
     
-    def __enter__(self, *args, **kwargs):
-        pass
+    # To apply a classifier on this data, we need to flatten the image, to
+# turn the data in a (samples, feature) matrix:
+n_samples = len(digits.images)
+data = digits.images.reshape((n_samples, -1))
     
-    def __exit__(self, *args, **kwargs):
-        pass
+    # Create a graph capturing local connectivity. Larger number of neighbors
+# will give more homogeneous clusters to the cost of computation
+# time. A very large number of neighbors gives more evenly distributed
+# cluster sizes, but may not impose the local manifold structure of
+# the data
+knn_graph = kneighbors_graph(X, 30, include_self=False)
     
-        aliases=Dict(dict(
-        keep = 'HistoryTrim.keep'
-    ))
+    Demonstrates the effect of different metrics on the hierarchical clustering.
     
-    def start(self):
-        profile_dir = self.profile_dir.location
-        hist_file = os.path.join(profile_dir, 'history.sqlite')
-        con = sqlite3.connect(hist_file)
+    # Code source: Gaël Varoquaux
+# Modified for documentation by Jaques Grobler
+# License: BSD 3 clause
     
-            If foo+bar can be evaluated in the user namespace, the result is
-        placed at the next input prompt. Otherwise, the history is searched
-        for lines which contain that substring, and the most recent one is
-        placed at the next input prompt.
+    # Anisotropicly distributed data
+transformation = [[0.60834549, -0.63667341], [-0.40887718, 0.85253229]]
+X_aniso = np.dot(X, transformation)
+y_pred = KMeans(n_clusters=3, random_state=random_state).fit_predict(X_aniso)
+    
+    # Find all the faces in the image using a pre-trained convolutional neural network.
+# This method is more accurate than the default HOG model, but it's slower
+# unless you have an nvidia GPU and dlib compiled with CUDA extensions. But if you do,
+# this will use GPU acceleration and perform well.
+# See also: find_faces_in_picture.py
+face_locations = face_recognition.face_locations(image, number_of_times_to_upsample=0, model='cnn')
+    
+        pool = context.Pool(processes=processes)
+    
+    while video_capture.isOpened():
+    # Grab a single frame of video
+    ret, frame = video_capture.read()
+    
+            face = cv2.resize(face,  # pylint:disable=no-member
+                          dsize=(self.input_size, self.input_size),
+                          interpolation=interpolation)
+        return face
+    
+        The following keys are expected for the _DEFAULTS <metadata> dict:
+        datatype:  [required] A python type class. This limits the type of data that can be
+                   provided in the .ini file and ensures that the value is returned in the
+                   correct type to faceswap. Valid datatypes are: <class 'int'>, <class 'float'>,
+                   <class 'str'>, <class 'bool'>.
+        default:   [required] The default value for this option.
+        info:      [required] A string describing what this option does.
+        choices:   [optional] If this option's datatype is of <class 'str'> then valid
+                   selections can be defined here. This validates the option and also enables
+                   a combobox / radio option in the GUI.
+        gui_radio: [optional] If <choices> are defined, this indicates that the GUI should use
+                   radio buttons rather than a combobox to display this option.
+        min_max:   [partial] For <class 'int'> and <class 'float'> datatypes this is required
+                   otherwise it is ignored. Should be a tuple of min and max accepted values.
+                   This is used for controlling the GUI slider range. Values are not enforced.
+        rounding:  [partial] For <class 'int'> and <class 'float'> datatypes this is
+                   required otherwise it is ignored. Used for the GUI slider. For floats, this
+                   is the number of decimal places to display. For ints this is the step size.
+        fixed:     [optional] [train only]. Training configurations are fixed when the model is
+                   created, and then reloaded from the state file. Marking an item as fixed=False
+                   indicates that this value can be changed for existing models, and will override
+                   the value saved in the state file with the updated value in config. If not
+                   provided this will default to True.
+'''
+    
+            mask = BlurMask(self.config['type'],
+                        mask,
+                        self.config['radius'],
+                        self.config['passes']).blurred
+        logger.debug('Built box mask. Shape: %s', mask.shape)
+        return mask
+    
+            kernel_fourier_shape = correct_fft(np.zeros(kernel_shape)).shape
+        init = []
+        for _ in range(filters_size):
+            basis = self._create_basis(
+                stack_size, np.prod(kernel_fourier_shape), dtype)
+            basis = basis.reshape((stack_size,) + kernel_fourier_shape)
+    
+            Returns:
+        -------
+        Tuple of mean and standard deviations for the L*, a*, and b*
+        channels, respectively
         '''
-        if not arg:                 # Last output
-            self.shell.set_next_input(str(self.shell.user_ns['_']))
-            return
-                                    # Get history range
-        histlines = self.shell.history_manager.get_range_by_str(arg)
-        cmd = '\n'.join(x[2] for x in histlines)
-        if cmd:
-            self.shell.set_next_input(cmd.rstrip())
-            return
-    
-      The offset is automatically calibrated based on when the thread is actually
-  woken from sleep by increasing/decreasing the offset halfway between its
-  current value and `_MIN_OFFSET`.
-    
-      def testSleeper_SleepUntil(self):
-    # Burn in.
-    for _ in range(10):
-      concurrency.Sleeper().sleep(.01)
-    
-      Args:
-    batched_states: A nested structure with entries whose first dimensions all
-      equal `batch_size`.
-    batch_size: The number of states in the batch.
-    
-        :param location: Location of file on system.
-    :param chunk_size: The size of each chunk in the stream (in bytes)
-    :param mime_type: Specific mime_type.
-    :param headers: Custom Headers.
-    :param filename: Override filename.
-    :param chunked: Enable or disable chunked transfer-encoding
-    :param _range:
-    '''
-    headers = headers or {}
-    if filename:
-        headers.setdefault(
-            'Content-Disposition', 'attachment; filename='{}''.format(filename)
-        )
-    filename = filename or path.split(location)[-1]
-    
-        request, response = app.test_client.head('/files/{}'.format(file_name))
-    assert response.status == 200
-    assert 'Accept-Ranges' in response.headers
-    assert 'Content-Length' in response.headers
-    assert int(response.headers['Content-Length']) == len(
-        get_file_content(static_file_directory, file_name)
-    )
-    
-    GIT_COMMANDS = {
-    'get_tag': ['git describe --tags --abbrev=0'],
-    'commit_version_change': [
-        'git add . && git commit -m 'Bumping up version from '
-        '{current_version} to {new_version}''
-    ],
-    'create_new_tag': [
-        'git tag -a {new_version} -m 'Bumping up version from '
-        '{current_version} to {new_version}''
-    ],
-    'push_tag': ['git push origin {new_version}'],
-    'get_change_log': [
-        'git log --no-merges --pretty=format:'%h::: %cn::: %s' '
-        '{current_version}..'
-    ],
-}
+        # compute the mean and standard deviation of each channel
+        (light, col_a, col_b) = cv2.split(image)  # pylint: disable=no-member
+        (l_mean, l_std) = (light.mean(), light.std())
+        (a_mean, a_std) = (col_a.mean(), col_a.std())
+        (b_mean, b_std) = (col_b.mean(), col_b.std())
