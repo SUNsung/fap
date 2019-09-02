@@ -1,151 +1,63 @@
 
         
-                def to_s
-          @symbol.to_s
-        end
-        alias to_str to_s
+                get '/hot_threads' do
+          begin
+            ignore_idle_threads = params['ignore_idle_threads'] || true
+            options = {:ignore_idle_threads => as_boolean(ignore_idle_threads)}
+            options[:threads] = params['threads'].to_i if params.has_key?('threads')
+            options[:ordered_by] = params['ordered_by'] if params.has_key?('ordered_by')
+            options[:stacktrace_size] = params['stacktrace_size'] if params.has_key?('stacktrace_size')
     
-              stats = diff_stats_collection&.find_by_path(diff.new_path)
+        def self.format_queue_stats(pipeline_id, metric_store)
+      path = [:stats, :pipelines, pipeline_id, :queue, :type]
+      if metric_store.has_metric?(*path)
+        queue_type = metric_store.get_shallow(*path).value
+      else
+        queue_type = 'memory'
+      end
     
-      def respond_to_on_destroy
-    # We actually need to hardcode this as Rails default responder doesn't
-    # support returning empty response on GET request
-    respond_to do |format|
-      format.all { head :no_content }
-      format.any(*navigational_formats) { redirect_to after_sign_out_path_for(resource_name) }
+          @event.set('[pipeline]', pipeline_data(pipeline))
+    
+        def load_locale!
+      require 'i18n'
+      I18n.enforce_available_locales = true
+      I18n.load_path << LogStash::Environment.locales_path('en.yml')
+      I18n.reload!
+      fail 'No locale? This is a bug.' if I18n.available_locales.empty?
     end
-  end
-end
-
     
-      prepend_before_action :assert_is_devise_resource!
-  respond_to :html if mimes_for_respond_to.empty?
+        # Because we made a mistake in naming the RC version numbers, both rpm and deb view
+    # '1.5.0.rc1' higher than '1.5.0'. Setting the epoch to 1 ensures that we get a kind
+    # of clean slate as to how we compare package versions. The default epoch is 0, and
+    # epoch is sorted first, so a version 1:1.5.0 will have greater priority
+    # than 1.5.0.rc4
+    out.epoch = 1
     
-        def reset_password_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :reset_password_instructions, opts)
-    end
-    
-        # Creates configuration values for Devise and for the given module.
-    #
-    #   Devise::Models.config(Devise::Models::DatabaseAuthenticatable, :stretches)
-    #
-    # The line above creates:
-    #
-    #   1) An accessor called Devise.stretches, which value is used by default;
-    #
-    #   2) Some class methods for your model Model.stretches and Model.stretches=
-    #      which have higher priority than Devise.stretches;
-    #
-    #   3) And an instance method stretches.
-    #
-    # To add the class methods you need to have a module ClassMethods defined
-    # inside the given class.
-    #
-    def self.config(mod, *accessors) #:nodoc:
-      class << mod; attr_accessor :available_configs; end
-      mod.available_configs = accessors
-    
-            def set_reset_password_token
-          raw, enc = Devise.token_generator.generate(self.class, :reset_password_token)
-    
-          class Miscellaneous < FormulaCop
-        def audit_formula(_node, _class_node, _parent_class_node, body_node)
-          # FileUtils is included in Formula
-          # encfs modifies a file with this name, so check for some leading characters
-          find_instance_method_call(body_node, 'FileUtils', nil) do |method_node|
-            problem 'Don't need 'FileUtils.' before #{method_node.method_name}'
+              it 'should compile correctly' do
+            expect(compiled_section).to ir_eql(j.iIf(
+                                          rand_meta,
+                                          j.eEq(j.eEventValue('[foo]'), j.eEventValue('[bar]')),
+                                          j.iIf(rand_meta, j.eEq(j.eEventValue('[bar]'), j.eEventValue('[baz]')),
+                                                   splugin('aplugin'),
+                                                   j.noop
+                                                  ),
+                                          j.iIf(
+                                            rand_meta,
+                                            j.eEq(j.eEventValue('[bar]'), j.eEventValue('[baz]')),
+                                            splugin('bplugin'),
+                                            j.iIf(
+                                              rand_meta,
+                                              j.eEq(j.eEventValue('[baz]'), j.eEventValue('[bot]')),
+                                              splugin('cplugin'),
+                                              splugin('dplugin')
+                                            )
+                                          )
+                                        )
+                                       )
           end
-    
-              def install
-            system 'cargo', 'build'
-            ^^^^^^^^^^^^^^^^^^^^^^^ use \'cargo\', \'install\', \'--root\', prefix, \'--path\', \'.\'
           end
         end
-      RUBY
-    end
-  end
-end
-
-    
-      def recursive_requirements
-    Requirement.expand(self)
-  end
-    
-            uses_from_macos('foo', after: :mojave)
       end
-    
-        raise 'Loaded OS::Mac on generic OS!' if ENV['HOMEBREW_TEST_GENERIC_OS']
-    
-          def update_instructions
-        if OS::Mac.prerelease?
-          <<~EOS
-            Xcode can be updated from:
-              #{Formatter.url('https://developer.apple.com/download/more/')}
-          EOS
-        else
-          <<~EOS
-            Xcode can be updated from the App Store.
-          EOS
-        end
-      end
-    
-      it 'prints the file used to cache the Cask' do
-    transmission_location = CurlDownloadStrategy.new(
-      local_transmission.url.to_s, local_transmission.token, local_transmission.version,
-      cache: Cask::Cache.path, **local_transmission.url.specs
-    ).cached_location
-    caffeine_location = CurlDownloadStrategy.new(
-      local_caffeine.url.to_s, local_caffeine.token, local_caffeine.version,
-      cache: Cask::Cache.path, **local_caffeine.url.specs
-    ).cached_location
-    
-    version = ['', 'ext/etc/'].find do |dir|
-  begin
-    break File.open(File.expand_path('../#{dir}/etc.c', __FILE__)) do |f|
-      f.gets '\n#define RUBY_ETC_VERSION '
-      f.gets[/'(.+)'/, 1]
-    end
-  rescue
-    next
-  end
-end
-    
-        def quote_field(field)
-      field = String(field)
-      encoded_quote_character = @quote_character.encode(field.encoding)
-      encoded_quote_character +
-        field.gsub(encoded_quote_character,
-                   encoded_quote_character * 2) +
-        encoded_quote_character
     end
     
-      it 'calls the given block for each line in the stream, passing the line as an argument' do
-    ScratchPad.record []
-    @gzreader.send(@method) { |b| ScratchPad << b }
-    
-      def unread_notifications
-    notifications.where(:unread => true)
-  end
-    
-          def handle_jwt_bearer(req)
-        jwt_string = req['client_assertion']
-        jwt = JSON::JWT.decode jwt_string, :skip_verification
-        o_auth_app = Api::OpenidConnect::OAuthApplication.find_by(client_id: jwt['iss'])
-        raise Rack::OAuth2::Server::Authorize::BadRequest(:invalid_request) unless o_auth_app
-        public_key = fetch_public_key(o_auth_app, jwt)
-        JSON::JWT.decode(jwt_string, JSON::JWK.new(public_key).to_key)
-        req.update_param('client_id', o_auth_app.client_id)
-        req.update_param('client_secret', o_auth_app.client_secret)
-      end
-    
-    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
-    
-        if params[:conversation_id]
-      @conversation = Conversation.joins(:conversation_visibilities)
-                                  .where(conversation_visibilities: {
-                                           person_id:       current_user.person_id,
-                                           conversation_id: params[:conversation_id]
-                                         }).first
+    require 'bootstrap/environment'
