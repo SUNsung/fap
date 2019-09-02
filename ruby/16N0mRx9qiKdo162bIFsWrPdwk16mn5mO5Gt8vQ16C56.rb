@@ -1,180 +1,155 @@
 
         
-            should 'not filter entries within include' do
-      includes = %w(_index.html .htaccess include*)
-      files = %w(index.html _index.html .htaccess includeA)
+              def test_helpers_with_block
+        @controller.process(:with_block)
+        assert_equal 'Hello World', @controller.response_body
+      end
     
-        # Internal
-    #
-    # Determine if the directory is supposed to contain posts and drafts.
-    # If the user has defined a custom collections_dir, then attempt to read
-    # posts and drafts only from within that directory.
-    #
-    # Returns true if a custom collections_dir has been set but current directory lies
-    # outside that directory.
-    def outside_configured_directory?(dir)
-      collections_dir = site.config['collections_dir']
-      !collections_dir.empty? && !dir.start_with?('/#{collections_dir}')
-    end
-    
-    def converted_history(markdown)
-  remove_head_from_history(
-    custom_release_header_anchors(
-      liquid_escape(
-        linkify(
-          normalize_bullets(markdown)
-        )
-      )
-    )
-  )
-end
-    
-    CONTENT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
-    
-    $LOAD_PATH.unshift File.expand_path('../lib', __dir__)
-    
-            # rubocop:disable Metrics/AbcSize
-        def process(args, opts)
-          if !args || args.empty?
-            raise Jekyll::Errors::InvalidThemeName, 'You must specify a theme name.'
-          end
-    
-        def parse_as_fragment
-      Nokogiri::HTML.fragment @content, 'UTF-8'
-    end
+        @mod = RDoc::NormalModule.new 'Mod'
   end
-end
-
     
-          max_length = if tag = str.slice!(/ \[.+\]\z/)
-        terminal_width - tag.length
-      else
-        terminal_width
+      def test_initialize
+    assert_equal 'foo', @req.name
+    
+        push_history(5)
+    invalid_indexes = [5, 6, 100, -6, -7, -100]
+    invalid_indexes.each do |i|
+      assert_raise(IndexError, NotImplementedError, 'index=<#{i}>') do
+        Readline::HISTORY.delete_at(i)
       end
+    end
     
-            css('img[src]').each do |node|
-          node['src'] = node['src'].gsub(%r{angularjs\.org/([\d\.]+)/docs/partials/(\w+)/}, 'angularjs.org/\1/docs/\2/')
-        end
+    # skip over blogs that aren't found
+unavailable = []
+fast_forwards = [
+  'Baidu Research',
+  'Booking.com',
+  'Fynd',
+  'Graphcool',
+  'LinkedIn',
+  'Medallia',
+  'OmniTI',
+  'Paperless Post',
+  'Pluralsight',
+  'Prolific Interactive',
+  'Quora',
+  'Robert Elder Software',
+  'Simple',
+  'SlideShare',
+  'SourceClear',
+  'Viget',
+  'Zalando',
+  'Zapier',
+  'Zynga',
+  'Dave Beazley',
+  'Edan Kwan',
+  'Grzegorz Gajos',
+  'Joe Armstrong',
+  'Kai Hendry',
+  'LiveOverflow'
+]
     
-            new(sandbox, sandbox.root.to_s, pods_project, umbrella_targets_descriptions)
-      end
-    
-        describe Executable::Indenter do
-      it 'indents any appended strings' do
-        UI.indentation_level = 4
-    
-            # @private
-        # @return [Hash<PodVariant, String>]
+            # Initialize a new instance from its attributes.
         #
-        def scope_by_build_type
-          scope_if_necessary(group_by { |v| v.build_type.packaging }.map(&:scope_by_linkage)) do |variant|
-            variant.build_type.packaging
-          end
-        end
-    
-                  FileUtils.expects(:ln_sf).with(relative_path, target_module_path)
-              native_target = mock(:build_configurations => [])
-              @installer.send(:create_module_map, native_target)
-            end
-          end
-    
-          describe '#==' do
-        it 'compares equal build types as equal' do
-          BuildType.new(:linkage => :dynamic, :packaging => :library).should == BuildType.new(:linkage => :dynamic, :packaging => :library)
-        end
-    
-            # Cleans up projects before writing.
+        # @param [Array<Specification>] specs      @see #specs
+        # @param [Array<Specification>] test_specs @see #test_specs
+        # @param [Array<Specification>] app_specs  @see #app_specs
+        # @param [Platform] platform               @see #platform
+        # @param [Target::BuildType] build_type    @see #build_type
         #
-        def cleanup_projects(projects)
-          projects.each do |project|
-            [project.pods, project.support_files_group,
-             project.development_pods, project.dependencies_group].each { |group| group.remove_from_project if group.empty? }
-            project.sort(:groups_position => :below)
-          end
+        def initialize(specs, test_specs, app_specs, platform, build_type = Target::BuildType.static_library)
+          @specs = specs
+          @test_specs = test_specs
+          @app_specs = app_specs
+          @platform = platform
+          @build_type = build_type
+          @hash = [specs, platform, build_type].hash
         end
+    
+          # @return [Boolean] whether the target is built dynamically
+      #
+      def dynamic?
+        linkage == :dynamic
       end
-    end
-  end
+    
+    def fixture_file_accessor(spec_or_name, platform = Pod::Platform.ios)
+  spec = spec_or_name.is_a?(Pod::Specification) ? spec_or_name : fixture_spec(spec_or_name)
+  path_list = Pod::Sandbox::PathList.new(spec.defined_in_file.dirname)
+  Pod::Sandbox::FileAccessor.new(path_list, spec.consumer(platform))
 end
-
     
-            if deprecated_pods.any?
-          UI.section 'The following pods are deprecated:' do
-            deprecated_pods.each do |spec|
-              if spec.deprecated_in_favor_of
-                UI.puts '- #{spec.name}' \
-                  ' (in favor of #{spec.deprecated_in_favor_of})'
-              else
-                UI.puts '- #{spec.name}'
-              end
-            end
-          end
+    module Pod
+  describe Generator::ModuleMap do
+    before do
+      spec = fixture_spec('banana-lib/BananaLib.podspec')
+      @pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec], [fixture_target_definition])
+      @gen = Generator::ModuleMap.new(@pod_target)
+    end
+    
+            it 'checks resource paths are empty for dynamic frameworks' do
+          @pod_target.stubs(:should_build?).returns(true)
+          @pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @pod_target.stubs(:resource_paths).returns(['MyResources.bundle'])
+          @target.stubs(:bridge_support_file).returns(nil)
+          resource_paths_by_config = @target.resource_paths_by_config
+          resource_paths_by_config['Debug'].should.be.empty
+          resource_paths_by_config['Release'].should.be.empty
         end
-      end
     
-            rhs
+            it 'allows specifying linkage' do
+          BuildType.new(:linkage => :dynamic).should == BuildType.dynamic_library
+        end
+    
+          # Store the result ready to return
+      result = {:message_id => nil, :messages => {}}
+      params.rcpt_to.uniq.each do |rcpt_to|
+        message = identity.server.message_db.new_message
+        message.rcpt_to = rcpt_to
+        message.mail_from = params.mail_from
+        message.raw_message = raw_message
+        message.received_with_ssl = true
+        message.scope = 'outgoing'
+        message.domain_id = authenticated_domain.id
+        message.credential_id = identity.id
+        message.bounce = params.bounce ? 1 : 0
+        message.save
+        result[:message_id] = message.message_id if result[:message_id].nil?
+        result[:messages][rcpt_to] = {:id => message.id, :token => message.token}
       end
+      result
     end
   end
-end
-
     
-      context 'when using inline modifiers' do
-    it 'does not register an offense' do
-      expect_no_offenses(<<~RUBY)
-        class SomeClass
-          private def some_method
-            puts 10
-          end
-        end
-      RUBY
+      config.after(:suite) do
+    # Remove the global server after the suite has finished running and then
+    # clean the database in case it left anything lying around.
+    if defined?(GLOBAL_SERVER)
+      GLOBAL_SERVER.destroy
+      DatabaseCleaner.clean
     end
   end
     
-            KEYWORDS = %w[begin class def end module].freeze
-        ALLOWED_COMMENTS = %w[:nodoc: :yields: rubocop:disable].freeze
+      expansion(:headers) { o.headers }
     
-          # If converting a string to Ruby string literal source code, must
-      # double quotes be used?
-      def double_quotes_required?(string)
-        # Double quotes are required for strings which either:
-        # - Contain single quotes
-        # - Contain non-printable characters, which must use an escape
+      before_action do
+    if params[:server_id]
+      @server = organization.servers.present.find_by_permalink!(params[:server_id])
+      params[:id] && @domain = @server.domains.find_by_uuid!(params[:id])
+    else
+      params[:id] && @domain = organization.domains.find_by_uuid!(params[:id])
+    end
+  end
     
-          # Checks whether this is a multiline block. This is overridden here
-      # because the general version in `Node` does not work for `block` nodes.
-      #
-      # @return [Boolean] whether the `block` literal is on a several lines
-      def multiline?
-        !single_line?
-      end
+      def update
+    if @ip_pool.update(safe_params)
+      redirect_to_with_json [:edit, @ip_pool], :notice => 'IP Pool has been updated.'
+    else
+      render_form_errors 'edit', @ip_pool
+    end
+  end
     
-          # Custom destructuring method. This is used to normalize the branches
-      # for `if` and `unless` nodes, to aid comparisons and conversions.
-      #
-      # @return [Array<Node>] the different parts of the `if` statement
-      def node_parts
-        if unless?
-          condition, false_branch, true_branch = *self
-        else
-          condition, true_branch, false_branch = *self
-        end
-    
-          # Checks whether the method is an enumerator method.
-      #
-      # @return [Boolean] whether the method is an enumerator
-      def enumerator_method?
-        ENUMERATOR_METHODS.include?(method_name) ||
-          method_name.to_s.start_with?('each_')
-      end
+      def get_messages(scope)
+    if scope == 'held'
+      options = {:where => {:held => 1}}
+    else
+      options = {:where => {:scope => scope, :spam => false}, :order => :timestamp, :direction => 'desc'}
