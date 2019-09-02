@@ -1,241 +1,397 @@
 
         
-            void KeyChord::Modifiers(Settings::KeyModifiers const& value)
-    {
-        _modifiers = value;
+        class OpenURIDialog : public QDialog
+{
+    Q_OBJECT
     }
     
-      void visitInitExistentialValueInst(InitExistentialValueInst *IEVI) {
-    SGM.useConformancesFromType(IEVI->getFormalConcreteType());
-    SGM.useConformancesFromObjectiveCType(IEVI->getFormalConcreteType());
-    for (auto conformance : IEVI->getConformances())
-      SGM.useConformance(conformance);
-  }
     
-      // If we have a value that is owned, but that we are going to use in as a
-  // guaranteed argument, we need to borrow/unborrow the argument. Otherwise, we
-  // will introduce new consuming uses. In contrast, if we have an owned value,
-  // we are ok due to the forwarding nature of upcasts.
-  SmallVector<SILValue, 8> NewArgBorrows;
-    
-    private:
-  /// The ClassDecl mapped to this VTable.
-  ClassDecl *Class;
-    
-    
-    {#ifndef NDEBUG
-  LLVM_ATTRIBUTE_DEPRECATED(void dump(SourceManager &SM, llvm::raw_ostream &OS = llvm::errs(),
-                            unsigned Indent = 0) const,
-                  'only for use in the debugger');
-  LLVM_ATTRIBUTE_DEPRECATED(void dump(SILModule &Mod) const, 'only for use in the debugger');
-#endif
+    {    Lock& lock;
+    Lock templock;
 };
     
-      const ClosureBindingMetadataSource *
-  createClosureBinding(unsigned Index) {
-    return ClosureBindingMetadataSource::create(*this, Index);
-  }
+    SECP256K1_INLINE static void secp256k1_fe_sqr_inner(uint64_t *r, const uint64_t *a) {
+/**
+ * Registers: rdx:rax = multiplication accumulator
+ *            r9:r8   = c
+ *            rcx:rbx = d
+ *            r10-r14 = a0-a4
+ *            r15     = M (0xfffffffffffff)
+ *            rdi     = r
+ *            rsi     = a / t?
+ */
+  uint64_t tmp1, tmp2, tmp3;
+__asm__ __volatile__(
+    'movq 0(%%rsi),%%r10\n'
+    'movq 8(%%rsi),%%r11\n'
+    'movq 16(%%rsi),%%r12\n'
+    'movq 24(%%rsi),%%r13\n'
+    'movq 32(%%rsi),%%r14\n'
+    'movq $0xfffffffffffff,%%r15\n'
+    }
     
-    template <typename T> static T unwrap(llvm::Expected<T> value) {
-  if (value)
-    return std::move(value.get());
-  llvm::errs() << 'swift-reflection-test error: ' << toString(value.takeError())
-               << '\n';
-  exit(EXIT_FAILURE);
+    ROTATE_ARGS
+	movdqa	XTMP2, XTMP3	; XTMP2 = W[-15]
+    mov	y0, e		; y0 = e
+    mov	y1, a		; y1 = a
+	movdqa	XTMP4, XTMP3	; XTMP4 = W[-15]
+    ror	y0, (25-11)	; y0 = e >> (25-11)
+    xor	y0, e		; y0 = e ^ (e >> (25-11))
+    mov	y2, f		; y2 = f
+    ror	y1, (22-13)	; y1 = a >> (22-13)
+	pslld	XTMP3, (32-18)
+    xor	y1, a		; y1 = a ^ (a >> (22-13)
+    ror	y0, (11-6)	; y0 = (e >> (11-6)) ^ (e >> (25-6))
+    xor	y2, g		; y2 = f^g
+	psrld	XTMP2, 18
+    ror	y1, (13-2)	; y1 = (a >> (13-2)) ^ (a >> (22-2))
+    xor	y0, e		; y0 = e ^ (e >> (11-6)) ^ (e >> (25-6))
+    and	y2, e		; y2 = (f^g)&e
+    ror	y0, 6		; y0 = S1 = (e>>6) & (e>>11) ^ (e>>25)
+	pxor	XTMP1, XTMP3
+    xor	y1, a		; y1 = a ^ (a >> (13-2)) ^ (a >> (22-2))
+    xor	y2, g		; y2 = CH = ((f^g)&e)^g
+	psrld	XTMP4, 3	; XTMP4 = W[-15] >> 3
+    add	y2, y0		; y2 = S1 + CH
+    add	y2, [rsp + _XFER + 1*4]	; y2 = k + w + S1 + CH
+    ror	y1, 2		; y1 = S0 = (a>>2) ^ (a>>13) ^ (a>>22)
+	pxor	XTMP1, XTMP2	; XTMP1 = W[-15] ror 7 ^ W[-15] ror 18
+    mov	y0, a		; y0 = a
+    add	h, y2		; h = h + S1 + CH + k + w
+    mov	y2, a		; y2 = a
+	pxor	XTMP1, XTMP4	; XTMP1 = s0
+    or	y0, c		; y0 = a|c
+    add	d, h		; d = d + h + S1 + CH + k + w
+    and	y2, c		; y2 = a&c
+	;; compute low s1
+	pshufd	XTMP2, X3, 11111010b	; XTMP2 = W[-2] {BBAA}
+    and	y0, b		; y0 = (a|c)&b
+    add	h, y1		; h = h + S1 + CH + k + w + S0
+	paddd	XTMP0, XTMP1	; XTMP0 = W[-16] + W[-7] + s0
+    or	y0, y2		; y0 = MAJ = (a|c)&b)|(a&c)
+    add	h, y0		; h = h + S1 + CH + k + w + S0 + MAJ
+    
+    // Make the CURRENT file point to the descriptor file with the
+// specified number.
+extern Status SetCurrentFile(Env* env, const std::string& dbname,
+                             uint64_t descriptor_number);
+    
+        Int64 _ljOffset[MAX_CODE_LEN +1 ]; // There are some other terms that can 
+                                       // be folded into constants when taking
+                                       // the 'left justified' decode path. This
+                                       // holds those constants, indexed by
+                                       // code length
+    
+    
+    {    OPENEXR_IMF_INTERNAL_NAMESPACE::Xdr::write <OPENEXR_IMF_INTERNAL_NAMESPACE::StreamIO> (os, version);
 }
     
-      constexpr static KeyPathComponentHeader
-  forStructComponentWithUnresolvedFieldOffset(bool isLet) {
-    return KeyPathComponentHeader(
-      (_SwiftKeyPathComponentHeader_StructTag
-       << _SwiftKeyPathComponentHeader_DiscriminatorShift)
-      | _SwiftKeyPathComponentHeader_UnresolvedFieldOffsetPayload
-      | isLetBit(isLet));
-  }
-  
-  constexpr static KeyPathComponentHeader
-  forClassComponentWithInlineOffset(bool isLet,
-                                    unsigned offset) {
-    return KeyPathComponentHeader(
-      (_SwiftKeyPathComponentHeader_ClassTag
-       << _SwiftKeyPathComponentHeader_DiscriminatorShift)
-      | validateInlineOffset(offset)
-      | isLetBit(isLet));
-  }
+    #include 'ImfVersion.h'
+#include 'ImfIO.h'
+#include 'ImfXdr.h'
+#include 'ImfHeader.h'
+#include 'ImfNamespace.h'
+#include 'ImfExport.h'
     
-      size_t numTrailingObjects(
-      typename TrailingObjectsIdentifier::template OverloadToken<SourceLoc>)
-      const {
-    return asDerived().hasArgumentLabelLocs() ? asDerived().getNumArguments()
-                                              : 0;
-  }
+        //
+    // The screen window width must not be less than 0.
+    // The size of the screen window can vary over a wide
+    // range (fish-eye lens to astronomical telescope),
+    // so we can't limit the screen window width to a
+    // small range.
+    //
     
-    namespace swift {
-struct SupplementaryOutputPaths {
-  /// The path to which we should emit an Objective-C header for the module.
-  ///
-  /// Currently only makes sense when the compiler has whole module knowledge.
-  /// The modes for which it makes sense incuide both WMO and the 'merge
-  /// modules' job that happens after the normal compilation jobs. That's where
-  /// the header is emitted in single-file mode, since it needs whole-module
-  /// information.
-  ///
-  /// \sa swift::printAsObjC
-  std::string ObjCHeaderOutputPath;
-    }
-    }
+        IMF_EXPORT
+    static void			setMaxImageSize (int maxWidth, int maxHeight);
+    IMF_EXPORT
+    static void			setMaxTileSize (int maxWidth, int maxHeight);
     
-    namespace mongo {
-    }
+    #ifndef IMFINPUTPARTDATA_H_
+#define IMFINPUTPARTDATA_H_
     
-    #include 'mongo/db/stats/top.h'
-#include 'mongo/unittest/unittest.h'
     
-        int32_t result;
-    int32_t fastLatinOptions = settings->fastLatinOptions;
-    if(fastLatinOptions >= 0 &&
-            (equalPrefixLength == leftLength ||
-                left[equalPrefixLength] <= CollationFastLatin::LATIN_MAX) &&
-            (equalPrefixLength == rightLength ||
-                right[equalPrefixLength] <= CollationFastLatin::LATIN_MAX)) {
-        if(leftLength >= 0) {
-            result = CollationFastLatin::compareUTF16(data->fastLatinTable,
-                                                      settings->fastLatinPrimaries,
-                                                      fastLatinOptions,
-                                                      left + equalPrefixLength,
-                                                      leftLength - equalPrefixLength,
-                                                      right + equalPrefixLength,
-                                                      rightLength - equalPrefixLength);
-        } else {
-            result = CollationFastLatin::compareUTF16(data->fastLatinTable,
-                                                      settings->fastLatinPrimaries,
-                                                      fastLatinOptions,
-                                                      left + equalPrefixLength, -1,
-                                                      right + equalPrefixLength, -1);
-        }
-    } else {
-        result = CollationFastLatin::BAIL_OUT_RESULT;
+OPENEXR_IMF_INTERNAL_NAMESPACE_SOURCE_EXIT 
+
+    
+    	ERR_FAIL_COND(tasks.has(p_task));
+	ProgressDialog::Task t;
+	t.vb = memnew(VBoxContainer);
+	VBoxContainer *vb2 = memnew(VBoxContainer);
+	t.vb->add_margin_child(p_label, vb2);
+	t.progress = memnew(ProgressBar);
+	t.progress->set_max(p_steps);
+	t.progress->set_value(p_steps);
+	vb2->add_child(t.progress);
+	t.state = memnew(Label);
+	t.state->set_clip_text(true);
+	vb2->add_child(t.state);
+	main->add_child(t.vb);
+    
+    	void set_agent_height(float p_value);
+	float get_agent_height() const;
+    
+    		MMRESULT res = midiInOpen(&midi_in, i, (DWORD_PTR)read, (DWORD_PTR)this, CALLBACK_FUNCTION);
+		if (res == MMSYSERR_NOERROR) {
+			midiInStart(midi_in);
+			connected_sources.insert(i, midi_in);
+		} else {
+			char err[256];
+			midiInGetErrorText(res, err, 256);
+			ERR_PRINTS('midiInOpen error: ' + String(err));
     }
     
-    U_NAMESPACE_BEGIN
+    #include 'core/string_name.h'
+#include 'core/ustring.h'
     
-    U_NAMESPACE_BEGIN
+    #endif // GODOT_UPNP_H
+
     
-                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    	void set_description_url(const String &url);
+	String get_description_url() const;
     
-            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
+      double tx0, ty0;		// global translation
+  double xScale0, yScale0;	// global scaling
+  int rotate0;			// rotation angle (0, 90, 180, 270)
+  double clipLLX0, clipLLY0,
+         clipURX0, clipURY0;
+  double tx, ty;		// global translation for current page
+  double xScale, yScale;	// global scaling for current page
+  int rotate;			// rotation angle for current page
+  double epsX1, epsY1,		// EPS bounding box (unrotated)
+         epsX2, epsY2;
     
+      PSTokenizer(int (*getCharFuncA)(void *), void *dataA);
+  ~PSTokenizer();
     
-    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            ImGui::End();
-        }
+      // Get duration, the maximum length of time, in seconds,
+  // that the page is displayed before the presentation automatically
+  // advances to the next page
+  double getDuration() { return duration; }
     
-    
-    {    // Create SwapChain, RenderPass, Framebuffer, etc.
-    IM_ASSERT(g_MinImageCount >= 2);
-    ImGui_ImplVulkanH_CreateWindow(g_Instance, g_PhysicalDevice, g_Device, wd, g_QueueFamily, g_Allocator, width, height, g_MinImageCount);
-}
-    
-    IMGUI_IMPL_API bool     ImGui_ImplGlfw_InitForOpenGL(GLFWwindow* window, bool install_callbacks);
-IMGUI_IMPL_API bool     ImGui_ImplGlfw_InitForVulkan(GLFWwindow* window, bool install_callbacks);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplGlfw_NewFrame();
-    
-            D3D12_RESOURCE_BARRIER barrier = {};
-        barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-        barrier.Flags                  = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-        barrier.Transition.pResource   = g_mainRenderTargetResource[backBufferIdx];
-        barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-        barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
-        barrier.Transition.StateAfter  = D3D12_RESOURCE_STATE_RENDER_TARGET;
-    
-        // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-    
-    IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_Init(const char* glsl_version = NULL);
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data);
-    
-    void    ImFontAtlas::GetTexDataAsAlpha8(unsigned char** out_pixels, int* out_width, int* out_height, int* out_bytes_per_pixel)
+    class PopplerCache
 {
-    // Build atlas on demand
-    if (TexPixelsAlpha8 == NULL)
-    {
-        if (ConfigData.empty())
-            AddFontDefault();
-        Build();
-    }
-    }
+  public:
+    PopplerCache(int cacheSizeA);
+    ~PopplerCache();
     
-      static bool s_inited;
-  static hphp_string_map<Verb> s_verbs;
-  static const char *s_verb_names[];
+    /* The item returned is owned by the cache */
+    PopplerCacheItem *lookup(const PopplerCacheKey &key);
     
-      T& operator[](V idx);
-  const T& operator[](V idx) const;
+    /* The key and item pointers ownership is taken by the cache */
+    void put(PopplerCacheKey *key, PopplerCacheItem *item);
     
-    inline bool isPropHandled(Variant& propResult) {
-  return propResult.isInitialized();
+    /* The max size of the cache */
+    int size();
+    
+    /* The number of items in the cache */
+    int numberOfItems();
+    
+    /* The n-th item in the cache */
+    PopplerCacheItem *item(int index);
+    
+    /* The n-th key in the cache */
+    PopplerCacheKey *key(int index);
+  
+  private:
+    PopplerCache(const PopplerCache &cache); // not allowed
+  
+    PopplerCacheKey **keys;
+    PopplerCacheItem **items;
+    int lastValidCacheIndex;
+    int cacheSize;
+};
+    
+      // End a page.
+  virtual void endPage();
+    
+    #ifndef PROFILE_DATA_H
+#define PROFILE_DATA_H
+    
+    Sound *Sound::parseSound(Object *obj)
+{
+  // let's try to see if this Object is a Sound, according to the PDF specs
+  // (section 9.2)
+  Stream *str = NULL;
+  // the Object must be a Stream
+  if (obj->isStream()) {
+    str = obj->getStream();
+  } else {
+    return NULL;
+  }
+  // the Stream must have a Dict
+  Dict *dict = str->getDict();
+  if (dict == NULL)
+    return NULL;
+  Object tmp;
+  // the Dict must have the 'R' key of type num
+  dict->lookup('R', &tmp);
+  if (tmp.isNum()) {
+    return new Sound(obj);
+  } else {
+    return NULL;
+  }
 }
     
-      bool operator==(unsigned char v) const { return compare(v) == 0;}
-  bool operator!=(unsigned char v) const { return compare(v) != 0;}
-  bool operator>=(unsigned char v) const { return compare(v) >= 0;}
-  bool operator<=(unsigned char v) const { return compare(v) <= 0;}
-  bool operator> (unsigned char v) const { return compare(v) >  0;}
-  bool operator< (unsigned char v) const { return compare(v) <  0;}
     
-    #if USE_JEMALLOC_EXTENT_HOOKS
-    
-    #endif // incl_HPHP_SYNCHRONIZABLE_H_
+    {
+    {
+    {
+    {    LOG(CONSOLE) << '======== Monitor: ' << label << ' ========';
+    for (auto &kv : statistics_map) {
+      if (kv.second.count == 0) {
+        LOG(WARNING) <<
+            'Timer for ' << kv.first << ' did not get stopped properly.';
+        continue;
+      }
+      LOG(CONSOLE) << kv.first << ': ' << kv.second.timer.ElapsedSeconds()
+                   << 's, ' << kv.second.count << ' calls @ '
+                   << std::chrono::duration_cast<std::chrono::microseconds>(
+                          kv.second.timer.elapsed / kv.second.count)
+                          .count()
+                   << 'us';
+    }
+    self_timer.Stop();
+  }
+  void Init(std::string label) { this->label = label; }
+  void Start(const std::string &name) {
+    if (ConsoleLogger::ShouldLog(ConsoleLogger::LV::kDebug)) {
+      statistics_map[name].timer.Start();
+    }
+  }
+  void Stop(const std::string &name) {
+    if (ConsoleLogger::ShouldLog(ConsoleLogger::LV::kDebug)) {
+      auto &stats = statistics_map[name];
+      stats.timer.Stop();
+      stats.count++;
+    }
+  }
+  void StartCuda(const std::string &name) {
+    if (ConsoleLogger::ShouldLog(ConsoleLogger::LV::kDebug)) {
+      auto &stats = statistics_map[name];
+      stats.timer.Start();
+#if defined(XGBOOST_USE_NVTX) && defined(__CUDACC__)
+      stats.nvtx_id = nvtxRangeStartA(name.c_str());
+#endif  // defined(XGBOOST_USE_NVTX) && defined(__CUDACC__)
+    }
+  }
+  void StopCuda(const std::string &name) {
+    if (ConsoleLogger::ShouldLog(ConsoleLogger::LV::kDebug)) {
+      auto &stats = statistics_map[name];
+      stats.timer.Stop();
+      stats.count++;
+#if defined(XGBOOST_USE_NVTX) && defined(__CUDACC__)
+      nvtxRangeEnd(stats.nvtx_id);
+#endif  // defined(XGBOOST_USE_NVTX) && defined(__CUDACC__)
+    }
+  }
+};
+}  // namespace common
+}  // namespace xgboost
 
     
-    ////////////////////////////////////////////////////////////////////////////////
+      // Write 2 nodes
+  EXPECT_EQ(sizeof(RegTree::Node),
+            3 * sizeof(int) + 1 * sizeof(unsigned) + sizeof(float));
+  int parent = -1;
+  int cleft = 1;
+  int cright = -1;
+  unsigned sindex = 5;
+  float split_or_weight = 0.5;
+  fo->Write(&parent, sizeof(int));
+  fo->Write(&cleft, sizeof(int));
+  fo->Write(&cright, sizeof(int));
+  fo->Write(&sindex, sizeof(unsigned));
+  fo->Write(&split_or_weight, sizeof(float));
+  parent = 0;
+  cleft = -1;
+  cright = -1;
+  sindex = 2;
+  split_or_weight = 0.1;
+  fo->Write(&parent, sizeof(int));
+  fo->Write(&cleft, sizeof(int));
+  fo->Write(&cright, sizeof(int));
+  fo->Write(&sindex, sizeof(unsigned));
+  fo->Write(&split_or_weight, sizeof(float));
     
-        // out_of_range.403
-    try
-    {
-        // try to use a JSON pointer to an nonexistent object key
-        json::const_reference ref = j.at('/foo'_json_pointer);
+    template<typename IndexType>
+class DensifyParser : public dmlc::Parser<IndexType> {
+ public:
+  DensifyParser(dmlc::Parser<IndexType>* parser, uint32_t num_col)
+      : parser_(parser), num_col_(num_col) {
+  }
     }
-    catch (json::out_of_range& e)
+    
+        uint16_t port;
+    auto connection = make_unique<DHTConnectionImpl>(family);
     {
-        std::cout << e.what() << '\n';
+      port = e->getBtRegistry()->getUdpPort();
+      const std::string& addr = e->getOption()->get(
+          family == AF_INET ? PREF_DHT_LISTEN_ADDR : PREF_DHT_LISTEN_ADDR6);
+      // If UDP port is already used, use the same port
+      // number. Normally IPv4 port is available, then IPv6 port is
+      // (especially for port >= 1024). We don't loose much by doing
+      // this. We did the same thing in TCP socket. See BtSetup.cc.
+      bool rv;
+      if (port == 0) {
+        auto sgl =
+            util::parseIntSegments(e->getOption()->get(PREF_DHT_LISTEN_PORT));
+        sgl.normalize();
+        rv = connection->bind(port, addr, sgl);
+      }
+      else {
+        rv = connection->bind(port, addr);
+      }
+      if (!rv) {
+        throw DL_ABORT_EX('Error occurred while binding UDP port for DHT');
+      }
+      localNode->setPort(port);
     }
+    A2_LOG_DEBUG(fmt('Initialized local node ID=%s',
+                     util::toHex(localNode->getID(), DHT_ID_LENGTH).c_str()));
+    auto tracker = std::make_shared<DHTMessageTracker>();
+    auto routingTable = make_unique<DHTRoutingTable>(localNode);
+    auto factory = make_unique<DHTMessageFactoryImpl>(family);
+    auto dispatcher = make_unique<DHTMessageDispatcherImpl>(tracker);
+    auto receiver = make_unique<DHTMessageReceiver>(tracker);
+    auto taskQueue = make_unique<DHTTaskQueueImpl>();
+    auto taskFactory = make_unique<DHTTaskFactoryImpl>();
+    auto peerAnnounceStorage = make_unique<DHTPeerAnnounceStorage>();
+    auto tokenTracker = make_unique<DHTTokenTracker>();
+    // For now, UDPTrackerClient was enabled along with DHT
+    auto udpTrackerClient = std::make_shared<UDPTrackerClient>();
+    const auto messageTimeout =
+        e->getOption()->getAsInt(PREF_DHT_MESSAGE_TIMEOUT);
+    // wiring up
+    tracker->setRoutingTable(routingTable.get());
+    tracker->setMessageFactory(factory.get());
     
-        // print values
-    std::cout << object << '\n';
-    std::cout << *res1.first << ' ' << std::boolalpha << res1.second << '\n';
+      virtual void startup() = 0;
     
-    #endif // OPENPOSE_CORE_RECTANGLE_HPP
-
-    
-    
-    {
-    {        // PIMP requires DELETE_COPY & destructor, or extra code
-        // http://oliora.github.io/2015/12/29/pimpl-and-rule-of-zero.html
-        DELETE_COPY(GuiAdam);
-    };
+    void DHTTokenTracker::updateTokenSecret()
+{
+  memcpy(secret_[1], secret_[0], SECRET_SIZE);
+  util::generateRandomData(secret_[0], SECRET_SIZE);
 }
     
-        template<typename T>
-    Point<T> Point<T>::operator-(const T value) const
-    {
-        try
-        {
-            return Point<T>{T(x - value), T(y - value)};
-        }
-        catch (const std::exception& e)
-        {
-            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
-            return Point<T>{};
-        }
+    #endif // D_DHT_TOKEN_UPDATE_COMMAND_H
+
+    
+    DHTUnknownMessage::DHTUnknownMessage(const std::shared_ptr<DHTNode>& localNode,
+                                     const unsigned char* data, size_t length,
+                                     const std::string& ipaddr, uint16_t port)
+    : DHTMessage(localNode, std::shared_ptr<DHTNode>()),
+      length_(length),
+      ipaddr_(ipaddr),
+      port_(port)
+{
+  if (length_ == 0) {
+    data_ = nullptr;
+  }
+  else {
+    data_ = new unsigned char[length];
+    memcpy(data_, data, length);
+  }
+}
+    
+    namespace aria2 {
     }
