@@ -1,113 +1,68 @@
 
         
-        from sklearn.svm.bounds import l1_min_c
-from sklearn.svm import LinearSVC
-from sklearn.linear_model.logistic import LogisticRegression
+            @app.route('/<ctx:name>')
+    def index(name):
+        return name
     
-        def get_hessians(y_true, raw_predictions):
-        # create gradients and hessians array, update inplace, and return
-        gradients = np.empty_like(raw_predictions, dtype=G_H_DTYPE)
-        hessians = np.empty_like(raw_predictions, dtype=G_H_DTYPE)
-        loss.update_gradients_and_hessians(gradients, hessians, y_true,
-                                           raw_predictions)
+    from werkzeug.local import LocalProxy
+from werkzeug.local import LocalStack
     
-    from sklearn import datasets
-from sklearn.utils import shuffle
-from sklearn.metrics import mean_squared_error
-from sklearn.svm.classes import NuSVR
-from sklearn.ensemble.gradient_boosting import GradientBoostingRegressor
-from sklearn.linear_model.stochastic_gradient import SGDClassifier
-from sklearn.metrics import hamming_loss
+            def __init__(self, name, doc=None):
+            self.name = name
+            self.__doc__ = doc
     
-        title = match1(html, r'&title=([^&]+)')
+        # try/finally, in case other tests use this app for Blueprint tests.
+    max_age_default = app.config['SEND_FILE_MAX_AGE_DEFAULT']
+    try:
+        with app.test_request_context():
+            unexpected_max_age = 3600
+            if app.config['SEND_FILE_MAX_AGE_DEFAULT'] == unexpected_max_age:
+                unexpected_max_age = 7200
+            app.config['SEND_FILE_MAX_AGE_DEFAULT'] = unexpected_max_age
+            rv = blueprint.send_static_file('index.html')
+            cc = parse_cache_control_header(rv.headers['Cache-Control'])
+            assert cc.max_age == 100
+            rv.close()
+    finally:
+        app.config['SEND_FILE_MAX_AGE_DEFAULT'] = max_age_default
     
-    site = Infoq()
-download = site.download_by_url
-download_playlist = site.download_by_url
-
+    When starting from the default values (alpha_init = 1.90, lambda_init = 1.),
+the bias of the resulting curve is large, and the variance is small.
+So, lambda_init should be relatively small (1.e-3) so as to reduce the bias.
     
-    import mock
+    '''
+print(__doc__)
     
-    
-class JWSTest(unittest.TestCase):
-    '''Tests for acme.jws.JWS.'''
-    
-            self.assertEqual(None, self._call(self.vhosts))
-    
-            self.addr1 = Addr.fromstring('127.0.0.1')
-        self.addr2 = Addr.fromstring('127.0.0.1:*')
-    
-            try:
-            response = dns.query.udp(request, self.server, port=self.port)
-            rcode = response.rcode()
+    from sklearn.cluster import AgglomerativeClustering
     
     
-  def EmptyInsertionText_test( self ):
-    self._Check( 0, {
-      'insertion_text':  '',
-      'menu_text':       'MENU TEXT',
-      'extra_menu_info': 'EXTRA MENU INFO',
-      'kind':            'K',
-      'detailed_info':   'DETAILED INFO',
-      'extra_data': {
-        'doc_string':    'DOC STRING',
-      },
-    }, {
-      'word'     : '',
-      'abbr'     : 'MENU TEXT',
-      'menu'     : 'EXTRA MENU INFO',
-      'kind'     : 'k',
-      'info'     : 'DETAILED INFO\nDOC STRING',
-      'equal'    : 1,
-      'dup'      : 1,
-      'empty'    : 1,
-      'user_data': '0',
-    } )
-
+if __name__ == '__main__':
+    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
+    # block to be able to use a multi-core grid search that also works under
+    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
+    # The multiprocessing module is used as the backend of joblib.Parallel
+    # that is used when n_jobs != 1 in GridSearchCV
     
+    In both examples below, the main result is that the empirical covariance
+estimate, as a non-robust one, is highly influenced by the heterogeneous
+structure of the observations. Although the robust covariance estimate is
+able to focus on the main mode of the data distribution, it sticks to the
+assumption that the data should be Gaussian distributed, yielding some biased
+estimation of the data structure, but yet accurate to some extent.
+The One-Class SVM does not assume any parametric form of the data distribution
+and can therefore model the complex shape of the data much better.
     
-  def _HandleBasicResponse( self ):
-    vimsupport.PostVimMessage( self._response, warning = False )
+    # We learn the digits on the first half of the digits
+classifier.fit(data[:n_samples // 2], digits.target[:n_samples // 2])
     
+    import time
+import matplotlib.pyplot as plt
+import numpy as np
     
-  def _DiagnosticsCount( self, predicate ):
-    count = 0
-    for diags in itervalues( self._line_to_diags ):
-      count += sum( 1 for d in diags if predicate( d ) )
-    return count
+    from sklearn import datasets, cluster
+from sklearn.feature_extraction.image import grid_to_graph
     
+    # Author: Phil Roth <mr.phil.roth@gmail.com>
+# License: BSD 3 clause
     
-  def Start( self ):
-    request_data = BuildRequestData()
-    request_data.update( { 'filetypes': self.filetypes } )
-    self._response = self.PostDataToHandler( request_data,
-                                             'semantic_completion_available' )
-    
-    
-  def Poll( self, diagnostics_handler ):
-    '''This should be called regularly to check for new messages in this buffer.
-    Returns True if Poll should be called again in a while. Returns False when
-    the completer or server indicated that further polling should not be done
-    for the requested file.'''
-    
-      with CurrentWorkingDirectory( unicode_dir ):
-    with MockVimBuffers( [ current_buffer ], [ current_buffer ] ):
-      with MockCompletionRequest( ServerResponse ):
-        ycm.SendCompletionRequest()
-        ok_( ycm.CompletionRequestReady() )
-        assert_that(
-          ycm.GetCompletionResponse(),
-          has_entries( {
-            'completions': empty(),
-            'completion_start_column': 1
-          } )
-        )
-    
-    
-def RegexMultiList_test():
-  opts = _JavaFilter( { 'regex' : [ 'taco', 'burrito' ] } )
-  f = _CreateFilterForTypes( opts, [ 'java' ] )
-    
-    class Error(Exception):
-    '''Base class for all future-related exceptions.'''
-    pass
+        Code is a simple port of what is already in the /scripts directory
