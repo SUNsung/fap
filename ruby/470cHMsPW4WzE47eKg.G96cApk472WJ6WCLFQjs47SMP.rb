@@ -1,171 +1,151 @@
 
         
-            def initialize
-      @pages = {}
-    end
+                def to_s
+          @symbol.to_s
+        end
+        alias to_str to_s
     
-            css('br', 'hr', '.material-icons', '.header-link', '.breadcrumb').remove
+              stats = diff_stats_collection&.find_by_path(diff.new_path)
     
-      it { is_expected.to change(Notification, :count).by(1) }
-    
-        @account = account
-    @poll    = poll
-    @choices = choices
-    @votes   = []
-    
-          expect(response).to redirect_to(settings_preferences_other_path)
-      user.reload
-      expect(user.locale).to eq 'en'
-      expect(user.chosen_languages).to eq ['es', 'fr']
-    end
-    
-          expect(response).to redirect_to(settings_preferences_notifications_path)
-      user.reload
-      expect(user.settings['notification_emails']['follow']).to be true
-      expect(user.settings['interactions']['must_be_follower']).to be false
+      def respond_to_on_destroy
+    # We actually need to hardcode this as Rails default responder doesn't
+    # support returning empty response on GET request
+    respond_to do |format|
+      format.all { head :no_content }
+      format.any(*navigational_formats) { redirect_to after_sign_out_path_for(resource_name) }
     end
   end
 end
 
     
-          if resource.blank?
-        resource = new(email: attributes[:mail].first, agreement: true, account_attributes: { username: attributes[Devise.ldap_uid.to_sym].first })
-        resource.ldap_setup(attributes)
-      end
+      prepend_before_action :assert_is_devise_resource!
+  respond_to :html if mimes_for_respond_to.empty?
     
-        old_account.update!(uri: 'https://example.org/alice', domain: 'example.org', protocol: :activitypub, inbox_url: 'https://example.org/inbox')
-    new_account.update!(uri: 'https://example.com/alice', domain: 'example.com', protocol: :activitypub, inbox_url: 'https://example.com/inbox', also_known_as: [old_account.uri])
-    
-          before do
-        subject.perform
-      end
-    
-      expect(status).to be_success
-end
-    
-          OptionParser.new do |opts|
-        opts.banner = 'See full documentation at http://capistranorb.com/.'
-        opts.separator ''
-        opts.separator 'Install capistrano in a project:'
-        opts.separator '    bundle exec cap install [STAGES=qa,staging,production,...]'
-        opts.separator ''
-        opts.separator 'Show available tasks:'
-        opts.separator '    bundle exec cap -T'
-        opts.separator ''
-        opts.separator 'Invoke (or simulate invoking) a task:'
-        opts.separator '    bundle exec cap [--dry-run] STAGE TASK'
-        opts.separator ''
-        opts.separator 'Advanced options:'
-    
-          def trusted_keys
-        @trusted_keys.dup
-      end
-    
-        it { expect(alias_node.new_identifier.sym_type?).to be(true) }
-    it { expect(alias_node.new_identifier.children.first).to eq(:foo) }
-  end
-    
-          it { expect(class_node.body.send_type?).to be(true) }
+        def reset_password_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :reset_password_instructions, opts)
     end
     
-      describe '.new' do
-    let(:source) do
-      'class << self; end'
-    end
+        # Creates configuration values for Devise and for the given module.
+    #
+    #   Devise::Models.config(Devise::Models::DatabaseAuthenticatable, :stretches)
+    #
+    # The line above creates:
+    #
+    #   1) An accessor called Devise.stretches, which value is used by default;
+    #
+    #   2) Some class methods for your model Model.stretches and Model.stretches=
+    #      which have higher priority than Devise.stretches;
+    #
+    #   3) And an instance method stretches.
+    #
+    # To add the class methods you need to have a module ClassMethods defined
+    # inside the given class.
+    #
+    def self.config(mod, *accessors) #:nodoc:
+      class << mod; attr_accessor :available_configs; end
+      mod.available_configs = accessors
     
-      context 'when a variable is assigned and unreferenced in a class' do
-    it 'registers an offense' do
-      expect_offense(<<~RUBY)
-        1.times do
-          foo = 1
-          puts foo
-          class SomeClass
-            foo = 2
-            ^^^ Useless assignment to variable - `foo`.
-            bar = 3
-            puts bar
+            def set_reset_password_token
+          raw, enc = Devise.token_generator.generate(self.class, :reset_password_token)
+    
+          class Miscellaneous < FormulaCop
+        def audit_formula(_node, _class_node, _parent_class_node, body_node)
+          # FileUtils is included in Formula
+          # encfs modifies a file with this name, so check for some leading characters
+          find_instance_method_call(body_node, 'FileUtils', nil) do |method_node|
+            problem 'Don't need 'FileUtils.' before #{method_node.method_name}'
+          end
+    
+              def install
+            system 'cargo', 'build'
+            ^^^^^^^^^^^^^^^^^^^^^^^ use \'cargo\', \'install\', \'--root\', prefix, \'--path\', \'.\'
           end
         end
       RUBY
     end
   end
+end
+
     
-        expect(new_source).to eq(<<~RUBY)
-      def foo
-        raise(<<-FAIL) if true
-          boop
-        FAIL
+      def recursive_requirements
+    Requirement.expand(self)
+  end
     
-          # Checks whether this `block` literal belongs to a lambda.
-      #
-      # @return [Boolean] whether the `block` literal belongs to a lambda
-      def lambda?
-        send_node.method?(:lambda)
+            uses_from_macos('foo', after: :mojave)
       end
     
-            if obj && obj.errors[method].present?
-          errors = safe_join(obj.errors[method], '<br />'.html_safe)
-          content_tag(:span, errors, class: 'formError')
+        raise 'Loaded OS::Mac on generic OS!' if ENV['HOMEBREW_TEST_GENERIC_OS']
+    
+          def update_instructions
+        if OS::Mac.prerelease?
+          <<~EOS
+            Xcode can be updated from:
+              #{Formatter.url('https://developer.apple.com/download/more/')}
+          EOS
         else
-          ''
+          <<~EOS
+            Xcode can be updated from the App Store.
+          EOS
         end
       end
     
-          # users should be able to set price when importing orders via api
-      def permitted_line_item_attributes
-        if @current_user_roles.include?('admin')
-          super + [:price, :variant_id, :sku]
-        else
-          super
-        end
+      it 'prints the file used to cache the Cask' do
+    transmission_location = CurlDownloadStrategy.new(
+      local_transmission.url.to_s, local_transmission.token, local_transmission.version,
+      cache: Cask::Cache.path, **local_transmission.url.specs
+    ).cached_location
+    caffeine_location = CurlDownloadStrategy.new(
+      local_caffeine.url.to_s, local_caffeine.token, local_caffeine.version,
+      cache: Cask::Cache.path, **local_caffeine.url.specs
+    ).cached_location
+    
+    version = ['', 'ext/etc/'].find do |dir|
+  begin
+    break File.open(File.expand_path('../#{dir}/etc.c', __FILE__)) do |f|
+      f.gets '\n#define RUBY_ETC_VERSION '
+      f.gets[/'(.+)'/, 1]
+    end
+  rescue
+    next
+  end
+end
+    
+        def quote_field(field)
+      field = String(field)
+      encoded_quote_character = @quote_character.encode(field.encoding)
+      encoded_quote_character +
+        field.gsub(encoded_quote_character,
+                   encoded_quote_character * 2) +
+        encoded_quote_character
+    end
+    
+      it 'calls the given block for each line in the stream, passing the line as an argument' do
+    ScratchPad.record []
+    @gzreader.send(@method) { |b| ScratchPad << b }
+    
+      def unread_notifications
+    notifications.where(:unread => true)
+  end
+    
+          def handle_jwt_bearer(req)
+        jwt_string = req['client_assertion']
+        jwt = JSON::JWT.decode jwt_string, :skip_verification
+        o_auth_app = Api::OpenidConnect::OAuthApplication.find_by(client_id: jwt['iss'])
+        raise Rack::OAuth2::Server::Authorize::BadRequest(:invalid_request) unless o_auth_app
+        public_key = fetch_public_key(o_auth_app, jwt)
+        JSON::JWT.decode(jwt_string, JSON::JWK.new(public_key).to_key)
+        req.update_param('client_id', o_auth_app.client_id)
+        req.update_param('client_secret', o_auth_app.client_secret)
       end
     
-            def address_params
-          params.require(:address).permit(permitted_address_attributes)
-        end
+    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
+#   licensed under the Affero General Public License version 3 or later.  See
+#   the COPYRIGHT file.
     
-            def inventory_unit
-          @inventory_unit ||= InventoryUnit.accessible_by(current_ability, :show).find(params[:id])
-        end
-    
-            def destroy
-          @option_type = Spree::OptionType.accessible_by(current_ability, :destroy).find(params[:id])
-          @option_type.destroy
-          render plain: nil, status: 204
-        end
-    
-            def destroy
-          @option_value = scope.accessible_by(current_ability, :destroy).find(params[:id])
-          @option_value.destroy
-          render plain: nil, status: 204
-        end
-    
-            def find_order
-          @order = Spree::Order.find_by!(number: order_id)
-          authorize! :show, @order, order_token
-        end
-    
-            def update
-          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
-          if @return_authorization.update(return_authorization_params)
-            respond_with(@return_authorization, default_template: :show)
-          else
-            invalid_resource!(@return_authorization)
-          end
-        end
-    
-              Spree::Dependencies.cart_remove_item_service.constantize.call(order: @shipment.order,
-                                                                        variant: variant,
-                                                                        quantity: quantity,
-                                                                        options: { shipment: @shipment })
-    
-            private
-    
-            def update
-          authorize! :update, taxon
-          if taxon.update(taxon_params)
-            respond_with(taxon, status: 200, default_template: :show)
-          else
-            invalid_resource!(taxon)
-          end
-        end
+        if params[:conversation_id]
+      @conversation = Conversation.joins(:conversation_visibilities)
+                                  .where(conversation_visibilities: {
+                                           person_id:       current_user.person_id,
+                                           conversation_id: params[:conversation_id]
+                                         }).first
