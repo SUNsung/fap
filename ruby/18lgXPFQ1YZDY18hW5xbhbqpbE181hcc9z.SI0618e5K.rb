@@ -1,86 +1,126 @@
 
         
-        def global_require
-  JSON.pretty_generate(DATA)
-end
+                desc 'Requests access for the authenticated user to a #{source_type}.' do
+          detail 'This feature was introduced in GitLab 8.11.'
+          success Entities::AccessRequester
+        end
+        post ':id/access_requests' do
+          source = find_source(source_type, params[:id])
+          access_requester = source.request_access(current_user)
     
-      def test_trigonometric_functions
-    assert_equal 0, CMath.asin(0)
-    assert_equal 0, CMath.acos(1)
-    assert_equal 0, CMath.atan(0)
-    assert_equal 0, CMath.asinh(0)
-    assert_equal 0, CMath.acosh(1)
-    assert_equal 0, CMath.atanh(0)
+              if badge.is_a?(GroupBadge) && source.is_a?(Project)
+            error!('To delete a Group badge please use the Group endpoint', 403)
+          end
     
-      it 'invokes seek method on the associated IO object' do
-    # first, prepare the mock object:
-    (obj = mock('io')).should_receive(:get_io).any_number_of_times.and_return(@io)
-    def obj.read(args); get_io.read(args); end
-    def obj.seek(pos, whence = 0)
-      ScratchPad.record :seek
-      get_io.seek(pos, whence)
+          desc 'Get a specific project's deploy keys' do
+        success Entities::DeployKeysProject
+      end
+      params do
+        use :pagination
+      end
+      # rubocop: disable CodeReuse/ActiveRecord
+      get ':id/deploy_keys' do
+        keys = user_project.deploy_keys_projects.preload(:deploy_key)
+    
+              if !@run.key?(:privileged)
+            @run[:privileged] = false
+          end
+    
+        it 'should raise an exception' do
+      expect { subject }.
+        to raise_error(Vagrant::Errors::BoxMetadataFileNotFound)
     end
+  end
     
-          it 'decrements pos' do
-        @gz.ungetbyte 0x21
-        @gz.pos.should == -1
+            vf_path           = @machine.provider_config.vagrant_vagrantfile
+        host_machine_name = @machine.provider_config.vagrant_machine || :default
+        if !vf_path
+          # We don't have a Vagrantfile path set, so we're going to use
+          # the default but we need to copy it into the data dir so that
+          # we don't write into our installation dir (we can't).
+          default_path = File.expand_path('../hostmachine/Vagrantfile', __FILE__)
+          vf_path      = @machine.env.data_dir.join('docker-host', 'Vagrantfile')
+          begin
+            @machine.env.lock('docker-provider-hostvm') do
+              vf_path.dirname.mkpath
+              FileUtils.cp(default_path, vf_path)
+            end
+          rescue Vagrant::Errors::EnvironmentLockedError
+            # Lock contention, just retry
+            retry
+          end
+    
+    describe Vagrant::BatchAction do
+  let(:called_actions) { [] }
+  let!(:lock) { Mutex.new }
+  let(:provider_name) { 'test' }
+  let(:provider_options) { {} }
+    
+          # Resolve the request set to ensure proper activation order
+      solution = request_set.resolve(current_set)
+      solution_specs = solution.map(&:full_spec)
+      solution_full_names = solution_specs.map(&:full_name)
+    
+          def add_host(host, properties={})
+        new_host = Server[host]
+        new_host.port = properties[:port] if properties.key?(:port)
+        # This matching logic must stay in sync with `Server#matches?`.
+        key = ServerKey.new(new_host.hostname, new_host.port)
+        existing = servers_by_key[key]
+        if existing
+          existing.user = new_host.user if new_host.user
+          existing.with(properties)
+        else
+          servers_by_key[key] = new_host.with(properties)
+        end
+      end
+    
+          def fetch(key, default=nil, &block)
+        fetched_keys << key unless fetched_keys.include?(key)
+        peek(key, default, &block)
+      end
+    
+    # We use a special :_default_git value so that SCMResolver can tell whether the
+# default has been replaced by the user via `set`.
+set_if_empty :scm, Capistrano::Configuration::SCMResolver::DEFAULT_GIT
+set_if_empty :branch, 'master'
+set_if_empty :deploy_to, -> { '/var/www/#{fetch(:application)}' }
+set_if_empty :tmp_dir, '/tmp'
+    
+        def reset
+      preferences.each do |name, _value|
+        set_preference name, preference_default(name)
       end
     end
     
-    describe 'GzipWriter#write' do
-  before :each do
-    @data = '12345abcde'
-    @zip = [31, 139, 8, 0, 44, 220, 209, 71, 0, 3, 51, 52, 50, 54, 49, 77,
-            76, 74, 78, 73, 5, 0, 157, 5, 0, 36, 10, 0, 0, 0].pack('C*')
-    @io = StringIO.new ''.b
-  end
-    
-        # advance scanner to pos after the next match of pattern and return the match
-    def scan_next(pattern)
-      return unless @s.scan_until(pattern)
-      @s.matched
+        def errors
+      validators.map(&:errors).reduce({}, :merge)
     end
     
-      # Disable Rails's static asset server (Apache or nginx will already do this).
-  if config.respond_to?(:serve_static_files)
-    # rails >= 4.2
-    config.serve_static_files = true
-  elsif config.respond_to?(:serve_static_assets)
-    # rails < 4.2
-    config.serve_static_assets = true
-  end
+                  inventory_unit.save!
+            end
     
-            # Initialize a new instance
-        #
-        # @param  [Hash{Symbol=>String}] pods_by_state
-        #         The name of the pods grouped by their state
-        #         (`:added`, `:removed`, `:changed` or `:unchanged`).
-        #
-        def initialize(pods_by_state = nil)
-          @added     = Set.new
-          @deleted   = Set.new
-          @changed   = Set.new
-          @unchanged = Set.new
+          def variants_associations
+        [{ option_values: :option_type }, :default_price, :images]
+      end
     
-      autoload :AggregateTarget,           'cocoapods/target/aggregate_target'
-  autoload :Command,                   'cocoapods/command'
-  autoload :Deintegrator,              'cocoapods_deintegrate'
-  autoload :Executable,                'cocoapods/executable'
-  autoload :ExternalSources,           'cocoapods/external_sources'
-  autoload :Installer,                 'cocoapods/installer'
-  autoload :HooksManager,              'cocoapods/hooks_manager'
-  autoload :PodTarget,                 'cocoapods/target/pod_target'
-  autoload :Project,                   'cocoapods/project'
-  autoload :Resolver,                  'cocoapods/resolver'
-  autoload :Sandbox,                   'cocoapods/sandbox'
-  autoload :Target,                    'cocoapods/target'
-  autoload :Validator,                 'cocoapods/validator'
+            def create
+          authorize! :create, Spree::OptionValue
+          @option_value = scope.new(option_value_params)
+          if @option_value.save
+            render :show, status: 201
+          else
+            invalid_resource!(@option_value)
+          end
+        end
     
-            # @return [Hash{String=>Symbol}] A hash representing all the user build
-        #         configurations across all integration targets. Each key
-        #         corresponds to the name of a configuration and its value to
-        #         its type (`:debug` or `:release`).
-        #
-        attr_reader :build_configurations
+            def index
+          @properties = Spree::Property.accessible_by(current_ability)
     
-          private
+            def index
+          authorize! :admin, ReturnAuthorization
+          @return_authorizations = order.return_authorizations.accessible_by(current_ability).
+                                   ransack(params[:q]).result.
+                                   page(params[:page]).per(params[:per_page])
+          respond_with(@return_authorizations)
+        end
