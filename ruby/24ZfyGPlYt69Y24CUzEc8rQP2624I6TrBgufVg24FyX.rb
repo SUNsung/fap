@@ -1,174 +1,269 @@
 
         
-        class BugTest < Minitest::Test
-  def test_stuff
-    assert 'zomg'.present?
-    refute ''.present?
+              template_args = {}
+      client_message = nil
+    
+      def primary_group_lookup
+    @primary_group_lookup ||= options[:primary_group_lookup] || PrimaryGroupLookup.new(user_ids)
   end
 end
 
     
-      # Eager load code on boot. This eager loads most of Rails and
-  # your application in memory, allowing both threaded web servers
-  # and those relying on copy on write to perform better.
-  # Rake tasks automatically ignore this option for performance.
-  config.eager_load = true
+      def source_regex(db_name, filename, multisite:)
+    bucket = Regexp.escape(SiteSetting.s3_backup_bucket)
+    prefix = file_prefix(db_name, multisite)
+    filename = Regexp.escape(filename)
+    expires = S3Helper::DOWNLOAD_URL_EXPIRES_AFTER_SECONDS
     
-          private
-        def run_rake_routes
-          Dir.chdir(app_path) { `bin/rake routes` }
-        end
-    end
-  end
-end
-
+    require 'rails_helper'
+require 'i18n/backend/fallback_locale_list'
     
-          delegate_to Type
-    
-        it 'returns a hash with the flare tag's bg_color_hex' do
-      expect(described_class.new(valid_article).tag_hash.value?('#f3f3f3')).to be true
-    end
-    
-        context 'when organization is present' do
-      let(:organization) { create(:organization) }
-    
-          def is_create_page
-        true
-      end
-    
-          # Finds header node inside Nokogiri::HTML document.
-      #
-      def find_header_node(doc)
-        case @page.format
-          when :asciidoc
-            doc.css('div#gollum-root > h1:first-child')
-          when :org
-            doc.css('div#gollum-root > p.title:first-child')
-          when :pod
-            doc.css('div#gollum-root > a.dummyTopAnchor:first-child + h1')
-          when :rest
-            doc.css('div#gollum-root > div > div > h1:first-child')
-          else
-            doc.css('div#gollum-root > h1:first-child')
-        end
-      end
-    
-        @wiki.write_page(page, :markdown, text,
-                     { :name => 'user1', :email => 'user1' });
-    
-    context 'Precious::Helpers' do
-  include Precious::Helpers
-    
-          page_dir = settings.wiki_options[:page_file_dir].to_s
-      unless page_dir.empty?
-        # --page-file-dir docs
-        # /docs/Home should be created in /Home
-        # not /docs/Home because write_page will append /docs
-        @path = @path.sub(page_dir, '/') if @path.start_with? page_dir
-      end
-      @path = clean_path(@path)
-    
-        # returns the formatted price for the specified variant as a difference from product price
-    def variant_price_diff(variant)
-      variant_amount = variant.amount_in(current_currency)
-      product_amount = variant.product.amount_in(current_currency)
-      return if variant_amount == product_amount || product_amount.nil?
-    
-          I18N_PLURAL_MANY_COUNT = 2.1
-      def plural_resource_name(resource_class)
-        resource_class.model_name.human(count: I18N_PLURAL_MANY_COUNT)
-      end
-    
-          def void_transaction!
-        return true if void?
-    
-              if completed_at = params.delete(:completed_at)
-            order.completed_at = completed_at
-            order.state = 'complete'
+              it 'only uses existing tags' do
+            Fabricate(:tag, name: 'totally')
+            expect {
+              @result = subject.revise!(user, raw: 'lets totally update the body', tags: ['totally', 'update'])
+            }.to_not change { Tag.count }
+            expect(@result).to eq(true)
+            post.reload
+            expect(post.topic.tags.map(&:name)).to eq(['totally'])
           end
+        end
+      end
+    end
+  end
+end
+
     
-            def new; end
+        it 'does not override types in the type supervisor' do
+      settings.setting(:foo, 'bar')
+      settings.provider.save(:foo, 'bar', SiteSetting.types[:enum])
+      settings.refresh!
+      expect(settings.foo).to eq('bar')
     
-            def new; end
+          it 'is ready to test' do
+        mock_client_response(:get_build) do
+          {
+            'externalState' => 'testflight.build.state.testing.ready'
+          }
+        end
+        expect(build).to be_ready_to_test
+      end
     
-            def index
-          @product_properties = @product.product_properties.accessible_by(current_ability).
-                                ransack(params[:q]).result.
-                                page(params[:page]).per(params[:per_page])
-          respond_with(@product_properties)
+            mock_client_response(:get_builds_for_train, with: hash_including(train_version: '1.1')) do
+          [
+            {
+              id: 2,
+              appAdamId: 10,
+              trainVersion: '1.1',
+              uploadDate: '2017-01-02T12:00:00.000+0000',
+              externalState: 'testflight.build.state.submit.ready'
+            },
+            {
+              id: 3,
+              appAdamId: 10,
+              trainVersion: '1.1',
+              uploadDate: '2017-01-03T12:00:00.000+0000',
+              externalState: 'testflight.build.state.processing'
+            }
+          ]
+        end
+      end
+    
+        def verify_supported_os(name, class_ref)
+      if class_ref.respond_to?(:is_supported?)
+        # This value is filled in based on the executed platform block. Might be nil when lane is in root of Fastfile
+        platform = Actions.lane_context[Actions::SharedValues::PLATFORM_NAME]
+        if platform
+          unless class_ref.is_supported?(platform)
+            UI.important('Action '#{name}' isn't known to support operating system '#{platform}'.')
+          end
+        end
+      end
+    end
+    
+              current_path = File.expand_path(current_path)
+          Dir.mktmpdir do |dir|
+            Dir.chdir(dir) do
+              Actions.sh('unzip -qo #{current_path.shellescape}')
+              work_q = Queue.new
+              Dir['*.dSYM'].each do |sub|
+                work_q.push(sub)
+              end
+              execute_uploads(params, max_worker_threads, work_q)
+            end
+          end
+        else
+          UI.error('Don't know how to handle '#{current_path}'')
+        end
+      end
+    
+          it 'prefers an explicitly specified changelog value' do
+        values = Fastlane::FastFile.new.parse('lane :test do
+          # changelog_from_git_commits sets this lane context variable
+          Actions.lane_context[SharedValues::FL_CHANGELOG] = 'autogenerated changelog'
+          pilot(changelog: 'custom changelog')
+        end').runner.execute(:test)
+    
+          [
+        # app upload info
+        FastlaneCore::ConfigItem.new(key: :username,
+                                     short_option: '-u',
+                                     env_name: 'PILOT_USERNAME',
+                                     description: 'Your Apple ID Username',
+                                     default_value: user,
+                                     default_value_dynamic: true),
+        FastlaneCore::ConfigItem.new(key: :app_identifier,
+                                     short_option: '-a',
+                                     env_name: 'PILOT_APP_IDENTIFIER',
+                                     description: 'The bundle identifier of the app to upload or manage testers (optional)',
+                                     optional: true,
+                                     code_gen_sensitive: true,
+                                     # This incorrect env name is here for backwards compatibility
+                                     default_value: ENV['TESTFLIGHT_APP_IDENTITIFER'] || CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier),
+                                     default_value_dynamic: true),
+        FastlaneCore::ConfigItem.new(key: :app_platform,
+                                     short_option: '-m',
+                                     env_name: 'PILOT_PLATFORM',
+                                     description: 'The platform to use (optional)',
+                                     optional: true,
+                                     default_value: 'ios',
+                                     verify_block: proc do |value|
+                                       UI.user_error!('The platform can only be ios, appletvos, or osx') unless ['ios', 'appletvos', 'osx'].include?(value)
+                                     end),
+        FastlaneCore::ConfigItem.new(key: :apple_id,
+                                     short_option: '-p',
+                                     env_name: 'PILOT_APPLE_ID',
+                                     description: 'Apple ID property in the App Information section in App Store Connect',
+                                     optional: true,
+                                     code_gen_sensitive: true,
+                                     default_value: ENV['TESTFLIGHT_APPLE_ID'],
+                                     default_value_dynamic: true,
+                                     type: String,
+                                     verify_block: proc do |value|
+                                       error_message = '`apple_id` value is incorrect. The correct value should be taken from Apple ID property in the App Information section in App Store Connect.'
+    
+        let(:current_user) do
+      Spaceship::Tunes::Member.new({ 'firstname' => 'Josh',
+                           'lastname' => 'Liebowitz',
+                           'email_address' => 'taquitos+nospam@gmail.com' })
+    end
+    
+    STDOUT.sync = true if ENV['CP_STDOUT_SYNC'] == 'TRUE'
+    
+      autoload :AggregateTarget,           'cocoapods/target/aggregate_target'
+  autoload :Command,                   'cocoapods/command'
+  autoload :Deintegrator,              'cocoapods_deintegrate'
+  autoload :Executable,                'cocoapods/executable'
+  autoload :ExternalSources,           'cocoapods/external_sources'
+  autoload :Installer,                 'cocoapods/installer'
+  autoload :HooksManager,              'cocoapods/hooks_manager'
+  autoload :PodTarget,                 'cocoapods/target/pod_target'
+  autoload :Project,                   'cocoapods/project'
+  autoload :Resolver,                  'cocoapods/resolver'
+  autoload :Sandbox,                   'cocoapods/sandbox'
+  autoload :Target,                    'cocoapods/target'
+  autoload :Validator,                 'cocoapods/validator'
+    
+            def create_project(path, object_version, pod_target_subproject)
+          object_version ||= Xcodeproj::Constants::DEFAULT_OBJECT_VERSION
+          Pod::Project.new(path, false, object_version, :pod_target_subproject => pod_target_subproject)
         end
     
-    def blog_url(user, project, source_dir)
-  cname = '#{source_dir}/CNAME'
-  url = if File.exists?(cname)
-    'http://#{IO.read(cname).strip}'
-  else
-    'http://#{user.downcase}.github.io'
+          describe 'concerning settings for file accessors' do
+        it 'does not propagate framework or libraries from a test specification to an aggregate target' do
+          target_definition = fixture_target_definition(:contents => { 'inheritance' => 'complete' })
+          spec = stub('spec', :library_specification? => false, :spec_type => :test)
+          consumer = stub('consumer',
+                          :libraries => ['xml2'],
+                          :frameworks => ['XCTest'],
+                          :weak_frameworks => [],
+                          :spec => spec,
+                         )
+          file_accessor = stub('file_accessor',
+                               :spec => spec,
+                               :spec_consumer => consumer,
+                               :vendored_static_frameworks => [config.sandbox.root + 'StaticFramework.framework'],
+                               :vendored_static_libraries => [config.sandbox.root + 'libStaticLibrary.a'],
+                               :vendored_static_artifacts => [config.sandbox.root + 'StaticFramework.framework', config.sandbox.root + 'libStaticLibrary.a'],
+                               :vendored_dynamic_frameworks => [config.sandbox.root + 'VendoredFramework.framework'],
+                               :vendored_dynamic_libraries => [config.sandbox.root + 'VendoredDyld.dyld'],
+                              )
+          pod_target = stub('pod_target',
+                            :file_accessors => [file_accessor],
+                            :requires_frameworks? => true,
+                            :dependent_targets => [],
+                            :recursive_dependent_targets => [],
+                            :sandbox => config.sandbox,
+                            :include_in_build_config? => true,
+                            :should_build? => false,
+                            :spec_consumers => [consumer],
+                            :build_as_static? => false,
+                            :product_basename => 'PodTarget',
+                            :target_definitions => [target_definition],
+                           )
+          pod_target.stubs(:build_settings => pod(pod_target))
+          aggregate_target = fixture_aggregate_target([pod_target])
+          aggregate(aggregate_target).other_ldflags.should.not.include '-framework'
+        end
+    
+        it 'only prints a count when invoked with --count-only' do
+      config.repos_dir = fixture('spec-repos')
+      output = run_command('repo', 'list', '--count-only')
+      output.should.include? 'repo'
+      output.should.not.include? '- Type:'
+    end
+    
+                  # Files within the .xcdatamodeld directory are added automatically by adding the .xcdatamodeld directory.
+              file_ref = @installer.pods_project['Pods/BananaLib/Resources/Sample.xcdatamodeld/Sample.xcdatamodel']
+              file_ref.should.be.not.nil
+              file_ref.path.should == 'Sample.xcdatamodel'
+              file_ref.source_tree.should == '<group>'
+            end
+    
+            # @return [Array<Specification>] the specifications of the resolved version of Pods that should be installed.
+        #
+        attr_reader :specifications
+    
+    require 'xcodeproj'
+    
+        obj = Helpers.new('HTTP_ACCEPT_LANGUAGE' => 'sv-se')
+    assert_equal 'sv', obj.locale
+    
+          b = $count
+      assert_equal a, b
+      assert_equal false, p.thread.status
+      refute mgr.latest_error, mgr.latest_error.to_s
+    end
   end
-  url += '/#{project}' unless project == ''
-  url
 end
+
+    
+          dead_set.kill(Sidekiq.dump_json(jid: '000101', class: 'MyWorker1', args: []))
+    end
+    
+        boss = Minitest::Mock.new
+    boss.expect(:options, {:queues => ['default'] }, [])
+    boss.expect(:options, {:queues => ['default'] }, [])
+    boss.expect(:options, {:queues => ['default'] }, [])
+    processor = Sidekiq::Processor.new(boss)
+    boss.expect(:processor_done, nil, [processor])
+    processor.process(Sidekiq::BasicFetch::UnitOfWork.new('queue:default', msg))
+    assert_equal %w(2 before 3 before 1 before work_performed 1 after 3 after 2 after), $recorder.flatten
+  end
+    
+        it 'allows angry developers to express their emotional constitution and remedies it' do
+      Sidekiq.❨╯°□°❩╯︵┻━┻
+      assert_equal 'Calm down, yo.\n', $stdout.string
+    end
+  end
+    
+        class InlineFooModel
+      def self.bar(str)
+        raise InlineError
+      end
+    end
     
         def render(context)
-      quote = paragraphize(super)
-      author = '<strong>#{@by.strip}</strong>' if @by
-      if @source
-        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
-        parts = []
-        url.each do |part|
-          if (parts + [part]).join('/').length < 32
-            parts << part
-          end
-        end
-        source = parts.join('/')
-        source << '/&hellip;' unless source == @source
-      end
-      if !@source.nil?
-        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
-      elsif !@title.nil?
-        cite = ' <cite>#{@title}</cite>'
-      end
-      blockquote = if @by.nil?
-        quote
-      elsif cite
-        '#{quote}<footer>#{author + cite}</footer>'
-      else
-        '#{quote}<footer>#{author}</footer>'
-      end
-      '<blockquote>#{blockquote}</blockquote>'
-    end
-    
-      def set_checkbox(value) # rubocop:disable Naming/AccessorMethodName
-    if value && !native['checked']
-      native['checked'] = 'checked'
-    elsif !value && native['checked']
-      native.remove_attribute('checked')
-    end
-  end
-    
-    Capybara.register_driver :selenium_safari_not_clear_storage do |app|
-  safari_options = {
-    browser: :safari,
-    options: browser_options
-  }
-  Capybara::Selenium::Driver.new(app, safari_options.merge(clear_local_storage: false, clear_session_storage: false))
-end
-    
-          def negative_failure_message
-        failure_message_helper(' not')
-      end
-    
-          def included(base)
-        warn 'including Capybara::DSL in the global scope is not recommended!' if base == Object
-        if defined?(::RSpec::Matchers) && base.include?(::RSpec::Matchers)
-          base.send(:include, ::Capybara::RSpecMatcherProxies)
-        end
-        super
-      end
-    end
-  end
-    
-      it 'should check query options' do
-    @session.visit('/with_js?test=test')
-    expect(@session).to have_current_path('/with_js?test=test')
-  end
+      code_dir = (context.registers[:site].config['code_dir'].sub(/^\//,'') || 'downloads/code')
+      code_path = (Pathname.new(context.registers[:site].source) + code_dir).expand_path
+      file = code_path + @file
