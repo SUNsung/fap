@@ -1,13 +1,42 @@
 
         
-          desc 'Create a nicely formatted history page for the jekyll site based on the repo history.'
-  task :history do
-    siteify_file('History.markdown', { 'title' => 'History' })
-  end
+          has_many :other_posts,          class_name: 'Post'
+  has_many :posts_with_callbacks, class_name: 'Post', before_add: :log_before_adding,
+           after_add: :log_after_adding,
+           before_remove: :log_before_removing,
+           after_remove: :log_after_removing
+  has_many :posts_with_proc_callbacks, class_name: 'Post',
+           before_add: Proc.new { |o, r| o.post_log << 'before_adding#{r.id || '<new>'}' },
+           after_add: Proc.new { |o, r| o.post_log << 'after_adding#{r.id || '<new>'}' },
+           before_remove: Proc.new { |o, r| o.post_log << 'before_removing#{r.id}' },
+           after_remove: Proc.new { |o, r| o.post_log << 'after_removing#{r.id}' }
+  has_many :posts_with_multiple_callbacks, class_name: 'Post',
+           before_add: [:log_before_adding, Proc.new { |o, r| o.post_log << 'before_adding_proc#{r.id || '<new>'}' }],
+           after_add: [:log_after_adding,  Proc.new { |o, r| o.post_log << 'after_adding_proc#{r.id || '<new>'}' }]
+  has_many :unchangeable_posts, class_name: 'Post', before_add: :raise_exception, after_add: :log_after_adding
     
-    def docs_folder
-  'docs'
+              {% include params.html
+            param='value' %}
+        CONTENT
+        create_post(content,
+                    'permalink'   => 'pretty',
+                    'source'      => source_dir,
+                    'destination' => dest_dir,
+                    'read_posts'  => true)
+      end
+    
+    # Just a slash
+Benchmark.ips do |x|
+  path = '/'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
 end
+    
+    # -------------------------------------------------------------------
+# Benchmarking changes in https://github.com/jekyll/jekyll/pull/6767
+# -------------------------------------------------------------------
     
       p.option 'source', '-s', '--source [DIR]', 'Source directory (defaults to ./)'
   p.option 'destination', '-d', '--destination [DIR]',
@@ -19,180 +48,183 @@ end
     'Layouts directory (defaults to ./_layouts)'
   p.option 'profile', '--profile', 'Generate a Liquid rendering profile'
     
-        def upload_images(language)
-      Supply::IMAGES_TYPES.each do |image_type|
-        search = File.join(metadata_path, language, Supply::IMAGES_FOLDER_NAME, image_type) + '.#{IMAGE_FILE_EXTENSIONS}'
-        path = Dir.glob(search, File::FNM_CASEFOLD).last
-        next unless path
+          # From https://github.com/orta/danger/blob/master/lib/danger/Dangerfile.rb
+      if content.tr!('“”‘’‛', %('''''))
+        UI.error('Your #{File.basename(path)} has had smart quotes sanitised. ' \
+                  'To avoid issues in the future, you should not use ' \
+                  'TextEdit for editing it. If you are not using TextEdit, ' \
+                  'you should turn off smart quotes in your editor of choice.')
+      end
     
-            mock_client_response(:get_builds_for_train, with: hash_including(train_version: '1.0')) do
-          [
-            {
-              id: 1,
-              appAdamId: 10,
-              trainVersion: '1.0',
-              uploadDate: '2017-01-01T12:00:00.000+0000',
-              externalState: 'testflight.build.state.export.compliance.missing'
-            }
-          ]
-        end
-    
-          UI.verbose('Fetching a new access token from Google...')
-    
-              directories.find do |category|
-            path = File.join(category_directory(category), file_name)
-            @repository.blob_at(@commit.id, path)
-          end
+        def upload_mapping(apk_version_codes)
+      mapping_paths = [Supply.config[:mapping]] unless (mapping_paths = Supply.config[:mapping_paths])
+      mapping_paths.zip(apk_version_codes).each do |mapping_path, version_code|
+        if mapping_path
+          client.upload_mapping(mapping_path, version_code)
         end
       end
     end
-  end
-end
-
     
-            it { expect(presenter.can_approve?).to eq(false) }
-      end
+          it 'updates whats_new' do
+        updated_test_info = build.test_info.deep_copy
+        updated_test_info.whats_new = 'this fixture data is new'
+    
+        it 'raises an exception if authentication failed' do
+      expect do
+        subject.login('bad-username', 'bad-password')
+      end.to raise_exception(Spaceship::Client::InvalidUserCredentialsError)
     end
   end
     
-        subject.unfold_diff_files([position])
-  end
-end
-
+        describe 'handle conflicts' do
+      it 'Both primary and secondary are available, and both match the export method, it should prefer the primary mapping' do
+        result = csm.merge_profile_mapping(primary_mapping: { 'identifier.1' => 'Ap-pStoreValue2' },
+                                       secondary_mapping: { 'identifier.1' => 'Ap-pStoreValue1' },
+                                           export_method: 'app-store')
     
-    class Devise::ConfirmationsController < DeviseController
-  # GET /resource/confirmation/new
-  def new
-    self.resource = resource_class.new
-  end
-    
-          respond_to_on_destroy
-    end
-  end
-    
-        # The path used after unlocking the resource
-    def after_unlock_path_for(resource)
-      new_session_path(resource)  if is_navigational_format?
-    end
-    
-        def email_changed(record, opts={})
-      devise_mail(record, :email_changed, opts)
-    end
-    
-          # Forgets the given resource by deleting a cookie
-      def forget_me(resource)
-        scope = Devise::Mapping.find_scope!(resource)
-        resource.forget_me!
-        cookies.delete(remember_key(resource, scope), forget_cookie_values(resource))
+            it 'finds the one build when no app version is provided' do
+          allow(fake_app).to receive(:latest_version).and_return(fake_version)
+          allow(fake_version).to receive(:candidate_builds).and_return(fake_builds, fake_builds_with_processed_build)
+          only_build = fake_builds.first
+          allow(review_submitter).to receive(:sleep)
+          expect(review_submitter.wait_for_build(fake_app, nil)).to equal(fake_builds_with_processed_build.first)
+        end
       end
     
-      def initialize(info = {})
-    super(merge_info(info,
-      'Name'          => 'Bind TCP Stager (RC4 Stage Encryption, Metasm)',
-      'Description'   => 'Connect back to the attacker',
-      'Author'        => ['hdm', 'skape', 'sf', 'mihi', 'max3raza', 'RageLtMan'],
-      'License'       => MSF_LICENSE,
-      'Platform'      => 'win',
-      'Arch'          => ARCH_X64,
-      'Handler'       => Msf::Handler::BindTcp,
-      'Convention'    => 'sockrdi',
-      'Stager'        => { 'RequiresMidstager' => false }
-      ))
-  end
-end
-
-    
-      # reports the hash info to metasploit backend
-  def report_hash(type, hash, user)
-    return unless hash.present?
-    print_good('#{type}:#{user}:#{hash}')
-    case type
-    when 'NT'
-      private_data = '#{Metasploit::Credential::NTLMHash::BLANK_LM_HASH}:#{hash}'
-      private_type = :ntlm_hash
-      jtr_format = 'ntlm'
-    when 'LM'
-      private_data = '#{hash}:#{Metasploit::Credential::NTLMHash::BLANK_NT_HASH}'
-      private_type = :ntlm_hash
-      jtr_format = 'lm'
-    when 'SHA-512 PBKDF2'
-      private_data = hash
-      private_type = :nonreplayable_hash
-      jtr_format = 'PBKDF2-HMAC-SHA512'
-    when 'SHA-512'
-      private_data = hash
-      private_type = :nonreplayable_hash
-      jtr_format = 'xsha512'
-    when 'SHA-1'
-      private_data = hash
-      private_type = :nonreplayable_hash
-      jtr_format = 'xsha'
-    end
-    create_credential(
-      jtr_format: jtr_format,
-      workspace_id: myworkspace_id,
-      origin_type: :session,
-      session_id: session_db_id,
-      post_reference_name: self.refname,
-      username: user,
-      private_data: private_data,
-      private_type: private_type
-    )
-    print_status('Credential saved in database.')
-  end
-    
-            This module expects a URL to be provided using the URL option.
-        Alternatively, multiple URLs can be provided by supplying the
-        path to a file containing a list of URLs in the URL_LIST option.
-    
-        # XXX: $HOME may not work in some cases
-    register_dir_for_cleanup('$HOME/.groovy/grapes/#{vendor}')
-  end
-    
-        #
-    # Automatically allow the webcam to run on the target machine
-    #
-    args = ''
-    if remote_browser_path =~ /Chrome/
-      args = '--allow-file-access-from-files --use-fake-ui-for-media-stream'
-    elsif remote_browser_path =~ /Firefox/
-      profile_name = Rex::Text.rand_text_alpha(8)
-      o = cmd_exec('#{remote_browser_path} --CreateProfile #{profile_name} #{tmp_dir}\\#{profile_name}')
-      profile_path = (o.scan(/created profile '.+' at '(.+)'/).flatten[0] || '').strip
-      setting = %|user_pref('media.navigator.permission.disabled', true);|
-      begin
-        write_file(profile_path, setting)
-      rescue RuntimeError => e
-        elog('webcam_chat failed: #{e.class} #{e}')
-        raise 'Unable to write the necessary setting for Firefox.'
+            return build_settings
       end
-      args = '-p #{profile_name}'
-    end
     
-      # Function to install payload as a service
-  #-------------------------------------------------------------------------------
-  def install_service(path)
-    print_status('Creating service #{@service_name}')
+          def self.details
+        'This action allows you to upload symbolication files to Crashlytics. It's extra useful if you use it to download the latest dSYM files from Apple when you use Bitcode. This action will not fail the build if one of the uploads failed. The reason for that is that sometimes some of dSYM files are invalid, and we don't want them to fail the complete build.'
+      end
     
-    @@ login
-<form action='/'>
-  <label for='user'>User Name:</label>
-  <input name='user' value='' />
-  <input type='submit' value='GO!' />
-</form>
-    
-            # Set these key values to boolean 'true' to include in policy
-        NO_ARG_DIRECTIVES.each do |d|
-          if options.key?(d) && options[d].is_a?(TrueClass)
-            directives << d.to_s.sub(/_/, '-')
+            if Helper.ci? || Helper.test?
+          # The 'BUILD_URL' environment variable is set automatically by Jenkins in every build
+          jenkins_api_url = URI(ENV['BUILD_URL'] + 'api/json\?wrapper\=changes\&xpath\=//changeSet//comment')
+          begin
+            json = JSON.parse(Net::HTTP.get(jenkins_api_url))
+            json['changeSet']['items'].each do |item|
+              comment = params[:include_commit_body] ? item['comment'] : item['msg']
+              changelog << comment.strip + '\n'
+            end
+          rescue => ex
+            UI.error('Unable to read/parse changelog from jenkins: #{ex.message}')
           end
         end
     
-          def cookie_paths(path)
-        path = '/' if path.to_s.empty?
-        paths = []
-        Pathname.new(path).descend { |p| paths << p.to_s }
-        paths
+          def self.available_options
+        require 'match'
+        Match::Options.available_options
+      end
+    
+          def_node_matcher :find_output_method, <<-PATTERN
+        (defs (self) :output ...)
+      PATTERN
+    
+      # Returns the FQDN of the image URL.
+  #
+  # @param [String] path
+  #
+  # @return [String]
+  def image_url(path)
+    File.join(base_url, image_path(path))
+  end
+    
+          # If set, will only run trigger for guests that match keys for this parameter.
+      #
+      # @return [String, Regex, Array]
+      attr_accessor :only_on
+    
+      let(:iso_env) do
+    # We have to create a Vagrantfile so there is a root path
+    env = isolated_environment
+    env.vagrantfile('')
+    env.create_vagrant_env
+  end
+    
+    # Load in helpers
+require 'unit/support/dummy_communicator'
+require 'unit/support/dummy_provider'
+require 'unit/support/shared/base_context'
+require 'unit/support/shared/action_synced_folders_context'
+require 'unit/support/shared/capability_helpers_context'
+require 'unit/support/shared/plugin_command_context'
+require 'unit/support/shared/virtualbox_context'
+    
+          env = environment.create_vagrant_env(vagrantfile_name: 'non_standard_name')
+      expect(env.vagrantfile.config.ssh.port).to eq(200)
+    end
+    
+        it 'returns all the machines' do
+      configure do |config|
+        config.vm.define 'foo'
+        config.vm.define 'bar', autostart: false
+        config.vm.define 'baz', autostart: true
+      end
+    
+        it 'returns true if usable' do
+      allow(VagrantPlugins::ProviderVirtualBox::Driver::Meta).to receive(:new).and_return(driver)
+      expect(subject).to be_usable
+    end
+    
+                if trigger.run_remote
+              run_remote(trigger.run_remote, trigger.on_error, trigger.exit_codes)
+            end
+    
+        def bad_sourceforge_url?
+      bad_url_format?(/sourceforge/,
+                      [
+                        %r{\Ahttps://sourceforge\.net/projects/[^/]+/files/latest/download\Z},
+                        %r{\Ahttps://downloads\.sourceforge\.net/(?!(project|sourceforge)\/)},
+                      ])
+    end
+    
+          def tag_without_or_later(tag)
+        tag
+      end
+    
+      def fails_with(compiler, &block)
+    compiler_failures << CompilerFailure.create(compiler, &block)
+  end
+    
+        it 'acts like #depends_on' do
+      f = formula 'foo' do
+        url 'foo-1.0'
+    
+      describe '#uses_from_macos' do
+    before do
+      sierra_os_version = OS::Mac::Version.from_symbol(:sierra)
+    
+            version < minimum_version
+      end
+    
+      let(:local_caffeine) {
+    Cask::CaskLoader.load(cask_path('local-caffeine'))
+  }
+    
+        [stdout, stderr, status]
+  end
+    
+            if Rake::Task.task_defined?('deploy:set_current_revision')
+          before 'deploy:set_current_revision',
+                 '#{scm_name}:set_current_revision'
+        end
+      end
+      # rubocop:enable Style/GuardClause
+    
+        def frame_class(frame)
+      if frame.filename =~ %r{lib/sinatra.*\.rb}
+        'framework'
+      elsif (defined?(Gem) && frame.filename.include?(Gem.dir)) ||
+            frame.filename =~ %r{/bin/(\w+)\z}
+        'system'
+      else
+        'app'
+      end
+    end
+    
+          def session?(env)
+        env.include? options[:session_key]
       end
     
             modes       = Array options[:escape]
@@ -201,165 +233,19 @@ end
         @javascript = modes.include? :javascript
         @url        = modes.include? :url
     
-        it 'Returns nil when Referer header is invalid' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/bad|uri'}
-      expect(subject.referrer(env)).to be_nil
-    end
-  end
-end
-
-    
-        it 'denies requests with duplicate session cookies' do
-      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
-      expect(last_response).not_to be_ok
+      it 'allows for a custom authenticity token param' do
+    mock_app do
+      use Rack::Protection::AuthenticityToken, :authenticity_param => 'csrf_param'
+      run proc { |e| [200, {'Content-Type' => 'text/plain'}, ['hi']] }
     end
     
-          it { expect(module_node.body.begin_type?).to be(true) }
+        it 'Reads referrer from Host header when Referer header is relative' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => '/valid'}
+      expect(subject.referrer(env)).to eq('foo.com')
     end
     
-          it_behaves_like 'single capture'
-    end
-    
-        def self.cache_root(config_store)
-      root = config_store.for('.').for_all_cops['CacheRootDirectory']
-      root ||= if ENV.key?('XDG_CACHE_HOME')
-                 # Include user ID in the path to make sure the user has write
-                 # access.
-                 File.join(ENV['XDG_CACHE_HOME'], Process.uid.to_s)
-               else
-                 File.join(ENV['HOME'], '.cache')
-               end
-      File.join(root, 'rubocop_cache')
-    end
-    
-      it 'does not register offense when guard clause is before `ensure`' do
-    expect_no_offenses(<<~RUBY)
-      def foo
-        begin
-          return another_object if something_different?
-        ensure
-          bar
-        end
-      end
-    RUBY
+      it 'should set the Content Security Policy' do
+    expect(
+      get('/', {}, 'wants' => 'text/html').headers['Content-Security-Policy']
+    ).to eq('connect-src 'self'; default-src none; img-src 'self'; script-src 'self'; style-src 'self'')
   end
-    
-    # define charCodeAt on String
-class String
-  def charCodeAt(k)
-    # use scan, nil check, and unpack instead of ord for 1.8
-    # 1.9 can simply use self[k].ord
-    # http://stackoverflow.com/questions/7793177/split-utf8-string-regardless-of-ruby-version
-    c = self.scan(/./mu)[k]
-    return nil if c.nil?
-    c.unpack('U')[0]
-  end
-end
-    
-          def page_dir
-        @page_dir
-      end
-    
-          def author
-        first = page.last_version
-        return DEFAULT_AUTHOR unless first
-        first.author.name.respond_to?(:force_encoding) ? first.author.name.force_encoding('UTF-8') : first.author.name
-      end
-    
-        assert_match /Edit Page/,             last_response.body, ''Edit Page' link is blocked in compare template'
-    assert_match /Revert Changes/,        last_response.body, ''Revert Changes' link is blocked in compare template'
-  end
-    
-    context 'Frontend Unicode support' do
-  include Rack::Test::Methods
-    
-    desc 'Update gemspec'
-task :gemspec => :validate do
-  # read spec file and split out manifest section
-  spec = File.read(gemspec_file)
-  head, manifest, tail = spec.split('  # = MANIFEST =\n')
-    
-      s.rdoc_options = ['--charset=UTF-8']
-  s.extra_rdoc_files = %w[README.md LICENSE]
-    
-        def initialize(dir, existing, attempted, message = nil)
-      @dir            = dir
-      @existing_path  = existing
-      @attempted_path = attempted
-      super(message || 'Cannot write #{@dir}/#{@attempted_path}, found #{@dir}/#{@existing_path}.')
-    end
-  end
-end
-    
-      describe 'POST /chat_channel_memberships' do
-    it 'creates chat channel invitation' do
-      user.add_role(:super_admin)
-      mems_num = ChatChannelMembership.all.size
-      post '/chat_channel_memberships', params: {
-        chat_channel_membership: {
-          user_id: second_user.id, chat_channel_id: chat_channel.id
-        }
-      }
-      expect(ChatChannelMembership.all.size).to eq(mems_num + 1)
-      expect(ChatChannelMembership.last.status).to eq('pending')
-    end
-    
-      def user_org_admin?
-    user.org_admin?(record.organization_id)
-  end
-end
-
-    
-      def article
-    @article = Article.find(params[:id])
-    not_found unless @article.published
-    
-      def self.buff!(article_id, text, buffer_profile_id_code, social_service_name = 'twitter', tag_id = nil)
-    buffer_response = send_to_buffer(text, buffer_profile_id_code)
-    create(
-      article_id: article_id,
-      tag_id: tag_id,
-      body_text: text,
-      buffer_profile_id_code: buffer_profile_id_code,
-      social_service_name: social_service_name,
-      buffer_response: buffer_response,
-      status: 'sent_direct',
-    )
-  end
-    
-      def to_s_extension; 'txz'; end
-    
-      private
-  def input(package)
-    # Notes:
-    # * npm respects PREFIX
-    settings = {
-      'cache' => build_path('npm_cache'),
-      'loglevel' => 'warn',
-      'global' => 'true'
-    }
-    
-        File.write(build_path('build-info'), `pkg_info -X pkg_install | egrep '^(MACHINE_ARCH|OPSYS|OS_VERSION|PKGTOOLS_VERSION)'`)
-    
-        platforms.each do |platform|
-      logger.info('Generating service manifest.', :platform => platform.class.name)
-      platform.program = command.first
-      platform.name = attributes[:pleaserun_name]
-      platform.args = command[1..-1]
-      platform.description = if attributes[:description_given?]
-        attributes[:description]
-      else
-        platform.name
-      end
-      pleaserun_attributes.each do |attribute_name|
-        attribute = 'pleaserun_#{attribute_name}'.to_sym
-        if attributes.has_key?(attribute) and not attributes[attribute].nil?
-          platform.send('#{attribute_name}=', attributes[attribute])
-        end
-      end
-    
-        # Generate the package 'Prototype' file
-    File.open('#{build_path}/Prototype', 'w') do |prototype|
-      prototype.puts('i pkginfo')
-      prototype.puts('i preinstall') if self.scripts['pre-install']
-      prototype.puts('i postinstall') if self.scripts['post-install']
