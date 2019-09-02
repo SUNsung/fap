@@ -1,186 +1,195 @@
 
         
         
-class TestAES(unittest.TestCase):
-    def setUp(self):
-        self.key = self.iv = [0x20, 0x15] + 14 * [0]
-        self.secret_msg = b'Secret message goes here'
-    
-        def _get_ip(self, protocol):
-        if self._SKIP_SOCKS_TEST:
-            return '127.0.0.1'
-    
-        def lower_items(self):
-        '''Like iteritems(), but with all lowercase keys.'''
-        return (
-            (lowerkey, keyval[1])
-            for (lowerkey, keyval)
-            in self._store.items()
-        )
-    
-        @possible_keys
-    def test_delitem(self, key):
-        del self.case_insensitive_dict[key]
-        assert key not in self.case_insensitive_dict
-    
-    #: Python 2.x?
-is_py2 = (_ver[0] == 2)
-    
-        def multiple_domains(self):
-        '''Returns True if there are multiple domains in the jar.
-        Returns False otherwise.
+with codecs.open(JSON_FILE_PATH, encoding='utf8') as f:
+    JSON_FILE_CONTENT = f.read()
     
     
-def info():
-    '''Generate information for a bug report.'''
-    try:
-        platform_info = {
-            'system': platform.system(),
-            'release': platform.release(),
-        }
-    except IOError:
-        platform_info = {
-            'system': 'Unknown',
-            'release': 'Unknown',
-        }
+def test_follow_redirect_output_options(httpbin):
+    r = http('--check-status',
+             '--follow',
+             '--all',
+             '--print=h',
+             '--history-print=H',
+             httpbin.url + '/redirect/2')
+    assert r.count('GET /') == 2
+    assert 'HTTP/1.1 302 FOUND' not in r
+    assert HTTP_OK in r
     
     
-def test_idna_without_version_attribute(mocker):
-    '''Older versions of IDNA don't provide a __version__ attribute, verify
-    that if we have such a package, we don't blow up.
-    '''
-    mocker.patch('requests.help.idna', new=None)
-    assert info()['idna'] == {'version': ''}
+class ExitStatus(Enum):
+    '''Program exit code constants.'''
+    SUCCESS = 0
+    ERROR = 1
+    PLUGIN_ERROR = 7
     
-        def get_redirect_target(self, resp):
-        '''Receives a Response. Returns a redirect URI or ``None``'''
-        # Due to the nature of how requests processes redirects this method will
-        # be called at least once upon the original response and at least twice
-        # on each subsequent redirect response (if any).
-        # If a custom mixin is used to handle this logic, it may be advantageous
-        # to cache the redirect location onto the response object as a private
-        # attribute.
-        if resp.is_redirect:
-            location = resp.headers['location']
-            # Currently the underlying http module on py3 decode headers
-            # in latin1, but empirical evidence suggests that latin1 is very
-            # rarely used with non-ASCII characters in HTTP headers.
-            # It is more likely to get UTF8 header rather than latin1.
-            # This causes incorrect handling of UTF8 encoded location headers.
-            # To solve this, we re-encode the location in latin1.
-            if is_py3:
-                location = location.encode('latin1')
-            return to_native_string(location, 'utf8')
-        return None
+    import pytest
     
-        def iter_content(self, chunk_size=1, decode_unicode=False):
-        '''Iterates over the response data.  When stream=True is set on the
-        request, this avoids reading the content at once into memory for
-        large responses.  The chunk size is the number of bytes it should
-        read into memory.  This is not necessarily the length of each item
-        returned as decoding can take place.
+    from httpie import __version__, sessions
+from httpie.cli.constants import SSL_VERSION_ARG_MAPPING
+from httpie.cli.dicts import RequestHeadersDict
+from httpie.plugins import plugin_manager
+from httpie.utils import repr_dict
+    
+    REQUESTS_IMP_ERR = None
+try:
+    import requests
+except ImportError:
+    REQUESTS_IMP_ERR = traceback.format_exc()
+    REQUESTS_FOUND = False
+else:
+    REQUESTS_FOUND = True
     
     
-if __name__ == '__main__':
-    main()
+class ClcBlueprintPackage:
+    
+    ANSIBLE_METADATA = {
+    'metadata_version': '1.1',
+    'status': ['preview'],
+    'supported_by': 'community',
+}
+    
+        def __init__(self, host, suffix, module, members=None, tls=False):
+        if tls:
+            self.base_url = str(str('https://') + str(host))
+            self.url = str(str('https://') + str(host) + str(suffix))
+        else:
+            self.base_url = str(str('http://') + str(host))
+            self.url = str(str('http://') + str(host) + str(suffix))
+        self.module = module
+        self.page = self.fetch_balancer_page()
+        if members is None:
+            self._members = []
     
     
-      3. find centroids and clusters using kmeans function.
-  
-        centroids, cluster_assignment = kmeans(
-            X, 
-            k, 
-            initial_centroids, 
-            maxiter=400,
-            record_heterogeneity=heterogeneity, 
-            verbose=True # whether to print logs in console or not.(default=False)
-            )
-  
-  
-  4. Plot the loss function, hetrogeneity values for every iteration saved in hetrogeneity list.
-        plot_heterogeneity(
-            heterogeneity, 
-            k
-        )
-  
-  5. Have fun..
-  
+import os
+import tempfile
+import traceback
+from distutils.version import LooseVersion
+from ansible.module_utils.basic import AnsibleModule, missing_required_lib
+from ansible.module_utils._text import to_native
+    
+                else:
+                # If does not exist, do nothing
+                return (True, changed, 'Issue does not exist', {})
+    
+    
+RETURN = '''
+# Default return values
 '''
-from __future__ import print_function
-from sklearn.metrics import pairwise_distances
-import numpy as np
     
-            a += a
-        b >>= 1
+            if channel in channels_by_tag:
+            target = channels_by_tag[channel]
+        else:
+            module.fail_json(msg='Channel '%s' not found. Available channels: '%s'' % (channel, '', ''.join(channels_by_tag.keys())))
     
-            # Some people use different formatting conventions, which makes
-        # untokenize a little trickier. Note that this test involves trailing
-        # whitespace after the colon. Note that we use hex escapes to make the
-        # two trailing blanks apparent in the expected output.
+    from __future__ import absolute_import, division, print_function
+__metaclass__ = type
     
+        name = module.params['name']
+    port = module.params['port']
+    user = module.params['user']
+    password = module.params['password']
+    state = module.params['state']
+    timeout = module.params['timeout']
     
-def main():
-    parser = ArgumentParser(description='''\
-Unpack a MIME message into a directory of files.
-''')
-    parser.add_argument('-d', '--directory', required=True,
-                        help='''Unpack the MIME message into the named
-                        directory, which will be created if it doesn't already
-                        exist.''')
-    parser.add_argument('msgfile')
-    args = parser.parse_args()
+            # test if we're actually logged in
+        if password or login_token:
+            gh_obj.me()
+    except github3.exceptions.AuthenticationFailed as e:
+        module.fail_json(msg='Failed to connect to GitHub: %s' % to_native(e),
+                         details='Please check username and password or token '
+                                 'for repository %s' % repo)
     
-    ##
+        Examples
+    --------
+    >>> import numpy as np
+    >>> from scipy.misc import bytescale
+    >>> img = np.array([[ 91.06794177,   3.39058326,  84.4221549 ],
+    ...                 [ 73.88003259,  80.91433048,   4.88878881],
+    ...                 [ 51.53875334,  34.45808177,  27.5873488 ]])
+    >>> bytescale(img)
+    array([[255,   0, 236],
+           [205, 225,   4],
+           [140,  90,  70]], dtype=uint8)
+    >>> bytescale(img, high=200, low=100)
+    array([[200, 100, 192],
+           [180, 188, 102],
+           [155, 135, 128]], dtype=uint8)
+    >>> bytescale(img, cmin=0, cmax=255)
+    array([[91,  3, 84],
+           [74, 81,  5],
+           [52, 34, 28]], dtype=uint8)
     
-                if buffer.lstrip().upper().startswith('SELECT'):
-                print(cur.fetchall())
-        except sqlite3.Error as e:
-            print('An error occurred:', e.args[0])
-        buffer = ''
+        plt.figure('scikit-learn LASSO benchmark results')
+    plt.subplot(211)
+    plt.plot(list_n_samples, lasso_results, 'b-',
+                            label='Lasso')
+    plt.plot(list_n_samples, lars_lasso_results, 'r-',
+                            label='LassoLars')
+    plt.title('precomputed Gram matrix, %d features, alpha=%s' % (n_features,
+                            alpha))
+    plt.legend(loc='upper left')
+    plt.xlabel('number of samples')
+    plt.ylabel('Time (s)')
+    plt.axis('tight')
     
-        def get_device_name(self, device):
-        '''Return the name of the given device or None if we don't know.'''
-        if not self.last_results:
-            return None
-        for client in self.last_results:
-            if client.mac == device:
-                return client.ip
-        return None
+    data, row_idx, col_idx = sg._shuffle(data, random_state=0)
+plt.matshow(data, cmap=plt.cm.Blues)
+plt.title('Shuffled dataset')
     
-    from homeassistant.components.notify import (
-    PLATFORM_SCHEMA, BaseNotificationService)
-from homeassistant.const import CONF_ACCESS_TOKEN, CONF_USERNAME
-import homeassistant.helpers.config_validation as cv
+    from sklearn import datasets, cluster
+from sklearn.feature_extraction.image import grid_to_graph
     
-    PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-    vol.Optional(CONF_APP_NAME, default=DEFAULT_APP_NAME): cv.string,
-    vol.Optional(CONF_APP_ICON): vol.Url,
-    vol.Optional(CONF_HOSTNAME, default=DEFAULT_HOST): cv.string,
-    vol.Optional(CONF_PASSWORD): cv.string,
-    vol.Optional(CONF_PORT, default=DEFAULT_PORT): cv.port,
-})
+    np.random.seed(0)
+###############################################################################
+n_features = 100
+# simulation covariance matrix (AR(1) process)
+r = 0.1
+real_cov = toeplitz(r ** np.arange(n_features))
+coloring_matrix = cholesky(real_cov)
     
-        def __init__(self, hass, host, port):
-        '''Initialize the service.'''
-        self._hass = hass
-        self._host = host
-        self._port = port
+    for i, face_distance in enumerate(face_distances):
+    print('The test image has a distance of {:.2} from known image #{}'.format(face_distance, i))
+    print('- With a normal cutoff of 0.6, would the test image match the known image? {}'.format(face_distance < 0.6))
+    print('- With a very strict cutoff of 0.5, would the test image match the known image? {}'.format(face_distance < 0.5))
+    print()
+
     
-        def send_message(self, message='', **kwargs):
-        '''Send a message to a user.'''
-        _LOGGER.debug('Sending to: %s, %s', self._recipient, str(self._device))
-        data = {
-            'secret': self._secret,
-            'to': self._recipient,
-            'device': self._device,
-            'payload': message,
-        }
+        # Print the location of each face in this image
+    top, right, bottom, left = face_location
+    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
     
-    REQUIREMENTS = ['messagebird==1.2.0']
+        # Print the location of each face in this image
+    top, right, bottom, left = face_location
+    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
     
+    # Load a sample picture and learn how to recognize it.
+print('Loading known face image(s)')
+obama_image = face_recognition.load_image_file('obama_small.jpg')
+obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
     
-def get_service(hass, config, discovery_info=None):
-    '''Get the Pushetta notification service.'''
-    api_key = config[CONF_API_KEY]
-    channel_name = config[CONF_CHANNEL_NAME]
-    send_test_msg = config[CONF_SEND_TEST_MSG]
+    # 载入样本图片（奥巴马和拜登）
+print('Loading known face image(s)')
+obama_image = face_recognition.load_image_file('obama_small.jpg')
+obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
+    
+            # Send frame to global
+        write_frame_list[worker_id] = frame_process
+    
+    import mock
+    
+        '''
+    
+        def ifaces(self, *ifaces_groups):
+        '''Does plugin implements specified interface groups?'''
+        return not ifaces_groups or any(
+            all(iface.implementedBy(self.plugin_cls)
+                for iface in ifaces)
+            for ifaces in ifaces_groups)
+    
+      Things we check for: spaces around operators, spaces after
+  if/for/while/switch, no spaces around parens in function calls, two
+  spaces between code and comment, don't start a block with a blank
+  line, don't end a function with a blank line, don't add a blank line
+  after public/protected/private, don't have too many blank lines in a row.
