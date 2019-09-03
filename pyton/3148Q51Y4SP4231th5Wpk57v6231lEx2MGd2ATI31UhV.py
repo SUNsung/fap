@@ -1,153 +1,230 @@
 
         
-                formats = []
-        for f_id, f_url in item.get('files', {}).items():
-            if f_id == 'external':
-                return self.url_result(f_url)
-            ext, height = f_id.split('_')
-            formats.append({
-                'format_id': height + 'p',
-                'url': f_url,
-                'height': int_or_none(height),
-                'ext': ext,
-            })
-        self._sort_formats(formats)
+        '''
+    The approach taken is explained below. I decided to do it simply.
+    Initially I was considering parsing the data into some sort of
+    structure and then generating an appropriate README. I am still
+    considering doing it - but for now this should work. The only issue
+    I see is that it only sorts the entries at the lowest level, and that
+    the order of the top-level contents do not match the order of the actual
+    entries.
+    
+            description = self._html_search_regex(
+            r'(?s)<div\b[^>]+\bclass=['\']full hidden[^>]+>(.+?)</div>',
+            webpage, 'description', fatal=False)
+        thumbnail = self._og_search_thumbnail(
+            webpage, default=None) or self._html_search_meta(
+            'twitter:image:src', webpage, 'thumbnail')
+        uploader = self._html_search_regex(
+            (r'(?s)<div class=['\']channel-banner.*?<p\b[^>]+\bclass=['\']name[^>]+>(.+?)</p>',
+             r'(?s)<p\b[^>]+\bclass=['\']video-author[^>]+>(.+?)</p>'),
+            webpage, 'uploader', fatal=False)
+    
+            return {
+            'id': video_id,
+            'title': title,
+            'description': video.get('long_description') or video.get(
+                'short_description'),
+            'duration': float_or_none(video.get('duration'), scale=1000),
+            'formats': formats,
+            'subtitles': subtitles,
+        }
     
         _TESTS = [{
-        'url': 'http://www.southpark.de/clips/uygssh/the-government-wont-respect-my-privacy#tab=featured',
+        'url': 'http://www.cbs.com/shows/garth-brooks/video/_u7W953k6la293J7EPTd9oHkSPs6Xn6_/connect-chat-feat-garth-brooks/',
         'info_dict': {
-            'id': '85487c96-b3b9-4e39-9127-ad88583d9bf2',
+            'id': '_u7W953k6la293J7EPTd9oHkSPs6Xn6_',
             'ext': 'mp4',
-            'title': 'South Park|The Government Won\'t Respect My Privacy',
-            'description': 'Cartman explains the benefits of 'Shitter' to Stan, Kyle and Craig.',
-            'timestamp': 1380160800,
-            'upload_date': '20130926',
+            'title': 'Connect Chat feat. Garth Brooks',
+            'description': 'Connect with country music singer Garth Brooks, as he chats with fans on Wednesday November 27, 2013. Be sure to tune in to Garth Brooks: Live from Las Vegas, Friday November 29, at 9/8c on CBS!',
+            'duration': 1495,
+            'timestamp': 1385585425,
+            'upload_date': '20131127',
+            'uploader': 'CBSI-NEW',
         },
-    }, {
-        # non-ASCII characters in initial URL
-        'url': 'http://www.southpark.de/alle-episoden/s18e09-hashtag-aufwärmen',
-        'info_dict': {
-            'title': 'Hashtag „Aufwärmen“',
-            'description': 'Kyle will mit seinem kleinen Bruder Ike Videospiele spielen. Als der nicht mehr mit ihm spielen will, hat Kyle Angst, dass er die Kids von heute nicht mehr versteht.',
+        'params': {
+            # m3u8 download
+            'skip_download': True,
         },
-        'playlist_count': 3,
+        '_skip': 'Blocked outside the US',
     }, {
-        # non-ASCII characters in redirect URL
-        'url': 'http://www.southpark.de/alle-episoden/s18e09',
-        'info_dict': {
-            'title': 'Hashtag „Aufwärmen“',
-            'description': 'Kyle will mit seinem kleinen Bruder Ike Videospiele spielen. Als der nicht mehr mit ihm spielen will, hat Kyle Angst, dass er die Kids von heute nicht mehr versteht.',
-        },
-        'playlist_count': 3,
+        'url': 'http://colbertlateshow.com/video/8GmB0oY0McANFvp2aEffk9jZZZ2YyXxy/the-colbeard/',
+        'only_matching': True,
     }, {
-        'url': 'http://www.southpark.de/collections/2476/superhero-showdown/1',
+        'url': 'http://www.colbertlateshow.com/podcasts/dYSwjqPs_X1tvbV_P2FcPWRa_qT6akTC/in-the-bad-room-with-stephen/',
         'only_matching': True,
     }]
     
-            try:
-            video = self._download_json(
-                'https://api.redbull.tv/v3/products/' + video_id,
-                video_id, note='Downloading video information',
-                headers={'Authorization': token}
-            )
-        except ExtractorError as e:
-            if isinstance(e.cause, compat_HTTPError) and e.cause.code == 404:
-                error_message = self._parse_json(
-                    e.cause.read().decode(), video_id)['error']
-                raise ExtractorError('%s said: %s' % (
-                    self.IE_NAME, error_message), expected=True)
-            raise
-    
-    
-    {    # Options that need a file parameter
-    'download-archive': ['--require-parameter'],
-    'cookies': ['--require-parameter'],
-    'load-info': ['--require-parameter'],
-    'batch-file': ['--require-parameter'],
-}
-    
-    versions_info = json.load(open('update/versions.json'))
-if 'signature' in versions_info:
-    del versions_info['signature']
-    
-    try:
-    input = raw_input
-except NameError:
-    pass
+    with open('update/versions.json', 'w') as jsonf:
+    json.dump(versions_info, jsonf, indent=4, sort_keys=True)
+
     
         out = issue_template_tmpl % {'version': locals()['__version__']}
     
+    # NAME
     
-# find the correct sorting and add the required base classes so that sublcasses
-# can be correctly created
-classes = _ALL_CLASSES[:-1]
-ordered_cls = []
-while classes:
-    for c in classes[:]:
-        bases = set(c.__bases__) - set((object, InfoExtractor, SearchInfoExtractor))
-        stop = False
-        for b in bases:
-            if b not in classes and b not in ordered_cls:
-                if b.__name__ == 'GenericIE':
-                    exit()
-                classes.insert(0, b)
-                stop = True
-        if stop:
-            break
-        if all(b in ordered_cls for b in bases):
-            ordered_cls.append(c)
-            classes.remove(c)
-            break
-ordered_cls.append(_ALL_CLASSES[-1])
+        params = {
+        'age_limit': age,
+        'skip_download': True,
+        'writeinfojson': True,
+        'outtmpl': '%(id)s.%(ext)s',
+    }
+    ydl = YoutubeDL(params)
+    ydl.add_default_info_extractors()
+    json_filename = os.path.splitext(filename)[0] + '.info.json'
+    try_rm(json_filename)
+    ydl.download([url])
+    res = os.path.exists(json_filename)
+    try_rm(json_filename)
+    return res
     
-    header = oldreadme[:oldreadme.index('# OPTIONS')]
-footer = oldreadme[oldreadme.index('# CONFIGURATION'):]
-    
-                        # Pandoc's definition_lists. See http://pandoc.org/README.html
-                    # for more information.
-                    ret += '\n%s\n:   %s\n' % (option, description)
-                    continue
-            ret += line.lstrip() + '\n'
-        else:
-            ret += line + '\n'
+        def to_url(self, value):
+        return value
     
     
-def build_completion(opt_parser):
-    opts = [opt for group in opt_parser.option_groups
-            for opt in group.option_list]
-    opts_file = [opt for opt in opts if opt.metavar == 'FILE']
-    opts_dir = [opt for opt in opts if opt.metavar == 'DIR']
+class POFileAssertionMixin:
     
-    from test.helper import try_rm
     
-        def get(self):
-        if len(self.config.GAE_APPIDS):
-            if len(self.working_appid_list) == 0:
-                time_to_reset = 600 - (time.time() - self.last_reset_time)
-                if time_to_reset > 0:
-                    self.logger.warn('all appid out of quota, wait %d seconds to reset', time_to_reset)
-                    time.sleep(time_to_reset)
-                    return None
-                else:
-                    self.logger.warn('reset appid')
-                    self.reset_appid()
+class CopyPluralFormsExtractorTests(ExtractorTests):
     
-        lp = rls[n].split(':')
-    if len(lp) < 2:
-        return None
     
-        >>> data1.data = 10
-    DecimalViewer: Subject Data 1 has data 10
+DOCUMENTATION = '''
+module: clc_publicip
+short_description: Add and Delete public ips on servers in CenturyLink Cloud.
+description:
+  - An Ansible module to add or delete public ip addresses on an existing server or servers in CenturyLink Cloud.
+version_added: '2.0'
+options:
+  protocol:
+    description:
+      - The protocol that the public IP will listen for.
+    default: TCP
+    choices: ['TCP', 'UDP', 'ICMP']
+  ports:
+    description:
+      - A list of ports to expose. This is required when state is 'present'
+  server_ids:
+    description:
+      - A list of servers to create public ips on.
+    required: True
+  state:
+    description:
+      - Determine whether to create or delete public IPs. If present module will not create a second public ip if one
+        already exists.
+    default: present
+    choices: ['present', 'absent']
+  wait:
+    description:
+      - Whether to wait for the tasks to finish before returning.
+    type: bool
+    default: 'yes'
+requirements:
+    - python = 2.7
+    - requests >= 2.5.0
+    - clc-sdk
+author: 'CLC Runner (@clc-runner)'
+notes:
+    - To use this module, it is required to set the below environment variables which enables access to the
+      Centurylink Cloud
+          - CLC_V2_API_USERNAME, the account login id for the centurylink cloud
+          - CLC_V2_API_PASSWORD, the account password for the centurylink cloud
+    - Alternatively, the module accepts the API token and account alias. The API token can be generated using the
+      CLC account login and password via the HTTP api call @ https://api.ctl.io/v2/authentication/login
+          - CLC_V2_API_TOKEN, the API token generated from https://api.ctl.io/v2/authentication/login
+          - CLC_ACCT_ALIAS, the account alias associated with the centurylink cloud
+    - Users can set CLC_V2_API_URL to specify an endpoint for pointing to a different CLC environment.
+'''
     
-        def __str__(self):
-        return 'Dog'
+    DOCUMENTATION = '''
+---
+module: netcup_dns
+notes: []
+version_added: 2.7.0
+short_description: manage Netcup DNS records
+description:
+  - 'Manages DNS records via the Netcup API, see the docs U(https://ccp.netcup.net/run/webservice/servers/endpoint.php)'
+options:
+  api_key:
+    description:
+      - API key for authentification, must be obtained via the netcup CCP (U(https://ccp.netcup.net))
+    required: True
+  api_password:
+    description:
+      - API password for authentification, must be obtained via the netcup CCP (https://ccp.netcup.net)
+    required: True
+  customer_id:
+    description:
+      - Netcup customer id
+    required: True
+  domain:
+    description:
+      - Domainname the records should be added / removed
+    required: True
+  record:
+    description:
+      - Record to add or delete, supports wildcard (*). Default is C(@) (e.g. the zone name)
+    default: '@'
+    aliases: [ name ]
+  type:
+    description:
+      - Record type
+    choices: ['A', 'AAAA', 'MX', 'CNAME', 'CAA', 'SRV', 'TXT', 'TLSA', 'NS', 'DS']
+    required: True
+  value:
+    description:
+      - Record value
+    required: true
+  solo:
+    type: bool
+    default: False
+    description:
+      - Whether the record should be the only one for that record type and record name. Only use with C(state=present)
+      - This will delete all other records with the same record name and type.
+  priority:
+    description:
+      - Record priority. Required for C(type=MX)
+    required: False
+  state:
+    description:
+      - Whether the record should exist or not
+    required: False
+    default: present
+    choices: [ 'present', 'absent' ]
+requirements:
+  - 'nc-dnsapi >= 0.1.3'
+author: 'Nicolai Buchwitz (@nbuchwitz)'
     
-    '''*What is this pattern about?
-A Factory is an object for creating other objects.
+        if not matrix_found:
+        module.fail_json(msg=missing_required_lib('matrix-client'), exception=MATRIX_IMP_ERR)
     
-    *References:
-http://stackoverflow.com/questions/1514120/python-implementation-of-the-object-pool-design-pattern
-https://sourcemaking.com/design_patterns/object_pool
+    def main():
+    module = AnsibleModule(
+        argument_spec=dict(
+            api_key=dict(type='str', required=True, no_log=True),
+            channel=dict(type='str', default=None),
+            device=dict(type='str', default=None),
+            push_type=dict(type='str', default='note', choices=['note', 'link']),
+            title=dict(type='str', required=True),
+            body=dict(type='str', default=None),
+            url=dict(type='str', default=None),
+        ),
+        mutually_exclusive=(
+            ['channel', 'device'],
+        ),
+        supports_check_mode=True
+    )
     
-        def __init__(self, delegate):
-        self.delegate = delegate
+        def testSetDictionary(self):
+        jieba.set_dictionary('foobar.txt')
+        for content in test_contents:
+            result = jieba.cut(content)
+            assert isinstance(result, types.GeneratorType), 'Test SetDictionary Generator error'
+            result = list(result)
+            assert isinstance(result, list), 'Test SetDictionary error on content: %s' % content
+            print(' , '.join(result), file=sys.stderr)
+        print('testSetDictionary', file=sys.stderr)
+    
+    t2 = time.time()
+tm_cost = t2-t1
+    
+    jieba.enable_parallel(4)
