@@ -1,84 +1,144 @@
 
         
-            plt.clf()
-    xx = range(0, n * step, step)
-    plt.title('Lasso regression on sample dataset (%d features)' % n_features)
-    plt.plot(xx, scikit_results, 'b-', label='scikit-learn')
-    plt.plot(xx, glmnet_results, 'r-', label='glmnet')
-    plt.legend()
-    plt.xlabel('number of samples to classify')
-    plt.ylabel('Time (s)')
+            # Loading and vectorizing the data:
+    print('====== %s ======' % dat)
+    print('--- Fetching data...')
+    if dat in ['http', 'smtp', 'SF', 'SA']:
+        dataset = fetch_kddcup99(subset=dat, shuffle=True,
+                                 percent10=True, random_state=random_state)
+        X = dataset.data
+        y = dataset.target
+    
+    :class:`sklearn.covariance.EllipticEnvelope` assumes the data is Gaussian and
+learns an ellipse. It thus degrades when the data is not unimodal. Notice
+however that this estimator is robust to outliers.
+    
+    for i, n in enumerate(n_samples):
+    for j, p in enumerate(n_features):
+        X = np.random.normal(size=(n, p))
+        t0 = time.time()
+        ward.fit(X)
+        scikits_time[j, i] = time.time() - t0
+        t0 = time.time()
+        hierarchy.ward(X)
+        scipy_time[j, i] = time.time() - t0
+    
+        for line in input_file:
+        linestrip = line.strip()
+        if len(linestrip) == 0:
+            in_exercise_region = False
+        elif linestrip.startswith('# TASK:'):
+            in_exercise_region = True
+    
+    '''
+print(__doc__)
+    
     plt.show()
+
     
     
-def plot_batch_errors(all_errors, n_features, all_batch_sizes, data):
-    plt.figure()
-    plot_results(all_batch_sizes, all_errors['pca'], label='PCA')
-    plot_results(all_batch_sizes, all_errors['ipca'], label='IncrementalPCA')
-    plt.legend(loc='lower left')
-    plt.suptitle('Algorithm error vs. batch_size for n_components %i\n \
-                 LFW, size %i x %i' % (
-                 n_features, data.shape[0], data.shape[1]))
-    plt.xlabel('Batch size')
-    plt.ylabel('Mean absolute error')
+def is_setting_index(node):
+    if node.tagname == 'index':
+        # index entries for setting directives look like:
+        # [(u'pair', u'SETTING_NAME; setting', u'std:setting-SETTING_NAME', '')]
+        entry_type, info, refid = node['entries'][0][:3]
+        return entry_type == 'pair' and info.endswith('; setting')
+    return False
+    
+        def run(self, args, opts):
+        '''
+        Entry point for running commands
+        '''
+        raise NotImplementedError
+
+    
+            # scrapy already handles #! links properly
+        ajax_crawl_request = request.replace(url=request.url+'#!')
+        logger.debug('Downloading AJAX crawlable %(ajax_crawl_request)s instead of %(request)s',
+                     {'ajax_crawl_request': ajax_crawl_request, 'request': request},
+                     extra={'spider': spider})
+    
+    # If true, show URL addresses after external links.
+#man_show_urls = False
+    
+    # Load a test image and get encondings for it
+image_to_test = face_recognition.load_image_file('obama2.jpg')
+image_to_test_encoding = face_recognition.face_encodings(image_to_test)[0]
     
     
-def euclidean_distances(X, n_jobs):
-    return pairwise_distances(X, metric='euclidean', n_jobs=n_jobs)
-    
-        # split the dataset in training and test set:
-    docs_train, docs_test, y_train, y_test = train_test_split(
-        dataset.data, dataset.target, test_size=0.25, random_state=None)
-    
-        print('Generating skeleton for %s' % f)
-    
-    images_and_predictions = list(zip(digits.images[n_samples // 2:], predicted))
-for index, (image, prediction) in enumerate(images_and_predictions[:4]):
-    plt.subplot(2, 4, index + 5)
-    plt.axis('off')
-    plt.imshow(image, cmap=plt.cm.gray_r, interpolation='nearest')
-    plt.title('Prediction: %i' % prediction)
-    
-    fignum = 1
-titles = ['8 clusters', '3 clusters', '3 clusters, bad initialization']
-for name, est in estimators:
-    fig = plt.figure(fignum, figsize=(4, 3))
-    ax = Axes3D(fig, rect=[0, 0, .95, 1], elev=48, azim=134)
-    est.fit(X)
-    labels = est.labels_
-    
-    
-class PollErrorTest(unittest.TestCase):
-    '''Tests for acme.errors.PollError.'''
-    
-    from certbot.tests import util as certbot_util
-    
-        def test_conflicts(self):
-        # Note: Defined IP is more important than defined port in match
-        self.assertTrue(self.addr.conflicts(self.addr1))
-        self.assertTrue(self.addr.conflicts(self.addr2))
-        self.assertTrue(self.addr.conflicts(self.addr_defined))
-        self.assertFalse(self.addr.conflicts(self.addr_default))
-    
-    
-@pytest.mark.parametrize('certname_pattern, params, context', [
-    ('nginx.{0}.wtf', ['run'], {'default_server': True}),
-    ('nginx2.{0}.wtf', ['--preferred-challenges', 'http'], {'default_server': True}),
-    # Overlapping location block and server-block-level return 301
-    ('nginx3.{0}.wtf', ['--preferred-challenges', 'http'], {'default_server': True}),
-    # No matching server block; default_server exists
-    ('nginx4.{0}.wtf', ['--preferred-challenges', 'http'], {'default_server': True}),
-    # No matching server block; default_server does not exist
-    ('nginx5.{0}.wtf', ['--preferred-challenges', 'http'], {'default_server': False}),
-    # Multiple domains, mix of matching and not
-    ('nginx6.{0}.wtf,nginx7.{0}.wtf', ['--preferred-challenges', 'http'], {'default_server': False}),
-], indirect=['context'])
-def test_certificate_deployment(certname_pattern, params, context):
-    # type: (str, list, nginx_context.IntegrationTestsContext) -> None
+def show_prediction_labels_on_image(img_path, predictions):
     '''
-    Test various scenarios to deploy a certificate to nginx using certbot.
-    '''
-    domains = certname_pattern.format(context.worker_id)
-    command = ['--domains', domains]
-    command.extend(params)
-    context.certbot_test_nginx(command)
+    Shows the face recognition results visually.
+    
+    # Load the jpg file into a numpy array
+image = face_recognition.load_image_file('biden.jpg')
+    
+            if file and allowed_file(file.filename):
+            # The image file seems valid! Detect faces and return the result.
+            return detect_faces_in_image(file)
+    
+            self.assertEqual(len(face_landmarks), 1)
+        self.assertEqual(face_landmarks[0].num_parts, 68)
+        self.assertEqual((example_landmark.x, example_landmark.y), (552, 399))
+    
+    # PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
+# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
+# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
+    
+            # Wait to read
+        while Global.read_num != worker_id or Global.read_num != prev_id(Global.buff_num, worker_num):
+            time.sleep(0.01)
+    
+    with open('HISTORY.rst') as history_file:
+    history = history_file.read()
+    
+            #Creating directory title page for current directory
+        with open('dir_title.html', 'w') as os_html:
+            os_html.write(header + dir_title)
+        
+        group.append(HTML('dir_title.html').render())
+    
+    # 引入 Perceptron 类
+from __future__ import print_function
+from perceptron import Perceptron
+    
+    
+# def mineTweets(tweetArr, minSup=5):
+#     '''
+#     获取频繁项集
+#     '''
+#     parsedList = []
+#     for i in range(14):
+#         for j in range(100):
+#             parsedList.append(textParse(tweetArr[i][j].text))
+#     initSet = createInitSet(parsedList)
+#     myFPtree, myHeaderTab = createTree(initSet, minSup)
+#     myFreqList = []
+#     mineTree(myFPtree, myHeaderTab, minSup, set([]), myFreqList)
+#     return myFreqList
+    
+    
+def analyse_data(dataMat):
+    meanVals = mean(dataMat, axis=0)
+    meanRemoved = dataMat-meanVals
+    covMat = cov(meanRemoved, rowvar=0)
+    eigvals, eigVects = linalg.eig(mat(covMat))
+    eigValInd = argsort(eigvals)
+    
+        # 分析插入的 Sigma 长度
+    analyse_data(Sigma, 20)
+    
+            for index in self.dataList:
+            wDelta += float(labels[index]) * X[index, :]  # wDelta += label*dataSet
+        eta = 1.0/(2.0*self.t)       # calc new: eta
+        # calc new: w = (1.0 - 1/t)*w + (eta/k)*wDelta
+        wMat = (1.0 - 1.0/self.t)*wMat + (eta/self.k)*wDelta
+        for mapperNum in range(1, self.numMappers+1):
+            yield (mapperNum, ['w', wMat.tolist()[0]])    # 发出 w
+            if self.t < self.options.iterations:
+                yield (mapperNum, ['t', self.t+1])        # 增量 T
+                for j in range(self.k/self.numMappers):   # emit random ints for mappers iid
+                    yield (mapperNum, ['x', random.randint(shape(self.data)[0])])
+    
+    with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
+    long_description = f.read()
