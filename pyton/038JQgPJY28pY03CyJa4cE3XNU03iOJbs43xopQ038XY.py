@@ -1,240 +1,140 @@
 
         
-                self.check_tokenize('''\
-async def foo():
-  def foo(await):
-    await = 1
-  if 1:
-    await
-async += 1
-''', '''\
-    NAME       'async'       (1, 0) (1, 5)
-    NAME       'def'         (1, 6) (1, 9)
-    NAME       'foo'         (1, 10) (1, 13)
-    OP         '('           (1, 13) (1, 14)
-    OP         ')'           (1, 14) (1, 15)
-    OP         ':'           (1, 15) (1, 16)
-    NEWLINE    '\\n'          (1, 16) (1, 17)
-    INDENT     '  '          (2, 0) (2, 2)
-    NAME       'def'         (2, 2) (2, 5)
-    NAME       'foo'         (2, 6) (2, 9)
-    OP         '('           (2, 9) (2, 10)
-    NAME       'await'       (2, 10) (2, 15)
-    OP         ')'           (2, 15) (2, 16)
-    OP         ':'           (2, 16) (2, 17)
-    NEWLINE    '\\n'          (2, 17) (2, 18)
-    INDENT     '    '        (3, 0) (3, 4)
-    NAME       'await'       (3, 4) (3, 9)
-    OP         '='           (3, 10) (3, 11)
-    NUMBER     '1'           (3, 12) (3, 13)
-    NEWLINE    '\\n'          (3, 13) (3, 14)
-    DEDENT     ''            (4, 2) (4, 2)
-    NAME       'if'          (4, 2) (4, 4)
-    NUMBER     '1'           (4, 5) (4, 6)
-    OP         ':'           (4, 6) (4, 7)
-    NEWLINE    '\\n'          (4, 7) (4, 8)
-    INDENT     '    '        (5, 0) (5, 4)
-    NAME       'await'       (5, 4) (5, 9)
-    NEWLINE    '\\n'          (5, 9) (5, 10)
-    DEDENT     ''            (6, 0) (6, 0)
-    DEDENT     ''            (6, 0) (6, 0)
-    NAME       'async'       (6, 0) (6, 5)
-    OP         '+='          (6, 6) (6, 8)
-    NUMBER     '1'           (6, 9) (6, 10)
-    NEWLINE    '\\n'          (6, 10) (6, 11)
-    ''')
+            @app.route('/hello')
+    def hello():
+        return 'Hello, World!'
     
-        def load_short_binbytes(self):
-        len = self.read(1)[0]
-        self.append(self.read(len))
-    dispatch[SHORT_BINBYTES[0]] = load_short_binbytes
+    from flask import has_request_context
+from flask import url_for
     
-    ignores = '''\
-def foo():
-    pass  # type: ignore
+            for deferred in self.deferred_functions:
+            deferred(state)
     
-        env = {
-        key.lower(): value
-        for key, _, value in
-        (line.partition('=') for line in out.splitlines())
-        if key and value
-    }
+        The following characters are escaped in strings:
     
-        if osname[:5] == 'linux':
-        # At least on Linux/Intel, 'machine' is the processor --
-        # i386, etc.
-        # XXX what about Alpha, SPARC, etc?
-        return  '%s-%s' % (osname, machine)
-    elif osname[:5] == 'sunos':
-        if release[0] >= '5':           # SunOS 5 == Solaris 2
-            osname = 'solaris'
-            release = '%d.%s' % (int(release[0]) - 3, release[2:])
-            # We can't use 'platform.architecture()[0]' because a
-            # bootstrap problem. We use a dict to get an error
-            # if some suspicious happens.
-            bitness = {2147483647:'32bit', 9223372036854775807:'64bit'}
-            machine += '.%s' % bitness[sys.maxsize]
-        # fall through to standard osname-release-machine representation
-    elif osname[:3] == 'aix':
-        return '%s-%s.%s' % (osname, version, release)
-    elif osname[:6] == 'cygwin':
-        osname = 'cygwin'
-        import re
-        rel_re = re.compile(r'[\d.]+')
-        m = rel_re.match(release)
-        if m:
-            release = m.group()
-    elif osname[:6] == 'darwin':
-        import _osx_support
-        osname, release, machine = _osx_support.get_platform_osx(
-                                            get_config_vars(),
-                                            osname, release, machine)
+            from .debughelpers import explain_template_loading_attempts
     
-        The returned representation depends on the legacy flag:
-    * if legacy is False (the default):
-      date has the YYYYMMDD format and time the HHMMSS format
-    * if legacy is True:
-      date has the YYMMDD format and time the HHMMSS format.
-    RFC 3977 compliant servers should understand both formats; therefore,
-    legacy is only needed when talking to old servers.
-    '''
-    if not isinstance(dt, datetime.datetime):
-        time_str = '000000'
-    else:
-        time_str = '{0.hour:02d}{0.minute:02d}{0.second:02d}'.format(dt)
-    y = dt.year
-    if legacy:
-        y = y % 100
-        date_str = '{0:02d}{1.month:02d}{1.day:02d}'.format(y, dt)
-    else:
-        date_str = '{0:04d}{1.month:02d}{1.day:02d}'.format(y, dt)
-    return date_str, time_str
+                resp = app.response_class()
+            if not session_interface.is_null_session(sess):
+                session_interface.save_session(app, sess, resp)
+            headers = resp.get_wsgi_headers(c.request.environ)
+            self.cookie_jar.extract_wsgi(c.request.environ, headers)
     
-    def _supports_sched():
-    if not hasattr(posix, 'sched_getscheduler'):
-        return False
-    try:
-        posix.sched_getscheduler(0)
-    except OSError as e:
-        if e.errno == errno.ENOSYS:
-            return False
-    return True
+        def create_app(info):
+        app = Flask('flaskgroup')
+        app.debug = True
+        return app
     
-            if not DEBUG:
-            cmd = executable
-        sys.stderr.write('unable to execute %r for unknown reasons' % cmd)
-        os._exit(1)
-    else: # in the parent
-        # Loop until the child either exits or is terminated by a signal
-        # (ie. keep waiting if it's merely stopped)
-        while True:
-            try:
-                pid, status = os.waitpid(pid, 0)
-            except OSError as exc:
-                if not DEBUG:
-                    cmd = executable
-                raise DistutilsExecError(
-                      'command %r failed: %s' % (cmd, exc.args[-1]))
-            if os.WIFSIGNALED(status):
-                if not DEBUG:
-                    cmd = executable
-                raise DistutilsExecError(
-                      'command %r terminated by signal %d'
-                      % (cmd, os.WTERMSIG(status)))
-            elif os.WIFEXITED(status):
-                exit_status = os.WEXITSTATUS(status)
-                if exit_status == 0:
-                    return   # hey, it succeeded!
-                else:
-                    if not DEBUG:
-                        cmd = executable
-                    raise DistutilsExecError(
-                          'command %r failed with exit status %d'
-                          % (cmd, exit_status))
-            elif os.WIFSTOPPED(status):
-                continue
-            else:
-                if not DEBUG:
-                    cmd = executable
-                raise DistutilsExecError(
-                      'unknown error executing %r: termination status %d'
-                      % (cmd, status))
+    # A shorter title for the navigation bar.  Default is the same as
+# html_title.
+#html_short_title = None
     
-        Handles decoding/encoding between RFC3339 strings and aware (not
-    naive) `datetime.datetime` objects
-    (e.g. ``datetime.datetime.now(pytz.utc)``).
+    test_end_to_end = '''
+encoding = face_recognition.face_encodings(image)[0]
+'''
     
-    # If false, no module index is generated.
-#latex_domain_indices = True
-    
-            self.assertFalse(self.addr1.conflicts(self.addr))
-        self.assertTrue(self.addr1.conflicts(self.addr_defined))
-        self.assertFalse(self.addr1.conflicts(self.addr_default))
-    
-    from acme.magic_typing import Dict  # pylint: disable=unused-import, no-name-in-module
-from certbot import constants
-from certbot import errors
-from certbot import interfaces
-    
-    
-def gradients_collection(ys, xs, grad_ys=None, **kwargs):
-    return gradients(ys, xs, grad_ys, checkpoints='collection', **kwargs)
-    
-                    var_x = K.reshape(inputs, (batch_size,
-                                           self.group,
-                                           channels // self.group,
-                                           height,
-                                           width))
-                mean = K.mean(var_x, axis=[2, 3, 4], keepdims=True)
-                std = K.sqrt(K.var(var_x, axis=[2, 3, 4], keepdims=True) + self.epsilon)
-                var_x = (var_x - mean) / std
-    
-    
-_DEFAULTS = {
-    'threshold': {
-        'default': 99.0,
-        'info': 'Adjust the threshold for histogram matching. Can reduce extreme colors '
-                'leaking in by filtering out colors at the extreme ends of the histogram '
-                'spectrum.',
-        'datatype': float,
-        'rounding': 1,
-        'min_max': (90.0, 100.0),
-        'choices': [],
-        'gui_radio': False,
-        'fixed': True,
-    }
-}
+    for i, face_distance in enumerate(face_distances):
+    print('The test image has a distance of {:.2} from known image #{}'.format(face_distance, i))
+    print('- With a normal cutoff of 0.6, would the test image match the known image? {}'.format(face_distance < 0.6))
+    print('- With a very strict cutoff of 0.5, would the test image match the known image? {}'.format(face_distance < 0.5))
+    print()
 
     
-        # MASK MANIPULATIONS
-    def erode(self, mask):
-        ''' Erode/dilate mask if requested '''
-        kernel = self.get_erosion_kernel(mask)
-        if self.config['erosion'] > 0:
-            logger.trace('Eroding mask')
-            mask = cv2.erode(mask, kernel, iterations=1)  # pylint: disable=no-member
-        else:
-            logger.trace('Dilating mask')
-            mask = cv2.dilate(mask, kernel, iterations=1)  # pylint: disable=no-member
-        return mask
+        face_names = []
+    for face_encoding in face_encodings:
+        # See if the face is a match for the known face(s)
+        match = face_recognition.compare_faces(known_faces, face_encoding, tolerance=0.50)
     
-        def __call__(self, shape, dtype='float32'):  # tf needs partition_info=None
-        shape = list(shape)
-        if self.scale == 1:
-            return self.initializer(shape)
-        new_shape = shape[:3] + [shape[3] // (self.scale ** 2)]
-        if isinstance(self.initializer, dict):
-            self.initializer = initializers.deserialize(self.initializer)
-        var_x = self.initializer(new_shape, dtype)
-        var_x = tf.transpose(var_x, perm=[2, 0, 1, 3])
-        var_x = tf.image.resize_nearest_neighbor(
-            var_x,
-            size=(shape[0] * self.scale, shape[1] * self.scale),
-            align_corners=True)
-        var_x = tf.space_to_depth(var_x, block_size=self.scale, data_format='NHWC')
-        var_x = tf.transpose(var_x, perm=[1, 2, 0, 3])
-        return var_x
+            self.assertEqual(len(detected_faces), 1)
+        self.assertAlmostEqual(detected_faces[0][0], 144, delta=25)
+        self.assertAlmostEqual(detected_faces[0][1], 608, delta=25)
+        self.assertAlmostEqual(detected_faces[0][2], 389, delta=25)
+        self.assertAlmostEqual(detected_faces[0][3], 363, delta=25)
     
-        def __init__(self, parent):
-        ttk.Frame.__init__(self, parent)
-        self.pack(side=tk.BOTTOM, padx=10, pady=2, fill=tk.X, expand=False)
+    # Show the picture
+pil_image.show()
+
+    
+    import os, json, imp
+here = os.path.abspath(os.path.dirname(__file__))
+proj_info = json.loads(open(os.path.join(here, PROJ_METADATA), encoding='utf-8').read())
+try:
+    README = open(os.path.join(here, 'README.rst'), encoding='utf-8').read()
+except:
+    README = ''
+CHANGELOG = open(os.path.join(here, 'CHANGELOG.rst'), encoding='utf-8').read()
+VERSION = imp.load_source('version', os.path.join(here, 'src/%s/version.py' % PACKAGE_NAME)).__version__
+    
+    __all__ = ['dailymotion_download']
+    
+            for i in range(len(titles)):
+            title = titles[i]
+            datas = {
+                'sid': song_id[i],
+                'ssid': song_ssid[i]
+            }
+            post_params = urllib.parse.urlencode(datas).encode('utf-8')
+            try:
+                resp = urllib.request.urlopen(get_song_url, post_params)
+                resp_data = json.loads(resp.read().decode('utf-8'))
+                real_url = resp_data['r']
+                type, ext, size = url_info(real_url)
+                print_info(site_info, title, type, size)
+            except:
+                pass
+    
+        stream_id_pattern = r'id='html_stream' value='(\w+)''
+    stream_id = match1(html, stream_id_pattern)
+    
+        html = get_content(url)
+    uuid_pattern = r''([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})''
+    id = r1(r'var vid='([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})'', html)
+    if id is None:
+        video_pattern = r''vid'\s*:\s*' + uuid_pattern
+        id = match1(html, video_pattern)
+    assert id, 'can't find video info'
+    return ifeng_download_by_id(id, None, output_dir = output_dir, merge = merge, info_only = info_only)
+    
+    if args.quiet:
+    jieba.setLogLevel(60)
+if args.pos:
+    import jieba.posseg
+    posdelim = args.pos
+    def cutfunc(sentence, _, HMM=True):
+        for w, f in jieba.posseg.cut(sentence, HMM):
+            yield w + posdelim + f
+else:
+    cutfunc = jieba.cut
+    
+        def __init__(self):
+        self.tokenizer = self.postokenizer = jieba.posseg.dt
+        self.stop_words = self.STOP_WORDS.copy()
+        self.pos_filt = frozenset(('ns', 'n', 'vn', 'v'))
+        self.span = 5
+    
+            x = 0
+        buf = ''
+        N = len(sentence)
+        while x < N:
+            y = route[x][1] + 1
+            l_word = sentence[x:y]
+            if y - x == 1:
+                buf += l_word
+            else:
+                if buf:
+                    if len(buf) == 1:
+                        yield pair(buf, self.word_tag_tab.get(buf, 'x'))
+                    elif not self.tokenizer.FREQ.get(buf):
+                        recognized = self.__cut_detail(buf)
+                        for t in recognized:
+                            yield t
+                    else:
+                        for elem in buf:
+                            yield pair(elem, self.word_tag_tab.get(elem, 'x'))
+                    buf = ''
+                yield pair(l_word, self.word_tag_tab.get(l_word, 'x'))
+            x = y
+    
+    content = open(file_name, 'rb').read()
+    
+    import jieba
