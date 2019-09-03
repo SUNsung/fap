@@ -1,113 +1,122 @@
 
         
-        
-@functools.lru_cache()
-def get_hstore_oids(connection_alias):
-    '''Return hstore and hstore array OIDs.'''
-    with connections[connection_alias].cursor() as cursor:
-        cursor.execute(
-            'SELECT t.oid, typarray '
-            'FROM pg_type t '
-            'JOIN pg_namespace ns ON typnamespace = ns.oid '
-            'WHERE typname = 'hstore''
-        )
-        oids = []
-        array_oids = []
-        for row in cursor:
-            oids.append(row[0])
-            array_oids.append(row[1])
-        return tuple(oids), tuple(array_oids)
-    
-        @cached_property
-    def model(self):
-        return self.get_model_class()
-    
-    
-class Session(AbstractBaseSession):
+            :param str u_string: unicode string to check. Must be unicode
+        and not Python 2 `str`.
+    :rtype: bool
     '''
-    Django provides full support for anonymous sessions. The session
-    framework lets you store and retrieve arbitrary data on a
-    per-site-visitor basis. It stores data on the server side and
-    abstracts the sending and receiving of cookies. Cookies contain a
-    session ID -- not the data itself.
+    assert isinstance(u_string, str)
+    try:
+        u_string.encode('ascii')
+        return True
+    except UnicodeEncodeError:
+        return False
+
     
-    
-def to_native_string(string, encoding='ascii'):
-    '''Given a string object, regardless of type, returns a representation of
-    that string in the native string type, encoding and decoding where
-    necessary. This assumes ASCII unless told otherwise.
+        Requests that produced this error are safe to retry.
     '''
-    if isinstance(string, builtin_str):
-        out = string
-    else:
-        if is_py2:
-            out = string.encode(encoding)
+    
+    import sys
+    
+        All keys are expected to be strings. The structure remembers the
+    case of the last key to be set, and ``iter(instance)``,
+    ``keys()``, ``items()``, ``iterkeys()``, and ``iteritems()``
+    will contain case-sensitive keys. However, querying and contains
+    testing is case insensitive::
+    
+    try:
+    from urllib3.contrib.socks import SOCKSProxyManager
+except ImportError:
+    def SOCKSProxyManager(*args, **kwargs):
+        raise InvalidSchema('Missing dependencies for SOCKS support.')
+    
+          >>> import requests
+      >>> req = requests.Request('GET', 'https://httpbin.org/get')
+      >>> req.prepare()
+      <PreparedRequest [GET]>
+    '''
+    
+    # Check imported dependencies for compatibility.
+try:
+    check_compatibility(urllib3.__version__, chardet.__version__)
+except (AssertionError, ValueError):
+    warnings.warn('urllib3 ({}) or chardet ({}) doesn't match a supported '
+                  'version!'.format(urllib3.__version__, chardet.__version__),
+                  RequestsDependencyWarning)
+    
+        kwargs.setdefault('allow_redirects', True)
+    return request('get', url, params=params, **kwargs)
+    
+                    try:
+                    ip = line.split()[0]
+                    return ip
+                except:
+                    continue
+    
+            # if current token is consistent with what could come after set
+        # then we know we're missing a token; error recovery is free to
+        # 'insert' the missing token
+        if input.LA(1) in follow or EOR_TOKEN_TYPE in follow:
+            return True
+    
+        def check_tokenize(self, s, expected):
+        # Format the tokens in s in a table format.
+        # The ENDMARKER and final NEWLINE are omitted.
+        f = BytesIO(s.encode('utf-8'))
+        result = stringify_tokens_from_source(tokenize(f.readline), s)
+    
+        def visitField(self, field, name, depth, product):
+        def emit(s, d):
+            self.emit(s, depth + d)
+        if product:
+            value = 'o->%s' % field.name
         else:
-            out = string.decode(encoding)
+            value = 'o->v.%s.%s' % (name, field.name)
+        self.set(field, value, depth)
+        emit('if (!value) goto failed;', 0)
+        emit('if (_PyObject_SetAttrId(result, &PyId_%s, value) == -1)' % field.name, 0)
+        emit('goto failed;', 1)
+        emit('Py_DECREF(value);', 0)
     
-        For example, ``headers['content-encoding']`` will return the
-    value of a ``'Content-Encoding'`` response header, regardless
-    of how the header name was originally stored.
+        # First, if the caller didn't force us into direct or indirect mode,
+    # figure out which mode we should be in.  We take a conservative
+    # approach: choose direct mode *only* if the current interpreter is
+    # in debug mode and optimize is 0.  If we're not in debug mode (-O
+    # or -OO), we don't know which level of optimization this
+    # interpreter is running with, so we can't do direct
+    # byte-compilation and be certain that it's the right thing.  Thus,
+    # always compile indirectly if the current interpreter is in either
+    # optimize mode, or if either optimization level was requested by
+    # the caller.
+    if direct is None:
+        direct = (__debug__ and optimize == 0)
     
-    
-class CookieConflictError(RuntimeError):
-    '''There are two cookies that meet the criteria specified in the cookie jar.
-    Use .get and .set and include domain and path args in order to be more specific.
+        Mainly needed on Unix, so we can plug in the information that
+    varies across Unices and is stored in Python's Makefile.
     '''
+    if compiler.compiler_type == 'unix':
+        if sys.platform == 'darwin':
+            # Perform first-time customization of compiler-related
+            # config vars on OS X now that we know we need a compiler.
+            # This is primarily to support Pythons from binary
+            # installers.  The kind and paths to build tools on
+            # the user system may vary significantly from the system
+            # that Python itself was built on.  Also the user OS
+            # version and build tools may not support the same set
+            # of CPU architectures for universal builds.
+            global _config_vars
+            # Use get_config_var() to ensure _config_vars is initialized.
+            if not get_config_var('CUSTOMIZED_OSX_COMPILER'):
+                import _osx_support
+                _osx_support.customize_compiler(_config_vars)
+                _config_vars['CUSTOMIZED_OSX_COMPILER'] = 'True'
     
-            assert r.status_code == 200
-        headers, body = raw_request.split(b'\r\n\r\n', 1)
-        status_line, headers = headers.split(b'\r\n', 1)
+                import distutils.bcppcompiler
+            import distutils.ccompiler
+            import distutils.cygwinccompiler
+            import distutils.filelist
+            import distutils.text_file
+            import distutils.unixccompiler
     
-            # if the server thread fails to finish, the test suite will hang
-        # and get killed by the jenkins timeout.
-    
-        # Client Error.
-    400: ('bad_request', 'bad'),
-    401: ('unauthorized',),
-    402: ('payment_required', 'payment'),
-    403: ('forbidden',),
-    404: ('not_found', '-o-'),
-    405: ('method_not_allowed', 'not_allowed'),
-    406: ('not_acceptable',),
-    407: ('proxy_authentication_required', 'proxy_auth', 'proxy_authentication'),
-    408: ('request_timeout', 'timeout'),
-    409: ('conflict',),
-    410: ('gone',),
-    411: ('length_required',),
-    412: ('precondition_failed', 'precondition'),
-    413: ('request_entity_too_large',),
-    414: ('request_uri_too_large',),
-    415: ('unsupported_media_type', 'unsupported_media', 'media_type'),
-    416: ('requested_range_not_satisfiable', 'requested_range', 'range_not_satisfiable'),
-    417: ('expectation_failed',),
-    418: ('im_a_teapot', 'teapot', 'i_am_a_teapot'),
-    421: ('misdirected_request',),
-    422: ('unprocessable_entity', 'unprocessable'),
-    423: ('locked',),
-    424: ('failed_dependency', 'dependency'),
-    425: ('unordered_collection', 'unordered'),
-    426: ('upgrade_required', 'upgrade'),
-    428: ('precondition_required', 'precondition'),
-    429: ('too_many_requests', 'too_many'),
-    431: ('header_fields_too_large', 'fields_too_large'),
-    444: ('no_response', 'none'),
-    449: ('retry_with', 'retry'),
-    450: ('blocked_by_windows_parental_controls', 'parental_controls'),
-    451: ('unavailable_for_legal_reasons', 'legal_reasons'),
-    499: ('client_closed_request',),
-    
-        all_layers = model.get_all_encoder_layers()
-    
-      class BertModelTester(object):
-    
-        self.learning_rate = learning_rate
-    self.weight_decay_rate = weight_decay_rate
-    self.beta_1 = beta_1
-    self.beta_2 = beta_2
-    self.epsilon = epsilon
-    self.exclude_from_weight_decay = exclude_from_weight_decay
-    
-    flags = tf.flags
-    
-    flags = tf.flags
+            alloc_before = alloc_after
+        rc_before = rc_after
+        fd_before = fd_after
