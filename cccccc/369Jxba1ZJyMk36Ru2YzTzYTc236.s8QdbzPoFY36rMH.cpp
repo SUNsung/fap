@@ -1,246 +1,384 @@
 
         
-        
-    {    QString appName;
-    QIcon appIcon;
-    QIcon trayAndWindowIcon;
-    QString titleAddText;
-};
+          auto op_profiler =
+      params.profiler->MakeScopedInstructionProfiler(hlo_instruction());
+  ShapeTree<InfeedBuffer> infeed_buffers =
+      GetOrCreateInfeedManager()->BlockingGetNextDestination();
     
-    #endif // BITCOIN_QT_OPENURIDIALOG_H
+    namespace xla {
+namespace gpu {
+    }
+    }
+    
+      // TODO(b/125951860): Plumb more datatypes / reduction operators. Initial
+  // implementation is simply F32 summation.
+  //
+  // TODO(b/125951860): Support all-reduces with replica groups, i.e.
+  // all-reduces that compute multiple sums across subsets of all replicas.
+  NcclAllReduceThunk(int64 replica_count, int64 element_count,
+                     const BufferAllocation::Slice& source_buffer,
+                     const BufferAllocation::Slice& destination_buffer,
+                     const HloInstruction* all_reduce);
+  ~NcclAllReduceThunk() override;
+    
+    #endif  // TENSORFLOW_COMPILER_XLA_SERVICE_GPU_OUTFEED_THUNK_H_
 
     
     
-    {    secp256k1_scalar_set_b32(&sec, seckey, &overflow);
-    /* Fail if the secret key is invalid. */
-    if (!overflow && !secp256k1_scalar_is_zero(&sec)) {
-        unsigned char nonce32[32];
-        unsigned int count = 0;
-        secp256k1_scalar_set_b32(&msg, msg32, NULL);
-        while (1) {
-            ret = noncefp(nonce32, msg32, seckey, NULL, (void*)noncedata, count);
-            if (!ret) {
-                break;
-            }
-            secp256k1_scalar_set_b32(&non, nonce32, &overflow);
-            if (!secp256k1_scalar_is_zero(&non) && !overflow) {
-                if (secp256k1_ecdsa_sig_sign(&ctx->ecmult_gen_ctx, &r, &s, &sec, &msg, &non, &recid)) {
-                    break;
-                }
-            }
-            count++;
-        }
-        memset(nonce32, 0, 32);
-        secp256k1_scalar_clear(&msg);
-        secp256k1_scalar_clear(&non);
-        secp256k1_scalar_clear(&sec);
+    {
+    {}  // namespace gpu
+}  // namespace xla
+
+    
+        // Copy the result of condition computation and break the loop if 'false'.
+    bool condition_result;
+    stream.ThenMemcpy(&condition_result, condition_result_data, sizeof(bool));
+    VLOG(3) << 'condition_result = ' << condition_result;
+    Status block_status = stream.BlockHostUntilDone();
+    if (!block_status.ok()) {
+      return InternalError(
+          'Failed to complete all kernels launched on stream %p: %s', &stream,
+          block_status.error_message());
     }
-    if (ret) {
-        secp256k1_ecdsa_recoverable_signature_save(signature, &r, &s, recid);
+    
+    
+    {}  // namespace xla
+    
+        Mat displacement_field(Size(dst_frame1.cols / (1 << OF_scale), dst_frame1.rows / (1 << OF_scale)),
+                           CV_32FC2);
+    randn(displacement_field, 0.0, sigma);
+    resize(displacement_field, displacement_field, dst_frame2.size(), 0.0, 0.0, INTER_CUBIC);
+    for (int i = 0; i < displacement_field.rows; i++)
+        for (int j = 0; j < displacement_field.cols; j++)
+            displacement_field.at<Vec2f>(i, j) += Vec2f((float)j, (float)i);
+    
+                int rleCount = buffer >> 56;
+    
+    
+OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_ENTER
+    
+    template <>
+IMF_EXPORT
+void FloatVectorAttribute::readValueFrom
+    (OPENEXR_IMF_INTERNAL_NAMESPACE::IStream &, int, int);
+    
+    
+//----------
+// Iterators
+//----------
+    
+    #endif /* GENERICOUTPUTFILE_H_ */
+
+    
+    		    _data->cachedBuffer->insert
+			(k.name(),
+			 Slice (UINT,
+				(char *)(new unsigned int[tileRowSize] - 
+					_data->offset),
+				sizeof (unsigned int),
+				sizeof (unsigned int) *
+				    _data->tFile->levelWidth(0),
+				1, 1,
+				s.fillValue,
+				false, true));
+		    break;
+    
+        IMF_EXPORT
+    virtual ~InputFile ();
+    
+    
+    {};
+    
+    OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_ENTER
+    
+    TEST_F(JsonObjectWriterTest, EmptyObjectKey) {
+  ow_ = new JsonObjectWriter('', out_stream_);
+  ow_->StartObject('')->RenderString('', 'value')->EndObject();
+  EXPECT_EQ('{\'\':\'value\'}', CloseStreamAndGetString());
+}
+    
+    void MapLiteTestUtil::ExpectMapFieldsModified(
+    const unittest::TestMapLite& message) {
+  MapTestUtilImpl::ExpectMapFieldsModified<unittest::MapEnumLite,
+                                           unittest::MAP_ENUM_BAR_LITE,
+                                           unittest::MAP_ENUM_FOO_LITE>(
+      message);
+}
+    
+        for (int i = 0; i < dataset.payload_size(); i++) {
+      message->ParseFromString(dataset.payload(i));
+      Proto3DataStripper stripper;
+      stripper.StripMessage(message);
+      dataset.set_payload(i, message->SerializeAsString());
+    }
+    
+        string filename = file->name();
+    string basename = StripProto(filename);
+    
+    namespace {
+    }
+    
+    
+    {  int total_added_;
+};
+    
+      // True when a ScopedPyObjectPtr and a raw pointer refer to the same object.
+  // Comparison operators are non reflexive.
+  bool operator==(const PyObjectStruct* p) const { return ptr_ == p; }
+  bool operator!=(const PyObjectStruct* p) const { return ptr_ != p; }
+    
+    // if changed remember to keep in sync with frontend enums
+enum PageTransitionType {
+  transitionReplace = 0,
+  transitionSplit,
+  transitionBlinds,
+  transitionBox,
+  transitionWipe,
+  transitionDissolve,
+  transitionGlitter,
+  transitionFly,
+  transitionPush,
+  transitionCover,
+  transitionUncover,
+  transitionFade
+};
+    
+      // refill token buffers and check for 'endstream'
+  shift();  // kill '>>'
+  shift();  // kill 'stream'
+  if (buf1.isCmd('endstream')) {
+    shift();
+  } else {
+    error(getPos(), 'Missing 'endstream'');
+    if (xref) {
+      // shift until we find the proper endstream or we change to another object or reach eof
+      while (!buf1.isCmd('endstream') && xref->getNumEntry(lexer->getPos()) == objNum && !buf1.isEOF()) {
+        shift();
+      }
+      length = lexer->getPos() - pos;
+      if (buf1.isCmd('endstream')) {
+        obj.initInt(length);
+        dict->dictSet('Length', &obj);
+        obj.free();
+      }
     } else {
-        memset(signature, 0, sizeof(*signature));
+      // When building the xref we can't use it so use this
+      // kludge for broken PDF files: just add 5k to the length, and
+      // hope its enough
+      length += 5000;
     }
-    return ret;
-}
-    
-    const std::vector<std::string>& UniValue::getKeys() const
-{
-    if (typ != VOBJ)
-        throw std::runtime_error('JSON value is not an object as expected');
-    return keys;
-}
-    
-    
-    {    BOOST_CHECK_EQUAL(vals[1].get_int(), 10);
-    BOOST_CHECK_THROW(vals[1].get_bool(), std::runtime_error);
-}
-    
-    namespace sha256_sse4
-{
-void Transform(uint32_t* s, const unsigned char* chunk, size_t blocks)
-{
-    static const uint32_t K256 alignas(16) [] = {
-        0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,
-        0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
-        0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3,
-        0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
-        0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc,
-        0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
-        0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7,
-        0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
-        0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13,
-        0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
-        0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3,
-        0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
-        0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5,
-        0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
-        0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208,
-        0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2,
-    };
-    static const uint32_t FLIP_MASK alignas(16) [] = {0x00010203, 0x04050607, 0x08090a0b, 0x0c0d0e0f};
-    static const uint32_t SHUF_00BA alignas(16) [] = {0x03020100, 0x0b0a0908, 0xffffffff, 0xffffffff};
-    static const uint32_t SHUF_DC00 alignas(16) [] = {0xffffffff, 0xffffffff, 0x03020100, 0x0b0a0908};
-    uint32_t a, b, c, d, f, g, h, y0, y1, y2;
-    uint64_t tbl;
-    uint64_t inp_end, inp;
-    uint32_t xfer alignas(16) [4];
-    }
-    }
-    
-    void InternalFilterPolicy::CreateFilter(const Slice* keys, int n,
-                                        std::string* dst) const {
-  // We rely on the fact that the code in table.cc does not mind us
-  // adjusting keys[].
-  Slice* mkey = const_cast<Slice*>(keys);
-  for (int i = 0; i < n; i++) {
-    mkey[i] = ExtractUserKey(keys[i]);
-    // TODO(sanjay): Suppress dups?
   }
-  user_policy_->CreateFilter(keys, n, dst);
+    
+      if (*keys[0] == key) {
+    return items[0];
+  }
+  for (int i = 1; i <= lastValidCacheIndex; i++) {
+    if (*keys[i] == key) {
+      PopplerCacheKey *keyHit = keys[i];
+      PopplerCacheItem *itemHit = items[i];
+    }
+    }
+    
+    ProfileData::ProfileData() {
+	count = 0;
+	total = 0.0;
+	min = 0.0;
+	max = 0.0;
 }
     
-    // Return the name of the log file with the specified number
-// in the db named by 'dbname'.  The result will be prefixed with
-// 'dbname'.
-extern std::string LogFileName(const std::string& dbname, uint64_t number);
+    GBool ExternalSecurityHandler::authorize(void *authData) {
+  char *key;
+  int length;
+    }
     
-    class StdoutPrinter : public WritableFile {
+      static Data& getMutableData6() { return data6_; }
+    
+      void sendMessage();
+    
+      virtual ~DHTResponseMessage();
+    
+    void DHTRoutingTableDeserializer::deserialize(const std::string& filename)
+{
+  A2_LOG_INFO(fmt('Loading DHT routing table from %s.', filename.c_str()));
+  BufferedFile fp(filename.c_str(), BufferedFile::READ);
+  if (!fp) {
+    throw DL_ABORT_EX(
+        fmt('Failed to load DHT routing table from %s', filename.c_str()));
+  }
+  char header[8];
+  memset(header, 0, sizeof(header));
+  // magic
+  header[0] = 0xa1u;
+  header[1] = 0xa2u;
+  // format ID
+  header[2] = 0x02u;
+  // version
+  header[6] = 0;
+  header[7] = 0x03u;
+    }
+    
+      std::shared_ptr<DHTNode> localNode_;
+    
+    
+    {} // namespace aria2
+
+    
+      void setLocalNode(const std::shared_ptr<DHTNode>& localNode);
+    
+    DHTTaskExecutor::DHTTaskExecutor(int numConcurrent)
+    : numConcurrent_(numConcurrent)
+{
+}
+    
+      virtual void process() CXX11_OVERRIDE;
+    
+    const std::string DHTUnknownMessage::UNKNOWN('unknown');
+    
+    #include 'a2functional.h'
+    
+      /*
+   * @brief the uri used to begin POSTing carve data
+   *
+   * This endpoint should negotiate the details of the carve, as well
+   * as give the client a session id used to continue POSTing the data.
+   */
+  std::string startUri_;
+    
+      // Return default value in case of NotFound error
+  Expected<int32_t, DatabaseError> getInt32Or(const std::string& domain,
+                                              const std::string& key,
+                                              const int32_t default_value = 0);
+  Expected<std::string, DatabaseError> getStringOr(
+      const std::string& domain,
+      const std::string& key,
+      const std::string& default_value = '');
+    
+    // This implementation is not 100% thread safe and does not
+// support close/open commands during regular db usage.
+// It's safe as long as DB is open in single threaded manner,
+// and only then used from multiple threads.
+class RocksdbDatabase final : public Database {
  public:
-  virtual Status Append(const Slice& data) {
-    fwrite(data.data(), 1, data.size(), stdout);
-    return Status::OK();
-  }
-  virtual Status Close() { return Status::OK(); }
-  virtual Status Flush() { return Status::OK(); }
-  virtual Status Sync() { return Status::OK(); }
-  virtual std::string GetName() const { return '[stdout]'; }
-};
-    
-    #include 'rect.h'    // for TBOX
-#include 'strngs.h'  // for STRING
-    
-    
-// Returns the median value of the vector, given that the values are
-// circular, with the given modulus. Values may be signed or unsigned,
-// eg range from -pi to pi (modulus 2pi) or from 0 to 2pi (modulus 2pi).
-// NOTE that the array is shuffled, but the time taken is linear.
-// An assumption is made that most of the values are spread over no more than
-// half the range, but wrap-around is accounted for if the median is near
-// the wrap-around point.
-// Cannot be a member of GenericVector, as it makes heavy used of LLSQ.
-// T must be an integer or float/double type.
-template<typename T> T MedianOfCircularValues(T modulus, GenericVector<T>* v) {
-  LLSQ stats;
-  T halfrange = static_cast<T>(modulus / 2);
-  int num_elements = v->size();
-  for (int i = 0; i < num_elements; ++i) {
-    stats.add((*v)[i], (*v)[i] + halfrange);
-  }
-  bool offset_needed = stats.y_variance() < stats.x_variance();
-  if (offset_needed) {
-    for (int i = 0; i < num_elements; ++i) {
-      (*v)[i] += halfrange;
+  using Handle = rocksdb::ColumnFamilyHandle;
+  using HandleRef = std::shared_ptr<Handle>;
     }
+    
+      /**
+   * @brief Bind this plugin to an external plugin reference.
+   *
+   * Allow a specialized plugin type to act when an external plugin is
+   * registered (e.g., a TablePlugin will attach the table name).
+   *
+   * @param name The broadcasted name of the plugin.
+   * @param info The routing info for the owning extension.
+   */
+  static Status addExternal(const std::string& name,
+                            const PluginResponse& info) {
+    (void)name;
+    (void)info;
+    return Status::success();
   }
-  int median_index = v->choose_nth_item(num_elements / 2);
-  if (offset_needed) {
-    for (int i = 0; i < num_elements; ++i) {
-      (*v)[i] -= halfrange;
+    
+    TEST_F(RocksdbDatabaseTest, test_put) {
+  auto db = std::make_unique<RocksdbDatabase>('test', path_);
+  auto result = db->putInt32('test', 'test', 23);
+  EXPECT_FALSE(result);
+  EXPECT_EQ(result.getError(), DatabaseError::DbIsNotOpen);
+  EXPECT_TRUE(db->open());
+  EXPECT_TRUE(db->putInt32(kPersistentSettings, 'test_key_int', 12));
+  auto int_value = db->getInt32(kPersistentSettings, 'test_key_int');
+  EXPECT_TRUE(int_value);
+  EXPECT_EQ(int_value.take(), 12);
     }
-  }
-  return (*v)[median_index];
+    
+    
+    {#ifdef SW_CONTEXT_PROTECT_STACK_PAGE
+    uint32_t protect_page = get_protect_stack_page();
+    if (protect_page)
+    {
+        if (protect_stack(stack_, stack_size, protect_page))
+        {
+            protect_page_ = protect_page;
+        }
+    }
+#endif
 }
     
-    // Computes the histogram for the given image rectangle, and the given
-// single channel. Each channel is always one byte per pixel.
-// Histogram is always a kHistogramSize(256) element array to count
-// occurrences of each pixel value.
-void HistogramRect(Pix* src_pix, int channel,
-                   int left, int top, int width, int height,
-                   int* histogram);
-    
-      /* Reject modes generated after QUALITY_ACCEPT but before MINIMAL_REJ accep*/
-  R_DOC_REJ,    // TEMP Document rejection
-  R_BLOCK_REJ,  // TEMP Block rejection
-  R_ROW_REJ,    // TEMP Row rejection
-  R_UNLV_REJ,   // TEMP ~ turned to - or ^ turned to space
-    
-    namespace tesseract {
+        inline bool is_empty()
+    {
+        return data_queue.size() == 0;
     }
     
-      std::string fname = TableFileName(dbname, meta->number);
-  if (iter->Valid()) {
-    WritableFile* file;
-    s = env->NewWritableFile(fname, &file);
-    if (!s.ok()) {
-      return s;
+        signals:
+        void finished();
+    
+    const char* swoole_mime_type_get(const char *filename)
+{
+    auto suffix = get_suffix(filename);
+    auto i = mime_map.find(suffix);
+    if (i != mime_map.end())
+    {
+        return i->second.c_str();
     }
+    return 'application/octet-stream';
+}
+    
+    uint8_t get_static_type_size(uint8_t type)
+{
+    static const uint8_t map[] =
+    {
+        0,                // SW_MYSQL_TYPE_DECIMAL   0
+        sizeof(int8_t),   // SW_MYSQL_TYPE_TINY      1
+        sizeof(int16_t),  // SW_MYSQL_TYPE_SHORT     2
+        sizeof(int32_t),  // SW_MYSQL_TYPE_LONG      3
+        sizeof(float),    // SW_MYSQL_TYPE_FLOAT     4
+        sizeof(double),   // SW_MYSQL_TYPE_DOUBLE    5
+        0,                // SW_MYSQL_TYPE_NULL      6
+        0,                // SW_MYSQL_TYPE_TIMESTAMP 7
+        sizeof(int64_t),  // SW_MYSQL_TYPE_LONGLONG  8
+        sizeof(int32_t),  // SW_MYSQL_TYPE_INT24     9
+        0,                // SW_MYSQL_TYPE_DATE      10
+        0,                // SW_MYSQL_TYPE_TIME      11
+        0,                // SW_MYSQL_TYPE_DATETIME  12
+        sizeof(int16_t),  // SW_MYSQL_TYPE_YEAR      13
+        0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0
+    };
+    SW_ASSERT(sizeof(map) == UINT8_MAX + 1);
+    return map[type];
+}
+    
+            switch (descriptors[i].mode & ~DESC_PARENT_MODE_WRITE)
+        {
+        case DESC_PIPE:
+            stream = php_swoole_create_stream_from_socket(descriptors[i].parentend, AF_UNIX, SOCK_STREAM, 0 STREAMS_CC);
+            /* mark the descriptor close-on-exec, so that it won't be inherited by potential other children */
+            fcntl(descriptors[i].parentend, F_SETFD, FD_CLOEXEC);
+            if (stream)
+            {
+                zval retfp;
     }
-    
-      fname = LogFileName('foo', 192);
-  ASSERT_EQ('foo/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(192, number);
-  ASSERT_EQ(kLogFile, type);
-    
-    struct TableAndFile {
-  RandomAccessFile* file;
-  Table* table;
-};
-    
-      // Set the count for the number of entries in the batch.
-  static void SetCount(WriteBatch* batch, int n);
-    
-    namespace leveldb {
-    }
-    
-      // Delete the specified directory.
-  virtual Status DeleteDir(const std::string& dirname) = 0;
-    
-    #if LEVELDB_HAS_PORT_CONFIG_H
-#include 'port/port_config.h'
-#endif  // LEVELDB_HAS_PORT_CONFIG_H
-    
-      // Iterator interface methods
-  bool Valid() const { return valid_; }
-  Slice key() const {
-    assert(Valid());
-    return key_;
-  }
-  Slice value() const {
-    assert(Valid());
-    return iter_->value();
-  }
-  // Methods below require iter() != nullptr
-  Status status() const {
-    assert(iter_);
-    return iter_->status();
-  }
-  void Next() {
-    assert(iter_);
-    iter_->Next();
-    Update();
-  }
-  void Prev() {
-    assert(iter_);
-    iter_->Prev();
-    Update();
-  }
-  void Seek(const Slice& k) {
-    assert(iter_);
-    iter_->Seek(k);
-    Update();
-  }
-  void SeekToFirst() {
-    assert(iter_);
-    iter_->SeekToFirst();
-    Update();
-  }
-  void SeekToLast() {
-    assert(iter_);
-    iter_->SeekToLast();
-    Update();
-  }
-    
-    namespace leveldb {
     }
