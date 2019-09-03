@@ -1,183 +1,264 @@
 
         
-            def __init__(self, results):
-        self.results = results
-        self.next = next
-    
-        UNREAD = 0
-    READ = 1
-    ACCEPTED = 2
-    REJECTED = 3
-
-    
-    
-if __name__ == '__main__':
-    SpendingByCategory.run()
-
-    
-        def get_person(self, person_id):
-        person_server = self.lookup[person_id]
-        return person_server.people[person_id]
-    
-        def as_oracle(self, compiler, connection, **extra_context):
-        if self.output_field.get_internal_type() == 'DurationField':
-            expression = self.get_source_expressions()[0]
-            options = self._get_repr_options()
-            from django.db.backends.oracle.functions import IntervalToSeconds, SecondsToInterval
-            return compiler.compile(
-                SecondsToInterval(self.__class__(IntervalToSeconds(expression), **options))
-            )
-        return super().as_sql(compiler, connection, **extra_context)
-    
-        # Don't worry about making _dec look similar to a list/tuple as it's rather
-    # meaningless.
-    if not hasattr(decorator, '__iter__'):
-        update_wrapper(_dec, decorator)
-    # Change the name to aid debugging.
-    obj = decorator if hasattr(decorator, '__name__') else decorator.__class__
-    _dec.__name__ = 'method_decorator(%s)' % obj.__name__
-    return _dec
-    
-        def test_simple_dependencies(self):
-        raw = [
-            ('s1', ('s1_db', ['alpha'])),
-            ('s2', ('s2_db', ['bravo'])),
-            ('s3', ('s3_db', ['charlie'])),
-        ]
-        dependencies = {
-            'alpha': ['charlie'],
-            'bravo': ['charlie'],
-        }
-    
-                # Checking the alias dictionary (case-insensitive) to see if an
-            # alias exists for the given driver.
-            if dr_input.lower() in self._alias:
-                name = self._alias[dr_input.lower()]
-            else:
-                name = dr_input
-    
-            For raster formats using Persistent Auxiliary Metadata (PAM) services,
-        the statistics might be cached in an auxiliary file.
-        '''
-        # Prepare array with arguments for capi function
-        smin, smax, smean, sstd = c_double(), c_double(), c_double(), c_double()
-        stats_args = [
-            self._ptr, c_int(approximate), byref(smin), byref(smax),
-            byref(smean), byref(sstd), c_void_p(), c_void_p(),
-        ]
-    
-        def initialize_options(self):
-        TestCommand.initialize_options(self)
-        try:
-            from multiprocessing import cpu_count
-            self.pytest_args = ['-n', str(cpu_count()), '--boxed']
-        except (ImportError, NotImplementedError):
-            self.pytest_args = ['-n', '1', '--boxed']
-    
-    Data structures that power Requests.
-'''
-    
-        def inner(*suffix):
-        return urljoin(httpbin_url, '/'.join(suffix))
-    
-    
-class TestLookupDict:
-    
-    
-def test_chunked_upload():
-    '''can safely send generators'''
-    close_server = threading.Event()
-    server = Server.basic_response_server(wait_to_close_event=close_server)
-    data = iter([b'a', b'b', b'c'])
-    
-    
-@pytest.mark.parametrize(
-    'value, expected', (
-        (
-            '<http:/.../front.jpeg>; rel=front; type='image/jpeg'',
-            [{'url': 'http:/.../front.jpeg', 'rel': 'front', 'type': 'image/jpeg'}]
-        ),
-        (
-            '<http:/.../front.jpeg>',
-            [{'url': 'http:/.../front.jpeg'}]
-        ),
-        (
-            '<http:/.../front.jpeg>;',
-            [{'url': 'http:/.../front.jpeg'}]
-        ),
-        (
-            '<http:/.../front.jpeg>; type='image/jpeg',<http://.../back.jpeg>;',
-            [
-                {'url': 'http:/.../front.jpeg', 'type': 'image/jpeg'},
-                {'url': 'http://.../back.jpeg'}
-            ]
-        ),
-        (
-            '',
-            []
-        ),
-    ))
-def test_parse_header_links(value, expected):
-    assert parse_header_links(value) == expected
-    
+            def checker(self):
+        while True:
             try:
-            integration = Integration.objects.get(
-                id=params['integration_id'],
-                organizations=organization,
-            )
-        except Integration.DoesNotExist:
-            raise Http404
+                ip = self.get_ip()
+            except Exception as e:
+                xlog.info('no ip left')
+                return
     
-            self.integration = Integration.objects.create(
-            provider='slack',
-            external_id='TXXXXXXX1',
-            metadata={
-                'access_token': 'xoxa-xxxxxxxxx-xxxxxxxxxx-xxxxxxxxxxxx',
+            # If you are parsing a tree node stream, you will encounter som
+        # imaginary nodes w/o line/col info.  We now search backwards looking
+        # for most recent token with line/col info, but notify getErrorHeader()
+        # that info is approximate.
+        self.approximateLineInfo = False
+    
+                elif opt in ('-f', '--force'):
+                # Force download.
+                conf['force'] = True
+    
+    from ..common import *
+    
+        def prepare(self, **kwargs):
+        if re.search(r'imgur\.com/a/', self.url):
+            # album
+            content = get_content(self.url)
+            album = match1(content, r'album\s*:\s*({.*}),') or \
+                    match1(content, r'image\s*:\s*({.*}),')
+            album = json.loads(album)
+            count = album['album_images']['count']
+            images = album['album_images']['images']
+            ext = images[0]['ext']
+            self.streams = {
+                'original': {
+                    'src': ['http://i.imgur.com/%s%s' % (i['hash'], ext)
+                            for i in images],
+                    'size': sum([i['size'] for i in images]),
+                    'container': ext[1:]
+                },
+                'thumbnail': {
+                    'src': ['http://i.imgur.com/%ss%s' % (i['hash'], '.jpg')
+                            for i in images],
+                    'container': 'jpg'
+                }
             }
-        )
-        OrganizationIntegration.objects.create(
-            organization=self.org,
-            integration=self.integration,
-        )
+            self.title = album['title']
     
-        def __init__(self, message, severity=SEVERITY_CRITICAL, url=None):
-        assert severity in self.SEVERITY_LEVELS
-        self.message = six.text_type(message)
-        self.severity = severity
-        self.url = url
     
-        complete_apps = ['tagstore']
-
+def _get_file_md5sum(file_name):
+    '''Compute the md5 hash of a file.'''
+    hash_obj = hashlib.md5()
+    with open(file_name, 'rb') as f:
+        hash_obj.update(f.read())
+    return hash_obj.hexdigest().encode('utf-8')
+    
+        def test_deprecated_key_from_file(self):
+        # You should see logger messages like:
+        #   'Deprecated config key (ignoring): MODEL.DILATION'
+        with tempfile.NamedTemporaryFile() as f:
+            cfg2 = copy.deepcopy(cfg)
+            cfg2.MODEL.DILATION = 2
+            envu.yaml_dump(cfg2, f)
+            with self.assertRaises(AttributeError):
+                _ = cfg.MODEL.DILATION  # noqa
+            core_config.merge_cfg_from_file(f.name)
+            with self.assertRaises(AttributeError):
+                _ = cfg.MODEL.DILATION  # noqa
+    
+        if 'cfg' in src_blobs:
+        saved_cfg = load_cfg(src_blobs['cfg'])
+        configure_bbox_reg_weights(model, saved_cfg)
+    if 'blobs' in src_blobs:
+        # Backwards compat--dictionary used to be only blobs, now they are
+        # stored under the 'blobs' key
+        src_blobs = src_blobs['blobs']
+    # Initialize weights on GPU gpu_id only
+    unscoped_param_names = OrderedDict()  # Print these out in model order
+    for blob in model.params:
+        unscoped_param_names[c2_utils.UnscopeName(str(blob))] = True
+    with c2_utils.NamedCudaScope(gpu_id):
+        for unscoped_param_name in unscoped_param_names.keys():
+            if (unscoped_param_name.find(']_') >= 0 and
+                    unscoped_param_name not in src_blobs):
+                # Special case for sharing initialization from a pretrained
+                # model:
+                # If a blob named '_[xyz]_foo' is in model.params and not in
+                # the initialization blob dictionary, then load source blob
+                # 'foo' into destination blob '_[xyz]_foo'
+                src_name = unscoped_param_name[
+                    unscoped_param_name.find(']_') + 2:]
+            else:
+                src_name = unscoped_param_name
+            if src_name not in src_blobs:
+                logger.info('{:s} not found'.format(src_name))
+                continue
+            dst_name = core.ScopedName(unscoped_param_name)
+            has_momentum = src_name + '_momentum' in src_blobs
+            has_momentum_str = ' [+ momentum]' if has_momentum else ''
+            logger.info(
+                '{:s}{:} loaded from weights file into {:s}: {}'.format(
+                    src_name, has_momentum_str, dst_name, src_blobs[src_name]
+                    .shape
+                )
+            )
+            if dst_name in ws_blobs:
+                # If the blob is already in the workspace, make sure that it
+                # matches the shape of the loaded blob
+                ws_blob = workspace.FetchBlob(dst_name)
+                assert ws_blob.shape == src_blobs[src_name].shape, \
+                    ('Workspace blob {} with shape {} does not match '
+                     'weights file shape {}').format(
+                        src_name,
+                        ws_blob.shape,
+                        src_blobs[src_name].shape)
+            workspace.FeedBlob(
+                dst_name,
+                src_blobs[src_name].astype(np.float32, copy=False))
+            if has_momentum:
+                workspace.FeedBlob(
+                    dst_name + '_momentum',
+                    src_blobs[src_name + '_momentum'].astype(
+                        np.float32, copy=False))
     
     from detectron.core.config import cfg
-import detectron.utils.boxes as box_utils
+from detectron.utils.io import load_object
+import detectron.utils.env as envu
     
-            # 'gtCoarse_train',
-        # 'gtCoarse_val',
-        # 'gtCoarse_train_extra'
-    ]
-    ann_dirs = [
-        'gtFine_trainvaltest/gtFine/val',
-        # 'gtFine_trainvaltest/gtFine/train',
-        # 'gtFine_trainvaltest/gtFine/test',
+    from detectron.core.config import assert_and_infer_cfg
+from detectron.core.config import cfg
+from detectron.core.config import load_cfg
+from detectron.core.config import merge_cfg_from_cfg
+from detectron.core.config import merge_cfg_from_file
+from detectron.utils.io import cache_url
+from detectron.utils.logging import setup_logging
+import detectron.core.rpn_generator as rpn_engine
+import detectron.core.test_engine as model_engine
+import detectron.datasets.dummy_datasets as dummy_datasets
+import detectron.utils.c2 as c2_utils
+import detectron.utils.env as envu
+import detectron.utils.vis as vis_utils
     
     
-def get_eval_functions():
-    # Determine which parent or child function should handle inference
-    if cfg.MODEL.RPN_ONLY:
-        child_func = generate_rpn_on_range
-        parent_func = generate_rpn_on_dataset
-    else:
-        # Generic case that handles all network types other than RPN-only nets
-        # and RetinaNet
-        child_func = test_net
-        parent_func = test_net_on_dataset
+def get_rpn_blob_names(is_training=True):
+    '''Blob names used by RPN.'''
+    # im_info: (height, width, image scale)
+    blob_names = ['im_info']
+    if is_training:
+        # gt boxes: (batch_idx, x1, y1, x2, y2, cls)
+        blob_names += ['roidb']
+        if cfg.FPN.FPN_ON and cfg.FPN.MULTILEVEL_RPN:
+            # Same format as RPN blobs, but one per FPN level
+            for lvl in range(cfg.FPN.RPN_MIN_LEVEL, cfg.FPN.RPN_MAX_LEVEL + 1):
+                blob_names += [
+                    'rpn_labels_int32_wide_fpn' + str(lvl),
+                    'rpn_bbox_targets_wide_fpn' + str(lvl),
+                    'rpn_bbox_inside_weights_wide_fpn' + str(lvl),
+                    'rpn_bbox_outside_weights_wide_fpn' + str(lvl)
+                ]
+        else:
+            # Single level RPN blobs
+            blob_names += [
+                'rpn_labels_int32_wide',
+                'rpn_bbox_targets_wide',
+                'rpn_bbox_inside_weights_wide',
+                'rpn_bbox_outside_weights_wide'
+            ]
+    return blob_names
     
-    def add_fpn_onto_conv_body(
-    model, conv_body_func, fpn_level_info_func, P2only=False
-):
-    '''Add the specified conv body to the model and then add FPN levels to it.
+        detpath: Path to detections
+        detpath.format(classname) should produce the detection results file.
+    annopath: Path to annotations
+        annopath.format(imagename) should be the xml annotations file.
+    imagesetfile: Text file containing the list of images, one image per line.
+    classname: Category name (duh)
+    cachedir: Directory for caching the annotations
+    [ovthresh]: Overlap threshold (default = 0.5)
+    [use_07_metric]: Whether to use VOC07's 11 point AP computation
+        (default False)
     '''
-    # Note: blobs_conv is in revsersed order: [fpn5, fpn4, fpn3, fpn2]
-    # similarly for dims_conv: [2048, 1024, 512, 256]
-    # similarly for spatial_scales_fpn: [1/32, 1/16, 1/8, 1/4]
+    # assumes detections are in detpath.format(classname)
+    # assumes annotations are in annopath.format(imagename)
+    # assumes imagesetfile is a text file with each line an image name
+    # cachedir caches the annotations in a pickle file
+    
+        # Add suffix ops
+    new_net.Proto().op.extend(net.Proto().op[prefix_len:])
+    # Add external input blobs
+    # Treat any undefined blobs as external inputs
+    input_names = [
+        i for op in new_net.Proto().op for i in op.input
+        if not new_net.BlobIsDefined(i)]
+    new_net.Proto().external_input.extend(input_names)
+    # Add external output blobs
+    output_names = [str(o) for o in outputs]
+    new_net.Proto().external_output.extend(output_names)
+    return new_net, [new_net.GetBlobRef(o) for o in output_names]
+    
+    log = logging.getLogger(__name__)
+    
+    # Copyright (c) 2017-present, Facebook, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the 'License');
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an 'AS IS' BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+##############################################################################
+    
+        dt_testdev = []
+    print('Filtering test-dev from test...')
+    t = Timer()
+    t.tic()
+    for i in range(len(dt)):
+        if i % 1000 == 0:
+            print('{}/{}'.format(i, len(dt)))
+        if dt[i]['image_id'] in image_testdev_id:
+            dt_testdev.append(dt[i])
+    print('Done filtering ({:2}s)!'.format(t.toc()))
+    
+    if args.quiet:
+    jieba.setLogLevel(60)
+if args.pos:
+    import jieba.posseg
+    posdelim = args.pos
+    def cutfunc(sentence, _, HMM=True):
+        for w, f in jieba.posseg.cut(sentence, HMM):
+            yield w + posdelim + f
+else:
+    cutfunc = jieba.cut
+    
+        route = [None] * len(obs)
+    i = len(obs) - 1
+    while i >= 0:
+        route[i] = state
+        state = mem_path[i][state]
+        i -= 1
+    return (prob, route)
+
+    
+    USAGE = 'usage:    python extract_tags_with_weight.py [file name] -k [top k] -w [with weight=1 or 0]'
+    
+        def testTokenize_NOHMM(self):
+        for content in test_contents:
+            result = jieba.tokenize(content,HMM=False)
+            assert isinstance(result, types.GeneratorType), 'Test Tokenize Generator error'
+            result = list(result)
+            assert isinstance(result, list), 'Test Tokenize error on content: %s' % content
+            for tk in result:
+                print('word %s\t\t start: %d \t\t end:%d' % (tk[0],tk[1],tk[2]), file=sys.stderr)
+        print('testTokenize_NOHMM', file=sys.stderr)
+    
+    while True:
+    line = sys.stdin.readline()
+    if line=='':
+        break
+    line = line.strip()
+    for word in jieba.cut(line):
+        print(word)
