@@ -1,205 +1,593 @@
 
         
-         private:
-  CertificateManagerModel(net::NSSCertDatabase* nss_cert_database,
-                          bool is_user_db_available);
+            http://www.apache.org/licenses/LICENSE-2.0
     
-      // TODO(codebytere): Write tests for these methods once we
-  // are running tests on a Mojave machine
-  std::string GetMediaAccessStatus(const std::string& media_type,
-                                   mate::Arguments* args);
-  v8::Local<v8::Promise> AskForMediaAccess(v8::Isolate* isolate,
-                                           const std::string& media_type);
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-     private:
-  v8::Isolate* isolate() const { return isolate_; }
+      // Construct top-level tuple of infeed containing the data and the token. Use
+  // a nullptr for the token, it should never be dereferenced.
+  se::DeviceMemoryBase data_address =
+      buffer_allocations.GetDeviceAddress(infeed_slices_.element({0}));
+  void* infeed_addresses[] = {data_address.opaque(), nullptr};
+  se::DeviceMemoryBase top_level_address =
+      buffer_allocations.GetDeviceAddress(infeed_slices_.element({}));
+  stream.ThenMemcpy(&top_level_address, infeed_addresses, 2 * sizeof(void*));
     
-    
-    {  return args[0];
-}
-    
-      // Notify another process, if available. Otherwise sets ourselves as the
-  // singleton instance. Returns PROCESS_NONE if we became the singleton
-  // instance. Callers are guaranteed to either have notified an existing
-  // process or have grabbed the singleton (unless the profile is locked by an
-  // unreachable process).
-  // TODO(brettw): Make the implementation of this method non-platform-specific
-  // by making Linux re-use the Windows implementation.
-  NotifyResult NotifyOtherProcessOrCreate();
-  void StartListeningOnSocket();
-  void OnBrowserReady();
-    
-    data:
- [8. 2. 1. 1. 7. 8. 1.]
-indices:
- [3 5 6]
-    
-    Example 2 (with KEY):
-DATA  = [1, 2, 3, 4, 5, 6, 7, 8]
-KEY   = [0, 1, 3, 2, 1, 0, 1, 0]
-RANGES = [
-  [
-    [2, 4],
-    [0, 2],
-  ],
-  [
-    [0, 0],
-    [6, 2],
-  ]
-]
-lengths = [4, 2]
-OUTPUT[0] = [[6, 5, 4, 3], [0, 0, 0, 0]]
-OUTPUT[1] = [[1, 2], [8, 7]]
-    
-      int num_words;
-  TBOX lword_box;     // in normalized (horiz text rows) space
-  TBOX rword_box;     // in normalized (horiz text rows) space
-    
-    #include 'dppoint.h'
-#include 'errcode.h'
-#include 'tprintf.h'
-    
-      // The first paragraph on a page often lacks a first line indent, but should
-  // still be modeled by the same model as other body text paragraphs on the
-  // page.
-  bool is_very_first_or_continuation;
-    
-    namespace tesseract {
-class TrainingSample;
-}
-    
-      // Visual debugger classifies the given sample, displays the results and
-  // solicits user input to display other classifications. Returns when
-  // the user has finished with debugging the sample.
-  // Probably doesn't need to be overridden if the subclass provides
-  // DisplayClassifyAs.
-  virtual void DebugDisplay(const TrainingSample& sample, Pix* page_pix,
-                            UNICHAR_ID unichar_id);
-    
-    // Classifies the given [training] sample, writing to results.
-// See ShapeClassifier for a full description.
-int TessClassifier::UnicharClassifySample(
-    const TrainingSample& sample, Pix* page_pix, int debug,
-    UNICHAR_ID keep_this, GenericVector<UnicharRating>* results) {
-  const int old_matcher_level = classify_->matcher_debug_level;
-  const int old_matcher_flags = classify_->matcher_debug_flags;
-  const int old_classify_level = classify_->classify_debug_level;
-  if (debug) {
-    // Explicitly set values of various control parameters to generate debug
-    // output if required, restoring the old values after classifying.
-    classify_->matcher_debug_level.set_value(2);
-    classify_->matcher_debug_flags.set_value(25);
-    classify_->classify_debug_level.set_value(3);
-  }
-  classify_->CharNormTrainingSample(pruner_only_, keep_this, sample, results);
-  if (debug) {
-    classify_->matcher_debug_level.set_value(old_matcher_level);
-    classify_->matcher_debug_flags.set_value(old_matcher_flags);
-    classify_->classify_debug_level.set_value(old_classify_level);
-  }
-  return results->size();
-}
-    
-    using json = nlohmann::json;
-    
-    #ifdef USE_VALGRIND
-#include <valgrind/valgrind.h>
-#endif
-    
-        ret = p.write(&p, (void*) SW_STRS('hello world1'));
-    ASSERT_GT(ret, 0);
-    ret = p.write(&p, (void*) SW_STRS('hello world2'));
-    ASSERT_GT(ret, 0);
-    ret = p.write(&p, (void*) SW_STRS('hello world3'));
-    ASSERT_GT(ret, 0);
-    
-        cache.set('test1', val1);
-    ASSERT_EQ(cache.get('test1').get(), val1.get());
-    val1.reset();
-    ASSERT_EQ(dtor_num, 0);
-    
-    auth_switch_request_packet::auth_switch_request_packet(const char *data) : server_packet(data)
-{
-    swMysqlPacketDump(header.length, header.number, data, 'Protocol::AuthSwitchRequest');
-    // 4 header
-    data += SW_MYSQL_PACKET_HEADER_SIZE;
-    // 1 type
-    data += 1;
-    // string[NUL] auth_method_name
-    auth_method_name = std::string(data);
-    data += (auth_method_name.length() + 1);
-    // string[NUL] auth_method_data
-    strcpy(auth_method_data, data);
-    swTraceLog(SW_TRACE_MYSQL_CLIENT, 'auth switch plugin name=%s', auth_method_name.c_str());
-}
-    
-    #endif // OPENPOSE_CORE_RECTANGLE_HPP
-
-    
-        const auto HAND_NUMBER_PARTS = 21u;
-    #define HAND_PAIRS_RENDER_GPU \
-        0,1,  1,2,  2,3,  3,4,  0,5,  5,6,  6,7,  7,8,  0,9,  9,10,  10,11,  11,12,  0,13,  13,14,  14,15,  15,16,  0,17,  17,18,  18,19,  19,20
-    #define HAND_SCALES_RENDER_GPU 1
-    const std::vector<unsigned int> HAND_PAIRS_RENDER {HAND_PAIRS_RENDER_GPU};
-    #define HAND_COLORS_RENDER_GPU \
-        100.f,  100.f,  100.f, \
-        100.f,    0.f,    0.f, \
-        150.f,    0.f,    0.f, \
-        200.f,    0.f,    0.f, \
-        255.f,    0.f,    0.f, \
-        100.f,  100.f,    0.f, \
-        150.f,  150.f,    0.f, \
-        200.f,  200.f,    0.f, \
-        255.f,  255.f,    0.f, \
-          0.f,  100.f,   50.f, \
-          0.f,  150.f,   75.f, \
-          0.f,  200.f,  100.f, \
-          0.f,  255.f,  125.f, \
-          0.f,   50.f,  100.f, \
-          0.f,   75.f,  150.f, \
-          0.f,  100.f,  200.f, \
-          0.f,  125.f,  255.f, \
-        100.f,    0.f,  100.f, \
-        150.f,    0.f,  150.f, \
-        200.f,    0.f,  200.f, \
-        255.f,    0.f,  255.f
-    const std::vector<float> HAND_COLORS_RENDER{HAND_COLORS_RENDER_GPU};
-    const std::vector<float> HAND_SCALES_RENDER{HAND_SCALES_RENDER_GPU};
-    
-            cv::Mat mImagePrevious;
-        std::vector<cv::Mat> mPyramidImagesPrevious;
-        std::unordered_map<int, PersonTrackerEntry> mPersonEntries;
-        Array<long long> mLastPoseIds;
-    
-        template<typename T>
-    Point<T> Point<T>::operator+(const Point<T>& point) const
-    {
-        try
-        {
-            return Point<T>{T(x + point.x), T(y + point.y)};
-        }
-        catch (const std::exception& e)
-        {
-            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
-            return Point<T>{};
-        }
+    // Thunk that zeroes out a given chunk of memory.
+class MemzeroThunk : public Thunk {
+ public:
+  explicit MemzeroThunk(const BufferAllocation::Slice& dest,
+                        const HloInstruction* hlo)
+      : Thunk(Kind::kMemzero, hlo), dest_(dest) {}
     }
     
-        template<typename T>
-    Rectangle<T>& Rectangle<T>::operator/=(const T value)
+    
+    {  const int64 replica_count_;
+  const int64 element_count_;
+  const BufferAllocation::Slice source_buffer_;
+  const BufferAllocation::Slice destination_buffer_;
+  std::unique_ptr<AuxData> aux_data_;
+};
+    
+    #ifndef TENSORFLOW_COMPILER_XLA_SERVICE_GPU_SEQUENTIAL_THUNK_H_
+#define TENSORFLOW_COMPILER_XLA_SERVICE_GPU_SEQUENTIAL_THUNK_H_
+    
+      llvm::DenseMap<ASTNode, ASTNode> RegionCondToParentMap;
+    
+      void *operator new(size_t Bytes) throw() = delete;
+  void operator delete(void *Data) throw() = delete;
+  void *operator new(size_t Bytes, void *Mem) throw() = delete;
+  void *operator new(size_t Bytes, ASTContext &C,
+                     unsigned Alignment = 8);
+    
+      llvm::DenseMap<AbstractFunctionDecl *, MethodInfo *> MethodInfos;
+  llvm::SpecificBumpPtrAllocator<MethodInfo> MethodInfoAllocator;
+    
+    KNOWN_STDLIB_TYPE_DECL(OptionSet, NominalTypeDecl, 1)
+    
+    /// An ASTVisitor for generating SIL from top-level declarations in a module.
+class LLVM_LIBRARY_VISIBILITY SILGenModule : public ASTVisitor<SILGenModule> {
+public:
+  /// The Module being constructed.
+  SILModule &M;
+  
+  /// The type converter for the module.
+  TypeConverter &Types;
+  
+  /// The Swift module we are visiting.
+  ModuleDecl *SwiftModule;
+  
+  /// TopLevelSGF - The SILGenFunction used to visit top-level code, or null if
+  /// the current source file is not a script source file.
+  SILGenFunction /*nullable*/ *TopLevelSGF;
+    }
+    
+    namespace swift {
+namespace reflection {
+    }
+    }
+    
+    
+    {  bool operator!=(const MetadataSourceRecordIterator &other) const {
+    return !(*this == other);
+  }
+};
+    
+    /// Field types and flags as represented in a nominal type's field/case type
+/// vector.
+class FieldType {
+  typedef uintptr_t int_type;
+  // Type metadata is always at least pointer-aligned, so we get at least two
+  // low bits to stash flags. We could use three low bits on 64-bit, and maybe
+  // some high bits as well.
+  enum : int_type {
+    Indirect = 1,
+    Weak = 2,
+    }
+    }
+    
+    /// A value for `SymbolNamespace` which indicates that this type came
+/// from a C `typedef` that was imported as a distinct type instead
+/// of a `typealias`.  This can happen for reasons like:
+///
+/// - the `typedef` was declared with the `swift_wrapper` attribute
+/// - the `typedef` is a CF type
+constexpr static const char CTypedef[] = 't';
+    
+      std::string mangleConstructorEntity(const ConstructorDecl *ctor,
+                                      bool isAllocating, bool isCurried,
+                                      SymbolKind SKind = SymbolKind::Default);
+    
+    class PrimarySpecificPaths {
+public:
+  /// The name of the main output file,
+  /// that is, the .o file for this input (or a file specified by -o).
+  /// If there is no such file, contains an empty string. If the output
+  /// is to be written to stdout, contains '-'.
+  std::string OutputFilename;
+    }
+    
+    void Tesseract::PrerecAllWordsPar(const GenericVector<WordData>& words) {
+  // Prepare all the blobs.
+  GenericVector<BlobData> blobs;
+  for (int w = 0; w < words.size(); ++w) {
+    if (words[w].word->ratings != nullptr &&
+        words[w].word->ratings->get(0, 0) == nullptr) {
+      for (int s = 0; s < words[w].lang_words.size(); ++s) {
+        Tesseract* sub = s < sub_langs_.size() ? sub_langs_[s] : this;
+        const WERD_RES& word = *words[w].lang_words[s];
+        for (int b = 0; b < word.chopped_word->NumBlobs(); ++b) {
+          blobs.push_back(BlobData(b, sub, word));
+        }
+      }
+    }
+  }
+  // Pre-classify all the blobs.
+  if (tessedit_parallelize > 1) {
+#ifdef _OPENMP
+#pragma omp parallel for num_threads(10)
+#endif  // _OPENMP
+    for (int b = 0; b < blobs.size(); ++b) {
+      *blobs[b].choices =
+          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
+    }
+  } else {
+    // TODO(AMD) parallelize this.
+    for (int b = 0; b < blobs.size(); ++b) {
+      *blobs[b].choices =
+          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
+    }
+  }
+}
+    
+    #ifndef TESSERACT_CCUTIL_BOXREAD_H_
+#define TESSERACT_CCUTIL_BOXREAD_H_
+    
+    // Computes the Otsu threshold(s) for the given image rectangle, making one
+// for each channel. Each channel is always one byte per pixel.
+// Returns an array of threshold values and an array of hi_values, such
+// that a pixel value >threshold[channel] is considered foreground if
+// hi_values[channel] is 0 or background if 1. A hi_value of -1 indicates
+// that there is no apparent foreground. At least one hi_value will not be -1.
+// Delete thresholds and hi_values with delete [] after use.
+// The return value is the number of channels in the input image, being
+// the size of the output thresholds and hi_values arrays.
+int OtsuThreshold(Pix* src_pix, int left, int top, int width, int height,
+                  int** thresholds, int** hi_values);
+    
+    
+    {}  // namespace tesseract.
+    
+        class Rational
     {
-        try
+    public:
+        Rational() noexcept;
+        Rational(Number const& n) noexcept;
+        Rational(Number const& p, Number const& q) noexcept;
+        Rational(int32_t i);
+        Rational(uint32_t ui);
+        Rational(uint64_t ui);
+    }
+    
+    
+    {                return localizationSettings;
+            }
+    
+    /// <summary>
+/// Invoked when the application is launched normally by the end user. Other entry points
+/// will be used such as when the application is launched to open a specific file.
+/// </summary>
+/// <param name='e'>Details about the launch request and process.</param>
+void App::OnLaunched(Windows::ApplicationModel::Activation::LaunchActivatedEventArgs ^ e)
+{
+#if _DEBUG
+    // Show graphics profiling information while debugging.
+    if (IsDebuggerPresent())
+    {
+        // Display the current frame rate counters
+        DebugSettings->EnableFrameRateCounter = true;
+    }
+#endif
+    }
+    
+    Size HorizontalNoOverflowStackPanel::MeasureOverride(Size availableSize)
+{
+    float maxHeight = 0;
+    float width = 0;
+    for (auto child : Children)
+    {
+        child->Measure(Size(numeric_limits<float>::infinity(), numeric_limits<float>::infinity()));
+        maxHeight = max(maxHeight, child->DesiredSize.Height);
+        width += child->DesiredSize.Width;
+    }
+    return Size(min(width, availableSize.Width), min(availableSize.Height, maxHeight));
+}
+    
+            try
         {
-            x /= value;
-            y /= value;
-            width /= value;
-            height /= value;
-            // Return
-            return *this;
+            rshrat(&lhsRat, rhsRat, RATIONAL_BASE, RATIONAL_PRECISION);
+            destroyrat(rhsRat);
         }
-        catch (const std::exception& e)
+        catch (uint32_t error)
         {
-            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
-            return *this;
+            destroyrat(lhsRat);
+            destroyrat(rhsRat);
+            throw(error);
         }
+    
+            UCM::Category m_curCategory;
+        UCM::Unit m_curFrom;
+        UCM::Unit m_curTo;
+        UCM::Command m_lastCommand;
+    
+    // Called after = with the result of the equation
+// Responsible for clearing the top line of current running history display, as well as adding yet another element to
+// history of equations
+void CHistoryCollector::CompleteHistoryLine(wstring_view numStr)
+{
+    if (nullptr != m_pCalcDisplay)
+    {
+        m_pCalcDisplay->SetExpressionDisplay(
+            std::make_shared<CalculatorVector<std::pair<std::wstring, int>>>(), std::make_shared<CalculatorVector<std::shared_ptr<IExpressionCommand>>>());
+    }
+    }
+    
+        PNUMBER Number::ToPNUMBER() const
+    {
+        PNUMBER ret = _createnum(static_cast<uint32_t>(this->Mantissa().size()) + 1);
+        ret->sign = this->Sign();
+        ret->exp = this->Exp();
+        ret->cdigit = static_cast<int32_t>(this->Mantissa().size());
+    }
+    
+            bool IsNegative()
+        {
+            return m_isNegative;
+        }
+        void IsNegative(bool isNegative)
+        {
+            m_isNegative = isNegative;
+        }
+    
+    NarratorAnnouncement ^ CalculatorAnnouncement::GetHistoryClearedAnnouncement(String ^ announcement)
+{
+    return ref new NarratorAnnouncement(
+        announcement, CalculatorActivityIds::HistoryCleared, AutomationNotificationKind::ItemRemoved, AutomationNotificationProcessing::MostRecent);
+}
+    
+    
+    {        Platform::String ^ m_announcement;
+        Platform::String ^ m_activityId;
+        AutomationNotificationKind m_kind;
+        AutomationNotificationProcessing m_processing;
+    };
+    
+    #include <emscripten.h>
+#include <stdio.h>
+#include <setjmp.h>
+    
+    //------------------------------------------------------------------------
+    
+    //------------------------------------------------------------------------
+// PageAttrs
+//------------------------------------------------------------------------
+    
+    class PageLabelInfo {
+public:
+  PageLabelInfo(Object *tree, int numPages);
+  ~PageLabelInfo();
+  GBool labelToIndex(GooString *label, int *index);
+  GBool indexToLabel(int index, GooString *label);
+    }
+    
+      // Get scale
+  double getScale() { return scale; }
+    
+    DHTReplaceNodeTask::DHTReplaceNodeTask(const std::shared_ptr<DHTBucket>& bucket,
+                                       const std::shared_ptr<DHTNode>& newNode)
+    : bucket_(bucket),
+      newNode_(newNode),
+      numRetry_(0),
+      timeout_(DHT_MESSAGE_TIMEOUT)
+{
+}
+    
+      void dropNode(const std::shared_ptr<DHTNode>& node);
+    
+      char zero[18];
+  memset(zero, 0, sizeof(zero));
+    
+      void setNodes(const std::vector<std::shared_ptr<DHTNode>>& nodes);
+    
+    
+    {  virtual bool finished() = 0;
+};
+    
+    
+    {} // namespace aria2
+
+    
+    namespace aria2 {
+    }
+    
+    namespace aria2 {
+    }
+    
+    DHTTokenUpdateCommand::~DHTTokenUpdateCommand() = default;
+    
+    DNSCache::CacheEntry::~CacheEntry() = default;
+    
+    
+    {  keppler_orbit->set_gnss_type(apollo::drivers::gnss::GnssType::GPS_SYS);
+  keppler_orbit->set_gnss_time_type(
+      apollo::drivers::gnss::GnssTimeType::GPS_TIME);
+  keppler_orbit->set_sat_prn(gps_emph->prn);
+  keppler_orbit->set_week_num(gps_emph->week);
+  keppler_orbit->set_af0(gps_emph->af0);
+  keppler_orbit->set_af1(gps_emph->af1);
+  keppler_orbit->set_af2(gps_emph->af2);
+  keppler_orbit->set_iode(gps_emph->iode1);
+  keppler_orbit->set_deltan(gps_emph->delta_A);
+  keppler_orbit->set_m0(gps_emph->M_0);
+  keppler_orbit->set_e(gps_emph->ecc);
+  keppler_orbit->set_roota(sqrt(gps_emph->A));
+  keppler_orbit->set_toe(gps_emph->toe);
+  keppler_orbit->set_toc(gps_emph->toc);
+  keppler_orbit->set_cic(gps_emph->cic);
+  keppler_orbit->set_crc(gps_emph->crc);
+  keppler_orbit->set_cis(gps_emph->cis);
+  keppler_orbit->set_crs(gps_emph->crs);
+  keppler_orbit->set_cuc(gps_emph->cuc);
+  keppler_orbit->set_cus(gps_emph->cus);
+  keppler_orbit->set_omega0(gps_emph->omega_0);
+  keppler_orbit->set_omega(gps_emph->omega);
+  keppler_orbit->set_i0(gps_emph->I_0);
+  keppler_orbit->set_omegadot(gps_emph->dot_omega);
+  keppler_orbit->set_idot(gps_emph->dot_I);
+  keppler_orbit->set_accuracy(
+      static_cast<google::protobuf::uint32>(sqrt(gps_emph->ura)));
+  keppler_orbit->set_health(gps_emph->health);
+  keppler_orbit->set_tgd(gps_emph->tgd);
+  keppler_orbit->set_iodc(gps_emph->iodc);
+  return true;
+}
+    
+    inline uint32_t crc32_block(const uint8_t* buffer, size_t length) {
+  uint32_t word = 0;
+  while (length--) {
+    uint32_t t1 = (word >> 8) & 0xFFFFFF;
+    uint32_t t2 = crc32_word((word ^ *buffer++) & 0xFF);
+    word = t1 ^ t2;
+  }
+  return word;
+}
+    
+      a.setStyleSheet(
+      'QSplitter::handle {'
+      '   background: lightGray;'
+      '   border-radius: 2px; '
+      '}');
+    
+    // @brief default initializer used in concurrent object pool
+template <class T>
+struct ObjectPoolDefaultInitializer {
+  void operator()(T* t) const {}
+};
+// @brief concurrent object pool with dynamic size
+template <class ObjectType, size_t N = kPoolDefaultSize,
+          class Initializer = ObjectPoolDefaultInitializer<ObjectType>>
+class ConcurrentObjectPool : public BaseObjectPool<ObjectType> {
+ public:
+  // using ObjectTypePtr = typename BaseObjectPool<ObjectType>::ObjectTypePtr;
+  using BaseObjectPool<ObjectType>::capacity_;
+  // @brief Only allow accessing from global instance
+  static ConcurrentObjectPool& Instance() {
+    static ConcurrentObjectPool pool(N);
+    return pool;
+  }
+  // @brief overrided function to get object smart pointer
+  std::shared_ptr<ObjectType> Get() override {
+// TODO(All): remove conditional build
+#ifndef PERCEPTION_BASE_DISABLE_POOL
+    ObjectType* ptr = nullptr;
+    {
+      std::lock_guard<std::mutex> lock(mutex_);
+      if (queue_.empty()) {
+        Add(1 + kPoolDefaultExtendNum);
+      }
+      ptr = queue_.front();
+      queue_.pop();
+    }
+    // For efficiency consideration, initialization should be invoked
+    // after releasing the mutex
+    kInitializer(ptr);
+    return std::shared_ptr<ObjectType>(ptr, [&](ObjectType* obj_ptr) {
+      std::lock_guard<std::mutex> lock(mutex_);
+      queue_.push(obj_ptr);
+    });
+#else
+    return std::shared_ptr<ObjectType>(new ObjectType);
+#endif
+  }
+  // @brief overrided function to get batch of smart pointers
+  // @params[IN] num: batch number
+  // @params[OUT] data: vector container to store the pointers
+  void BatchGet(size_t num,
+                std::vector<std::shared_ptr<ObjectType>>* data) override {
+#ifndef PERCEPTION_BASE_DISABLE_POOL
+    std::vector<ObjectType*> buffer(num, nullptr);
+    {
+      std::lock_guard<std::mutex> lock(mutex_);
+      if (queue_.size() < num) {
+        Add(num - queue_.size() + kPoolDefaultExtendNum);
+      }
+      for (size_t i = 0; i < num; ++i) {
+        buffer[i] = queue_.front();
+        queue_.pop();
+      }
+    }
+    // For efficiency consideration, initialization should be invoked
+    // after releasing the mutex
+    for (size_t i = 0; i < num; ++i) {
+      kInitializer(buffer[i]);
+      data->emplace_back(
+          std::shared_ptr<ObjectType>(buffer[i], [&](ObjectType* obj_ptr) {
+            std::lock_guard<std::mutex> lock(mutex_);
+            queue_.push(obj_ptr);
+          }));
+    }
+#else
+    for (size_t i = 0; i < num; ++i) {
+      data->emplace_back(std::shared_ptr<ObjectType>(new ObjectType));
+    }
+#endif
+  }
+  // @brief overrided function to get batch of smart pointers
+  // @params[IN] num: batch number
+  // @params[IN] is_front: indicating insert to front or back of the list
+  // @params[OUT] data: list container to store the pointers
+  void BatchGet(size_t num, bool is_front,
+                std::list<std::shared_ptr<ObjectType>>* data) override {
+#ifndef PERCEPTION_BASE_DISABLE_POOL
+    std::vector<ObjectType*> buffer(num, nullptr);
+    {
+      std::lock_guard<std::mutex> lock(mutex_);
+      if (queue_.size() < num) {
+        Add(num - queue_.size() + kPoolDefaultExtendNum);
+      }
+      for (size_t i = 0; i < num; ++i) {
+        buffer[i] = queue_.front();
+        queue_.pop();
+      }
+    }
+    // For efficiency consideration, initialization should be invoked
+    // after releasing the mutex
+    for (size_t i = 0; i < num; ++i) {
+      kInitializer(buffer[i]);
+      is_front ? data->emplace_front(std::shared_ptr<ObjectType>(
+                     buffer[i],
+                     [&](ObjectType* obj_ptr) {
+                       std::lock_guard<std::mutex> lock(mutex_);
+                       queue_.push(obj_ptr);
+                     }))
+               : data->emplace_back(std::shared_ptr<ObjectType>(
+                     buffer[i], [&](ObjectType* obj_ptr) {
+                       std::lock_guard<std::mutex> lock(mutex_);
+                       queue_.push(obj_ptr);
+                     }));
+    }
+#else
+    for (size_t i = 0; i < num; ++i) {
+      is_front
+          ? data->emplace_front(std::shared_ptr<ObjectType>(new ObjectType))
+          : data->emplace_back(std::shared_ptr<ObjectType>(new ObjectType));
+    }
+#endif
+  }
+  // @brief overrided function to get batch of smart pointers
+  // @params[IN] num: batch number
+  // @params[IN] is_front: indicating insert to front or back of the deque
+  // @params[OUT] data: deque container to store the pointers
+  void BatchGet(size_t num, bool is_front,
+                std::deque<std::shared_ptr<ObjectType>>* data) override {
+#ifndef PERCEPTION_BASE_DISABLE_POOL
+    std::vector<ObjectType*> buffer(num, nullptr);
+    {
+      std::lock_guard<std::mutex> lock(mutex_);
+      if (queue_.size() < num) {
+        Add(num - queue_.size() + kPoolDefaultExtendNum);
+      }
+      for (size_t i = 0; i < num; ++i) {
+        buffer[i] = queue_.front();
+        queue_.pop();
+      }
+    }
+    for (size_t i = 0; i < num; ++i) {
+      kInitializer(buffer[i]);
+      is_front ? data->emplace_front(std::shared_ptr<ObjectType>(
+                     buffer[i],
+                     [&](ObjectType* obj_ptr) {
+                       std::lock_guard<std::mutex> lock(mutex_);
+                       queue_.push(obj_ptr);
+                     }))
+               : data->emplace_back(std::shared_ptr<ObjectType>(
+                     buffer[i], [&](ObjectType* obj_ptr) {
+                       std::lock_guard<std::mutex> lock(mutex_);
+                       queue_.push(obj_ptr);
+                     }));
+    }
+#else
+    for (size_t i = 0; i < num; ++i) {
+      is_front
+          ? data->emplace_front(std::shared_ptr<ObjectType>(new ObjectType))
+          : data->emplace_back(std::shared_ptr<ObjectType>(new ObjectType));
+    }
+#endif
+  }
+#ifndef PERCEPTION_BASE_DISABLE_POOL
+  // @brief overrided function to set capacity
+  void set_capacity(size_t capacity) override {
+    std::lock_guard<std::mutex> lock(mutex_);
+    if (capacity_ < capacity) {
+      Add(capacity - capacity_);
+    }
+  }
+  // @brief get remained object number
+  size_t RemainedNum() override { return queue_.size(); }
+#endif
+  // @brief destructor to release the cached memory
+  ~ConcurrentObjectPool() override {
+    if (cache_) {
+      delete[] cache_;
+      cache_ = nullptr;
+    }
+    for (auto& ptr : extended_cache_) {
+      delete ptr;
+    }
+    extended_cache_.clear();
+  }
+    }
+    
+    // Definition of the use type of a lane mark in lane adjustment
+enum class LaneLineUseType { REAL = 0, VIRTUAL };
+    
+    // @brief: scale input prob within input range
+// @return bounded & scaled prob
+// @NOTE: original method name is bound_scale_probability
+double BoundedScalePositiveProbability(double p, double max_p, double min_p);
+    
+    
+    {  float scalar_radar_velocity = radar_velocity.norm();
+  float scalar_camera_velocity = camera_velocity.norm();
+  if (std::max(scalar_radar_velocity, scalar_camera_velocity) > 2) {
+    float diff_velocity = (radar_velocity - camera_velocity).norm() / 2;
+    float diff_velocity_ratio =
+        diff_velocity / std::max(scalar_camera_velocity, scalar_radar_velocity);
+    const float velocity_std = 0.15f;
+    const float max_velocity_p = 0.9f;
+    const float th_velocity_p = 0.5f;
+    float velocity_score = static_cast<float>(
+        1 - ChiSquaredCdf1TableFun(diff_velocity_ratio * diff_velocity_ratio /
+                                   velocity_std / velocity_std));
+    velocity_score = static_cast<float>(ScalePositiveProbability(
+        velocity_score, max_velocity_p, th_velocity_p));
+    return velocity_score;
+  } else {
+    return 0.5;
+  }
+}
+    
+    #include 'cyber/common/file.h'
+#include 'cyber/common/log.h'
+    
+    #endif // OPENPOSE_HAND_HAND_PARAMETERS_HPP
+
+    
+        class OP_API PersonTracker
+    {
     }
