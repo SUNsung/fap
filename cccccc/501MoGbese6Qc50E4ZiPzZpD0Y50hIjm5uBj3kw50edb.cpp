@@ -1,147 +1,146 @@
 
         
-          // Methods used during initialization, see the comment at the top of the .cc
-  // file for details.
-  static void DidGetCertDBOnUIThread(net::NSSCertDatabase* cert_db,
-                                     bool is_user_db_available,
-                                     const CreationCallback& callback);
-  static void DidGetCertDBOnIOThread(const CreationCallback& callback,
-                                     net::NSSCertDatabase* cert_db);
-  static void GetCertDBOnIOThread(content::ResourceContext* context,
-                                  const CreationCallback& callback);
+        const char kAppMenuRegistrarName[] = 'com.canonical.AppMenu.Registrar';
+const char kAppMenuRegistrarPath[] = '/com/canonical/AppMenu/Registrar';
     
-    void AutofillAgent::TextFieldDidReceiveKeyDown(
-    const blink::WebInputElement& element,
-    const blink::WebKeyboardEvent& event) {
-  if (event.windows_key_code == ui::VKEY_DOWN ||
-      event.windows_key_code == ui::VKEY_UP) {
-    ShowSuggestionsOptions options;
-    options.autofill_on_empty_values = true;
-    options.requires_caret_at_end = true;
-    ShowSuggestions(element, options);
+      // Schedule a notification unresponsive event.
+  void ScheduleUnresponsiveEvent(int ms);
+    
+    namespace electron {
+    }
+    
+    // static
+mate::WrappableBase* Notification::New(mate::Arguments* args) {
+  if (!Browser::Get()->is_ready()) {
+    args->ThrowError('Cannot create Notification before app is ready');
+    return nullptr;
+  }
+  return new Notification(args->isolate(), args->GetThis(), args);
+}
+    
+    
+    {}  // namespace electron
+    
+    namespace electron {
+    }
+    
+      // display::DisplayObserver:
+  void OnDisplayAdded(const display::Display& new_display) override;
+  void OnDisplayRemoved(const display::Display& old_display) override;
+  void OnDisplayMetricsChanged(const display::Display& display,
+                               uint32_t changed_metrics) override;
+    
+      bool delete_view_ = true;
+  views::View* view_ = nullptr;
+    
+    void WebContents::DetachFromOuterFrame() {
+  // See detach_webview_frame.patch on how to detach.
+  DCHECK(content::GuestMode::IsCrossProcessFrameGuest(web_contents()));
+  int frame_tree_node_id =
+      static_cast<content::WebContentsImpl*>(web_contents())
+          ->GetOuterDelegateFrameTreeNodeId();
+  if (frame_tree_node_id != content::FrameTreeNode::kFrameTreeNodeInvalidId) {
+    auto* node = content::FrameTreeNode::GloballyFindByID(frame_tree_node_id);
+    DCHECK(node->parent());
+    node->frame_tree()->RemoveFrame(node);
   }
 }
     
-    template <>
-struct Converter<base::Value> {
-  static bool FromV8(v8::Isolate* isolate,
-                     v8::Local<v8::Value> val,
-                     base::Value* out);
-  static v8::Local<v8::Value> ToV8(v8::Isolate* isolate,
-                                   const base::Value& val);
+        int32_t KeyChord::Vkey()
+    {
+        return _vkey;
+    }
+    
+    
+#if defined(__clang__)
+    #if !__has_extension(cxx_override_control)
+        #define override
+        #define final
+    #endif
+#elif defined(__GNUC__) && GNUC_VERSION < 40700
+    #define override
+    #define final
+#endif
+    
+    // Asserts that a given statement causes the program to exit, with an
+// integer exit status that satisfies predicate, and emitting error output
+// that matches regex.
+# define ASSERT_EXIT(statement, predicate, regex) \
+    GTEST_DEATH_TEST_(statement, predicate, regex, GTEST_FATAL_FAILURE_)
+    
+    
+    {}  // namespace internal
+    
+    // This is used internally by all instances of linked_ptr<>.  It needs to be
+// a non-template class because different types of linked_ptr<> can refer to
+// the same object (linked_ptr<Superclass>(obj) vs linked_ptr<Subclass>(obj)).
+// So, it needs to be possible for different types of linked_ptr to participate
+// in the same circular linked list, so we need a single class type here.
+//
+// DO NOT USE THIS CLASS DIRECTLY YOURSELF.  Use linked_ptr<T>.
+class linked_ptr_internal {
+ public:
+  // Create a new circle that includes only this instance.
+  void join_new() {
+    next_ = this;
+  }
+    }
+    
+    
+    {  template <class Tuple>
+  static GTEST_BY_REF_(GTEST_TUPLE_ELEMENT_(6, Tuple))
+  ConstField(const Tuple& t) { return t.f6_; }
 };
     
-      v8::Local<v8::Object> GetHandle() const override;
+    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
+    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
+    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
+    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
+    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
+    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
+    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
+    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
+    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27,
+    GTEST_TEMPLATE_ T28, GTEST_TEMPLATE_ T29, GTEST_TEMPLATE_ T30,
+    GTEST_TEMPLATE_ T31, GTEST_TEMPLATE_ T32, GTEST_TEMPLATE_ T33>
+struct Templates33 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates32<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
+      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
+      T29, T30, T31, T32, T33> Tail;
+};
     
-    #include 'base/time/time.h'
-#include 'native_mate/dictionary.h'
-#include 'native_mate/object_template_builder.h'
-#include 'shell/browser/browser.h'
-#include 'shell/browser/native_window.h'
-#include 'shell/browser/window_list.h'
-#include 'shell/common/api/event_emitter_caller.h'
-#include 'shell/common/native_mate_converters/callback.h'
-#include 'shell/common/node_includes.h'
+    PlanningBase::~PlanningBase() {}
     
     
     {
-    {        if ((m_radix == 10) && IsNumberInvalid(m_numberString, MAX_EXPONENT, m_precision, m_radix))
-        {
-            DisplayError(CALC_E_OVERFLOW);
-        }
-        else
-        {
-            // Display the string and return.
-            SetPrimaryDisplay(GroupDigitsPerRadix(m_numberString, m_radix));
-        }
-    }
-}
-    
-    using namespace std;
-using namespace CalcEngine;
-    
-    LiveRegionHost::LiveRegionHost()
-    : m_host(nullptr)
-{
-}
-    
-      static Variant setProp(const Object& this_,
-                         const String& name,
-                         const Variant& value) {
-    auto set = Derived::map.set(name);
-    CHECK_ACCESSOR(set, 'set', this_->getVMClass()->name(), name);
-    set(this_, value);
-    return true;
-  }
-    
-    struct HostHealthMonitorExtension final : public Extension {
-  HostHealthMonitorExtension() : Extension('hosthealthmonitor', '1.0') {}
-    }
-    
-    
-    {  m_clientTxn->sendHeaders(response);
-  if (!m_bodyData.empty()) {
-    VLOG(2) << 'Reposting body bytes for client transaction ' << *m_clientTxn;
-    m_clientTxn->sendBody(m_bodyData.move());
-  }
-}
-    
-    void cgDivInt(IRLS& env, const IRInstruction* inst) {
-  auto const d = dstLoc(env, inst, 0).reg();
-  auto const dividend = srcLoc(env, inst, 0).reg();
-  auto const divisor  = srcLoc(env, inst, 1).reg();
-  auto& v = vmain(env);
-    }
-    
-    #endif
+    {
+    {}  // namespace common
+}  // namespace perception
+}  // namespace apollo
 
     
-    
-    
-    namespace op
-{
-    template<typename T>
-    Rectangle<T>::Rectangle(const T x_, const T y_, const T width_, const T height_) :
-        x{x_},
-        y{y_},
-        width{width_},
-        height{height_}
-    {
+        bool Get(K key, V **value) {
+      Entry *prev = nullptr;
+      Entry *target = nullptr;
+      if (Find(key, &prev, &target)) {
+        *value = target->value_ptr.load(std::memory_order_acquire);
+        return true;
+      }
+      return false;
     }
-    }
-    
-    #include <folly/Optional.h>
-#include <folly/io/async/EventBaseManager.h>
-#include <folly/portability/GTest.h>
-#include <folly/synchronization/Baton.h>
-#include <folly/system/ThreadName.h>
     
     
     {
-    {  bool ttyOutput() const override {
-    return false;
-  }
-};
-} // namespace
+    {}  // namespace control
+}  // namespace apollo
+
     
-    struct HashTraits {
-  size_t operator()(char* a) {
-    size_t result = 0;
-    while (a[0] != 0) {
-      result += static_cast<size_t>(*(a++));
-    }
-    return result;
+      AINFO << 'Init Detector ...';
+  BaseObstacleDetector *detector =
+      BaseObstacleDetectorRegisterer::GetInstanceByName(FLAGS_detector);
+  if (FLAGS_pre_detected_dir == '') {
+    CHECK_EQ(detector->Name(), FLAGS_detector);
+    CHECK(detector->Init(init_options));
   }
-  size_t operator()(const char& a) {
-    return static_cast<size_t>(a);
-  }
-  size_t operator()(const StringPiece a) {
-    size_t result = 0;
-    for (const auto& ch : a) {
-      result += static_cast<size_t>(ch);
-    }
-    return result;
-  }
-};
-    
-      constexpr Err(Type type) : type_(type) {}
+  AINFO << 'Done!';
