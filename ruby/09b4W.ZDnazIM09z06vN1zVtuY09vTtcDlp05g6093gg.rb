@@ -1,199 +1,132 @@
 
         
-          # Constants which holds devise configuration for extensions. Those should
-  # not be modified by the 'end user' (this is why they are constants).
-  ALL         = []
-  CONTROLLERS = {}
-  ROUTES      = {}
-  STRATEGIES  = {}
-  URL_HELPERS = {}
+            SPLIT_INTS = /(?<=\d)\.(?=[\s\d])/.freeze
     
-      # GET /resource/confirmation?confirmation_token=abcdef
-  def show
-    self.resource = resource_class.confirm_by_token(params[:confirmation_token])
-    yield resource if block_given?
+        DOCUMENT_RGX = /\A(?:\s|(?:<!--.*?-->))*<(?:\!doctype|html)/i
     
-      def after_omniauth_failure_path_for(scope)
-    new_session_path(scope)
-  end
-    
-          def remove_domain_from_uri(uri)
-        [uri.path.sub(/\A\/+/, '/'), uri.query].compact.join('?')
-      end
-    
-          def rsync_installed(machine)
-        machine.communicate.test('which rsync')
-      end
-    
-      describe '#rsync_post' do
-    let(:opts) {{:type=>:rsync,
-                 :guestpath=>'/vagrant',
-                 :hostpath=>'/home/user/syncfolder',
-                 :disabled=>false,
-                 :__vagrantfile=>true,
-                 :exclude=>['.vagrant'],
-                 :owner=>'vagrant',
-                 :group=>'vagrant'}}
-    
-        def new_entry(name, provider, version)
-      Vagrant::MachineIndex::Entry.new.tap do |entry|
-        entry.extra_data['box'] = {
-          'name' => name,
-          'provider' => provider,
-          'version' => version,
-        }
-      end
-    end
-    
-              # Create a temporary file to store the data so we can upload it.
-          remote_file = File.join(guest_provisioning_path, 'dna.json')
-          @machine.communicate.sudo(remove_command(remote_file), error_check: false)
-          Tempfile.open('vagrant-chef-provisioner-config') do |f|
-            f.binmode
-            f.write(json)
-            f.fsync
-            f.close
-            @machine.communicate.upload(f.path, remote_file)
-          end
+            if at_css('.api-type-label.module')
+          at_css('h1').content = subpath.remove('api/')
         end
     
-        it 'returns true if installed' do
-      expect(machine.communicate).to receive(:test).
-        with(command, sudo: true).and_return(true)
-      subject.chef_installed(machine, 'chef_solo', version)
+            keys.find do |key|
+          key_tag_version = tag_without_or_later(key)
+          begin
+            MacOS::Version.from_symbol(key_tag_version) <= tag_version
+          rescue ArgumentError
+            false
+          end
+        end
+      end
     end
+  end
+end
+
+    
+      let(:specs) { {} }
+  let(:name) { 'foo' }
+  let(:url) { 'https://example.com/foo.tar.gz' }
+  let(:version) { nil }
+  let(:args) { %w[foo bar baz] }
+    
+      it 'prints the file used to cache the Cask' do
+    transmission_location = CurlDownloadStrategy.new(
+      local_transmission.url.to_s, local_transmission.token, local_transmission.version,
+      cache: Cask::Cache.path, **local_transmission.url.specs
+    ).cached_location
+    caffeine_location = CurlDownloadStrategy.new(
+      local_caffeine.url.to_s, local_caffeine.token, local_caffeine.version,
+      cache: Cask::Cache.path, **local_caffeine.url.specs
+    ).cached_location
+    
+          return if parent.nil?
+    
+            def initialize(machine, config)
+          super
     
     describe VagrantPlugins::Chef::Cap::Windows::ChefInstalled do
   include_context 'unit'
     
-      describe '#machine_names' do
-    it 'returns the default name when single-VM' do
-      configure { |config| }
+          env[:box_url] = tf.path
+      env[:box_provider] = ['virtualbox', 'vmware']
+      expect(box_collection).to receive(:add).with(any_args) { |path, name, version, **opts|
+        expect(checksum(path)).to eq(checksum(box_path))
+        expect(name).to eq('foo/bar')
+        expect(version).to eq('0.7')
+        expect(opts[:metadata_url]).to eq('file://#{tf.path}')
+        true
+      }.and_return(box)
     
-        # Initializes a new environment with the given options. The options
-    # is a hash where the main available key is `cwd`, which defines where
-    # the environment represents. There are other options available but
-    # they shouldn't be used in general. If `cwd` is nil, then it defaults
-    # to the `Dir.pwd` (which is the cwd of the executing process).
-    def initialize(opts=nil)
-      opts = {
-        cwd:              nil,
-        home_path:        nil,
-        local_data_path:  nil,
-        ui_class:         nil,
-        vagrantfile_name: nil,
-      }.merge(opts || {})
-    
-        it 'should set custom sources' do
-      expect(subject).to receive(:internal_install) do |info, update, opts|
-        expect(info[plugin_name]['sources']).to eq(sources)
+            it 'should not attempt to install a plugin' do
+          expect(plugin_manager).not_to receive(:install_plugin)
+          expect(instance.send(:process_configured_plugins)).to eq(local_installed_plugins)
+        end
       end
-      subject.install_local(plugin_path, sources: sources)
+    
+      subject { described_class.new(loader, keys) }
+    
+      # Automatically discover new inputs in Rails' autoload path.
+  # config.inputs_discovery = true
+    
+    
+    
+          def accepts?(env)
+        cookie_header = env['HTTP_COOKIE']
+        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
+        cookies.each do |k, v|
+          if k == session_key && Array(v).size > 1
+            bad_cookies << k
+          elsif k != session_key && Rack::Utils.unescape(k) == session_key
+            bad_cookies << k
+          end
+        end
+        bad_cookies.empty?
+      end
+    
+      it_behaves_like 'any rack application'
+    
+        it 'leaves normal params untouched' do
+      mock_app do |env|
+        request = Rack::Request.new(env)
+        [200, {'Content-Type' => 'text/plain'}, [request.params['foo']]]
+      end
+      get '/', :foo => 'bar'
+      expect(body).to eq('bar')
     end
     
-        context 'when container does not exist' do
-      before { allow(subject).to receive(:execute)
-        .and_return('foo\n#{cid}extra\nbar') }
-      it { expect(result).to be_falsey }
-    end
+      it 'accepts post requests with correct X-CSRF-Token header' do
+    post('/', {}, 'rack.session' => session, 'HTTP_X_CSRF_TOKEN' => token)
+    expect(last_response).to be_ok
   end
     
-              with_target_vms(argv, provider: provider) do |machine|
-            if !machine.config.vm.box
-              machine.ui.output(I18n.t(
-                'vagrant.errors.box_update_no_name'))
-              next
+          context 'and :python_package_name_prefix is nil/default' do
+        it 'should prefix the package with 'python-'' do
+          subject.input(example_dir)
+          insist { subject.name } == 'python-Example'
+        end
+      end
+    
+            insist { @rpmtags[:os] } == os
+        insist { `rpm -q --qf '%{OS}' -p #{@target}`.chomp } == os
+      end
+    
+        it 'should support specifying confinement' do
+      pending('Ruby 1.x and 2.0.x are unsupported for Snap because it lacks Psych::safe_load') if is_old_ruby
+      original.attributes[:snap_confinement] = 'test-confinement'
+    
+                # ensure it doesn't end with a slash
+            if(full_record_path[full_record_path.length-1] == '/')
+              full_record_path = full_record_path.chop()
             end
+          else
+            extension_data = hash_record(data)
+          end
     
-          context 'boxes have an update' do
-        let(:md) {
-          md = Vagrant::BoxMetadata.new(StringIO.new(<<-RAW))
-        {
-          'name': 'foo',
-          'versions': [
-            {
-              'version': '1.0'
-            },
-            {
-              'version': '1.1',
-              'providers': [
-                {
-                  'name': 'virtualbox',
-                  'url': 'bar'
-                }
-              ]
-            }
-          ]
-        }
-          RAW
-        }
+      # Take a flat package as input
+  def input(input_path)
+    # TODO: Fail if it's a Distribution pkg or old-fashioned
+    expand_dir = File.join(build_path, 'expand')
+    # expand_dir must not already exist for pkgutil --expand
+    safesystem('pkgutil --expand #{input_path} #{expand_dir}')
     
-    <script>
-  // reading
-  var es = new EventSource('/stream');
-  es.onmessage = function(e) { $('#chat').append(e.data + '\n') };
-    
-          def has_vector?(request, headers)
-        return false if request.xhr?
-        return false if options[:allow_if] && options[:allow_if].call(request.env)
-        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
-        origin(request.env).nil? and referrer(request.env) != request.host
-      end
-    
-      it 'accepts post form requests with masked authenticity_token field' do
-    post('/', {'authenticity_token' => masked_token}, 'rack.session' => session)
-    expect(last_response).to be_ok
-  end
-    
-      it 'should ignore CSP3 no arg directives unless they are set to true' do
-    mock_app do
-      use Rack::Protection::ContentSecurityPolicy, :block_all_mixed_content => false, :disown_opener => 'false', :upgrade_insecure_requests => 'foo'
-    
-      context 'with custom session key' do
-    it 'denies requests with duplicate session cookies' do
-      mock_app do
-        use Rack::Protection::CookieTossing, :session_key => '_session'
-        run DummyApp
-      end
-    
-      it 'accepts post requests with masked X-CSRF-Token header' do
-    post('/', {}, 'rack.session' => session, 'HTTP_X_CSRF_TOKEN' => masked_token)
-    expect(last_response).to be_ok
-  end
-    
-    
-===============================================
- Error for category_generator.rb plugin
------------------------------------------------
- No 'category_index.html' in source/_layouts/
- Perhaps you haven't installed a theme yet.
-===============================================
-    
-        def render(context)
-      if parts = @text.match(/([a-zA-Z\d]*) (.*)/)
-        gist, file = parts[1].strip, parts[2].strip
-      else
-        gist, file = @text.strip, ''
-      end
-      if gist.empty?
-        ''
-      else
-        script_url = script_url_for gist, file
-        code       = get_cached_gist(gist, file) || get_gist_from_web(gist, file)
-        html_output_for script_url, code
-      end
-    end
-    
-    end
-    
-      class RenderPartialTag < Liquid::Tag
-    include OctopressFilters
-    def initialize(tag_name, markup, tokens)
-      @file = nil
-      @raw = false
-      if markup =~ /^(\S+)\s?(\w+)?/
-        @file = $1.strip
-        @raw = $2 == 'raw'
-      end
-      super
-    end
+        # Manifest Filename
+    manifest_fn = build_path('#{name}.p5m')
