@@ -1,180 +1,207 @@
 
         
-        
-if __name__ == '__main__':
-    from glmnet.elastic_net import Lasso as GlmnetLasso
-    from sklearn.linear_model import Lasso as ScikitLasso
-    # Delayed import of matplotlib.pyplot
-    import matplotlib.pyplot as plt
+            assert actual_body == expected_body
     
-                gc.collect()
-            print('- benchmarking Lasso')
-            clf = Lasso(alpha=alpha, fit_intercept=False,
-                        precompute=precompute)
-            tstart = time()
-            clf.fit(X, Y)
-            lasso_results.append(time() - tstart)
+        def filter(self, by_type=Type[BasePlugin]):
+        return [plugin for plugin in self if issubclass(plugin, by_type)]
     
-        for n_components in [i.astype(int) for i in
-                         np.linspace(data.shape[1] // 10,
-                                     data.shape[1], num=4)]:
-        all_times = defaultdict(list)
-        all_errors = defaultdict(list)
-        pca = PCA(n_components=n_components)
-        rpca = PCA(n_components=n_components, svd_solver='randomized',
-                   random_state=1999)
-        results_dict = {k: benchmark(est, data) for k, est in [('pca', pca),
-                                                               ('rpca', rpca)]}
+    This module provides the capabilities for the Requests hooks system.
     
-            start = time.time()
-        func(X, n_jobs=1)
-        one_core.append(time.time() - start)
+    if is_py2:
+    from urllib import (
+        quote, unquote, quote_plus, unquote_plus, urlencode, getproxies,
+        proxy_bypass, proxy_bypass_environment, getproxies_environment)
+    from urlparse import urlparse, urlunparse, urljoin, urlsplit, urldefrag
+    from urllib2 import parse_http_list
+    import cookielib
+    from Cookie import Morsel
+    from StringIO import StringIO
+    # Keep OrderedDict for backwards compatibility.
+    from collections import Callable, Mapping, MutableMapping, OrderedDict
     
-    for i, n in enumerate(n_samples):
-    for j, p in enumerate(n_features):
-        X = np.random.normal(size=(n, p))
-        t0 = time.time()
-        ward.fit(X)
-        scikits_time[j, i] = time.time() - t0
-        t0 = time.time()
-        hierarchy.ward(X)
-        scipy_time[j, i] = time.time() - t0
+        def lower_items(self):
+        '''Like iteritems(), but with all lowercase keys.'''
+        return (
+            (lowerkey, keyval[1])
+            for (lowerkey, keyval)
+            in self._store.items()
+        )
     
-                gc.collect()
-            print('- benchmarking SGD')
-            clf = SGDRegressor(alpha=alpha / n_train, fit_intercept=False,
-                               max_iter=max_iter, learning_rate='invscaling',
-                               eta0=.01, power_t=0.25, tol=1e-3)
+    setup(
+    name=about['__title__'],
+    version=about['__version__'],
+    description=about['__description__'],
+    long_description=readme,
+    long_description_content_type='text/markdown',
+    author=about['__author__'],
+    author_email=about['__author_email__'],
+    url=about['__url__'],
+    packages=packages,
+    package_data={'': ['LICENSE', 'NOTICE'], 'requests': ['*.pem']},
+    package_dir={'requests': 'requests'},
+    include_package_data=True,
+    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*',
+    install_requires=requires,
+    license=about['__license__'],
+    zip_safe=False,
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Developers',
+        'Natural Language :: English',
+        'License :: OSI Approved :: Apache Software License',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: Implementation :: CPython',
+        'Programming Language :: Python :: Implementation :: PyPy'
+    ],
+    cmdclass={'test': PyTest},
+    tests_require=test_requirements,
+    extras_require={
+        'security': ['pyOpenSSL >= 0.14', 'cryptography>=1.3.4', 'idna>=2.0.0'],
+        'socks': ['PySocks>=1.5.6, !=1.5.7'],
+        'socks:sys_platform == 'win32' and python_version == '2.7'': ['win_inet_pton'],
+    },
+    project_urls={
+        'Documentation': 'http://docs.python-requests.org',
+        'Source': 'https://github.com/kennethreitz/requests',
+    },
+)
+
     
-        # Print and plot the confusion matrix
-    cm = metrics.confusion_matrix(y_test, y_predicted)
-    print(cm)
+    # There are two options for replacing |today|: either, you set today to
+# some non-false value, then it is used:
+#today = ''
+# Else, today_fmt is used as the format for a strftime call.
+#today_fmt = '%B %d, %Y'
+    
+    # Get the face encodings for the known images
+obama_face_encoding = face_recognition.face_encodings(known_obama_image)[0]
+biden_face_encoding = face_recognition.face_encodings(known_biden_image)[0]
+    
+        # 将每一个人脸与已知样本图片比对
+    for face_encoding in face_encodings:
+        # 看是否属于奥巴马或者拜登
+        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
+        name = '<Unknown Person>'
+    
+    # You can change this to any folder on your system
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+    
+        # Load a second sample picture and learn how to recognize it.
+    biden_image = face_recognition.load_image_file('biden.jpg')
+    biden_face_encoding = face_recognition.face_encodings(biden_image)[0]
+    
+                if offscreen:
+    
+        Defaults files should be named <plugin_name>_defaults.py
+    Any items placed into this file will automatically get added to the relevant config .ini files
+    within the faceswap/config folder.
+    
+                       <option_name> should always be lower text.
+                   <metadata> dictionary requirements are listed below.
+    
+        def launch_detector(self):
+        ''' Launch the face detector '''
+        logger.debug('Launching Detector')
+        kwargs = {'in_queue': self.queues['extract_detect_in'],
+                  'out_queue': self.queues['extract_align_in']}
+        mp_func = PoolProcess if self.detector.parent_is_pool else SpawnProcess
+        process = mp_func(self.detector.run, **kwargs)
+    
+        def progress_update(self, message, position, update_position=True):
+        ''' Update the GUIs progress bar and position '''
+        self.pbar_message.set(message)
+        if update_position:
+            self.pbar_position.set(position)
+
+    
+            # Deleting model 'GroupTagValue'
+        db.delete_table(u'tagstore_grouptagvalue')
     
     
-def plot_influence(conf, mse_values, prediction_times, complexities):
+def main():
     '''
-    Plot influence of model complexity on both accuracy and latency.
+    # Counting to two...
+    >>> for number in count_to_two():
+    ...     print(number)
+    one
+    two
+    
+        >>> Order(1000, discount_strategy=on_sale_discount)
+    <Price: 1000, price after discount: 730.0>
     '''
-    plt.figure(figsize=(12, 6))
-    host = host_subplot(111, axes_class=Axes)
-    plt.subplots_adjust(right=0.75)
-    par1 = host.twinx()
-    host.set_xlabel('Model Complexity (%s)' % conf['complexity_label'])
-    y1_label = conf['prediction_performance_label']
-    y2_label = 'Time (s)'
-    host.set_ylabel(y1_label)
-    par1.set_ylabel(y2_label)
-    p1, = host.plot(complexities, mse_values, 'b-', label='prediction error')
-    p2, = par1.plot(complexities, prediction_times, 'r-',
-                    label='latency')
-    host.legend(loc='upper right')
-    host.axis['left'].label.set_color(p1.get_color())
-    par1.axis['right'].label.set_color(p2.get_color())
-    plt.title('Influence of Model Complexity - %s' % conf['estimator'].__name__)
-    plt.show()
     
-    In both examples below, the main result is that the empirical covariance
-estimate, as a non-robust one, is highly influenced by the heterogeneous
-structure of the observations. Although the robust covariance estimate is
-able to focus on the main mode of the data distribution, it sticks to the
-assumption that the data should be Gaussian distributed, yielding some biased
-estimation of the data structure, but yet accurate to some extent.
-The One-Class SVM does not assume any parametric form of the data distribution
-and can therefore model the complex shape of the data much better.
     
-    The plots display firstly what a K-means algorithm would yield
-using three clusters. It is then shown what the effect of a bad
-initialization is on the classification process:
-By setting n_init to only 1 (default is 10), the amount of
-times that the algorithm will be run with different centroid
-seeds is reduced.
-The next plot displays what using eight clusters would deliver
-and finally the ground truth.
+def get_text():
+    return 'plain-text'
     
-    This example is meant to illustrate situations where k-means will produce
-unintuitive and possibly unexpected clusters. In the first three plots, the
-input data does not conform to some implicit assumption that k-means makes and
-undesirable clusters are produced as a result. In the last plot, k-means
-returns intuitive clusters despite unevenly sized blobs.
+    
+class Cat(object):
+    def speak(self):
+        return 'meow'
+    
+        def __init__(self):
+        self.__dict__ = self.__shared_state
+        self.state = 'Init'
+    
+    The first example achieves this by using an abstract base
+class for a building, where the initializer (__init__ method) specifies the
+steps needed, and the concrete subclasses implement these steps.
+    
+        @property
+    def _lazy_property(self):
+        if not hasattr(self, attr):
+            setattr(self, attr, fn(self))
+        return getattr(self, attr)
+    
+    *TL;DR
+Stores a set of initialized objects kept ready to use.
 '''
-print(__doc__)
     
-    colors = cycle('bgrcmykbgrcmykbgrcmykbgrcmyk')
-for k, col in zip(range(n_clusters_), colors):
-    my_members = labels == k
-    cluster_center = cluster_centers[k]
-    plt.plot(X[my_members, 0], X[my_members, 1], col + '.')
-    plt.plot(cluster_center[0], cluster_center[1], 'o', markerfacecolor=col,
-             markeredgecolor='k', markersize=14)
-plt.title('Estimated number of clusters: %d' % n_clusters_)
-plt.show()
+    *TL;DR
+Allows object composition to achieve the same code reuse as inheritance.
+'''
+    
+    ### OUTPUT ###
+# API1.circle at 1:2 radius 7.5
+# API2.circle at 5:7 radius 27.5
 
     
-        def ensure_augeas_state(self):
-        '''Makes sure that all Augeas dom changes are written to files to avoid
-        loss of configuration directives when doing additional augeas parsing,
-        causing a possible augeas.load() resulting dom reset
-        '''
+    shutil.rmtree(os.path.join(CURRENT_DIR, 'mxnet'), ignore_errors=True)
+shutil.rmtree(os.path.join(CURRENT_DIR, 'dmlc_tracker'), ignore_errors=True)
+shutil.copytree(os.path.join(CURRENT_DIR, 'mxnet-build/python/mxnet'),
+                os.path.join(CURRENT_DIR, 'mxnet'))
+shutil.copytree(os.path.join(CURRENT_DIR, 'mxnet-build/3rdparty/dmlc-core/tracker/dmlc_tracker'),
+                os.path.join(CURRENT_DIR, 'dmlc_tracker'))
+shutil.copy(LIB_PATH[0], os.path.join(CURRENT_DIR, 'mxnet'))
     
-        @certbot_util.patch_get_utility()
-    def test_successful_choice(self, mock_util):
-        mock_util().menu.return_value = (display_util.OK, 3)
-        self.assertEqual(self.vhosts[3], self._call(self.vhosts))
+            net = _get_test_network()
+        ce_loss = loss.SoftmaxCrossEntropyLoss()
+        acc = mx.metric.Accuracy()
+        est = estimator.Estimator(net, loss=ce_loss, metrics=acc)
+        train_metrics, val_metrics = est.prepare_loss_and_metrics()
+        logging_handler = event_handler.LoggingHandler(file_name=file_name,
+                                                       file_location=tmpdir,
+                                                       train_metrics=train_metrics,
+                                                       val_metrics=val_metrics)
+        est.fit(test_data, event_handlers=[logging_handler], epochs=3)
+        assert logging_handler.batch_index == 0
+        assert logging_handler.current_epoch == 3
+        assert os.path.isfile(output_dir)
     
-    # Custom sidebar templates, maps document names to template names.
-#html_sidebars = {}
     
-    '''
-
-    
-        if not opts and not args:
-        # Display help.
-        print(_help)
-        # Enter GUI mode.
-        #from .gui import gui_main
-        #gui_main()
-    else:
-        conf = {}
-        for opt, arg in opts:
-            if opt in ('-h', '--help'):
-                # Display help.
-                print(_help)
-    
-    __all__ = ['cbs_download']
-    
-        def prepare(self, **kwargs):
-        self.api_data = json.loads(get_content(self.__class__.ep.format(self.vid)))
-        self.title = self.api_data['title']
-        for s in self.api_data['video']:
-            for st in self.__class__.stream_types:
-                if st['map_to'] == s:
-                    urls = self.api_data['video'][s]
-                    src = [u['url'] for u in urls]
-                    stream_data = dict(src=src, size=0, container='mp4', video_profile=st['video_profile'])
-                    self.streams[st['id']] = stream_data
-    
-    def get_NSID(url, page):
-    return match1(page, pattern_inline_NSID)
-    
-        url = list(set([
-        unicodize(str.replace(i, '\\/', '/'))
-        for i in re.findall(r'<meta property='og:video:secure_url' content='(.*?)'>', html)
-    ]))
-    
-        def extract(self, **kwargs):
-        if 'stream_id' in kwargs and kwargs['stream_id']:
-            i = kwargs['stream_id']
-            if 'size' not in self.streams[i]:
-                self.streams[i]['size'] = urls_size(self.streams[i]['src'])
-    
-            # cookie handler
-        ssl_context = request.HTTPSHandler(
-            context=ssl.SSLContext(ssl.PROTOCOL_TLSv1))
-        cookie_handler = request.HTTPCookieProcessor()
-        opener = request.build_opener(ssl_context, cookie_handler)
-        opener.addheaders = [
-            ('Referer', self.url),
-            ('Cookie',
-             'CloudFront-Policy=%s;CloudFront-Signature=%s;CloudFront-Key-Pair-Id=%s' % (scp, scs, sck))
-        ]
-        request.install_opener(opener)
+def test_incomplete_infer_convolution():
+    a = mx.sym.Variable('a', shape=(0, 10, 0, 0))
+    b = mx.sym.Convolution(data=a, num_filter=21, kernel=(3, 3), dilate=(1, 1), pad=(1, 1))
+    c = mx.sym.Variable('c', shape=(5, 21, 32, 32))
+    d = b + c
+    arg_shapes, _, _ = d.infer_shape()
+    arg_names = d.list_arguments()
+    arg_shapes = {k: v for k, v in zip(arg_names, arg_shapes)}
+    assert arg_shapes['a'] == (5, 10, 32, 32)
