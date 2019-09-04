@@ -1,114 +1,137 @@
 
         
-            # The path used after confirmation.
-    def after_confirmation_path_for(resource_name, resource)
-      if signed_in?(resource_name)
-        signed_in_root_path(resource)
-      else
-        new_session_path(resource_name)
-      end
-    end
-    
-      # Check if there is no signed in user before doing the sign out.
-  #
-  # If there is no signed in user, it will set the flash message and redirect
-  # to the after_sign_out path.
-  def verify_signed_out_user
-    if all_signed_out?
-      set_flash_message! :notice, :already_signed_out
-    
-      # Returns real navigational formats which are supported by Rails
-  def navigational_formats
-    @navigational_formats ||= Devise.navigational_formats.select { |format| Mime::EXTENSION_LOOKUP[format.to_s] }
-  end
-    
-    if defined?(ActionMailer)
-  class Devise::Mailer < Devise.parent_mailer.constantize
-    include Devise::Mailers::Helpers
-    
-          # Forgets the given resource by deleting a cookie
-      def forget_me(resource)
-        scope = Devise::Mapping.find_scope!(resource)
-        resource.forget_me!
-        cookies.delete(remember_key(resource, scope), forget_cookie_values(resource))
+              def test_invert_create_table
+        @recorder.revert do
+          @recorder.record :create_table, [:system_settings]
+        end
+        drop_table = @recorder.commands.first
+        assert_equal [:drop_table, [:system_settings], nil], drop_table
       end
     
-          private
+          test '`rake routes` outputs routes' do
+        app_file 'config/routes.rb', <<-RUBY
+          Rails.application.routes.draw do
+            get '/cart', to: 'cart#show'
+          end
+        RUBY
     
-      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
-     options[:store] != false && !env['devise.skip_timeoutable']
-    last_request_at = warden.session(scope)['last_request_at']
+            def to_s
+          @symbol.to_s
+        end
+        alias to_str to_s
     
-          # Resets reset password token and send reset password instructions by email.
-      # Returns the token sent in the e-mail.
-      def send_reset_password_instructions
-        token = set_reset_password_token
-        send_reset_password_instructions_notification(token)
-    
-      let(:user) { Fabricate(:user) }
-    
-      private
-    
-    RSpec.describe ActivityPub::Activity::Move do
-  let(:follower)    { Fabricate(:account) }
-  let(:old_account) { Fabricate(:account) }
-  let(:new_account) { Fabricate(:account) }
-    
-      context 'when the recipient follows the sender' do
-    before do
-      recipient.follow!(sender)
+      # if rss_url already in existing opml file, use that; otherwise, do a lookup
+  rss_url = nil
+  if File.exist?(OUTPUT_FILENAME)
+    xml = Nokogiri::XML(File.open(OUTPUT_FILENAME))
+    existing_blog = xml.xpath('//outline[@htmlUrl='#{web_url}']').first
+    if existing_blog
+      rss_url = existing_blog.attr('xmlUrl')
+      puts '#{name}: ALREADY HAVE'
     end
-    
-      include Msf::Payload::Single
-  include Msf::Sessions::CommandShellOptions
-    
-    lib_path = root.join('lib').to_path
-    
-    # Framework context and core classes
-require 'msf/core/framework'
-require 'msf/core/db_manager'
-require 'msf/core/event_dispatcher'
-require 'msf/core/module_manager'
-require 'msf/core/module_set'
-require 'msf/core/plugin_manager'
-require 'msf/core/session'
-require 'msf/core/session_manager'
-require 'msf/core/analyze'
-    
-      bins.each do |from, to|
-    next if (from != 'metsvc.exe' and remove)
-    to ||= from
-    print_status(' >> Uploading #{from}...')
-    fd = client.fs.file.new(tempdir + '\\' + to, 'wb')
-    path = (from == 'metsrv.x86.dll') ? MetasploitPayloads.meterpreter_path('metsrv','x86.dll') : File.join(based, from)
-    fd.write(::File.read(path, ::File.size(path)))
-    fd.close
   end
     
-      describe 'client' do
-    it 'pushes messages to redis' do
-      q = Sidekiq::Queue.new('foo')
-      pre = q.size
-      jid = Sidekiq::Client.push('queue' => 'foo', 'class' => MyWorker, 'args' => [1, 2])
-      assert jid
-      assert_equal 24, jid.size
-      assert_equal pre + 1, q.size
+            # Set these key values to boolean 'true' to include in policy
+        NO_ARG_DIRECTIVES.each do |d|
+          if options.key?(d) && options[d].is_a?(TrueClass)
+            directives << d.to_s.sub(/_/, '-')
+          end
+        end
+    
+      context 'escaping' do
+    it 'escapes html entities' do
+      mock_app do |env|
+        request = Rack::Request.new(env)
+        [200, {'Content-Type' => 'text/plain'}, [request.params['foo']]]
+      end
+      get '/', :foo => '<bar>'
+      expect(body).to eq('&lt;bar&gt;')
     end
     
-        def locales
-      ['web/locales']
-    end
-    
-      describe 'lifecycle events' do
-    it 'handles invalid input' do
-      Sidekiq.options[:lifecycle_events][:startup].clear
-    
-        after do
-      Sidekiq::Testing.disable!
-      Sidekiq::Queues.clear_all
-    end
-    
-      def perform(msg='lulz you forgot a msg!')
-    $redis.lpush('sinkiq-example-messages', msg)
+      it 'denies post requests with wrong X-CSRF-Token header' do
+    post('/', {}, 'rack.session' => session, 'HTTP_X_CSRF_TOKEN' => bad_token)
+    expect(last_response).not_to be_ok
   end
+    
+        it 'returns a hash with the flare tag's name' do
+      expect(described_class.new(valid_article).tag_hash.value?('ama')).to be true
+    end
+    
+          cl_image_path(src,
+                    type: 'fetch',
+                    width: '1000',
+                    height: '500',
+                    crop: 'imagga_scale',
+                    quality: 'auto',
+                    flags: 'progressive',
+                    fetch_format: 'auto',
+                    sign_url: true)
+    end
+  end
+    
+      def create
+    @page = Page.new(page_params)
+    @page.save!
+    redirect_to '/internal/pages'
+  end
+    
+    desc 'Move source to source.old, install source theme updates, replace source/_includes/navigation.html with source.old's navigation'
+task :update_source, :theme do |t, args|
+  theme = args.theme || 'classic'
+  if File.directory?('#{source_dir}.old')
+    puts '## Removed existing #{source_dir}.old directory'
+    rm_r '#{source_dir}.old', :secure=>true
+  end
+  mkdir '#{source_dir}.old'
+  cp_r '#{source_dir}/.', '#{source_dir}.old'
+  puts '## Copied #{source_dir} into #{source_dir}.old/'
+  cp_r '#{themes_dir}/'+theme+'/source/.', source_dir, :remove_destination=>true
+  cp_r '#{source_dir}.old/_includes/custom/.', '#{source_dir}/_includes/custom/', :remove_destination=>true
+  cp '#{source_dir}.old/favicon.png', source_dir
+  mv '#{source_dir}/index.html', '#{blog_index_dir}', :force=>true if blog_index_dir != source_dir
+  cp '#{source_dir}.old/index.html', source_dir if blog_index_dir != source_dir && File.exists?('#{source_dir}.old/index.html')
+  puts '## Updated #{source_dir} ##'
 end
+    
+        def initialize(tag_name, markup, tokens)
+      @by = nil
+      @source = nil
+      @title = nil
+      if markup =~ FullCiteWithTitle
+        @by = $1
+        @source = $2 + $3
+        @title = $4.titlecase.strip
+      elsif markup =~ FullCite
+        @by = $1
+        @source = $2 + $3
+      elsif markup =~ AuthorTitle
+        @by = $1
+        @title = $2.titlecase.strip
+      elsif markup =~ Author
+        @by = $1
+      end
+      super
+    end
+    
+      if options.respond_to? 'keys'
+    options.each do |k,v|
+      unless v.nil?
+        v = v.join ',' if v.respond_to? 'join'
+        v = v.to_json if v.respond_to? 'keys'
+        output += ' data-#{k.sub'_','-'}='#{v}''
+      end
+    end
+  elsif options.respond_to? 'join'
+    output += ' data-value='#{config[key].join(',')}''
+  else
+    output += ' data-value='#{config[key]}''
+  end
+  output += '></#{tag}>'
+end
+    
+          if File.symlink?(code_path)
+        return 'Code directory '#{code_path}' cannot be a symlink'
+      end
+    
+    
+module OctopressLiquidFilters
