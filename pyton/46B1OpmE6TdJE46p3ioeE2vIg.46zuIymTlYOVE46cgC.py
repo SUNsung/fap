@@ -1,128 +1,104 @@
 
         
-            def test_encode_override(self):
-        self.assertEqual('y', self.field.encode('y'))
-    
-        @certbot_util.patch_get_utility()
-    def test_select_correct(self, mock_util):
-        mock_util().checklist.return_value = (
-            display_util.OK, [self.vhosts[3].display_repr(),
-                              self.vhosts[2].display_repr()])
-        vhs = select_vhost_multiple([self.vhosts[3],
-                                     self.vhosts[2],
-                                     self.vhosts[1]])
-        self.assertTrue(self.vhosts[2] in vhs)
-        self.assertTrue(self.vhosts[3] in vhs)
-        self.assertFalse(self.vhosts[1] in vhs)
-    
-        @mock.patch('dns.query.tcp')
-    def test_add_txt_record(self, query_mock):
-        query_mock.return_value.rcode.return_value = dns.rcode.NOERROR
-        # _find_domain | pylint: disable=protected-access
-        self.rfc2136_client._find_domain = mock.MagicMock(return_value='example.com')
-    
-        def certbot_test_nginx(self, args):
-        '''
-        Main command to execute certbot using the nginx plugin.
-        :param list args: list of arguments to pass to nginx
-        :param bool force_renew: set to False to not renew by default
-        '''
-        command = ['--authenticator', 'nginx', '--installer', 'nginx',
-                   '--nginx-server-root', self.nginx_root]
-        command.extend(args)
-        return certbot_call.certbot_test(
-            command, self.directory_url, self.http_01_port, self.tls_alpn_01_port,
-            self.config_dir, self.workspace, force_renew=True)
+            def _dispatch_call(self, call, employees):
+        for employee in employees:
+            if employee.call is None:
+                employee.take_call(call)
+                return employee
+        return None
     
     
-@pytest.mark.parametrize('certname_pattern, params, context', [
-    ('nginx.{0}.wtf', ['run'], {'default_server': True}),
-    ('nginx2.{0}.wtf', ['--preferred-challenges', 'http'], {'default_server': True}),
-    # Overlapping location block and server-block-level return 301
-    ('nginx3.{0}.wtf', ['--preferred-challenges', 'http'], {'default_server': True}),
-    # No matching server block; default_server exists
-    ('nginx4.{0}.wtf', ['--preferred-challenges', 'http'], {'default_server': True}),
-    # No matching server block; default_server does not exist
-    ('nginx5.{0}.wtf', ['--preferred-challenges', 'http'], {'default_server': False}),
-    # Multiple domains, mix of matching and not
-    ('nginx6.{0}.wtf,nginx7.{0}.wtf', ['--preferred-challenges', 'http'], {'default_server': False}),
-], indirect=['context'])
-def test_certificate_deployment(certname_pattern, params, context):
-    # type: (str, list, nginx_context.IntegrationTestsContext) -> None
-    '''
-    Test various scenarios to deploy a certificate to nginx using certbot.
-    '''
-    domains = certname_pattern.format(context.worker_id)
-    command = ['--domains', domains]
-    command.extend(params)
-    context.certbot_test_nginx(command)
+class Motorcycle(Vehicle):
     
-            # Pylint checks for super init, but also claims the super
-        # has no __init__member
-        # pylint: disable=super-init-not-called
-        self._plugins = collections.OrderedDict(sorted(six.iteritems(plugins)))
+        @patch('thefuck.utils.difflib_get_close_matches')
+    def test_call_without_n(self, difflib_mock, settings):
+        get_close_matches('', [])
+        assert difflib_mock.call_args[0][2] == settings.get('num_close_matches')
     
-            gold_tuples (iterable): Gold-standard training data.
-        pipeline (list): The pipeline the model is part of.
-        '''
-        if self.model is True:
-            self.model = self.Model(pipeline[0].model.nO)
-            link_vectors_to_models(self.vocab)
-        if sgd is None:
-            sgd = self.create_optimizer()
-        return sgd
+            # Insert the import statement to setup.py if not present
+        with open(setup_path, 'a+') as setup:
+            setup.seek(0)
+            setup_content = setup.read()
+            if not 'import fastentrypoints' in setup_content:
+                setup.seek(0)
+                setup.truncate()
+                setup.write('import fastentrypoints\n' + setup_content)
+    
+    The most similar choice to 'providers' is:
+    provider
+'''
+    
+        if app == 'apt':
+        return _parse_apt_operations(lines)
+    else:
+        return _parse_apt_get_and_cache_operations(lines)
+    
+    
+#TODO:
+# CA commaon should be GoAgent, vander should be XX-Net
+# need change and test on all support platform: Windows/Mac/Ubuntu/Debian
 
     
     
-@pytest.mark.parametrize('package', ['thinc'])
-def test_util_get_package_path(package):
-    '''Test that a Path object is returned for a package name.'''
-    path = util.get_package_path(package)
-    assert isinstance(path, Path)
+import xlog
+logger = xlog.getLogger('gae_proxy')
     
-        for base, _, files in os.walk(root):
-        for filename in files:
-            if filename.endswith('.pxd'):
-                hash_add(base, filename, new_db)
-                if hash_changed(base, filename, db):
-                    res = True
+    ## All tokens go to the parser (unless skip() is called in that rule)
+# on a particular 'channel'.  The parser tunes to a particular channel
+# so that whitespace etc... can go to the parser on a 'hidden' channel.
+DEFAULT_CHANNEL = 0
     
     
-def get_labelled_sentences(docs, doc_labels):
-    labels = []
-    sentences = []
-    for doc, y in zip(docs, doc_labels):
-        for sent in doc.sents:
-            sentences.append(sent)
-            labels.append(y)
-    return sentences, numpy.asarray(labels, dtype='int32')
+    def getSourceName(self):
+        return self.input.getSourceName()
     
+    # PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
+# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
+# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
     
-def train(train_loc, dev_loc, shape, settings):
-    train_texts1, train_texts2, train_labels = read_snli(train_loc)
-    dev_texts1, dev_texts2, dev_labels = read_snli(dev_loc)
+        # You can access the actual face itself like this:
+    face_image = image[top:bottom, left:right]
+    pil_image = Image.fromarray(face_image)
+    pil_image.show()
+
     
-        vectors = np.ndarray((100, 8), dtype='float32')
-    shape = (10, 16, 3)
-    settings = {'lr': 0.001, 'dropout': 0.2, 'gru_encode': True, 'entail_dir': 'both'}
-    model = build_model(vectors, shape, settings)
+        # If no valid image file was uploaded, show the file upload form:
+    return '''
+    <!doctype html>
+    <title>Is this a picture of Obama?</title>
+    <h1>Upload a picture and see if it's a picture of Obama!</h1>
+    <form method='POST' enctype='multipart/form-data'>
+      <input type='file' name='file'>
+      <input type='submit' value='Upload'>
+    </form>
+    '''
     
-            # Masks
-        if masks is not None:
-            mask = masks[:, :, i]
-            masked_image = apply_mask(masked_image, mask, color)
-            # Mask Polygon
-            # Pad to ensure proper polygons for masks that touch image edges.
-            padded_mask = np.zeros(
-                (mask.shape[0] + 2, mask.shape[1] + 2), dtype=np.uint8)
-            padded_mask[1:-1, 1:-1] = mask
-            contours = find_contours(padded_mask, 0.5)
-            for verts in contours:
-                # Subtract the padding and flip (y, x) to (x, y)
-                verts = np.fliplr(verts) - 1
-                p = Polygon(verts, facecolor='none', edgecolor=color)
-                ax.add_patch(p)
-    ax.imshow(masked_image.astype(np.uint8))
+    # Create arrays of known face encodings and their names
+known_face_encodings = [
+    obama_face_encoding,
+    biden_face_encoding
+]
+known_face_names = [
+    'Barack Obama',
+    'Joe Biden'
+]
     
-        # Number of classes (including background)
-    NUM_CLASSES = 1 + 1  # Background + nucleus
+    # This is an example of running face recognition on a single image
+# and drawing a box around each person that was identified.
+    
+        # Print the location of each facial feature in this image
+    for facial_feature in face_landmarks.keys():
+        print('The {} in this face has the following points: {}'.format(facial_feature, face_landmarks[facial_feature]))
+    
+        # Create workers
+    for worker_id in range(1, worker_num + 1):
+        p.append(Process(target=process, args=(worker_id, read_frame_list, write_frame_list, Global, worker_num,)))
+        p[worker_id].start()
+    
+        filter=-x,+y,...
+      Specify a comma-separated list of category-filters to apply: only
+      error messages whose category names pass the filters will be printed.
+      (Category names are printed with the message and look like
+      '[whitespace/indent]'.)  Filters are evaluated left to right.
+      '-FOO' and 'FOO' means 'do not print categories that start with FOO'.
+      '+FOO' means 'do print categories that start with FOO'.
