@@ -1,170 +1,209 @@
 
         
-                // 
-        // Refill all of bufferBack from the bitstream. Either grab
-        // a full 64-bit chunk, or whatever bytes are left. If we
-        // don't have 64-bits left, pad with 0's.
-        //
+        //-----------------------------------------------------------------------------
+//
+//	class FloatAttribute
+//
+//-----------------------------------------------------------------------------
+    
+    // attributes used in headers are TypedAttributes
+class Attribute;
+    
+    #include 'ImfGenericInputFile.h'
     
     
-template <>
-void
-FloatVectorAttribute::writeValueTo
-    (OPENEXR_IMF_INTERNAL_NAMESPACE::OStream &os, int version) const
-{
-    int n = _value.size();
-    }
-    
-    #include <ImfFramesPerSecond.h>
-#include 'ImathFun.h'
-    
-    #include <ImfBoxAttribute.h>
-#include <ImfFloatAttribute.h>
-#include <ImfTimeCodeAttribute.h>
-#include <ImfChromaticitiesAttribute.h>
-    
-    
-class GenericOutputFile
-{
-    public:
+    {    protected:
         IMF_EXPORT
-        virtual ~GenericOutputFile() {}
-    }
+        GenericOutputFile() {}
+        IMF_EXPORT
+        void writeMagicNumberAndVersionField (OPENEXR_IMF_INTERNAL_NAMESPACE::OStream& os, const Header& header);
+        IMF_EXPORT
+        void writeMagicNumberAndVersionField (OPENEXR_IMF_INTERNAL_NAMESPACE::OStream& os, const Header * headers, int parts);
+  
+};
     
     
-IStream::~IStream ()
+const char *
+IStream::fileName () const
 {
-    // empty
+    return _fileName.c_str();
 }
     
-    const FrameBuffer &
-InputPart::frameBuffer () const
-{
-    return file->frameBuffer();
+    #include 'ImfMultiPartInputFile.h'
+    
+    #define crash(msg, ...) do {                                        \
+        report_fatal_error(__FILE__, __LINE__, msg, ##__VA_ARGS__); \
+        BREAKPOINT; /* this used to be abort(), but it didn't cause VALGRIND to print a backtrace */ \
+        ::abort();                                                  \
+    } while (0)
+    
+        void operator()(const point_delete_t &d) {
+        sampler->new_sample();
+        response->response = point_delete_response_t();
+        point_delete_response_t *res =
+            boost::get<point_delete_response_t>(&response->response);
+    }
+    
+    #include 'arch/io/disk.hpp'
+#include 'btree/operations.hpp'
+#include 'btree/reql_specific.hpp'
+#include 'buffer_cache/alt.hpp'
+#include 'buffer_cache/blob.hpp'
+#include 'buffer_cache/cache_balancer.hpp'
+#include 'containers/uuid.hpp'
+#include 'unittest/unittest_utils.hpp'
+#include 'rdb_protocol/btree.hpp'
+#include 'rdb_protocol/datum.hpp'
+#include 'rdb_protocol/store.hpp'
+#include 'rdb_protocol/protocol.hpp'
+#include 'serializer/log/log_serializer.hpp'
+    
+    
+    {    return sindex_name_t(name);
 }
     
-    Example 2 (with KEY):
-DATA  = [1, 2, 3, 4, 5, 6, 7, 8]
-KEY   = [0, 1, 3, 2, 1, 0, 1, 0]
-RANGES = [
-  [
-    [2, 4],
-    [0, 2],
-  ],
-  [
-    [0, 0],
-    [6, 2],
-  ]
-]
-lengths = [4, 2]
-OUTPUT[0] = [[6, 5, 4, 3], [0, 0, 0, 0]]
-OUTPUT[1] = [[1, 2], [8, 7]]
+    // Functions producing parameter generators.
+//
+// Google Test uses these generators to produce parameters for value-
+// parameterized tests. When a parameterized test case is instantiated
+// with a particular generator, Google Test creates and runs tests
+// for each element in the sequence produced by the generator.
+//
+// In the following sample, tests from test case FooTest are instantiated
+// each three times with parameter values 3, 5, and 8:
+//
+// class FooTest : public TestWithParam<int> { ... };
+//
+// TEST_P(FooTest, TestThis) {
+// }
+// TEST_P(FooTest, TestThat) {
+// }
+// INSTANTIATE_TEST_CASE_P(TestSequence, FooTest, Values(3, 5, 8));
+//
     
-    OPERATOR_SCHEMA(Glu)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .SetDoc(R'DOC(
-Applies gated linear unit to the input Tensor X. The output Y is half the size
-of the input X, so if the shape of X is [d1, d2, ..., N] shape of Y will be
-[d1, d2, ..., dn/2] and Y(:dn-1, i) = GLU(X(:dn-1, i), X(:dn-1, i+N/2)) =
-X(dn-1, i) * sigmoid(X(dn-1, i+N/2))
-)DOC')
-    .Input(0, 'X', '1D input tensor')
-    .Output(0, 'Y', '1D output tensor');
+      // Appends the TestPartResult object to the TestPartResultArray
+  // received in the constructor.
+  //
+  // This method is from the TestPartResultReporterInterface
+  // interface.
+  virtual void ReportTestPartResult(const TestPartResult& result);
+ private:
+  void Init();
     
-    ChannelArguments::ChannelArguments(const ChannelArguments& other)
-    : strings_(other.strings_) {
-  args_.reserve(other.args_.size());
-  auto list_it_dst = strings_.begin();
-  auto list_it_src = other.strings_.begin();
-  for (auto a = other.args_.begin(); a != other.args_.end(); ++a) {
-    grpc_arg ap;
-    ap.type = a->type;
-    GPR_ASSERT(list_it_src->c_str() == a->key);
-    ap.key = const_cast<char*>(list_it_dst->c_str());
-    ++list_it_src;
-    ++list_it_dst;
-    switch (a->type) {
-      case GRPC_ARG_INTEGER:
-        ap.value.integer = a->value.integer;
-        break;
-      case GRPC_ARG_STRING:
-        GPR_ASSERT(list_it_src->c_str() == a->value.string);
-        ap.value.string = const_cast<char*>(list_it_dst->c_str());
-        ++list_it_src;
-        ++list_it_dst;
-        break;
-      case GRPC_ARG_POINTER:
-        ap.value.pointer = a->value.pointer;
-        ap.value.pointer.p = a->value.pointer.vtable->copy(ap.value.pointer.p);
-        break;
+    // Implements typed tests.
+    
+      // These classes and funcions are friends as they need to access private
+  // members of UnitTest.
+  friend class Test;
+  friend class internal::AssertHelper;
+  friend class internal::ScopedTrace;
+  friend class internal::StreamingListenerTest;
+  friend class internal::UnitTestRecordPropertyTestHelper;
+  friend Environment* AddGlobalTestEnvironment(Environment* env);
+  friend internal::UnitTestImpl* internal::GetUnitTestImpl();
+  friend void internal::ReportFailureInUnknownLocation(
+      TestPartResult::Type result_type,
+      const std::string& message);
+    
+     private:
+  std::string file_;
+  int line_;
+  int index_;
+  int write_fd_;
+    
+    class GTEST_API_ FilePath {
+ public:
+  FilePath() : pathname_('') { }
+  FilePath(const FilePath& rhs) : pathname_(rhs.pathname_) { }
     }
-    args_.push_back(ap);
+    
+    #define GTEST_TEST_NO_FATAL_FAILURE_(statement, fail) \
+  GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
+  if (::testing::internal::AlwaysTrue()) { \
+    ::testing::internal::HasNewFatalFailureHelper gtest_fatal_failure_checker; \
+    GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement); \
+    if (gtest_fatal_failure_checker.has_new_fatal_failure()) { \
+      goto GTEST_CONCAT_TOKEN_(gtest_label_testnofatal_, __LINE__); \
+    } \
+  } else \
+    GTEST_CONCAT_TOKEN_(gtest_label_testnofatal_, __LINE__): \
+      fail('Expected: ' #statement ' doesn't generate new fatal ' \
+           'failures in the current thread.\n' \
+           '  Actual: it does.')
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13>
+class ValueArray13 {
+ public:
+  ValueArray13(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
+      T10 v10, T11 v11, T12 v12, T13 v13) : v1_(v1), v2_(v2), v3_(v3), v4_(v4),
+      v5_(v5), v6_(v6), v7_(v7), v8_(v8), v9_(v9), v10_(v10), v11_(v11),
+      v12_(v12), v13_(v13) {}
+    }
+    
+    #include <utility>  // For ::std::pair.
+    
+      /**
+   * @brief Accessor for parser-manipulated data.
+   *
+   * Parsers should be used generically, for places within the code base that
+   * request a parser (check for its existence), should only use this
+   * ConfigParserPlugin::getData accessor.
+   *
+   * More complex parsers that require dynamic casting are not recommended.
+   */
+  const JSON& getData() const {
+    return data_;
   }
+    
+    
+    {  // Try again, this time requesting scheduled queries.
+  query_names.clear();
+  bool blacklisted = false;
+  get().scheduledQueries(([&blacklisted, &query_names, &query_name](
+                              std::string name, const ScheduledQuery& query) {
+                           if (name == query_name) {
+                             // Only populate the query we've blacklisted.
+                             query_names.push_back(std::move(name));
+                             blacklisted = query.blacklisted;
+                           }
+                         }),
+                         true);
+  ASSERT_EQ(query_names.size(), std::size_t{1});
+  EXPECT_EQ(query_names[0], query_name);
+  EXPECT_TRUE(blacklisted);
 }
     
-    #ifdef GRPC_WINSOCK_SOCKET
-#include 'src/core/lib/iomgr/endpoint_pair.h'
-#include 'src/core/lib/iomgr/sockaddr.h'
-#include 'src/core/lib/iomgr/sockaddr_utils.h'
     
-    static bool iomgr_platform_is_any_background_poller_thread(void) {
-  return false;
+    {  auto val5 = splayValue(1, 10);
+  EXPECT_EQ(val5, 1U);
 }
     
-     protected:
-  char* GetName();
+      /// Capture only error logs from RocksDB and forward them.
+  void Logv(const char* format, va_list ap) override {
+    va_list params;
+    va_copy(params, ap);
+    int size = vsnprintf(nullptr, 0, format, params);
+    va_end(params);
+    }
     
+      /// The line of the file emitting the status log.
+  size_t line;
     
-    {  /* large negative */
-  GPR_ASSERT(20 == int64_ttoa(-9223372036854775807LL - 1, buf));
-  GPR_ASSERT(0 == strcmp('-9223372036854775808', buf));
-}
-    
-    static grpc::internal::GrpcLibraryInitializer g_gli_initializer;
-ChannelCredentials::ChannelCredentials() { g_gli_initializer.summon(); }
-    
-    #include <gmock/gmock.h>
-#include <gtest/gtest.h>
-    
-    public:
-    /**
-    @{
-    Constructor.
-    @param width Width of the size.
-    @param height Height of the size.
-    @param other Copy constructor.
-    @param point Conversion from a point.
-     */
-    Size();
-    Size(float width, float height);
-    explicit Size(const Vec2& point);
-    /**@}*/
-    
-        /**
-    @brief Get the amplitude of the effect.
-    @return Return the amplitude of the effect.
-    */
-    float getAmplitude() const { return _amplitude; }
-    /**
-    @brief Set the amplitude to the effect.
-    @param amplitude The value of amplitude will be set.
-    */
-    void setAmplitude(float amplitude) { _amplitude = amplitude; }
-    
-        auto propsItr = dictionary.find('properties');
-    if(propsItr != dictionary.end() )
-    {
-        const ValueMap& properties = propsItr->second.asValueMap();
-        version = properties.at('format').asInt();
-        const ValueVector& spritesheets = properties.at('spritesheets').asValueVector();
+    void Plugin::setName(const std::string& name) {
+  if (!name_.empty() && name != name_) {
+    std::string error = 'Cannot rename plugin ' + name_ + ' to ' + name;
+    throw std::runtime_error(error);
+  }
     }
     
     
-#include '2d/CCClippingRectangleNode.h'
-#include 'base/CCDirector.h'
-#include 'renderer/CCRenderer.h'
-#include 'math/Vec2.h'
-#include 'platform/CCGLView.h'
+    { protected:
+  /// Customized name for the plugin, usually set by the registry.
+  std::string name_;
+};
     
-    NS_CC_BEGIN
+    #include <boost/filesystem.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
