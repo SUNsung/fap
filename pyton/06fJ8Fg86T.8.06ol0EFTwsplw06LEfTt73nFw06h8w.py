@@ -1,70 +1,39 @@
 
         
-                (2016-01, shopping), 25
-        (2016-01, shopping), 100
-        (2016-01, gas), 50
-        '''
-        timestamp, category, amount = line.split('\t')
-        period = self. extract_year_month(timestamp)
-        if period == self.current_year_month():
-            yield (period, category), amount
+        # Warnings
     
-        def extract_url(self, line):
-        '''Extract the generated url from the log line.'''
-        pass
+    elif is_py3:
+    from urllib.parse import urlparse, urlunparse, urljoin, urlsplit, urlencode, quote, unquote, quote_plus, unquote_plus, urldefrag
+    from urllib.request import parse_http_list, getproxies, proxy_bypass, proxy_bypass_environment, getproxies_environment
+    from http import cookiejar as cookielib
+    from http.cookies import Morsel
+    from io import StringIO
+    # Keep OrderedDict for backwards compatibility.
+    from collections import OrderedDict
+    from collections.abc import Callable, Mapping, MutableMapping
     
-        def remove(self, key):
-        hash_index = self._hash_function(key)
-        for index, item in enumerate(self.table[hash_index]):
-            if item.key == key:
-                del self.table[hash_index][index]
-                return
-        raise KeyError('Key not found')
-
-    
-        else:
-        try:
-            return importlib.import_module(name)
-        except ImportError as e:
-            if 'No module named' in str(e) and name in str(e):
-                pytest.skip('skipping as {} not available'.format(name))
-            raise
-    
-    
-def test_frame_mixed_depth_get():
-    arrays = [
-        ['a', 'top', 'top', 'routine1', 'routine1', 'routine2'],
-        ['', 'OD', 'OD', 'result1', 'result2', 'result1'],
-        ['', 'wx', 'wy', '', '', ''],
     ]
+test_requirements = [
+    'pytest-httpbin==0.0.7',
+    'pytest-cov',
+    'pytest-mock',
+    'pytest-xdist',
+    'PySocks>=1.5.6, !=1.5.7',
+    'pytest>=3'
+]
     
+            with Server(handler) as (host, port):
+            sock = socket.socket()
+            sock.connect((host, port))
+            sock.sendall(question)
+            text = sock.recv(1000)
+            assert text == answer
+            sock.close()
     
-def test_hash_keys():
-    # Using different hash keys, should have
-    # different hashes for the same data.
-    #
-    # This only matters for object dtypes.
-    obj = Series(list('abc'))
-    
-    
-def ChineseAnalyzer(stoplist=STOP_WORDS, minsize=1, stemfn=stem, cachesize=50000):
-    return (ChineseTokenizer() | LowercaseFilter() |
-            StopFilter(stoplist=stoplist, minsize=minsize) |
-            StemFilter(stemfn=stemfn, ignore=None, cachesize=cachesize))
-
-    
-    import jieba
-import jieba.analyse
-from optparse import OptionParser
-    
-        def testPosseg_NOHMM(self):
-        import jieba.posseg as pseg
-        for content in test_contents:
-            result = pseg.cut(content,HMM=False)
-            assert isinstance(result, types.GeneratorType), 'Test Posseg Generator error'
-            result = list(result)
-            assert isinstance(result, list), 'Test Posseg error on content: %s' % content
-            print(' , '.join([w.word + ' / ' + w.flag for w in result]), file=sys.stderr)
-        print('testPosseg_NOHMM', file=sys.stderr)
-    
-    USAGE ='usage:    python extract_tags.py [file name] -k [top k]'
+        # Check chardet for compatibility.
+    major, minor, patch = chardet_version.split('.')[:3]
+    major, minor, patch = int(major), int(minor), int(patch)
+    # chardet >= 3.0.2, < 3.1.0
+    assert major == 3
+    assert minor < 1
+    assert patch >= 2
