@@ -1,258 +1,505 @@
 
         
-        CholeskyThunk::CholeskyThunk(const CholeskyOptions& options,
-                             BufferAllocation::Slice a_buffer,
-                             BufferAllocation::Slice workspace_buffer,
-                             BufferAllocation::Slice info_buffer,
-                             PrimitiveType type, int64 batch_size, int64 n,
-                             const HloInstruction* hlo)
-    : Thunk(Kind::kCholesky, hlo),
-      uplo_(options.lower() ? se::blas::UpperLower::kLower
-                            : se::blas::UpperLower::kUpper),
-      a_buffer_(a_buffer),
-      workspace_buffer_(workspace_buffer),
-      info_buffer_(info_buffer),
-      type_(type),
-      batch_size_(batch_size),
-      a_batch_stride_(n * n *
-                      ShapeUtil::ByteSizeOfPrimitiveType(
-                          hlo->operand(0)->shape().element_type())),
-      n_(n) {}
-    
-    #endif  // TENSORFLOW_COMPILER_XLA_SERVICE_GPU_CONVOLUTION_THUNK_H_
-
-    
-    #ifndef TENSORFLOW_COMPILER_XLA_SERVICE_GPU_COPY_THUNK_H_
-#define TENSORFLOW_COMPILER_XLA_SERVICE_GPU_COPY_THUNK_H_
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-      VLOG(3) << 'uplo=' << se::blas::UpperLowerString(uplo_)
-          << ' side=' << se::blas::SideString(side_)
-          << ' diagonal=' << se::blas::DiagonalString(unit_diagonal_)
-          << ' batch_size=' << batch_size_ << ' m=' << m_ << ' n=' << n_
-          << ' a_batch_stride=' << a_batch_stride_
-          << ' b_batch_stride=' << b_batch_stride_;
-    
-    Status WhileThunk::ExecuteOnStream(const ExecuteParams& params) {
-  auto& profiler = *params.profiler;
-  auto& stream = *params.stream;
-    }
-    
-    namespace content {
-class RenderFrameHost;
-}
-    
-    
-    {}  // namespace remote
-    
-    namespace remote {
-    }
-    
-      ~EventListener() override;
-    
-    bool MenuDelegate::GetIconForCommandId(int command_id,
-                                       gfx::Image* icon) const {
-  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
-  if (item->icon_.IsEmpty())
-    return false;
-    }
-    
-    void MenuItem::Call(const std::string& method,
-                    const base::ListValue& arguments,
-                    content::RenderFrameHost* rvh) {
-  if (method == 'SetLabel') {
-    std::string label;
-    arguments.GetString(0, &label);
-    SetLabel(label);
-  } else if (method == 'SetIcon') {
-    std::string icon;
-    arguments.GetString(0, &icon);
-    SetIcon(icon);
-  } else if (method == 'SetIconIsTemplate') {
-    bool isTemplate;
-    arguments.GetBoolean(0, &isTemplate);
-    SetIconIsTemplate(isTemplate);
-  } else if (method == 'SetTooltip') {
-    std::string tooltip;
-    arguments.GetString(0, &tooltip);
-    SetTooltip(tooltip);
-  } else if (method == 'SetEnabled') {
-    bool enabled = true;
-    arguments.GetBoolean(0, &enabled);
-    SetEnabled(enabled);
-  } else if (method == 'SetChecked') {
-    bool checked = false;
-    arguments.GetBoolean(0, &checked);
-    SetChecked(checked);
-  } else if (method == 'SetSubmenu') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    SetSubmenu(object_manager()->GetApiObject<Menu>(object_id));
-#if defined(OS_MACOSX)
-  } else if (method == 'SetKey') {
-    std::string key;
-    arguments.GetString(0, &key);
-    SetKey(key);
-  } else if (method == 'SetModifiers') {
-    std::string mod;
-    arguments.GetString(0, &mod);
-    SetModifiers(mod);
-#endif
-  } else {
-    NOTREACHED() << 'Invalid call to MenuItem method:' << method
-                 << ' arguments:' << arguments;
+        
+    {  bool isChild() {
+    return pid == 0;
   }
+};
+    
+    
+    {          return out;
+        })
+    .Input(0, 'X', '4-tensor in NCHW or NHWC.')
+    .Output(
+        0,
+        'Y',
+        '4-tensor. For NCHW: N x (C x kH x kW) x outH x outW.'
+        'For NHWC: N x outH x outW x (kH x kW x C');
+    
+    template <typename T, class Context>
+class BernoulliJSDGradientOp final : public Operator<Context> {
+ public:
+  USE_SIMPLE_CTOR_DTOR(BernoulliJSDGradientOp);
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
+  bool RunOnDevice() override;
+};
+    
+    	SpinBox *epoints;
+    
+    	DEBUG_PRINT('IP: ' + String(ip) + ' port ' + itos(p_port));
+	Error err = client->connect_to_host(ip, p_port);
+	ERR_FAIL_COND_V(err, err);
+	while (client->get_status() == StreamPeerTCP::STATUS_CONNECTING) {
+		//DEBUG_PRINT('trying to connect....');
+		OS::get_singleton()->delay_usec(1000);
+	}
+    
+    	bool has_network_peer() const { return network_peer.is_valid(); }
+	Vector<int> get_network_connected_peers() const;
+	int get_rpc_sender_id() const { return rpc_sender_id; }
+	int get_network_unique_id() const;
+	bool is_network_server() const;
+	void set_refuse_new_network_connections(bool p_refuse);
+	bool is_refusing_new_network_connections() const;
+    
+    		GLenum target;
+		GLenum gl_format_cache;
+		GLenum gl_internal_format_cache;
+		GLenum gl_type_cache;
+		int data_size; //original data size, useful for retrieving back
+		bool compressed;
+		bool srgb;
+		int total_data_size;
+		bool ignore_mipmaps;
+    
+    	int resume_idx;
+	int resume_platform;
+    
+    
+    {	return OK;
 }
     
-        // The number of documents that we still need to skip.
-    long long _leftToSkip;
+    	Ref<InputEventKey> k = p_event;
+	if (tool_select->is_pressed() && k.is_valid() && k->is_pressed() && k->get_scancode() == KEY_DELETE && !k->is_echo()) {
+		if (selected_point != -1 || selected_triangle != -1) {
+			_erase_selected();
+			accept_event();
+		}
+	}
     
-            BSONElement a = fixed['a'];
-        ASSERT(o['a'].type() == bsonTimestamp);
-        ASSERT(o['a'].timestampValue() == 0);
-        ASSERT(a.type() == bsonTimestamp);
-        ASSERT(a.timestampValue() > 0);
-    
-    #include 'unicode/utypes.h'
-    
-    U_NAMESPACE_BEGIN
-    
-    UBool
-SelectFormat::operator==(const Format& other) const {
-    if (this == &other) {
-        return TRUE;
+    /* Schedule a shutdown of the socket operations. Will call the pending
+   operations to abort them. We need to do that this way because of the
+   various callsites of that function, which happens to be in various
+   mutex hold states, and that'd be unsafe to call them directly. */
+void grpc_winsocket_shutdown(grpc_winsocket* winsocket) {
+  /* Grab the function pointer for DisconnectEx for that specific socket.
+     It may change depending on the interface. */
+  int status;
+  GUID guid = WSAID_DISCONNECTEX;
+  LPFN_DISCONNECTEX DisconnectEx;
+  DWORD ioctl_num_bytes;
     }
-    if (!Format::operator==(other)) {
-        return FALSE;
+    
+    
+    {  async_connect_unlock_and_cleanup(ac, socket);
+  /* If the connection was aborted, the callback was already called when
+     the deadline was met. */
+  GRPC_CLOSURE_SCHED(on_done, error);
+}
+    
+    class CronetChannelCredentialsImpl final : public ChannelCredentials {
+ public:
+  CronetChannelCredentialsImpl(void* engine) : engine_(engine) {}
     }
-    const SelectFormat& o = (const SelectFormat&)other;
-    return msgPattern == o.msgPattern;
-}
     
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
+      Status RequestStream(ServerContext* context,
+                       ServerReader<EchoRequest>* reader,
+                       EchoResponse* response) override {
+    EchoRequest request;
+    grpc::string resp('');
+    while (reader->Read(&request)) {
+      gpr_log(GPR_INFO, 'recv msg %s', request.message().c_str());
+      resp.append(request.message());
+    }
+    response->set_message(resp);
+    return Status::OK;
+  }
+    
+      void InsertPlugin() {
+    if (GetParam()) {
+      // Add ServerBuilder plugin in static initialization
+      CheckPresent();
+    } else {
+      // Add ServerBuilder plugin using ServerBuilder::SetOption()
+      builder_->SetOption(std::unique_ptr<ServerBuilderOption>(
+          new InsertPluginServerBuilderOption()));
+    }
+  }
     
     
-    {    // Create SwapChain, RenderPass, Framebuffer, etc.
-    IM_ASSERT(g_MinImageCount >= 2);
-    ImGui_ImplVulkanH_CreateWindow(g_Instance, g_PhysicalDevice, g_Device, wd, g_QueueFamily, g_Allocator, width, height, g_MinImageCount);
-}
+    {    return Status(static_cast<StatusCode>(server_return_status_code), '');
+  }
     
-            // Rendering
-        ImGui::Render();
-        IwGxSetColClear(clear_color.x * 255, clear_color.y * 255, clear_color.z * 255, clear_color.w * 255);
-        IwGxClear();
-        ImGui_Marmalade_RenderDrawData(ImGui::GetDrawData());
-        IwGxSwapBuffers();
-    
-    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
-// You can also handle inputs yourself and use those as a reference.
-IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
-
-    
-    IMGUI_IMPL_API bool     ImGui_ImplGlfw_InitForOpenGL(GLFWwindow* window, bool install_callbacks);
-IMGUI_IMPL_API bool     ImGui_ImplGlfw_InitForVulkan(GLFWwindow* window, bool install_callbacks);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplGlfw_NewFrame();
-    
-        // Main loop
-    bool running = true;
-    while (running)
+    /*! \brief try to do efficient pruning */
+template<typename DType, typename RType>
+struct WXQSummary : public WQSummary<DType, RType> {
+  // redefine entry type
+  using Entry = typename WQSummary<DType, RType>::Entry;
+  // constructor
+  WXQSummary(Entry *data, size_t size)
+      : WQSummary<DType, RType>(data, size) {}
+  // check if the block is large chunk
+  inline static bool CheckLarge(const Entry &e, RType chunk) {
+    return  e.RMinNext() > e.RMaxPrev() + chunk;
+  }
+  // set prune
+  inline void SetPrune(const WQSummary<DType, RType> &src, size_t maxsize) {
+    if (src.size <= maxsize) {
+      this->CopyFrom(src); return;
+    }
+    RType begin = src.data[0].rmax;
+    // n is number of points exclude the min/max points
+    size_t n = maxsize - 2, nbig = 0;
+    // these is the range of data exclude the min/max point
+    RType range = src.data[src.size - 1].rmin - begin;
+    // prune off zero weights
+    if (range == 0.0f || maxsize <= 2) {
+      // special case, contain only two effective data pts
+      this->data[0] = src.data[0];
+      this->data[1] = src.data[src.size - 1];
+      this->size = 2;
+      return;
+    } else {
+      range = std::max(range, static_cast<RType>(1e-3f));
+    }
+    // Get a big enough chunk size, bigger than range / n
+    // (multiply by 2 is a safe factor)
+    const RType chunk = 2 * range / n;
+    // minimized range
+    RType mrange = 0;
     {
-        // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        ALLEGRO_EVENT ev;
-        while (al_get_next_event(queue, &ev))
-        {
-            ImGui_ImplAllegro5_ProcessEvent(&ev);
-            if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-                running = false;
-            if (ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE)
-            {
-                ImGui_ImplAllegro5_InvalidateDeviceObjects();
-                al_acknowledge_resize(display);
-                ImGui_ImplAllegro5_CreateDeviceObjects();
-            }
+      // first scan, grab all the big chunk
+      // moving block index, exclude the two ends.
+      size_t bid = 0;
+      for (size_t i = 1; i < src.size - 1; ++i) {
+        // detect big chunk data point in the middle
+        // always save these data points.
+        if (CheckLarge(src.data[i], chunk)) {
+          if (bid != i - 1) {
+            // accumulate the range of the rest points
+            mrange += src.data[i].RMaxPrev() - src.data[bid].RMinNext();
+          }
+          bid = i; ++nbig;
         }
+      }
+      if (bid != src.size - 2) {
+        mrange += src.data[src.size-1].RMaxPrev() - src.data[bid].RMinNext();
+      }
     }
+    // assert: there cannot be more than n big data points
+    if (nbig >= n) {
+      // see what was the case
+      LOG(INFO) << ' check quantile stats, nbig=' << nbig << ', n=' << n;
+      LOG(INFO) << ' srcsize=' << src.size << ', maxsize=' << maxsize
+                << ', range=' << range << ', chunk=' << chunk;
+      src.Print();
+      CHECK(nbig < n) << 'quantile: too many large chunk';
+    }
+    this->data[0] = src.data[0];
+    this->size = 1;
+    // The counter on the rest of points, to be selected equally from small chunks.
+    n = n - nbig;
+    // find the rest of point
+    size_t bid = 0, k = 1, lastidx = 0;
+    for (size_t end = 1; end < src.size; ++end) {
+      if (end == src.size - 1 || CheckLarge(src.data[end], chunk)) {
+        if (bid != end - 1) {
+          size_t i = bid;
+          RType maxdx2 = src.data[end].RMaxPrev() * 2;
+          for (; k < n; ++k) {
+            RType dx2 =  2 * ((k * mrange) / n + begin);
+            if (dx2 >= maxdx2) break;
+            while (i < end &&
+                   dx2 >= src.data[i + 1].rmax + src.data[i + 1].rmin) ++i;
+            if (i == end) break;
+            if (dx2 < src.data[i].RMinNext() + src.data[i + 1].RMaxPrev()) {
+              if (i != lastidx) {
+                this->data[this->size++] = src.data[i]; lastidx = i;
+              }
+            } else {
+              if (i + 1 != lastidx) {
+                this->data[this->size++] = src.data[i + 1]; lastidx = i + 1;
+              }
+            }
+          }
+        }
+        if (lastidx != end) {
+          this->data[this->size++] = src.data[end];
+          lastidx = end;
+        }
+        bid = end;
+        // shift base by the gap
+        begin += src.data[bid].RMinNext() - src.data[bid].RMaxPrev();
+      }
+    }
+  }
+};
+/*!
+ * \brief traditional GK summary
+ */
+template<typename DType, typename RType>
+struct GKSummary {
+  /*! \brief an entry in the sketch summary */
+  struct Entry {
+    /*! \brief minimum rank */
+    RType rmin;
+    /*! \brief maximum rank */
+    RType rmax;
+    /*! \brief the value of data */
+    DType value;
+    // constructor
+    Entry() = default;
+    // constructor
+    Entry(RType rmin, RType rmax, DType value)
+        : rmin(rmin), rmax(rmax), value(value) {}
+  };
+  /*! \brief input data queue before entering the summary */
+  struct Queue {
+    // the input queue
+    std::vector<DType> queue;
+    // end of the queue
+    size_t qtail;
+    // push data to the queue
+    inline void Push(DType x, RType w) {
+      queue[qtail++] = x;
+    }
+    inline void MakeSummary(GKSummary *out) {
+      std::sort(queue.begin(), queue.begin() + qtail);
+      out->size = qtail;
+      for (size_t i = 0; i < qtail; ++i) {
+        out->data[i] = Entry(i + 1, i + 1, queue[i]);
+      }
+    }
+  };
+  /*! \brief data field */
+  Entry *data;
+  /*! \brief number of elements in the summary */
+  size_t size;
+  GKSummary(Entry *data, size_t size)
+      : data(data), size(size) {}
+  /*! \brief the maximum error of the summary */
+  inline RType MaxError() const {
+    RType res = 0;
+    for (size_t i = 1; i < size; ++i) {
+      res = std::max(data[i].rmax - data[i-1].rmin, res);
+    }
+    return res;
+  }
+  /*! \return maximum rank in the summary */
+  inline RType MaxRank() const {
+    return data[size - 1].rmax;
+  }
+  /*!
+   * \brief copy content from src
+   * \param src source sketch
+   */
+  inline void CopyFrom(const GKSummary &src) {
+    size = src.size;
+    std::memcpy(data, src.data, sizeof(Entry) * size);
+  }
+  inline void CheckValid(RType eps) const {
+    // assume always valid
+  }
+  /*! \brief used for debug purpose, print the summary */
+  inline void Print() const {
+    for (size_t i = 0; i < size; ++i) {
+      LOG(CONSOLE) << 'x=' << data[i].value << '\t'
+                   << '[' << data[i].rmin << ',' << data[i].rmax << ']';
+    }
+  }
+  /*!
+   * \brief set current summary to be pruned summary of src
+   *        assume data field is already allocated to be at least maxsize
+   * \param src source summary
+   * \param maxsize size we can afford in the pruned sketch
+   */
+  inline void SetPrune(const GKSummary &src, size_t maxsize) {
+    if (src.size <= maxsize) {
+      this->CopyFrom(src); return;
+    }
+    const RType max_rank = src.MaxRank();
+    this->size = maxsize;
+    data[0] = src.data[0];
+    size_t n = maxsize - 1;
+    RType top = 1;
+    for (size_t i = 1; i < n; ++i) {
+      RType k = (i * max_rank) / n;
+      while (k > src.data[top + 1].rmax) ++top;
+      // assert src.data[top].rmin <= k
+      // because k > src.data[top].rmax >= src.data[top].rmin
+      if ((k - src.data[top].rmin) < (src.data[top+1].rmax - k)) {
+        data[i] = src.data[top];
+      } else {
+        data[i] = src.data[top + 1];
+      }
+    }
+    data[n] = src.data[src.size - 1];
+  }
+  inline void SetCombine(const GKSummary &sa,
+                         const GKSummary &sb) {
+    if (sa.size == 0) {
+      this->CopyFrom(sb); return;
+    }
+    if (sb.size == 0) {
+      this->CopyFrom(sa); return;
+    }
+    CHECK(sa.size > 0 && sb.size > 0) << 'invalid input for merge';
+    const Entry *a = sa.data, *a_end = sa.data + sa.size;
+    const Entry *b = sb.data, *b_end = sb.data + sb.size;
+    this->size = sa.size + sb.size;
+    RType aprev_rmin = 0, bprev_rmin = 0;
+    Entry *dst = this->data;
+    while (a != a_end && b != b_end) {
+      if (a->value < b->value) {
+        *dst = Entry(bprev_rmin + a->rmin,
+                     a->rmax + b->rmax - 1, a->value);
+        aprev_rmin = a->rmin;
+        ++dst; ++a;
+      } else {
+        *dst = Entry(aprev_rmin + b->rmin,
+                     b->rmax + a->rmax - 1, b->value);
+        bprev_rmin = b->rmin;
+        ++dst; ++b;
+      }
+    }
+    if (a != a_end) {
+      RType bprev_rmax = (b_end - 1)->rmax;
+      do {
+        *dst = Entry(bprev_rmin + a->rmin, bprev_rmax + a->rmax, a->value);
+        ++dst; ++a;
+      } while (a != a_end);
+    }
+    if (b != b_end) {
+      RType aprev_rmax = (a_end - 1)->rmax;
+      do {
+        *dst = Entry(aprev_rmin + b->rmin, aprev_rmax + b->rmax, b->value);
+        ++dst; ++b;
+      } while (b != b_end);
+    }
+    CHECK(dst == data + size) << 'bug in combine';
+  }
+};
     
-    IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_Init();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_RenderDrawData(ImDrawData* draw_data);
-    
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
-    
-    void CleanupDeviceD3D()
-{
-    CleanupRenderTarget();
-    if (g_pSwapChain) { g_pSwapChain->Release(); g_pSwapChain = NULL; }
-    if (g_hSwapChainWaitableObject != NULL) { CloseHandle(g_hSwapChainWaitableObject); }
-    for (UINT i = 0; i < NUM_FRAMES_IN_FLIGHT; i++)
-        if (g_frameContext[i].CommandAllocator) { g_frameContext[i].CommandAllocator->Release(); g_frameContext[i].CommandAllocator = NULL; }
-    if (g_pd3dCommandQueue) { g_pd3dCommandQueue->Release(); g_pd3dCommandQueue = NULL; }
-    if (g_pd3dCommandList) { g_pd3dCommandList->Release(); g_pd3dCommandList = NULL; }
-    if (g_pd3dRtvDescHeap) { g_pd3dRtvDescHeap->Release(); g_pd3dRtvDescHeap = NULL; }
-    if (g_pd3dSrvDescHeap) { g_pd3dSrvDescHeap->Release(); g_pd3dSrvDescHeap = NULL; }
-    if (g_fence) { g_fence->Release(); g_fence = NULL; }
-    if (g_fenceEvent) { CloseHandle(g_fenceEvent); g_fenceEvent = NULL; }
-    if (g_pd3dDevice) { g_pd3dDevice->Release(); g_pd3dDevice = NULL; }
+    void Top::_appendStatsEntry(BSONObjBuilder& b, const char* statsName, const UsageData& map) const {
+    BSONObjBuilder bb(b.subobjStart(statsName));
+    bb.appendNumber('time', map.time);
+    bb.appendNumber('count', map.count);
+    bb.done();
 }
     
-        const float line_height = size;
-    const float scale = size / FontSize;
     
-    namespace apollo {
-namespace planning {
+    
+    #define DOT               ((UChar)0x002E)
+#define SINGLE_QUOTE      ((UChar)0x0027)
+#define SLASH             ((UChar)0x002F)
+#define BACKSLASH         ((UChar)0x005C)
+#define SPACE             ((UChar)0x0020)
+#define TAB               ((UChar)0x0009)
+#define QUOTATION_MARK    ((UChar)0x0022)
+#define ASTERISK          ((UChar)0x002A)
+#define COMMA             ((UChar)0x002C)
+#define HYPHEN            ((UChar)0x002D)
+#define U_ZERO            ((UChar)0x0030)
+#define U_ONE             ((UChar)0x0031)
+#define U_TWO             ((UChar)0x0032)
+#define U_THREE           ((UChar)0x0033)
+#define U_FOUR            ((UChar)0x0034)
+#define U_FIVE            ((UChar)0x0035)
+#define U_SIX             ((UChar)0x0036)
+#define U_SEVEN           ((UChar)0x0037)
+#define U_EIGHT           ((UChar)0x0038)
+#define U_NINE            ((UChar)0x0039)
+#define COLON             ((UChar)0x003A)
+#define SEMI_COLON        ((UChar)0x003B)
+#define CAP_A             ((UChar)0x0041)
+#define CAP_B             ((UChar)0x0042)
+#define CAP_R             ((UChar)0x0052)
+#define CAP_Z             ((UChar)0x005A)
+#define LOWLINE           ((UChar)0x005F)
+#define LEFTBRACE         ((UChar)0x007B)
+#define RIGHTBRACE        ((UChar)0x007D)
+    
+        ret = swPipeBase_create(&p, 1);
+    ASSERT_EQ(ret, 0);
+    ret = p.write(&p, (void *) SW_STRL('hello world\n'));
+    ASSERT_GT(ret, 0);
+    ret = p.write(&p, (void *) SW_STRL('你好中国。\n'));
+    ASSERT_GT(ret, 0);
+    
+        zval retval;
+    zend_op_array *new_op_array;
+    ZVAL_NULL(&dummy);
+    if (zend_hash_add(&EG(included_files), opened_path, &dummy))
+    {
+        new_op_array = zend_compile_file(&file_handle, ZEND_REQUIRE);
+        zend_destroy_file_handle(&file_handle);
     }
+    else
+    {
+        new_op_array = NULL;
+        zend_file_handle_dtor(&file_handle);
+    }
+    zend_string_release(opened_path);
+    if (!new_op_array)
+    {
+        return false;
     }
     
-    /**
- * @file
- **/
     
-    Chassis GemController::chassis() {
-  chassis_.Clear();
-    }
-    
-    #include 'cyber/common/file.h'
-#include 'cyber/common/log.h'
-#include 'modules/planning/common/planning_gflags.h'
-    
-      PredictionThreadPool::ForEach(real.begin(), real.end(), [](int& input) {
-    EXPECT_EQ(1, PredictionThreadPool::s_thread_pool_level);
-    std::vector<int> vec = {1, 2, 3, 4};
-    PredictionThreadPool::ForEach(vec.begin(), vec.end(), [](int& v) {
-      ++v;
-      EXPECT_EQ(2, PredictionThreadPool::s_thread_pool_level);
+    {
+    {        ret = chan.push(nullptr, 0.001);
+        ASSERT_TRUE(ret);
+        ret = chan.push(nullptr, 0.001);
+        ASSERT_FALSE(ret);
     });
-    input = std::accumulate(vec.begin(), vec.end(), input);
-  });
+}
+    
+        un1.sun_family = AF_UNIX;
+    un2.sun_family = AF_UNIX;
+    
+            if (pid == 0)
+        {
+            usleep(100000);
+            exit(0);
+        }
+    
+        QObject::connect(&example, SIGNAL(finished()), &app, SLOT(quit()));
+    QTimer::singleShot(0, &example, SLOT(run()));
+    
+    uint8_t get_static_type_size(uint8_t type)
+{
+    static const uint8_t map[] =
+    {
+        0,                // SW_MYSQL_TYPE_DECIMAL   0
+        sizeof(int8_t),   // SW_MYSQL_TYPE_TINY      1
+        sizeof(int16_t),  // SW_MYSQL_TYPE_SHORT     2
+        sizeof(int32_t),  // SW_MYSQL_TYPE_LONG      3
+        sizeof(float),    // SW_MYSQL_TYPE_FLOAT     4
+        sizeof(double),   // SW_MYSQL_TYPE_DOUBLE    5
+        0,                // SW_MYSQL_TYPE_NULL      6
+        0,                // SW_MYSQL_TYPE_TIMESTAMP 7
+        sizeof(int64_t),  // SW_MYSQL_TYPE_LONGLONG  8
+        sizeof(int32_t),  // SW_MYSQL_TYPE_INT24     9
+        0,                // SW_MYSQL_TYPE_DATE      10
+        0,                // SW_MYSQL_TYPE_TIME      11
+        0,                // SW_MYSQL_TYPE_DATETIME  12
+        sizeof(int16_t),  // SW_MYSQL_TYPE_YEAR      13
+        0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0
+    };
+    SW_ASSERT(sizeof(map) == UINT8_MAX + 1);
+    return map[type];
+}
