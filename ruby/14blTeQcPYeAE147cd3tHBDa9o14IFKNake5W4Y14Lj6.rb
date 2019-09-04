@@ -1,200 +1,139 @@
 
         
-          #
-  # Kills off the connection threads if there are any hanging around.
-  #
-  def cleanup_handler
-    # Kill any remaining handle_connection threads that might
-    # be hanging around
-    conn_threads.each { |thr|
-      thr.kill
-    }
-  end
+        CONTENT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
     
-        # The first character must not be a non-alpha character or PHP chokes.
-    i = 0
-    while (b64[i].chr =~ %r{[0-9/+]})
-      b64[i] = 'chr(#{b64[i]}).'
-    end
-    
-        asm = %Q^
-      bind_tcp:
-        ; setup the structures we need on the stack...
-        mov r14, 'ws2_32'
-        push r14               ; Push the bytes 'ws2_32',0,0 onto the stack.
-        mov r14, rsp           ; save pointer to the 'ws2_32' string for LoadLibraryA call.
-        sub rsp, 408+8         ; alloc sizeof( struct WSAData ) bytes for the WSAData
-                               ; structure (+8 for alignment)
-        mov r13, rsp           ; save pointer to the WSAData structure for WSAStartup call.
-        xor rax, rax
-    ^
-    
-      #
-  # Generate the first stage
-  #
-  def generate
-    xorkey, rc4key = rc4_keys(datastore['RC4PASSWORD'])
-    conf = {
-      port:        datastore['LPORT'],
-      xorkey:      xorkey,
-      rc4key:      rc4key,
-      reliable:    false
-    }
-    
-        return unless res
-    
-            By specifying 'pdf' for the URL_TYPE, the module will treat
-        the specified URL(s) as PDF documents. The module will
-        download the documents and extract the authors' names from the
-        document metadata.
-    
-      # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
-    
-      # Configure static asset server for tests with Cache-Control for performance.
-  if config.respond_to?(:serve_static_files)
-    # rails >= 4.2
-    config.serve_static_files = true
-  elsif config.respond_to?(:serve_static_assets)
-    # rails < 4.2
-    config.serve_static_assets = true
-  end
-  config.static_cache_control = 'public, max-age=3600'
-    
-              it 'sets EMBEDDED_CONTENT_CONTAINS_SWIFT when the target_swift_version is nil' do
-            @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(true)
-            @target_definition.stubs(:swift_version).returns(nil)
-            @generator.generate.to_hash['EMBEDDED_CONTENT_CONTAINS_SWIFT'].should == 'YES'
-          end
-    
-    end
-    
-          # @return [Bool] whether this resolved specification is by non-library targets.
-      #
-      attr_reader :used_by_non_library_targets_only
-      alias used_by_non_library_targets_only? used_by_non_library_targets_only
-    
-                filename = path.basename.to_s
-            file_ref = group.files.find { |f| f.display_name == filename }
-            if file_ref && file_ref.path != path
-              file_ref_path = Pathname.new(file_ref.real_path)
-              if !file_ref_path.exist? || !xcconfig_path.exist? || file_ref_path.realpath != xcconfig_path.realpath
-                file_ref.path = path.to_s
-              end
-            end
-    
-          UI.warnings.should.match /not set.*base configuration/
-    end
-    
-            # @return [Bool] Bool indicating if this project is a pod target subproject.
-        # Used by `generate_multiple_pod_projects` installation option.
-        #
-        attr_reader :pod_target_subproject
-    
-    module Pod
-  module UserInterface
-    # Redirects GH-issues delegate callbacks to CocoaPods UI methods.
-    #
-    class InspectorReporter
-      # Called just as the investigation has begun.
-      # Lets the user know that it's looking for an issue.
-      #
-      # @param [query] String unused
-      #
-      # @param [GhInspector::Inspector] inspector
-      #        The current inspector
-      #
-      # @return [void]
-      #
-      def inspector_started_query(_, inspector)
-        UI.puts 'Looking for related issues on #{inspector.repo_owner}/#{inspector.repo_name}...'
+      Jekyll::External.require_if_present(Jekyll::External.blessed_gems) do |g, ver_constraint|
+    cmd = g.split('-').last
+    p.command(cmd.to_sym) do |c|
+      c.syntax cmd
+      c.action do
+        Jekyll.logger.abort_with 'You must install the '#{g}' gem' \
+          ' version #{ver_constraint} to use the 'jekyll #{cmd}' command.'
       end
+    end
+  end
     
-        it 'should use the default URL if no template URL is given' do
-      template_url = 'https://github.com/CocoaPods/pod-template.git'
-      @sut.any_instance.expects(:git!).with(['clone', template_url, 'TestPod']).once
-      run_command('lib', 'create', 'TestPod')
+            # @return [String] The path of the user project
+        #         integrated by this target.
+        #
+        def user_project_path
+          user_project.path if user_project
+        end
+    
+        it 'adds --force-local flag for tar on Windows' do
+      Executable.stubs(:which).returns('/usr/bin/tar.exe')
+      status = Object.new
+      status.define_singleton_method(:success?) { return true }
+      Executable.expects(:popen3).with('/usr/bin/tar.exe', ['--force-local'], [], []).returns(status)
+      Executable.execute_command('tar', [])
     end
   end
 end
 
     
-            # @return [Pathname] the path to the root of the project containing the user target
-        #
-        attr_reader :client_root
+    def fixture_pod_target_with_specs(specs, host_requires_frameworks = false, user_build_configurations = {}, archs = [],
+                                  platform = Pod::Platform.new(:ios, '6.0'), target_definitions = [],
+                                  scope_suffix = nil, build_type: nil)
+  build_type ||= Pod::Target::BuildType.infer_from_spec(specs.first, :host_requires_frameworks => host_requires_frameworks)
+  target_definitions << fixture_target_definition if target_definitions.empty?
+  target_definitions.each { |td| specs.each { |spec| td.store_pod(spec.name) } }
+  file_accessors = specs.map { |spec| fixture_file_accessor(spec, platform) }
+  Pod::PodTarget.new(config.sandbox, host_requires_frameworks, user_build_configurations, archs, platform, specs,
+                     target_definitions, file_accessors, scope_suffix, :build_type => build_type)
+end
     
-                <li class='code <%= frame_class(frame) %>'>
-              <% if frame.pre_context %>
-              <ol start='<%=h frame.pre_context_lineno + 1 %>'
-                  class='pre-context' id='pre-<%= id %>'
-                  onclick='toggle(<%= id %>);'>
-                <% frame.pre_context.each do |line| %>
-                <li class='pre-context-line'><code><%=h line %></code></li>
-                <% end %>
-              </ol>
-              <% end %>
-    
-    desc 'run specs'
-task(:spec) { ruby '-S rspec spec' }
-    
-            if @javascript and not @escaper.respond_to? :escape_javascript
-          fail('Use EscapeUtils for JavaScript escaping.')
+            it 'can be initialized with specs, platform and whether it requires frameworks' do
+          variant = PodVariant.new(@specs, [], [], @platform, @type)
+          variant.specs.should == @specs
+          variant.platform.should == @platform
+          variant.build_type.should == @type
         end
-      end
     
-          expected_header = <<-END.chomp
-rack.%2573ession=; domain=example.org; path=/; expires=Thu, 01 Jan 1970 00:00:00 -0000
-rack.%2573ession=; domain=example.org; path=/some; expires=Thu, 01 Jan 1970 00:00:00 -0000
-rack.%2573ession=; domain=example.org; path=/some/path; expires=Thu, 01 Jan 1970 00:00:00 -0000
-rack.session=; domain=example.org; path=/; expires=Thu, 01 Jan 1970 00:00:00 -0000
-rack.session=; domain=example.org; path=/some; expires=Thu, 01 Jan 1970 00:00:00 -0000
-rack.session=; domain=example.org; path=/some/path; expires=Thu, 01 Jan 1970 00:00:00 -0000
-END
-      expect(last_response.headers['Set-Cookie']).to eq(expected_header)
+              it 'sets the PODS_BUILD_DIR build variable' do
+            @xcconfig.to_hash['PODS_BUILD_DIR'].should == '${BUILD_DIR}'
+          end
+    
+          def all_paths
+        [source_path, dsym_path, bcsymbolmap_paths].flatten.compact
+      end
     end
   end
+end
+
     
-      it 'returns the merged `ConfigPart#config_string`' do
-    expect(subject.config_string).to eq(ordered_config_parts.collect(&:text).join('\n'))
+    # ECMA-262, section 15.1.3
+    def Encode(uri, unescape)
+      uriLength = uri.length;
+      # We are going to pass result to %StringFromCharCodeArray
+      # which does not expect any getters/setters installed
+      # on the incoming array.
+      result    = Array.new(uriLength);
+      index = 0;
+      k = -1;
+      while ((k+=1) < uriLength) do
+        cc1 = uri.charCodeAt(k);
+        next if cc1.nil?
+        if (self.send(unescape, cc1))
+          result[index] = cc1;
+          index += 1
+        else
+          if (cc1 >= 0xDC00 && cc1 <= 0xDFFF);
+            throw('URI malformed')
+          end
+          if (cc1 < 0xD800 || cc1 > 0xDBFF)
+            index = URIEncodeSingle(cc1, result, index);
+          else
+            k+=1;
+            if (k == uriLength);
+              throw('URI malformed')
+            end
+            cc2 = uri.charCodeAt(k);
+            if (cc2 < 0xDC00 || cc2 > 0xDFFF);
+              throw('URI malformed')
+            end
+            index = URIEncodePair(cc1, cc2, result, index);
+          end
+        end
+      end
+      # use .compact to get rid of nils from charCodeAt
+      # return %StringFromCharCodeArray(result);
+      # 'c' = 8 bit signed char
+      # http://www.ruby-doc.org/core-1.9.3/Array.html#method-i-pack
+      return result.compact.pack 'c*'
+    end
+  end # class << self
+end # module
+
+    
+          # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
+      def left_shift(int, shift)
+        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
+        # 1>>31, 2**32
+        (r & 2147483648) == 0 ? r : r - 4294967296
+      end
+    
+      test 'creating page is blocked' do
+    Precious::App.set(:wiki_options, { allow_editing: false})
+    post '/create', :content => 'abc', :page => 'D',
+         :format             => 'markdown', :message => 'def'
+    assert !last_response.ok?
+    
+        # Test page_header_from_content(@content)
+    actual = @view.title
+    assert_equal '1 & 2', actual
   end
     
-          it 'list the plugins with their versions' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose')
-        result.stdout.split('\n').each do |plugin|
-          expect(plugin).to match(/^logstash-\w+-\w+\s\(\d+\.\d+.\d+(.\w+)?\)/)
-        end
-      end
-    end
-    
-        before do
-      logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version #{previous_version} #{plugin_name}')
-      # Logstash won't update when we have a pinned version in the gemfile so we remove them
-      logstash.replace_in_gemfile(',[[:space:]]'0.1.0'', '')
-      expect(logstash).to have_installed?(plugin_name, previous_version)
-    end
-    
-    def config_tag(config, key, tag=nil, classname=nil)
-  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
-  tag       ||= 'div'
-  classname ||= key.sub(/_/, '-').sub(/\./, '-')
-  output      = '<#{tag} class='#{classname}''
-    
-    module Jekyll
-    
-        def render(context)
-      output = super
-      types = {
-        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
-        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
-        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
-      }
-      if @videos.size > 0
-        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
-        @videos.each do |v|
-          video << '<source src='#{v}' #{types[File.extname(v)]}>'
-        end
-        video += '</video>'
-      else
-        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
-      end
-    end
+        @wiki.update_page(@wiki.page('PG'), nil, nil, '다른 text', {})
+    page = @wiki.page('PG')
+    assert_equal '다른 text', utf8(page.raw_data)
