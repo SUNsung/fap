@@ -1,251 +1,231 @@
 
         
-        # def test_unicode_url_verbose(self):
-#     r = http(httpbin.url + '--verbose', u'/get?test=' + UNICODE)
-#     assert HTTP_OK in r
+            shutil.copyfile(os.path.join(str(keras_dir), 'CONTRIBUTING.md'),
+                    os.path.join(str(sources_dir), 'contributing.md'))
+    copy_examples(os.path.join(str(keras_dir), 'examples'),
+                  os.path.join(str(sources_dir), 'examples'))
     
-        def __init__(self, **kwargs):
-        '''
-        Use keyword arguments to overwrite
-        any of the class attributes for this instance.
+        # Note on passing external constants to RNNs
+        You can pass 'external' constants to the cell using the `constants`
+        keyword: argument of `RNN.__call__` (as well as `RNN.call`) method.
+        This: requires that the `cell.call` method accepts the same keyword argument
+        `constants`. Such constants can be used to condition the cell
+        transformation on additional static inputs (not changing over time),
+        a.k.a. an attention mechanism.
     
-    
-def load_text_file(item) -> str:
-    path = item.value
-    try:
-        with open(os.path.expanduser(path), 'rb') as f:
-            return f.read().decode()
-    except IOError as e:
-        raise ParseError(''%s': %s' % (item.orig, e))
-    except UnicodeDecodeError:
-        raise ParseError(
-            ''%s': cannot embed the content of '%s','
-            ' not a UTF8 or ASCII-encoded text file'
-            % (item.orig, item.value)
-        )
-    
-    
-MIME_RE = re.compile(r'^[^/]+/[^/]+$')
-    
-    
-def main():
-    package_meta_map = {
-        package_name: get_package_meta(package_name)
-        for package_name in PACKAGES
-    }
-    httpie_meta = package_meta_map.pop('httpie')
-    print()
-    print('  url '{url}''.format(url=httpie_meta['url']))
-    print('  sha256 '{sha256}''.format(sha256=httpie_meta['sha256']))
-    print()
-    for dep_meta in package_meta_map.values():
-        print('  resource '{name}' do'.format(name=dep_meta['name']))
-        print('    url '{url}''.format(url=dep_meta['url']))
-        print('    sha256 '{sha256}''.format(sha256=dep_meta['sha256']))
-        print('  end')
-        print('')
-    
-            if isinstance(headers, bytes):
-            # Python < 3
-            headers = headers.decode('utf8')
-        return headers
+                    assert len(val_data) == len(tensors)
+                val_size = val_data[0].shape[0]
+                i = 0
+                while i < val_size:
+                    step = min(self.batch_size, val_size - i)
+                    if self.model.uses_learning_phase:
+                        # do not slice the learning phase
+                        batch_val = [x[i:i + step] for x in val_data[:-1]]
+                        batch_val.append(val_data[-1])
+                    else:
+                        batch_val = [x[i:i + step] for x in val_data]
+                    assert len(batch_val) == len(tensors)
+                    feed_dict = dict(zip(tensors, batch_val))
+                    result = self.sess.run([self.merged], feed_dict=feed_dict)
+                    summary_str = result[0]
+                    self.writer.add_summary(summary_str, epoch)
+                    i += self.batch_size
     
     
-def basic_auth(header=BASIC_AUTH_HEADER_VALUE):
+class Embedding(Layer):
+    '''Turns positive integers (indexes) into dense vectors of fixed size.
+    eg. [[4], [20]] -> [[0.25, 0.1], [0.6, -0.2]]
     
-        def path(self) -> Path:
-        '''Return the config file path creating basedir, if needed.'''
-        path = self._get_path()
-        try:
-            path.parent.mkdir(mode=0o700, parents=True)
-        except OSError as e:
-            if e.errno != errno.EEXIST:
-                raise
-        return path
+            print('benchmarking scikit-learn: ')
+        scikit_results.append(bench(ScikitLasso, X, Y, X_test, Y_test, coef_))
+        print('benchmarking glmnet: ')
+        glmnet_results.append(bench(GlmnetLasso, X, Y, X_test, Y_test, coef_))
     
-        Provide both the name and the version of the Python implementation
-    currently running. For example, on CPython 2.7.5 it will return
-    {'name': 'CPython', 'version': '2.7.5'}.
+    First, we fix a training set, increase the number of
+samples to classify and plot number of classified samples as a
+function of time.
     
-    '''
-requests.hooks
-~~~~~~~~~~~~~~
+    skeleton_dir = os.path.abspath(os.path.join(exercise_dir, '..', 'skeletons'))
+if not os.path.exists(skeleton_dir):
+    os.makedirs(skeleton_dir)
     
-    import pytest
+    plt.figure(2)  # 'banana' shape
+plt.title('Outlier detection on a real data set (boston housing)')
+plt.scatter(X2[:, 0], X2[:, 1], color='black')
+plt.xlim((xx2.min(), xx2.max()))
+plt.ylim((yy2.min(), yy2.max()))
+plt.legend((legend2_values_list[0].collections[0],
+            legend2_values_list[1].collections[0],
+            legend2_values_list[2].collections[0]),
+           (legend2_keys_list[0], legend2_keys_list[1], legend2_keys_list[2]),
+           loc='upper center',
+           prop=matplotlib.font_manager.FontProperties(size=12))
+plt.ylabel('% lower status of the population')
+plt.xlabel('average number of rooms per dwelling')
     
-    if is_py2:
-    from urllib import (
-        quote, unquote, quote_plus, unquote_plus, urlencode, getproxies,
-        proxy_bypass, proxy_bypass_environment, getproxies_environment)
-    from urlparse import urlparse, urlunparse, urljoin, urlsplit, urldefrag
-    from urllib2 import parse_http_list
-    import cookielib
-    from Cookie import Morsel
-    from StringIO import StringIO
-    # Keep OrderedDict for backwards compatibility.
-    from collections import Callable, Mapping, MutableMapping, OrderedDict
+    Second, when using a connectivity matrix, single, average and complete
+linkage are unstable and tend to create a few clusters that grow very
+quickly. Indeed, average and complete linkage fight this percolation behavior
+by considering all the distances between two clusters when merging them (
+while single linkage exaggerates the behaviour by considering only the
+shortest distance between clusters). The connectivity graph breaks this
+mechanism for average and complete linkage, making them resemble the more
+brittle single linkage. This effect is more pronounced for very sparse graphs
+(try decreasing the number of neighbors in kneighbors_graph) and with
+complete linkage. In particular, having a very small number of neighbors in
+the graph, imposes a geometry that is close to that of single linkage,
+which is well known to have this percolation instability. '''
+# Authors: Gael Varoquaux, Nelle Varoquaux
+# License: BSD 3 clause
     
-            with server as address:
-            sock = socket.socket()
-            sock.connect(address)
-            time.sleep(1.5)
-            sock.sendall(b'hehehe, not received')
-            sock.close()
-    
-        :param url: URL for the new :class:`Request` object.
-    :param data: (optional) Dictionary, list of tuples, bytes, or file-like
-        object to send in the body of the :class:`Request`.
-    :param json: (optional) json data to send in the body of the :class:`Request`.
-    :param \*\*kwargs: Optional arguments that ``request`` takes.
-    :return: :class:`Response <Response>` object
-    :rtype: requests.Response
-    '''
-    
-        def test_cookie_second_line_commented_first_line(self):
-        lines = (
-            b'#print('\xc2\xa3')\n',
-            b'# vim: set fileencoding=iso8859-15 :\n',
-            b'print('\xe2\x82\xac')\n'
-        )
-        encoding, consumed_lines = detect_encoding(self.get_readline(lines))
-        self.assertEqual(encoding, 'iso8859-15')
-        expected = [b'#print('\xc2\xa3')\n', b'# vim: set fileencoding=iso8859-15 :\n']
-        self.assertEqual(consumed_lines, expected)
-    
-    _tuplesize2code = [EMPTY_TUPLE, TUPLE1, TUPLE2, TUPLE3]
-    
-        # First, if the caller didn't force us into direct or indirect mode,
-    # figure out which mode we should be in.  We take a conservative
-    # approach: choose direct mode *only* if the current interpreter is
-    # in debug mode and optimize is 0.  If we're not in debug mode (-O
-    # or -OO), we don't know which level of optimization this
-    # interpreter is running with, so we can't do direct
-    # byte-compilation and be certain that it's the right thing.  Thus,
-    # always compile indirectly if the current interpreter is in either
-    # optimize mode, or if either optimization level was requested by
-    # the caller.
-    if direct is None:
-        direct = (__debug__ and optimize == 0)
-    
-        LOG_EMERG     = 0       #  system is unusable
-    LOG_ALERT     = 1       #  action must be taken immediately
-    LOG_CRIT      = 2       #  critical conditions
-    LOG_ERR       = 3       #  error conditions
-    LOG_WARNING   = 4       #  warning conditions
-    LOG_NOTICE    = 5       #  normal but significant condition
-    LOG_INFO      = 6       #  informational
-    LOG_DEBUG     = 7       #  debug-level messages
-    
-        def submit(self, fn, /, *args, **kwargs):
-        with self._shutdown_lock, _global_shutdown_lock:
-            if self._broken:
-                raise BrokenThreadPool(self._broken)
-    
-        # clear type cache
-    sys._clear_type_cache()
-    
-              name, _, val = line.partition('=')
-          name = name.strip()
-          val = val.strip()
-          if name == 'set noparent':
-            keep_looking = False
-          elif name == 'filter':
-            cfg_filters.append(val)
-          elif name == 'exclude_files':
-            # When matching exclude_files pattern, use the base_name of
-            # the current file name or the directory name we are processing.
-            # For example, if we are checking for lint errors in /foo/bar/baz.cc
-            # and we found the .cfg file at /foo/CPPLINT.cfg, then the config
-            # file's 'exclude_files' filter is meant to be checked against 'bar'
-            # and not 'baz' nor 'bar/baz.cc'.
-            if base_name:
-              pattern = re.compile(val)
-              if pattern.match(base_name):
-                _cpplint_state.PrintInfo('Ignoring '%s': file excluded by '
-                    ''%s'. File path component '%s' matches pattern '%s'\n' %
-                    (filename, cfg_file, base_name, val))
-                return False
-          elif name == 'linelength':
-            global _line_length
-            try:
-                _line_length = int(val)
-            except ValueError:
-                _cpplint_state.PrintError('Line length must be numeric.')
-          elif name == 'extensions':
-              global _valid_extensions
-              try:
-                  extensions = [ext.strip() for ext in val.split(',')]
-                  _valid_extensions = set(extensions)
-              except ValueError:
-                  sys.stderr.write('Extensions should be a comma-separated list of values;'
-                                   'for example: extensions=hpp,cpp\n'
-                                   'This could not be parsed: '%s'' % (val,))
-          elif name == 'headers':
-              global _header_extensions
-              try:
-                  extensions = [ext.strip() for ext in val.split(',')]
-                  _header_extensions = set(extensions)
-              except ValueError:
-                  sys.stderr.write('Extensions should be a comma-separated list of values;'
-                                   'for example: extensions=hpp,cpp\n'
-                                   'This could not be parsed: '%s'' % (val,))
-          elif name == 'root':
-            global _root
-            _root = val
-          else:
-            _cpplint_state.PrintError(
-                'Invalid configuration option (%s) in file %s\n' %
-                (name, cfg_file))
-    
-            face = cv2.resize(face,  # pylint:disable=no-member
-                          dsize=(self.input_size, self.input_size),
-                          interpolation=interpolation)
-        return face
+    from sklearn import cluster
     
     
-def get_default_mask():
-    ''' Set the default mask for cli '''
-    masks = get_available_masks()
-    default = 'dfl_full'
-    default = default if default in masks else masks[0]
-    logger.debug(default)
-    return default
-    
-        def load_module(self, filename, module_path, plugin_type):
-        ''' Load the defaults module and add defaults '''
-        logger.debug('Adding defaults: (filename: %s, module_path: %s, plugin_type: %s',
-                     filename, module_path, plugin_type)
-        module = os.path.splitext(filename)[0]
-        section = '.'.join((plugin_type, module.replace('_defaults', '')))
-        logger.debug('Importing defaults module: %s.%s', module_path, module)
-        mod = import_module('{}.{}'.format(module_path, module))
-        self.add_section(title=section, info=mod._HELPTEXT)  # pylint:disable=protected-access
-        for key, val in mod._DEFAULTS.items():  # pylint:disable=protected-access
-            self.add_item(section=section, title=key, **val)
-        logger.debug('Added defaults: %s', section)
+def test_iloc_nonunique():
+    s = Series([0, 1, 2], index=[0, 1, 0])
+    assert s.iloc[2] == 2
 
     
-        def set_config(self, configfile, config):
-        ''' Set the config to either global config or passed in config '''
-        section = '.'.join(self.__module__.split('.')[-2:])
-        if config is None:
-            logger.debug('Loading base config')
-            retval = get_config(section, configfile=configfile)
-        else:
-            logger.debug('Loading passed in config')
-            config.section = section
-            retval = config.config_dict
-            config.section = None
-        logger.debug('Config: %s', retval)
-        return retval
+    
+def radd(left, right):
+    return right + left
+    
+            # we are not asked to reduce or infer reduction
+        # so just return a copy of the existing object
+        if self.result_type not in ['reduce', None]:
+            return self.obj.copy()
+    
+                if n > max_seq_items:
+                n = min(max_seq_items // 2, 10)
+                head = [formatter(x) for x in self[:n]]
+                tail = [formatter(x) for x in self[-n:]]
+                summary = '[{head} ... {tail}]'.format(
+                    head=', '.join(head), tail=', '.join(tail)
+                )
+            else:
+                tail = [formatter(x) for x in self]
+                summary = '[{tail}]'.format(tail=', '.join(tail))
+    
+        meta = MetaData(con, schema=schema)
+    try:
+        meta.reflect(only=[table_name], views=True)
+    except sqlalchemy.exc.InvalidRequestError:
+        raise ValueError('Table {name} not found'.format(name=table_name))
+    
+        def __call__(self, text, **kargs):
+        words = jieba.tokenize(text, mode='search')
+        token = Token()
+        for (w, start_pos, stop_pos) in words:
+            if not accepted_chars.match(w) and len(w) <= 1:
+                continue
+            token.original = token.text = w
+            token.pos = start_pos
+            token.startchar = start_pos
+            token.endchar = stop_pos
+            yield token
+    
+        last = [(V[-1][y], y) for y in mem_path[-1].keys()]
+    # if len(last)==0:
+    #     print obs
+    prob, state = max(last)
+    
+    if opt.topK is None:
+    topK = 10
+else:
+    topK = int(opt.topK)
+    
+    t2 = time.time()
+tm_cost = t2-t1
+    
+      if 'extra_data' in completion_data:
+    docstring = completion_data[ 'extra_data' ].get( 'doc_string', '' )
+    if docstring:
+      if info:
+        info += '\n' + docstring
+      else:
+        info = docstring
+    
+          # Vim internally moves the cursor to the start column before calling again
+      # the omnifunc. Some omnifuncs like the one defined by the
+      # LanguageClient-neovim plugin depend on this behavior to compute the list
+      # of candidates.
+      vimsupport.SetCurrentLineAndColumn( line, start_column )
     
     
-class Color(Adjustment):
-    ''' Seamless clone the swapped face into the old face with cv2
-        NB: This probably isn't the best place for this, but it doesn't work well and
-        and does not have a natural home, so here for now.
-    '''
+def FormatDebugInfoResponse( response ):
+  if not response:
+    return 'Server errored, no debug info from server\n'
+  message = _FormatYcmdDebugInfo( response )
+  completer = response[ 'completer' ]
+  if completer:
+    message += _FormatCompleterDebugInfo( completer )
+  return message
     
     
-if __name__ == '__main__':
-    main()
+  def Poll( self, diagnostics_handler ):
+    '''This should be called regularly to check for new messages in this buffer.
+    Returns True if Poll should be called again in a while. Returns False when
+    the completer or server indicated that further polling should not be done
+    for the requested file.'''
+    
+    
+def FormatDebugInfoResponse_Completer_ServerRunningWithoutHost_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'completer' ][ 'servers' ][ 0 ].update( {
+    'address': None,
+    'port': None
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Completer name completer debug information:\n'
+      '  Server name running\n'
+      '  Server name process ID: 12345\n'
+      '  Server name executable: /path/to/executable\n'
+      '  Server name logfiles:\n'
+      '    /path/to/stdout/logfile\n'
+      '    /path/to/stderr/logfile\n'
+      '  Server name key: value\n'
+      '  Key: value\n'
+    )
+  )
+    
+    from ycm.tests.test_utils import MockVimModule
+MockVimModule()
+    
+                if self._state in [CANCELLED, CANCELLED_AND_NOTIFIED]:
+                raise CancelledError()
+            elif self._state == FINISHED:
+                return self.__get_result()
+            else:
+                raise TimeoutError()
+    
+        # Parse and validate the field names.  Validation serves two purposes,
+    # generating informative error messages and preventing template injection attacks.
+    if isinstance(field_names, basestring):
+        field_names = field_names.replace(',', ' ').split() # names separated by whitespace and/or commas
+    field_names = tuple(map(str, field_names))
+    for name in (typename,) + field_names:
+        if not all(c.isalnum() or c=='_' for c in name):
+            raise ValueError('Type names and field names can only contain alphanumeric characters and underscores: %r' % name)
+        if _iskeyword(name):
+            raise ValueError('Type names and field names cannot be a keyword: %r' % name)
+        if name[0].isdigit():
+            raise ValueError('Type names and field names cannot start with a number: %r' % name)
+    seen_names = set()
+    for name in field_names:
+        if name.startswith('_'):
+            raise ValueError('Field names cannot start with an underscore: %r' % name)
+        if name in seen_names:
+            raise ValueError('Encountered duplicate field name: %r' % name)
+        seen_names.add(name)
+    
+    # These benchmarks are delicate.  They hit various fast-paths in the gen
+# machinery in order to stay synchronous so we don't need an IOLoop.
+# This removes noise from the results, but it's easy to change things
+# in a way that completely invalidates the results.
+    
+    import typing
+    
+            result = yield f()
+        self.assertEqual(result, 42)
