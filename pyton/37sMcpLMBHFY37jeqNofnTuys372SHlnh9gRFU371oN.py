@@ -1,107 +1,171 @@
 
         
-        
-def check_format(filename):
-    '''
-    validates that each line is formatted correctly,
-    appending to error list as needed
-    '''
-    with open(filename) as fp:
-        lines = list(line.rstrip() for line in fp)
-    check_alphabetical(lines)
-    # START Check Entries
-    num_in_category = min_entries_per_section + 1
-    category = ''
-    category_line = 0
-    for line_num, line in enumerate(lines):
-        if section_title_re.match(line):
-            title_links.append(section_title_re.match(line).group(1))
-        # check each section for the minimum number of entries
-        if line.startswith(anchor):
-            match = anchor_re.match(line)
-            if match:
-                if match.group(1) not in title_links:
-                    add_error(line_num, 'section header ({}) not added as a title link'.format(match.group(1)))
+        from uuid import uuid4
+from random import random,randint
+import json
+from math import floor
+from zlib import decompress
+import hashlib
+import time
+    
+            if not title:
+            self.title = vid
+    
+        return video_dict
+    
+        if title is None:
+      title = url[0]
+    
+    def ifeng_download_by_id(id, title = None, output_dir = '.', merge = True, info_only = False):
+    assert r1(r'([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', id), id
+    url = 'http://vxml.ifengimg.com/video_info_new/%s/%s/%s.xml' % (id[-2], id[-2:], id)
+    xml = get_html(url, 'utf-8')
+    title = r1(r'Name='([^']+)'', xml)
+    title = unescape_html(title)
+    url = r1(r'VideoPlayUrl='([^']+)'', xml)
+    from random import randint
+    r = randint(10, 19)
+    url = url.replace('http://wideo.ifeng.com/', 'http://ips.ifeng.com/wideo.ifeng.com/')
+    type, ext, size = url_info(url)
+    
+        # 读取文件
+    for f in files_list:
+        txt = open(f).read()
+        # words = word_tokenize(txt)
+        words = tokenizer.tokenize(txt)
+        # creating inverted index data structure
+        for word in words:
+            word = word_clean(word)  # 单词清洗
+            if word not in index:
+                index[word] = {f}
             else:
-                add_error(line_num, 'section header is not formatted correctly')
-            if num_in_category < min_entries_per_section:
-                add_error(category_line, '{} section does not have the minimum {} entries (only has {})'.format(
-                    category, min_entries_per_section, num_in_category))
-            category = line.split(' ')[1]
-            category_line = line_num
-            num_in_category = 0
-            continue
-        # skips lines that we do not care about
-        if not line.startswith('|') or line.startswith('|---'):
-            continue
-        num_in_category += 1
-        segments = line.split('|')[1:-1]
-        if len(segments) < num_segments:
-            add_error(line_num, 'entry does not have all the required sections (have {}, need {})'.format(
-                len(segments), num_segments))
-            continue
-        # START Global
-        for segment in segments:
-            # every line segment should start and end with exactly 1 space
-            if len(segment) - len(segment.lstrip()) != 1 or len(segment) - len(segment.rstrip()) != 1:
-                add_error(line_num, 'each segment must start and end with exactly 1 space')
-        # END Global
-        segments = [seg.strip() for seg in segments]
-        check_entry(line_num, segments)
-    # END Check Entries
+                index[word].add(f)
     
     
-@pytest.mark.parametrize('override, old, new', [
-    ({'key': 'val'}, {}, {'key': 'val'}),
-    ({'key': 'new-val'}, {'key': 'val'}, {'key': 'val'}),
-    ({'key': 'new-val', 'unset': 'unset'}, {'key': 'val'}, {'key': 'val', 'unset': 'unset'})])
-def test_default_settings(settings, override, old, new):
-    settings.clear()
-    settings.update(old)
-    default_settings(override)(lambda _: _)(None)
-    assert settings == new
+    
+        def __call__(self, x):
+        ''''''
+        n_input = int(x.get_shape()[-1])
+        if not self._built:
+            self._build(n_input)
+            self._built = True
+    
+    References：
+    [1509.01626] Character-level Convolutional Networks for Text Classification https://arxiv.org/abs/1509.01626
+'''
     
     
-class TestGeneric(object):
-    @pytest.fixture
-    def shell(self):
-        return Generic()
+def get_w(shape,
+          w_initializer=truncated_normal,
+          w_regularizer=l2_regularizer,
+          name=None):
+    name = name or 'W'
+    W = tf.get_variable(name, shape, dtype=tf_float, initializer=w_initializer,
+                        regularizer=w_regularizer)
+    return W
     
-        import sys
-    from mymodule import entry_function
-    sys.exit(entry_function())
+    if args.dict:
+    jieba.initialize(args.dict)
+else:
+    jieba.initialize()
+if args.user_dict:
+    jieba.load_userdict(args.user_dict)
     
-    from thefuck.rules.az_cli import match, get_new_command
-from thefuck.types import Command
+        def set_new_path(self, new_idf_path):
+        if self.path != new_idf_path:
+            self.path = new_idf_path
+            content = open(new_idf_path, 'rb').read().decode('utf-8')
+            self.idf_freq = {}
+            for line in content.splitlines():
+                word, freq = line.strip().split(' ')
+                self.idf_freq[word] = float(freq)
+            self.median_idf = sorted(
+                self.idf_freq.values())[len(self.idf_freq) // 2]
     
-        def parse(self, response):
-        pass
+    
+def add_force_split(word):
+    global Force_Split_Words
+    Force_Split_Words.add(word)
+    
+    import jieba
+import jieba.analyse
+from optparse import OptionParser
+    
+    tags = jieba.analyse.extract_tags(content, topK=topK)
+    
+    default_encoding='utf-8'
+    
+    if opt.topK==None:
+    topK=10
+else:
+    topK = int(opt.topK)
+    
+    
+  def _SendRequest( self ):
+    self._response_future = self.PostDataToHandlerAsync(
+      self._request_data,
+      'receive_messages',
+      timeout = TIMEOUT_SECONDS )
+    return
+    
+    
+def FormatDebugInfoResponse_Completer_ServerNotRunningWithNoLogfiles_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'completer' ][ 'servers' ][ 0 ].update( {
+    'is_running': False,
+    'logfiles': []
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Completer name completer debug information:\n'
+      '  Server name not running\n'
+      '  Server name executable: /path/to/executable\n'
+      '  No logfiles available\n'
+      '  Server name key: value\n'
+      '  Key: value\n'
+    )
+  )
 
     
-        def process_options(self, args, opts):
-        try:
-            self.settings.setdict(arglist_to_dict(opts.set),
-                                  priority='cmdline')
-        except ValueError:
-            raise UsageError('Invalid -s value, use -s NAME=VALUE', print_help=False)
-    
-    logger = logging.getLogger(__name__)
+    from ycm.client.messages_request import _HandlePollResponse
+from ycm.tests.test_utils import ExtendedMock
     
     
-IPv4 = CheckNetwork('IPv4')
-IPv4.urls = [
-            'https://www.microsoft.com',
-            'https://www.apple.com',
-            'https://code.jquery.com',
-            'https://cdn.bootcss.com',
-            'https://cdnjs.cloudflare.com']
-IPv4.triger_check_network()
+@YouCompleteMeInstance()
+@patch( 'ycm.vimsupport.PostVimMessage', new_callable = ExtendedMock )
+def SendCompletionRequest_ResponseContainingError_test( ycm, post_vim_message ):
+  current_buffer = VimBuffer( 'buffer' )
     
-    	# Track the line at which the error occurred in case this is
-	# generated from a lexer.  We need to track this since the
-        # unexpected char doesn't carry the line info.
-        self.line = None
+        A = nd.contrib.hawkesll(
+        mu.tile((N, 1)), alpha, beta, states, lags, marks, valid_length, max_time
+    )
     
-                # The char position into the input buffer where this token stops
-            # This is the index of the last char, *not* the index after it!
-            self.stop = stop
+        def state_info(self, batch_size=0):
+        raise NotImplementedError('_BaseConvRNNCell is abstract class for convolutional RNN')
+    
+    def config_cython():
+    '''Try to configure cython and return cython configuration'''
+    if not with_cython:
+        return []
+    # pylint: disable=unreachable
+    if os.name == 'nt':
+        print('WARNING: Cython is not supported on Windows, will compile without cython module')
+        return []
+    
+    
+def test_rnn_cells_export_import():
+    class RNNLayer(gluon.HybridBlock):
+        def __init__(self):
+            super(RNNLayer, self).__init__()
+            with self.name_scope():
+                self.cell = gluon.rnn.RNNCell(hidden_size=1)
+    
+        # Verify that some of the NVTX ranges we should have created are present
+    # Verify that we have NVTX ranges for our simple operators.
+    assert 'Range \'FullyConnected\'' in profiler_output
+    assert 'Range \'_zeros\'' in profiler_output
+    
+        (prototxt, caffemodel, mean) = download_caffe_model(model_name, meta_info, dst_dir='./model')
+    convert_and_compare_caffe_to_mxnet(image_url, gpu, prototxt, caffemodel, mean,
+                                       mean_diff_allowed=1e-03, max_diff_allowed=1e-01)
