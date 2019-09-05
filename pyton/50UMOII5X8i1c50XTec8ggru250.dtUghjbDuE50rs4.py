@@ -1,391 +1,242 @@
 
         
-          Args:
-    file_path: Path to file containing data.
+                    def f(m):
+                l = []
+                o = 0
+                b = False
+                m_len = len(m)
+                while ((not b) and o < m_len):
+                    n = m[o] << 2
+                    o += 1
+                    k = -1
+                    j = -1
+                    if o < m_len:
+                        n += m[o] >> 4
+                        o += 1
+                        if o < m_len:
+                            k = (m[o - 1] << 4) & 255
+                            k += m[o] >> 2
+                            o += 1
+                            if o < m_len:
+                                j = (m[o - 1] << 6) & 255
+                                j += m[o]
+                                o += 1
+                            else:
+                                b = True
+                        else:
+                            b = True
+                    else:
+                        b = True
+                    l.append(n)
+                    if k != -1:
+                        l.append(k)
+                    if j != -1:
+                        l.append(j)
+                return l
     
-        This generator is more flexible than the multiple_grid_anchor_generator
-    and multiscale_grid_anchor_generator, and can generate any of the anchors
-    that they can generate, plus additional anchor configurations. In
-    particular, it allows the explicit specification of scale and aspect ratios
-    at each layer without making any assumptions between the relationship
-    between scales and aspect ratios between layers.
+            return {
+            'id': video_id,
+            'title': title,
+            'description': video.get('long_description') or video.get(
+                'short_description'),
+            'duration': float_or_none(video.get('duration'), scale=1000),
+            'formats': formats,
+            'subtitles': subtitles,
+        }
     
-      Raises:
-    ValueError: when using an unsupported input data type.
-  '''
-  if global_step is None:
-    global_step = tf.train.get_or_create_global_step()
-  learning_rate = None
-  learning_rate_type = learning_rate_config.WhichOneof('learning_rate')
-  if learning_rate_type == 'constant_learning_rate':
-    config = learning_rate_config.constant_learning_rate
-    learning_rate = tf.constant(config.learning_rate, dtype=tf.float32,
-                                name='learning_rate')
+        def _extract_video_info(self, content_id, site='cbs', mpx_acc=2198311517):
+        items_data = self._download_xml(
+            'http://can.cbs.com/thunder/player/videoPlayerService.php',
+            content_id, query={'partner': site, 'contentId': content_id})
+        video_data = xpath_element(items_data, './/item')
+        title = xpath_text(video_data, 'videoTitle', 'title', True)
+        tp_path = 'dJ5BDC/media/guid/%d/%s' % (mpx_acc, content_id)
+        tp_release_url = 'http://link.theplatform.com/s/' + tp_path
     
-        Args:
-      boxes: a tensor of shape [N, 4] representing box corners
+    versions_info['signature'] = signature
+with open('update/versions.json', 'w') as versionsf:
+    json.dump(versions_info, versionsf, indent=4, sort_keys=True)
+
     
-        boxes = box_list.BoxList(corners)
-    boxes.add_field('weights', weights)
-    subset = box_list_ops.gather(boxes, indices, ['weights'],
-                                 use_static_shapes=True)
-    with self.test_session() as sess:
-      subset_output, weights_output = sess.run(
-          [subset.get(), subset.get_field('weights')],
-          feed_dict={
-              corners:
-                  np.array(
-                      [4 * [0.0], 4 * [1.0], 4 * [2.0], 4 * [3.0], 4 * [4.0]]),
-              indices:
-                  np.array([0, 2, 4]).astype(np.int32),
-              weights:
-                  np.array([[.1], [.3], [.5], [.7], [.9]])
-          })
-      self.assertAllClose(subset_output, expected_subset)
-      self.assertAllClose(weights_output, expected_weights)
+        bug_text = re.search(
+        r'(?s)#\s*BUGS\s*[^\n]*\s*(.*?)#\s*COPYRIGHT', readme).group(1)
+    dev_text = re.search(
+        r'(?s)(#\s*DEVELOPER INSTRUCTIONS.*?)#\s*EMBEDDING YOUTUBE-DL',
+        readme).group(1)
     
-    In floating point Mobilenet model, 'normalized_image_tensor' has values
-between [-1,1). This typically means mapping each pixel (linearly)
-to a value between [-1, 1]. Input image
-values between 0 and 255 are scaled by (1/128.0) and then a value of
--1 is added to them to ensure the range is [-1,1).
-In quantized Mobilenet model, 'normalized_image_tensor' has values between [0,
-255].
-In general, see the `preprocess` function defined in the feature extractor class
-in the object_detection/models directory.
-    
-      def _match(self, similarity_matrix, valid_rows):
-    '''Tries to match each column of the similarity matrix to a row.
-    
-        absolute_proposal_boxes = ops.normalized_to_image_coordinates(
-        proposal_boxes_normalized, image_shape,
-        parallel_iterations=self._parallel_iterations)
-    
-      relation_evaluator = vrd_evaluation.VRDRelationDetectionEvaluator()
-  phrase_evaluator = vrd_evaluation.VRDPhraseDetectionEvaluator()
-    
-    [English to French sentence pairs.
-](http://www.manythings.org/anki/fra-eng.zip)
+    README_FILE = 'README.md'
+helptext = sys.stdin.read()
     
     
-def is_model(layer):
-    return isinstance(layer, Model)
+def main():
+    parser = optparse.OptionParser(usage='%prog OUTFILE.md')
+    options, args = parser.parse_args()
+    if len(args) != 1:
+        parser.error('Expected an output filename')
     
-    # Reverse-lookup token index to decode sequences back to
-# something readable.
+    # Add any paths that contain templates here, relative to this directory.
+templates_path = ['_templates']
+    
+    
+class TestCache(unittest.TestCase):
+    def setUp(self):
+        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
+        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
+        _mkdir(TESTDATA_DIR)
+        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
+        self.tearDown()
+    
+            return fn
+    
+        def test_and_(self, shell):
+        assert shell.and_('foo', 'bar') == 'foo; and bar'
+    
+        @memoize
+    def get_aliases(self):
+        proc = Popen(['tcsh', '-ic', 'alias'], stdout=PIPE, stderr=DEVNULL)
+        return dict(
+            self._parse_alias(alias)
+            for alias in proc.stdout.read().decode('utf-8').split('\n')
+            if alias and '\t' in alias)
+    
+    
+class Zsh(Generic):
+    friendly_name = 'ZSH'
+    
+    
+@pytest.mark.parametrize('script, output', [
+    ('pyenv global', 'system'),
+    ('pyenv versions', '  3.7.0\n  3.7.1\n* 3.7.2\n'),
+    ('pyenv install --list', '  3.7.0\n  3.7.1\n  3.7.2\n'),
+])
+def test_not_match(script, output):
+    assert not match(Command(script, output=output))
+    
+    # Define sampling models
 reverse_input_char_index = dict(
     (i, char) for char, i in input_token_index.items())
 reverse_target_char_index = dict(
     (i, char) for char, i in target_token_index.items())
     
     
-# the data, split between train and test sets
-(x_train, y_train), (x_test, y_test) = mnist.load_data()
-x_train = x_train.astype('float32')
-x_test = x_test.astype('float32')
-x_train /= 255
-x_test /= 255
-input_shape = x_train.shape[1:]
+def get_function_signature(function, method=True):
+    wrapped = getattr(function, '_original_function', None)
+    if wrapped is None:
+        signature = inspect.getargspec(function)
+    else:
+        signature = inspect.getargspec(wrapped)
+    defaults = signature.defaults
+    if method:
+        args = signature.args[1:]
+    else:
+        args = signature.args
+    if defaults:
+        kwargs = zip(args[-len(defaults):], defaults)
+        args = args[:-len(defaults)]
+    else:
+        kwargs = []
+    st = '%s.%s(' % (clean_module_name(function.__module__), function.__name__)
     
+                x = np.concatenate((image_batch, generated_images))
     
-def test_boston_load_does_not_affect_global_rng(fake_downloaded_boston_path):
-    np.random.seed(1337)
-    before = np.random.randint(0, 100, size=10)
+    This script loads the ```s2s.h5``` model saved by [lstm_seq2seq.py
+](/examples/lstm_seq2seq/) and generates sequences from it. It assumes
+that no changes have been made (for example: ```latent_dim``` is unchanged,
+and the input data and model architecture are unchanged).
     
-    
-def test_follow_all_output_options_used_for_redirects(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 3
-    assert HTTP_OK not in r
-    
-    # def test_unicode_url_verbose(self):
-#     r = http(httpbin.url + '--verbose', u'/get?test=' + UNICODE)
-#     assert HTTP_OK in r
-    
-    
-@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
-@pytest.mark.parametrize('filename', filenames)
-def test_rst_file_syntax(filename):
-    p = subprocess.Popen(
-        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
-    )
-    err = p.communicate()[1]
-    assert p.returncode == 0, err.decode('utf8')
+    print('Train...')
+model.fit(x_train, y_train,
+          batch_size=batch_size,
+          epochs=epochs,
+          validation_data=(x_test, y_test))
+score, acc = model.evaluate(x_test, y_test, batch_size=batch_size)
+print('Test score:', score)
+print('Test accuracy:', acc)
 
     
-        def test_download_interrupted(self, httpbin_both):
-        with open(os.devnull, 'w') as devnull:
-            downloader = Downloader(output_file=devnull, progress_file=devnull)
-            downloader.start(Response(
-                url=httpbin_both.url + '/',
-                headers={'Content-Length': 5}
-            ))
-            downloader.chunk_downloaded(b'1234')
-            downloader.finish()
-            assert downloader.interrupted
-            downloader._progress_reporter.join()
+    print('Build model...')
+model = Sequential()
+model.add(Embedding(max_features, 128))
+model.add(LSTM(128, dropout=0.2, recurrent_dropout=0.2))
+model.add(Dense(1, activation='sigmoid'))
+    
+    import random
+from keras.datasets import mnist
+from keras.models import Model
+from keras.layers import Input, Flatten, Dense, Dropout, Lambda
+from keras.optimizers import RMSprop
+from keras import backend as K
     
     
-@mock.patch('httpie.core.get_response')
-def test_error_traceback(get_response):
-    exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    with raises(ConnectionError):
-        main(['http', '--ignore-stdin', '--traceback', 'www.google.com'])
+def test_invalid_data_format():
+    with pytest.raises(ValueError):
+        K.normalize_data_format('channels_middle')
     
-        def test_binary_stdin(self, httpbin):
-        with open(BIN_FILE_PATH, 'rb') as stdin:
-            env = MockEnvironment(
-                stdin=stdin,
-                stdin_isatty=False,
-                stdout_isatty=False
-            )
-            r = http('--print=B', 'POST', httpbin.url + '/post', env=env)
-            assert r == BIN_FILE_CONTENT
+        #   - Make sure the value of `use_multiprocessing` is ignored
+    #   - Make sure `RuntimeError` exception bubbles up
+    with pytest.raises(RuntimeError):
+        model.fit_generator(custom_generator(),
+                            steps_per_epoch=samples,
+                            validation_steps=None,
+                            max_queue_size=10,
+                            workers=0,
+                            use_multiprocessing=True)
     
     
-def build_output_stream(
-    args: argparse.Namespace,
-    env: Environment,
-    request: requests.Request,
-    response: requests.Response,
-    output_options: str
-) -> Iterable[bytes]:
-    '''Build and return a chain of iterators over the `request`-`response`
-    exchange each of which yields `bytes` chunks.
+# TODO: resolve flakyness issue. Tracked with #11064
+@pytest.mark.parametrize('metrics_mode', ['list', 'dict'])
+@flaky(rerun_filter=lambda err, *args: issubclass(err[0], AssertionError))
+def test_stateful_metrics(metrics_mode):
+    np.random.seed(1334)
     
-        '''
-    name = 'HTTP'
-    aliases = ['http']
-    filenames = ['*.http']
-    tokens = {
-        'root': [
-            # Request-Line
-            (r'([A-Z]+)( +)([^ ]+)( +)(HTTP)(/)(\d+\.\d+)',
-             pygments.lexer.bygroups(
-                 pygments.token.Name.Function,
-                 pygments.token.Text,
-                 pygments.token.Name.Namespace,
-                 pygments.token.Text,
-                 pygments.token.Keyword.Reserved,
-                 pygments.token.Operator,
-                 pygments.token.Number
-             )),
-            # Response Status-Line
-            (r'(HTTP)(/)(\d+\.\d+)( +)(\d{3})( +)(.+)',
-             pygments.lexer.bygroups(
-                 pygments.token.Keyword.Reserved,  # 'HTTP'
-                 pygments.token.Operator,  # '/'
-                 pygments.token.Number,  # Version
-                 pygments.token.Text,
-                 pygments.token.Number,  # Status code
-                 pygments.token.Text,
-                 pygments.token.Name.Exception,  # Reason
-             )),
-            # Header
-            (r'(.*?)( *)(:)( *)(.+)', pygments.lexer.bygroups(
-                pygments.token.Name.Attribute,  # Name
-                pygments.token.Text,
-                pygments.token.Operator,  # Colon
-                pygments.token.Text,
-                pygments.token.String  # Value
-            ))
-        ]
-    }
+            self.bias_i_i = self.bias[:self.units]
+        self.bias_f_i = self.bias[self.units: self.units * 2]
+        self.bias_c_i = self.bias[self.units * 2: self.units * 3]
+        self.bias_o_i = self.bias[self.units * 3: self.units * 4]
+        self.bias_i = self.bias[self.units * 4: self.units * 5]
+        self.bias_f = self.bias[self.units * 5: self.units * 6]
+        self.bias_c = self.bias[self.units * 6: self.units * 7]
+        self.bias_o = self.bias[self.units * 7:]
     
-            elif state == 'port_absent':
-            changed, result_lb = self.ensure_loadbalancerpool_absent(
-                alias=loadbalancer_alias,
-                location=loadbalancer_location,
-                name=loadbalancer_name,
-                port=loadbalancer_port)
+        def call(self, inputs):
+        output = K.local_conv2d(inputs,
+                                self.kernel,
+                                self.kernel_size,
+                                self.strides,
+                                (self.output_row, self.output_col),
+                                self.data_format)
     
-        module.exit_json(changed=True)
     
-    # (c) 2016, Olivier Boukili <boukili.olivier@gmail.com>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+class MissingNonceTest(unittest.TestCase):
+    '''Tests for acme.errors.MissingNonce.'''
     
-        if username not in ht.users():
-        return ('%s not present' % username, False)
-    else:
-        if not check_mode:
-            ht.delete(username)
-            ht.save()
-        return ('Remove %s' % username, True)
+    # A shorter title for the navigation bar.  Default is the same as html_title.
+#html_short_title = None
     
-        def get_jenkins_connection(self):
-        try:
-            if (self.user and self.password):
-                return jenkins.Jenkins(self.jenkins_url, self.user, self.password)
-            elif (self.user and self.token):
-                return jenkins.Jenkins(self.jenkins_url, self.user, self.token)
-            elif (self.user and not (self.password or self.token)):
-                return jenkins.Jenkins(self.jenkins_url, self.user)
-            else:
-                return jenkins.Jenkins(self.jenkins_url)
-        except Exception as e:
-            self.module.fail_json(msg='Unable to connect to Jenkins server, %s' % to_native(e), exception=traceback.format_exc())
+            self.vhosts.append(
+            obj.VirtualHost(
+                'path', 'aug_path', set([obj.Addr.fromstring('*:80')]),
+                False, False,
+                'wildcard.com', set(['*.wildcard.com'])))
     
-        # --- run command ---
-    try:
-        ipmi_cmd = command.Command(
-            bmc=name, userid=user, password=password, port=port
-        )
-        module.debug('ipmi instantiated - name: '%s'' % name)
+    import pytest
     
-        HAS_GITHUB_API = True
-except ImportError:
-    GITHUB_IMP_ERR = traceback.format_exc()
-    HAS_GITHUB_API = False
-    
-            for stream in info['data']['vidl']:
+        def prepare(self):
+        '''Memoized plugin preparation.'''
+        assert self.initialized
+        if self._prepared is None:
             try:
-                stream_id = self.vd_2_id[stream['vd']]
-                if stream_id in self.stream_types:
-                    continue
-                stream_profile = self.id_2_profile[stream_id]
-                self.streams[stream_id] = {'video_profile': stream_profile, 'container': 'm3u8', 'src': [stream['m3u']], 'size' : 0, 'm3u8_url': stream['m3u']}
-            except Exception as e:
-                log.i('vd: {} is not handled'.format(stream['vd']))
-                log.i('info is {}'.format(stream))
-    
-    
-        if not opts and not args:
-        # Display help.
-        print(_help)
-        # Enter GUI mode.
-        #from .gui import gui_main
-        #gui_main()
-    else:
-        conf = {}
-        for opt, arg in opts:
-            if opt in ('-h', '--help'):
-                # Display help.
-                print(_help)
-    
-        def prepare(self, **kwargs):
-        if self.__class__.coeff is None:
-            magic_list = self.__class__.fetch_magic(self.__class__.a_mobile_url)
-            self.__class__.coeff = self.__class__.get_coeff(magic_list)
-    
-    
-def hard_sigmoid(x):
-    '''
-    x = 0.                  x < -2.5
-      = 1.                  x > 2.5
-      = 0.2 * x + 0.5       otherwise
-    '''
-    x = (0.2 * x) + 0.5
-    x = tf.clip_by_value(x, 0., 1.)
-    return x
-    
-    
-# TODO(huay): char_cnn_embedding
-def char_cnn_embedding(x, c_embed_size=8, share_cnn_weights=True, name='char_cnn_embedding', reuse=None):
-    '''
-    In:  [N, max_n_word, max_n_char]
-    Out: [N, max_n_word, c_embed_size]
-    
-    l2_regularizer = L1L2Regularizer(l2=0.01)
-    
-                if point.name == 'p':
-                link = point.find('a')
-                if link is not None:
-                    link = clean_pdf_link(link.attrs['href'])
-                    ext = get_extension(link)
-                    print(ext)
-                    if not ext in forbidden_extensions:
-                        print(shorten_title(point.text) + ' (' + link + ')')
-                        try:
-                            name = clean_text(point.text.split('[' + ext + ']')[0])
-                            fullname = '.'.join((name, ext))
-                            if not os.path.exists('/'.join((current_directory, fullname)) ):
-                                download_pdf(link, current_directory, '.'.join((name, ext)))
-                        except KeyboardInterrupt:
-                            try:
-                                print('Press Ctrl-C in 1 second to quit')
-                                time.sleep(1)
-                            except KeyboardInterrupt:
-                                print('Cancelling..')
-                                break
-                        except:
-                            failures.append(point.text)
-                        
-        point = point.next_sibling          
-    
-            # Adding unique constraint on 'EventTag', fields ['event_id', 'key', 'value']
-        db.create_unique(u'tagstore_eventtag', ['event_id', 'key', 'value'])
-    
-        models = {
-        'tagstore.eventtag': {
-            'Meta': {'unique_together': '(('project_id', 'event_id', 'key', 'value'),)', 'object_name': 'EventTag', 'index_together': '(('project_id', 'key', 'value'), ('group_id', 'key', 'value'))'},
-            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'db_index': 'True'}),
-            'event_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {}),
-            'group_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {}),
-            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
-            'key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
-            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {}),
-            'value': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagValue']', 'db_column': ''value_id''})
-        },
-        'tagstore.grouptagkey': {
-            'Meta': {'unique_together': '(('project_id', 'group_id', '_key'),)', 'object_name': 'GroupTagKey'},
-            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
-            'group_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
-            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
-            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
-            'values_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
-        },
-        'tagstore.grouptagvalue': {
-            'Meta': {'unique_together': '(('project_id', 'group_id', '_key', '_value'),)', 'object_name': 'GroupTagValue', 'index_together': '(('project_id', '_key', '_value', 'last_seen'),)'},
-            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
-            '_value': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagValue']', 'db_column': ''value_id''}),
-            'first_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
-            'group_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
-            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
-            'last_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
-            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
-            'times_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
-        },
-        'tagstore.tagkey': {
-            'Meta': {'unique_together': '(('project_id', 'environment_id', 'key'),)', 'object_name': 'TagKey'},
-            'environment_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {}),
-            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
-            'key': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
-            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
-            'status': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'}),
-            'values_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
-        },
-        'tagstore.tagvalue': {
-            'Meta': {'unique_together': '(('project_id', '_key', 'value'),)', 'object_name': 'TagValue', 'index_together': '(('project_id', '_key', 'last_seen'),)'},
-            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
-            'data': ('sentry.db.models.fields.gzippeddict.GzippedDictField', [], {'null': 'True', 'blank': 'True'}),
-            'first_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
-            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
-            'last_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
-            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
-            'times_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'}),
-            'value': ('django.db.models.fields.CharField', [], {'max_length': '200'})
-        }
-    }
-    
-    
-def chunked(iterator, size):
-    chunk = []
-    for item in iterator:
-        chunk.append(item)
-        if len(chunk) == size:
-            yield chunk
-            chunk = []
-    
-    
-def get_logger():
-    'Attach a file handler to the logger if there isn't one already.'
-    debug_on = getattr(settings, 'SOUTH_LOGGING_ON', False)
-    logging_file = getattr(settings, 'SOUTH_LOGGING_FILE', False)
+                self._initialized.prepare()
+            except errors.MisconfigurationError as error:
+                logger.debug('Misconfigured %r: %s', self, error, exc_info=True)
+                self._prepared = error
+            except errors.NoInstallationError as error:
+                logger.debug(
+                    'No installation (%r): %s', self, error, exc_info=True)
+                self._prepared = error
+            except errors.PluginError as error:
+                logger.debug('Other error:(%r): %s', self, error, exc_info=True)
+                self._prepared = error
+            else:
+                self._prepared = True
+        return self._prepared
