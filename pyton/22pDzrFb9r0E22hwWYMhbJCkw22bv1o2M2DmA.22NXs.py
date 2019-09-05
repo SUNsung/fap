@@ -1,97 +1,73 @@
 
         
-        
-class CallableChoiceIterator:
-    def __init__(self, choices_func):
-        self.choices_func = choices_func
+            Requests that produced this error are safe to retry.
+    '''
     
-        def as_postgresql(self, compiler, connection, **extra_context):
-        # Cast FloatField to DecimalField as PostgreSQL doesn't support the
-        # following function signatures:
-        # - LOG(double, double)
-        # - MOD(double, double)
-        output_field = DecimalField(decimal_places=sys.float_info.dig, max_digits=1000)
-        clone = self.copy()
-        clone.set_source_expressions([
-            Cast(expression, output_field) if isinstance(expression.output_field, FloatField)
-            else expression for expression in self.get_source_expressions()
-        ])
-        return clone.as_sql(compiler, connection, **extra_context)
-    
-        def test_filtered_aggregate_ref_annotation(self):
-        aggs = Author.objects.annotate(
-            double_age=F('age') * 2,
-        ).aggregate(
-            cnt=Count('pk', filter=Q(double_age__gt=100)),
+        @classmethod
+    def basic_response_server(cls, **kwargs):
+        return cls.text_response_server(
+            'HTTP/1.1 200 OK\r\n' +
+            'Content-Length: 0\r\n\r\n',
+            **kwargs
         )
-        self.assertEqual(aggs['cnt'], 2)
     
-        def test_version_dev_tuple(self):
-        expect = ('1.2.3dev', 1, 2, 3)
-        ops = FakePostGISOperations(expect[0])
-        actual = ops.postgis_version_tuple()
-        self.assertEqual(expect, actual)
+        :param cookie_dict: Dict of key/values to insert into CookieJar.
+    :param cookiejar: (optional) A cookiejar to add the cookies to.
+    :param overwrite: (optional) If False, will not replace cookies
+        already in the jar with new ones.
+    :rtype: CookieJar
+    '''
+    if cookiejar is None:
+        cookiejar = RequestsCookieJar()
     
-        # Copy any attributes that a decorator adds to the function it decorates.
-    for dec in decorators:
-        _update_method_wrapper(_wrapper, dec)
-    # Preserve any existing attributes of 'method', including the name.
-    update_wrapper(_wrapper, method)
-    return _wrapper
+    # Output file base name for HTML help builder.
+htmlhelp_basename = 'Requestsdoc'
     
-            # Making sure we get a valid pointer to the OGR Driver
-        if not driver:
-            raise GDALException('Could not initialize GDAL/OGR Driver on input: %s' % dr_input)
-        self.ptr = driver
+        def redirect_resp_handler(sock):
+        consume_socket_content(sock, timeout=0.5)
+        location = u'//{}:{}/{}'.format(host, port, path)
+        sock.send(
+            b'HTTP/1.1 301 Moved Permanently\r\n'
+            b'Content-Length: 0\r\n'
+            b'Location: ' + location.encode('utf8') + b'\r\n'
+            b'\r\n'
+        )
+        redirect_request.append(consume_socket_content(sock, timeout=0.5))
+        sock.send(b'HTTP/1.1 200 OK\r\n\r\n')
     
-            if size[0] > self.width or size[1] > self.height:
-            raise ValueError('Size is larger than raster.')
     
-        @property
-    def extent(self):
-        '''
-        Return the extent as a 4-tuple (xmin, ymin, xmax, ymax).
-        '''
-        # Calculate boundary values based on scale and size
-        xval = self.origin.x + self.scale.x * self.width
-        yval = self.origin.y + self.scale.y * self.height
-        # Calculate min and max values
-        xmin = min(xval, self.origin.x)
-        xmax = max(xval, self.origin.x)
-        ymin = min(yval, self.origin.y)
-        ymax = max(yval, self.origin.y)
+def _check_cryptography(cryptography_version):
+    # cryptography < 1.3.4
+    try:
+        cryptography_version = list(map(int, cryptography_version.split('.')))
+    except ValueError:
+        return
     
-        def contains(self, x):
-        if isinstance(x, list):
-            x = np.array(x)  # Promote list to array for contains check
-        return ((x==0) | (x==1)).all()
     
-            # Flag to payout 1.5 on a 'natural' blackjack win, like casino rules
-        # Ref: http://www.bicyclecards.com/how-to-play/blackjack/
-        self.natural = natural
-        # Start the first game
-        self.reset()
+def head(url, **kwargs):
+    r'''Sends a HEAD request.
     
-            '''
-        nvec: vector of counts of each categorical variable
-        '''
-        assert (np.array(nvec) > 0).all(), 'nvec (counts) have to be positive'
-        self.nvec = np.asarray(nvec, dtype=np.int64)
+        def test_delivery_stream_tags(self):
+        result = firehose_api.get_delivery_stream_tags(TEST_STREAM_NAME)
+        self.assertEquals(TEST_TAGS, result['Tags'])
+        result = firehose_api.get_delivery_stream_tags(TEST_STREAM_NAME, exclusive_start_tag_key='MyTag')
+        self.assertEquals([TEST_TAG_2], result['Tags'])
+        result = firehose_api.get_delivery_stream_tags(TEST_STREAM_NAME, limit=1)
+        self.assertEquals([TEST_TAG_1], result['Tags'])
+        self.assertEquals(True, result['HasMore'])
+
     
-        def _get_obs(self, pos=None):
-        if pos is None:
-            pos = self.read_head_position
-        if pos < 0:
-            return self.base
-        if isinstance(pos, np.ndarray):
-            pos = pos.item()
-        try:
-            return self.input_data[pos]
-        except IndexError:
-            return self.base
+        def _list_stack_names(self):
+        client = aws_stack.connect_to_service('cloudformation')
+        stack_names = [s['StackName'] for s in client.list_stacks()['StackSummaries']]
+        return stack_names
     
-            logger.debug('Starting ffmpeg with '%s'', ' '.join(self.cmdline))
-        if hasattr(os,'setsid'): #setsid not present on Windows
-            self.proc = subprocess.Popen(self.cmdline, stdin=subprocess.PIPE, preexec_fn=os.setsid)
-        else:
-            self.proc = subprocess.Popen(self.cmdline, stdin=subprocess.PIPE)
+        def test_attribute_raw_subscribe(self):
+        # create SNS topic and connect it to an SQS queue
+        queue_arn = aws_stack.sqs_queue_arn(TEST_QUEUE_NAME)
+        self.sns_client.subscribe(
+            TopicArn=self.topic_arn,
+            Protocol='sqs',
+            Endpoint=queue_arn,
+            Attributes={'RawMessageDelivery': 'true'}
+        )
