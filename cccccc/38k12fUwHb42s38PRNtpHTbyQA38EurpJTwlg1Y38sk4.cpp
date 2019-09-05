@@ -1,429 +1,705 @@
 
         
-        void absDiff(const Size2D &size,
-             const s32 *src0Base, ptrdiff_t src0Stride,
-             const s32 *src1Base, ptrdiff_t src1Stride,
-             s32 *dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, AbsDiffSigned<s32>());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
+        OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_ENTER
+    
+    //-----------------------------------------------------------------------------
+//
+//	class FloatAttribute
+//
+//-----------------------------------------------------------------------------
+    
+    
+    {    for (int i = 0; i < n; ++i)
+       Xdr::read <StreamIO> (is, _value[i]);
 }
     
+    class InputPart;
+class TiledInputPart;
+class DeepScanLineInputPart;
+class DeepTiledInputPart;
     
-    {    void operator() (const T * src0, const T * src1, T * dst) const
+    
+    
+    
+void
+Header::setVersion(const int version)
+{
+    if (version != 1)
     {
-        dst[0] = internal::saturate_cast<T>((WT)src0[0] + (WT)src1[0]);
+        throw IEX_NAMESPACE::ArgExc ('We can only process version 1');
     }
-};
+    }
     
-    void bitwiseXor(const Size2D &size,
-                const u8 *src0Base, ptrdiff_t src0Stride,
-                const u8 *src1Base, ptrdiff_t src1Stride,
-                u8 *dstBase, ptrdiff_t dstStride)
+    //
+// Used to wrap OPENEXR_IMF_INTERNAL_NAMESPACE::IStream as a Mutex.
+//
+struct InputStreamMutex : public Mutex
 {
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, BitwiseXor());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
+    OPENEXR_IMF_INTERNAL_NAMESPACE::IStream* is;
+    Int64 currentPosition;
+    }
+    
+    TEST_F(JsonObjectWriterTest, PrettyPrintList) {
+  ow_ = new JsonObjectWriter(' ', out_stream_);
+  ow_->StartObject('')
+      ->StartList('items')
+      ->RenderString('', 'item1')
+      ->RenderString('', 'item2')
+      ->RenderString('', 'item3')
+      ->EndList()
+      ->StartList('empty')
+      ->EndList()
+      ->EndObject();
+  EXPECT_EQ(
+      '{\n'
+      ' \'items\': [\n'
+      '  \'item1\',\n'
+      '  \'item2\',\n'
+      '  \'item3\'\n'
+      ' ],\n'
+      ' \'empty\': []\n'
+      '}\n',
+      CloseStreamAndGetString());
 }
     
     
-    {            v_src = vld3q_u8(src + sj + 48);
-            vst1q_u8(dst + dj + 16, v_src.val[coi]);
-        }
-#endif
-    
-    
-    {            v_y = vld2q_u8(srcy + syj + 32);
-            v_dst.val[0] = v_y.val[0];
-            v_dst.val[1] = vld1q_u8(srcu + sj + 16);
-            v_dst.val[2] = v_y.val[1];
-            v_dst.val[3] = vld1q_u8(srcv + sj + 16);
-            vst4q_u8(dst + dj + 64, v_dst);
-        }
-#endif
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVTS_FUNC(s32, s16, 8,
-    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
-    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.32 {d4-d5}, [%[src1]]                             \n\t'
-            'vld1.32 {d6-d7}, [%[src2]]                             \n\t'
-            'vcvt.f32.s32 q4, q2                                    \n\t'
-            'vcvt.f32.s32 q5, q3                                    \n\t'
-            'vmul.f32 q6, q4, q0                                    \n\t'
-            'vmul.f32 q7, q5, q0                                    \n\t'
-            'vadd.f32 q8, q6, q1                                    \n\t'
-            'vadd.f32 q9, q7, q1                                    \n\t'
-            'vcvt.s32.f32 q10, q8                                   \n\t'
-            'vcvt.s32.f32 q11, q9                                   \n\t'
-            'vqmovn.s32 d24, q10                                    \n\t'
-            'vqmovn.s32 d25, q11                                    \n\t'
-            'vst1.8 {d24-d25}, [%[dst]]                             \n\t'
-            : /*no output*/
-            : [src1] 'r' (_src + i + 0),
-              [src2] 'r' (_src + i + 4),
-              [dst] 'r' (_dst + i),
-              'w'  (vscale), 'w' (vshift)
-            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25'
-        );
-    }
-})
-#else
-CVTS_FUNC(s32, s16, 8,
-    float32x4_t vscale = vdupq_n_f32((f32)alpha);
-    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        int32x4_t vline1_s32 = vld1q_s32(_src + i + 0);
-        int32x4_t vline2_s32 = vld1q_s32(_src + i + 4);
-        float32x4_t vline1_f32 = vcvtq_f32_s32(vline1_s32);
-        float32x4_t vline2_f32 = vcvtq_f32_s32(vline2_s32);
-        vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        vline1_f32 = vaddq_f32(vline1_f32, vshift);
-        vline2_f32 = vaddq_f32(vline2_f32, vshift);
-        vline1_s32 = vcvtq_s32_f32(vline1_f32);
-        vline2_s32 = vcvtq_s32_f32(vline2_f32);
-        int16x4_t vRes1 = vqmovn_s32(vline1_s32);
-        int16x4_t vRes2 = vqmovn_s32(vline2_s32);
-        vst1q_s16(_dst + i, vcombine_s16(vRes1, vRes2));
-    }
-})
-#endif
-    
-                vec128 v_src = vld3q(src + js), v_dst;
-            v_src.val[0] = vrev64q(v_src.val[0]);
-            v_src.val[1] = vrev64q(v_src.val[1]);
-            v_src.val[2] = vrev64q(v_src.val[2]);
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/common.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-      static vector<string> LayerTypeList() {
-    CreatorRegistry& registry = Registry();
-    vector<string> layer_types;
-    for (typename CreatorRegistry::iterator iter = registry.begin();
-         iter != registry.end(); ++iter) {
-      layer_types.push_back(iter->first);
-    }
-    return layer_types;
-  }
-    
-    
-  /// @brief Not implemented -- AccuracyLayer cannot be used as a loss.
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
-    for (int i = 0; i < propagate_down.size(); ++i) {
-      if (propagate_down[i]) { NOT_IMPLEMENTED; }
-    }
-  }
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    
-    { protected:
-  /**
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (N \times 1 \times K) @f$ or, if out_max_val
-   *      @f$ (N \times 2 \times K) @f$ unless axis set than e.g.
-   *      @f$ (N \times K \times H \times W) @f$ if axis == 1
-   *      the computed outputs @f$
-   *       y_n = \arg\max\limits_i x_{ni}
-   *      @f$ (for @f$ K = 1 @f$).
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  /// @brief Not implemented (non-differentiable function)
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
-    NOT_IMPLEMENTED;
-  }
-  bool out_max_val_;
-  size_t top_k_;
-  bool has_axis_;
-  int axis_;
-};
-    
-      virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include <grpcpp/impl/grpc_library.h>
-#include <grpcpp/security/credentials.h>
-    
-    grpc::string ChannelArguments::GetSslTargetNameOverride() const {
-  for (unsigned int i = 0; i < args_.size(); i++) {
-    if (grpc::string(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG) == args_[i].key) {
-      return args_[i].value.string;
-    }
-  }
-  return '';
+    {  string str_with_null_char('ab\0c', 4);
+  EXPECT_EXIT(
+      TextFormatDecodeData::DecodeDataForString(str_with_null_char, 'def'),
+      ::testing::KilledBySignal(SIGABRT),
+      'error: got a null char in a string for making TextFormat data, input:');
+  EXPECT_EXIT(
+      TextFormatDecodeData::DecodeDataForString('def', str_with_null_char),
+      ::testing::KilledBySignal(SIGABRT),
+      'error: got a null char in a string for making TextFormat data, input:');
 }
+#endif  // PROTOBUF_HAS_DEATH_TEST
     
-    void CensusClientCallData::OnDoneRecvTrailingMetadataCb(void* user_data,
-                                                        grpc_error* error) {
-  grpc_call_element* elem = reinterpret_cast<grpc_call_element*>(user_data);
-  CensusClientCallData* calld =
-      reinterpret_cast<CensusClientCallData*>(elem->call_data);
-  GPR_ASSERT(calld != nullptr);
-  if (error == GRPC_ERROR_NONE) {
-    GPR_ASSERT(calld->recv_trailing_metadata_ != nullptr);
-    FilterTrailingMetadata(calld->recv_trailing_metadata_,
-                           &calld->elapsed_time_);
-  }
-  GRPC_CLOSURE_RUN(calld->initial_on_done_recv_trailing_metadata_,
-                   GRPC_ERROR_REF(error));
-}
-    
-    std::unique_ptr<ServerBuilderOption> MakeChannelArgumentOption(
-    const grpc::string& name, int value) {
-  class IntOption final : public ServerBuilderOption {
-   public:
-    IntOption(const grpc::string& name, int value)
-        : name_(name), value_(value) {}
-    }
-    }
-    
-    
-    {}  // namespace
-    
-    #include <grpc/support/port_platform.h>
-    
-    TEST(AutoCompactTest, ReadAll) {
-  DoReads(kCount);
-}
-    
-      // Reports dropped bytes to the reporter.
-  // buffer_ must be updated to remove the dropped bytes prior to invocation.
-  void ReportCorruption(uint64_t bytes, const char* reason);
-  void ReportDrop(uint64_t bytes, const Status& reason);
-    
-    
-    {}  // namespace leveldb
-    
-    
-    {}  // namespace leveldb
-
-    
-        public:
-        CompositeMinibatchSource(const MinibatchSourceConfig& configuration);
-    
-            for (const auto& key : requiredKeys)
-        {
-            if (!dict.Contains(key))
-            {
-                 LogicError('Required key '%ls' is not found in the dictionary (%s).',
-                            key.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
-            }
-        }
-    
-        public:
-        template <typename ElementType>
-        PackedValue(const NDShape& sampleShape, const std::vector<Axis>& sampleDynamicAxes, const std::shared_ptr<Microsoft::MSR::CNTK::Matrix<ElementType>>& packedDataMatrix, const std::shared_ptr<Microsoft::MSR::CNTK::MBLayout>& packedDataLayout, bool isReadOnly)
-            : Value(nullptr), m_isPacked(true), m_sampleShape(sampleShape), m_sampleDynamicAxes(sampleDynamicAxes), m_packedData(nullptr), m_packedDataLayout(packedDataLayout), m_isReadOnly(isReadOnly)
-        {
-            NDShape packedMatrixShape({ packedDataMatrix->GetNumRows(), packedDataMatrix->GetNumCols() });
-            auto tensorView = new Microsoft::MSR::CNTK::TensorView<ElementType>(packedDataMatrix, AsTensorViewShape(packedMatrixShape));
-            m_packedData = MakeSharedObject<NDArrayView>(AsDataType<ElementType>(), AsDeviceDescriptor(packedDataMatrix->GetDeviceId()), AsStorageFormat(packedDataMatrix->GetFormat()), packedMatrixShape, m_isReadOnly, tensorView);
-    }
-    
-                // Validate that each of the dynamic axes are unique
-            std::unordered_set<Axis> uniqueDynamicAxis;
-            for (auto& currentDynamicAxis : dynamicAxes)
-            {
-                auto retVal = uniqueDynamicAxis.insert(currentDynamicAxis);
-                if (!retVal.second)
-                    InvalidArgument('Dynamic axis named %S is specified more than once for Variable '%S'', currentDynamicAxis.Name().c_str(), AsString().c_str());
-            }
-    
-        // Releases the mutex
-    void Release()
-    {
-        assert(m_fd != -1);
-        // removing file
-        unlink(m_fileName.c_str());
-        // Note: file is intentionally removed *before* releasing the lock
-        // to ensure that locked file isn't deleted by the non-owner of the lock
-        m_lock.l_type = F_UNLCK;
-        // Now removing the lock and closing the file descriptor
-        // waiting processes will be notified
-        int rc = fcntl(m_fd, F_SETLKW, &m_lock);
-        if (rc == FCNTL_ERROR)
-        {
-            RuntimeError('Mutex Release: Failed to release mutex %s', m_fileName.c_str());
-        }
-        close(m_fd);
-        m_fd = -1;
-    }
-    
-    // Same as above but with additional information about required streams.
-void DataReader::StartMinibatchLoop(size_t mbSize, size_t epoch, const std::unordered_set<InputStreamDescription>& streamDescriptions, size_t requestedEpochSamples)
-{
-    for (size_t i = 0; i < m_ioNames.size(); i++)
-        m_dataReaders[m_ioNames[i]]->StartMinibatchLoop(mbSize, epoch, streamDescriptions, requestedEpochSamples);
-}
-    
-        void Start();
-    void Stop();
-    void Restart();
-    
-        size_t rank = runningAverage.GetShape().GetRank();
-    auto input = newInput.ValueTensorFor(rank, fr);
-    
-    // logistic loss for probability regression task
-struct LogisticRegression {
-  // duplication is necessary, as __device__ specifier
-  // cannot be made conditional on template parameter
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return common::Sigmoid(x); }
-  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return x >= 0.0f && x <= 1.0f; }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    return predt - label;
-  }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    const float eps = 1e-16f;
-    return fmaxf(predt * (1.0f - predt), eps);
-  }
-  template <typename T>
-  static T PredTransform(T x) { return common::Sigmoid(x); }
-  template <typename T>
-  static T FirstOrderGradient(T predt, T label) { return predt - label; }
-  template <typename T>
-  static T SecondOrderGradient(T predt, T label) {
-    const T eps = T(1e-16f);
-    return std::max(predt * (T(1.0f) - predt), eps);
-  }
-  static bst_float ProbToMargin(bst_float base_score) {
-    CHECK(base_score > 0.0f && base_score < 1.0f)
-      << 'base_score must be in (0,1) for logistic loss';
-    return -logf(1.0f / base_score - 1.0f);
-  }
-  static const char* LabelErrorMsg() {
-    return 'label must be in [0,1] for logistic regression';
-  }
-  static const char* DefaultEvalMetric() { return 'rmse'; }
-};
-    
-    // implementing configure.
-template<typename PairIter>
-inline void GradientBooster::Configure(PairIter begin, PairIter end) {
-  std::vector<std::pair<std::string, std::string> > vec(begin, end);
-  this->Configure(vec);
-}
-    
-    
-    {/*!
- * \brief Macro to register objective function.
- *
- * \code
- * // example of registering a objective
- * XGBOOST_REGISTER_OBJECTIVE(LinearRegression, 'reg:linear')
- * .describe('Linear regression objective')
- * .set_body([]() {
- *     return new RegLossObj(LossType::kLinearSquare);
- *   });
- * \endcode
- */
-#define XGBOOST_REGISTER_OBJECTIVE(UniqueId, Name)                      \
-  static DMLC_ATTRIBUTE_UNUSED ::xgboost::ObjFunctionReg &              \
-  __make_ ## ObjFunctionReg ## _ ## UniqueId ## __ =                    \
-      ::dmlc::Registry< ::xgboost::ObjFunctionReg>::Get()->__REGISTER__(Name)
-}  // namespace xgboost
-#endif  // XGBOOST_OBJECTIVE_H_
-
-    
-      bool Read(SparsePage* page,
-            dmlc::SeekStream* fi,
-            const std::vector<bst_uint>& sorted_index_set) override {
-    if (!fi->Read(&disk_offset_)) return false;
-    auto& offset_vec = page->offset.HostVector();
-    auto& data_vec = page->data.HostVector();
-    // setup the offset
-    offset_vec.clear();
-    offset_vec.push_back(0);
-    for (unsigned int fid : sorted_index_set) {
-      CHECK_LT(fid + 1, disk_offset_.size());
-      size_t size = disk_offset_[fid + 1] - disk_offset_[fid];
-      offset_vec.push_back(offset_vec.back() + size);
-    }
-    data_vec.resize(offset_vec.back());
-    // read in the data
-    size_t begin = fi->Tell();
-    size_t curr_offset = 0;
-    for (size_t i = 0; i < sorted_index_set.size();) {
-      bst_uint fid = sorted_index_set[i];
-      if (disk_offset_[fid] != curr_offset) {
-        CHECK_GT(disk_offset_[fid], curr_offset);
-        fi->Seek(begin + disk_offset_[fid] * sizeof(Entry));
-        curr_offset = disk_offset_[fid];
+        for (size_t i = 0; i < set_fields.size(); i++) {
+      const FieldDescriptor* field = set_fields[i];
+      if (ShouldBeClear(field)) {
+        reflection->ClearField(message, field);
+        continue;
       }
-      size_t j, size_to_read = 0;
-      for (j = i; j < sorted_index_set.size(); ++j) {
-        if (disk_offset_[sorted_index_set[j]] == disk_offset_[fid] + size_to_read) {
-          size_to_read += offset_vec[j + 1] - offset_vec[j];
+      if (field->type() == FieldDescriptor::TYPE_MESSAGE) {
+        if (field->is_repeated()) {
+          for (int j = 0; j < reflection->FieldSize(*message, field); j++) {
+            StripMessage(reflection->MutableRepeatedMessage(message, field, j));
+          }
         } else {
-          break;
+          StripMessage(reflection->MutableMessage(message, field));
         }
       }
-    }
     }
     
-      bool PredictFromCache(DMatrix* dmat,
-                        HostDeviceVector<bst_float>* out_preds,
-                        const gbm::GBTreeModel& model,
-                        unsigned ntree_limit) {
-    if (ntree_limit == 0 ||
-        ntree_limit * model.param.num_output_group >= model.trees.size()) {
-      auto it = cache_.find(dmat);
-      if (it != cache_.end()) {
-        const HostDeviceVector<bst_float>& y = it->second.predictions;
-        if (y.Size() != 0) {
-          out_preds->Resize(y.Size());
-          std::copy(y.HostVector().begin(), y.HostVector().end(),
-                    out_preds->HostVector().begin());
-          return true;
-        }
+        std::cerr << 'Generating ' << input_file
+        << ' to ' << output_file << std::endl;
+    benchmarks::BenchmarkDataset dataset;
+    Message* message;
+    std::string dataset_payload = ReadFile(input_file);
+    GOOGLE_CHECK(dataset.ParseFromString(dataset_payload))
+      << 'Can' t parse data file ' << input_file;
+    
+    
+    {  ASSERT_THROWS_WITH(
+      bn(torch::ones({2, 5})),
+      'Calling BatchNorm::forward is only permitted '
+      'when the 'stateful' option is true (was false). '
+      'Use BatchNorm::pure_forward instead.');
+}
+    
+    namespace caffe2 {
+    }
+    
+    
+    {} // namespace caffe2
+    
+    void set_superblock_metainfo(real_superblock_t *superblock,
+                             const std::vector<std::vector<char> > &keys,
+                             const std::vector<binary_blob_t> &values,
+                             cluster_version_t version) {
+    buf_write_t write(superblock->get());
+    reql_btree_superblock_t *data
+        = static_cast<reql_btree_superblock_t *>(
+            write.get_data_write(REQL_BTREE_SUPERBLOCK_SIZE));
+    }
+    
+        ~btree_slice_t();
+    
+    
+    {}  // namespace testing
+    
+    // Finally, you are free to instantiate the pattern with the types you
+// want.  If you put the above code in a header file, you can #include
+// it in multiple C++ source files and instantiate it multiple times.
+//
+// To distinguish different instances of the pattern, the first
+// argument to the INSTANTIATE_* macro is a prefix that will be added
+// to the actual test case name.  Remember to pick unique prefixes for
+// different instances.
+typedef testing::Types<char, int, unsigned int> MyTypes;
+INSTANTIATE_TYPED_TEST_CASE_P(My, FooTest, MyTypes);
+    
+    
+    {  return AssertionFailure() << pred_text << '('
+                            << e1 << ', '
+                            << e2 << ', '
+                            << e3 << ', '
+                            << e4 << ') evaluates to false, where'
+                            << '\n' << e1 << ' evaluates to ' << v1
+                            << '\n' << e2 << ' evaluates to ' << v2
+                            << '\n' << e3 << ' evaluates to ' << v3
+                            << '\n' << e4 << ' evaluates to ' << v4;
+}
+    
+      // Returns true if pathname describes an absolute path.
+  bool IsAbsolutePath() const;
+    
+    // When the compiler sees expression IsContainerTest<C>(0), if C is an
+// STL-style container class, the first overload of IsContainerTest
+// will be viable (since both C::iterator* and C::const_iterator* are
+// valid types and NULL can be implicitly converted to them).  It will
+// be picked over the second overload as 'int' is a perfect match for
+// the type of argument 0.  If C::iterator or C::const_iterator is not
+// a valid type, the first overload is not viable, and the second
+// overload will be picked.  Therefore, we can determine whether C is
+// a container class by checking the type of IsContainerTest<C>(0).
+// The value of the expression is insignificant.
+//
+// Note that we look for both C::iterator and C::const_iterator.  The
+// reason is that C++ injects the name of a class as a member of the
+// class itself (e.g. you can refer to class iterator as either
+// 'iterator' or 'iterator::iterator').  If we look for C::iterator
+// only, for example, we would mistakenly think that a class named
+// iterator is an STL container.
+//
+// Also note that the simpler approach of overloading
+// IsContainerTest(typename C::const_iterator*) and
+// IsContainerTest(...) doesn't work with Visual Age C++ and Sun C++.
+typedef int IsContainer;
+template <class C>
+IsContainer IsContainerTest(int /* dummy */,
+                            typename C::iterator* /* it */ = NULL,
+                            typename C::const_iterator* /* const_it */ = NULL) {
+  return 0;
+}
+    
+      // Smart pointer members.
+  void reset(T* ptr = NULL) {
+    depart();
+    capture(ptr);
+  }
+  T* get() const { return value_; }
+  T* operator->() const { return value_; }
+  T& operator*() const { return *value_; }
+    
+      // This device now supports text in pattern colorspace!
+  virtual GBool supportTextCSPattern(GfxState *state)
+  	{ return state->getFillColorSpace()->getMode() == csPattern; }
+    
+    #ifdef USE_GCC_PRAGMAS
+#pragma interface
+#endif
+    
+      // get attributes
+  attrs = attrsA;
+    
+    private:
+  struct Interval {
+    Interval(Object *dict, int baseA);
+    ~Interval();
+    GooString *prefix;
+    enum NumberStyle {
+      None,
+      Arabic,
+      LowercaseRoman,
+      UppercaseRoman,
+      UppercaseLatin,
+      LowercaseLatin
+    } style;
+    int first, base, length;
+  };
+    
+    
+    
+      // dictionary or stream
+  } else if (buf1.isCmd('<<')) {
+    shift(objNum);
+    obj->initDict(xref);
+    while (!buf1.isCmd('>>') && !buf1.isEOF()) {
+      if (!buf1.isName()) {
+	error(getPos(), 'Dictionary key must be a name object');
+	shift();
+      } else {
+	// buf1 might go away in shift(), so construct the key
+	key = copyString(buf1.getName());
+	shift();
+	if (buf1.isEOF() || buf1.isError()) {
+	  gfree(key);
+	  break;
+	}
+	obj->dictAdd(key, getObj(&obj2, fileKey, encAlgorithm, keyLength, objNum, objGen, fetchOriginatorNums));
       }
     }
-    return false;
+    if (buf1.isEOF())
+      error(getPos(), 'End of file inside dictionary');
+    // stream objects are not allowed inside content streams or
+    // object streams
+    if (allowStreams && buf2.isCmd('stream')) {
+      if ((str = makeStream(obj, fileKey, encAlgorithm, keyLength,
+			    objNum, objGen, fetchOriginatorNums))) {
+	obj->initStream(str);
+      } else {
+	obj->free();
+	obj->initError();
+      }
+    } else {
+      shift();
+    }
+    
+    PopplerCache::PopplerCache(int cacheSizeA)
+{
+  cacheSize = cacheSizeA;
+  keys = new PopplerCacheKey*[cacheSize];
+  items = new PopplerCacheItem*[cacheSize];
+  lastValidCacheIndex = -1;
+}
+    
+    
+    {  GBool mono;
+  GBool gray;
+  GBool transparency;
+  GBool gdi;
+  PSLevel level;		// PostScript level (1, 2, separation)
+  GBool level1PSBug;		// gTrue if it uses a feature not supported in PSOutputDev
+};
+    
+      Sound *copy();
+    
+    
+    {  int ret = XGBoosterLoadModel(handle, fname);
+  if (fname) jenv->ReleaseStringUTFChars(jfname,fname);
+  return ret;
+}
+    
+      size_t Size(unsigned node_id) {
+    return elem_of_each_node_[node_id].Size();
   }
+    
+    SEXP XGDMatrixSetInfo_R(SEXP handle, SEXP field, SEXP array) {
+  R_API_BEGIN();
+  int len = length(array);
+  const char *name = CHAR(asChar(field));
+  if (!strcmp('group', name)) {
+    std::vector<unsigned> vec(len);
+    #pragma omp parallel for schedule(static)
+    for (int i = 0; i < len; ++i) {
+      vec[i] = static_cast<unsigned>(INTEGER(array)[i]);
+    }
+    CHECK_CALL(XGDMatrixSetGroup(R_ExternalPtrAddr(handle), BeginPtr(vec), len));
+  } else {
+    std::vector<float> vec(len);
+    #pragma omp parallel for schedule(static)
+    for (int i = 0; i < len; ++i) {
+      vec[i] = REAL(array)[i];
+    }
+    CHECK_CALL(XGDMatrixSetFloatInfo(R_ExternalPtrAddr(handle),
+                                   CHAR(asChar(field)),
+                                   BeginPtr(vec), len));
+  }
+  R_API_END();
+  return R_NilValue;
+}
+    
+    #include <utility>
+#include <vector>
+#include <cmath>
+#include <algorithm>
+#include <utility>
+    
+      /*!
+   * \brief dense feature vector that can be taken by RegTree
+   * and can be construct from sparse feature vector.
+   */
+  struct FVec {
+    /*!
+     * \brief initialize the vector with size vector
+     * \param size The size of the feature vector.
+     */
+    void Init(size_t size);
+    /*!
+     * \brief fill the vector with sparse vector
+     * \param inst The sparse instance to fill.
+     */
+    void Fill(const SparsePage::Inst& inst);
+    /*!
+     * \brief drop the trace after fill, must be called after fill.
+     * \param inst The sparse instance to drop.
+     */
+    void Drop(const SparsePage::Inst& inst);
+    /*!
+     * \brief returns the size of the feature vector
+     * \return the size of the feature vector
+     */
+    size_t Size() const;
+    /*!
+     * \brief get ith value
+     * \param i feature index.
+     * \return the i-th feature value
+     */
+    bst_float Fvalue(size_t i) const;
+    /*!
+     * \brief check whether i-th entry is missing
+     * \param i feature index.
+     * \return whether i-th value is missing.
+     */
+    bool IsMissing(size_t i) const;
+    }
+    
+    // redirect the nath functions.
+bool CheckNAN(double v) {
+  return ISNAN(v);
+}
+#if !defined(XGBOOST_USE_CUDA)
+double LogGamma(double v) {
+  return lgammafn(v);
+}
+#endif  // !defined(XGBOOST_USE_CUDA)
+// customize random engine.
+void CustomGlobalRandomEngine::seed(CustomGlobalRandomEngine::result_type val) {
+  // ignore the seed
+}
+    
+    
+    { private:
+  RowBlock<IndexType> out_;
+  std::unique_ptr<Parser<IndexType> > parser_;
+  uint32_t num_col_;
+  std::vector<size_t> offset_;
+  std::vector<IndexType> dense_index_;
+  std::vector<xgboost::bst_float> dense_value_;
+};
+    
+    /*! \brief try to do efficient pruning */
+template<typename DType, typename RType>
+struct WXQSummary : public WQSummary<DType, RType> {
+  // redefine entry type
+  using Entry = typename WQSummary<DType, RType>::Entry;
+  // constructor
+  WXQSummary(Entry *data, size_t size)
+      : WQSummary<DType, RType>(data, size) {}
+  // check if the block is large chunk
+  inline static bool CheckLarge(const Entry &e, RType chunk) {
+    return  e.RMinNext() > e.RMaxPrev() + chunk;
+  }
+  // set prune
+  inline void SetPrune(const WQSummary<DType, RType> &src, size_t maxsize) {
+    if (src.size <= maxsize) {
+      this->CopyFrom(src); return;
+    }
+    RType begin = src.data[0].rmax;
+    // n is number of points exclude the min/max points
+    size_t n = maxsize - 2, nbig = 0;
+    // these is the range of data exclude the min/max point
+    RType range = src.data[src.size - 1].rmin - begin;
+    // prune off zero weights
+    if (range == 0.0f || maxsize <= 2) {
+      // special case, contain only two effective data pts
+      this->data[0] = src.data[0];
+      this->data[1] = src.data[src.size - 1];
+      this->size = 2;
+      return;
+    } else {
+      range = std::max(range, static_cast<RType>(1e-3f));
+    }
+    // Get a big enough chunk size, bigger than range / n
+    // (multiply by 2 is a safe factor)
+    const RType chunk = 2 * range / n;
+    // minimized range
+    RType mrange = 0;
+    {
+      // first scan, grab all the big chunk
+      // moving block index, exclude the two ends.
+      size_t bid = 0;
+      for (size_t i = 1; i < src.size - 1; ++i) {
+        // detect big chunk data point in the middle
+        // always save these data points.
+        if (CheckLarge(src.data[i], chunk)) {
+          if (bid != i - 1) {
+            // accumulate the range of the rest points
+            mrange += src.data[i].RMaxPrev() - src.data[bid].RMinNext();
+          }
+          bid = i; ++nbig;
+        }
+      }
+      if (bid != src.size - 2) {
+        mrange += src.data[src.size-1].RMaxPrev() - src.data[bid].RMinNext();
+      }
+    }
+    // assert: there cannot be more than n big data points
+    if (nbig >= n) {
+      // see what was the case
+      LOG(INFO) << ' check quantile stats, nbig=' << nbig << ', n=' << n;
+      LOG(INFO) << ' srcsize=' << src.size << ', maxsize=' << maxsize
+                << ', range=' << range << ', chunk=' << chunk;
+      src.Print();
+      CHECK(nbig < n) << 'quantile: too many large chunk';
+    }
+    this->data[0] = src.data[0];
+    this->size = 1;
+    // The counter on the rest of points, to be selected equally from small chunks.
+    n = n - nbig;
+    // find the rest of point
+    size_t bid = 0, k = 1, lastidx = 0;
+    for (size_t end = 1; end < src.size; ++end) {
+      if (end == src.size - 1 || CheckLarge(src.data[end], chunk)) {
+        if (bid != end - 1) {
+          size_t i = bid;
+          RType maxdx2 = src.data[end].RMaxPrev() * 2;
+          for (; k < n; ++k) {
+            RType dx2 =  2 * ((k * mrange) / n + begin);
+            if (dx2 >= maxdx2) break;
+            while (i < end &&
+                   dx2 >= src.data[i + 1].rmax + src.data[i + 1].rmin) ++i;
+            if (i == end) break;
+            if (dx2 < src.data[i].RMinNext() + src.data[i + 1].RMaxPrev()) {
+              if (i != lastidx) {
+                this->data[this->size++] = src.data[i]; lastidx = i;
+              }
+            } else {
+              if (i + 1 != lastidx) {
+                this->data[this->size++] = src.data[i + 1]; lastidx = i + 1;
+              }
+            }
+          }
+        }
+        if (lastidx != end) {
+          this->data[this->size++] = src.data[end];
+          lastidx = end;
+        }
+        bid = end;
+        // shift base by the gap
+        begin += src.data[bid].RMinNext() - src.data[bid].RMaxPrev();
+      }
+    }
+  }
+};
+/*!
+ * \brief traditional GK summary
+ */
+template<typename DType, typename RType>
+struct GKSummary {
+  /*! \brief an entry in the sketch summary */
+  struct Entry {
+    /*! \brief minimum rank */
+    RType rmin;
+    /*! \brief maximum rank */
+    RType rmax;
+    /*! \brief the value of data */
+    DType value;
+    // constructor
+    Entry() = default;
+    // constructor
+    Entry(RType rmin, RType rmax, DType value)
+        : rmin(rmin), rmax(rmax), value(value) {}
+  };
+  /*! \brief input data queue before entering the summary */
+  struct Queue {
+    // the input queue
+    std::vector<DType> queue;
+    // end of the queue
+    size_t qtail;
+    // push data to the queue
+    inline void Push(DType x, RType w) {
+      queue[qtail++] = x;
+    }
+    inline void MakeSummary(GKSummary *out) {
+      std::sort(queue.begin(), queue.begin() + qtail);
+      out->size = qtail;
+      for (size_t i = 0; i < qtail; ++i) {
+        out->data[i] = Entry(i + 1, i + 1, queue[i]);
+      }
+    }
+  };
+  /*! \brief data field */
+  Entry *data;
+  /*! \brief number of elements in the summary */
+  size_t size;
+  GKSummary(Entry *data, size_t size)
+      : data(data), size(size) {}
+  /*! \brief the maximum error of the summary */
+  inline RType MaxError() const {
+    RType res = 0;
+    for (size_t i = 1; i < size; ++i) {
+      res = std::max(data[i].rmax - data[i-1].rmin, res);
+    }
+    return res;
+  }
+  /*! \return maximum rank in the summary */
+  inline RType MaxRank() const {
+    return data[size - 1].rmax;
+  }
+  /*!
+   * \brief copy content from src
+   * \param src source sketch
+   */
+  inline void CopyFrom(const GKSummary &src) {
+    size = src.size;
+    std::memcpy(data, src.data, sizeof(Entry) * size);
+  }
+  inline void CheckValid(RType eps) const {
+    // assume always valid
+  }
+  /*! \brief used for debug purpose, print the summary */
+  inline void Print() const {
+    for (size_t i = 0; i < size; ++i) {
+      LOG(CONSOLE) << 'x=' << data[i].value << '\t'
+                   << '[' << data[i].rmin << ',' << data[i].rmax << ']';
+    }
+  }
+  /*!
+   * \brief set current summary to be pruned summary of src
+   *        assume data field is already allocated to be at least maxsize
+   * \param src source summary
+   * \param maxsize size we can afford in the pruned sketch
+   */
+  inline void SetPrune(const GKSummary &src, size_t maxsize) {
+    if (src.size <= maxsize) {
+      this->CopyFrom(src); return;
+    }
+    const RType max_rank = src.MaxRank();
+    this->size = maxsize;
+    data[0] = src.data[0];
+    size_t n = maxsize - 1;
+    RType top = 1;
+    for (size_t i = 1; i < n; ++i) {
+      RType k = (i * max_rank) / n;
+      while (k > src.data[top + 1].rmax) ++top;
+      // assert src.data[top].rmin <= k
+      // because k > src.data[top].rmax >= src.data[top].rmin
+      if ((k - src.data[top].rmin) < (src.data[top+1].rmax - k)) {
+        data[i] = src.data[top];
+      } else {
+        data[i] = src.data[top + 1];
+      }
+    }
+    data[n] = src.data[src.size - 1];
+  }
+  inline void SetCombine(const GKSummary &sa,
+                         const GKSummary &sb) {
+    if (sa.size == 0) {
+      this->CopyFrom(sb); return;
+    }
+    if (sb.size == 0) {
+      this->CopyFrom(sa); return;
+    }
+    CHECK(sa.size > 0 && sb.size > 0) << 'invalid input for merge';
+    const Entry *a = sa.data, *a_end = sa.data + sa.size;
+    const Entry *b = sb.data, *b_end = sb.data + sb.size;
+    this->size = sa.size + sb.size;
+    RType aprev_rmin = 0, bprev_rmin = 0;
+    Entry *dst = this->data;
+    while (a != a_end && b != b_end) {
+      if (a->value < b->value) {
+        *dst = Entry(bprev_rmin + a->rmin,
+                     a->rmax + b->rmax - 1, a->value);
+        aprev_rmin = a->rmin;
+        ++dst; ++a;
+      } else {
+        *dst = Entry(aprev_rmin + b->rmin,
+                     b->rmax + a->rmax - 1, b->value);
+        bprev_rmin = b->rmin;
+        ++dst; ++b;
+      }
+    }
+    if (a != a_end) {
+      RType bprev_rmax = (b_end - 1)->rmax;
+      do {
+        *dst = Entry(bprev_rmin + a->rmin, bprev_rmax + a->rmax, a->value);
+        ++dst; ++a;
+      } while (a != a_end);
+    }
+    if (b != b_end) {
+      RType aprev_rmax = (a_end - 1)->rmax;
+      do {
+        *dst = Entry(aprev_rmin + b->rmin, aprev_rmax + b->rmax, b->value);
+        ++dst; ++b;
+      } while (b != b_end);
+    }
+    CHECK(dst == data + size) << 'bug in combine';
+  }
+};
+    
+    #include <osquery/flags.h>
+#include <osquery/logger.h>
+#include <osquery/tables.h>
+#include <osquery/utils/conversions/join.h>
+#include <osquery/utils/info/platform_type.h>
+#include <osquery/utils/json/json.h>
+    
+    void Initializer::initShell() const {
+  // Get the caller's home dir for temporary storage/state management.
+  auto homedir = osqueryHomeDirectory();
+  if (osquery::pathExists(homedir).ok()) {
+    // Only apply user/shell-specific paths if not overridden by CLI flag.
+    if (Flag::isDefault('database_path')) {
+      osquery::FLAGS_database_path =
+          (fs::path(homedir) / 'shell.db').make_preferred().string();
+    }
+    initShellSocket(homedir);
+  } else {
+    fprintf(
+        stderr, 'Cannot access or create osquery home: %s', homedir.c_str());
+    FLAGS_disable_extensions = true;
+    FLAGS_disable_database = true;
+  }
+    }
+    
+    #include <dlfcn.h>
+#include <stdlib.h>
+    
+    template <typename T>
+Expected<T, DatabaseError> InMemoryDatabase::getValue(const std::string& domain,
+                                                      const std::string& key) {
+  debug_only::verifyTrue(is_open_, 'database is not open');
+  if (!is_open_) {
+    return createError(DatabaseError::DbIsNotOpen) << 'Database is closed';
+  }
+  auto storage_iter = storage_.find(domain);
+  if (storage_iter == storage_.end()) {
+    return domainNotFoundError(domain);
+  }
+  std::lock_guard<std::mutex> lock(storage_iter->second->getMutex());
+  auto result = storage_iter->second->get(key);
+  if (result) {
+    DataType value = result.take();
+    if (value.type() == typeid(T)) {
+      return boost::get<T>(value);
+    } else {
+      auto error = createError(DatabaseError::KeyNotFound)
+                   << 'Requested wrong type for: ' << domain << ':' << key
+                   << ' stored type: ' << value.type().name()
+                   << ' requested type '
+                   << boost::core::demangle(typeid(T).name());
+      LOG(ERROR) << error.getMessage();
+      debug_only::fail(error.getMessage().c_str());
+      return std::move(error);
+    }
+  }
+  return result.takeError();
+}
+    
+      // Open and close are not thread safe commands,
+  // Before closing db you need to ensure that no other theads are currently
+  // using db connection.
+  // Please see comment above about reopening db.
+  void close() override;
+    
+    
+    {    ASSERT_EQ(swThreadPool_free(&pool), SW_OK);
+    ASSERT_EQ(result, N);
+}
+#endif
+    
+            pid_t pid = fork();
+        ASSERT_NE(pid, -1);
