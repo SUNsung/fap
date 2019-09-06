@@ -1,306 +1,239 @@
 
         
-          /// Get the execution count corresponding to \p Node from a profile, if one
-  /// is available.
-  ProfileCounter getExecutionCount(ASTNode Node);
-    
-      void collectMethodImplementations() {
-    // Collect vtable method implementations.
-    for (SILVTable &vTable : Module->getVTableList()) {
-      for (const SILVTable::Entry &entry : vTable.getEntries()) {
-        // We don't need to collect destructors because we mark them as alive
-        // anyway.
-        if (entry.Method.kind == SILDeclRef::Kind::Deallocator ||
-            entry.Method.kind == SILDeclRef::Kind::IVarDestroyer) {
-          continue;
-        }
-        SILFunction *F = entry.Implementation;
-        auto *fd = getBase(cast<AbstractFunctionDecl>(entry.Method.getDecl()));
-        MethodInfo *mi = getMethodInfo(fd, /*isWitnessTable*/ false);
-        mi->addClassMethodImpl(F, vTable.getClass());
-      }
+          if (isa<StructDecl>(NTD) || isa<ClassDecl>(NTD)) {
+    for (auto *VD : NTD->getStoredProperties()) {
+      useConformancesFromType(VD->getValueInterfaceType()
+                                ->getCanonicalType(genericSig));
     }
-    }
-    
-    
-    {  char *end;
-  _set_errno(0);
-  *result = _strtod_l(str, &end, getCLocale());
-  if (*result == HUGE_VAL || *result == -HUGE_VAL || *result == 0.0 || *result == -0.0) {
-    if (errno == ERANGE)
-        end = nullptr;
   }
-  return end;
-}
     
-    static int doDumpReflectionSections(ArrayRef<std::string> BinaryFilenames,
-                                    StringRef Arch, ActionType Action,
-                                    std::ostream &OS) {
-  // Note: binaryOrError and objectOrError own the memory for our ObjectFile;
-  // once they go out of scope, we can no longer do anything.
-  std::vector<OwningBinary<Binary>> BinaryOwners;
-  std::vector<std::unique_ptr<ObjectFile>> ObjectOwners;
-  std::vector<const ObjectFile *> ObjectFiles;
-    }
-    
-    /// The mangler for AST declarations.
-class ASTMangler : public Mangler {
-protected:
-  CanGenericSignature CurGenericSignature;
-  ModuleDecl *Mod = nullptr;
-    }
-    
-    
-    {}  // namespace caffe
-#endif  // USE_HDF5
-
-    
-    #include 'gtest/gtest.h'
-    
-    TYPED_TEST(HDF5DataLayerTest, TestRead) {
-  typedef typename TypeParam::Dtype Dtype;
-  // Create LayerParameter with the known parameters.
-  // The data file we are reading has 10 rows and 8 columns,
-  // with values from 0 to 10*8 reshaped in row-major order.
-  LayerParameter param;
-  param.add_top('data');
-  param.add_top('label');
-  param.add_top('label2');
-    }
+      // If we have a value that is owned, but that we are going to use in as a
+  // guaranteed argument, we need to borrow/unborrow the argument. Otherwise, we
+  // will introduce new consuming uses. In contrast, if we have an owned value,
+  // we are ok due to the forwarding nature of upcasts.
+  SmallVector<SILValue, 8> NewArgBorrows;
     
     template <typename Dtype>
-void ClipLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& top,
+void hdf5_save_nd_dataset(
+    const hid_t file_id, const string& dataset_name, const Blob<Dtype>& blob,
+    bool write_diff = false);
+    
+      layer.SetUp(this->blob_bottom_vec_, this->blob_top_vec_);
+    
+    template <typename Dtype>
+void InnerProductLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& top,
     const vector<bool>& propagate_down,
     const vector<Blob<Dtype>*>& bottom) {
-  if (propagate_down[0]) {
-    const Dtype* bottom_data = bottom[0]->cpu_data();
+  if (this->param_propagate_down_[0]) {
     const Dtype* top_diff = top[0]->cpu_diff();
-    Dtype* bottom_diff = bottom[0]->mutable_cpu_diff();
-    const int count = bottom[0]->count();
+    const Dtype* bottom_data = bottom[0]->cpu_data();
+    // Gradient with respect to weight
+    if (transpose_) {
+      caffe_cpu_gemm<Dtype>(CblasTrans, CblasNoTrans,
+          K_, N_, M_,
+          (Dtype)1., bottom_data, top_diff,
+          (Dtype)1., this->blobs_[0]->mutable_cpu_diff());
+    } else {
+      caffe_cpu_gemm<Dtype>(CblasTrans, CblasNoTrans,
+          N_, K_, M_,
+          (Dtype)1., top_diff, bottom_data,
+          (Dtype)1., this->blobs_[0]->mutable_cpu_diff());
     }
-    }
-    
-    TYPED_TEST(CuDNNNeuronLayerTest, TestTanHGradientCuDNN) {
-  LayerParameter layer_param;
-  CuDNNTanHLayer<TypeParam> layer(layer_param);
-  GradientChecker<TypeParam> checker(1e-2, 1e-3);
-  checker.CheckGradientEltwise(&layer, this->blob_bottom_vec_,
-      this->blob_top_vec_);
-}
-#endif
-    
-    #endif  // CAFFE_NET_HPP_
-
-    
-    template <typename Dtype>
-void Net<Dtype>::BackwardFromTo(int start, int end) {
-  CHECK_GE(end, 0);
-  CHECK_LT(start, layers_.size());
-  for (int i = start; i >= end; --i) {
-    for (int c = 0; c < before_backward_.size(); ++c) {
-      before_backward_[c]->run(i);
-    }
-    if (layer_need_backward_[i]) {
-      layers_[i]->Backward(
-          top_vecs_[i], bottom_need_backward_[i], bottom_vecs_[i]);
-      if (debug_info_) { BackwardDebugInfo(i); }
-    }
-    for (int c = 0; c < after_backward_.size(); ++c) {
-      after_backward_[c]->run(i);
+  }
+  if (bias_term_ && this->param_propagate_down_[1]) {
+    const Dtype* top_diff = top[0]->cpu_diff();
+    // Gradient with respect to bias
+    caffe_cpu_gemv<Dtype>(CblasTrans, M_, N_, (Dtype)1., top_diff,
+        bias_multiplier_.cpu_data(), (Dtype)1.,
+        this->blobs_[1]->mutable_cpu_diff());
+  }
+  if (propagate_down[0]) {
+    const Dtype* top_diff = top[0]->cpu_diff();
+    // Gradient with respect to bottom data
+    if (transpose_) {
+      caffe_cpu_gemm<Dtype>(CblasNoTrans, CblasTrans,
+          M_, K_, N_,
+          (Dtype)1., top_diff, this->blobs_[0]->cpu_data(),
+          (Dtype)0., bottom[0]->mutable_cpu_diff());
+    } else {
+      caffe_cpu_gemm<Dtype>(CblasNoTrans, CblasNoTrans,
+          M_, K_, N_,
+          (Dtype)1., top_diff, this->blobs_[0]->cpu_data(),
+          (Dtype)0., bottom[0]->mutable_cpu_diff());
     }
   }
 }
     
-    #include 'boost/algorithm/string.hpp'
-#include 'caffe/solver.hpp'
-#include 'caffe/util/format.hpp'
-#include 'caffe/util/hdf5.hpp'
-#include 'caffe/util/io.hpp'
-#include 'caffe/util/upgrade_proto.hpp'
-    
-    void convert_dataset(const char* image_filename, const char* label_filename,
-        const char* db_path, const string& db_backend) {
-  // Open files
-  std::ifstream image_file(image_filename, std::ios::in | std::ios::binary);
-  std::ifstream label_file(label_filename, std::ios::in | std::ios::binary);
-  CHECK(image_file) << 'Unable to open file ' << image_filename;
-  CHECK(label_file) << 'Unable to open file ' << label_filename;
-  // Read the magic and the meta data
-  uint32_t magic;
-  uint32_t num_items;
-  uint32_t num_labels;
-  uint32_t rows;
-  uint32_t cols;
-    }
-    
-      inline const shared_ptr<SyncedMemory>& diff() const {
-    CHECK(diff_);
-    return diff_;
-  }
+      /// @brief Updates the network weights based on the diff values computed.
+  void Update();
+  /**
+   * @brief Shares weight data of owner blobs with shared blobs.
+   *
+   * Note: this is called by Net::Init, and thus should normally not be
+   * called manually.
+   */
+  void ShareWeights();
     
     /**
- * @brief Fills a Blob with values @f$ x \sim N(0, \sigma^2) @f$ where
- *        @f$ \sigma^2 @f$ is set inversely proportional to number of incoming
- *        nodes, outgoing nodes, or their average.
- *
- * A Filler based on the paper [He, Zhang, Ren and Sun 2015]: Specifically
- * accounts for ReLU nonlinearities.
- *
- * Aside: for another perspective on the scaling factor, see the derivation of
- * [Saxe, McClelland, and Ganguli 2013 (v3)].
- *
- * It fills the incoming matrix by randomly sampling Gaussian data with std =
- * sqrt(2 / n) where n is the fan_in, fan_out, or their average, depending on
- * the variance_norm option. You should make sure the input blob has shape (num,
- * a, b, c) where a * b * c = fan_in and num * b * c = fan_out. Note that this
- * is currently not the case for inner product layers.
+ * @brief Applies common transformations to the input data, such as
+ * scaling, mirroring, substracting the image mean...
  */
 template <typename Dtype>
-class MSRAFiller : public Filler<Dtype> {
+class DataTransformer {
  public:
-  explicit MSRAFiller(const FillerParameter& param)
-      : Filler<Dtype>(param) {}
-  virtual void Fill(Blob<Dtype>* blob) {
-    CHECK(blob->count());
-    int fan_in = blob->count() / blob->shape(0);
-    // Compatibility with ND blobs
-    int fan_out = blob->num_axes() > 1 ?
-                  blob->count() / blob->shape(1) :
-                  blob->count();
-    Dtype n = fan_in;  // default to fan_in
-    if (this->filler_param_.variance_norm() ==
-        FillerParameter_VarianceNorm_AVERAGE) {
-      n = (fan_in + fan_out) / Dtype(2);
-    } else if (this->filler_param_.variance_norm() ==
-        FillerParameter_VarianceNorm_FAN_OUT) {
-      n = fan_out;
+  explicit DataTransformer(const TransformationParameter& param, Phase phase);
+  virtual ~DataTransformer() {}
     }
-    Dtype std = sqrt(Dtype(2) / n);
-    caffe_rng_gaussian<Dtype>(blob->count(), Dtype(0), std,
-        blob->mutable_cpu_data());
-    CHECK_EQ(this->filler_param_.sparse(), -1)
-         << 'Sparsity not supported by this Filler.';
-  }
-};
     
+    void UnregisterShellMenu(std::wstring opt, wchar_t* keyBaseName)
+{
+	HKEY root = GetRootKey(opt);
+	HKEY cmderKey;
+	FAIL_ON_ERROR(RegCreateKeyEx(root, keyBaseName, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &cmderKey, NULL));
+	FAIL_ON_ERROR(RegDeleteTree(cmderKey, NULL));
+	RegDeleteKeyEx(root, keyBaseName, KEY_ALL_ACCESS, NULL);
+	RegCloseKey(cmderKey);
+	RegCloseKey(root);
+}
     
-    {}  // namespace grpc_impl
+    int main(int argc, char** argv) { return leveldb::test::RunAllTests(); }
 
     
-      void KeepSendingRequests() {
-    gpr_log(GPR_INFO, 'Start sending requests.');
-    while (!shutdown_) {
-      ClientContext context;
-      context.set_deadline(grpc_timeout_milliseconds_to_deadline(1000));
-      EchoRequest request;
-      request.set_message('test');
-      EchoResponse response;
-      {
-        std::lock_guard<std::mutex> lock(stub_mutex_);
-        Status status = stub_->Echo(&context, request, &response);
-      }
+      WriteOptions write_options;
+  ASSERT_OK(db->Put(write_options, '1', 'b'));
+  ASSERT_OK(db->Put(write_options, '2', 'c'));
+  ASSERT_OK(db->Put(write_options, '3', 'd'));
+  ASSERT_OK(db->Put(write_options, '4', 'e'));
+  ASSERT_OK(db->Put(write_options, '5', 'f'));
+    
+    #ifndef STORAGE_LEVELDB_TABLE_MERGER_H_
+#define STORAGE_LEVELDB_TABLE_MERGER_H_
+    
+    namespace leveldb {
     }
-    gpr_log(GPR_INFO, 'Finish sending requests.');
-  }
     
     
-    {  std::string credentials_type_list('credentials types:');
-  for (const string& type : credentials_types) {
-    credentials_type_list.append(' ' + type);
-  }
-  gpr_log(GPR_INFO, '%s', credentials_type_list.c_str());
-  return credentials_types;
+    {  Slice input(s);
+  Slice v;
+  ASSERT_TRUE(GetLengthPrefixedSlice(&input, &v));
+  ASSERT_EQ('', v.ToString());
+  ASSERT_TRUE(GetLengthPrefixedSlice(&input, &v));
+  ASSERT_EQ('foo', v.ToString());
+  ASSERT_TRUE(GetLengthPrefixedSlice(&input, &v));
+  ASSERT_EQ('bar', v.ToString());
+  ASSERT_TRUE(GetLengthPrefixedSlice(&input, &v));
+  ASSERT_EQ(std::string(200, 'x'), v.ToString());
+  ASSERT_EQ('', input.ToString());
 }
     
-    class GlobalConfigEnvString : public GlobalConfigEnv {
+    #pragma once
+    
+    
+    {    return 0;
+}
+
+    
+    
+    {    switch (msg)
+    {
+    case WM_SIZE:
+        if (g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
+        {
+            CleanupRenderTarget();
+            g_pSwapChain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam), DXGI_FORMAT_UNKNOWN, 0);
+            CreateRenderTarget();
+        }
+        return 0;
+    case WM_SYSCOMMAND:
+        if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
+            return 0;
+        break;
+    case WM_DESTROY:
+        ::PostQuitMessage(0);
+        return 0;
+    }
+    return ::DefWindowProc(hWnd, msg, wParam, lParam);
+}
+
+    
+        g_AttribLocationTex = glGetUniformLocation(g_ShaderHandle, 'Texture');
+    g_AttribLocationProjMtx = glGetUniformLocation(g_ShaderHandle, 'ProjMtx');
+    g_AttribLocationVtxPos = glGetAttribLocation(g_ShaderHandle, 'Position');
+    g_AttribLocationVtxUV = glGetAttribLocation(g_ShaderHandle, 'UV');
+    g_AttribLocationVtxColor = glGetAttribLocation(g_ShaderHandle, 'Color');
+    
+            if (ImGui::Button('Button'))                                  // Buttons return true when clicked (most widgets return true when edited/activated)
+            counter++;
+        ImGui::SameLine();
+        ImGui::Text('counter = %d', counter);
+    
+    IMGUI_IMPL_API bool     ImGui_ImplDX10_Init(ID3D10Device* device);
+IMGUI_IMPL_API void     ImGui_ImplDX10_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplDX10_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data);
+    
+    #include <osquery/config/config.h>
+#include <osquery/database.h>
+#include <osquery/events.h>
+#include <osquery/flagalias.h>
+#include <osquery/flags.h>
+#include <osquery/hashing/hashing.h>
+#include <osquery/killswitch.h>
+#include <osquery/logger.h>
+#include <osquery/packs.h>
+#include <osquery/registry.h>
+#include <osquery/system.h>
+#include <osquery/tables.h>
+#include <osquery/utils/conversions/split.h>
+#include <osquery/utils/conversions/tryto.h>
+#include <osquery/utils/system/time.h>
+    
+     protected:
+  /**
+   * @brief Call the genConfig method of the config retriever plugin.
+   *
+   * This may perform a resource load such as TCP request or filesystem read.
+   * If a non-zero value is passed to --config_refresh, this starts a thread
+   * that periodically calls genConfig to reload config state
+   */
+  Status refresh();
+    
+    namespace osquery {
+    }
+    
+     private:
+  struct DatabaseHandle {
+    std::unique_ptr<rocksdb::DB> db_handle;
+    rocksdb::Options options;
+    std::string path;
+    std::unordered_map<std::string,
+                       std::unique_ptr<rocksdb::ColumnFamilyHandle>>
+        handles;
+  };
+  DatabaseHandle input_db_;
+  DatabaseHandle output_db_;
+    
+    #pragma once
+    
+    class SQLPlugin : public Plugin {
  public:
-  constexpr GlobalConfigEnvString(char* name, const char* default_value)
-      : GlobalConfigEnv(name), default_value_(default_value) {}
+  /// Run a SQL query string against the SQL implementation.
+  virtual Status query(const std::string& query,
+                       QueryData& results,
+                       bool use_cache) const = 0;
     }
     
-    #include 'test/core/util/test_config.h'
-    
-      EXPECT_FALSE(IsConfigErrorCalled());
-    
-      std::shared_ptr<grpc::Channel> CreateChannelImpl(
-      const string& target, const grpc::ChannelArguments& args) override {
-    return CreateChannelWithInterceptors(
-        target, args,
-        std::vector<std::unique_ptr<
-            experimental::ClientInterceptorFactoryInterface>>());
-  }
-    
-      void SetUp() override {
-    port_ = grpc_pick_unused_port_or_die();
-    ref_desc_pool_ = protobuf::DescriptorPool::generated_pool();
-    }
-    
-      void ResetStub() {
-    string target = 'dns:localhost:' + to_string(port_);
-    channel_ = grpc::CreateChannel(target, InsecureChannelCredentials());
-    stub_ = grpc::testing::EchoTestService::NewStub(channel_);
-  }
-    
-    void deletePrefResource() { delete getPrefFactory(); }
-    
-      DHTRegistry();
-    
-      int numRetry_;
-    
-    void DHTRoutingTable::dropNode(const std::shared_ptr<DHTNode>& node)
-{
-  getBucketFor(node)->dropNode(node);
+    GTEST_TEST(InMemoryDatabaseTest, test_destroy) {
+  auto db = std::make_unique<InMemoryDatabase>('test');
+  ASSERT_FALSE(db->open().isError());
+  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'key', 10).isError());
+  db->close();
+  // In memory db should be destroyed on close
+  // but we want to test that destroy is not failing for no reason
+  auto result = db->destroyDB();
+  EXPECT_TRUE(result);
+  ASSERT_FALSE(db->open().isError());
+  auto get_result = db->getInt32(kPersistentSettings, 'key');
+  EXPECT_FALSE(get_result);
+  EXPECT_EQ(get_result.getError(), DatabaseError::KeyNotFound);
 }
-/*
-  void DHTRoutingTable::moveBucketHead(const std::shared_ptr<DHTNode>& node)
-  {
-  getBucketFor(node)->moveToHead(node);
-  }
-*/
-void DHTRoutingTable::moveBucketTail(const std::shared_ptr<DHTNode>& node)
-{
-  getBucketFor(node)->moveToTail(node);
-}
-    
-    #include 'DHTNode.h'
-#include 'DHTConstants.h'
-#include 'bittorrent_helper.h'
-#include 'DlAbortEx.h'
-#include 'Logger.h'
-#include 'a2netcompat.h'
-#include 'fmt.h'
-#include 'util.h'
-#include 'array_fun.h'
-#include 'LogFactory.h'
-#include 'BufferedFile.h'
-    
-    DHTTaskExecutor::DHTTaskExecutor(int numConcurrent)
-    : numConcurrent_(numConcurrent)
-{
-}
-    
-          {
-        auto iter = OpenTransactionLogIter(0);
-        ExpectRecords(4, iter);
-      }
-    
-      BlobCompactionContext context;
-  blob_db_impl_->GetCompactionContext(&context);
-    
-    
-    {  const char* Name() const override { return 'PutOperator'; }
-};
-    
-    
-    {}  // namespace rocksdb
-    
-    
-    {  virtual std::string GetPrintableOptions() const = 0;
-};
-    
-      // If non-NULL, use the specified filter policy to reduce disk reads.
-  // Many applications will benefit from passing the result of
-  // NewBloomFilterPolicy() here.
-  //
-  // Default: NULL
-  const FilterPolicy* filter_policy;
