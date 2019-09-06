@@ -1,374 +1,283 @@
 
         
-        
-    {
-    {    if (bridgedStoredNSError) {
-      auto subConformance = SwiftModule->lookupConformance(
-          t, bridgedStoredNSError);
-      if (subConformance)
-        useConformance(*subConformance);
-    }
-  });
-}
-    
-      uint64_t PGOFuncHash = 0;
-    
-    
-    {  char *end;
-  _set_errno(0);
-  *result = _strtof_l(str, &end, getCLocale());
-  if (*result == HUGE_VALF || *result == -HUGE_VALF || *result == 0.0 || *result == -0.0) {
-    if (errno == ERANGE)
-        end = nullptr;
-  }
-  return end;
-}
-    
-            auto SubstitutedTypeName =
-            AssocTy.getMangledSubstitutedTypeName(TypeRefOffset);
-        auto Demangled = Dem.demangleType(SubstitutedTypeName);
-        auto *TypeWitness = swift::Demangle::decodeMangledType(*this, Demangled);
-    
-      /// Retrieve the # of conditional requirements.
-  unsigned getNumConditionalRequirements() const {
-    return (Value & NumConditionalRequirementsMask)
-              >> NumConditionalRequirementsShift;
-  }
-    
-    /// Parsed information about the identity of a type.
-class ParsedTypeIdentity {
-public:
-  /// The user-facing name of the type.
-  StringRef UserFacingName;
+        struct BlobData {
+  BlobData() : blob(nullptr), choices(nullptr) {}
+  BlobData(int index, Tesseract* tess, const WERD_RES& word)
+    : blob(word.chopped_word->blobs[index]),
+      tesseract(tess),
+      choices(&(*word.ratings)(index, index)) {}
     }
     
-    #define format_assert_message(assert_type, cond) assert_type ' failed: [' stringify(cond) '] '
-#define guarantee(cond, ...) do {                                                \
-        if (UNLIKELY(!(cond))) {                                                 \
-            crash_or_trap(format_assert_message('Guarantee', cond) __VA_ARGS__); \
-        }                                                                        \
-    } while (0)
+    #include 'allheaders.h'
     
-        void operator()(const changefeed_limit_subscribe_t &s) {
-        ql::env_t env(
-            ctx,
-            ql::return_empty_normal_batches_t::NO,
-            interruptor,
-            s.serializable_env,
-            trace);
-        ql::raw_stream_t stream;
-        optional<uuid_u> sindex_id;
-        {
-            std::vector<scoped_ptr_t<ql::op_t> > ops;
-            for (const auto &transform : s.spec.range.transforms) {
-                ops.push_back(make_op(transform));
+        void remove_pos(             //Cut out an element
+                    int16_t pos);  //element to remove
+    
+      // Return the id associated with the given unichar representation,
+  // this representation MUST exist within the UNICHARMAP. The first
+  // length characters (maximum) from unichar_repr are used. The length
+  // MUST be non-zero.
+  UNICHAR_ID unichar_to_id(const char* const unichar_repr, int length) const;
+    
+      // If we manage the given dawg, decrement its count,
+  // and possibly delete it if the count reaches zero.
+  // If dawg is unknown to us, return false.
+  bool FreeDawg(Dawg *dawg) {
+    return dawgs_.Free(dawg);
+  }
+    
+    template <>
+void hdf5_load_nd_dataset<double>(hid_t file_id, const char* dataset_name_,
+        int min_dim, int max_dim, Blob<double>* blob, bool reshape) {
+  hdf5_load_nd_dataset_helper(file_id, dataset_name_, min_dim, max_dim, blob,
+                              reshape);
+  herr_t status = H5LTread_dataset_double(
+    file_id, dataset_name_, blob->mutable_cpu_data());
+  CHECK_GE(status, 0) << 'Failed to read double dataset ' << dataset_name_;
+}
+    
+      Dtype min = this->layer_param_.clip_param().min();
+  Dtype max = this->layer_param_.clip_param().max();
+    
+    TYPED_TEST(NeuronLayerTest, TestExpGradientBase2Scale3) {
+  typedef typename TypeParam::Dtype Dtype;
+  const Dtype kBase = 2;
+  const Dtype kScale = 3;
+  const Dtype kShift = 0;
+  this->TestExpGradient(kBase, kScale, kShift);
+}
+    
+    // TODO(Yangqing): Is there a faster way to do pooling in the channel-first
+// case?
+template <typename Dtype>
+void PoolingLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top) {
+  const Dtype* bottom_data = bottom[0]->cpu_data();
+  Dtype* top_data = top[0]->mutable_cpu_data();
+  const int top_count = top[0]->count();
+  // We'll output the mask to top[1] if it's of size >1.
+  const bool use_top_mask = top.size() > 1;
+  int* mask = NULL;  // suppress warnings about uninitialized variables
+  Dtype* top_mask = NULL;
+  // Different pooling methods. We explicitly do the switch outside the for
+  // loop to save time, although this results in more code.
+  switch (this->layer_param_.pooling_param().pool()) {
+  case PoolingParameter_PoolMethod_MAX:
+    // Initialize
+    if (use_top_mask) {
+      top_mask = top[1]->mutable_cpu_data();
+      caffe_set(top_count, Dtype(-1), top_mask);
+    } else {
+      mask = max_idx_.mutable_cpu_data();
+      caffe_set(top_count, -1, mask);
+    }
+    caffe_set(top_count, Dtype(-FLT_MAX), top_data);
+    // The main loop
+    for (int n = 0; n < bottom[0]->num(); ++n) {
+      for (int c = 0; c < channels_; ++c) {
+        for (int ph = 0; ph < pooled_height_; ++ph) {
+          for (int pw = 0; pw < pooled_width_; ++pw) {
+            int hstart = ph * stride_h_ - pad_h_;
+            int wstart = pw * stride_w_ - pad_w_;
+            int hend = min(hstart + kernel_h_, height_);
+            int wend = min(wstart + kernel_w_, width_);
+            hstart = max(hstart, 0);
+            wstart = max(wstart, 0);
+            const int pool_index = ph * pooled_width_ + pw;
+            for (int h = hstart; h < hend; ++h) {
+              for (int w = wstart; w < wend; ++w) {
+                const int index = h * width_ + w;
+                if (bottom_data[index] > top_data[pool_index]) {
+                  top_data[pool_index] = bottom_data[index];
+                  if (use_top_mask) {
+                    top_mask[pool_index] = static_cast<Dtype>(index);
+                  } else {
+                    mask[pool_index] = index;
+                  }
+                }
+              }
             }
-            rget_read_t rget;
-            rget.region = s.region;
-            rget.current_shard = s.current_shard;
-            rget.table_name = s.table;
-            rget.batchspec = ql::batchspec_t::all(); // Terminal takes care of stopping.
-            if (s.spec.range.sindex) {
-                rget.terminal.set(ql::limit_read_t{
-                    is_primary_t::NO,
-                    s.spec.limit,
-                    s.region,
-                    !reversed(s.spec.range.sorting)
-                        ? store_key_t::min()
-                        : store_key_t::max(),
-                    s.spec.range.sorting,
-                    &ops});
-                rget.sindex.set(sindex_rangespec_t(
-                    *s.spec.range.sindex,
-                    r_nullopt, // We just want to use whole range.
-                    s.spec.range.datumspec));
-            } else {
-                rget.terminal.set(ql::limit_read_t{
-                    is_primary_t::YES,
-                    s.spec.limit,
-                    s.region,
-                    !reversed(s.spec.range.sorting)
-                        ? store_key_t::min()
-                        : store_key_t::max(),
-                    s.spec.range.sorting,
-                    &ops});
-            }
-            rget.sorting = s.spec.range.sorting;
-            // The superblock will instead be released in `store_t::read`
-            // shortly after this function returns.
-            rget_read_response_t resp;
-            do_read(&env, store, btree, superblock, rget, &resp,
-                    release_superblock_t::KEEP,
-                    &sindex_id);
-            auto *gs = boost::get<ql::grouped_t<ql::stream_t> >(&resp.result);
-            if (gs == NULL) {
-                auto *exc = boost::get<ql::exc_t>(&resp.result);
-                guarantee(exc != NULL);
-                response->response = resp;
-                return;
-            }
-            ql::stream_t read_stream = groups_to_batch(gs->get_underlying_map());
-            guarantee(read_stream.substreams.size() <= 1);
-            if (read_stream.substreams.size() == 1) {
-                stream = std::move(read_stream.substreams.begin()->second.stream);
-            } else {
-                guarantee(stream.size() == 0);
-            }
+          }
         }
-        auto lvec = ql::changefeed::mangle_sort_truncate_stream(
-            std::move(stream),
-            s.spec.range.sindex ? is_primary_t::NO : is_primary_t::YES,
-            s.spec.range.sorting,
-            s.spec.limit);
+        // compute offset
+        bottom_data += bottom[0]->offset(0, 1);
+        top_data += top[0]->offset(0, 1);
+        if (use_top_mask) {
+          top_mask += top[0]->offset(0, 1);
+        } else {
+          mask += top[0]->offset(0, 1);
+        }
+      }
     }
+    break;
+  case PoolingParameter_PoolMethod_AVE:
+    for (int i = 0; i < top_count; ++i) {
+      top_data[i] = 0;
+    }
+    // The main loop
+    for (int n = 0; n < bottom[0]->num(); ++n) {
+      for (int c = 0; c < channels_; ++c) {
+        for (int ph = 0; ph < pooled_height_; ++ph) {
+          for (int pw = 0; pw < pooled_width_; ++pw) {
+            int hstart = ph * stride_h_ - pad_h_;
+            int wstart = pw * stride_w_ - pad_w_;
+            int hend = min(hstart + kernel_h_, height_ + pad_h_);
+            int wend = min(wstart + kernel_w_, width_ + pad_w_);
+            int pool_size = (hend - hstart) * (wend - wstart);
+            hstart = max(hstart, 0);
+            wstart = max(wstart, 0);
+            hend = min(hend, height_);
+            wend = min(wend, width_);
+            for (int h = hstart; h < hend; ++h) {
+              for (int w = wstart; w < wend; ++w) {
+                top_data[ph * pooled_width_ + pw] +=
+                    bottom_data[h * width_ + w];
+              }
+            }
+            top_data[ph * pooled_width_ + pw] /= pool_size;
+          }
+        }
+        // compute offset
+        bottom_data += bottom[0]->offset(0, 1);
+        top_data += top[0]->offset(0, 1);
+      }
+    }
+    break;
+  case PoolingParameter_PoolMethod_STOCHASTIC:
+    NOT_IMPLEMENTED;
+    break;
+  default:
+    LOG(FATAL) << 'Unknown pooling method.';
+  }
+}
     
-        void acquire_all_sindex_superblocks_for_write(
-            block_id_t sindex_block_id,
-            buf_parent_t parent,
-            sindex_access_vector_t *sindex_sbs_out)
-        THROWS_ONLY(sindex_not_ready_exc_t);
     
-    #endif  // GTEST_INCLUDE_GTEST_GTEST_DEATH_TEST_H_
-
+    {
+    {    if (++count % 1000 == 0) {
+      txn->Commit();
+    }
+  }
+  // write the last batch
+  if (count % 1000 != 0) {
+      txn->Commit();
+  }
+  LOG(INFO) << 'Processed ' << count << ' files.';
+  delete[] pixels;
+  db->Close();
+}
     
-    // scripts/fuse_gtest.py depends on gtest's own header being #included
-// *unconditionally*.  Therefore these #includes cannot be moved
-// inside #if GTEST_HAS_PARAM_TEST.
-#include 'gtest/internal/gtest-internal.h'
-#include 'gtest/internal/gtest-param-util.h'
-#include 'gtest/internal/gtest-param-util-generated.h'
+      virtual inline const char* type() const { return 'Pooling'; }
+  virtual inline int ExactNumBottomBlobs() const { return 1; }
+  virtual inline int MinTopBlobs() const { return 1; }
+  // MAX POOL layers can output an extra top blob for the mask;
+  // others can only output the pooled inputs.
+  virtual inline int MaxTopBlobs() const {
+    return (this->layer_param_.pooling_param().pool() ==
+            PoolingParameter_PoolMethod_MAX) ? 2 : 1;
+  }
     
-    # if GTEST_HAS_COMBINE
-// Combine() allows the user to combine two or more sequences to produce
-// values of a Cartesian product of those sequences' elements.
-//
-// Synopsis:
-// Combine(gen1, gen2, ..., genN)
-//   - returns a generator producing sequences with elements coming from
-//     the Cartesian product of elements from the sequences generated by
-//     gen1, gen2, ..., genN. The sequence elements will have a type of
-//     tuple<T1, T2, ..., TN> where T1, T2, ..., TN are the types
-//     of elements from sequences produces by gen1, gen2, ..., genN.
-//
-// Combine can have up to $maxtuple arguments. This number is currently limited
-// by the maximum number of elements in the tuple implementation used by Google
-// Test.
-//
-// Example:
-//
-// This will instantiate tests in test case AnimalTest each one with
-// the parameter values tuple('cat', BLACK), tuple('cat', WHITE),
-// tuple('dog', BLACK), and tuple('dog', WHITE):
-//
-// enum Color { BLACK, GRAY, WHITE };
-// class AnimalTest
-//     : public testing::TestWithParam<tuple<const char*, Color> > {...};
-//
-// TEST_P(AnimalTest, AnimalLooksNice) {...}
-//
-// INSTANTIATE_TEST_CASE_P(AnimalVariations, AnimalTest,
-//                         Combine(Values('cat', 'dog'),
-//                                 Values(BLACK, WHITE)));
-//
-// This will instantiate tests in FlagDependentTest with all variations of two
-// Boolean flags:
-//
-// class FlagDependentTest
-//     : public testing::TestWithParam<tuple<bool, bool> > {
-//   virtual void SetUp() {
-//     // Assigns external_flag_1 and external_flag_2 values from the tuple.
-//     tie(external_flag_1, external_flag_2) = GetParam();
-//   }
-// };
-//
-// TEST_P(FlagDependentTest, TestFeature1) {
-//   // Test your code using external_flag_1 and external_flag_2 here.
-// }
-// INSTANTIATE_TEST_CASE_P(TwoBoolSequence, FlagDependentTest,
-//                         Combine(Bool(), Bool()));
-//
-$range i 2..maxtuple
-$for i [[
-$range j 1..i
+      image_file.read(reinterpret_cast<char*>(&magic), 4);
+  magic = swap_endian(magic);
+  CHECK_EQ(magic, 2051) << 'Incorrect image file magic.';
+  label_file.read(reinterpret_cast<char*>(&magic), 4);
+  magic = swap_endian(magic);
+  CHECK_EQ(magic, 2049) << 'Incorrect label file magic.';
+  image_file.read(reinterpret_cast<char*>(&num_items), 4);
+  num_items = swap_endian(num_items);
+  label_file.read(reinterpret_cast<char*>(&num_labels), 4);
+  num_labels = swap_endian(num_labels);
+  CHECK_EQ(num_items, num_labels);
+  image_file.read(reinterpret_cast<char*>(&rows), 4);
+  rows = swap_endian(rows);
+  image_file.read(reinterpret_cast<char*>(&cols), 4);
+  cols = swap_endian(cols);
     
-    // A concrete DeathTestFactory implementation for normal use.
-class DefaultDeathTestFactory : public DeathTestFactory {
+    #define INSTANTIATE_LAYER_GPU_FORWARD(classname) \
+  template void classname<float>::Forward_gpu( \
+      const std::vector<Blob<float>*>& bottom, \
+      const std::vector<Blob<float>*>& top); \
+  template void classname<double>::Forward_gpu( \
+      const std::vector<Blob<double>*>& bottom, \
+      const std::vector<Blob<double>*>& top);
+    
+    
+/// @brief Fills a Blob with constant values @f$ x = 0 @f$.
+template <typename Dtype>
+class ConstantFiller : public Filler<Dtype> {
  public:
-  virtual bool Create(const char* statement, const RE* regex,
-                      const char* file, int line, DeathTest** test);
+  explicit ConstantFiller(const FillerParameter& param)
+      : Filler<Dtype>(param) {}
+  virtual void Fill(Blob<Dtype>* blob) {
+    Dtype* data = blob->mutable_cpu_data();
+    const int count = blob->count();
+    const Dtype value = this->filler_param_.value();
+    CHECK(count);
+    for (int i = 0; i < count; ++i) {
+      data[i] = value;
+    }
+    CHECK_EQ(this->filler_param_.sparse(), -1)
+         << 'Sparsity not supported by this Filler.';
+  }
 };
     
-      // Converts a wide C string to a String using the UTF-8 encoding.
-  // NULL will be converted to '(null)'.  If an error occurred during
-  // the conversion, '(failed to convert from wide string)' is
-  // returned.
-  static std::string ShowWideCString(const wchar_t* wide_c_str);
+    #include 'mongo/db/handle_request_response.h'
+#include 'mongo/base/transaction_error.h'
     
-    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
-    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
-    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
-    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
-    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
-    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
-    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
-    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
-    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27,
-    GTEST_TEMPLATE_ T28, GTEST_TEMPLATE_ T29>
-struct Templates29 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates28<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
-      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-      T29> Tail;
-};
+        /**
+     * Stores an error that occurred trying to send/recv a TargetedWriteBatch for this
+     * BatchWriteOp.
+     */
+    void noteBatchError(const TargetedWriteBatch& targetedBatch, const WriteErrorDetail& error);
     
+        const SpecificStats* getSpecificStats() const final;
     
-    {
-    {                nodePtr = builder.Convolution(NULL, NULL, kernelWidth, kernelHeight, outputChannels,
-                                              horizontalSubsample, verticalSubsample, imageLayoutKind, zeroPadding,
-                                              maxTempMemSizeInSamples, name);
-            }
-            else
-                assert(false);
-        }
-    }
-    else if (cnNodeType == OperationNameOf(MaxPoolingNode))
-    {
-        if (parameter.size() != 5)
-            RuntimeError('%ls should have 5 parameters[inputValueNodeName, windowWidth, windowHeight, horizontalSubsample, verticalSubsample, imageLayout = \'HWC\'|\'cudnn\'].', cnNodeType.c_str());
-    
-    // EqualInsensitive - check to see if two nodes are equal
-// string1 - [in,out] string to compare, if comparision is equal insensitive but not sensitive, will replace with sensitive version
-// string2 - second string to compare
-// alternate - alternate naming of the string
-// return - true if strings are equal insensitive and modifies string1 to sensitive version if different
-bool EqualInsensitive(std::wstring& string1, const std::wstring& string2, const wchar_t* alternate /*=NULL*/)
-{
-    bool equal = EqualCI(string1, string2) ||
-                 (alternate && EqualCI(string1, alternate));
-    }
-    
-        // StripComments - This method removes the section of a config line corresponding to a comment.
-    // configLine - The line within a config file to pre-process.
-    // returns:
-    //      If the entire line is whitespace, or if the entire line is a comment, simply return an empty string.
-    //      If there is no comment, simply return the original 'configString'
-    //      If there is a comment, remove the part of 'configString' corresponding to the comment
-    //      Note that midline comments need to be preceded by whitespace, otherwise they are not treated as comments.
-    static std::string StripComments(const std::string& configLine)
-    {
-        std::string::size_type pos = configLine.find_first_not_of(' \t');
-    }
-    
-    protected:
-    void ConstructFromRoots(DEVICEID_TYPE deviceId, std::deque<ComputationNodeBasePtr>&& roots, const map<ComputationNodeBasePtr, ComputationNodeBasePtr>& replacements);
-    void ProcessSpecialNodes(const ScriptableObjects::IConfigRecord& config, std::deque<ComputationNodeBasePtr>& roots);
-    
-    // =======================================================================
-// ILateAttachingNode -- helper wrapper class for ComputationNodes that must
-// AttachInputs() late due to circular references
-// =======================================================================
-    
-    template<typename ElemType>
-VariableSchema CNTKEvalExtended<ElemType>::GetInputSchema() const
-{
-    VariableSchema inputLayouts;
-    auto nodes = m_inputNodes;
-    if (nodes.size() == 0)
-    {
-        // Default to all nodes
-        nodes = this->m_net->InputNodesForOutputs({});
-    }
-    }
-    
-    #include 'Basics.h'
-#include 'ComputationNetwork.h'
-#include 'SimpleEvaluator.h'
-#include 'DataReader.h'
-#include 'ScriptableObjects.h'
-#include 'Criterion.h'
-#include <vector>
-#include <string>
-#include <stdexcept>
-#include 'fileutil.h'
-#include 'Config.h'
-#include <chrono>
-#include <random>
-#include 'Profiler.h'
-#include 'MASGD.h'
-#include 'ASGDHelper.h'
-#include <map>
-using namespace std; // ugh! TODO: get rid of this from .h files!!!
-    
-      // This should go to the lowpri queue, as we only
-  // have 3 priorities
-  queue.writeWithPriority(5, 50);
-  // unqualified writes should be mid-pri
-  queue.write(3);
-  queue.writeWithPriority(6, 2);
-  queue.writeWithPriority(1, 0);
-  queue.write(4);
-  queue.writeWithPriority(2, 0);
-    
-      template <class U>
-  Value value_or(U&& dflt) && {
-    if (LIKELY(this->which_ == expected_detail::Which::eValue)) {
-      return std::move(this->value_);
-    }
-    return static_cast<U&&>(dflt);
-  }
-    
-    TEST(Expected, Comparisons) {
-  Expected<int, E> o_;
-  Expected<int, E> o1(1);
-  Expected<int, E> o2(2);
-    }
-    
-    void SocketAddress::setFromSockaddr(
-    const struct sockaddr_un* address,
-    socklen_t addrlen) {
-  assert(address->sun_family == AF_UNIX);
-  if (addrlen > sizeof(struct sockaddr_un)) {
-    throw std::invalid_argument(
-        'SocketAddress::setFromSockaddr() called '
-        'with length too long for a sockaddr_un');
-  }
-    }
-    
-    
-    {  if (param.version == 4) {
-    in_addr v4addr = detail::Bytes::mkAddress4(&param.bytes[0]);
-    address = IPAddress(v4addr);
-  } else {
-    in6_addr v6addr = detail::Bytes::mkAddress6(&param.bytes[0]);
-    address = IPAddress(v6addr);
-  }
-  ExpectIsValid(address);
-  EXPECT_EQ(strAddr, address);
+    TEST(TopTest, CollectionDropped) {
+    Top().collectionDropped(NamespaceString('test.coll'));
 }
     
-    #include <folly/portability/GTest.h>
+            WorkingSet ws;
+        CountScan count(&_opCtx, params, &ws);
     
-    template <typename T>
-struct transparent : T {
-  using is_transparent = void;
-  using T::T;
-};
     
-    template <
-    typename Key,
-    typename Hasher = f14::DefaultHasher<Key>,
-    typename KeyEqual = f14::DefaultKeyEqual<Key>>
-using F14VectorSet = folly::F14VectorSet<
-    Key,
-    Hasher,
-    KeyEqual,
-    folly::detail::std_pmr::polymorphic_allocator<Key>>;
-    
-        // if we were given a combine signal, detach the return value from the
-    // wait struct into the request, so the current thread can access it
-    // outside this function
-    auto combined = (signal == kCombined);
-    auto exceptionOccurred = (signal == kExceptionOccurred);
-    if (combined || exceptionOccurred) {
-      detach(request, state, exceptionOccurred, storage);
+//--------------------------------------------------------------------------------
+//
+//  getInput() -- like inputText(), but makes a clone or copies into another UText
+//
+//--------------------------------------------------------------------------------
+UText *RegexMatcher::getInput (UText *dest, UErrorCode &status) const {
+    if (U_FAILURE(status)) {
+        return dest;
     }
+    if (U_FAILURE(fDeferredStatus)) {
+        status = fDeferredStatus;
+        return dest;
+    }
+    }
+    
+    
+    
+            Point<T>& operator-=(const T value);
+    
+            /**
+         * It returns a string with the whole Rectangle<T> data. Useful for debugging.
+         * The format is: `[x, y, width, height]`
+         * @return A string with the Rectangle<T> values in the above format.
+         */
+        std::string toString() const;
+    
+    
+    // Constant parameters
+    const auto HAND_CCN_DECREASE_FACTOR = 8.f;
+    const std::string HAND_PROTOTXT{'hand/pose_deploy.prototxt'};
+    const std::string HAND_TRAINED_MODEL{'hand/pose_iter_102000.caffemodel'};
+    
+            virtual ~PersonIdExtractor();
+    
+        private:
+        const bool mMergeResults;
+        const int mLevels;
+        const int mPatchSize;
+        const bool mTrackVelocity;
+        const float mConfidenceThreshold;
+        const bool mScaleVarying;
+        const float mRescale;
