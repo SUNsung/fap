@@ -1,138 +1,91 @@
 
         
-            def test_jwk_serialize(self):
-        from acme.jws import JWS
-        jws = JWS.sign(payload=b'foo', key=self.privkey,
-                       alg=jose.RS256, nonce=self.nonce,
-                       url=self.url)
-        self.assertEqual(jws.signature.combined.kid, None)
-        self.assertEqual(jws.signature.combined.jwk, self.pubkey)
+        
+with codecs.open(JSON_FILE_PATH, encoding='utf8') as f:
+    JSON_FILE_CONTENT = f.read()
     
-        def __init__(self, plugins):
-        # plugins are sorted so the same order is used between runs.
-        # This prevents deadlock caused by plugins acquiring a lock
-        # and ensures at least one concurrent Certbot instance will run
-        # successfully.
+        def test_binary_file_path(self, httpbin):
+        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
+        r = http('--print=B', 'POST', httpbin.url + '/post',
+                 '@' + BIN_FILE_PATH_ARG, env=env, )
+        assert r == BIN_FILE_CONTENT
     
-        >>> assert lookup_table(
-    ...     ['foo', 'bar', 'baz', 'qux', 'quux'], lambda s: s[0],
-    ...     unique=True) == {
-    ...     'b': 'baz',
-    ...     'f': 'foo',
-    ...     'q': 'quux'
-    ... }
+        def __init__(self, error_message):
+        self.error_message = error_message
+    
+        @property
+    def encoding(self) -> Optional[str]:
+        '''Return a `str` with the message's encoding, if known.'''
+        raise NotImplementedError()
+    
+        # 128+2 SIGINT <http://www.tldp.org/LDP/abs/html/exitcodes.html>
+    ERROR_CTRL_C = 130
+    
+        platforms = 'any',
+    zip_safe = True,
+    include_package_data = True,
+    
+        if re.match(r'https?://movie', url):
+        title = match1(html, 'name='description' content='([^']+)')
+        tid = match1(url, 'trailer/(\d+)')
+        real_url = 'https://movie.douban.com/trailer/video_url?tid=%s' % tid
+        type, ext, size = url_info(real_url)
+    
+    #----------------------------------------------------------------------
+def makeMimi(upid):
+    '''From http://cdn37.atwikiimg.com/sitescript/pub/dksitescript/FC2.site.js
+    Also com.hps.util.fc2.FC2EncrptUtil.makeMimiLocal
+    L110'''
+    strSeed = 'gGddgPfeaf_gzyr'
+    prehash = upid + '_' + strSeed
+    return md5(prehash.encode('utf-8')).hexdigest()
     
     
-def is_type_checking():
-    try:
-        from typing import TYPE_CHECKING
-    except ImportError:
-        return False
-    return TYPE_CHECKING
+class KBaseMapping:
+    def __init__(self, base=62):
+        self.base = base
+        mapping_table = [str(num) for num in range(10)]
+        for i in range(26):
+            mapping_table.append(chr(i + ord('a')))
+        for i in range(26):
+            mapping_table.append(chr(i + ord('A')))
     
-        validator = MyValidator()
-    assert validator._config['test']
+        html = get_content(url)
+    uuid_pattern = r''([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})''
+    id = r1(r'var vid='([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})'', html)
+    if id is None:
+        video_pattern = r''vid'\s*:\s*' + uuid_pattern
+        id = match1(html, video_pattern)
+    assert id, 'can't find video info'
+    return ifeng_download_by_id(id, None, output_dir = output_dir, merge = merge, info_only = info_only)
+    
+    site = Infoq()
+download = site.download_by_url
+download_playlist = site.download_by_url
 
     
-    
-# TODO remove test with the next major release
-@mark.parametrize('rule', ('check_with', 'validator'))
-def test_validator_method(rule):
-    class MyValidator(cerberus.Validator):
-        def _validator_oddity(self, field, value):
-            if not value & 1:
-                self._error(field, 'Must be an odd number')
-    
-    from __future__ import print_function, absolute_import
-    
-        def _get_pypirc_command(self):
-        '''
-        Get the distutils command for interacting with PyPI configurations.
-        :return: the command.
-        '''
-        from distutils.core import Distribution
-        from distutils.config import PyPIRCCommand
-        d = Distribution()
-        return PyPIRCCommand(d)
-    
-    
-def batch_iter(data, batch_size, num_epochs):
     '''
-    Generates a batch iterator for a dataset.
-    '''
-    data = np.array(data)
-    data_size = len(data)
-    num_batches_per_epoch = int(len(data)/batch_size) + 1
-    for epoch in range(num_epochs):
-        # Shuffle the data at each epoch
-        shuffle_indices = np.random.permutation(np.arange(data_size))
-        shuffled_data = data[shuffle_indices]
-        for batch_num in range(num_batches_per_epoch):
-            start_index = batch_num * batch_size
-            end_index = min((batch_num + 1) * batch_size, data_size)
-            yield shuffled_data[start_index:end_index]
+Created on Jun 14, 2011
+Update  on 2017-05-18
+FP-Growth FP means frequent pattern
+the FP-Growth algorithm needs:
+1. FP-tree (class treeNode)
+2. header table (use dict)
+This finds frequent itemsets similar to apriori but does not find association rules.
+Author: Peter/片刻
+GitHub: https://github.com/apachecn/AiLearning
+'''
+from __future__ import print_function
+print(__doc__)
     
-        # load weights
-    if weights == 'imagenet':
-        print('K.image_dim_ordering:', K.image_dim_ordering())
-        if K.image_dim_ordering() == 'th':
-            if include_top:
-                weights_path = get_file('resnet50_weights_th_dim_ordering_th_kernels.h5',
-                                        TH_WEIGHTS_PATH,
-                                        cache_subdir='models')
-            else:
-                weights_path = get_file('resnet50_weights_th_dim_ordering_th_kernels_notop.h5',
-                                        TH_WEIGHTS_PATH_NO_TOP,
-                                        cache_subdir='models')
-            model.load_weights(weights_path)
-            if K.backend() == 'tensorflow':
-                warnings.warn('You are using the TensorFlow backend, yet you '
-                              'are using the Theano '
-                              'image dimension ordering convention '
-                              '(`image_dim_ordering='th'`). '
-                              'For best performance, set '
-                              '`image_dim_ordering='tf'` in '
-                              'your Keras config '
-                              'at ~/.keras/keras.json.')
-                convert_all_kernels_in_model(model)
-        else:
-            if include_top:
-                weights_path = get_file('resnet50_weights_tf_dim_ordering_tf_kernels.h5',
-                                        TF_WEIGHTS_PATH,
-                                        cache_subdir='models')
-            else:
-                weights_path = get_file('resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5',
-                                        TF_WEIGHTS_PATH_NO_TOP,
-                                        cache_subdir='models')
-            model.load_weights(weights_path)
-            if K.backend() == 'theano':
-                convert_all_kernels_in_model(model)
-    return model
     
-    with tf.device('/cpu:0'):
-  sum = tf.add_n(c1) #Addition of all elements in c1, i.e. A^n + B^n
+datArr, labelList = loadDataSet('data/15.BigData_MapReduce/testSet.txt')
+datMat = mat(datArr)
+# finalWs = seqPegasos(datMat, labelList, 2, 5000)
+finalWs = batchPegasos(datMat, labelList, 2, 50, 100)
+print(finalWs)
     
-    learning_rate = 0.1
-updates = [
-    (param_i, param_i - learning_rate * grad_i)
-    for param_i, grad_i in zip(params, grads)
-]
-    
-            tree = estimator.tree_
-        
-        if tree.feature[i] == 0:
-            plt.plot([tree.threshold[i], tree.threshold[i]], ylim, '-k')
-            plot_boundaries(tree.children_left[i],
-                            [xlim[0], tree.threshold[i]], ylim)
-            plot_boundaries(tree.children_right[i],
-                            [tree.threshold[i], xlim[1]], ylim)
-        
-        elif tree.feature[i] == 1:
-            plt.plot(xlim, [tree.threshold[i], tree.threshold[i]], '-k')
-            plot_boundaries(tree.children_left[i], xlim,
-                            [ylim[0], tree.threshold[i]])
-            plot_boundaries(tree.children_right[i], xlim,
-                            [tree.threshold[i], ylim[1]])
-            
-    if boundaries:
-        plot_boundaries(0, plt.xlim(), plt.ylim())
+       # create a tuple with the values to be used by reducer
+   # and encode it with base64 to avoid potential trouble with '\t' and '\n' used
+   # as default separators in Hadoop Streaming
+   producedvalue = base64.b64encode(pickle.dumps((E.T*E, E.T*D*e)))
