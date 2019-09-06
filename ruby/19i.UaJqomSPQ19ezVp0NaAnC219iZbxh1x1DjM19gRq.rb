@@ -1,149 +1,57 @@
 
         
-        module Frameit
-  class Runner
-    def initialize
-      downloader = FrameDownloader.new
-      unless downloader.frames_exist?
-        downloader.download_frames
+            desc 'Get the text for a specific license' do
+      detail 'This feature was introduced in GitLab 8.7.'
+      success ::API::Entities::License
+    end
+    params do
+      requires :name, type: String, desc: 'The name of the template'
+    end
+    get 'templates/licenses/:name', requirements: { name: /[\w\.-]+/ } do
+      template = TemplateFinder.build(:licenses, nil, name: params[:name]).execute
+    
+    module Gitlab
+  module CryptoHelper
+    extend self
+    
+            it { expect(presenter.can_resend_invite?).to eq(false) }
       end
     end
     
-          #####################################################
-      # @!group Documentation
-      #####################################################
-    
-            config.vm.provider 'foo' do |_, c|
-          c.ssh.port = 100
+            desc 'Preview a badge from a #{source_type}.' do
+          detail 'This feature was introduced in GitLab 10.6.'
+          success Entities::BasicBadgeDetails
         end
-      end
-    
-              with_target_vms(argv, provider: provider) do |machine|
-            if !machine.config.vm.box
-              machine.ui.output(I18n.t(
-                'vagrant.errors.box_update_no_name'))
-              next
-            end
-    
-                it 'passes force through to action_box_add as true' do
-              expect(box).to receive(:has_update?).
-                with(machine.config.vm.box_version,
-                     {download_options:
-                       {ca_cert: 'foo', ca_path: 'bar', client_cert: 'baz',
-                        insecure: true}}).
-                and_return([md, md.version('1.1'),
-                            md.version('1.1').provider('virtualbox')])
-    
-      def set_poll
-    @poll = Poll.attached.find(params[:id])
-    authorize @poll.status, :show?
-  rescue Mastodon::NotPermittedError
-    raise ActiveRecord::RecordNotFound
-  end
-    
-      def reject_follow!(follow)
-    follow.destroy
-    
-      def forward_to_origin!
-    ActivityPub::DeliveryWorker.perform_async(
-      payload,
-      some_local_account.id,
-      @target_account.inbox_url
-    )
-  end
-    
-      describe '#call' do
-    context 'when actor is the sender'
-    context 'when actor differs from sender' do
-      let(:forwarder) { Fabricate(:account, domain: 'example.com', uri: 'http://example.com/other_account') }
-    
-              if node.blockarg_type?
-            correct_for_blockarg_type(node)
-          else
-            lambda do |corrector|
-              variable_name = if node.optarg_type?
-                                node.node_parts[0]
-                              else
-                                # Extract only a var name without splat (`*`)
-                                node.source.gsub(/\A\*+/, '')
-                              end
-              corrector.replace(node.loc.name, '_#{variable_name}')
-            end
-          end
+        params do
+          requires :link_url, type: String, desc: 'URL of the badge link'
+          requires :image_url, type: String, desc: 'URL of the badge image'
         end
+        get ':id/badges/render' do
+          authenticate!
     
-          let(:expected_source) { <<-RUBY }
-        def some_method(foo, bar)
-          foo + bar
-        end
-      RUBY
-    
-        it 'still points out redundant uses within the block' do
-      expect_offense(<<~RUBY)
-        class SomeClass
-          concerning :FirstThing do
-            def foo
-            end
-            private
-    
-            def heredoc_line(node, heredoc_node)
-          heredoc_body = heredoc_node.loc.heredoc_body
-          num_of_heredoc_lines =
-            heredoc_body.last_line - heredoc_body.first_line
-    
-      it 'registers an offense for `raise` guard clause not followed by ' \
-     'empty line when guard clause is after method call with argument' do
-    expect_offense(<<~'RUBY')
-      def foo
-        raise SerializationError.new('Unsupported argument type: #{argument.class.name}') unless serializer
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Add empty line after guard clause.
-        serializer.serialize(argument)
-      end
-    RUBY
+    desc 'Move source to source.old, install source theme updates, replace source/_includes/navigation.html with source.old's navigation'
+task :update_source, :theme do |t, args|
+  theme = args.theme || 'classic'
+  if File.directory?('#{source_dir}.old')
+    puts '## Removed existing #{source_dir}.old directory'
+    rm_r '#{source_dir}.old', :secure=>true
   end
+  mkdir '#{source_dir}.old'
+  cp_r '#{source_dir}/.', '#{source_dir}.old'
+  puts '## Copied #{source_dir} into #{source_dir}.old/'
+  cp_r '#{themes_dir}/'+theme+'/source/.', source_dir, :remove_destination=>true
+  cp_r '#{source_dir}.old/_includes/custom/.', '#{source_dir}/_includes/custom/', :remove_destination=>true
+  cp '#{source_dir}.old/favicon.png', source_dir
+  mv '#{source_dir}/index.html', '#{blog_index_dir}', :force=>true if blog_index_dir != source_dir
+  cp '#{source_dir}.old/index.html', source_dir if blog_index_dir != source_dir && File.exists?('#{source_dir}.old/index.html')
+  puts '## Updated #{source_dir} ##'
+end
     
-        it 'returns nil if an except is provided' do
-      valid_article = create(:article, tags: 'explainlikeimfive')
-      expect(described_class.new(valid_article, 'explainlikeimfive').tag).to eq(nil)
-    end
-    
-          it 'flashes a message containing the token' do
-        post '/users/api_secrets', params: { api_secret: valid_params }
-        expect(flash[:notice]).to include(ApiSecret.last.secret)
-        expect(flash[:error]).to be_nil
+      class IncludeArrayTag < Liquid::Tag
+    Syntax = /(#{Liquid::QuotedFragment}+)/
+    def initialize(tag_name, markup, tokens)
+      if markup =~ Syntax
+        @array_name = $1
+      else
+        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
       end
-    end
-    
-      def permitted_attributes
-    %i[title body_html body_markdown main_image published canonical_url
-       description allow_small_edits allow_big_edits tag_list publish_under_org
-       video video_code video_source_url video_thumbnail_url receive_notifications
-       archived]
-  end
-    
-          assert_raises ArgumentError do
-        Sidekiq::Client.push('queue' => 'foo', 'class' => 42, 'args' => [1, 2])
-      end
-    
-    describe Sidekiq::Extensions do
-  before do
-    Sidekiq.redis {|c| c.flushdb }
-  end
-    
-      def new_manager(opts)
-    Sidekiq::Manager.new(opts)
-  end
-    
-          msg['locale'] = 'jp'
-      I18n.locale = I18n.default_locale
-      assert_equal :en, I18n.locale
-      mw = Sidekiq::Middleware::I18n::Server.new
-      mw.call(nil, msg, nil) do
-        assert_equal :jp, I18n.locale
-      end
-      assert_equal :en, I18n.locale
-    end
-    
-          QueueWorker.perform_async(1, 2)
-      QueueWorker.perform_async(1, 2)
-      AltQueueWorker.perform_async(1, 2)
