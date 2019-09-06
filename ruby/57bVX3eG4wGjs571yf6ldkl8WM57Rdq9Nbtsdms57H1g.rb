@@ -1,149 +1,117 @@
 
         
-        # Mimic how the proposed change would first execute a couple of checks and
-# proceed to process with Liquid if necessary
-def conditional_liquid(content)
-  return content if content.nil? || content.empty?
-  return content unless content.include?('{%') || content.include?('{{')
-  always_liquid(content)
-end
-    }
-    }
-    }
-    
-    if pathutil_relative == native_relative
-  Benchmark.ips do |x|
-    x.report('pathutil') { pathutil_relative }
-    x.report('native')   { native_relative }
-    x.compare!
+                updated_podspec_content
+      end
+    end
   end
-else
-  print 'PATHUTIL: '
-  puts pathutil_relative
-  print 'NATIVE:   '
-  puts native_relative
 end
 
     
-            @io.puts
-        print_exception(exception, status, @indent)
-        @io.flush
+          def self.services_mapping
+        {
+            access_wifi: 'access_wifi',
+            app_group: 'app_group',
+            apple_pay: 'apple_pay',
+            associated_domains: 'associated_domains',
+            auto_fill_credential: 'auto_fill_credential',
+            data_protection: 'data_protection',
+            game_center: 'game_center',
+            health_kit: 'healthkit',
+            home_kit: 'homekit',
+            hotspot: 'hotspot',
+            icloud: 'icloud',
+            in_app_purchase: 'in_app_purchase',
+            inter_app_audio: 'inter_app_audio',
+            multipath: 'multipath',
+            network_extension: 'network_extension',
+            nfc_tag_reading: 'nfc_tag_reading',
+            personal_vpn: 'personal_vpn',
+            passbook: 'passbook',
+            push_notification: 'push_notification',
+            siri_kit: 'sirikit',
+            vpn_configuration: 'vpn_conf',
+            wallet: 'wallet',
+            wireless_accessory: 'wireless_conf'
+        }
       end
     
-            # For a description of the protocol see
-        # http://feedback.livereload.com/knowledgebase/articles/86174-livereload-protocol
-        def reload(pages)
-          pages.each do |p|
-            json_message = JSON.dump(
-              :command => 'reload',
-              :path    => p.url,
-              :liveCSS => true
-            )
+          def destination(devices)
+        unless verify_devices_share_os(devices)
+          UI.user_error!('All devices provided to snapshot should run the same operating system')
+        end
+        # on Mac we will always run on host machine, so should specify only platform
+        return ['-destination 'platform=macOS''] if devices.first.to_s =~ /^Mac/
     
-    class Devise::ConfirmationsController < DeviseController
-  # GET /resource/confirmation/new
-  def new
-    self.resource = resource_class.new
-  end
-    
-          respond_to_on_destroy
-    end
-  end
-    
-        def confirmation_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :confirmation_instructions, opts)
-    end
-    
-          def expire_data_after_sign_in!
-        # session.keys will return an empty array if the session is not yet loaded.
-        # This is a bug in both Rack and Rails.
-        # A call to #empty? forces the session to be loaded.
-        session.empty?
-        session.keys.grep(/^devise\./).each { |k| session.delete(k) }
+          def self.description
+        'Receive the version number from a podspec file'
       end
     
-          private
+            _, _, *arg_nodes = *node
+        return unless arg_nodes.count == 2
     
-            routes.each do |module_name, actions|
-          [:path, :url].each do |path_or_url|
-            actions.each do |action|
-              action = action ? '#{action}_' : ''
-              method = :'#{action}#{module_name}_#{path_or_url}'
-    
-    # Each time a record is set we check whether its session has already timed out
-# or not, based on last request time. If so, the record is logged out and
-# redirected to the sign in page. Also, each time the request comes and the
-# record is set, we set the last request time inside its scoped session to
-# verify timeout in the following request.
-Warden::Manager.after_set_user do |record, warden, options|
-  scope = options[:scope]
-  env   = warden.request.env
-    
-          def initialize_from_record(record)
-        @scope_name = Devise::Mapping.find_scope!(record)
-        @resource   = instance_variable_set('@#{devise_mapping.name}', record)
-      end
-    
-      def ownership_of_status_message
-    message = StatusMessage.find_by_guid(self.status_message_guid)
-    if self.status_message_guid && message
-      self.diaspora_handle == message.diaspora_handle
-    else
-      true
-    end
+        File.write(dest, Oj.dump(map))
+    puts 'Wrote emojo to destination! (#{dest})'
   end
-    
-      def import
-    import_tag_followings
-    import_aspects
-    import_contacts
-    import_posts
-    import_relayables
-    import_subscriptions
-    import_others_relayables
-  end
-    
-    puts 'Bundler configured! Please run 'bin/bundle install' now.'
+end
 
     
-          # Inspired by https://github.com/nov/openid_connect_sample/blob/master/app/controllers/connect/clients_controller.rb#L24
-      def create
-        registrar = OpenIDConnect::Client::Registrar.new(request.url, params)
-        client = Api::OpenidConnect::OAuthApplication.register! registrar
-        render json: client.as_json(root: false)
-      end
+          context 'if the message chain initiated by recipient, but is not direct message' do
+        let(:reply_to) { Fabricate(:status, account: recipient) }
+        let(:activity) { Fabricate(:mention, account: recipient, status: Fabricate(:status, account: sender, visibility: :direct, thread: reply_to)) }
     
-    module Api
-  module OpenidConnect
-    class TokenEndpointController < ApplicationController
-      skip_before_action :verify_authenticity_token
+    @@ chat
+<pre id='chat'></pre>
+<form>
+  <input id='msg' placeholder='type message here...' />
+</form>
     
-        @contact = current_user.share_with(@person, @aspect)
+        # Pulled from Rack::ShowExceptions in order to override TEMPLATE.
+    # If Rack provides another way to override, this could be removed
+    # in the future.
+    def pretty(env, exception)
+      req = Rack::Request.new(env)
     
-        if @aspect.save
-      result = {id: @aspect.id, name: @aspect.name}
-      if aspecting_person_id.present?
-        aspect_membership = connect_person_to_aspect(aspecting_person_id)
-        result[:aspect_membership] = AspectMembershipPresenter.new(aspect_membership).base_hash if aspect_membership
-      end
-    
-      def create
-    begin
-      comment = comment_service.create(params[:post_id], params[:text])
-    rescue ActiveRecord::RecordNotFound
-      render plain: I18n.t('comments.create.error'), status: 404
-      return
-    end
-    
-      def contacts_by_aspect(aspect_id)
-    contacts = current_user.contacts.arel_table
-    aspect_memberships = AspectMembership.arel_table
-    current_user.contacts.joins(
-      contacts.outer_join(aspect_memberships).on(
-        aspect_memberships[:aspect_id].eq(aspect_id).and(
-          aspect_memberships[:contact_id].eq(contacts[:id])
-        )
-      ).join_sources
-    )
+      # insert data
+  fields.each do |field, values|
+    updated = '  s.#{field} = ['
+    updated << values.map { |v| '\n    %p' % v }.join(',')
+    updated << '\n  ]'
+    content.sub!(/  s\.#{field} = \[\n(    .*\n)*  \]/, updated)
   end
+    
+              compare_with_real_token token, session
+    
+          def call(env)
+        status, headers, body = @app.call(env)
+        header = options[:report_only] ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'
+        headers[header] ||= csp_policy if html? headers
+        [status, headers, body]
+      end
+    end
+  end
+end
+
+    
+            close_body(body) if reaction
+    
+        headers = get('/', {}, 'wants' => 'text/html').headers
+    expect(headers['Content-Security-Policy']).to eq('connect-src https://api.mybank.com; default-src none; font-src https://cdn.mybank.net; frame-src self; img-src https://cdn.mybank.net; media-src https://cdn.mybank.net; object-src https://cdn.mybank.net; report-uri /my_amazing_csp_report_parser; sandbox allow-scripts; script-src https://cdn.mybank.net; style-src https://cdn.mybank.net')
+    expect(headers['Content-Security-Policy-Report-Only']).to be_nil
+  end
+    
+      it 'accepts post requests with correct X-CSRF-Token header' do
+    post('/', {}, 'rack.session' => session, 'HTTP_X_CSRF_TOKEN' => token)
+    expect(last_response).to be_ok
+  end
+    
+        # Creates an instance of CategoryIndex for each category page, renders it, and
+    # writes the output to a file.
+    #
+    #  +category_dir+ is the String path to the category folder.
+    #  +category+     is the category currently being processed.
+    def write_category_index(category_dir, category)
+      index = CategoryIndex.new(self, self.source, category_dir, category)
+      index.render(self.layouts, site_payload)
+      index.write(self.dest)
+      # Record the fact that this page has been added, otherwise Site::cleanup will remove it.
+      self.pages << index
