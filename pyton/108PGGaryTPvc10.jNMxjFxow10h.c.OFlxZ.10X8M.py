@@ -1,199 +1,154 @@
 
         
-            def add_user(self, user_id, name, pass_hash):
-        pass
+        import getopt
+import os
+import platform
+import sys
+from .version import script_name, __version__
+from .util import git, log
     
-        def set(self, results, query):
-        '''Set the result for the given query key in the cache.
+    def baomihua_download_by_id(id, title=None, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html('http://play.baomihua.com/getvideourl.aspx?flvid=%s&devicetype=phone_app' % id)
+    host = r1(r'host=([^&]*)', html)
+    assert host
+    type = r1(r'videofiletype=([^&]*)', html)
+    assert type
+    vid = r1(r'&stream_name=([^&]*)', html)
+    assert vid
+    dir_str = r1(r'&dir=([^&]*)', html).strip()
+    url = 'http://%s/%s/%s.%s' % (host, dir_str, vid, type)
+    _, ext, size = url_info(url)
+    print_info(site_info, title, type, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir, merge = merge)
     
-        if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile('config.py', silent=True)
-    else:
-        # load the test config if passed in
-        app.config.update(test_config)
+            if self.tree.find('result').text != '1':
+            log.wtf('API result says failed!')
+            raise 
     
-            if triple is None:
-            detail = 'no match'
+        return video_dict
+    
+        for quality in ['1080','720','480','380','240','144','auto']:
+        try:
+            real_url = info[quality][1]['url']
+            if real_url:
+                break
+        except KeyError:
+            pass
+    
+        @classmethod
+    def get_cdninfo(cls, hashid):
+        url = 'http://jobsfe.funshion.com/query/v1/mp4/{}.json'.format(hashid)
+        meta = json.loads(get_content(url, decoded=False).decode('utf8'))
+        return meta['playlist'][0]['urls']
+    
+            pdf = match1(content, r'name='filename'\s*value='([^']+\.pdf)'')
+        if pdf: pdf = 'http://res.infoq.com/downloads/pdfdownloads/%s' % pdf
+    
+        The following variables should be defined:
+        _HELPTEXT: A string describing what this plugin does
+        _DEFAULTS: A dictionary containing the options, defaults and meta information. The
+                   dictionary should be defined as:
+                       {<option_name>: {<metadata>}}
+    
+    
+class Adjustment():
+    ''' Parent class for scaling adjustments '''
+    def __init__(self, configfile=None, config=None):
+        logger.debug('Initializing %s: (configfile: %s, config: %s)',
+                     self.__class__.__name__, configfile, config)
+        self.config = self.set_config(configfile, config)
+        logger.debug('config: %s', self.config)
+        logger.debug('Initialized %s', self.__class__.__name__)
+    
+    
+def _is_iterable(obj):
+    ''' Check if object is iterable '''
+    try:
+        _ = iter(obj)
+    except Exception:  # pylint: disable=broad-except
+        return False
+    return True
+    
+            dest_format = self.get_dest_format()
+        if len(self.args.alignments_file) == 1:
+            retval = AlignmentData(self.args.alignments_file[0], dest_format)
         else:
-            detail = 'found (%r)' % (triple[1] or '<string>')
-            total_found += 1
-        info.append('       -> %s' % detail)
+            retval = [AlignmentData(a_file, dest_format) for a_file in self.args.alignments_file]
+        logger.debug('Alignments: %s', retval)
+        return retval
     
-            for srcobj, loader in self._iter_loaders(template):
-            try:
-                rv = loader.get_source(environment, template)
-                if trv is None:
-                    trv = rv
-            except TemplateNotFound:
-                rv = None
-            attempts.append((loader, srcobj, rv))
-    
-            ::
-    
-        @blue.route('/decorator')
-    def blue_deco_test():
-        raise MyDecoratorException()
-    
-        class Module:
-        @staticmethod
-        def create_app(foo, bar):
-            return Flask('appname2')
-    
-        from site_app import app
-    
-            def to_python(self, value):
-            return Foo(value)
+        def draw_extract_box(self, color_id=2, thickness=1):
+        ''' Draw the extracted face box '''
+        if not self.roi:
+            return
+        color = self.colors[color_id]
+        for idx, roi in enumerate(self.roi):
+            logger.trace('Drawing Extract Box: (idx: %s, roi: %s)', idx, roi)
+            top_left = [point for point in roi.squeeze()[0]]
+            top_left = (top_left[0], top_left[1] - 10)
+            cv2.putText(self.image,  # pylint: disable=no-member
+                        str(idx),
+                        top_left,
+                        cv2.FONT_HERSHEY_DUPLEX,  # pylint: disable=no-member
+                        1.0,
+                        color,
+                        thickness)
+            cv2.polylines(self.image, [roi], True, color, thickness)  # pylint: disable=no-member
     
     
-@pytest.fixture
-def httpbin_secure(httpbin_secure):
-    return prepare_url(httpbin_secure)
+def main():
+    test = TestSetOfStacks()
+    test.test_set_of_stacks()
+    
+            print('Success: test_sort_stack')
+    
+      # Implements linear decay of the learning rate.
+  learning_rate = tf.train.polynomial_decay(
+      learning_rate,
+      global_step,
+      num_train_steps,
+      end_learning_rate=0.0,
+      power=1.0,
+      cycle=False)
+    
+            scaffold_fn = tpu_scaffold
+      else:
+        tf.train.init_from_checkpoint(init_checkpoint, assignment_map)
+    
+      if FLAGS.do_predict:
+    predict_examples = processor.get_test_examples(FLAGS.data_dir)
+    if FLAGS.use_tpu:
+      # Discard batch remainder if running on TPU
+      n = len(predict_examples)
+      predict_examples = predict_examples[:(n - n % FLAGS.predict_batch_size)]
+    
+    
+def convert_by_vocab(vocab, items):
+  '''Converts a sequence of [tokens|ids] using the vocab.'''
+  output = []
+  for item in items:
+    output.append(vocab[item])
+  return output
+    
+        def _get_page(self, topic, request_options=None):
+    
+    def log(text):
+    '''
+    Log error `text` (if it does not start with 'Too many queries')
+    '''
+    if not text.startswith('Too many queries'):
+        print(text)
+        logging.info(text)
 
     
+            answer = self._get_page_dict(topic, topic_type, request_options=request_options)
+        if isinstance(answer, dict):
+            if 'cache' in answer:
+                cache_needed = answer['cache']
     
-def _implementation():
-    '''Return a dict with the Python implementation and version.
-    
-    This module provides the capabilities for the Requests hooks system.
-    
-    
-def test_idna_with_version_attribute(mocker):
-    '''Verify we're actually setting idna version when it should be available.'''
-    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
-    assert info()['idna'] == {'version': '2.6'}
-
-    
-            with server as address:
-            sock = socket.socket()
-            sock.connect(address)
-            time.sleep(1.5)
-            sock.sendall(b'hehehe, not received')
-            sock.close()
-    
-        def __init__(self):
-        #: HTTP verb to send to the server.
-        self.method = None
-        #: HTTP URL to send the request to.
-        self.url = None
-        #: dictionary of HTTP headers.
-        self.headers = None
-        # The `CookieJar` used to create the Cookie header will be stored here
-        # after prepare_cookies is called
-        self._cookies = None
-        #: request body to send to the server.
-        self.body = None
-        #: dictionary of callback hooks, for internal usage.
-        self.hooks = default_hooks()
-        #: integer denoting starting position of a readable file-like body.
-        self._body_position = None
-    
-    HAS_HEROKU = False
-HEROKU_IMP_ERR = None
-try:
-    import heroku3
-    HAS_HEROKU = True
-except ImportError:
-    HEROKU_IMP_ERR = traceback.format_exc()
-    
-            request_body = regexp_extraction(self.management_url, EXPRESSION, 1)
-        for k in values_mapping.keys():
-            if values[str(k)]:
-                request_body = request_body + str(values_mapping[k]) + '=1'
-            else:
-                request_body = request_body + str(values_mapping[k]) + '=0'
-    
-            severity_list = filter(lambda x: x.name == issue_severity, project.list_severities())
-        if len(severity_list) != 1:
-            return (False, changed, 'Unable to find severity %s for project %s' % (issue_severity, project_name), {})
-        severity_id = severity_list[0].id
-    
-            if resource['scopeUris'] is None or set(resource['scopeUris']) != set(scope_uris):
-            state['ansible_facts'][fact_name] = self.resource_client.patch(resource['uri'], **operation_data)
-            state['changed'] = True
-            state['msg'] = self.MSG_UPDATED
-    
-        module.exit_json(changed=ldap.passwd_set())
-    
-    RETURN = '''
-records:
-    description: list containing all records
-    returned: success
-    type: complex
-    contains:
-        name:
-            description: the record name
-            returned: success
-            type: str
-            sample: fancy-hostname
-        type:
-            description: the record type
-            returned: succcess
-            type: str
-            sample: A
-        value:
-            description: the record destination
-            returned: success
-            type: str
-            sample: 127.0.0.1
-        priority:
-            description: the record priority (only relevant if type=MX)
-            returned: success
-            type: int
-            sample: 0
-        id:
-            description: internal id of the record
-            returned: success
-            type: int
-            sample: 12345
+        search.limit
 '''
     
-    DOCUMENTATION = '''
----
-author: 'Jan Christian Grünhage (@jcgruenhage)'
-module: matrix
-short_description: Send notifications to matrix
-description:
-    - This module sends html formatted notifications to matrix rooms.
-version_added: '2.8'
-options:
-    msg_plain:
-        description:
-            - Plain text form of the message to send to matrix, usually markdown
-        required: true
-    msg_html:
-        description:
-            - HTML form of the message to send to matrix
-        required: true
-    room_id:
-        description:
-            - ID of the room to send the notification to
-        required: true
-    hs_url:
-        description:
-            - URL of the homeserver, where the CS-API is reachable
-        required: true
-    token:
-        description:
-            - Authentication token for the API call. If provided, user_id and password are not required
-    user_id:
-        description:
-            - The user id of the user
-    password:
-        description:
-            - The password to log in with
-requirements:
-    -  matrix-client (Python library)
-'''
-    
-    import traceback
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-        module = AnsibleModule(
-        argument_spec,
-        supports_check_mode=True,
-    )
+    import config
+config.CONFIG['cache.type'] = 'none'
