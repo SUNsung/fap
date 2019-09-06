@@ -1,89 +1,188 @@
 
         
-        namespace :bower do
-    
-      def process_bootstrap
-    log_status 'Convert Bootstrap LESS to Sass'
-    puts ' repo   : #@repo_url'
-    puts ' branch : #@branch_sha #@repo_url/tree/#@branch'
-    puts ' save to: #{@save_to.to_json}'
-    puts ' twbs cache: #{@cache_path}'
-    puts '-' * 60
-    
-        alias log puts
-    
-    if rails_env == 'production'
-  config('without test:development')
-elsif rails_env == 'test'
-  config('without development')
-end
-    
-      def aspect_params
-    params.require(:aspect).permit(:name, :chat_enabled, :order_id)
-  end
-end
-
-    
-    class ContactsController < ApplicationController
-  before_action :authenticate_user!
-    
-      def create
-    # Contacts autocomplete does not work the same way on mobile and desktop
-    # Mobile returns contact ids array while desktop returns person id
-    # This will have to be removed when mobile autocomplete is ported to Typeahead
-    recipients_param, column = [%i(contact_ids id), %i(person_ids person_id)].find {|param, _| params[param].present? }
-    if recipients_param
-      person_ids = current_user.contacts.mutual.where(column => params[recipients_param].split(',')).pluck(:person_id)
+            before do
+      hex = 'xxx'
+      SecureRandom.stubs(:hex).returns(hex)
+      @temp_folder = '#{Pathname.new(Dir.tmpdir).realpath}/discourse_theme_#{hex}'
+      @ssh_folder = '#{Pathname.new(Dir.tmpdir).realpath}/discourse_theme_ssh_#{hex}'
     end
     
-        @invalid_emails = html_safe_string_from_session_array(:invalid_email_invites)
-    @valid_emails   = html_safe_string_from_session_array(:valid_email_invites)
-    
-        if message.save
-      logger.info 'event=create type=message user=#{current_user.diaspora_handle} status=success ' \
-                  'message=#{message.id} chars=#{params[:message][:text].length}'
-      Diaspora::Federation::Dispatcher.defer_dispatch(current_user, message)
-    else
-      flash[:error] = I18n.t('conversations.new_conversation.fail')
+        it 'supports one and other' do
+      override_translation('en', 'items.one', 'one fish')
+      override_translation('en', 'items.other', '%{count} fishies')
+      expect(I18n.t('items', count: 13)).to eq('13 fishies')
+      expect(I18n.t('items', count: 1)).to eq('one fish')
     end
-    redirect_to conversations_path(:conversation_id => conversation.id)
-  end
-end
+    
+      context 'S3 specific behavior' do
+    before { create_backups }
+    after(:all) { remove_backups }
+    
+    end
 
     
-        respond_to do |format|
-      format.html
-      format.xml { render :xml => @notifications.to_xml }
-      format.json {
-        render json: render_as_json(@unread_notification_count, @grouped_unread_notification_counts, @notifications)
+        helper = S3Helper.new('bob', 'tomb')
+    helper.update_tombstone_lifecycle(100)
+  end
+    
+    def log(message)
+  puts '[#{DateTime.now.strftime('%Y-%m-%d %H:%M:%S')}] #{message}'
+end
+    
+      it 'imports a scenario that does not exist yet' do
+    visit new_scenario_imports_path
+    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
+    click_on 'Start Import'
+    expect(page).to have_text('This scenario has a few agents to get you started. Feel free to change them or delete them as you see fit!')
+    expect(page).not_to have_text('This Scenario already exists in your system.')
+    check('I confirm that I want to import these Agents.')
+    click_on 'Finish Import'
+    expect(page).to have_text('Import successful!')
+  end
+    
+        it 'should work with the human task agent' do
+      valid_params = {
+        'expected_receive_period_in_days' => 2,
+        'trigger_on' => 'event',
+        'hit' =>
+          {
+            'assignments' => 1,
+            'title' => 'Sentiment evaluation',
+            'description' => 'Please rate the sentiment of this message: '<$.message>'',
+            'reward' => 0.05,
+            'lifetime_in_seconds' => 24 * 60 * 60,
+            'questions' =>
+              [
+                {
+                  'type' => 'selection',
+                  'key' => 'sentiment',
+                  'name' => 'Sentiment',
+                  'required' => 'true',
+                  'question' => 'Please select the best sentiment value:',
+                  'selections' =>
+                    [
+                      { 'key' => 'happy', 'text' => 'Happy' },
+                      { 'key' => 'sad', 'text' => 'Sad' },
+                      { 'key' => 'neutral', 'text' => 'Neutral' }
+                    ]
+                },
+                {
+                  'type' => 'free_text',
+                  'key' => 'feedback',
+                  'name' => 'Have any feedback for us?',
+                  'required' => 'false',
+                  'question' => 'Feedback',
+                  'default' => 'Type here...',
+                  'min_length' => '2',
+                  'max_length' => '2000'
+                }
+              ]
+          }
       }
+      @agent = Agents::HumanTaskAgent.new(:name => 'somename', :options => valid_params)
+      @agent.user = users(:jane)
+      LiquidMigrator.convert_all_agent_options(@agent)
+      expect(@agent.reload.options['hit']['description']).to eq('Please rate the sentiment of this message: '{{message}}'')
+    end
+  end
+end
+    
+        it 'should provide the since attribute after the first run' do
+      time = (Time.now-1.minute).iso8601
+      @checker.memory[:last_event] = time
+      @checker.save
+      expect(@checker.reload.send(:query_parameters)).to eq({:query => {:since => time}})
     end
   end
     
-        def roles
-      ['--roles ROLES', '-r',
-       'Run SSH commands only on hosts matching these roles',
-       lambda do |value|
-         Configuration.env.add_cmdline_filter(:role, value)
-       end]
+      def mark_as_processing!
+    redis.setex('move_in_progress:#{@account.id}', PROCESSING_COOLDOWN, true)
+  end
+end
+
+    
+            expect_any_instance_of(ActivityPub::LinkedDataSignature).to receive(:verify_account!).and_return(nil)
+        expect(ActivityPub::Activity).not_to receive(:factory)
+    
+            it 'not calls erros.add' do
+          expect(errors).not_to have_received(:add).with(:username, any_args)
+        end
+      end
+    end
+  end
+end
+
+    
+    RSpec.describe UrlValidator, type: :validator do
+  describe '#validate_each' do
+    before do
+      allow(validator).to receive(:compliant?).with(value) { compliant }
+      validator.validate_each(record, attribute, value)
     end
     
-            if echo?
-          $stdin.gets
-        else
-          $stdin.noecho(&:gets).tap { $stdout.print '\n' }
-        end
-      rescue Errno::EIO
-        # when stdio gets closed
-        return
-      end
+        before do
+      get :show, params: { id: poll.id }
+    end
     
-          def warn_third_party_scm_must_be_upgraded
-        $stderr.puts(<<-MESSAGE)
-[Deprecation Notice] `set :scm, #{scm_name.inspect}` is deprecated.
-To ensure this custom SCM will work with future versions of Capistrano,
-please upgrade it to a version that uses the new SCM plugin mechanism
-documented here:
+            let(:object_json) do
+          {
+            id: 'https://example.com/actor#bar',
+            type: 'Note',
+            content: 'Lorem ipsum',
+            to: 'http://example.com/followers',
+            attributedTo: 'https://example.com/actor',
+          }
+        end
+    
+      spec.files         = %w[
+    LICENSE.txt
+    README.md
+    ext/etc/constdefs.h
+    ext/etc/etc.c
+    ext/etc/extconf.rb
+    ext/etc/mkconstants.rb
+    stub/etc.rb
+    test/etc/test_etc.rb
+  ]
+  spec.bindir        = 'exe'
+  spec.require_paths = ['lib']
+  spec.extensions    = %w{ext/etc/extconf.rb}
+    
+    testdata( File.dirname($0) + '/scandata', ARGV ).each do |file|
+  $stderr.print File.basename(file) + ': '
+  begin
+    ok = File.read(file)
+    s = Racc::GrammarFileScanner.new( ok )
+    sym, (val, _lineno) = s.scan
+    if printonly then
+      $stderr.puts
+      $stderr.puts val
+      next
+    end
+    
+        assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.sin('0') }
+    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.cos('0') }
+    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.tan('0') }
+    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.sinh('0') }
+    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.cosh('0') }
+    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.tanh('0') }
+    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.asin('0') }
+    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.atan('0') }
+    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.asinh('0') }
+    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.acosh('0') }
+    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.atanh('0') }
+  end
+    
+        gz.pos.should == 0
+    
+        quarantine! do # https://bugs.ruby-lang.org/issues/13675
+      describe 'with nil' do
+        it 'does not append anything to the stream' do
+          @gz.ungetbyte nil
+          @gz.read.should == ''
+        end
+    
+    describe 'Zlib::Inflate#finish' do
     
           it 'flashes an error message' do
         post '/users/api_secrets', params: { api_secret: invalid_params }
@@ -95,88 +194,57 @@ documented here:
 end
 
     
-        it 'denies chat channel invitation to non-authorized user' do
+      it 'renders a user's story successfully' do
+    expect(get: '/ben/this-is-a-slug').to route_to(
+      controller: 'stories',
+      action: 'show',
+      slug: 'this-is-a-slug',
+      username: 'ben',
+    )
+  end
+    
+      def destroy
+    @page = Page.find(params[:id])
+    @page.destroy
+    redirect_to '/internal/pages'
+  end
+    
+        def tmux_new_window_command
+      path = root? ? '#{Tmuxinator::Config.default_path_option} #{root}' : nil
+      '#{project.tmux} new-window #{path} -t #{tmux_window_target} #{tmux_window_name_option}'
+    end
+    
+        it 'should raise if there is not a project name' do
       expect do
-        post '/chat_channel_memberships', params: {
-          chat_channel_membership: {
-            user_id: second_user.id, chat_channel_id: chat_channel.id
-          }
-        }
-      end.to raise_error(Pundit::NotAuthorizedError)
+        noname_project.validate!
+      end.to raise_error RuntimeError, %r{didn't.specify.a.'project_name'}
     end
-  end
-    
-      def user_defined_image(article)
-    return article.social_image if article.social_image.present?
-    return article.main_image if article.main_image.present?
-    return article.video_thumbnail_url if article.video_thumbnail_url.present?
   end
 end
 
     
-      def new
-    @page = Page.new
-  end
-    
-        it 'allows Resque helpers to point to different Redi' do
-      conn = MiniTest::Mock.new
-      conn.expect(:multi, []) { |*args, &block| block.call }
-      conn.expect(:zadd, 1, [String, Array])
-      DWorker.sidekiq_options('pool' => ConnectionPool.new(size: 1) { conn })
-      Sidekiq::Client.enqueue_in(10, DWorker, 3)
-      conn.verify
-    end
-  end
-    
-        it 'can schedule' do
-      ss = Sidekiq::ScheduledSet.new
-      q = Sidekiq::Queue.new
-    
-      class YetAnotherCustomMiddleware
-    def initialize(name, recorder)
-      @name = name
-      @recorder = recorder
-    end
-    
-        it 'removes the enqueued_at field when scheduling' do
-      ss = Sidekiq::ScheduledSet.new
-      ss.clear
-    
-      describe 'redis connection' do
-  	it 'returns error without creating a connection if block is not given' do
-  		assert_raises(ArgumentError) do
-  			Sidekiq.redis
+        context 'and there is no local project config' do
+      context 'when no args are supplied' do
+        it 'should call ::start' do
+          expect(cli).to receive(:start).with([])
+          subject
+        end
       end
-  	end
-  end
     
-        ## Write the results to a file
-    ## Requires railsexpress patched MRI build
-    # brew install qcachegrind
-    #File.open('callgrind.profile', 'w') do |f|
-      #RubyProf::CallTreePrinter.new(result).print(f, :min_percent => 1)
-    #end
-  end
-end
-    
-        def tmux_layout_command
-      '#{project.tmux} select-layout -t #{tmux_window_target} #{layout}'
-    end
-    
-        it 'returns the string' do
-      expect(project.send('hook_#{hook_name}')).to eq('echo 'on hook'')
+          # The first pathname of the project named 'name' found while
+      # recursively searching 'directory'
+      def project_in(directory, name)
+        return nil if String(directory).empty?
+        projects = Dir.glob('#{directory}/**/*.{yml,yaml}').sort
+        projects.detect { |project| File.basename(project, '.*') == name }
+      end
     end
   end
-    
-      it { expect(subject.tmux_window_and_pane_target).to eql 'foo:0.1' }
 end
 
     
-        msg = 'Actual pane does not match expected'
-    msg << '\n  Expected #{@commands} but has #{actual.commands}' if @commands
-    msg << '\n  Expected pane to have #{@expected_attrs}' if @expected_attrs
-  end
-    
-            expect(described_class.validate).to be_a Tmuxinator::Project
-      end
-    end
+        context 'both $XDG_CONFIG_HOME/tmuxinator and ~/.tmuxinator exist' do
+      it 'is #xdg' do
+        allow(described_class).to receive(:environment?).and_return false
+        allow(described_class).to receive(:xdg?).and_return true
+        allow(described_class).to receive(:home?).and_return true
