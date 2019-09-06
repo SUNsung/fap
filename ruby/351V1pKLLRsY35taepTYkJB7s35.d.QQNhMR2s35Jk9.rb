@@ -1,133 +1,237 @@
 
         
-          # Get the title for the page.
-  #
-  # @param [Middleman::Page] page
-  #
-  # @return [String]
-  def title_for(page)
-    if page && page.data.page_title
-      return '#{page.data.page_title} - Vagrant by HashiCorp'
-    end
+            before_action :ensure_configured
     
-            def verify_binary(binary)
-          # Checks for the existence of chef binary and error if it
-          # doesn't exist.
-          if windows?
-            command = 'if ((&'#{binary}' -v) -Match 'Chef*'){ exit 0 } else { exit 1 }'
-          else
-            command = 'sh -c 'command -v #{binary}''
-          end
+      # Use default logging formatter so that PID and timestamp are not suppressed.
+  config.log_formatter = ::Logger::Formatter.new
     
-        it 'returns true if installed' do
-      expect(machine.communicate).to receive(:test).
-        with(command, sudo: true).and_return(true)
-      subject.chef_installed(machine, 'chef_solo', version)
-    end
+    require 'active_support/core_ext/module/attribute_accessors'
     
-        it 'returns true if installed' do
-      expect(machine.communicate).to receive(:test).
-        with(command, sudo: true).and_return(true)
-      subject.chef_installed(machine, 'chef_solo', version)
-    end
+            css('.entry-detail[id$='instance-method']').each do |node|
+          name = node.at_css('.signature > strong').content.strip
+          name.prepend '#{self.name}#' unless slug.end_with?('toplevel')
+          id = node['id'] = node['id'].remove(/<.+?>/)
+          entries << [name, id] unless entries.last && entries.last[0] == name
+        end
     
-    # Unset all host plugins so that we aren't executing subprocess things
-# to detect a host for every test.
-Vagrant.plugin('2').manager.registered.dup.each do |plugin|
-  if plugin.components.hosts.to_hash.length > 0
-    Vagrant.plugin('2').manager.unregister(plugin)
-  end
-end
+            # remove 'This reference reflects Leaflet 1.2.0.'
+        css('h1 ~ p').each do |node|
+          node.remove
+          break
+        end
     
-        it 'raises an error if the download failed' do
-      dl = double('downloader')
-      allow(Vagrant::Util::Downloader).to receive(:new).and_return(dl)
-      expect(dl).to receive(:download!).and_raise(
-        Vagrant::Errors::DownloaderError.new(message: 'foo'))
+          TYPE_BY_SUBPATH_STARTS_WITH = {
+        'c3ref' => 'C Interface',
+        'capi' => 'C Interface',
+        'session' => 'C Interface: Session Module',
+        'optoverview' => 'Query Planner',
+        'queryplanner' => 'Query Planner',
+        'syntax' => 'Syntax Diagrams',
+        'lang' => 'Language',
+        'pragma' => 'PRAGMA Statements',
+        'cli' => 'CLI',
+        'json' => 'JSON',
+        'fileformat' => 'Database File Format',
+        'tcl' => 'Tcl Interface',
+        'malloc' => 'Dynamic Memory Allocation',
+        'vtab' => 'Virtual Table Mechanism',
+        'datatype' => 'Datatypes',
+        'locking' => 'Locking and Concurrency',
+        'foreignkey' => 'Foreign Key Constraints',
+        'wal' => 'Write-Ahead Logging',
+        'fts' => 'Full-Text Search',
+        'rtree' => 'R*Tree Module',
+        'rbu' => 'RBU Extension',
+        'limits' => 'Limits',
+        'howtocorrupt' => 'How To Corrupt',
+        'geopoly' => 'Geopoly'
+      }
     
-            {
-          host: port_info['HostIp'],
-          port: port_info['HostPort']
-        }
-      end
-    
-          it 'should exit the process if exit_code has been set' do
-        subject.custom(machine) { |m| Thread.current[:exit_code] = 1}
-        subject.custom(machine) { |*_| }
-        expect(Process).to receive(:exit!).with(1)
-        subject.run
-      end
+        it 'ignores HOMEBREW_SKIP_OR_LATER_BOTTLES on release versions', :needs_macos do
+      allow(ARGV).to receive(:skip_or_later_bottles?).and_return(true)
+      allow(OS::Mac).to receive(:prerelease?).and_return(false)
+      subject[:mavericks] = 'foo'
+      expect(subject.send(:find_matching_tag, :mavericks)).to eq(:mavericks)
+      expect(subject.send(:find_matching_tag, :yosemite)).to eq(:mavericks)
     end
   end
 end
 
     
-        context 'when disabling compression or dsa_authentication flags' do
-      let(:ssh_info) {{
-        host: 'localhost',
-        port: 2222,
-        username: 'vagrant',
-        private_key_path: [private_key_path],
-        compression: false,
-        dsa_authentication: false
-      }}
+              # Check for long inreplace block vars
+          find_all_blocks(body_node, :inreplace) do |node|
+            block_arg = node.arguments.children.first
+            next unless block_arg.source.size > 1
     
-          it 'Does not render below article variant when no variants published' do
-        html_variant = create(:html_variant, published: false, approved: true, group: 'article_show_below_article_cta')
-        get article.path + '?variant_version=0'
-        expect(response.body).not_to include html_variant.html
+          # Look in the standard locations, because even if port or fink are
+      # not in the path they can still break builds if the build scripts
+      # have these paths baked in.
+      %w[/sw/bin/fink /opt/local/bin/port].each do |ponk|
+        path = Pathname.new(ponk)
+        paths << path if path.exist?
       end
     
-      def index
-    @pages = Page.all
+        def quarantine
+      return if @quarantine.nil?
+      return unless Quarantine.available?
+    
+      before do
+    @commit_id = 1
+    FileUtils.mkpath cached_location
   end
     
-        # Creates an instance of CategoryIndex for each category page, renders it, and
-    # writes the output to a file.
-    #
-    #  +category_dir+ is the String path to the category folder.
-    #  +category+     is the category currently being processed.
-    def write_category_index(category_dir, category)
-      index = CategoryIndex.new(self, self.source, category_dir, category)
-      index.render(self.layouts, site_payload)
-      index.write(self.dest)
-      # Record the fact that this page has been added, otherwise Site::cleanup will remove it.
-      self.pages << index
+    # Resource is the fundamental representation of an external resource. The
+# primary formula download, along with other declared resources, are instances
+# of this class.
+class Resource
+  include FileUtils
     
-      if options.respond_to? 'keys'
-    options.each do |k,v|
-      unless v.nil?
-        v = v.join ',' if v.respond_to? 'join'
-        v = v.to_json if v.respond_to? 'keys'
-        output += ' data-#{k.sub'_','-'}='#{v}''
-      end
+        def quote_field(field)
+      field = String(field)
+      encoded_quote_character = @quote_character.encode(field.encoding)
+      encoded_quote_character +
+        field.gsub(encoded_quote_character,
+                   encoded_quote_character * 2) +
+        encoded_quote_character
     end
-  elsif options.respond_to? 'join'
-    output += ' data-value='#{config[key].join(',')}''
-  else
-    output += ' data-value='#{config[key]}''
+    
+    testdata( File.dirname($0) + '/scandata', ARGV ).each do |file|
+  $stderr.print File.basename(file) + ': '
+  begin
+    ok = File.read(file)
+    s = Racc::GrammarFileScanner.new( ok )
+    sym, (val, _lineno) = s.scan
+    if printonly then
+      $stderr.puts
+      $stderr.puts val
+      next
+    end
+    
+      before :each do
+    @data = '12345abcde'
+    @zip = [31, 139, 8, 0, 44, 220, 209, 71, 0, 3, 51, 52, 50, 54, 49, 77,
+            76, 74, 78, 73, 5, 0, 157, 5, 0, 36, 10, 0, 0, 0].pack('C*')
+    @io = StringIO.new @zip
   end
-  output += '></#{tag}>'
+    
+          # create several required methods for this temporal file
+      Tempfile.send(:define_method, 'content_type') { return att_content_type }
+      Tempfile.send(:define_method, 'original_filename') { return file_name }
+      file
+    end
+  end
+    
+    rails_env = BundlerHelper.rails_env
+database = BundlerHelper.database
+    
+            expect(federation_entity.photos.size).to eq(1)
+        expect(federation_photo.author).to eq(diaspora_entity.author.diaspora_handle)
+        expect(federation_photo.guid).to eq(diaspora_photo.guid)
+        expect(federation_photo.public).to eq(diaspora_photo.public)
+        expect(federation_photo.created_at).to eq(diaspora_photo.created_at)
+        expect(federation_photo.remote_photo_path).to eq(diaspora_photo.remote_photo_path)
+        expect(federation_photo.remote_photo_name).to eq(diaspora_photo.remote_photo_name)
+        expect(federation_photo.text).to eq(diaspora_photo.text)
+        expect(federation_photo.height).to eq(diaspora_photo.height)
+        expect(federation_photo.width).to eq(diaspora_photo.width)
+      end
+    
+          def save_params_and_render_consent_form(endpoint)
+        @o_auth_application = endpoint.o_auth_application
+        @response_type = endpoint.response_type
+        @redirect_uri = endpoint.redirect_uri
+        @scopes = endpoint.scopes
+        save_request_parameters
+        @app = UserApplicationPresenter.new @o_auth_application, @scopes
+        render :new
+      end
+    
+          raise(UnknownPlugin) unless klass
+      klass
+    end
+    
+    module LogStash
+  module PluginManager
+  end
 end
     
-        context 'when I18n enforces available locales' do
-      before { I18n.enforce_available_locales = true }
+      it 'returns the sorted config parts' do
+    expect(subject.config_parts).to eq(ordered_config_parts)
+  end
     
-                    memo[memo_key] = handle_passed_param(declared_parent_param, passed_children_params) do
-                  declared(passed_children_params, options, declared_children_params)
-                end
-              end
-            else
-              # If it is not a Hash then it does not have children.
-              # Find its value or set it to nil.
-              has_renaming = route_setting(:renamed_params) && route_setting(:renamed_params).find { |current| current[declared_param] }
-              param_renaming = has_renaming[declared_param] if has_renaming
+        it 'returns a flare tag if there are 2 flare tags in the list' do
+      valid_article = create(:article, tags: %w[ama explainlikeimfive])
+      expect(described_class.new(valid_article).tag.name).to eq('explainlikeimfive')
+    end
+  end
     
-        class LazyValueArray < LazyValueEnumerable
-      def initialize(array)
-        super
-        @value_hash = []
-        array.each_with_index do |value, index|
-          self[index] = value
-        end
+      def user_is_author?
+    if record.instance_of?(Article)
+      record.user_id == user.id
+    else
+      record.pluck(:user_id).uniq == [user.id]
+    end
+  end
+    
+          now = Time.current
+      @user.onboarding_package_requested_again = true if @user.onboarding_package_requested
+      @user.onboarding_package_requested = true
+      @user.onboarding_package_form_submmitted_at = now
+      @user.personal_data_updated_at = now
+      @user.shipping_validated_at = now if user_params[:shipping_validated] == '1'
+      if @user.save!
+        format.html { redirect_to '/freestickers/edit' }
+        format.json { render :show, status: :ok, location: @user }
+      else
+        format.html { render :edit }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+    
+    # define charCodeAt on String
+class String
+  def charCodeAt(k)
+    # use scan, nil check, and unpack instead of ord for 1.8
+    # 1.9 can simply use self[k].ord
+    # http://stackoverflow.com/questions/7793177/split-utf8-string-regardless-of-ruby-version
+    c = self.scan(/./mu)[k]
+    return nil if c.nil?
+    c.unpack('U')[0]
+  end
+end
+    
+          def css # custom css
+        @css
+      end
+    
+        assert_match /Edit/, last_response.body, ''Edit' link is blocked in history template'
+    
+    def date
+  Date.today.to_s
+end
+    
+        post '/compare/*' do
+      @file     = encodeURIComponent(params[:splat].first)
+      @versions = params[:versions] || []
+      if @versions.size < 2
+        redirect to('/history/#{@file}')
+      else
+        redirect to('/compare/%s/%s...%s' % [
+            @file,
+            @versions.last,
+            @versions.first]
+                 )
+      end
+    end
+    
+    shared_examples_for 'a project hook' do
+  let(:project) { FactoryBot.build(:project) }
+    
+        context 'when first window is nameless' do
+      let(:project) { nameless_window_project }
+      let(:command) { '#{project.tmux} new-session -d -s #{project.name} ' }
+    
+          def stop_template
+        asset_path 'template-stop.erb'
       end
