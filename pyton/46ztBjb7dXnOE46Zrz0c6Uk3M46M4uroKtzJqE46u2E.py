@@ -1,198 +1,117 @@
 
         
-            lowPrimes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59,
-                 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127,
-                 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191,
-                 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257,
-                 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331,
-                 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401,
-                 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467,
-                 479, 487, 491, 499, 503, 509, 521, 523, 541, 547, 557, 563,
-                 569, 571, 577, 587, 593, 599, 601, 607, 613, 617, 619, 631,
-                 641, 643, 647, 653, 659, 661, 673, 677, 683, 691, 701, 709,
-                 719, 727, 733, 739, 743, 751, 757, 761, 769, 773, 787, 797,
-                 809, 811, 821, 823, 827, 829, 839, 853, 857, 859, 863, 877,
-                 881, 883, 887, 907, 911, 919, 929, 937, 941, 947, 953, 967,
-                 971, 977, 983, 991, 997]
+            :param filepath: Optional filepath the the blns.txt file
+    :returns: The list of naughty strings
+    '''
     
-    	if len(sys.argv) == 1:
-		try:
-			n = int(raw_input('Enter a number: '))
-			print(partition(n))
-		except ValueError:
-			print('Please enter a number.')
-	else:
-		try:
-			n = int(sys.argv[1])
-			print(partition(n))
-		except ValueError:
-			print('Please pass a number.')
+        # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
+    frame = frame[:, :, ::-1]
     
-    def longestSub(ARRAY): 			#This function is recursive
-	
-	ARRAY_LENGTH = len(ARRAY)
-	if(ARRAY_LENGTH <= 1):  	#If the array contains only one element, we return it (it's the stop condition of recursion)
-		return ARRAY
-								#Else
-	PIVOT=ARRAY[0]
-	isFound=False
-	i=1
-	LONGEST_SUB=[]
-	while(not isFound and i<ARRAY_LENGTH):
-		if (ARRAY[i] < PIVOT):
-			isFound=True
-			TEMPORARY_ARRAY = [ element for element in ARRAY[i:] if element >= ARRAY[i] ]
-			TEMPORARY_ARRAY = longestSub(TEMPORARY_ARRAY)
-			if ( len(TEMPORARY_ARRAY) > len(LONGEST_SUB) ):
-				LONGEST_SUB = TEMPORARY_ARRAY
-		else:
-			i+=1
+    
+    # Display the results
+    for (top, right, bottom, left), name in zip(face_locations, face_names):
+        # Scale back up face locations since the frame we detected in was scaled to 1/4 size
+        top *= 4
+        right *= 4
+        bottom *= 4
+        left *= 4
     
     
 if __name__ == '__main__':
-    whole_array = input('please input some numbers:')
-    array = SubArray(whole_array)
-    re = array.solve_sub_array()
-    print(('the results is:', re))
-    
-    
-def b_expo(a, b):
-    res = 0
-    while b > 0:
-        if b&1:
-            res += a
-    
-        freqOrder = []
-    for freqPair in freqPairs:
-        freqOrder.append(freqPair[1])
-    
-        def run(self, args, opts):
-        if len(args) != 1:
-            raise UsageError()
-    
-        def _print_response(self, response, opts):
-        if opts.headers:
-            self._print_headers(response.request.headers, b'>')
-            print('>')
-            self._print_headers(response.headers, b'<')
-        else:
-            self._print_bytes(response.body)
-    
-        requires_project = False
-    default_settings = {'LOG_ENABLED': False,
-                        'SPIDER_LOADER_WARN_ONLY': True}
-    
-            self._download_http = httpdownloadhandler(settings).download_request
-    
-    
-class DefaultHeadersMiddleware(object):
-    
-    
-def get_github_url(app, view, path):
-    github_fmt = 'https://github.com/{}/{}/{}/{}{}'
-    return (
-        github_fmt.format(app.config.edit_on_github_project, view,
-                          app.config.edit_on_github_branch,
-                          app.config.edit_on_github_src_path, path))
-    
-        if temperature_unit != ha_unit:
-        temperature = convert_temperature(
-            temperature, temperature_unit, ha_unit)
-    
-        meters = value
-    
-    
-class GroupTagValueNotFound(Exception):
-    pass
+    app.run(host='0.0.0.0', port=5001, debug=True)
 
     
-            # Deleting model 'GroupTagKey'
-        db.delete_table(u'tagstore_grouptagkey')
+        # Start to show video
+    last_num = 1
+    fps_list = []
+    tmp_time = time.time()
+    while not Global.is_exit:
+        while Global.write_num != last_num:
+            last_num = int(Global.write_num)
     
-    import logging
+    requirements = [
+    'face_recognition_models>=0.3.0',
+    'Click>=6.0',
+    'dlib>=19.7',
+    'numpy',
+    'Pillow'
+]
     
-    logger = logging.getLogger('sentry.scheduler')
-    
-    
-class BufferFull(UnpackException):
-    pass
-    
-    
-def fetch(version):
-    base = 'http://wheels.scipy.org'
-    tree = html.parse(base)
-    root = tree.getroot()
-    
-    
-@pytest.mark.parametrize('key_strs,groupers', [
-    ('inner',  # Index name
-     pd.Grouper(level='inner')
-     ),
-    (['inner'],  # List of index name
-     [pd.Grouper(level='inner')]
-     ),
-    (['B', 'inner'],  # Column and index
-     ['B', pd.Grouper(level='inner')]
-     ),
-    (['inner', 'B'],  # Index and column
-     [pd.Grouper(level='inner'), 'B'])])
-def test_grouper_index_level_as_string(frame, key_strs, groupers):
-    result = frame.groupby(key_strs).mean()
-    expected = frame.groupby(groupers).mean()
-    assert_frame_equal(result, expected)
-    
-        if seed_nans:
-        frame.loc[1::11, '1st'] = np.nan
-        frame.loc[3::17, '2nd'] = np.nan
-        frame.loc[7::19, '3rd'] = np.nan
-        frame.loc[8::19, '3rd'] = np.nan
-        frame.loc[9::19, '3rd'] = np.nan
-    
-        drop_right = [n for n in right_levels if n not in right_on]
-    if drop_right:
-        df_right = df_right.reset_index(drop_right, drop=True)
+        def test_timestamp_in_columns(self):
+        df = pd.DataFrame(
+            [[1, 2]], columns=[pd.Timestamp('2016'), pd.Timedelta(10, unit='s')]
+        )
+        result = df.to_json(orient='table')
+        js = json.loads(result)
+        assert js['schema']['fields'][1]['name'] == 1451606400000
+        assert js['schema']['fields'][2]['name'] == 10000
     
     
-def ChineseAnalyzer(stoplist=STOP_WORDS, minsize=1, stemfn=stem, cachesize=50000):
-    return (ChineseTokenizer() | LowercaseFilter() |
-            StopFilter(stoplist=stoplist, minsize=minsize) |
-            StemFilter(stemfn=stemfn, ignore=None, cachesize=cachesize))
+def test_readjson_chunks_from_file():
+    with ensure_clean('test.json') as path:
+        df = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})
+        df.to_json(path, lines=True, orient='records')
+        chunked = pd.concat(pd.read_json(path, lines=True, chunksize=1))
+        unchunked = pd.read_json(path, lines=True)
+        assert_frame_equal(unchunked, chunked)
+    
+        def test_to_csv_path_is_none(self):
+        # GH 8215
+        # Make sure we return string for consistency with
+        # Series.to_csv()
+        csv_str = self.frame.to_csv(path_or_buf=None)
+        assert isinstance(csv_str, str)
+        recons = pd.read_csv(StringIO(csv_str), index_col=0)
+        assert_frame_equal(self.frame, recons)
+    
+        def test_get_item(self, closed):
+        i = IntervalIndex.from_arrays((0, 1, np.nan), (1, 2, np.nan), closed=closed)
+        assert i[0] == Interval(0.0, 1.0, closed=closed)
+        assert i[1] == Interval(1.0, 2.0, closed=closed)
+        assert isna(i[2])
+    
+                # can't roundtrip intervalindex via read_csv so check string repr (GH 23595)
+            expected = s.copy()
+            expected.index = expected.index.astype(str)
+    
+    
+@YouCompleteMeInstance( { 'g:ycm_cache_omnifunc': 1,
+                          'g:ycm_semantic_triggers': TRIGGERS } )
+def OmniCompleter_GetCompletions_Cache_ListFilter_test( ycm ):
+  def Omnifunc( findstart, base ):
+    if findstart:
+      return 5
+    return [ 'a', 'b', 'cdef' ]
+    
+      return qf_item
 
     
+        with patch( 'ycm.youcompleteme.SendCommandRequest' ) as send_request:
+      ycm.SendCommandRequest( [ 'ft=ycm:ident', 'GoTo' ], '', False, 1, 1 )
+      send_request.assert_called_once_with( *expected_args )
     
-class TextRank(KeywordExtractor):
+    from ycm.client.base_request import BaseRequest, BuildRequestData
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+    DoneAndNotDoneFutures = namedtuple(
+        'DoneAndNotDoneFutures', 'done not_done')
+def wait(fs, timeout=None, return_when=ALL_COMPLETED):
+    '''Wait for the futures in the given sequence to complete.
     
     
-def viterbi(obs, states, start_p, trans_p, emit_p):
-    V = [{}]  # tabular
-    mem_path = [{}]
-    all_states = trans_p.keys()
-    for y in states.get(obs[0], all_states):  # init
-        V[0][y] = start_p[y] + emit_p[y].get(obs[0], MIN_FLOAT)
-        mem_path[0][y] = ''
-    for t in xrange(1, len(obs)):
-        V.append({})
-        mem_path.append({})
-        #prev_states = get_top_states(V[t-1])
-        prev_states = [
-            x for x in mem_path[t - 1].keys() if len(trans_p[x]) > 0]
-    
-    print('='*40)
-print('3. 关键词提取')
-print('-'*40)
-print(' TF-IDF')
-print('-'*40)
-    
-    if withWeight is True:
-    for tag in tags:
-        print('tag: %s\t\t weight: %f' % (tag[0],tag[1]))
-else:
-    print(','.join(tags))
+def do_run():
+    # Only run the tests if the $TEST_ERROR_INJECTION environment variable is set. This is to reduce the
+    # testing time, because the injected errors result in retries and timeouts that slow down the tests overall.
+    return os.environ.get('TEST_ERROR_INJECTION') in ('true', '1')
 
     
-    for f_name in glob.glob(pattern):
-    with open(f_name) as f:
-        print('read file:', f_name)
-        for line in f: #one line as a document
-            words = ' '.join(jieba.cut(line))
-            docs.append(words)
+        def _list_stack_names(self):
+        client = aws_stack.connect_to_service('cloudformation')
+        stack_names = [s['StackName'] for s in client.list_stacks()['StackSummaries']]
+        return stack_names
