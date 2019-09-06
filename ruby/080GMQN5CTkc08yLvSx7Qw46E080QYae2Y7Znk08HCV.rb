@@ -1,203 +1,165 @@
 
         
-                @version_value = '#{major}.#{minor}.#{patch}'
-      end
+          enum status: [:proposed, :written, :published]
+  enum read_status: { unread: 0, reading: 2, read: 3, forgotten: nil }
+  enum nullable_status: [:single, :married]
+  enum language: [:english, :spanish, :french], _prefix: :in
+  enum author_visibility: [:visible, :invisible], _prefix: true
+  enum illustrator_visibility: [:visible, :invisible], _prefix: true
+  enum font_size: [:small, :medium, :large], _prefix: :with, _suffix: true
+  enum difficulty: [:easy, :medium, :hard], _suffix: :to_read
+  enum cover: { hard: 'hard', soft: 'soft' }
     
-          def initialize(wrapped_ex, options)
-        @wrapped_exception = wrapped_ex
-        @recovered_options = options
+          def test_missing_helper_error_has_the_right_path
+        e = assert_raise(AbstractController::Helpers::MissingHelperError) { AbstractInvalidHelpers.helper(:missing) }
+        assert_equal 'helpers/missing_helper.rb', e.path
       end
     end
+  end
+end
+
     
-          def self.allowed_services_description
-        return Produce::DeveloperCenter::ALLOWED_SERVICES.map do |k, v|
-          '#{k}: (#{v.join('|')})(:on|:off)(true|false)'
-        end.join(', ')
+          assert_equal %w(main.scss symlinked-file).length, site.pages.length
+      refute_equal [], site.static_files
+    end
+    
+    if pathutil_relative == native_relative
+  Benchmark.ips do |x|
+    x.report('pathutil') { pathutil_relative }
+    x.report('native')   { native_relative }
+    x.compare!
+  end
+else
+  print 'PATHUTIL: '
+  puts pathutil_relative
+  print 'NATIVE:   '
+  puts native_relative
+end
+
+    
+          def cell_prefix(status)
+        @prefixes[status]
       end
     
+        it 'returns a label 'Disabled' if a given agent is disabled' do
+      stub(@agent).disabled? { true }
+      label = working(@agent)
+      expect(label).to be_html_safe
+      expect(Nokogiri(label).text).to eq 'Disabled'
+    end
+    
+    describe DotHelper do
+  describe 'with example Agents' do
+    class Agents::DotFoo < Agent
+      default_schedule '2pm'
+    
+        context '#run' do
       before do
-    # Use a simple client for all data models
-    allow(Spaceship::TestFlight::Base).to receive(:client).and_return(mock_client)
-    allow(mock_client).to receive(:team_id).and_return('')
+        mock(@agent_runner).run_workers
+      end
+    
+      describe '#log_for_agent' do
+    it 'creates AgentLogs' do
+      log = AgentLog.log_for_agent(agents(:jane_website_agent), 'some message', :level => 4, :outbound_event => events(:jane_website_agent_event))
+      expect(log).not_to be_new_record
+      expect(log.agent).to eq(agents(:jane_website_agent))
+      expect(log.outbound_event).to eq(events(:jane_website_agent_event))
+      expect(log.message).to eq('some message')
+      expect(log.level).to eq(4)
+    end
+    
+    # This class finds files in a repository by name and content
+# the result is joined and sorted by file name
+module Gitlab
+  class FileFinder
+    attr_reader :project, :ref
+    
+    shared_examples 'diff statistics' do |test_include_stats_flag: true|
+  def stub_stats_find_by_path(path, stats_mock)
+    expect_next_instance_of(Gitlab::Git::DiffStatsCollection) do |collection|
+      allow(collection).to receive(:find_by_path).and_call_original
+      expect(collection).to receive(:find_by_path).with(path).and_return(stats_mock)
+    end
   end
     
-            raise ex
-      end
+          validates virtual_attribute, allow_nil: true, duration: { message: parameters[:error_message] }
     end
     
-      describe :find_build do
-    context 'one build' do
-      let(:fake_builds) { make_fake_builds(1) }
-      it 'finds the one build' do
-        only_build = fake_builds.first
-        expect(review_submitter.find_build(fake_builds)).to eq(only_build)
+        %w[group project].each do |source_type|
+      params do
+        requires :id, type: String, desc: 'The ID of a #{source_type}'
       end
-    end
-    
-          def options(language, locale)
-        config = Snapshot.config
-        result_bundle_path = resolve_result_bundle_path(language, locale) if config[:result_bundle]
-    
-          def self.is_supported?(platform)
-        [:ios, :mac].include?(platform)
-      end
-    
-            Actions.lane_context[SharedValues::PODSPEC_VERSION_NUMBER] = version_podspec_file.version_value
-      end
-    
-        SPLIT_INTS = /(?<=\d)\.(?=[\s\d])/.freeze
-    
-        def push(*names)
-      @filters.push *filter_const(names)
-    end
-    
-            css('br', 'hr', '.material-icons', '.header-link', '.breadcrumb').remove
-    
-            css('h1').each_with_index do |node, i|
-          next if i == 0
-          node.name = 'h2'
+      resource source_type.pluralize, requirements: API::NAMESPACE_OR_PROJECT_REQUIREMENTS do
+        desc 'Gets a list of #{source_type} badges viewable by the authenticated user.' do
+          detail 'This feature was introduced in GitLab 10.6.'
+          success Entities::Badge
         end
+        params do
+          use :pagination
+        end
+        get ':id/badges' do
+          source = find_source(source_type, params[:id])
     
-      # When true, warn user if they just used next-to-last attempt of authentication
-  mattr_accessor :last_attempt_warning
-  @@last_attempt_warning = true
+      def deprecated_option(hash)
+    raise ArgumentError, 'deprecated_option hash must not be empty' if hash.empty?
     
-    module Devise
-  module Controllers
-    # Provide the ability to store a location.
-    # Used to redirect back to a desired path after sign in.
-    # Included by default in all controllers.
-    module StoreLocation
-      # Returns and delete (if it's navigational format) the url stored in the session for
-      # the given scope. Useful for giving redirect backs after sign up:
+          # Returns a Pathname object corresponding to Xcode.app's Developer
+      # directory or nil if Xcode.app is not installed
+      def prefix
+        @prefix ||=
+          begin
+            dir = MacOS.active_developer_dir
+    
+          it 'adds the appropriate curl args and does not URL-encode the cookies' do
+        expect(subject).to receive(:system_command!) { |*, args:, **|
+          expect(args.each_cons(2)).to include(['-b', 'coo=k/e;mon=ster'])
+        }
+    
+      let(:payload) do
+    {
+      '@context': 'https://www.w3.org/ns/activitystreams',
+      id: 'foo',
+      type: 'Create',
+      actor: ActivityPub::TagManager.instance.uri_for(actor),
+      object: {
+        id: 'bar',
+        type: 'Note',
+        content: 'Lorem ipsum',
+      },
+    }
+  end
+    
+        puts 'Downloading emojos from source... (#{source})'
+    
+    RSpec.describe FollowLimitValidator, type: :validator do
+  describe '#validate' do
+    before do
+      allow_any_instance_of(described_class).to receive(:limit_reached?).with(account) do
+        limit_reached
+      end
+    
+      FREQUENCY      = 7.days.freeze
+  SIGN_IN_OFFSET = 1.day.freeze
+    
+          def ==(other)
+        if other.class == self.class
+          other.source_path == @source_path && other.dsym_path == @dsym_path && other.bcsymbolmap_paths == @bcsymbolmap_paths
+        else
+          false
+        end
+      end
+    
+          # @return [Array<Pathname>] The paths of the files which should be
+      #         included in resources bundles by the Pod.
       #
-      # Example:
-      #
-      #   redirect_to stored_location_for(:user) || root_path
-      #
-      def stored_location_for(resource_or_scope)
-        session_key = stored_location_key_for(resource_or_scope)
-    
-        if record.timedout?(last_request_at) &&
-        !env['devise.skip_timeout'] &&
-        !proxy.remember_me_is_active?(record)
-      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
-      throw :warden, scope: scope, message: :timeout
-    end
-    
-          klass.devise_modules.each do |mod|
-        constant = const_get(mod.to_s.classify)
-    
-              find_method_with_args(body_node, :system, 'go', 'get') do
-            problem 'Do not use `go get`. Please ask upstream to implement Go vendoring'
-          end
-    
-      def initialize
-    @rebuild = 0
-    @prefix = Homebrew::DEFAULT_PREFIX
-    @cellar = Homebrew::DEFAULT_CELLAR
-    @collector = Utils::Bottles::Collector.new
-    @root_url_specs = {}
-  end
-    
-    describe SoftwareSpec do
-  subject(:spec) { described_class.new }
-    
-      describe '#cached_location' do
-    it 'returns the path of the cached resource' do
-      allow_any_instance_of(described_class).to receive(:cache_tag).and_return('foo')
-      downloader = described_class.new(url, 'baz', version)
-      expect(downloader.cached_location).to eq(HOMEBREW_CACHE/'baz--foo')
-    end
-  end
-end
-    
-      context do
-    let(:asshole)  { Fabricate(:account, username: 'asshole') }
-    let(:reply_to) { Fabricate(:status, account: asshole) }
-    let(:activity) { Fabricate(:mention, account: recipient, status: Fabricate(:status, account: sender, thread: reply_to)) }
-    
-      def show
-    render json: @poll, serializer: REST::PollSerializer, include_results: true
-  end
-    
-      describe 'GET #show' do
-    let(:poll) { Fabricate(:poll, status: Fabricate(:status, visibility: visibility)) }
-    
-    require 'open-uri'
-require 'json'
-require 'strscan'
-require 'forwardable'
-require 'term/ansicolor'
-require 'fileutils'
-    
-        it 'fetches the correct path for ruby' do
-      ruby_path = File.basename(Executable.which('ruby'))
-      ruby_path.should == 'ruby'
-    end
-    
-    def fixture_pod_target(spec_or_name, host_requires_frameworks = false, user_build_configurations = {}, archs = [],
-                       platform = Pod::Platform.new(:ios, '6.0'), target_definitions = [], scope_suffix = nil, build_type: nil)
-  spec = spec_or_name.is_a?(Pod::Specification) ? spec_or_name : fixture_spec(spec_or_name)
-  fixture_pod_target_with_specs([spec], host_requires_frameworks, user_build_configurations, archs, platform,
-                                target_definitions, scope_suffix, :build_type => build_type)
-end
-    
-    module Pod
-  class Target
-    describe BuildType do
-      describe '#initialize' do
-        it 'returns static library by default' do
-          BuildType.new.should == BuildType.static_library
-        end
-    
-          def all_paths
-        [source_path, dsym_path, bcsymbolmap_paths].flatten.compact
+      def resource_bundle_files
+        resource_bundles.values.flatten
       end
-    end
-  end
-end
-
     
-            # Cleans up projects before writing.
-        #
-        def cleanup_projects(projects)
-          projects.each do |project|
-            [project.pods, project.support_files_group,
-             project.development_pods, project.dependencies_group].each { |group| group.remove_from_project if group.empty? }
-            project.sort(:groups_position => :below)
-          end
+            index = UI.gets.chomp.to_i - 1
+        if index < 0 || index > array.count - 1
+          raise Informative, '#{index + 1} is invalid [1-#{array.count}]'
+        else
+          index
         end
-      end
-    end
-  end
-end
-
-    
-          def ensure_external_podspecs_present!
-        return unless config.podfile
-        config.podfile.dependencies.each do |dep|
-          next if dep.external_source.nil?
-          unless config.sandbox.specification(dep.root_name)
-            raise Informative, 'You must run `pod install` first to ensure that the ' \
-              'podspec for `#{dep.root_name}` has been fetched.'
-          end
-        end
-      end
-    end
-  end
-end
-
-    
-      class VagrantSSHCommandError < RuntimeError; end
-    
-        def configure_sshkit_output(sshkit)
-      format_args = [fetch(:format)]
-      format_args.push(fetch(:format_options)) if any?(:format_options)
-    
-        require 'capistrano/scm/git'
-    install_plugin Capistrano::SCM::Git
-    
-          def trusted_keys
-        @trusted_keys.dup
       end
