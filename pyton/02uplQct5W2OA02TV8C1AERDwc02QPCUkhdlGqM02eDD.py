@@ -1,200 +1,154 @@
 
         
-        
-def main():
-    ''' main entry point for module execution
-    '''
-    backup_spec = dict(
-        filename=dict(),
-        dir_path=dict(type='path')
-    )
-    argument_spec = dict(
-        src=dict(type='path'),
+          # Parse AggregationConfig proto, and select output extension.
+  config = aggregation_config_pb2.AggregationConfig()
+  with tf.gfile.GFile(aggregation_config_path, 'r') as f:
+    text_format.Merge(f.read(), config)
+  output_extension = '.'
+  if config.use_regional_aggregation:
+    output_extension += 'r'
+  if config.aggregation_type == _VLAD:
+    output_extension += _VLAD_EXTENSION_SUFFIX
+  elif config.aggregation_type == _ASMK:
+    output_extension += _ASMK_EXTENSION_SUFFIX
+  elif config.aggregation_type == _ASMK_STAR:
+    output_extension += _ASMK_STAR_EXTENSION_SUFFIX
+  else:
+    raise ValueError('Invalid aggregation type: %d' % config.aggregation_type)
     
-        def test_action_with_complex_and_complex_args(self):
-        m = ModuleArgsParser(dict(action=dict(module='copy', args=dict(src='a', dest='b'))))
-        mod, args, to = m.parse()
-        self._debug(mod, args, to)
+      fig, ax = plt.subplots(1)
+  ax.imshow(image)
+  for i, box in enumerate(boxes):
+    scaled_box = [
+        box[0] * height, box[1] * width, box[2] * height, box[3] * width
+    ]
+    rect = patches.Rectangle([scaled_box[1], scaled_box[0]],
+                             scaled_box[3] - scaled_box[1],
+                             scaled_box[2] - scaled_box[0],
+                             linewidth=3,
+                             edgecolor=_BOX_EDGE_COLORS[i %
+                                                        len(_BOX_EDGE_COLORS)],
+                             facecolor='none')
+    ax.add_patch(rect)
     
-            testrole/tasks/main.yml:
-        - include: 'include1.yml'
-          static: no
+        (locations_out, descriptors_out, feature_scales_out,
+     attention_out) = sess.run(
+         [locations, descriptors, feature_scales, attention],
+         feed_dict={
+             input_image: resized_image,
+             input_score_threshold: config.delf_local_config.score_threshold,
+             input_image_scales: list(config.image_scales),
+             input_max_feature_num: config.delf_local_config.max_feature_num
+         })
+    rescaled_locations_out = locations_out / scale_factor
     
-        wapi = WapiModule(module)
-    # to check for vendor specific dhcp option
-    ib_spec = check_vendor_specific_dhcp_option(module, ib_spec)
+      Args:
+    predictions: Dict mapping test image ID to a dict with keys 'class'
+      (integer) and 'score' (float).
+    recognition_solution: Dict mapping test image ID to list of ground-truth
+      landmark IDs.
     
-    - name: Configure interface in access and trunk mode using aggregate
-  junos_l2_interface:
-    aggregate:
-    - name: ge-0/0/1
-      description: test-interface-access
-      mode: access
-      access_vlan: red
-    - name: ge-0/0/2
-      description: test-interface-trunk
-      mode: trunk
-      trunk_vlans:
-      - blue
-      - green
-      native_vlan: 100
-    active: True
-    state: present
-'''
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
     
-        Async friendly.
-    '''
-    data[msg['key']] = msg['value']
-    await store.async_save(data)
-    connection.send_message(websocket_api.result_message(
-        msg['id'],
-    ))
+        html = get_content(url)
+    pid = match1(html, r'video\.settings\.pid\s*=\s*\'([^\']+)\'')
+    title = match1(html, r'video\.settings\.title\s*=\s*\'([^\']+)\'')
     
-        assert 0 == len(calls)
-    
-        result = await async_setup_component(hass, 'snips', {
-        'snips': {
-            'feedback_sounds': 'on',
-            'probability': 'none',
-            'site_ids': 'default'
-        },
-    })
-    assert not result
-    
-        def test_invalidcalib(self):
-        '''Test invalid sensor values.'''
-        self.hass.states.set('test.indoortemp', '10',
-                             {ATTR_UNIT_OF_MEASUREMENT: TEMP_CELSIUS})
-        self.hass.states.set('test.outdoortemp', '10',
-                             {ATTR_UNIT_OF_MEASUREMENT: TEMP_CELSIUS})
-        self.hass.states.set('test.indoorhumidity', '0',
-                             {ATTR_UNIT_OF_MEASUREMENT: '%'})
-    
-        mock_discover, mock_platform = yield from mock_discovery(hass, discover)
-    
-      def apply_gradients(self, grads_and_vars, global_step=None, name=None):
-    '''See base class.'''
-    assignments = []
-    for (grad, param) in grads_and_vars:
-      if grad is None or param is None:
-        continue
-    
-      @classmethod
-  def get_unreachable_ops(cls, graph, outputs):
-    '''Finds all of the tensors in graph that are unreachable from outputs.'''
-    outputs = cls.flatten_recursive(outputs)
-    output_to_op = collections.defaultdict(list)
-    op_to_all = collections.defaultdict(list)
-    assign_out_to_in = collections.defaultdict(list)
-    
-        per_example_loss = -tf.reduce_sum(one_hot_labels * log_probs, axis=-1)
-    loss = tf.reduce_mean(per_example_loss)
-    
-      def test_is_whitespace(self):
-    self.assertTrue(tokenization._is_whitespace(u' '))
-    self.assertTrue(tokenization._is_whitespace(u'\t'))
-    self.assertTrue(tokenization._is_whitespace(u'\r'))
-    self.assertTrue(tokenization._is_whitespace(u'\n'))
-    self.assertTrue(tokenization._is_whitespace(u'\u00A0'))
-    
-        :param arg1: Description of arg1.
-    :type arg1: str.
-    :param arg2: Description of arg2.
-    :type arg2: bool.
-    :returns:  int -- description of the return value.
-    :raises: AttributeError, KeyError
-    '''
-    docstring_info = docstrings.parse(docstring)
-    expected_docstring_info = DocstringInfo(
-        summary='Docstring summary.',
-        description='This is a longer description of the docstring. It spans '
-        'across multiple lines.',
-        args=[
-            ArgInfo(name='arg1', type='str',
-                    description='Description of arg1.'),
-            ArgInfo(name='arg2', type='bool',
-                    description='Description of arg2.'),
-        ],
-        returns='int -- description of the return value.',
-        raises='AttributeError, KeyError',
-    )
-    self.assertEqual(docstring_info, expected_docstring_info)
-    
-      fish_source = '''function __fish_using_command
-    set cmd (commandline -opc)
-    for i in (seq (count $cmd) 1)
-        switch $cmd[$i]
-        case '-*'
-        case '*'
-            if [ $cmd[$i] = $argv[1] ]
-                return 0
-            else
-                return 1
-            end
-        end
-    end
-    return 1
-end
-    
-    if __name__ == '__main__':
-  main()
-
-    
-      def testSetParseFnsDefaultsFromFire(self):
-    # Fire should use the decorator to know how to parse string arguments.
-    self.assertEqual(core.Fire(WithDefaults, command=['example1']), (10, int))
-    self.assertEqual(core.Fire(WithDefaults, command=['example1', '10']),
-                     (10, float))
-    self.assertEqual(core.Fire(WithDefaults, command=['example1', '13']),
-                     (13, float))
-    self.assertEqual(core.Fire(WithDefaults, command=['example1', '14.0']),
-                     (14, float))
-    
-        return bot_params
-
-    
-        piece_x_sum = 0
-    piece_x_c = 0
-    piece_y_max = 0
-    scan_x_border = int(w / 8)  # 扫描棋子时的左右边界
-    scan_start_y = 0  # 扫描的起始 y 坐标
-    im_pixel = im.load()
-    # 以 50px 步长，尝试探测 scan_start_y
-    for i in range(int(h / 3), int(h * 2 / 3), 50):
-        last_pixel = im_pixel[0, i]
-        for j in range(1, w):
-            pixel = im_pixel[j, i]
-            # 不是纯色的线，则记录 scan_start_y 的值，准备跳出循环
-            if pixel[0] != last_pixel[0] or pixel[1] != last_pixel[1] or pixel[2] != last_pixel[2]:
-                scan_start_y = i - 50
+        for quality in ['1080','720','480','380','240','144','auto']:
+        try:
+            real_url = info[quality][1]['url']
+            if real_url:
                 break
-        if scan_start_y:
-            break
-    # print('scan_start_y: {}'.format(scan_start_y))
+        except KeyError:
+            pass
     
+    	for video in tab.childNodes:
+		if re.search(contentid, video.attributes['link'].value):
+			url = video.attributes['flv'].value
+			break
     
-fig = plt.figure()
-pull_screenshot()
-img = np.array(Image.open('autojump.png'))
-im = plt.imshow(img, animated=True)
+    def ifeng_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+# old pattern /uuid.shtml
+# now it could be #uuid
+    id = r1(r'([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', url)
+    if id:
+        return ifeng_download_by_id(id, None, output_dir = output_dir, merge = merge, info_only = info_only)
     
-    # Enable and configure HTTP caching (disabled by default)
-# See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
-#HTTPCACHE_ENABLED = True
-#HTTPCACHE_EXPIRATION_SECS = 0
-#HTTPCACHE_DIR = 'httpcache'
-#HTTPCACHE_IGNORE_HTTP_CODES = []
-#HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+            # cookie handler
+        ssl_context = request.HTTPSHandler(
+            context=ssl.SSLContext(ssl.PROTOCOL_TLSv1))
+        cookie_handler = request.HTTPCookieProcessor()
+        opener = request.build_opener(ssl_context, cookie_handler)
+        opener.addheaders = [
+            ('Referer', self.url),
+            ('Cookie',
+             'CloudFront-Policy=%s;CloudFront-Signature=%s;CloudFront-Key-Pair-Id=%s' % (scp, scs, sck))
+        ]
+        request.install_opener(opener)
+    
+        def test_same_server(self):
+        from certbot_apache.obj import VirtualHost
+        no_name1 = VirtualHost(
+            'fp', 'vhp', set([self.addr1]), False, False, None)
+        no_name2 = VirtualHost(
+            'fp', 'vhp', set([self.addr2]), False, False, None)
+        no_name3 = VirtualHost(
+            'fp', 'vhp', set([self.addr_default]),
+            False, False, None)
+        no_name4 = VirtualHost(
+            'fp', 'vhp', set([self.addr2, self.addr_default]),
+            False, False, None)
+    
+        :param dict values: A map of values to write.
+    :param str path: Where to write the values.
+    '''
+    
+        def _get_obs(self):
+        return (np.array([float(self.wealth)]), self.rounds_elapsed, self.wins,
+                self.losses, np.array([float(self.max_ever_wealth)]))
+    
+            if not self.has_object:
+            achieved_goal = grip_pos.copy()
+        else:
+            achieved_goal = np.squeeze(object_pos.copy())
+        obs = np.concatenate([
+            grip_pos, object_pos.ravel(), object_rel_pos.ravel(), gripper_state, object_rot.ravel(),
+            object_velp.ravel(), object_velr.ravel(), grip_velp, gripper_vel,
+        ])
+    
+        def viewer_setup(self):
+        self.viewer.cam.trackbodyid = 2
+        self.viewer.cam.distance = self.model.stat.extent * 0.5
+        self.viewer.cam.lookat[2] = 1.15
+        self.viewer.cam.elevation = -20
 
     
-    def alter_content(request: HttpRequest, content: bytes) -> bytes:
-    first_paragraph_text = get_content_description(content, request)
-    return content.replace(request.placeholder_open_graph_description.encode('utf-8'),
-                           first_paragraph_text.encode('utf-8'))
+        def _move(self, movement):
+        named = self.MOVEMENTS[movement]
+        x, y = self.read_head_position
+        if named == 'left':
+            x -= 1
+        elif named == 'right':
+            x += 1
+        elif named == 'up':
+            y -= 1
+        elif named == 'down':
+            y += 1
+        else:
+            raise ValueError('Unrecognized direction: {}'.format(named))
+        self.read_head_position = x, y
     
-        user_file = list(request.FILES.values())[0]
-    file_size = user_file._get_size()
-    if settings.MAX_FILE_UPLOAD_SIZE * 1024 * 1024 < file_size:
-        return json_error(_('Uploaded file is larger than the allowed limit of %s MB') % (
-            settings.MAX_FILE_UPLOAD_SIZE))
-    check_upload_within_quota(user_profile.realm, file_size)
+            obs = np.zeros( (FIELD_H,FIELD_W,3), dtype=np.uint8 )
+        obs[:,:,:] = self.bg_color
+        obs[FIELD_H-5:FIELD_H,:,:] = self.wall_color
+        obs[FIELD_H-5:FIELD_H, self.hole_x-HOLE_WIDTH//2:self.hole_x+HOLE_WIDTH//2+1, :] = self.bg_color
+        obs[self.cube_y-1:self.cube_y+2, self.cube_x-1:self.cube_x+2, :] = self.cube_color
+        if self.use_black_screen and self.step_n > 4:
+            obs[:] = np.zeros((3,), dtype=np.uint8)
+    
+            for obj in self.particles:
+            obj.ttl -= 0.15
+            obj.color1 = (max(0.2,0.2+obj.ttl), max(0.2,0.5*obj.ttl), max(0.2,0.5*obj.ttl))
+            obj.color2 = (max(0.2,0.2+obj.ttl), max(0.2,0.5*obj.ttl), max(0.2,0.5*obj.ttl))
