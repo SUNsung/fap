@@ -1,139 +1,156 @@
 
         
+            def run(path, color = nil)
+      unless color
+        color = Frameit::Color::BLACK
+        color = Frameit::Color::SILVER if Frameit.config[:white] || Frameit.config[:silver]
+        color = Frameit::Color::GOLD if Frameit.config[:gold]
+        color = Frameit::Color::ROSE_GOLD if Frameit.config[:rose_gold]
+      end
+    
+        it 'detects the build configuration from selected scheme', requires_xcode: true do
+      workspace_path = 'gym/spec/fixtures/projects/cocoapods/Example.xcworkspace'
+      project = FastlaneCore::Project.new({ workspace: workspace_path })
+      csm = Gym::CodeSigningMapping.new(project: project)
+      Gym.config[:scheme] = 'Example (Debug)'
+      expect(csm.detect_project_profile_mapping).to eq({ 'family.wwdc.app' => 'match Development family.wwdc.app', 'family.wwdc.app.watchkitapp' => 'match Development family.wwdc.app.watchkitapp', 'family.wwdc.app.watchkitapp.watchkitextension' => 'match Development family.wwdc.app.watchkitappextension' })
+    end
+    
+        context 'no builds' do
+      let(:fake_builds) { make_fake_builds(0) }
+      it 'throws a UI error' do
+        expect do
+          review_submitter.find_build(fake_builds)
+        end.to raise_error(FastlaneCore::Interface::FastlaneError, 'Could not find any available candidate builds on App Store Connect to submit')
+      end
+    end
+    
+          def verify_devices_share_os(device_names)
+        # Get device types based off of device name
+        devices = get_device_type_with_simctl(device_names)
+    
+          def pipe(device_type, language, locale)
+        log_path = xcodebuild_log_path(device_type: device_type, language: language, locale: locale)
+        return ['| tee #{log_path.shellescape} | xcpretty #{Snapshot.config[:xcpretty_args]}']
+      end
+    
+            # Allows adding of additional multiple dsym_paths since :dsym_path can be autoset by other actions
+        dsym_paths += params[:dsym_paths] if params[:dsym_paths]
+    
+            if Helper.test?
+          Actions.lane_context[SharedValues::IPA_OUTPUT_PATH] = File.join(absolute_dest_directory, 'test.ipa')
+          Actions.lane_context[SharedValues::DSYM_OUTPUT_PATH] = File.join(absolute_dest_directory, 'test.app.dSYM.zip')
+          return build_args
+        end
+    
+          template.resolve!(
+        project_name: params[:project].presence,
+        fullname: params[:fullname].presence || current_user&.name
+      )
+    
+            def list_files_for(dir)
+          dir = '#{dir}/' unless dir.end_with?('/')
+          Dir.glob(File.join(dir, '*#{@extension}')).select { |f| f =~ self.class.filter_regex(@extension) }
+        end
+    
+              File.join(category_directory(directory), file_name)
+        end
+    
           private
     
-            it { expect(presenter.can_approve?).to eq(true) }
+          context 'when user can update_group_member' do
+        before do
+          allow(presenter).to receive(:can?).with(user, :update_group_member, presenter).and_return(true)
+        end
+    
+            def self.default_options
+          ::Commit.max_diff_options.merge(ignore_whitespace_change: false, expanded: false, include_stats: true)
+        end
+    
+    shared_examples 'unfoldable diff' do
+  let(:subject) { described_class.new(diffable, diff_options: nil) }
+    
+              present_badges(source, badge)
+        end
+    
+      # Time interval you can access your account before confirming your account.
+  # nil - allows unconfirmed access for unlimited time
+  mattr_accessor :allow_unconfirmed_access_for
+  @@allow_unconfirmed_access_for = 0.days
+    
+          private
+    
+          private
+    
+        # Creates configuration values for Devise and for the given module.
+    #
+    #   Devise::Models.config(Devise::Models::DatabaseAuthenticatable, :stretches)
+    #
+    # The line above creates:
+    #
+    #   1) An accessor called Devise.stretches, which value is used by default;
+    #
+    #   2) Some class methods for your model Model.stretches and Model.stretches=
+    #      which have higher priority than Devise.stretches;
+    #
+    #   3) And an instance method stretches.
+    #
+    # To add the class methods you need to have a module ClassMethods defined
+    # inside the given class.
+    #
+    def self.config(mod, *accessors) #:nodoc:
+      class << mod; attr_accessor :available_configs; end
+      mod.available_configs = accessors
+    
+      describe '#chef_installed' do
+    let(:version) { '15.0.0' }
+    let(:command) { 'test -x /opt/chef_solo/bin/knife&& /opt/chef_solo/bin/knife --version | grep '15.0.0'' }
+    
+        it 'returns the host machine object' do
+      allow(machine.provider_config).to receive(:vagrant_vagrantfile).and_return('/path/to/Vagrantfile')
+      allow(machine.provider_config).to receive(:vagrant_machine).and_return(:default)
+      allow(machine).to receive(:env).and_return(true)
+      allow(machine.env).to receive(:root_path).and_return('/.vagrant.d')
+      allow(machine.env).to receive(:home_path).and_return('/path/to')
+      allow(machine.env).to receive(:ui_class).and_return(true)
+    
+        it 'raises an exception if checksum given but not correct' do
+      box_path = iso_env.box2_file(:virtualbox)
+      tf = Tempfile.new(['vagrant-test-bad-checksum', '.json']).tap do |f|
+        f.write(<<-RAW)
+        {
+          'name': 'foo/bar',
+          'versions': [
+            {
+              'version': '0.5'
+            },
+            {
+              'version': '0.7',
+              'providers': [
+                {
+                  'name': 'virtualbox',
+                  'url':  '#{box_path}',
+                  'checksum_type': 'sha1',
+                  'checksum': 'thisisnotcorrect'
+                }
+              ]
+            }
+          ]
+        }
+        RAW
+        f.close
       end
     
-            def decorate_diff!(diff)
-          return diff if diff.is_a?(File)
+        it 'raises an exception if virtualbox is the wrong version' do
+      allow(VagrantPlugins::ProviderVirtualBox::Driver::Meta).to receive(:new).
+        and_raise(Vagrant::Errors::VirtualBoxInvalidVersion, supported_versions: '1,2,3')
     
-      def output_chronic_duration_attribute(source_attribute)
-    value = attributes[source_attribute.to_s]
-    ChronicDuration.output(value, format: :short) if value
+          it 'should exit the process if exit_code has been set' do
+        subject.custom(machine) { |m| Thread.current[:exit_code] = 1}
+        subject.custom(machine) { |*_| }
+        expect(Process).to receive(:exit!).with(1)
+        subject.run
+      end
+    end
   end
 end
-
-    
-      THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-  'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-=end
-    
-          # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
-      def left_shift(int, shift)
-        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
-        # 1>>31, 2**32
-        (r & 2147483648) == 0 ? r : r - 4294967296
-      end
-    
-        @view = Precious::Views::Page.new
-    @view.instance_variable_set :@page, page
-    @view.instance_variable_set :@content, page.formatted_data
-    @view.instance_variable_set :@h1_title, true
-    
-      begin
-    require 'gollum-lib'
-    wiki = Gollum::Wiki.new(gollum_path, wiki_options)
-    if !wiki.exist? then
-      raise Gollum::InvalidGitRepositoryError
-    end
-    if wiki_options[:plantuml_url]
-      Gollum::Filter::PlantUML.configure do |config|
-        puts 'Using #{wiki_options[:plantuml_url]} as PlantUML endpoint'
-        config.url = wiki_options[:plantuml_url]
-      end
-    end
-    puts
-    puts 'Loaded Gollum wiki at:'
-    puts '#{File.expand_path(gollum_path).inspect}'
-    puts
-    puts 'Example API calls:'
-    puts %(    page = wiki.page('page-name'))
-    puts %(    # => <Gollum::Page>)
-    puts
-    puts %(    page.raw_data)
-    puts %(    # => '# My wiki page')
-    puts
-    puts %(    page.formatted_data)
-    puts %(    # => '<h1>My wiki page</h1>')
-    puts
-    puts 'Full API documentation at:'
-    puts 'https://github.com/gollum/gollum-lib'
-    puts
-    IRB.start_session(binding)
-  rescue Gollum::InvalidGitRepositoryError, Gollum::NoSuchPathError
-    puts 'Invalid Gollum wiki at #{File.expand_path(gollum_path).inspect}'
-    exit 0
-  end
-else
-  require 'gollum/app'
-  Precious::App.set(:gollum_path, gollum_path)
-  Precious::App.set(:wiki_options, wiki_options)
-  Precious::App.settings.mustache[:templates] = wiki_options[:template_dir] if wiki_options[:template_dir]
-    
-          it 'should have the custom version' do
-        pending('Ruby 1.x and 2.0.x are unsupported for Snap because it lacks Psych::safe_load') if is_old_ruby
-        insist { input.version } == 'custom-version'
-      end
-    
-      config.vm.define 'debian7' do |debian7|
-    debian7.vm.box = 'puppetlabs/centos-7.0-64-puppet'
-  end
-    
-    # enable logging
-FPM::Util.send :module_function, :logger
-FPM::Util.logger.level = :info
-FPM::Util.logger.subscribe STDERR
-    
-      # This method removes excluded files from the staging_path. Subclasses can
-  # remove the files during the input phase rather than deleting them here
-  def exclude
-    return if attributes[:excludes].nil?
-    
-        open(path, 'r') do |iscript|
-      lines = iscript.each
-      begin
-        while true
-          line = lines.next
-          # This regex picks up beginning names of posix shell
-          # functions
-          # Examples:
-          #   fname() {
-          #   fname() { echo hi }
-          m = FIND_SCRIPT_FUNCTION_LINE.match(line)
-          if not m.nil? and look_for.include? m[1]
-            if not m[2].nil?
-              functions[m[1]].push(m[2].rstrip())
-            end
-            gobble_function(lines, functions[m[1]])
-          else
-            global_lines.push(line.rstrip())
-          end
-        end
-      rescue StopIteration
-      end
-    end
-    look_for.each do |name|
-      # Add global lines to each function to preserve global variables, etc.
-      functions[name] = global_lines + functions[name]
-    end
-    return functions
-  end # def parse_install_script
-end # class FPM::Package::Pacman
-
-    }
-    
-        # Generate the package 'Prototype' file
-    File.open('#{build_path}/Prototype', 'w') do |prototype|
-      prototype.puts('i pkginfo')
-      prototype.puts('i preinstall') if self.scripts['pre-install']
-      prototype.puts('i postinstall') if self.scripts['post-install']
