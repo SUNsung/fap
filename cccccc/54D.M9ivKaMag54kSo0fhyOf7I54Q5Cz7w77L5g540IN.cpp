@@ -1,390 +1,208 @@
 
         
         
-    {  /// This class provides a non-trivial .cxx_destruct method, but
-  /// its .cxx_construct is trivial.  For backwards compatibility,
-  /// when setting this flag, HasCXXStructors must be set as well.
-  HasCXXDestructorOnly = 0x00100
-};
-inline ObjCClassFlags &operator|=(ObjCClassFlags &lhs, ObjCClassFlags rhs) {
-  lhs = ObjCClassFlags(uint32_t(lhs) | uint32_t(rhs));
-  return lhs;
-}
-inline ObjCClassFlags operator|(ObjCClassFlags lhs, ObjCClassFlags rhs) {
-  return (lhs |= rhs);
-}
+    {}
     
-    #ifndef SWIFT_ABI_TYPEIDENTITY_H
-#define SWIFT_ABI_TYPEIDENTITY_H
+    #endif // SWIFT_FRONTEND_INPUTFILE_H
+
     
+    extern grpc_tcp_server_vtable grpc_windows_tcp_server_vtable;
+extern grpc_tcp_client_vtable grpc_windows_tcp_client_vtable;
+extern grpc_timer_vtable grpc_generic_timer_vtable;
+extern grpc_pollset_vtable grpc_windows_pollset_vtable;
+extern grpc_pollset_set_vtable grpc_windows_pollset_set_vtable;
+extern grpc_address_resolver_vtable grpc_windows_resolver_vtable;
     
-    {public:
-  explicit DiagnosticSuppression(DiagnosticEngine &diags);
-  ~DiagnosticSuppression();
-};
+    typedef struct {
+  grpc_closure* on_done;
+  gpr_mu mu;
+  grpc_winsocket* socket;
+  grpc_timer alarm;
+  grpc_closure on_alarm;
+  char* addr_name;
+  int refs;
+  grpc_closure on_connect;
+  grpc_endpoint** endpoint;
+  grpc_channel_args* channel_args;
+} async_connect;
     
+    GPR_GLOBAL_CONFIG_DEFINE_BOOL(bool_var, true, '');
+GPR_GLOBAL_CONFIG_DEFINE_INT32(int32_var, 1234, '');
+GPR_GLOBAL_CONFIG_DEFINE_STRING(string_var, 'Apple', '');
     
-    {} // end namespace swift
+    #include <grpcpp/impl/grpc_library.h>
+#include <grpcpp/security/credentials.h>
     
-    class PrimarySpecificPaths {
-public:
-  /// The name of the main output file,
-  /// that is, the .o file for this input (or a file specified by -o).
-  /// If there is no such file, contains an empty string. If the output
-  /// is to be written to stdout, contains '-'.
-  std::string OutputFilename;
+    namespace grpc {
     }
     
-    /// A placeholder allowing the experimental system to fit into the driver
-/// without changing as much code.
-class DependencyGraphImpl {
-public:
-  /// Use the status quo LoadResult for now.
-  using LoadResult = typename swift::DependencyGraphImpl::LoadResult;
-};
     
-        void setModel(WalletModel *model);
-    void setAddress_SM(const QString &address);
-    void setAddress_VM(const QString &address);
-    
-    
-    {    /* d += a3 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'movq %%rax,%%rcx\n'
-    'movq %%rdx,%%r15\n'
-    /* d += a2 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a1 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d = a0 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c = a4 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += (c & M) * R */
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* t3 (tmp1) = d & M */
-    'movq %%rcx,%%rsi\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rsi\n'
-    'movq %%rsi,%q1\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* d += a4 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a2 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a1 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a0 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += c * R */
-    'movq %%r8,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* t4 = d & M (%%rsi) */
-    'movq %%rcx,%%rsi\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* tx = t4 >> 48 (tmp3) */
-    'movq %%rsi,%%rax\n'
-    'shrq $48,%%rax\n'
-    'movq %%rax,%q3\n'
-    /* t4 &= (M >> 4) (tmp2) */
-    'movq $0xffffffffffff,%%rax\n'
-    'andq %%rax,%%rsi\n'
-    'movq %%rsi,%q2\n'
-    /* c = a0 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += a4 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a2 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a1 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* u0 = d & M (%%rsi) */
-    'movq %%rcx,%%rsi\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* u0 = (u0 << 4) | tx (%%rsi) */
-    'shlq $4,%%rsi\n'
-    'movq %q3,%%rax\n'
-    'orq %%rax,%%rsi\n'
-    /* c += u0 * (R >> 4) */
-    'movq $0x1000003d1,%%rax\n'
-    'mulq %%rsi\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[0] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,0(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += a1 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* c += a0 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d += a4 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a2 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c += (d & M) * R */
-    'movq %%rcx,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* r[1] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,8(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += a2 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* c += a1 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* c += a0 * b2 (last use of %%r10 = a0) */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* fetch t3 (%%r10, overwrites a0), t4 (%%rsi) */
-    'movq %q2,%%rsi\n'
-    'movq %q1,%%r10\n'
-    /* d += a4 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c += (d & M) * R */
-    'movq %%rcx,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 (%%rcx only) */
-    'shrdq $52,%%r15,%%rcx\n'
-    /* r[2] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,16(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += t3 */
-    'addq %%r10,%%r8\n'
-    /* c += d * R */
-    'movq %%rcx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[3] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,24(%%rdi)\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* c += t4 (%%r8 only) */
-    'addq %%rsi,%%r8\n'
-    /* r[4] = c */
-    'movq %%r8,32(%%rdi)\n'
-: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
-: 'b'(b), 'D'(r)
-: '%rax', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
-);
+    {  EXPECT_CALL(stub, RequestStreamRaw(_, _))
+      .WillOnce(DoAll(SetArgPointee<1>(resp), Return(w)));
+  client.ResetStub(&stub);
+  client.DoRequestStream();
 }
     
+    #include 'src/proto/grpc/testing/echo.grpc.pb.h'
+#include 'test/core/util/port.h'
+#include 'test/core/util/test_config.h'
+#include 'test/cpp/end2end/test_service_impl.h'
+#include 'test/cpp/util/proto_reflection_descriptor_database.h'
     
-    {  // When limit user key is prefix of start user key
-  ASSERT_EQ(IKey('foobar', 100, kTypeValue),
-            Shorten(IKey('foobar', 100, kTypeValue),
-                    IKey('foo', 200, kTypeValue)));
+    // Regular Async, both peers use proto
+TEST_F(RawEnd2EndTest, PureAsyncService) {
+  typedef grpc::testing::EchoTestService::AsyncService SType;
+  ResetStub();
+  auto service = BuildAndStartServer<SType>();
+  grpc::ServerAsyncResponseWriter<EchoResponse> response_writer(&srv_ctx_);
+    }
+    
+    #endif // D_DHT_REGISTRY_H
+
+    
+    namespace aria2 {
+    }
+    
+    void DHTTaskQueueImpl::executeTask()
+{
+  A2_LOG_DEBUG('Updating periodicTaskQueue1');
+  periodicTaskQueue1_.update();
+  A2_LOG_DEBUG('Updating periodicTaskQueue2');
+  periodicTaskQueue2_.update();
+  A2_LOG_DEBUG('Updating immediateTaskQueue');
+  immediateTaskQueue_.update();
 }
     
-    #include <stdio.h>
-#include 'db/dbformat.h'
-#include 'db/filename.h'
-#include 'db/log_reader.h'
-#include 'db/version_edit.h'
-#include 'db/write_batch_internal.h'
-#include 'leveldb/env.h'
-#include 'leveldb/iterator.h'
-#include 'leveldb/options.h'
-#include 'leveldb/status.h'
-#include 'leveldb/table.h'
-#include 'leveldb/write_batch.h'
-#include 'util/logging.h'
+    #include 'DHTTaskQueue.h'
+#include 'DHTTaskExecutor.h'
     
-    // Assume a filename, and not a directory name like '/foo/bar/'
-static std::string GetDirName(const std::string filename) {
-  size_t found = filename.find_last_of('/\\');
-  if (found == std::string::npos) {
-    return '';
-  } else {
-    return filename.substr(0, found);
+      std::string generateToken(const unsigned char* infoHash,
+                            const std::string& ipaddr, uint16_t port,
+                            const unsigned char* secret) const;
+    
+    #include <cstring>
+#include <cstdlib>
+    
+    void DNSCache::put(const std::string& hostname, const std::string& ipaddr,
+                   uint16_t port)
+{
+  auto target = std::make_shared<CacheEntry>(hostname, port);
+  auto i = entries_.lower_bound(target);
+  if (i != entries_.end() && *(*i) == *target) {
+    (*i)->add(ipaddr);
+  }
+  else {
+    target->add(ipaddr);
+    entries_.insert(i, target);
   }
 }
     
-    template <typename Dtype>
-void SGDSolver<Dtype>::PreSolve() {
-  // Initialize the history
-  const vector<Blob<Dtype>*>& net_params = this->net_->learnable_params();
-  history_.clear();
-  update_.clear();
-  temp_.clear();
-  for (int i = 0; i < net_params.size(); ++i) {
-    const vector<int>& shape = net_params[i]->shape();
-    history_.push_back(shared_ptr<Blob<Dtype> >(new Blob<Dtype>(shape)));
-    update_.push_back(shared_ptr<Blob<Dtype> >(new Blob<Dtype>(shape)));
-    temp_.push_back(shared_ptr<Blob<Dtype> >(new Blob<Dtype>(shape)));
+    NcclComm::~NcclComm() { }
+    
+        // access with default values
+    template <class ValueType>
+    ValueType operator()(const std::wstring &id, const ValueType &defaultValue) const // e.g. confRec('message', 'hello)
+    {
+        const auto *valp = Find(id);
+        return valp ? *valp : defaultValue;
+    }
+    inline const IConfigRecord &operator()(const std::wstring &id, const IConfigRecord &defaultValue) const // retrieve a nested ConfigRecord
+    {
+        const auto *valp = Find(id);
+        return valp ? valp->AsRef<IConfigRecord>() : defaultValue;
+    }
+    std::string operator()(const std::wstring &id, const char *defaultValue) const
+    {
+        return Microsoft::MSR::CNTK::ToLegacyString(Microsoft::MSR::CNTK::ToUTF8(operator()(id, Microsoft::MSR::CNTK::ToFixedWStringFromMultiByte(defaultValue))));
+    } // special case for narrow strings
+    std::wstring operator()(const std::wstring &id, const wchar_t *defaultValue) const
+    {
+        return operator()(id, std::wstring(defaultValue));
+    }
+    
+    #if DUMPOUTPUT
+    virtual bool OutputUsedInComputingInputNodesGradients() const override { return true; }
+#else
+    virtual bool OutputUsedInComputingInputNodesGradients() const override { return false; }
+#endif
+    virtual bool InputUsedInComputingInputNodesGradients(size_t /*childIndex*/) const override { return false; }
+    
+            // create pinned memory
+        for (int i3 = 0; i3 < m_localBufferNum; ++i3)
+            CUDA_CALL(cudaMallocHost((void **)&m_cpuAsyncBuffer[i3], sizeof(ElemType) * (m_totalModelSize), cudaHostAllocPortable));
+    
+            // TODO: move this into shim for the old readers.
+        // decimate if needed. Decimation happens in-place.
+        // This is only allowed for old readers, which support a single layout for all inputs.
+        if (!useDistributedMBReading && useParallelTrain)
+        {
+            auto& pMBLayout = net->GetMBLayoutPtrOfNetwork();
+            
+            // Verify that there's indeed a single layout
+            for (const auto& iter : inputMatrices)
+            {
+                assert(iter.second.pMBLayout == pMBLayout);
+                // TODO: This must be a runtime check, not an assert().
+                UNUSED(iter);
+            }
+    }
+    
+        // read-only access
+    
+        // print values
+    std::cout << object << '\n';
+    std::cout << null << '\n';
+    
+      // Filter expired blob indexes regardless of snapshots.
+  bool IgnoreSnapshots() const override { return true; }
+    
+    #include 'monitoring/perf_context_imp.h'
+#include 'rocksdb/env.h'
+#include 'rocksdb/status.h'
+    
+    class PutOperatorV2 : public PutOperator {
+  bool FullMerge(const Slice& /*key*/, const Slice* /*existing_value*/,
+                 const std::deque<std::string>& /*operand_sequence*/,
+                 std::string* /*new_value*/,
+                 Logger* /*logger*/) const override {
+    assert(false);
+    return false;
   }
+    }
+    
+    #include <chrono>
+#include <condition_variable>
+#include <functional>
+#include <mutex>
+    
+    // Simple implementation of SlicePart variants of Put().  Child classes
+// can override these method with more performant solutions if they choose.
+Status WriteBatchBase::Put(ColumnFamilyHandle* column_family,
+                           const SliceParts& key, const SliceParts& value) {
+  std::string key_buf, value_buf;
+  Slice key_slice(key, &key_buf);
+  Slice value_slice(value, &value_buf);
+    }
+    
+    
+    {  // Sleep just until `num_bytes` is allowed.
+  uint64_t sleep_amount =
+      static_cast<uint64_t>(num_bytes /
+                            static_cast<long double>(delayed_write_rate_) *
+                            kMicrosPerSecond) +
+      sleep_debt;
+  last_refill_time_ = time_now + sleep_amount;
+  return sleep_amount;
 }
     
-      Caffe::set_solver_count(8);
-  for (int dev = 0; dev < Caffe::solver_count(); ++dev) {
-    Caffe::set_solver_rank(dev);
-    }
+      // Set a snapshot at start of transaction
+  txn_options.set_snapshot = true;
+  txn = txn_db->BeginTransaction(write_options, txn_options);
     
-    template <>
-void hdf5_load_nd_dataset<double>(hid_t file_id, const char* dataset_name_,
-        int min_dim, int max_dim, Blob<double>* blob, bool reshape) {
-  hdf5_load_nd_dataset_helper(file_id, dataset_name_, min_dim, max_dim, blob,
-                              reshape);
-  herr_t status = H5LTread_dataset_double(
-    file_id, dataset_name_, blob->mutable_cpu_data());
-  CHECK_GE(status, 0) << 'Failed to read double dataset ' << dataset_name_;
-}
+    #include 'rocksdb/db.h'
     
-    namespace caffe {
-    }
-    
-    template <typename Dtype>
-void ClipLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& top,
-    const vector<bool>& propagate_down,
-    const vector<Blob<Dtype>*>& bottom) {
-  if (propagate_down[0]) {
-    const Dtype* bottom_data = bottom[0]->cpu_data();
-    const Dtype* top_diff = top[0]->cpu_diff();
-    Dtype* bottom_diff = bottom[0]->mutable_cpu_diff();
-    const int count = bottom[0]->count();
-    }
-    }
-    
-      // Make and apply the update value for the current iteration.
-  virtual void ApplyUpdate() = 0;
-    
-    template <typename Dtype>
-string Solver<Dtype>::SnapshotToBinaryProto() {
-  string model_filename = SnapshotFilename('.caffemodel');
-  LOG(INFO) << 'Snapshotting to binary proto file ' << model_filename;
-  NetParameter net_param;
-  net_->ToProto(&net_param, param_.snapshot_diff());
-  WriteProtoToBinaryFile(net_param, model_filename);
-  return model_filename;
-}
+      // Any internal progress/error information generated by the db will
+  // be written to info_log if it is non-NULL, or to a file stored
+  // in the same directory as the DB contents if info_log is NULL.
+  // Default: NULL
+  Logger* info_log;
