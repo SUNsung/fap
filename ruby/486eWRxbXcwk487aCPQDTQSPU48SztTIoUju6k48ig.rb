@@ -1,330 +1,280 @@
 
         
-            def find_app(apple_id: nil, app_identifier: nil)
-      if app_identifier
-        app = Spaceship::ConnectAPI::App.find(app_identifier)
-        UI.user_error!('Could not find an app by #{app_identifier}') unless app
-        return app
-      end
+            it 'is turned off for existing instances of Huginn' do
+      stub(DefaultScenarioImporter).seed { fail 'seed should not have been called'}
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { nil }
+      DefaultScenarioImporter.import(user)
+    end
     
-            resps = Spaceship::ConnectAPI.get_beta_testers(filter: filter, includes: includes, limit: limit, sort: sort).all_pages
-        return resps.map(&:to_models).flatten
-      end
-    
-          def self.all(filter: {}, includes: nil, limit: nil, sort: nil)
-        resps = Spaceship::ConnectAPI.get_certificates(filter: filter, includes: includes).all_pages
-        return resps.map(&:to_models).flatten
-      end
+        it 'should generate the correct last checkpoint url' do
+      @checker.options['path'] = 'last_checkpoint/usps/9361289878905919630610'
+      expect(@checker.send(:event_url)).to eq('https://api.aftership.com/v4/last_checkpoint/usps/9361289878905919630610')
     end
   end
-end
-
     
-      # A period that the user is allowed to confirm their account before their
-  # token becomes invalid. For example, if set to 3.days, the user can confirm
-  # their account within 3 days after the mail was sent, but on the fourth day
-  # their account can't be confirmed with the token any more.
-  # Default is nil, meaning there is no restriction on how long a user can take
-  # before confirming their account.
-  # config.confirm_within = 3.days
-    
-      test 'warden manager user configuration through a block' do
-    Devise.yield_and_restore do
-      executed = false
-      Devise.warden do |config|
-        executed = true
-        assert_kind_of Warden::Config, config
-      end
-    
-        def translation_scope
-      'devise.confirmations'
+        it 'requires with_header to be either 'true' or 'false'' do
+      @checker.options['with_header'] = 'true'
+      expect(@checker).to be_valid
+      @checker.options['with_header'] = 'false'
+      expect(@checker).to be_valid
+      @checker.options['with_header'] = 'test'
+      expect(@checker).not_to be_valid
     end
-end
-
     
-      def failure
-    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
-    redirect_to after_omniauth_failure_path_for(resource_name)
+        # Ensure the file is removed
+    project.bfg_object_map.remove!
+    notification_service.repository_cleanup_failure(project, user, error)
   end
     
-        if record.timedout?(last_request_at) &&
-        !env['devise.skip_timeout'] &&
-        !proxy.remember_me_is_active?(record)
-      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
-      throw :warden, scope: scope, message: :timeout
-    end
+            filters = @filters.each_with_object([]) do |filter, parsed_filters|
+          match = @raw_query.split.find { |part| part =~ /\A#{filter[:name]}:/ }
+          next unless match
     
-        # Create magic predicates for verifying what module is activated by this map.
-    # Example:
-    #
-    #   def confirmable?
-    #     self.modules.include?(:confirmable)
-    #   end
-    #
-    def self.add_module(m)
-      class_eval <<-METHOD, __FILE__, __LINE__ + 1
-        def #{m}?
-          self.modules.include?(:#{m})
-        end
-      METHOD
-    end
-    
-            # Returns the path to the Chef binary, taking into account the
-        # `binary_path` configuration option.
-        def chef_binary_path(binary)
-          return binary if !@config.binary_path
-          return File.join(@config.binary_path, binary)
+              diff_files.each do |diff_file|
+            positions = positions_grouped_by_path.fetch(diff_file.file_path, [])
+            positions.each { |position| diff_file.unfold_diff_lines(position) }
+          end
         end
     
-      describe '#chef_installed' do
-    let(:version) { '15.0.0' }
-    let(:command) { 'test -x /opt/chef_solo/bin/knife&& /opt/chef_solo/bin/knife --version | grep '15.0.0'' }
+        it 'Gitlab::Diff::File is initialized with diff stats' do
+      subject = described_class.new(diffable, collection_default_args)
     
-      before do
-    allow(machine).to receive(:communicate).and_return(communicator)
-  end
+            authorize!(:update_deploy_key, deploy_keys_project.deploy_key)
     
-      describe '#chef_installed' do
-    let(:version) { '15.0.0' }
-    let(:command) { 'test -x /opt/chef_solo/bin/knife&& /opt/chef_solo/bin/knife --version | grep '15.0.0'' }
-    
-      let(:environment)   { isolated_environment }
-    
-      # A helper to register a provider for use in tests.
-  def register_provider(name, config_class=nil, options=nil)
-    provider_cls = Class.new(VagrantTests::DummyProvider) do
-      if options && options[:unusable]
-        def self.usable?(raise_error=false)
-          raise Vagrant::Errors::VagrantError if raise_error
-          false
-        end
-      end
+    describe Utils::Bottles::Collector do
+  describe '#fetch_checksum_for' do
+    it 'returns passed tags' do
+      subject[:yosemite] = 'foo'
+      subject[:el_captain] = 'bar'
+      expect(subject.fetch_checksum_for(:el_captain)).to eq(['bar', :el_captain])
     end
     
-              host_env.machine(
-            host_machine_name,
-            host_env.default_provider(
-              exclude: [:docker],
-              force_default: false,
-            ))
-        end
-    
-          expect(subject.state.id).to eq(:not_created)
-    end
-  end
-    
-        # Run all the queued up actions, parallelizing if possible.
-    #
-    # This will parallelize if and only if the provider of every machine
-    # supports parallelization and parallelization is possible from
-    # initialization of the class.
-    def run
-      par = false
-    
-        records.each { |account| authorize(account.user, :reject?) }
-           .each { |account| SuspendAccountService.new.call(account, including_user: true, destroy: true, skip_distribution: true) }
-  end
-end
-
-    
-      def perform(status_id)
-    @status  = Status.find(status_id)
-    @account = @status.account
-    
-    class ActivityPub::DistributionWorker
-  include Sidekiq::Worker
-  include Payloadable
-    
-      private
-    
-      describe 'PUT #update' do
-    it 'updates notifications settings' do
-      user.settings['notification_emails'] = user.settings['notification_emails'].merge('follow' => false)
-      user.settings['interactions'] = user.settings['interactions'].merge('must_be_follower' => true)
-    
-        def pam_conflict(_attributes)
-      # Block pam login tries on traditional account
-    end
-    
-      def origin_account
-    @account
-  end
-    
-          it 'does not process payload if no signature exists' do
-        expect_any_instance_of(ActivityPub::LinkedDataSignature).to receive(:verify_account!).and_return(nil)
-        expect(ActivityPub::Activity).not_to receive(:factory)
-    
-          it 'creates a block from sender to recipient' do
-        expect(sender.blocking?(recipient)).to be true
-      end
-    
-    start = -1
-min = -1
-max = 0
-for segment in macho.segments
-  next if segment.segname == MachO::LoadCommands::SEGMENT_NAMES[:SEG_PAGEZERO]
-  puts 'segment: #{segment.segname} #{segment.vmaddr.to_s(16)}'
-  if min == -1 or min > segment.vmaddr
-    min = segment.vmaddr
-  end
-  if max < segment.vmaddr + segment.vmsize
-    max = segment.vmaddr + segment.vmsize
-  end
-end
-    
-      var target = [];
-  var stale = 0;
-  Object.defineProperties(target, props);
-  stale = target.stale;
-    
-        register_options(
-      [
-        OptString.new('FILENAME', [false, 'The LNK file']),
-        OptString.new('DLLNAME', [false, 'The DLL file containing the payload']),
-        OptString.new('PATH', [false, 'An explicit path to where the files should be written to'])
-      ]
-    )
-    
-        if datastore['SVC_GEN']
-      com_opts[:harness] = File.join(Msf::Config.install_root, 'external', 'source', 'psh_exe', 'dot_net_service.cs')
-      com_opts[:assemblies] = ['System.ServiceProcess.dll', 'System.Configuration.Install.dll']
-    else
-      com_opts[:harness] = File.join(Msf::Config.install_root, 'external', 'source', 'psh_exe','dot_net_exe.cs')
-    end
-    
-        # Check for result
-    begin
-      size = session.fs.file.stat(net_com_opts[:target].gsub('\\', '\\\\')).size
-      print_good 'File #{net_com_opts[:target].gsub('\\', '\\\\')} found, #{size}kb'
-    rescue
-      print_error 'File #{net_com_opts[:target].gsub('\\', '\\\\')} not found,' \
-                  ' NET CLR version #{datastore['NET_CLR_VER']} possibly not available'
-      return
-    end
-    
-    # Exec a command and return the results
-def m_exec(session, cmd)
-  r = session.sys.process.execute(cmd, nil, {'Hidden' => true, 'Channelized' => true})
-  b = ''
-  while(d = r.channel.read)
-    b << d
-  end
-  r.channel.close
-  r.close
-  b
-end
-    
-    
-end
-
-    
-    TLV_TYPE_REGISTER_NAME      = TLV_META_TYPE_STRING  | 2540
-TLV_TYPE_REGISTER_SIZE      = TLV_META_TYPE_UINT    | 2541
-TLV_TYPE_REGISTER_VALUE_32  = TLV_META_TYPE_UINT    | 2542
-TLV_TYPE_REGISTER           = TLV_META_TYPE_GROUP   | 2550
-    
-          # Generates the contents of the module.modulemap file.
-      #
-      # @return [String]
-      #
-      def generate
-        <<-MODULE_MAP.strip_heredoc
-#{module_specifier_prefix}module #{target.product_module_name}#{module_declaration_attributes} {
-  #{headers.join('\n  ')}
-    }
-    
-            # @note Test specs are intentionally not included as part of the equality for pod variants since a
-        #       pod variant should not be affected by the number of test nor app specs included.
-        #
-        # @return [Bool] whether the {PodVariant} is equal to another taking all
-        #         all their attributes into account
-        #
-        def ==(other)
-          self.class == other.class &&
-          build_type == other.build_type &&
-            platform == other.platform &&
-            specs == other.specs
-        end
-        alias_method :eql?, :==
-    
-          it 'returns scopes by versioned platform names if they qualify' do
-        variants = PodVariantSet.new([
-          PodVariant.new([@root_spec], [], [], Platform.ios),
-          PodVariant.new([@root_spec], [], [], Platform.new(:ios, '7.0')),
-        ])
-        variants.scope_suffixes.values.should == %w(iOS iOS7.0)
-      end
-    
-                  FileUtils.expects(:ln_sf).with(relative_path, target_module_path)
-              native_target = mock(:build_configurations => [])
-              @installer.send(:create_module_map, native_target)
-            end
+                problem 'xcodebuild should be passed an explicit 'SYMROOT''
           end
     
-          describe 'with configuration dependent pod targets' do
-        before do
-          file_accessor = fixture_file_accessor(@spec, Platform.ios)
-          @pod_target_release = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@spec],
-                                              [@target_definition], [file_accessor])
-          @target.stubs(:pod_targets_for_build_configuration).with('Debug').returns([@pod_target])
-          @target.stubs(:pod_targets_for_build_configuration).with('Release').returns([@pod_target, @pod_target_release])
-          @target.stubs(:pod_targets).returns([@pod_target, @pod_target_release])
-          @target.stubs(:user_build_configurations).returns('Debug' => :debug, 'Release' => :release)
+        it 'hardcoded g++ compiler system' do
+      expect_offense(<<~'RUBY')
+        class Foo < Formula
+          desc 'foo'
+          url 'https://brew.sh/foo-1.0.tgz'
+          def install
+            system '/usr/bin/g++', '-o', 'foo', 'foo.cc'
+                    ^^^^^^^^^^^^ Use '#{ENV.cxx}' instead of hard-coding 'g++'
+          end
         end
-    
-              describe 'with boolean build settings' do
-            it 'does not warn if the values are equal' do
-              @consumer_a.stubs(:user_target_xcconfig).returns('ENABLE_HEADER_DEPENDENCIES' => 'YES')
-              @consumer_b.stubs(:user_target_xcconfig).returns('ENABLE_HEADER_DEPENDENCIES' => 'YES')
-              @xcconfig = @generator.generate
-              @xcconfig.to_hash['ENABLE_HEADER_DEPENDENCIES'].should == 'YES'
-            end
-    
-          def escape_hash(hash)
-        hash = hash.dup
-        hash.each { |k,v| hash[k] = escape(v) }
-        hash
-      end
-    
-      it 'accepts post requests with masked X-CSRF-Token header' do
-    post('/', {}, 'rack.session' => session, 'HTTP_X_CSRF_TOKEN' => masked_token)
-    expect(last_response).to be_ok
-  end
-    
-        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
-      env = {'HTTP_HOST' => 'foo.com'}
-      subject.options[:allow_empty_referrer] = false
-      expect(subject.referrer(env)).to be_nil
+      RUBY
     end
     
-    require_relative '../lib/bootstrap/environment'
+        it 'When go get is executed' do
+      expect_offense(<<~RUBY)
+        class Foo < Formula
+          url 'https://brew.sh/foo-1.0.tgz'
+          homepage 'https://brew.sh'
     
-    require 'clamp'
-require 'pluginmanager/util'
-require 'pluginmanager/gemfile'
-require 'pluginmanager/install'
-require 'pluginmanager/remove'
-require 'pluginmanager/list'
-require 'pluginmanager/update'
-require 'pluginmanager/pack'
-require 'pluginmanager/unpack'
-require 'pluginmanager/generate'
-require 'pluginmanager/prepare_offline_pack'
-require 'pluginmanager/proxy_support'
-configure_proxy
+    class SoftwareSpec
+  undef uses_from_macos
     
-          def get_installer_for(plugin_name)
-        uri = pack_uri(plugin_name)
+          def sdk(v = nil)
+        @locator ||= CLTSDKLocator.new
     
-        def initialize(local_file)
-      @local_file = local_file
-    end
-    
-        context 'update all the plugins' do
-      it 'has executed successfully' do
-        logstash.run_command_in_path('bin/logstash-plugin update --no-verify')
-        expect(logstash).to have_installed?(plugin_name, '0.1.1')
-      end
-    end
+      it 'properly handles Casks that are not present' do
+    expect {
+      described_class.run('notacask')
+    }.to raise_error(Cask::CaskUnavailableError)
   end
 end
+
+    
+      let(:iso_env) do
+    # We have to create a Vagrantfile so there is a root path
+    env = isolated_environment
+    env.vagrantfile('')
+    env.create_vagrant_env
+  end
+    
+        # The persistent data directory where global data can be stored. It
+    # is up to the creator of the data in this directory to properly
+    # remove it when it is no longer needed.
+    #
+    # @return [Pathname]
+    attr_reader :data_dir
+    
+    module Vagrant
+  # This class provides a way to load and access the contents
+  # of a Vagrantfile.
+  #
+  # This class doesn't actually load Vagrantfiles, parse them,
+  # merge them, etc. That is the job of {Config::Loader}. This
+  # class, on the other hand, has higher-level operations on
+  # a loaded Vagrantfile such as looking up the defined machines,
+  # loading the configuration of a specific machine/provider combo,
+  # etc.
+  class Vagrantfile
+    # This is the configuration loaded as-is given the loader and
+    # keys to #initialize.
+    attr_reader :config
+    
+        it 'returns all the machines' do
+      configure do |config|
+        config.vm.define 'foo'
+        config.vm.define 'bar', autostart: false
+        config.vm.define 'baz', autostart: true
+      end
+    
+              if !triggers.empty?
+            @logger.info('Firing trigger for action #{action} on guest #{guest_name}')
+            @ui.info(I18n.t('vagrant.trigger.start', type: type, stage: stage, action: action))
+            fire(triggers, guest_name)
+          end
+        end
+    
+    describe VagrantPlugins::CommandGlobalStatus::Command do
+  include_context 'unit'
+    
+        Rex::ThreadFactory.spawn('AESEncryption', false) {
+      c2 = OpenSSL::Cipher.new('aes-128-cfb8')
+      c2.decrypt
+      c2.key=key
+      iv=''
+      while iv.length < 16
+        iv << sock.read(16-iv.length)
+      end
+      c2.iv = iv
+      buf2 = sock.read(4096)
+      while buf2 and buf2 != ''
+        socks[0].put(c2.update(buf2))
+        buf2 = sock.read(4096)
+      end
+      socks[0].close()
+    }
+    
+            # Timeout and datastore options need to be passed through to the client
+        opts = {
+          :datastore    => datastore,
+          :expiration   => datastore['SessionExpirationTimeout'].to_i,
+          :comm_timeout => datastore['SessionCommunicationTimeout'].to_i,
+          :retry_total  => datastore['SessionRetryTotal'].to_i,
+          :retry_wait   => datastore['SessionRetryWait'].to_i,
+          :udp_session  => true
+        }
+    
+        # Register command execution options
+    register_options(
+      [
+        OptString.new('SHELL', [ true, 'The shell to execute.', '/bin/sh' ]),
+        OptString.new('ARGV0', [ false, 'argv[0] to pass to execve', 'sh' ]) # mostly used for busybox
+      ])
+  end
+    
+      # @return [Bool] system version is at least 10.5
+  def gte_leopard?
+    ver_num =~ /10\.(\d+)/ and $1.to_i >= 5
+  end
+    
+        it 'should return the result of echo 10 times' do
+      10.times do
+        test_string = Rex::Text.rand_text_alpha(4)
+        if session.platform.eql? 'windows'
+          output = cmd_exec('cmd.exe', '/c echo #{test_string}')
+        else
+          output = cmd_exec('echo #{test_string}')
+        end
+        return false unless output == test_string
+      end
+      true
+    end
+    vprint_status('Finished cmd_exec tests')
+  end
+    
+      #
+  # Displays information about the various creds commands
+  #
+  def cmd_creds_usage(provider)
+    print_line('Usage: creds_#{provider} [options]')
+    print_line
+    print_line('Dump #{provider} credentials.')
+    print_line(@@creds_opts.usage)
+  end
+    
+    
+    
+    
+    
+          cl_image_path(src,
+                    type: 'fetch',
+                    width: '1000',
+                    height: '500',
+                    crop: 'imagga_scale',
+                    quality: 'auto',
+                    flags: 'progressive',
+                    fetch_format: 'auto',
+                    sign_url: true)
+    end
+  end
+    
+          def css # custom css
+        @css
+      end
+    
+          def has_sidebar
+        if @sidebar
+          @sidebar.formatted_data.strip.empty? ? false : true
+        else
+          @sidebar = (@page.sidebar || false)
+          !!@sidebar
+        end
+      end
+    
+        def self.teardown(&block)
+      define_method(:teardown, &block)
+    end
+  end
+  (
+  class << klass;
+    self
+  end).send(:define_method, :name) { name.gsub(/\W/, '_') }
+  $contexts << klass
+  klass.class_eval &block
+end
+    
+    context 'Precious::Views::Page' do
+  setup do
+    examples = testpath 'examples'
+    @path    = File.join(examples, 'test.git')
+    FileUtils.cp_r File.join(examples, 'empty.git'), @path, :remove_destination => true
+    @wiki = Gollum::Wiki.new(@path)
+  end
+    
+      base_path = wiki_options[:base_path]
+    
+    module Gollum
+  VERSION = '4.1.4'
+    
+          # Remove page file dir prefix from upload path if necessary -- committer handles this itself
+      dir      = wiki.per_page_uploads ? params[:upload_dest] : ::File.join([wiki.page_file_dir, 'uploads'].compact)
+      ext      = ::File.extname(fullname)
+      format   = ext.split('.').last || 'txt'
+      filename = ::File.basename(fullname, ext)
+      contents = ::File.read(tempfile)
+      reponame = filename + '.' + format
+    
+        csr = OpenSSL::X509::Request.new
+    csr.subject = OpenSSL::X509::Name.new([['CN', self.domain, OpenSSL::ASN1::UTF8STRING]])
+    private_key = OpenSSL::PKey::RSA.new(self.key)
+    csr.public_key = private_key.public_key
+    csr.sign(private_key, OpenSSL::Digest::SHA256.new)
+    logger.info 'Getting certificate for #{self.domain}'
+    order.finalize(:csr => csr)
+    
+      expansion(:status) {
+    {
+      :status => o.status,
+      :last_delivery_attempt => o.last_delivery_attempt ? o.last_delivery_attempt.to_f : nil,
+      :held => o.held == 1 ? true : false,
+      :hold_expiry => o.hold_expiry ? o.hold_expiry.to_f : nil
+    }
+  }
+    
+      before_action { @server = organization.servers.present.find_by_permalink!(params[:server_id]) }
+  before_action { params[:id] && @http_endpoint = @server.http_endpoints.find_by_uuid!(params[:id]) }
