@@ -1,358 +1,207 @@
 
         
-            def _escalate_call(self):
-        self.call.state = CallState.READY
-        call = self.call
-        self.call = None
-        self.call_center.notify_call_escalated(call)
+            @method_decorator(permission_required('permission_not_granted'))
+    def permission_protected_view(self, request):
+        t = Template('This is a permission protected test using a method. '
+                     'Username is {{ user.username }}. '
+                     'Permissions are {{ user.get_all_permissions }}.',
+                     name='Permissions Template')
+        c = Context({'user': request.user})
+        return HttpResponse(t.render(c))
     
-        def remove_user(self, user_id):
-        pass
     
-        MOTORCYCLE = 0
-    COMPACT = 1
-    LARGE = 2
+@lru_cache(maxsize=None)
+def get_converters():
+    return {**DEFAULT_CONVERTERS, **REGISTERED_CONVERTERS}
     
-            (foo, 2), p1
-        (bar, 3), p1
-        (foo, 3), p2
-        (bar, 10), p3
-        (foo, 1), p4
+        # Don't worry about making _dec look similar to a list/tuple as it's rather
+    # meaningless.
+    if not hasattr(decorator, '__iter__'):
+        update_wrapper(_dec, decorator)
+    # Change the name to aid debugging.
+    obj = decorator if hasattr(decorator, '__name__') else decorator.__class__
+    _dec.__name__ = 'method_decorator(%s)' % obj.__name__
+    return _dec
     
-    import time
+        def __str__(self):
+        'The string name of the feature.'
+        return 'Feature FID %d in Layer<%s>' % (self.fid, self.layer_name)
     
-        clf.C = min_c * 1.01
-    clf.fit(X, y)
-    assert ((np.asarray(clf.coef_) != 0).any() or
-            (np.asarray(clf.intercept_) != 0).any())
-    
-        # TASK: Build a grid search to find out whether unigrams or bigrams are
-    # more useful.
-    # Fit the pipeline on the training set using grid search for the parameters
-    
-    skeleton_dir = os.path.abspath(os.path.join(exercise_dir, '..', 'skeletons'))
-if not os.path.exists(skeleton_dir):
-    os.makedirs(skeleton_dir)
-    
-    # Plot the results (= shape of the data points cloud)
-plt.figure(1)  # two clusters
-plt.title('Outlier detection on a real data set (boston housing)')
-plt.scatter(X1[:, 0], X1[:, 1], color='black')
-bbox_args = dict(boxstyle='round', fc='0.8')
-arrow_args = dict(arrowstyle='->')
-plt.annotate('several confounded points', xy=(24, 19),
-             xycoords='data', textcoords='data',
-             xytext=(13, 10), bbox=bbox_args, arrowprops=arrow_args)
-plt.xlim((xx1.min(), xx1.max()))
-plt.ylim((yy1.min(), yy1.max()))
-plt.legend((legend1_values_list[0].collections[0],
-            legend1_values_list[1].collections[0],
-            legend1_values_list[2].collections[0]),
-           (legend1_keys_list[0], legend1_keys_list[1], legend1_keys_list[2]),
-           loc='upper center',
-           prop=matplotlib.font_manager.FontProperties(size=12))
-plt.ylabel('accessibility to radial highways')
-plt.xlabel('pupil-teacher ratio by town')
-    
-    plt.matshow(fit_data, cmap=plt.cm.Blues)
-plt.title('After biclustering; rearranged to show biclusters')
-    
-    Second, when using a connectivity matrix, single, average and complete
-linkage are unstable and tend to create a few clusters that grow very
-quickly. Indeed, average and complete linkage fight this percolation behavior
-by considering all the distances between two clusters when merging them (
-while single linkage exaggerates the behaviour by considering only the
-shortest distance between clusters). The connectivity graph breaks this
-mechanism for average and complete linkage, making them resemble the more
-brittle single linkage. This effect is more pronounced for very sparse graphs
-(try decreasing the number of neighbors in kneighbors_graph) and with
-complete linkage. In particular, having a very small number of neighbors in
-the graph, imposes a geometry that is close to that of single linkage,
-which is well known to have this percolation instability. '''
-# Authors: Gael Varoquaux, Nelle Varoquaux
-# License: BSD 3 clause
-    
-    import matplotlib.pyplot as plt
-import numpy as np
-    
-        def test_specified_attributes(self):
-        self.assertIs(self.parser.specified_attributes, False)
-        for x in 0, 1, 2, 0:
-            self.parser.specified_attributes = x
-            self.assertIs(self.parser.specified_attributes, bool(x))
-    
-        def test_scope_isolation_from_global(self):
-        expected = {0: None, 1: None, 2: None, 3: None, 4: None, 5: None,
-                    6: None, 7: None, 8: None, 9: None}
-        actual = {g: None for g in range(10)}
-        self.assertEqual(actual, expected)
-        self.assertEqual(g, 'Global variable')
-    
-            Return value is a tuple (type, encoding) where type is None if
-        the type can't be guessed (no or unknown suffix) or a string
-        of the form type/subtype, usable for a MIME Content-type
-        header; and encoding is None for no encoding or the name of
-        the program used to encode (e.g. compress or gzip).  The
-        mappings are table driven.  Encoding suffixes are case
-        sensitive; type suffixes are first tried case sensitive, then
-        case insensitive.
-    
-    import time
-import os
-import sys
-import itertools
-import threading
-import subprocess
-import socket
-from optparse import OptionParser, SUPPRESS_HELP
-import platform
-    
-            These will be sorted in the order they appeared in the original
-        message, or were added to the message, and may contain duplicates.
-        Any fields deleted and re-inserted are always appended to the header
-        list.
+        def __init__(self, feat, index):
         '''
-        return [(k, self.policy.header_fetch_parse(k, v))
-                for k, v in self._headers]
+        Initialize on the feature object and the integer index of
+        the field within the feature.
+        '''
+        # Setting the feature pointer and index.
+        self._feat = feat
+        self._index = index
     
-        def CheckIntegrityError(self):
-        self.assertTrue(issubclass(sqlite.IntegrityError, sqlite.DatabaseError),
-                        'IntegrityError is not a subclass of DatabaseError')
+        @property
+    def semi_major(self):
+        'Return the Semi Major Axis for this Spatial Reference.'
+        return capi.semi_major(self.ptr, byref(c_int()))
     
+    * This implementation uses a weighted vote, such that the votes of closer-neighbors are weighted more heavily.
     
-class BrokenThreadPool(_base.BrokenExecutor):
-    '''
-    Raised when a worker thread in a ThreadPoolExecutor failed initializing.
-    '''
-    
-    
-def clip_relu(x, max_value):
-    '''截断 ReLU
-    `o = min(max(0., x), max_value)`
-    '''
-    o = tf.nn.relu(x)
-    o = tf.minimum(o, max_value)
-    return o
-    
-        from pprint import pprint
-    
-        def check_range(self, request):
-        if self.start <= request < self.end:
-            print('request {} handled in handler 1'.format(request))
-            return True
-    
-    *TL;DR
-Traverses a container and accesses the container's elements.
-'''
-    
-    '''
-https://www.djangospin.com/design-patterns-python/mediator/
-    
-        def restore():
-        obj.__dict__.clear()
-        obj.__dict__.update(state)
+        # Load the uploaded image file
+    img = face_recognition.load_image_file(file_stream)
+    # Get face encodings for any faces in the uploaded image
+    unknown_face_encodings = face_recognition.face_encodings(img)
     
     
-def main():
-    dispatcher = PrototypeDispatcher()
-    prototype = Prototype()
+@click.command()
+@click.argument('image_to_check')
+@click.option('--cpus', default=1, help='number of CPU cores to use in parallel. -1 means 'use all in system'')
+@click.option('--model', default='hog', help='Which face detection model to use. Options are 'hog' or 'cnn'.')
+def main(image_to_check, cpus, model):
+    # Multi-core processing only supported on Python 3.4 or greater
+    if (sys.version_info < (3, 4)) and cpus != 1:
+        click.echo('WARNING: Multi-processing support requires Python 3.4 or greater. Falling back to single-threaded processing!')
+        cpus = 1
     
-    '''
-Reference: https://en.wikipedia.org/wiki/Delegation_pattern
-Author: https://github.com/IuryAlves
+    # Open the input movie file
+input_movie = cv2.VideoCapture('hamilton_clip.mp4')
+length = int(input_movie.get(cv2.CAP_PROP_FRAME_COUNT))
     
-        >>> cat = Cat()
-    >>> objects.append(Adapter(cat, make_noise=cat.meow))
-    >>> human = Human()
-    >>> objects.append(Adapter(human, make_noise=human.speak))
-    >>> car = Car()
-    >>> objects.append(Adapter(car, make_noise=lambda: car.make_noise(3)))
+        # Gloss the lips
+    d.polygon(face_landmarks['top_lip'], fill=(150, 0, 0, 128))
+    d.polygon(face_landmarks['bottom_lip'], fill=(150, 0, 0, 128))
+    d.line(face_landmarks['top_lip'], fill=(150, 0, 0, 64), width=8)
+    d.line(face_landmarks['bottom_lip'], fill=(150, 0, 0, 64), width=8)
     
-    
-class ComputerFacade(object):
-    '''
-    Represents a facade for various computer parts.
-    '''
-    def __init__(self):
-        self.cpu = CPU()
-        self.memory = Memory()
-        self.ssd = SolidStateDrive()
-    
-                    var_x = K.reshape(inputs, (batch_size,
-                                           self.group,
-                                           channels // self.group,
-                                           height,
-                                           width))
-                mean = K.mean(var_x, axis=[2, 3, 4], keepdims=True)
-                std = K.sqrt(K.var(var_x, axis=[2, 3, 4], keepdims=True) + self.epsilon)
-                var_x = (var_x - mean) / std
+    # Load an image with an unknown face
+unknown_image = face_recognition.load_image_file('two_people.jpg')
     
     
-def get_default_mask():
-    ''' Set the default mask for cli '''
-    masks = get_available_masks()
-    default = 'dfl_full'
-    default = default if default in masks else masks[0]
-    logger.debug(default)
-    return default
+def detect_faces_in_image(file_stream):
+    # 用face_recognition.face_encodings(img)接口提前把奥巴马人脸的编码录入
+    known_face_encoding = [-0.09634063,  0.12095481, -0.00436332, -0.07643753,  0.0080383,
+                            0.01902981, -0.07184699, -0.09383309,  0.18518871, -0.09588896,
+                            0.23951106,  0.0986533 , -0.22114635, -0.1363683 ,  0.04405268,
+                            0.11574756, -0.19899382, -0.09597053, -0.11969153, -0.12277931,
+                            0.03416885, -0.00267565,  0.09203379,  0.04713435, -0.12731361,
+                           -0.35371891, -0.0503444 , -0.17841317, -0.00310897, -0.09844551,
+                           -0.06910533, -0.00503746, -0.18466514, -0.09851682,  0.02903969,
+                           -0.02174894,  0.02261871,  0.0032102 ,  0.20312519,  0.02999607,
+                           -0.11646006,  0.09432904,  0.02774341,  0.22102901,  0.26725179,
+                            0.06896867, -0.00490024, -0.09441824,  0.11115381, -0.22592428,
+                            0.06230862,  0.16559327,  0.06232892,  0.03458837,  0.09459756,
+                           -0.18777156,  0.00654241,  0.08582542, -0.13578284,  0.0150229 ,
+                            0.00670836, -0.08195844, -0.04346499,  0.03347827,  0.20310158,
+                            0.09987706, -0.12370517, -0.06683611,  0.12704916, -0.02160804,
+                            0.00984683,  0.00766284, -0.18980607, -0.19641446, -0.22800779,
+                            0.09010898,  0.39178532,  0.18818057, -0.20875394,  0.03097027,
+                           -0.21300618,  0.02532415,  0.07938635,  0.01000703, -0.07719778,
+                           -0.12651891, -0.04318593,  0.06219772,  0.09163868,  0.05039065,
+                           -0.04922386,  0.21839413, -0.02394437,  0.06173781,  0.0292527 ,
+                            0.06160797, -0.15553983, -0.02440624, -0.17509389, -0.0630486 ,
+                            0.01428208, -0.03637431,  0.03971229,  0.13983178, -0.23006812,
+                            0.04999552,  0.0108454 , -0.03970895,  0.02501768,  0.08157793,
+                           -0.03224047, -0.04502571,  0.0556995 , -0.24374914,  0.25514284,
+                            0.24795187,  0.04060191,  0.17597422,  0.07966681,  0.01920104,
+                           -0.01194376, -0.02300822, -0.17204897, -0.0596558 ,  0.05307484,
+                            0.07417042,  0.07126575,  0.00209804]
     
+            # Find all the faces and face encodings in the frame of video, cost most time
+        face_locations = face_recognition.face_locations(rgb_frame)
+        face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
     
-_DEFAULTS = {
-    'format': {
-        'default': 'png',
-        'info': 'Image format to use:'
-                '\n\t bmp: Windows bitmap'
-                '\n\t jpg: JPEG format'
-                '\n\t jp2: JPEG 2000 format'
-                '\n\t png: Portable Network Graphics'
-                '\n\t ppm: Portable Pixmap Format',
-        'datatype': str,
-        'rounding': None,
-        'min_max': None,
-        'choices': ['bmp', 'jpg', 'jp2', 'png', 'ppm'],
-        'gui_radio': True,
-        'fixed': True,
+    setup(
+    name='face_recognition',
+    version='1.2.3',
+    description='Recognize faces from Python or from the command line',
+    long_description=readme + '\n\n' + history,
+    author='Adam Geitgey',
+    author_email='ageitgey@gmail.com',
+    url='https://github.com/ageitgey/face_recognition',
+    packages=[
+        'face_recognition',
+    ],
+    package_dir={'face_recognition': 'face_recognition'},
+    package_data={
+        'face_recognition': ['models/*.dat']
     },
-    'draw_transparent': {
-        'default': False,
-        'info': 'Place the swapped face on a transparent layer rather than the original frame.'
-                '\nNB: This is only compatible with images saved in png format. If an '
-                'incompatible format is selected then the image will be saved as a png.',
-        'datatype': bool,
-        'rounding': None,
-        'min_max': None,
-        'choices': [],
-        'gui_radio': False,
-        'fixed': True,
+    entry_points={
+        'console_scripts': [
+            'face_recognition=face_recognition.face_recognition_cli:main',
+            'face_detection=face_recognition.face_detection_cli:main'
+        ]
     },
-    'jpg_quality': {
-        'default': 75,
-        'info': '[jpg only] Set the jpg quality. 1 is worst 95 is best. Higher quality leads '
-                'to larger file sizes.',
-        'datatype': int,
-        'rounding': 1,
-        'min_max': (1, 95),
-        'choices': [],
-        'gui_radio': False,
-        'fixed': True,
-    },
-    'png_compress_level': {
-        'default': 3,
-        'info': '[png only] ZLIB compression level, 1 gives best speed, 9 gives best '
-                'compression, 0 gives no compression at all.',
-        'datatype': int,
-        'rounding': 1,
-        'min_max': (0, 9),
-        'choices': [],
-        'gui_radio': False,
-        'fixed': True,
-    },
-}
+    install_requires=requirements,
+    license='MIT license',
+    zip_safe=False,
+    keywords='face_recognition',
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+    ],
+    test_suite='tests',
+    tests_require=test_requirements
+)
 
     
-        for i in range(num_convs):
-        current = model.ConvGN(
-            current,
-            '_mask_fcn' + str(i + 1),
-            dim_in,
-            dim_inner,
-            group_gn=get_group_gn(dim_inner),
-            kernel=3,
-            pad=1 * dilation,
-            stride=1,
-            weight_init=(cfg.MRCNN.CONV_INIT, {'std': 0.001}),
-            bias_init=('ConstantFill', {'value': 0.})
+        def test_cookie_second_line_empty_first_line(self):
+        lines = (
+            b'\n',
+            b'# vim: set fileencoding=iso8859-15 :\n',
+            b'print('\xe2\x82\xac')\n'
         )
-        current = model.Relu(current, current)
-        dim_in = dim_inner
+        encoding, consumed_lines = detect_encoding(self.get_readline(lines))
+        self.assertEqual(encoding, 'iso8859-15')
+        expected = [b'\n', b'# vim: set fileencoding=iso8859-15 :\n']
+        self.assertEqual(consumed_lines, expected)
     
-    from caffe2.python import core
-from caffe2.python import workspace
+                # One traced call
+            hook.__cantrace__ = True
+            eval('3')
     
-                return all_results
-        else:
-            # Subprocess child case:
-            # In this case test_net was called via subprocess.Popen to execute on a
-            # range of inputs on a single dataset
-            dataset_name, proposal_file = get_inference_dataset(0, is_parent=False)
-            output_dir = get_output_dir(dataset_name, training=False)
-            return child_func(
-                weights_file,
-                dataset_name,
-                proposal_file,
-                output_dir,
-                ind_range=ind_range,
-                gpu_id=gpu_id
-            )
+            This method is likely to be removed at some point.  Use qsize() == 0
+        as a direct substitute, but be aware that either approach risks a race
+        condition where a queue can grow before the result of empty() or
+        qsize() can be used.
     
-    import os
-import sys
-import yaml
+        def readable(self):
+        return True
     
     
-def print_net(model, namescope='gpu_0'):
-    '''Print the model network.'''
-    logger.info('Printing model: {}'.format(model.net.Name()))
-    op_list = model.net.Proto().op
-    for op in op_list:
-        input_name = op.input
-        # For simplicity: only print the first output
-        # Not recommended if there are split layers
-        output_name = str(op.output[0])
-        op_type = op.type
-        op_name = op.name
+def _init_nt():
+    '''Initialize the module as appropriate for NT'''
+    g = {}
+    # set basic install directories
+    g['LIBDEST'] = get_python_lib(plat_specific=0, standard_lib=1)
+    g['BINLIBDEST'] = get_python_lib(plat_specific=1, standard_lib=1)
     
-    '''Primitives for running multiple single-GPU jobs in parallel over subranges of
-data. These are used for running multi-GPU inference. Subprocesses are used to
-avoid the GIL since inference may involve non-trivial amounts of Python code.
-'''
+        iterkeys = lambda d: d.iterkeys()
+    itervalues = lambda d: d.itervalues()
+    iteritems = lambda d: d.iteritems()
     
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+        return (prob, path[state])
     
-        def __init__(self):
-        self._event = threading.Event()
-    
-    
-def convert(json_file, output_dir):
-    print('Reading: {}'.format(json_file))
-    with open(json_file, 'r') as fid:
-        dt = json.load(fid)
-    print('done!')
-    
-        args = parser.parse_args()
-    return args
-    
-    fp.close()
-
-    
-    accepted_chars = re.compile(r'[\u4E00-\u9FD5]+')
-    
-        def encode(self, arg):
-        return self.__unicode__().encode(arg)
-    
-    s = '此外，公司拟对全资子公司吉林欧亚置业有限公司增资4.3亿元，增资后，吉林欧亚置业注册资本由7000万元增加到5亿元。吉林欧亚置业主要经营范围为房地产开发及百货零售等业务。目前在建吉林欧亚城市商业综合体项目。2013年，实现营业收入0万元，实现净利润-139.13万元。'
-for x, w in jieba.analyse.extract_tags(s, withWeight=True):
-    print('%s %s' % (x, w))
-    
-    
-if len(args) < 1:
-    print(USAGE)
-    sys.exit(1)
+    if sys.version_info[0] > 2:
+    xrange = range
     
     if opt.topK is None:
     topK = 10
 else:
     topK = int(opt.topK)
     
-        def testPosseg(self):
-        import jieba.posseg as pseg
+        def testTokenize(self):
         for content in test_contents:
-            result = pseg.cut(content)
-            assert isinstance(result, types.GeneratorType), 'Test Posseg Generator error'
+            result = jieba.tokenize(content)
+            assert isinstance(result, types.GeneratorType), 'Test Tokenize Generator error'
             result = list(result)
-            assert isinstance(result, list), 'Test Posseg error on content: %s' % content
-            print(' , '.join([w.word + ' / ' + w.flag for w in result]), file=sys.stderr)
-        print('testPosseg', file=sys.stderr)
+            assert isinstance(result, list), 'Test Tokenize error on content: %s' % content
+            for tk in result:
+                print('word %s\t\t start: %d \t\t end:%d' % (tk[0],tk[1],tk[2]), file=sys.stderr)
+        print('testTokenize', file=sys.stderr)
+    
+    
