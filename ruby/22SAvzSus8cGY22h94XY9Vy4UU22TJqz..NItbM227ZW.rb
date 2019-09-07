@@ -1,131 +1,92 @@
 
         
-            # The path used after confirmation.
-    def after_confirmation_path_for(resource_name, resource)
-      if signed_in?(resource_name)
-        signed_in_root_path(resource)
-      else
-        new_session_path(resource_name)
-      end
-    end
+            if current_adapter?(:PostgreSQLAdapter)
+      def test_migrate_enable_and_disable_extension
+        migration1 = InvertibleMigration.new
+        migration2 = DisableExtension1.new
+        migration3 = DisableExtension2.new
     
-                  define_method method do |resource_or_scope, *args|
-                scope = Devise::Mapping.find_scope!(resource_or_scope)
-                router_name = Devise.mappings[scope].router_name
-                context = router_name ? send(router_name) : _devise_route_context
-                context.send('#{action}#{scope}_#{module_name}_#{path_or_url}', *args)
-              end
-            end
+          def test_invert_remove_reference
+        add = @recorder.inverse_of :remove_reference, [:table, :taggable, { polymorphic: true }]
+        assert_equal [:add_reference, [:table, :taggable, { polymorphic: true }], nil], add
+      end
+    
+      def test_add_index
+    # add_index calls data_source_exists? and index_name_exists? which can't work since execute is stubbed
+    def (ActiveRecord::Base.connection).data_source_exists?(*); true; end
+    def (ActiveRecord::Base.connection).index_name_exists?(*); false; end
+    
+            assert_equal <<~MESSAGE, run_rake_routes
+                                         Prefix Verb   URI Pattern                                                                              Controller#Action
+                                           cart GET    /cart(.:format)                                                                          cart#show
+                  rails_mandrill_inbound_emails POST   /rails/action_mailbox/mandrill/inbound_emails(.:format)                                  action_mailbox/ingresses/mandrill/inbound_emails#create
+                  rails_postmark_inbound_emails POST   /rails/action_mailbox/postmark/inbound_emails(.:format)                                  action_mailbox/ingresses/postmark/inbound_emails#create
+                     rails_relay_inbound_emails POST   /rails/action_mailbox/relay/inbound_emails(.:format)                                     action_mailbox/ingresses/relay/inbound_emails#create
+                  rails_sendgrid_inbound_emails POST   /rails/action_mailbox/sendgrid/inbound_emails(.:format)                                  action_mailbox/ingresses/sendgrid/inbound_emails#create
+                   rails_mailgun_inbound_emails POST   /rails/action_mailbox/mailgun/inbound_emails/mime(.:format)                              action_mailbox/ingresses/mailgun/inbound_emails#create
+                 rails_conductor_inbound_emails GET    /rails/conductor/action_mailbox/inbound_emails(.:format)                                 rails/conductor/action_mailbox/inbound_emails#index
+                                                POST   /rails/conductor/action_mailbox/inbound_emails(.:format)                                 rails/conductor/action_mailbox/inbound_emails#create
+              new_rails_conductor_inbound_email GET    /rails/conductor/action_mailbox/inbound_emails/new(.:format)                             rails/conductor/action_mailbox/inbound_emails#new
+             edit_rails_conductor_inbound_email GET    /rails/conductor/action_mailbox/inbound_emails/:id/edit(.:format)                        rails/conductor/action_mailbox/inbound_emails#edit
+                  rails_conductor_inbound_email GET    /rails/conductor/action_mailbox/inbound_emails/:id(.:format)                             rails/conductor/action_mailbox/inbound_emails#show
+                                                PATCH  /rails/conductor/action_mailbox/inbound_emails/:id(.:format)                             rails/conductor/action_mailbox/inbound_emails#update
+                                                PUT    /rails/conductor/action_mailbox/inbound_emails/:id(.:format)                             rails/conductor/action_mailbox/inbound_emails#update
+                                                DELETE /rails/conductor/action_mailbox/inbound_emails/:id(.:format)                             rails/conductor/action_mailbox/inbound_emails#destroy
+          rails_conductor_inbound_email_reroute POST   /rails/conductor/action_mailbox/:inbound_email_id/reroute(.:format)                      rails/conductor/action_mailbox/reroutes#create
+                             rails_service_blob GET    /rails/active_storage/blobs/:signed_id/*filename(.:format)                               active_storage/blobs#show
+                      rails_blob_representation GET    /rails/active_storage/representations/:signed_blob_id/:variation_key/*filename(.:format) active_storage/representations#show
+                             rails_disk_service GET    /rails/active_storage/disk/:encoded_key/*filename(.:format)                              active_storage/disk#show
+                      update_rails_disk_service PUT    /rails/active_storage/disk/:encoded_token(.:format)                                      active_storage/disk#update
+                           rails_direct_uploads POST   /rails/active_storage/direct_uploads(.:format)                                           active_storage/direct_uploads#create
+        MESSAGE
+      end
+    
+            def self.[](type)
+          if type.is_a?(self)
+            type
+          else
+            new(type)
           end
         end
-      end
     
-          module ClassMethods
-        Devise::Models.config(self, :timeout_in)
-      end
+        def plugins_with_type(type)
+      @registry.values.select { |specification| specification.type.to_sym == type.to_sym }.collect(&:klass)
     end
-  end
-end
-
     
-          it 'uses the custom arguments if given' do
-        opts[:args] = ['--verbose', '-z']
+        private
+    def uncompress(source)
+      temporary_directory = Stud::Temporary.pathname
+      LogStash::Util::Zip.extract(source, temporary_directory, LOGSTASH_PATTERN_RE)
+      temporary_directory
+    rescue Zip::Error => e
+      # OK Zip's handling of file is bit weird, if the file exist but is not a valid zip, it will raise
+      # a `Zip::Error` exception with a file not found message...
+      raise InvalidPackError, 'Cannot uncompress the zip: #{source}'
+    end
     
-        let(:cmd) { 'find /vagrant -path /vagrant/.vagrant -prune -o '!' -type l -a '(' ! -user vagrant -or ! -group vagrant ')' -exec chown vagrant:vagrant '{}' +' }
-    let(:no_exclude_cmd) { 'find /vagrant '!' -type l -a '(' ! -user vagrant -or ! -group vagrant ')' -exec chown vagrant:vagrant '{}' +' }
+      subject { described_class.new(source, pipeline_id, unordered_config_parts, settings) }
     
-        it 'returns all the machines' do
-      configure do |config|
-        config.vm.define 'foo'
-        config.vm.define 'bar', autostart: false
-        config.vm.define 'baz', autostart: true
+        class SetWorker
+      include Sidekiq::Worker
+      sidekiq_options :queue => :foo, 'retry' => 12
+    end
+    
+        obj = Helpers.new('HTTP_ACCEPT_LANGUAGE' => 'en-US,sv-SE;q=0.8,sv;q=0.6,en;q=0.4')
+    assert_equal 'en', obj.locale
+    
+          it 'can reset individual stats' do
+        Sidekiq::Stats.new.reset('failed')
+        s = Sidekiq::Stats.new
+        assert_equal 0, s.failed
+        assert_equal 5, s.processed
       end
     
-    describe VagrantPlugins::DockerProvider::Driver::Compose do
-  let(:cmd_executed) { @cmd }
-  let(:cid)          { 'side-1-song-10' }
-  let(:docker_yml){ double('docker-yml', path: '/tmp-file') }
-  let(:machine){ double('machine', env: env, name: :docker_1, id: :docker_id, provider_config: provider_config) }
-  let(:compose_configuration){ {} }
-  let(:provider_config) do
-    double('provider-config',
-      compose: true,
-      compose_configuration: compose_configuration
-    )
-  end
-  let(:env) do
-    double('env',
-      cwd: Pathname.new('/compose/cwd'),
-      local_data_path: local_data_path
-    )
-  end
-  let(:composition_content){ '--- {}\n' }
-  let(:composition_path) do
-    double('composition-path',
-      to_s: 'docker-compose.yml',
-      exist?: true,
-      read: composition_content,
-      delete: true
-    )
-  end
-  let(:data_directory){ double('data-directory', join: composition_path) }
-  let(:local_data_path){ double('local-data-path') }
-  let(:compose_execute_up){ ['docker-compose', '-f', 'docker-compose.yml', '-p', 'cwd', 'up', '--remove-orphans', '-d', {}] }
+      it 'throws away dead processors' do
+    mgr = new_manager(options)
+    init_size = mgr.workers.size
+    processor = mgr.workers.first
+    begin
+      mgr.processor_died(processor, 'ignored')
     
-      test 'h1 title sanitizes correctly' do
-    title = 'H1'
-    @wiki.write_page(title, :markdown, '# 1 & 2 <script>alert('js')</script>' + '\n # 3', commit_details)
-    page = @wiki.page(title)
-    
-        # TODO: Remove to_url once write_page changes are merged.
-    @wiki.write_page('ééééé'.to_url, :markdown, '한글 text', commit_details)
-    page = @wiki.page('eeeee')
-    assert_equal '한글 text', utf8(page.raw_data)
-  end
-    
-    require 'rake/testtask'
-Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test' << '.'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
-end
-    
-      begin
-    require 'gollum-lib'
-    wiki = Gollum::Wiki.new(gollum_path, wiki_options)
-    if !wiki.exist? then
-      raise Gollum::InvalidGitRepositoryError
-    end
-    if wiki_options[:plantuml_url]
-      Gollum::Filter::PlantUML.configure do |config|
-        puts 'Using #{wiki_options[:plantuml_url]} as PlantUML endpoint'
-        config.url = wiki_options[:plantuml_url]
-      end
-    end
-    puts
-    puts 'Loaded Gollum wiki at:'
-    puts '#{File.expand_path(gollum_path).inspect}'
-    puts
-    puts 'Example API calls:'
-    puts %(    page = wiki.page('page-name'))
-    puts %(    # => <Gollum::Page>)
-    puts
-    puts %(    page.raw_data)
-    puts %(    # => '# My wiki page')
-    puts
-    puts %(    page.formatted_data)
-    puts %(    # => '<h1>My wiki page</h1>')
-    puts
-    puts 'Full API documentation at:'
-    puts 'https://github.com/gollum/gollum-lib'
-    puts
-    IRB.start_session(binding)
-  rescue Gollum::InvalidGitRepositoryError, Gollum::NoSuchPathError
-    puts 'Invalid Gollum wiki at #{File.expand_path(gollum_path).inspect}'
-    exit 0
-  end
-else
-  require 'gollum/app'
-  Precious::App.set(:gollum_path, gollum_path)
-  Precious::App.set(:wiki_options, wiki_options)
-  Precious::App.settings.mustache[:templates] = wiki_options[:template_dir] if wiki_options[:template_dir]
+    class TimedWorker
+  include Sidekiq::Worker
