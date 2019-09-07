@@ -1,85 +1,187 @@
 
         
-                css('pre > code').each do |node|
-          node.parent['data-language'] = 'crystal'
-          node.parent.content = node.parent.content
-        end
-    
-            css('pre').each do |node|
-          node['data-language'] = 'js'
-          node['data-language'] = node['class'][/language-(\w+)/, 1] if node['class']
-          node.content = node.content
-        end
-    
-        def initialize(options = {})
-      @request_options = options.extract!(:request_options)[:request_options].try(:dup) || {}
-      options[:max_concurrency] ||= 20
-      options[:pipelining] = 0
-      super
+                UI.success('Successfully exported CSV to #{file}')
+      end
     end
     
-            css('> .alert + h1').each do |node|
-          node.previous_element.before(node)
-        end
+          #
+      # API
+      #
     
-        ActivityPub::DeliveryWorker.perform_async(Oj.dump(serialize_payload(follow, ActivityPub::RejectFollowSerializer)), current_account.id, follow.account.inbox_url)
-  end
+          attr_mapping({
+        'capabilityType' => 'capabilityType',
+        'settings' => 'email'
+      })
     
-        ActivityTracker.increment('activity:interactions')
-    
-        return unless @account.present? && @status.distributable?
-    
-        context 'when the sender is relayed' do
-      let!(:relay_account) { Fabricate(:account, inbox_url: 'https://relay.example.com/inbox') }
-      let!(:relay) { Fabricate(:relay, inbox_url: 'https://relay.example.com/inbox') }
-    
-      describe 'PUT #update' do
-    it 'updates notifications settings' do
-      user.settings['notification_emails'] = user.settings['notification_emails'].merge('follow' => false)
-      user.settings['interactions'] = user.settings['interactions'].merge('must_be_follower' => true)
-    
-            if Devise.check_at_sign && !resource[:email].index('@')
-          resource[:email] = Rpam2.getenv(resource.find_pam_service, attributes[:email], attributes[:password], 'email', false)
-          resource[:email] = '#{attributes[:email]}@#{resource.find_pam_suffix}' unless resource[:email]
-        end
+          module CertificateType
+        IOS_DEVELOPMENT = 'IOS_DEVELOPMENT'
+        IOS_DISTRIBUTION = 'IOS_DISTRIBUTION'
+        MAC_APP_DISTRIBUTION = 'MAC_APP_DISTRIBUTION'
+        MAC_INSTALLER_DISTRIBUTION = 'MAC_INSTALLER_DISTRIBUTION'
+        MAC_APP_DEVELOPMENT = 'MAC_APP_DEVELOPMENT'
+        DEVELOPER_ID_KEXT = 'DEVELOPER_ID_KEXT'
+        DEVELOPER_ID_APPLICATION = 'DEVELOPER_ID_APPLICATION'
       end
     
-      let(:json) do
-    {
-      '@context': 'https://www.w3.org/ns/activitystreams',
-      id: 'foo',
-      type: 'Move',
-      actor: old_account.uri,
-      object: old_account.uri,
-      target: new_account.uri,
-    }.with_indifferent_access
+          #
+      # API
+      #
+    
+          def self.all(filter: {}, includes: nil, limit: nil, sort: nil)
+        resps = Spaceship::ConnectAPI.get_profiles(filter: filter, includes: includes).all_pages
+        return resps.map(&:to_models).flatten
+      end
+    end
+  end
+end
+
+    
+          def self.all(filter: {}, includes: nil, limit: nil, sort: nil)
+        return Spaceship::ConnectAPI.get_users(filter: filter, includes: includes)
+      end
+    
+        def aes256_gcm_decrypt(value)
+      return unless value
+    
+              parsed_filters << filter
+        end
+    
+          stats_mock = double(Gitaly::DiffStats, path: '.gitignore', additions: 758, deletions: 120)
+      stub_stats_find_by_path(stub_path, stats_mock)
+    
+      # GET /resource/confirmation?confirmation_token=abcdef
+  def show
+    self.resource = resource_class.confirm_by_token(params[:confirmation_token])
+    yield resource if block_given?
+    
+      # POST /resource/sign_in
+  def create
+    self.resource = warden.authenticate!(auth_options)
+    set_flash_message!(:notice, :signed_in)
+    sign_in(resource_name, resource)
+    yield resource if block_given?
+    respond_with resource, location: after_sign_in_path_for(resource)
   end
     
-        it 'returns nil if an article doesn't have a flare tag' do
-      expect(described_class.new(article).tag_hash).to be nil
+      # Proxy to devise map name
+  def resource_name
+    devise_mapping.name
+  end
+  alias :scope_name :resource_name
+    
+          def parse_uri(location)
+        location && URI.parse(location)
+      rescue URI::InvalidURIError
+        nil
+      end
+    
+      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
+     options[:store] != false && !env['devise.skip_timeoutable']
+    last_request_at = warden.session(scope)['last_request_at']
+    
+          def self.required_fields(klass)
+        []
+      end
+    
+        def check_sha256_no_check_if_latest
+      odebug 'Verifying sha256 :no_check with version :latest'
+      return unless cask.version.latest?
+      return if cask.sha256 == :no_check
+    
+                problem ':#{requirement} is deprecated. Usage should be \'#{dependency}\'.'
+          end
+    
+    require_relative 'shared_examples/requires_cask_token'
+require_relative 'shared_examples/invalid_option'
+    
+        if params[:user][:otp_attempt].present? && session[:otp_user_id]
+      authenticate_with_two_factor_via_otp(resource)
+    else
+      strategy = Warden::Strategies[:database_authenticatable].new(warden.env, :user)
+      prompt_for_two_factor(strategy.user) if strategy.valid? && strategy._run!.successful?
+    end
+  end
+    
+    if rails_env == 'production'
+  config('without test:development')
+elsif rails_env == 'test'
+  config('without development')
+end
+    
+      def user_search
+    if params[:admins_controller_user_search]
+      search_params = params.require(:admins_controller_user_search)
+                            .permit(:username, :email, :guid, :under13)
+      @search = UserSearch.new(search_params)
+      @users = @search.perform
     end
     
-          it 'renders to appropriate if article belongs to org' do
-        article.update(organization_id: create(:organization).id)
-        get article.path
-        expect(response.body).to include CGI.escapeHTML(article.title)
+    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
+#   licensed under the Affero General Public License version 3 or later.  See
+#   the COPYRIGHT file.
+    
+      def create
+    conversation = Conversation.find(params[:conversation_id])
+    
+        types.each_with_object(current_user.unread_notifications.group_by(&:type)) {|(name, type), notifications|
+      @grouped_unread_notification_counts[name] = notifications.has_key?(type) ? notifications[type].count : 0
+    }
+    
+              @processed_source = processed_source
+    
+    RSpec.describe RuboCop::Cop::Lint::UnusedMethodArgument, :config do
+  subject(:cop) { described_class.new(config) }
+    
+          module_function
+    
+        context 'with nested conditionals in elsif clause' do
+      let(:source) do
+        ['if foo?',
+         '  1',
+         'elsif bar?',
+         '  if baz; 4; end',
+         'else',
+         '  3',
+         'end'].join('\n')
       end
     
-    require File.expand_path('../dummy/config/environment.rb', __FILE__)
+              node.last_line + num_of_heredoc_lines + END_OF_HEREDOC_LINE
+        end
     
-              unless inventory_unit.respond_to?(can_event) &&
-              inventory_unit.send(can_event)
-            render plain: { exception: 'cannot transition to #{@event}' }.to_json,
-                   status: 200
-            false
+          def sidebar
+        if @sidebar.nil?
+          if page = @page.sidebar
+            @sidebar = page.text_data
+          else
+            @sidebar = false
           end
         end
+        @sidebar
+      end
     
-          assert $called
-      assert client.middleware.exists?(mware)
-      refute Sidekiq.client_middleware.exists?(mware)
-    end
+          def use_identicon
+        @page.wiki.user_icons == 'identicon'
+      end
+    
+        get '/pages'
+    
+      test 'remove page extentions' do
+    view = Precious::Views::LatestChanges.new
+    assert_equal 'page', view.remove_page_extentions('page.wiki')
+    assert_equal 'page-wiki', view.remove_page_extentions('page-wiki.md')
+    assert_equal 'file.any_extention', view.remove_page_extentions('file.any_extention')
   end
+    
+      teardown do
+    FileUtils.rm_rf(@path)
+  end
+    
+      def self.assets_path
+    ::File.expand_path('gollum/public', ::File.dirname(__FILE__))
+  end
+    
+        it 'can enumerate retries' do
+      add_retry
     
     describe Sidekiq::ExceptionHandler do
   describe 'with mock logger' do
@@ -89,68 +191,13 @@
       Sidekiq.logger = Logger.new(@str_logger)
     end
     
-      it 'throws away dead processors' do
-    mgr = new_manager(options)
-    init_size = mgr.workers.size
-    processor = mgr.workers.first
-    begin
-      mgr.processor_died(processor, 'ignored')
-    
-        def start(name = nil, *args)
-      # project-config takes precedence over a named project in the case that
-      # both are provided.
-      if options['project-config']
-        args.unshift name if name
-        name = nil
-      end
-    
-            context 'a thor command' do
-          context '(-v)' do
-            let(:arg1) { '-v' }
-    
-        def yaml
-      _hashed? ? @yaml : {}
+          I18n.enforce_available_locales = false
+      I18n.available_locales = nil
     end
-    
-        initialize_with { Tmuxinator::Project.new(file) }
-  end
-    
-    describe Tmuxinator::Pane do
-  let(:klass) { described_class }
-  let(:instance) { klass.new(index, project, window, *commands) }
-  # let(:index) { 'vim' }
-  # let(:project) { 0 }
-  # let(:tab) { nil }
-  # let(:commands) { nil }
-  let(:index) { 0 }
-  let(:project) { double }
-  let(:window) { double }
-  let(:commands) { ['vim', 'bash'] }
-    
-      def is_pane
-    @actual.is_a? Tmuxinator::Pane
   end
 end
 
     
-          expect(instance.render).to match %r{wemux.ls.2>\/dev\/null}
-    end
-  end
-    
-          def valid_project_config?(project_config)
-        return false unless project_config
-        unless exists?(path: project_config)
-          raise 'Project config (#{project_config}) doesn't exist.'
-        end
-        true
-      end
-    
-            expect(window.panes).to match(
-          [
-            a_pane.with(index: 0).and_commands('vim'),
-            a_pane.with(index: 1).and_commands('ls'),
-            a_pane.with(index: 2).and_commands('top')
-          ]
-        )
-      end
-    end
+      describe 'lifecycle events' do
+    it 'handles invalid input' do
+      Sidekiq.options[:lifecycle_events][:startup].clear
