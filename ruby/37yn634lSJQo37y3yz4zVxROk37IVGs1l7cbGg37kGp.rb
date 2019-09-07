@@ -1,172 +1,57 @@
 
         
-                def initialize(symbol)
-          @symbol = symbol.to_sym
+                if Utils::HttpClient.remote_file_exist?(uri)
+          PluginManager.ui.debug('Found package at: #{uri}')
+          return LogStash::PluginManager::PackInstaller::Remote.new(uri)
+        else
+          PluginManager.ui.debug('Package not found at: #{uri}')
+          return nil
         end
+      rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
+        # This probably means there is a firewall in place of the proxy is not correctly configured.
+        # So lets skip this strategy but log a meaningful errors.
+        PluginManager.ui.debug('Network error, skipping Elastic pack, exception: #{e}')
     
-        class AbstractHelpersBlock < ControllerWithHelpers
-      helper do
-        include AbstractController::Testing::HelperyTest
+          post_install_messages.compact.each do |message|
+        PluginManager.ui.info(message)
       end
-    end
     
-      class Notification < ApplicationRecord
-  end
-    
-    RSpec::Matchers.define :have_value do |expected|
-  match do |actual|
-    await_condition { actual.value && actual.value.include?(expected) }
-  end
-    
-        it 'generates a jasmine fixture', fixture: true do
-      session[:mobile_view] = true
-      get :new, format: :mobile
-      save_fixture(html_for('body'), 'conversations_new_mobile')
-    end
-  end
-end
-
-    
-        it 'lets a user destroy their like' do
-      current_user = controller.send(:current_user)
-      expect(current_user).to receive(:retract).with(@like)
-    
-        it 'succeeds for notification dropdown' do
-      Timecop.travel(6.seconds.ago) do
-        @notification.touch
+        if local_gems.size > 0
+      if update_all?
+        plugins_with_path = local_gems
+      else
+        plugins_with_path = plugins_arg & local_gems
       end
-      get :index, format: :json
-      expect(response).to be_success
-      response_json = JSON.parse(response.body)
-      note_html = Nokogiri::HTML(response_json['notification_list'][0]['also_commented']['note_html'])
-      timeago_content = note_html.css('time')[0]['data-time-ago']
-      expect(response_json['unread_count']).to be(1)
-      expect(response_json['unread_count_by_type']).to eq(
-        'also_commented'       => 1,
-        'comment_on_post'      => 0,
-        'contacts_birthday'    => 0,
-        'liked'                => 0,
-        'mentioned'            => 0,
-        'mentioned_in_comment' => 0,
-        'reshared'             => 0,
-        'started_sharing'      => 0
-      )
-      expect(timeago_content).to include(@notification.updated_at.iso8601)
-      expect(response.body).to match(/note_html/)
+    
+    platforms = PlatformConfig.new
+    
+    shared_examples 'logstash update' do |logstash|
+  describe 'logstash-plugin update on #{logstash.hostname}' do
+    before :each do
+      logstash.install({:version => LOGSTASH_VERSION})
     end
     
-          it 'it doesn't call toggle_hidden_shareable' do
-        expect(@controller.current_user).not_to receive(:toggle_hidden_shareable).with(an_instance_of(StatusMessage))
-        begin
-          put :update, params: {id: 42, post_id: @status.id}, format: :js
-        rescue ActiveRecord::RecordNotFound
-        end
+    default_vagrant_boxes = ( platform == 'all' ? config.platforms : config.filter_type(platform, {'experimental' => experimental}) )
+    
+        def settings
+      self
+    end
+    
+      describe 'RedisScanner' do
+    it 'returns identical to smembers' do
+      test_obj = Object.new
+      test_obj.extend(Sidekiq::RedisScanner)
+      50.times do |i|
+        Sidekiq.redis { |conn| conn.sadd('processes', 'test-process-#{i}') }
       end
+      sscan = Sidekiq.redis { |c| test_obj.sscan(c, 'processes') }.sort!
+      smembers = Sidekiq.redis { |c| c.smembers('processes') }.sort!
+      assert_equal sscan.size, 50
+      assert_equal sscan, smembers
     end
   end
-end
-
     
-        private
-    def uncompress(source)
-      temporary_directory = Stud::Temporary.pathname
-      LogStash::Util::Zip.extract(source, temporary_directory, LOGSTASH_PATTERN_RE)
-      temporary_directory
-    rescue Zip::Error => e
-      # OK Zip's handling of file is bit weird, if the file exist but is not a valid zip, it will raise
-      # a `Zip::Error` exception with a file not found message...
-      raise InvalidPackError, 'Cannot uncompress the zip: #{source}'
-    end
-    
-      it 'records when the config was read' do
-    expect(subject.read_at).to be <= Time.now
-  end
-    
-            def delimiter_delta
-          return 0 if first.same_line?(second)
-          return 0 if first.delimiter != second.delimiter
-    
-          # @path_cache maps directories to configuration paths. We search
-      # for .rubocop.yml only if we haven't already found it for the
-      # given directory.
-      @path_cache = {}
-    
-          def preference_field_options(options)
-        field_options = case options[:type]
-                        when :integer
-                          {
-                            size: 10,
-                            class: 'input_integer form-control'
-                          }
-                        when :boolean
-                          {}
-                        when :string
-                          {
-                            size: 10,
-                            class: 'input_string form-control'
-                          }
-                        when :password
-                          {
-                            size: 10,
-                            class: 'password_string form-control'
-                          }
-                        when :text
-                          {
-                            rows: 15,
-                            cols: 85,
-                            class: 'form-control'
-                          }
-                        else
-                          {
-                            size: 10,
-                            class: 'input_string form-control'
-                          }
-                        end
-    
-            # Dynamically defines our stores checkout steps to ensure we check authorization on each step.
-        Order.checkout_steps.keys.each do |step|
-          define_method step do
-            find_order
-            authorize! :update, @order, params[:token]
-          end
-        end
-    
-            # Takes besides the products attributes either an array of variants or
-        # an array of option types.
-        #
-        # By submitting an array of variants the option types will be created
-        # using the *name* key in options hash. e.g
-        #
-        #   product: {
-        #     ...
-        #     variants: {
-        #       price: 19.99,
-        #       sku: 'hey_you',
-        #       options: [
-        #         { name: 'size', value: 'small' },
-        #         { name: 'color', value: 'black' }
-        #       ]
-        #     }
-        #   }
-        #
-        # Or just pass in the option types hash:
-        #
-        #   product: {
-        #     ...
-        #     option_types: ['size', 'color']
-        #   }
-        #
-        # By passing the shipping category name you can fetch or create that
-        # shipping category on the fly. e.g.
-        #
-        #   product: {
-        #     ...
-        #     shipping_category: 'Free Shipping Items'
-        #   }
-        #
-        def new; end
-    
-          @@reimbursement_attributes = [
-        :id, :reimbursement_status, :customer_return_id, :order_id,
-        :number, :total, :created_at, :updated_at
-      ]
+        describe 'when the exception does not have a backtrace' do
+      it 'does not fail' do
+        exception = ExceptionHandlerTestException.new
+        assert_nil exception.backtrace
