@@ -1,454 +1,527 @@
 
         
-            // Create the pipes to which the ConPTY will connect
-    if (CreatePipe(&hPipePTYIn, phPipeOut, NULL, 0) &&
-        CreatePipe(phPipeIn, &hPipePTYOut, NULL, 0))
-    {
-        // Determine required size of Pseudo Console
-        COORD consoleSize{};
-        CONSOLE_SCREEN_BUFFER_INFO csbi{};
-        HANDLE hConsole{ GetStdHandle(STD_OUTPUT_HANDLE) };
-        if (GetConsoleScreenBufferInfo(hConsole, &csbi))
-        {
-            consoleSize.X = csbi.srWindow.Right - csbi.srWindow.Left + 1;
-            consoleSize.Y = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
-        }
+        void MyComputedHashes::ComputeHashesForContent(const std::string& contents,
+                                             size_t block_size,
+                                             std::vector<std::string>* hashes) {
+  size_t offset = 0;
+  // Even when the contents is empty, we want to output at least one hash
+  // block (the hash of the empty string).
+  do {
+    const char* block_start = contents.data() + offset;
+    DCHECK(offset <= contents.size());
+    size_t bytes_to_read = std::min(contents.size() - offset, block_size);
+    std::unique_ptr<crypto::SecureHash> hash(
+        crypto::SecureHash::Create(crypto::SecureHash::SHA256));
+    hash->Update(block_start, bytes_to_read);
+    }
     }
     
-        int                 xSampling;
-    int                 ySampling;
+    IPC_SYNC_MESSAGE_ROUTED1_1(ShellViewHostMsg_SetForceClose, bool, int)
     
-    Rational
-guessExactFps (double fps)
-{
-    return guessExactFps (Rational (fps));
+    // Tell browser to allocate a new object.
+// function AllocateObject(id, name, options);
+v8::Handle<v8::Value> AllocateObject(int routing_id,
+                                     int object_id,
+                                     const std::string& type,
+                                     v8::Handle<v8::Value> options);
+    
+    Clipboard::Clipboard(int id,
+           const base::WeakPtr<DispatcherHost>& dispatcher_host,
+           const base::DictionaryValue& option)
+    : Base(id, dispatcher_host, option) {
 }
     
-        OPENEXR_IMF_INTERNAL_NAMESPACE::Xdr::read <OPENEXR_IMF_INTERNAL_NAMESPACE::StreamIO> (is, magic);
-    OPENEXR_IMF_INTERNAL_NAMESPACE::Xdr::read <OPENEXR_IMF_INTERNAL_NAMESPACE::StreamIO> (is, version);
-    
-    
-#endif /* IMFGENERICINPUTFILE_H_ */
-
-    
-    inline Header::ConstIterator &
-Header::ConstIterator::operator ++ ()
-{
-    ++_i;
-    return *this;
-}
-    
-    	    for (Int64 i = 1 << (HUF_DECBITS - l); i > 0; i--, pl++)
-	    {
-		if (pl->len || pl->p)
-		{
-		    //
-		    // Error: a short code or a long code has
-		    // already been stored in table entry *pl.
-		    //
-    }
+    void MenuDelegate::ExecuteCommand(int command_id, int event_flags) {
+  if (command_id < 0)
+    return;
     }
     
-        
-    //---------------------------------------------------------------
-    // Check if SSE optimization is enabled
-    //
-    // Call after setFrameBuffer() to query whether optimized file decoding
-    // is available - decode times will be faster if returns true
-    //
-    // Optimization depends on:
-    //   the file type (only scanline data is supported),
-    //   the framebuffer channels (RGB/RGBA mono or stereo)
-    //   the framebuffer channel types (all channels half-float format only)
-    //   the file channels (RGB/RGBA mono or stereo)
-    //   the file channel types (all channel half-float format only)
-    //   whether SSE2 instruction support was detected at compile time
-    //
-    // Calling isOptimizationEnabled before setFrameBuffer will throw an exception
-    //
-    //---------------------------------------------------------------
-    
-    IMF_EXPORT
-    bool                isOptimizationEnabled () const;
-    
-    
-    
-    
-    
-    {    private:
-        InputFile* file;
-    // for internal use - give OutputFile and TiledOutputFile access to file for copyPixels
-    friend void OutputFile::copyPixels(InputPart&);
-    friend void TiledOutputFile::copyPixels(InputPart&);
-    
-};
-    
-    //
-// Used to wrap OPENEXR_IMF_INTERNAL_NAMESPACE::IStream as a Mutex.
-//
-struct InputStreamMutex : public Mutex
-{
-    OPENEXR_IMF_INTERNAL_NAMESPACE::IStream* is;
-    Int64 currentPosition;
-    }
-    
-    //-----------------------------------------------------------------------------
-//
-//	class IntAttribute
-//
-//-----------------------------------------------------------------------------
-    
-    template <typename Dtype>
-void SGDSolver<Dtype>::RestoreSolverStateFromBinaryProto(
-    const string& state_file) {
-  SolverState state;
-  ReadProtoFromBinaryFile(state_file, &state);
-  this->iter_ = state.iter();
-  if (state.has_learned_net()) {
-    NetParameter net_param;
-    ReadNetParamsFromBinaryFileOrDie(state.learned_net().c_str(), &net_param);
-    this->net_->CopyTrainedLayersFrom(net_param);
-  }
-  this->current_step_ = state.current_step();
-  CHECK_EQ(state.history_size(), history_.size())
-      << 'Incorrect length of history blobs.';
-  LOG(INFO) << 'SGDSolver: restoring history';
-  for (int i = 0; i < history_.size(); ++i) {
-    history_[i]->FromProto(state.history(i));
+    void MenuItem::CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result) {
+  if (method == 'GetChecked') {
+    result->AppendBoolean(GetChecked());
+  } else {
+    NOTREACHED() << 'Invalid call to MenuItem method:' << method
+                 << ' arguments:' << arguments;
   }
 }
     
-      /**
-   * @brief Computes the error gradient w.r.t. the clipped inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x} = \left\{
-   *        \begin{array}{lr}
-   *            0 & \mathrm{if} \; x < min \vee x > max \\
-   *            \frac{\partial E}{\partial y} & \mathrm{if} \; x \ge min \wedge x \le max
-   *        \end{array} \right.
-   *      @f$
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-};
+    #include 'base/files/file_path.h'
+#include 'base/strings/string_util.h'
+#include 'base/strings/utf_string_conversions.h'
+#include 'base/threading/thread_restrictions.h'
+#include 'base/values.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menu/menu.h'
+#include 'content/nw/src/nw_base.h'
+#include 'content/nw/src/nw_content.h'
+#include 'content/nw/src/nw_package.h'
+#include 'ui/base/accelerators/accelerator.h'
+#include 'ui/gfx/image/image_skia_operations.h'
+#include 'ui/events/event_constants.h'//for modifier key code
+#include 'base/logging.h'
     
-      // vector wrappers for all the vector types we use
-  bp::class_<vector<shared_ptr<Blob<Dtype> > > >('BlobVec')
-    .def(bp::vector_indexing_suite<vector<shared_ptr<Blob<Dtype> > >, true>())
-    .def('add_blob', bp::raw_function(&BlobVec_add_blob));
-  bp::class_<vector<Blob<Dtype>*> >('RawBlobVec')
-    .def(bp::vector_indexing_suite<vector<Blob<Dtype>*>, true>());
-  bp::class_<vector<shared_ptr<Layer<Dtype> > > >('LayerVec')
-    .def(bp::vector_indexing_suite<vector<shared_ptr<Layer<Dtype> > >, true>());
-  bp::class_<vector<string> >('StringVec')
-    .def(bp::vector_indexing_suite<vector<string> >());
-  bp::class_<vector<int> >('IntVec')
-    .def(bp::vector_indexing_suite<vector<int> >());
-  bp::class_<vector<Dtype> >('DtypeVec')
-    .def(bp::vector_indexing_suite<vector<Dtype> >());
-  bp::class_<vector<shared_ptr<Net<Dtype> > > >('NetVec')
-    .def(bp::vector_indexing_suite<vector<shared_ptr<Net<Dtype> > >, true>());
-  bp::class_<vector<bool> >('BoolVec')
-    .def(bp::vector_indexing_suite<vector<bool> >());
-    
-    template <typename Dtype>
-void PoolingLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top) {
-  PoolingParameter pool_param = this->layer_param_.pooling_param();
-  if (pool_param.global_pooling()) {
-    CHECK(!(pool_param.has_kernel_size() ||
-      pool_param.has_kernel_h() || pool_param.has_kernel_w()))
-      << 'With Global_pooling: true Filter size cannot specified';
-  } else {
-    CHECK(!pool_param.has_kernel_size() !=
-      !(pool_param.has_kernel_h() && pool_param.has_kernel_w()))
-      << 'Filter size is kernel_size OR kernel_h and kernel_w; not both';
-    CHECK(pool_param.has_kernel_size() ||
-      (pool_param.has_kernel_h() && pool_param.has_kernel_w()))
-      << 'For non-square filters both kernel_h and kernel_w are required.';
-  }
-  CHECK((!pool_param.has_pad() && pool_param.has_pad_h()
-      && pool_param.has_pad_w())
-      || (!pool_param.has_pad_h() && !pool_param.has_pad_w()))
-      << 'pad is pad OR pad_h and pad_w are required.';
-  CHECK((!pool_param.has_stride() && pool_param.has_stride_h()
-      && pool_param.has_stride_w())
-      || (!pool_param.has_stride_h() && !pool_param.has_stride_w()))
-      << 'Stride is stride OR stride_h and stride_w are required.';
-  global_pooling_ = pool_param.global_pooling();
-  round_mode_ = pool_param.round_mode();
-  if (global_pooling_) {
-    kernel_h_ = bottom[0]->height();
-    kernel_w_ = bottom[0]->width();
-  } else {
-    if (pool_param.has_kernel_size()) {
-      kernel_h_ = kernel_w_ = pool_param.kernel_size();
-    } else {
-      kernel_h_ = pool_param.kernel_h();
-      kernel_w_ = pool_param.kernel_w();
-    }
-  }
-  CHECK_GT(kernel_h_, 0) << 'Filter dimensions cannot be zero.';
-  CHECK_GT(kernel_w_, 0) << 'Filter dimensions cannot be zero.';
-  if (!pool_param.has_pad_h()) {
-    pad_h_ = pad_w_ = pool_param.pad();
-  } else {
-    pad_h_ = pool_param.pad_h();
-    pad_w_ = pool_param.pad_w();
-  }
-  if (!pool_param.has_stride_h()) {
-    stride_h_ = stride_w_ = pool_param.stride();
-  } else {
-    stride_h_ = pool_param.stride_h();
-    stride_w_ = pool_param.stride_w();
-  }
-  if (global_pooling_) {
-    CHECK(pad_h_ == 0 && pad_w_ == 0 && stride_h_ == 1 && stride_w_ == 1)
-      << 'With Global_pooling: true; only pad = 0 and stride = 1';
-  }
-  if (pad_h_ != 0 || pad_w_ != 0) {
-    CHECK(this->layer_param_.pooling_param().pool()
-        == PoolingParameter_PoolMethod_AVE
-        || this->layer_param_.pooling_param().pool()
-        == PoolingParameter_PoolMethod_MAX)
-        << 'Padding implemented only for average and max pooling.';
-    CHECK_LT(pad_h_, kernel_h_);
-    CHECK_LT(pad_w_, kernel_w_);
-  }
-}
-    
-    template <typename Dtype>
-void Net<Dtype>::CopyTrainedLayersFromHDF5(const string& trained_filename) {
-#ifdef USE_HDF5
-  hid_t file_hid = H5Fopen(trained_filename.c_str(), H5F_ACC_RDONLY,
-                           H5P_DEFAULT);
-  CHECK_GE(file_hid, 0) << 'Couldn't open ' << trained_filename;
-  hid_t data_hid = H5Gopen2(file_hid, 'data', H5P_DEFAULT);
-  CHECK_GE(data_hid, 0) << 'Error reading weights from ' << trained_filename;
-  int num_layers = hdf5_get_num_links(data_hid);
-  for (int i = 0; i < num_layers; ++i) {
-    string source_layer_name = hdf5_get_name_by_idx(data_hid, i);
-    if (!layer_names_index_.count(source_layer_name)) {
-      LOG(INFO) << 'Ignoring source layer ' << source_layer_name;
+      // Ignore first non-switch arg if it's not a standalone package.
+  bool ignore_arg = !package->self_extract();
+  for (unsigned i = 1; i < argv.size(); ++i) {
+    if (ignore_arg && args.size() && argv[i] == args[0]) {
+      ignore_arg = false;
       continue;
     }
-    int target_layer_id = layer_names_index_[source_layer_name];
-    DLOG(INFO) << 'Copying source layer ' << source_layer_name;
-    vector<shared_ptr<Blob<Dtype> > >& target_blobs =
-        layers_[target_layer_id]->blobs();
-    hid_t layer_hid = H5Gopen2(data_hid, source_layer_name.c_str(),
-        H5P_DEFAULT);
-    CHECK_GE(layer_hid, 0)
-        << 'Error reading weights from ' << trained_filename;
-    // Check that source layer doesn't have more params than target layer
-    int num_source_params = hdf5_get_num_links(layer_hid);
-    CHECK_LE(num_source_params, target_blobs.size())
-        << 'Incompatible number of blobs for layer ' << source_layer_name;
-    for (int j = 0; j < target_blobs.size(); ++j) {
-      ostringstream oss;
-      oss << j;
-      string dataset_name = oss.str();
-      int target_net_param_id = param_id_vecs_[target_layer_id][j];
-      if (!H5Lexists(layer_hid, dataset_name.c_str(), H5P_DEFAULT)) {
-        // Target param doesn't exist in source weights...
-        if (param_owners_[target_net_param_id] != -1) {
-          // ...but it's weight-shared in target, so that's fine.
-          continue;
-        } else {
-          LOG(FATAL) << 'Incompatible number of blobs for layer '
-              << source_layer_name;
-        }
-      }
-      hdf5_load_nd_dataset(layer_hid, dataset_name.c_str(), 0, kMaxBlobAxes,
-          target_blobs[j].get());
-    }
-    H5Gclose(layer_hid);
-  }
-  H5Gclose(data_hid);
-  H5Fclose(file_hid);
-#else
-  LOG(FATAL) << 'CopyTrainedLayersFromHDF5 requires hdf5;'
-             << ' compile with USE_HDF5.';
-#endif  // USE_HDF5
-}
-    
-      // Set the signal handlers to the default.
-  void UnhookHandler() {
-    if (already_hooked_up) {
-      struct sigaction sa;
-      // Setup the sighup handler
-      sa.sa_handler = SIG_DFL;
-      // Restart the system call, if at all possible
-      sa.sa_flags = SA_RESTART;
-      // Block every signal during the handler
-      sigfillset(&sa.sa_mask);
-      // Intercept SIGHUP and SIGINT
-      if (sigaction(SIGHUP, &sa, NULL) == -1) {
-        LOG(FATAL) << 'Cannot uninstall SIGHUP handler.';
-      }
-      if (sigaction(SIGINT, &sa, NULL) == -1) {
-        LOG(FATAL) << 'Cannot uninstall SIGINT handler.';
-      }
-    }
     }
     
-    const int kCIFARSize = 32;
-const int kCIFARImageNBytes = 3072;
-const int kCIFARBatchSize = 10000;
-const int kCIFARTrainBatches = 5;
-    
-    #include 'resource_importer_image.h'
-    
-    String ResourceImporterOGGVorbis::get_resource_type() const {
+    class NwAppClearCacheFunction : public NWSyncExtensionFunction, public content::BrowsingDataRemover::Observer {
+ public:
+  NwAppClearCacheFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+  void OnBrowsingDataRemoverDone() override;
     }
     
-    		if (has_node(drag_node_path)) {
-			Node *n = get_node(drag_node_path);
-			drag_node = Object::cast_to<Control>(n);
-		}
     
-    
-    {	CPUParticles2DEditorPlugin(EditorNode *p_node);
-	~CPUParticles2DEditorPlugin();
+    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.clearSync', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwClipboardClearSyncFunction);
 };
     
-    void FileAccessNetworkClient::put_32(int p_32) {
-    }
+    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
+ public:
+  NwMenuGetNSStringWithFixupFunction(){}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
     
+ protected:
+  ~NwMenuGetNSStringWithFixupFunction() override {}
     
-    {			return p_left->center.y < p_right->center.y;
-		}
-	};
-	struct BVHCmpZ {
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
+};
     
-    public:
-	float get_length() const;
-	float get_max(float p_time, float p_time_next) const;
-	float get_min(float p_time, float p_time_next) const;
-    
-    
-    {		image->lock();
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++) {
-				image->set_pixel(i, j, image->get_pixel(i, j).inverted());
-			}
-		}
-		image->unlock();
-	}
-    
-    	ClassDB::bind_method('_removed_from_graph', &AnimationNodeBlendSpace2DEditor::_removed_from_graph);
-    
-            explicit Rational(PRAT prat) noexcept;
-        PRAT ToPRAT() const;
-    
-        /// <summary>
-    /// Calculate the remainder after division, the sign of a result will match the sign of lhs.
-    /// </summary>
-    /// <remarks>
-    /// This function has the same behavior as the standard C/C++ operator '%', to calculate the modulus after division instead, use <see
-    /// cref='Rational::operator%'/> instead.
-    /// </remarks>
-    Rational operator%(Rational lhs, Rational const& rhs)
-    {
-        lhs %= rhs;
-        return lhs;
-    }
-    
-    
-    {
-    {        return Calc_ULongLongToULong(ull64Result, pulResult);
-    }
+    bool NwObjAllocateIdFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  response->AppendInteger(nw::ObjectManager::AllocateId());
+  return true;
 }
     
-        auto operandCommand = std::make_shared<COpndCommand>(commands, fNegative, fDecimal, fSciFmt);
-    operandCommand->Initialize(rat);
-    int iCommandEnd = AddCommand(operandCommand);
-    m_lastOpStartIndex = IchAddSzToEquationSz(numStr, iCommandEnd);
+        void operator()(const point_read_t &get) {
+        response->response = point_read_response_t();
+        point_read_response_t *res =
+            boost::get<point_read_response_t>(&response->response);
+        rdb_get(get.key, btree, superblock, res, trace);
+    }
     
-        private:
-        // Make CalculatorAnnouncement a friend class so it is the only
-        // class that can access the private constructor.
-        friend class CalculatorAnnouncement;
+      static void Print(const T& value, ::std::ostream* os) {
+    // Prints the address of the value.  We use reinterpret_cast here
+    // as static_cast doesn't compile when T is a function type.
+    *os << '@' << reinterpret_cast<const void*>(&value) << ' ';
+    }
     
-    void PSOutputDev::updateStrokeOverprint(GfxState *state) {
-  if (level >= psLevel2) {
-    writePSFmt('{0:s} OP\n', state->getStrokeOverprint() ? 'true' : 'false');
+    // When this flag is set with a 'host:port' string, on supported
+// platforms test results are streamed to the specified port on
+// the specified host machine.
+GTEST_DECLARE_string_(stream_result_to);
+    
+      // Create the directory so that path exists. Returns true if successful or
+  // if the directory already exists; returns false if unable to create the
+  // directory for any reason, including if the parent directory does not
+  // exist. Not named 'CreateDirectory' because that's a macro on Windows.
+  bool CreateFolder() const;
+    
+      // Returns the fraction bits of this number.
+  Bits fraction_bits() const { return kFractionBitMask & u_.bits_; }
+    
+    
+    { private:
+  String();  // Not meant to be instantiated.
+};  // class String
+    
+    int main() {
+  volatile int x = 0;
+  emscripten_sleep(1);
+  int jmpval = setjmp(buf);
+  if (!jmpval) {
+    x++;                  // should be properly restored once longjmp jumps back
+    first();              // when executed, setjmp returns 1
+    printf('skipped\n');  // does not print
+  } else if (jmpval == 1) {  // when first() jumps back, setjmp returns 1
+    printf('result: %d %d\n', x, jmpval);  // prints
+    x++;
+    emscripten_sleep(1);
+    second();                 // when executed, setjmp returns -1
+    emscripten_sleep(1);
+  } else if (jmpval == -1) {  // when second() jumps back, setjmp returns -1
+    printf('result: %d %d\n', x, jmpval);  // prints
   }
+  emscripten_sleep(1);
+  finish(x);
+}
+
+    
+      // Write the Xpdf procset.
+  void writeXpdfProcset();
+    
+      // read a token
+  i = 0;
+  buf[i++] = c;
+  if (c == '(') {
+    backslash = gFalse;
+    while ((c = lookChar()) != EOF) {
+      consumeChar();
+      if (i < size) {
+	buf[i++] = c;
+      }
+      if (c == '\\') {
+	backslash = gTrue;
+      } else if (!backslash && c == ')') {
+	break;
+      } else {
+	backslash = gFalse;
+      }
+    }
+  } else if (c == '<') {
+    while ((c = lookChar()) != EOF) {
+      consumeChar();
+      if (i < size && specialChars[c] != 1) {
+	buf[i++] = c;
+      }
+      if (c == '>') {
+	break;
+      }
+    }
+  } else if (c != '[' && c != ']') {
+    while ((c = lookChar()) != EOF && !specialChars[c]) {
+      consumeChar();
+      if (i < size) {
+	buf[i++] = c;
+      }
+    }
+  }
+  // Zero terminate token string
+  buf[i] = '\0';
+  // Return length of token
+  *length = i;
+    
+      // thumb
+  pageDict->lookupNF('Thumb', &thumb);
+  if (!(thumb.isStream() || thumb.isNull() || thumb.isRef())) {
+      error(-1, 'Page thumb object (page %d) is wrong type (%s)',
+            num, thumb.getTypeName());
+      thumb.initNull(); 
+  }
+    
+      XRef *xref;			// the xref table for this PDF file
+  Lexer *lexer;			// input stream
+  GBool allowStreams;		// parse stream objects?
+  Object buf1, buf2;		// next two tokens
+  int inlineImg;		// set when inline image data is encountered
+    
+    class ObjectItem : public PopplerCacheItem {
+  public:
+    ObjectItem(Object *obj)
+    {
+      obj->copy(&item);
+    }
+    }
+    
+    
+    {  if (!ok) {
+    return gFalse;
+  }
+  if (authData) {
+    ownerPassword = ((StandardAuthData *)authData)->ownerPassword;
+    userPassword = ((StandardAuthData *)authData)->userPassword;
+  } else {
+    ownerPassword = NULL;
+    userPassword = NULL;
+  }
+  if (!Decrypt::makeFileKey(encVersion, encRevision, fileKeyLength,
+			    ownerKey, userKey, permFlags, fileID,
+			    ownerPassword, userPassword, fileKey,
+			    encryptMetadata, &ownerPasswordOk)) {
+    return gFalse;
+  }
+  return gTrue;
 }
     
-    private:
-  void parse(Object *tree);
+    void SplashOutputDev::drawSoftMaskedImage(GfxState *state, Object *ref,
+					  Stream *str, int width, int height,
+					  GfxImageColorMap *colorMap,
+					  GBool interpolate,
+					  Stream *maskStr,
+					  int maskWidth, int maskHeight,
+					  GfxImageColorMap *maskColorMap,
+					  GBool maskInterpolate) {
+  double *ctm;
+  SplashCoord mat[6];
+  SplashOutImageData imgData;
+  SplashOutImageData imgMaskData;
+  SplashColorMode srcMode;
+  SplashBitmap *maskBitmap;
+  Splash *maskSplash;
+  SplashColor maskColor;
+  GfxGray gray;
+  GfxRGB rgb;
+#if SPLASH_CMYK
+  GfxCMYK cmyk;
+#endif
+  Guchar pix;
+  int n, i;
+    }
     
-    #ifndef POPPLER_CACHE_H
-#define POPPLER_CACHE_H
+      XRef *xref;			// xref table for current document
     
-    #include <config.h>
+    XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(lz4i16hc)
+.describe('Apply LZ4 binary data compression(16 bit index mode) for ext memory.')
+.set_body([]() {
+    return new SparsePageLZ4Format<uint16_t>(true);
+  });
+    
+    /*!
+ * \brief Macro to register sparse page format.
+ *
+ * \code
+ * // example of registering a objective
+ * XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(raw)
+ * .describe('Raw binary data format.')
+ * .set_body([]() {
+ *     return new RawFormat();
+ *   });
+ * \endcode
+ */
+#define XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(Name)                       \
+  DMLC_REGISTRY_REGISTER(::xgboost::data::SparsePageFormatReg, SparsePageFormat, Name)
     
     
-    {  if (readAttrs)
+    {    // By default ImGuiFreeType will use IM_ALLOC()/IM_FREE().
+    // However, as FreeType does lots of allocations we provide a way for the user to redirect it to a separate memory heap if desired:
+    IMGUI_API void SetAllocatorFunctions(void* (*alloc_func)(size_t sz, void* user_data), void (*free_func)(void* ptr, void* user_data), void* user_data = NULL);
+}
+
+    
+            // 3. Show another simple window.
+        if (show_another_window)
+        {
+            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
+        }
+    
+        // Create Vulkan Instance
+    {
+        VkInstanceCreateInfo create_info = {};
+        create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+        create_info.enabledExtensionCount = extensions_count;
+        create_info.ppEnabledExtensionNames = extensions;
+    }
+    
+    // Main code
+int main(int, char**)
+{
+    // Create application window
+    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
+    ::RegisterClassEx(&wc);
+    HWND hwnd = ::CreateWindow(wc.lpszClassName, _T('Dear ImGui DirectX11 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
+    }
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
+    
+    void CleanupDeviceD3D()
+{
+    CleanupRenderTarget();
+    if (g_pSwapChain) { g_pSwapChain->Release(); g_pSwapChain = NULL; }
+    if (g_hSwapChainWaitableObject != NULL) { CloseHandle(g_hSwapChainWaitableObject); }
+    for (UINT i = 0; i < NUM_FRAMES_IN_FLIGHT; i++)
+        if (g_frameContext[i].CommandAllocator) { g_frameContext[i].CommandAllocator->Release(); g_frameContext[i].CommandAllocator = NULL; }
+    if (g_pd3dCommandQueue) { g_pd3dCommandQueue->Release(); g_pd3dCommandQueue = NULL; }
+    if (g_pd3dCommandList) { g_pd3dCommandList->Release(); g_pd3dCommandList = NULL; }
+    if (g_pd3dRtvDescHeap) { g_pd3dRtvDescHeap->Release(); g_pd3dRtvDescHeap = NULL; }
+    if (g_pd3dSrvDescHeap) { g_pd3dSrvDescHeap->Release(); g_pd3dSrvDescHeap = NULL; }
+    if (g_fence) { g_fence->Release(); g_fence = NULL; }
+    if (g_fenceEvent) { CloseHandle(g_fenceEvent); g_fenceEvent = NULL; }
+    if (g_pd3dDevice) { g_pd3dDevice->Release(); g_pd3dDevice = NULL; }
+}
+    
+    // CHANGELOG
+// (minor and older changes stripped away, please see git history for details)
+//  2019-05-29: DirectX9: Added support for large mesh (64K+ vertices), enable ImGuiBackendFlags_RendererHasVtxOffset flag.
+//  2019-04-30: DirectX9: Added support for special ImDrawCallback_ResetRenderState callback to reset render state.
+//  2019-03-29: Misc: Fixed erroneous assert in ImGui_ImplDX9_InvalidateDeviceObjects().
+//  2019-01-16: Misc: Disabled fog before drawing UI's. Fixes issue #2288.
+//  2018-11-30: Misc: Setting up io.BackendRendererName so it can be displayed in the About Window.
+//  2018-06-08: Misc: Extracted imgui_impl_dx9.cpp/.h away from the old combined DX9+Win32 example.
+//  2018-06-08: DirectX9: Use draw_data->DisplayPos and draw_data->DisplaySize to setup projection matrix and clipping rectangle.
+//  2018-05-07: Render: Saving/restoring Transform because they don't seem to be included in the StateBlock. Setting shading mode to Gouraud.
+//  2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback and exposed ImGui_ImplDX9_RenderDrawData() in the .h file so you can call it yourself.
+//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
+    
+    #include 'DHTNode.h'
+#include 'DHTBucket.h'
+#include 'DHTBucketTree.h'
+#include 'DHTTaskQueue.h'
+#include 'DHTTaskFactory.h'
+#include 'DHTTask.h'
+#include 'util.h'
+#include 'LogFactory.h'
+#include 'Logger.h'
+#include 'fmt.h'
+    
+    #include <vector>
+#include <string>
+#include <memory>
+    
+    #endif // D_DHT_TASK_H
+
+    
+    #include <algorithm>
+    
+      void addTask(const std::shared_ptr<DHTTask>& task) { queue_.push_back(task); }
+    
+    class DHTTaskFactoryImpl : public DHTTaskFactory {
+private:
+  std::shared_ptr<DHTNode> localNode_;
+    }
+    
+      virtual ~DHTTaskQueueImpl();
+    
+      std::string generateToken(const unsigned char* infoHash,
+                            const std::string& ipaddr, uint16_t port,
+                            const unsigned char* secret) const;
+    
+      // returns 'unknown'
+  virtual const std::string& getMessageType() const CXX11_OVERRIDE;
+    
+      template <typename OutputIterator>
+  void findAll(OutputIterator out, const std::string& hostname,
+               uint16_t port) const
   {
-    Object tmp;
-    Dict *dict = streamObj->getStream()->getDict();
-    dict->lookup('F', &tmp);
-    if (!tmp.isNull()) {
-      Object obj1;
-      // valid 'F' key -> external file
-      kind = soundExternal;
-      if (getFileSpecNameForPlatform (&tmp, &obj1)) {
-        fileName = obj1.getString()->copy();
-        obj1.free();
-      }
-    } else {
-      // no file specification, then the sound data have to be
-      // extracted from the stream
-      kind = soundEmbedded;
+    auto target = std::make_shared<CacheEntry>(hostname, port);
+    auto i = entries_.find(target);
+    if (i != entries_.end()) {
+      (*i)->getAllGoodAddrs(out);
     }
-    tmp.free();
-    // sampling rate
-    dict->lookup('R', &tmp);
-    if (tmp.isNum()) {
-      samplingRate = tmp.getNum();
-    }
-    tmp.free();
-    // sound channels
-    dict->lookup('C', &tmp);
-    if (tmp.isInt()) {
-      channels = tmp.getInt();
-    }
-    tmp.free();
-    // bits per sample
-    dict->lookup('B', &tmp);
-    if (tmp.isInt()) {
-      bitsPerSample = tmp.getInt();
-    }
-    tmp.free();
-    // encoding format
-    dict->lookup('E', &tmp);
-    if (tmp.isName())
-    {
-      const char *enc = tmp.getName();
-      if (strcmp('Raw', enc) == 0) {
-        encoding = soundRaw;
-      } else if (strcmp('Signed', enc) == 0) {
-        encoding = soundSigned;
-      } else if (strcmp('muLaw', enc) == 0) {
-        encoding = soundMuLaw;
-      } else if (strcmp('ALaw', enc) == 0) {
-        encoding = soundALaw;
-      }
-    }
-    tmp.free();
   }
-}
+    
+    template <class ConfigRecordType, typename ElemType>
+bool TryGetNetworkFactory(const ConfigRecordType& config, function<ComputationNetworkPtr(DEVICEID_TYPE)>& createNetworkFn)
+{
+    DEVICEID_TYPE deviceId = DeviceFromConfig(config);
+    }
+    
+    // Note: while ComputationNode and CompuationNetwork are (supposed to be) independent of ElemType, it is OK to keep this class dependent.
+template <class ElemType>
+ComputationNetworkPtr SimpleNetworkBuilder<ElemType>::BuildRNNFromDescription()
+{
+    ComputationNetworkBuilder<ElemType> builder(*m_net);
+    if (m_net->GetTotalNumberOfNodes() < 1) // not built yet
+    {
+        unsigned long randomSeed = 1;
+    }
+    }
+    
+        stringargvector m_nonLinearFunctions;
+    
+    int wmain(int argc, wchar_t* argv[]) // wmain wrapper that reports Win32 exceptions
+{
+    set_terminate(TerminateThis);    // insert a termination handler to ensure stderr gets flushed before actually terminating
+    }
+    
+    #include 'Basics.h'
+#include 'ComputationNode.h'
+#include 'ComputationNetwork.h'
+#include 'TrainingNodes.h'      // for NCEEvalMode
+#include 'ConvolutionalNodes.h' // for PoolKind
+#include 'ScriptableObjects.h'
+#include 'TensorShape.h'
+#include <string>
+    
+        public:
+        BasicModelAveragingSGD(const MPIWrapperPtr& pMPI, size_t reportFreq, DEVICEID_TYPE devID)
+            : Base(pMPI, reportFreq, devID)
+        {
+            fprintf(stderr, 'Parallel training (%d workers) using ModelAveraging\n',(int)m_pMPI->NumNodesInUse());
+        }
+    
+    template std::shared_ptr<IDistGradAggregator<float>> GetSimpleDistGradAggregator<float>(
+    const MPIWrapperPtr& mpi,
+    bool useAsyncAggregation,
+    int deviceId,
+    int syncStatsTrace,
+    size_t packThresholdSizeInBytes,
+    bool useFP16AllReduce);
+    
+        // Do the same via ValueRefs
+    ValueRefs<float> inputRefs(1);
+    inputRefs[0].m_buffer.InitFrom(inputBuffer[0].m_buffer);
+    inputRefs[0].m_colIndices.InitFrom(inputBuffer[0].m_colIndices);
+    inputRefs[0].m_indices.InitFrom(inputBuffer[0].m_indices);
+    ValueRefs<float> outputRefs(1);
+    std::vector<float> output(1);
+    outputRefs[0].m_buffer.InitFrom(output);
+    eval->ForwardPass(inputRefs, outputRefs);
+    BOOST_CHECK_EQUAL_COLLECTIONS(output.begin(), output.end(), expected.begin(), expected.end());
+    
+            /**
+         * Add your information about what your class does and their inputs/outputs.
+         * @param output is the modified cv::Mat.
+         * @param input is the input cv::Mat.
+         * @return If it is not void, add returning information here.
+         */
+        void doSomething(cv::Mat& output, const cv::Mat& input);
+    
+            Point<T> operator*(const T value) const;
+    
+    namespace op
+{
+    template<typename T>
+    struct Rectangle
+    {
+        T x;
+        T y;
+        T width;
+        T height;
+    }
+    }
+    
+        /*!
+     * Create a device command queue for a specified device in the passed context.
+     */
+    DeviceCommandQueue(
+        const Context& context,
+        const Device& device,
+        DeviceQueueProperties properties = DeviceQueueProperties::None,
+        cl_int* err = NULL)
+    {
+        cl_int error;
+    }
+    
+        template<typename T>
+    Rectangle<T> Rectangle<T>::operator/(const T value) const
+    {
+        try
+        {
+            return Rectangle<T>{T(x / value), T(y / value), T(width / value), T(height / value)};
+        }
+        catch (const std::exception& e)
+        {
+            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
+            return Rectangle<T>{};
+        }
+    }
