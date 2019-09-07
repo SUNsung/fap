@@ -1,144 +1,141 @@
 
         
-              private def_delegator :@obj, :config, :fallback_data
+            def download_url(upload)
+      not_implemented
+    end
     
-      Jekyll::External.require_if_present(Jekyll::External.blessed_gems) do |g, ver_constraint|
-    cmd = g.split('-').last
-    p.command(cmd.to_sym) do |c|
-      c.syntax cmd
-      c.action do
-        Jekyll.logger.abort_with 'You must install the '#{g}' gem' \
-          ' version #{ver_constraint} to use the 'jekyll #{cmd}' command.'
-      end
+        it 'should work with trailing slash url' do
+      Discourse::Utils.expects(:execute_command).with('git', 'clone', url, @temp_folder)
+    
+          result
     end
   end
     
-            @filters << filter
-      end
+        def file_regex
+      @file_regex ||= begin
+        path = @s3_helper.s3_bucket_folder_path || ''
     
-            def diff_stats_collection
-          strong_memoize(:diff_stats) do
-            # There are scenarios where we don't need to request Diff Stats,
-            # when caching for instance.
-            next unless @include_stats
-            next unless diff_refs
+      context 'S3 specific behavior' do
+    before { create_backups }
+    after(:all) { remove_backups }
     
-      it 'calls Gitlab::Diff::File#unfold_diff_lines with correct position' do
-    position = instance_double(Gitlab::Diff::Position, file_path: 'README')
-    readme_file = instance_double(Gitlab::Diff::File, file_path: 'README')
-    other_file = instance_double(Gitlab::Diff::File, file_path: 'foo.rb')
-    nil_path_file = instance_double(Gitlab::Diff::File, file_path: nil)
+    require_dependency 'reviewable_score_type_serializer'
     
-      config.logger = Logger.new($stdout)
-  Rails.logger  = config.logger
-    
-          # Sign out all active users or scopes. This helper is useful for signing out all roles
-      # in one click. This signs out ALL scopes in warden. Returns true if there was at least one logout
-      # and false if there was no user logged in on all scopes.
-      def sign_out_all_scopes(lock=true)
-        users = Devise.mappings.keys.map { |s| warden.user(scope: s, run_callbacks: false) }
-    
-          def mailer_from(mapping)
-        mailer_sender(mapping, :from)
-      end
-    
-        register_options(
-      [
-        Opt::LPORT(4444),
-        OptAddress.new('RHOST', [false, 'The target address', '']),
-      ], Msf::Handler::BindUdp)
-    
-        # Some of the shenanigans above could have appended a dot, which will
-    # cause a syntax error.  Remove any trailing dots.
-    b64.chomp!('.')
-    
-    require 'msf/core/handler/bind_tcp'
-require 'msf/core/payload/windows/x64/bind_tcp_rc4'
-    
-      def initialize(info = {})
-    super(update_info(info,
-      'Name'        => 'Gather PDF Authors',
-      'Description' => %q{
-        This module downloads PDF documents and extracts the author's
-        name from the document metadata.
-    }
-    
-      def validate(data_service)
-    raise 'Invalid data_service: #{data_service.class}, not of type Metasploit::Framework::DataService' unless data_service.is_a? (Metasploit::Framework::DataService)
-    raise 'Cannot register null data service data_service' unless data_service
-    raise 'Data Service already exists' if data_service_exist?(data_service)
-    # Raising an error for local DB causes startup to fail if there is a DB configured but we are unable to connect
-    # TODO: The check here shouldn't be dependent on if the data_service is local or not. We shouldn't
-    # connect to any data service if it is not online/active. This can likely be fixed by making a true
-    # LocalDataService instead of using DBManager.
-    unless data_service.is_local?
-      raise 'Data Service does not appear to be responding' unless data_service.active
+      def process_message(message)
+    begin
+      @last_message_processed = message.global_id
+      MessageBus.on_connect.call(message.site_id)
+      refresh!
+    ensure
+      MessageBus.on_disconnect.call(message.site_id)
     end
   end
     
-        path = datastore['PATH'] || session.sys.config.getenv('USERPROFILE')
-    path.chomp!('\\')
+        context 'similar activity' do
+      let!(:hottest_topic1) { Fabricate(:topic, views: 3530, posts_count: 100, like_count: 201) }
+      let!(:hottest_topic2) { Fabricate(:topic, views: 3530, posts_count: 100, like_count: 201) }
+      let!(:warm_topic1) { Fabricate(:topic, views: 2020, posts_count: 100, like_count: 99) }
+      let!(:warm_topic2) { Fabricate(:topic, views: 2020, posts_count: 100, like_count: 99) }
+      let!(:warm_topic3) { Fabricate(:topic, views: 2020, posts_count: 100, like_count: 99) }
+      let!(:lukewarm_topic1) { Fabricate(:topic, views: 1010, posts_count: 100, like_count: 51) }
+      let!(:lukewarm_topic2) { Fabricate(:topic, views: 1010, posts_count: 100, like_count: 51) }
+      let!(:lukewarm_topic3) { Fabricate(:topic, views: 1010, posts_count: 100, like_count: 51) }
+      let!(:lukewarm_topic4) { Fabricate(:topic, views: 1010, posts_count: 100, like_count: 51) }
+      let!(:cold_topic) { Fabricate(:topic, views: 100, posts_count: 100, like_count: 1) }
     
-            def send_missing_closing_parens?(parent, child, heredoc)
-          parent&.call_type? &&
-            parent.arguments.include?(child) &&
-            parent.loc.begin &&
-            parent.loc.end.line != heredoc.last_line
+        it 'an invalid rebuild statement' do
+      expect_offense(<<~RUBY)
+        class Foo < Formula
+          desc 'foo'
+          url 'https://brew.sh/foo-1.0.tgz'
+          bottle do
+            rebuild 0
+            ^^^^^^^^^ 'rebuild 0' should be removed
+            sha256 'fe0679b932dd43a87fd415b609a7fbac7a069d117642ae8ebaac46ae1fb9f0b3' => :sierra
+          end
         end
-    
-          it_behaves_like 'nonmatching'
+      RUBY
     end
     
-        context 'inside a class' do
-      it 'registers an offense when a modifier is ouside the block and a ' \
-        'method is defined only inside the block' do
-        src = <<~RUBY
-          class A
-            #{modifier}
-            A.class_eval do
-              def method1
-              end
-            end
-          end
-        RUBY
-        inspect_source(src)
-        expect(cop.offenses.size).to eq(1)
+    class Bottle
+  class Filename
+    attr_reader :name, :version, :tag, :rebuild
+    
+            uses_from_macos('foo', after: :mojave)
       end
     
-                corrector.insert_after(node_range, '\n')
-          end
-        end
+          def detect_version
+        version = nil
+        [EXECUTABLE_PKG_ID, MAVERICKS_NEW_PKG_ID].each do |id|
+          next unless File.exist?('#{PKG_PATH}/usr/bin/clang')
     
-          def product_scope
-        if @current_user_roles.include?('admin')
-          scope = Product.with_deleted.accessible_by(current_ability, :show).includes(*product_includes)
+      it 'properly handles Casks that are not present' do
+    expect {
+      described_class.run('notacask')
+    }.to raise_error(Cask::CaskUnavailableError)
+  end
+end
+
     
-              unless inventory_unit.respond_to?(can_event) &&
-              inventory_unit.send(can_event)
-            render plain: { exception: 'cannot transition to #{@event}' }.to_json,
-                   status: 200
-            false
-          end
-        end
+      def test_symlink_exists(path)
+    exists?('L', path)
+  end
     
-            def ready
-          unless @shipment.ready?
-            if @shipment.can_ready?
-              @shipment.ready!
-            else
-              render 'spree/api/v1/shipments/cannot_ready_shipment', status: 422 and return
-            end
-          end
-          respond_with(@shipment, default_template: :show)
-        end
+        def dry_run
+      ['--dry-run', '-n',
+       'Do a dry run without executing actions',
+       lambda do |_value|
+         Configuration.env.set(:sshkit_backend, SSHKit::Backend::Printer)
+       end]
+    end
     
-            def show
-          @stock_item = scope.find(params[:id])
-          respond_with(@stock_item)
-        end
+        def setup_filters
+      @filters = cmdline_filters
+      @filters += @custom_filters if @custom_filters
+      @filters << Filter.new(:role, ENV['ROLES']) if ENV['ROLES']
+      @filters << Filter.new(:host, ENV['HOSTS']) if ENV['HOSTS']
+      fh = fetch_for(:filter, {}) || {}
+      @filters << Filter.new(:host, fh[:hosts]) if fh[:hosts]
+      @filters << Filter.new(:role, fh[:roles]) if fh[:roles]
+      @filters << Filter.new(:host, fh[:host]) if fh[:host]
+      @filters << Filter.new(:role, fh[:role]) if fh[:role]
+    end
     
-            private
+          def self.[](host)
+        host.is_a?(Server) ? host : new(host)
+      end
     
-                def index
-              render_serialized_payload { serialize_collection(resource) }
-            end
+        def URIEncodeOctets(octets, result, index)
+      if (@@hexCharCodeArray == 0)
+        @@hexCharCodeArray = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57,
+                              65, 66, 67, 68, 69, 70];
+      end
+      index = URIAddEncodedOctetToBuffer(octets[0], result, index);
+      if (octets[1]);
+        index = URIAddEncodedOctetToBuffer(octets[1], result, index)
+      end
+      if (octets[2]);
+        index = URIAddEncodedOctetToBuffer(octets[2], result, index)
+      end
+      if (octets[3]);
+        index = URIAddEncodedOctetToBuffer(octets[3], result, index)
+      end
+      return index;
+    end
+    
+          def editable
+        @editable
+      end
+    
+        # Test page_header_from_content(@content)
+    actual = @view.title
+    assert_equal '1 & 2', actual
+  end
+    
+        @wiki.update_page(@wiki.page('PG'), nil, nil, '다른 text', {})
+    page = @wiki.page('PG')
+    assert_equal '다른 text', utf8(page.raw_data)
+    
+    # Set ruby to UTF-8 mode
+# This is required for Ruby 1.8.7 which gollum still supports.
+$KCODE = 'U' if RUBY_VERSION[0, 3] == '1.8'
