@@ -1,255 +1,324 @@
 
         
-          base::WeakPtrFactory<BrowserWindow> weak_factory_;
-    
-    namespace net {
-class URLRequestContextGetter;
+        
+    {
+    {    if (bridgedStoredNSError) {
+      auto subConformance = SwiftModule->lookupConformance(
+          t, bridgedStoredNSError);
+      if (subConformance)
+        useConformance(*subConformance);
+    }
+  });
 }
     
-    #if defined(OS_WIN)
-#include 'third_party/webrtc/modules/desktop_capture/win/dxgi_duplicator_controller.h'
-#include 'third_party/webrtc/modules/desktop_capture/win/screen_capturer_win_directx.h'
-#include 'ui/display/win/display_info.h'
-#endif  // defined(OS_WIN)
+      if (!CHA)
+    return false;
     
-    #endif  // SHELL_BROWSER_API_ATOM_API_DESKTOP_CAPTURER_H_
-
+        if (auto superclass = exis->getSuperclassConstraint()) {
+      // If there is a superclass constraint, we mangle it specially.
+      auto result = Dem.createNode(Node::Kind::ProtocolListWithClass);
+      auto superclassNode = _swift_buildDemanglingForMetadata(superclass, Dem);
+    }
     
-    class Net : public mate::EventEmitter<Net> {
+        // Functions that may be used externally cannot be removed.
+    if (F->isPossiblyUsedExternally())
+      return true;
+    
+    LLVM_ATTRIBUTE_NOINLINE SWIFT_RUNTIME_EXPORT
+void _swift_runtime_on_report(uintptr_t flags, const char *message,
+                              RuntimeErrorDetails *details) {
+  // Do nothing. This function is meant to be used by the debugger.
+    }
+    
+    KNOWN_STDLIB_TYPE_DECL(_MaxBuiltinFloatType, TypeAliasDecl, 0)
+    
+    #if defined(_WIN32)
+#define WIN32_LEAN_AND_MEAN
+// Avoid defining macro max(), min() which conflict with std::max(), std::min()
+#define NOMINMAX
+#include <windows.h>
+#else
+#if !defined(__HAIKU__)
+#include <sys/errno.h>
+#else
+#include <errno.h>
+#endif
+#include <sys/resource.h>
+#include <unistd.h>
+#endif
+#include <climits>
+#include <clocale>
+#include <cstdarg>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#if defined(__CYGWIN__) || defined(_WIN32) || defined(__HAIKU__)
+#include <sstream>
+#include <cmath>
+#elif defined(__ANDROID__)
+#include <locale.h>
+    
+    /// The number of arguments that will be passed directly to a generic
+/// nominal type access function. The remaining arguments (if any) will be
+/// passed as an array. That array has enough storage for all of the arguments,
+/// but only fills in the elements not passed directly. The callee may
+/// mutate the array to fill in the direct arguments.
+constexpr unsigned NumDirectGenericTypeMetadataAccessFunctionArgs = 3;
+    
+      /// Attempt to collect information from the given info chunk.
+  ///
+  /// \return true if collection was successful.
+  template <bool Asserting>
+  bool collect(StringRef value) {
+#define check(CONDITION, COMMENT)            \
+    do {                                     \
+      if (!Asserting) {                      \
+        if (!(CONDITION)) return false;      \
+      } else {                               \
+        assert((CONDITION) && COMMENT);      \
+      }                                      \
+    } while (false)
+    }
+    
+      // Returns the number of sample points that have an error more than threshold.
+  int NumberOfMisfittedPoints(double threshold) const;
+    
+    #include <cstdint>      // for int32_t
+#include 'points.h'     // for FCOORD
+    
+    using tesseract::JUSTIFICATION_LEFT;
+using tesseract::JUSTIFICATION_RIGHT;
+using tesseract::JUSTIFICATION_CENTER;
+using tesseract::JUSTIFICATION_UNKNOWN;
+    
+      // Functions to navigate the tree. Unlike the original implementation, we
+  // store the root at index 0.
+  int ParentNode(int index) const {
+    return (index + 1) / 2 - 1;
+  }
+  int LeftChild(int index) const {
+    return index * 2 + 1;
+  }
+    
+    class QRSequenceGenerator {
  public:
-  static v8::Local<v8::Value> Create(v8::Isolate* isolate);
+  // Object is initialized with the size of the output range.
+  explicit QRSequenceGenerator(int N) : N_(N), next_num_(0) {
+    num_bits_ = static_cast<int>(ceil(log(static_cast<double>(N)) / log(2.0)));
+  }
     }
     
-    void Notification::Close() {
-  if (notification_) {
-    notification_->Dismiss();
-    notification_.reset();
-  }
-}
-    
-      void Show();
-  void Close();
-    
-    /* Coin network-specific GUI style information */
-class NetworkStyle
-{
-public:
-    /** Get style associated with provided BIP70 network id, or 0 if not known */
-    static const NetworkStyle *instantiate(const QString &networkId);
-    }
-    
-    ROTATE_ARGS
-	movdqa	XTMP3, XTMP2	; XTMP3 = W[-2] {BBAA}
-    mov	y0, e		; y0 = e
-    mov	y1, a		; y1 = a
-    ror	y0, (25-11)	; y0 = e >> (25-11)
-	movdqa	XTMP4, XTMP2	; XTMP4 = W[-2] {BBAA}
-    xor	y0, e		; y0 = e ^ (e >> (25-11))
-    ror	y1, (22-13)	; y1 = a >> (22-13)
-    mov	y2, f		; y2 = f
-    xor	y1, a		; y1 = a ^ (a >> (22-13)
-    ror	y0, (11-6)	; y0 = (e >> (11-6)) ^ (e >> (25-6))
-	psrlq	XTMP2, 17	; XTMP2 = W[-2] ror 17 {xBxA}
-    xor	y2, g		; y2 = f^g
-	psrlq	XTMP3, 19	; XTMP3 = W[-2] ror 19 {xBxA}
-    xor	y0, e		; y0 = e ^ (e >> (11-6)) ^ (e >> (25-6))
-    and	y2, e		; y2 = (f^g)&e
-	psrld	XTMP4, 10	; XTMP4 = W[-2] >> 10 {BBAA}
-    ror	y1, (13-2)	; y1 = (a >> (13-2)) ^ (a >> (22-2))
-    xor	y1, a		; y1 = a ^ (a >> (13-2)) ^ (a >> (22-2))
-    xor	y2, g		; y2 = CH = ((f^g)&e)^g
-    ror	y0, 6		; y0 = S1 = (e>>6) & (e>>11) ^ (e>>25)
-	pxor	XTMP2, XTMP3
-    add	y2, y0		; y2 = S1 + CH
-    ror	y1, 2		; y1 = S0 = (a>>2) ^ (a>>13) ^ (a>>22)
-    add	y2, [rsp + _XFER + 2*4]	; y2 = k + w + S1 + CH
-	pxor	XTMP4, XTMP2	; XTMP4 = s1 {xBxA}
-    mov	y0, a		; y0 = a
-    add	h, y2		; h = h + S1 + CH + k + w
-    mov	y2, a		; y2 = a
-	pshufb	XTMP4, SHUF_00BA	; XTMP4 = s1 {00BA}
-    or	y0, c		; y0 = a|c
-    add	d, h		; d = d + h + S1 + CH + k + w
-    and	y2, c		; y2 = a&c
-	paddd	XTMP0, XTMP4	; XTMP0 = {..., ..., W[1], W[0]}
-    and	y0, b		; y0 = (a|c)&b
-    add	h, y1		; h = h + S1 + CH + k + w + S0
-	;; compute high s1
-	pshufd	XTMP2, XTMP0, 01010000b	; XTMP2 = W[-2] {DDCC}
-    or	y0, y2		; y0 = MAJ = (a|c)&b)|(a&c)
-    add	h, y0		; h = h + S1 + CH + k + w + S0 + MAJ
-    
-    void InternalFilterPolicy::CreateFilter(const Slice* keys, int n,
-                                        std::string* dst) const {
-  // We rely on the fact that the code in table.cc does not mind us
-  // adjusting keys[].
-  Slice* mkey = const_cast<Slice*>(keys);
-  for (int i = 0; i < n; i++) {
-    mkey[i] = ExtractUserKey(keys[i]);
-    // TODO(sanjay): Suppress dups?
-  }
-  user_policy_->CreateFilter(keys, n, dst);
-}
-    
-    static std::string Shorten(const std::string& s, const std::string& l) {
-  std::string result = s;
-  InternalKeyComparator(BytewiseComparator()).FindShortestSeparator(&result, l);
-  return result;
-}
+    // Returns a vector representing the direction of a feature with the given
+// theta direction in an INT_FEATURE_STRUCT.
+FCOORD FeatureDirection(uint8_t theta);
     
     
-// Called on every log record (each one of which is a WriteBatch)
-// found in a kLogFile.
-static void WriteBatchPrinter(uint64_t pos, Slice record, WritableFile* dst) {
-  std::string r = '--- offset ';
-  AppendNumberTo(&r, pos);
-  r += '; ';
-  if (record.size() < 12) {
-    r += 'log record length ';
-    AppendNumberTo(&r, record.size());
-    r += ' is too small\n';
-    dst->Append(r);
-    return;
-  }
-  WriteBatch batch;
-  WriteBatchInternal::SetContents(&batch, record);
-  r += 'sequence ';
-  AppendNumberTo(&r, WriteBatchInternal::Sequence(&batch));
-  r.push_back('\n');
-  dst->Append(r);
-  WriteBatchItemPrinter batch_item_printer;
-  batch_item_printer.dst_ = dst;
-  Status s = batch.Iterate(&batch_item_printer);
-  if (!s.ok()) {
-    dst->Append('  error: ' + s.ToString() + '\n');
-  }
-}
-    
-      void PartialCompactTestReopenWithFault(ResetMethod reset_method,
-                                         int num_pre_sync,
-                                         int num_post_sync) {
-    env_->SetFilesystemActive(false);
-    CloseDB();
-    ResetDBState(reset_method);
-    ASSERT_OK(OpenDB());
-    ASSERT_OK(Verify(0, num_pre_sync, FaultInjectionTest::VAL_EXPECT_NO_ERROR));
-    ASSERT_OK(Verify(num_pre_sync, num_post_sync, FaultInjectionTest::VAL_EXPECT_ERROR));
-  }
-    
-    grpc::string ChannelArguments::GetSslTargetNameOverride() const {
-  for (unsigned int i = 0; i < args_.size(); i++) {
-    if (grpc::string(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG) == args_[i].key) {
-      return args_[i].value.string;
-    }
-  }
-  return '';
-}
-    
-    static void async_connect_unlock_and_cleanup(async_connect* ac,
-                                             grpc_winsocket* socket) {
-  int done = (--ac->refs == 0);
-  gpr_mu_unlock(&ac->mu);
-  if (done) {
-    grpc_channel_args_destroy(ac->channel_args);
-    gpr_mu_destroy(&ac->mu);
-    gpr_free(ac->addr_name);
-    gpr_free(ac);
-  }
-  if (socket != NULL) grpc_winsocket_destroy(socket);
-}
-    
-    GPR_GLOBAL_CONFIG_DEFINE_BOOL(bool_var, false, '');
-GPR_GLOBAL_CONFIG_DEFINE_INT32(int32_var, 0, '');
-GPR_GLOBAL_CONFIG_DEFINE_STRING(string_var, '', '');
-    
-    static inline std::shared_ptr<::grpc::Channel>
-CreateCustomChannelWithInterceptors(
-    const grpc::string& target,
-    const std::shared_ptr<ChannelCredentials>& creds,
-    const ChannelArguments& args,
-    std::vector<
-        std::unique_ptr<experimental::ClientInterceptorFactoryInterface>>
-        interceptor_creators) {
-  return ::grpc_impl::experimental::CreateCustomChannelWithInterceptors(
-      target, creds, args, std::move(interceptor_creators));
-}
-    
-    // Possibly using buf to store characters, returns a pointer to a strerror-style error string.  This
-// has the same contract as the GNU (char *)-returning strerror_r.  The return value is a pointer to
-// a nul-terminated string, either equal to buf or pointing at a statically allocated string.
-MUST_USE const char *errno_string_maybe_using_buffer(int errsv, char *buf, size_t buflen);
-    
-    #include 'btree/node.hpp'
-#include 'btree/parallel_traversal.hpp'
-#include 'btree/secondary_operations.hpp'
-#include 'buffer_cache/types.hpp'
-#include 'concurrency/auto_drainer.hpp'
-#include 'concurrency/queue/disk_backed_queue_wrapper.hpp'
-#include 'concurrency/new_mutex.hpp'
-#include 'concurrency/new_semaphore.hpp'
-#include 'concurrency/rwlock.hpp'
-#include 'containers/map_sentries.hpp'
-#include 'containers/optional.hpp'
-#include 'containers/scoped.hpp'
-#include 'perfmon/perfmon.hpp'
-#include 'paths.hpp'
-#include 'protocol_api.hpp'
-#include 'rdb_protocol/changefeed.hpp'
-#include 'rdb_protocol/protocol.hpp'
-#include 'rdb_protocol/store_metainfo.hpp'
-#include 'rpc/mailbox/typed.hpp'
-#include 'store_view.hpp'
-#include 'utils.hpp'
-    
-      // Gets the line in the source file where the test part took place,
-  // or -1 if it's unknown.
-  int line_number() const { return line_number_; }
-    
-      // Name of the test case.
-  std::string name_;
-  // Name of the parameter type, or NULL if this is not a typed or a
-  // type-parameterized test.
-  const internal::scoped_ptr<const ::std::string> type_param_;
-  // The vector of TestInfos in their original order.  It owns the
-  // elements in the vector.
-  std::vector<TestInfo*> test_info_list_;
-  // Provides a level of indirection for the test list to allow easy
-  // shuffling and restoring the test order.  The i-th element in this
-  // vector is the index of the i-th test in the shuffled test list.
-  std::vector<int> test_indices_;
-  // Pointer to the function that sets up the test case.
-  Test::SetUpTestCaseFunc set_up_tc_;
-  // Pointer to the function that tears down the test case.
-  Test::TearDownTestCaseFunc tear_down_tc_;
-  // True iff any test in this test case should run.
-  bool should_run_;
-  // Elapsed time, in milliseconds.
-  TimeInMillis elapsed_time_;
-  // Holds test properties recorded during execution of SetUpTestCase and
-  // TearDownTestCase.
-  TestResult ad_hoc_test_result_;
+  // Displays classification as the given unichar_id. Creates as many windows
+  // as it feels fit, using index as a guide for placement. Adds any created
+  // windows to the windows output and returns a new index that may be used
+  // by any subsequent classifiers. Caller waits for the user to view and
+  // then destroys the windows by clearing the vector.
+  virtual int DisplayClassifyAs(const TrainingSample& sample,  Pix* page_pix,
+                                UNICHAR_ID unichar_id, int index,
+                                PointerVector<ScrollView>* windows);
     
     
     { private:
-  GTEST_DISALLOW_COPY_AND_ASSIGN_(ScopedTrace);
-} GTEST_ATTRIBUTE_UNUSED_;  // A ScopedTrace object does its job in its
-                            // c'tor and d'tor.  Therefore it doesn't
-                            // need to be used otherwise.
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36, typename T37, typename T38, typename T39, typename T40,
-    typename T41, typename T42, typename T43, typename T44, typename T45,
-    typename T46>
-struct Types46 {
-  typedef T1 Head;
-  typedef Types45<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
-      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
-      T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43,
-      T44, T45, T46> Tail;
+  ObjectCache<Dawg> dawgs_;
 };
+    
+      test_function<testfunc>(l, [](testfunc f) {
+    union { xmmType x; struct { uint64_t t; uint64_t v; }; } a0, a1, r;
+    }
+    
+    
+    {private:
+  int rn;
+};
+    
+    
+    {  if (m_data->m_buffer != nullptr && m_data->m_chunkSize > m_data->m_bufferSize) {
+    m_data->m_buffer = (char *)realloc(m_data->m_buffer, m_data->m_chunkSize);
+    m_data->m_bufferSize = m_data->m_chunkSize;
+  }
+}
+    
+    bool MemFile::open(const String& filename, const String& mode) {
+  assertx(m_len == -1);
+  // mem files are read-only
+  const char* mode_str = mode.c_str();
+  if (strchr(mode_str, '+') || strchr(mode_str, 'a') || strchr(mode_str, 'w')) {
+    return false;
+  }
+  int len = INT_MIN;
+  bool compressed = false;
+  char *data =
+    StaticContentCache::TheFileCache->read(filename.c_str(), len, compressed);
+  // -1: PHP file; -2: directory
+  if (len != INT_MIN && len != -1 && len != -2) {
+    assertx(len >= 0);
+    if (compressed) {
+      assertx(RuntimeOption::EnableOnDemandUncompress);
+      data = gzdecode(data, len);
+      if (data == nullptr) {
+        raise_fatal_error('cannot unzip compressed data');
+      }
+      m_data = data;
+      m_malloced = true;
+      m_len = len;
+      return true;
+    }
+    setName(filename.toCppString());
+    m_data = data;
+    m_len = len;
+    return true;
+  }
+  if (len != INT_MIN) {
+    Logger::Error('Cannot open a PHP file or a directory as MemFile: %s',
+                  filename.c_str());
+  }
+  return false;
+}
+    
+    bool OutputFile::flush() {
+  if (!isClosed()) {
+    g_context->flush();
+    return true;
+  }
+  return false;
+}
+    
+    
+    {
+    {///////////////////////////////////////////////////////////////////////////////
+}}
+    
+    
+    {  uint64_t hash() const {
+    // All the bits here are fantastically good.
+    return (uint64_t(q[0]) << 32) + q[1];
+  }
+};
+    
+    
+    {    std::cout << null << '\n';
+    std::cout << *res2.first << ' ' << std::boolalpha << res2.second << '\n';
+}
+
+    
+    using ServiceNameMap = std::unordered_map<std::string, std::string>;
+    
+    void processLocalGroups(QueryData& results) {
+  unsigned long groupInfoLevel = 1;
+  unsigned long numGroupsRead = 0;
+  unsigned long totalGroups = 0;
+  unsigned long resumeHandle = 0;
+  unsigned long ret = 0;
+  LOCALGROUP_INFO_1* lginfo = nullptr;
+    }
+    
+    #include <set>
+#include <string>
+    
+      /**
+   * @brief List of blacklisted queries.
+   *
+   * A list of queries that are blacklisted from executing due to prior
+   * failures. If a query caused a worker to fail it will be recorded during
+   * the next execution and saved to the blacklist.
+   */
+  std::map<std::string, size_t> blacklist_;
+    
+    void Pack::initialize(const std::string& name,
+                      const std::string& source,
+                      const rj::Value& obj) {
+  name_ = name;
+  source_ = source;
+  // Check the shard limitation, shards falling below this value are included.
+  if (obj.HasMember('shard')) {
+    shard_ = JSON::valueToSize(obj['shard']);
+  }
+    }
+    
+    TEST_F(PacksTests, test_get_discovery_queries) {
+  std::vector<std::string> expected;
+    }
+    
+      virtual Expected<int32_t, DatabaseError> getInt32(const std::string& domain,
+                                                    const std::string& key);
+  virtual Expected<std::string, DatabaseError> getString(
+      const std::string& domain, const std::string& key) = 0;
+    
+        swHashMap_del(hm, (char *) SW_STRL('willdel'));
+    swHashMap_update(hm, (char *) SW_STRL('willupadte'), (void *) (9999 * 5555));
+    
+        friend
+    void RedisQtDelWrite(void * adapter) {
+        RedisQtAdapter * a = static_cast<RedisQtAdapter *>(adapter);
+        a->delWrite();
+    }
+    
+    public:
+    explicit LRUCache(size_t capacity)
+    {
+        cache_capacity = capacity;
+    }
+    
+        for (i = 1; i < 1024; i++)
+    {
+        uint32_t key = (rand() % (20000 * 37));
+        if (key % 37 == 0)
+        {
+            continue;
+        }
+        int ret = (int) (long) swRbtree_find(tree, key);
+        ASSERT_EQ(ret, 0);
+    }
+    
+            while (prev)
+        {
+            zend_uchar *type;
+    }
+    
+    /** hazptr_retire */
+template <template <typename> class Atom, typename T, typename D>
+FOLLY_ALWAYS_INLINE void hazptr_retire(T* obj, D reclaim) {
+  default_hazptr_domain<Atom>().retire(obj, std::move(reclaim));
+}
+    
+      std::thread cobThread;
+  {
+    auto observer =
+        folly::observer::ObserverCreator<Observable, Traits>().getObserver();
+    }
+    
+      for (auto& th : posters) {
+    th = std::thread([&] {
+      barrier.wait();
+      for (auto i = 0ull; i < iters; ++i) {
+        if (i % (iters >> 4) == 0) {
+          std::this_thread::yield();
+        }
+        sem.post();
+      }
+    });
+  }
+  for (auto& th : waiters) {
+    th = std::thread([&] {
+      barrier.wait();
+      for (auto i = 0ull; i < iters; ++i) {
+        sem.wait();
+      }
+    });
+  }
+    
+    void BENCHFUN(sizeCtor)(int iters, int size) {
+  FOR_EACH_RANGE (i, 0, iters) {
+    VECTOR v(size);
+    doNotOptimizeAway(&v);
+  }
+}
+BENCHMARK_PARAM(BENCHFUN(sizeCtor), 16)
+BENCHMARK_PARAM(BENCHFUN(sizeCtor), 128)
+BENCHMARK_PARAM(BENCHFUN(sizeCtor), 1024)
