@@ -1,59 +1,75 @@
 
         
-            test_suite = 'tests',
+        
+def gzip_magic_number(response):
+    return response.body[:3] == b'\x1f\x8b\x08'
+
     
-                    log.println('    platform: {}'.format(platform.platform()))
-                log.println('    python:   {}'.format(sys.version.split('\n')[0]))
+            req = Request('http://example.com/index.html')
+        download_func = mock.MagicMock()
+        dfd = self.mwman.download(download_func, req, self.spider)
+        results = []
+        dfd.addBoth(results.append)
+        self._wait(dfd)
     
-    def baomihua_download_by_id(id, title=None, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html('http://play.baomihua.com/getvideourl.aspx?flvid=%s&devicetype=phone_app' % id)
-    host = r1(r'host=([^&]*)', html)
-    assert host
-    type = r1(r'videofiletype=([^&]*)', html)
-    assert type
-    vid = r1(r'&stream_name=([^&]*)', html)
-    assert vid
-    dir_str = r1(r'&dir=([^&]*)', html).strip()
-    url = 'http://%s/%s/%s.%s' % (host, dir_str, vid, type)
-    _, ext, size = url_info(url)
-    print_info(site_info, title, type, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir, merge = merge)
-    
-        for quality in ['1080','720','480','380','240','144','auto']:
+        def test_walk_modules_egg(self):
+        egg = os.path.join(os.path.dirname(__file__), 'test.egg')
+        sys.path.append(egg)
         try:
-            real_url = info[quality][1]['url']
-            if real_url:
-                break
-        except KeyError:
-            pass
+            mods = walk_modules('testegg')
+            expected = [
+                'testegg.spiders',
+                'testegg.spiders.a',
+                'testegg.spiders.b',
+                'testegg'
+            ]
+            self.assertEqual(set([m.__name__ for m in mods]), set(expected))
+        finally:
+            sys.path.remove(egg)
     
-    # image size suffixes used in inline json 'key' field
-# listed in descending order
-size_suffixes = ['o', 'k', 'h', 'l', 'c', 'z', 'm', 'n', 's', 't', 'q', 'sq']
+    # Items
     
-    References:
-    tensorlayer.layers.Conv2dLayer
-'''
-import tensorflow as tf
+    from scrapy.spiders import Spider
+from scrapy.http import Request, Response
+from scrapy.exceptions import _InvalidOutput
+from scrapy.utils.test import get_crawler
+from scrapy.core.spidermw import SpiderMiddlewareManager
+from tests import mock
+    
+        :param install_root_handler: whether to install root logging handler
+        (default: True)
+    :type install_root_handler: bool
     
     
-def multi_dense(x, n_unit_ls, act_fn=relu, name=None):
-    '''多层全连接
-    Input shape:  [batch_size, n_input]
-    Output shape: [batch_size, n_unit_list[-1]]
+def commit_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
+    ref = 'https://github.com/scrapy/scrapy/commit/' + text
+    set_classes(options)
+    node = nodes.reference(rawtext, 'commit ' + text, refuri=ref, **options)
+    return [node], []
     
-    word_unk = 'aam'
-ngrams = compute_ngrams(word_unk, min_ngrams, max_ngrams)  # min_ngrams, max_ngrams = 2, 4
-word_vec = np.zeros(model.vector_size, dtype=np.float32)
-ngrams_found = 0
-for ngram in ngrams:
-    ngram_hash = ft_hash(ngram) % model.bucket
-    if ngram_hash in model.wv.hash2index:
-        word_vec += model.wv.vectors_ngrams[model.wv.hash2index[ngram_hash]]
-        ngrams_found += 1
+        def syntax(self):
+        '''
+        Command syntax (preferably one-line). Do not include command name.
+        '''
+        return ''
     
-            print('Success: test_merge_sort')
+        def start_requests(self):
+        qargs = {'total': self.total, 'show': self.show}
+        url = '{}?{}'.format(self.baseurl, urlencode(qargs, doseq=1))
+        return [scrapy.Request(url, dont_filter=True)]
     
-            print('Test: Pop on a stack to destroy it')
-        assert_equal(stacks.pop(), 'a')
+    
+site_info = 'Le.com'
+download = letv_download
+download_playlist = playlist_not_supported('letv')
+
+    
+    site = BokeCC()
+    
+    __all__ = ['cntv_download', 'cntv_download_by_id']
+    
+    
+def huomaotv_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    room_id_pattern = r'huomao.com/(\d+)'
+    room_id = match1(url, room_id_pattern)
+    html = get_content(get_mobile_room_url(room_id))
