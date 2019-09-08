@@ -1,139 +1,69 @@
 
         
-            def save(self, fail_silently=False):
-        self['__meta__'] = {
-            'httpie': __version__
-        }
-        if self.helpurl:
-            self['__meta__']['help'] = self.helpurl
+        
+def _to_snake_case(name):
+    intermediate = re.sub('(.)([A-Z][a-z0-9]+)', r'\1_\2', name)
+    insecure = re.sub('([a-z])([A-Z])', r'\1_\2', intermediate).lower()
+    # If the class is private the name starts with '_' which is not secure
+    # for creating scopes. We prefix the name with 'private' in this case.
+    if insecure[0] != '_':
+        return insecure
+    return 'private' + insecure
     
-            # Broken links can't be fixed and
-        # I am not sure what do with the local ones.
-        if errortype.lower() in ['broken', 'local']:
-            print('Not Fixed: ' + line)
-        else:
-            # If this is a new file
-            if newfilename != _filename:
+    '''
     
-        def _print_headers(self, headers, prefix):
-        for key, values in headers.items():
-            for value in values:
-                self._print_bytes(prefix + b' ' + key + b': ' + value)
     
-        @property
-    def templates_dir(self):
-        _templates_base_dir = self.settings['TEMPLATES_DIR'] or \
-            join(scrapy.__path__[0], 'templates')
-        return join(_templates_base_dir, 'spiders')
-
+@pytest.mark.parametrize('data_format', ['channels_first', 'channels_last'])
+@pytest.mark.parametrize('return_sequences', [True, False])
+@pytest.mark.parametrize('use_mask', [True, False])
+def test_convolutional_recurrent(data_format, return_sequences, use_mask):
     
-            if encoding == b'deflate':
-            try:
-                body = zlib.decompress(body)
-            except zlib.error:
-                # ugly hack to work with raw deflate content that may
-                # be sent by microsoft servers. For more information, see:
-                # http://carsten.codimi.de/gzip.yaws/
-                # http://www.port80software.com/200ok/archive/2005/10/31/868.aspx
-                # http://www.gzip.org/zlib/zlib_faq.html#faq38
-                body = zlib.decompress(body, -15)
-        if encoding == b'br' and b'br' in ACCEPTED_ENCODINGS:
-            body = brotli.decompress(body)
-        return body
-
     
-        # Find all the faces and face encodings in the current frame of video
-    face_locations = face_recognition.face_locations(small_frame, model='cnn')
-    
-    for i, face_distance in enumerate(face_distances):
-    print('The test image has a distance of {:.2} from known image #{}'.format(face_distance, i))
-    print('- With a normal cutoff of 0.6, would the test image match the known image? {}'.format(face_distance < 0.6))
-    print('- With a very strict cutoff of 0.5, would the test image match the known image? {}'.format(face_distance < 0.5))
-    print()
-
-    
-        # Load the uploaded image file
-    img = face_recognition.load_image_file(file_stream)
-    # Get face encodings for any faces in the uploaded image
-    unknown_face_encodings = face_recognition.face_encodings(img)
-    
-    # To run this, you need a Raspberry Pi 2 (or greater) with face_recognition and
-# the picamera[array] module installed.
-# You can follow this installation instructions to get your RPi set up:
-# https://gist.github.com/ageitgey/1ac8dbe8572f3f533df6269dab35df65
-    
-            self.assertEqual(result.exit_code, 0)
-        self.assertTrue(target_string in result.output)
-    
-      # You shouldn't have a space before a semicolon at the end of the line.
-  # There's a special case for 'for' since the style guide allows space before
-  # the semicolon there.
-  if Search(r':\s*;\s*$', line):
-    error(filename, linenum, 'whitespace/semicolon', 5,
-          'Semicolon defining empty statement. Use {} instead.')
-  elif Search(r'^\s*;\s*$', line):
-    error(filename, linenum, 'whitespace/semicolon', 5,
-          'Line contains only semicolon. If this should be an empty statement, '
-          'use {} instead.')
-  elif (Search(r'\s+;\s*$', line) and
-        not Search(r'\bfor\b', line)):
-    error(filename, linenum, 'whitespace/semicolon', 5,
-          'Extra space before last semicolon. If this should be an empty '
-          'statement, use {} instead.')
+def set_image_data_format(data_format):
+    '''Sets the value of the data format convention.
     
     import os
-import sys
-import glob
-import re
-import markdown
-import argparse
+import csv
+import six
     
-    def strdecode(sentence):
-    if not isinstance(sentence, text_type):
-        try:
-            sentence = sentence.decode('utf-8')
-        except UnicodeDecodeError:
-            sentence = sentence.decode('gbk', 'ignore')
-    return sentence
+                try:
+                res = self.check_ip.check_ip(ip)
+            except Exception as e:
+                xlog.warn('check except:%r', e)
+                continue
     
+            if self.continue_fail_count > 10:
+            # don't set network_stat to 'unknown', wait for check
+            # network_stat = 'unknown'
+            xlog.debug('report_connect_fail %s continue_fail_count:%d',
+                       self.type, self.continue_fail_count)
+            self.triger_check_network(True)
     
-def ChineseAnalyzer(stoplist=STOP_WORDS, minsize=1, stemfn=stem, cachesize=50000):
-    return (ChineseTokenizer() | LowercaseFilter() |
-            StopFilter(stoplist=stoplist, minsize=minsize) |
-            StemFilter(stemfn=stemfn, ignore=None, cachesize=cachesize))
-
+    ##
+# imaginary tree navigation type; traverse 'get child' link
+DOWN = 2
+##
+#imaginary tree navigation type; finish with a child list
+UP = 3
     
-        def __cut_detail(self, sentence):
-        blocks = re_han_detail.split(sentence)
-        for blk in blocks:
-            if re_han_detail.match(blk):
-                for word in self.__cut(blk):
-                    yield word
-            else:
-                tmp = re_skip_detail.split(blk)
-                for x in tmp:
-                    if x:
-                        if re_num.match(x):
-                            yield pair(x, 'm')
-                        elif re_eng.match(x):
-                            yield pair(x, 'eng')
-                        else:
-                            yield pair(x, 'x')
-    
-    import jieba
-import jieba.analyse
-from optparse import OptionParser
-    
-    if opt.topK is None:
-    topK = 10
-else:
-    topK = int(opt.topK)
+                    # not in range and not EOF/EOT, must be invalid symbol
+                self.noViableAlt(s, input)
+                return 0
     
     
-class JiebaTestCase(unittest.TestCase):
-    def setUp(self):
-        reload(jieba)
+def attention_flow_self(h, u, T=None, J=None, d=None, name=None, reuse=None):
+    '''Attention Flow Self Match Layer
+    Input shape:
+        h: [N, T, d]  # 原文中的 shape 为 [N, T, 2d], 因为经过了 bi-LSTM, 维度扩了一倍
+        u: [N, J, d]
+    Output shape:
+        [N, T, 4d]
     
-    parser = OptionParser(USAGE)
-parser.add_option('-k',dest='topK')
-opt, args = parser.parse_args()
+    
+def get_params_dict():
+    '''以字典形式获取所有 trainable 参数'''
+    param_dict = dict()
+    for var in tf.trainable_variables():
+        param_dict[var.name] = {'shape': list(map(int, var.shape)),
+                                'number': int(reduce(mul, var.shape, 1))}
+    return param_dict
