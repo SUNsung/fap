@@ -1,382 +1,281 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
-#define TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
-    
-    #include <iomanip>
-#include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/tensor_shape.pb.h'
-#include 'tensorflow/core/grappler/costs/graph_properties.h'
-#include 'tensorflow/core/grappler/grappler_item.h'
-    
-    // Global registry mapping C API error codes to the corresponding custom Python
-// exception type. This is used to expose the exception types to C extension
-// code (i.e. so we can raise custom exceptions via SWIG).
-//
-// Init() must be called exactly once at the beginning of the process before
-// Lookup() can be used.
-//
-// Example usage:
-//   TF_Status* status = TF_NewStatus();
-//   TF_Foo(..., status);
-//
-//   if (TF_GetCode(status) != TF_OK) {
-//     PyObject* exc_type = PyExceptionRegistry::Lookup(TF_GetCode(status));
-//     // Arguments to OpError base class. Set `node_def` and `op` to None.
-//     PyObject* args =
-//       Py_BuildValue('sss', nullptr, nullptr, TF_Message(status));
-//     PyErr_SetObject(exc_type, args);
-//     Py_DECREF(args);
-//     TF_DeleteStatus(status);
-//     return NULL;
-//   }
-class PyExceptionRegistry {
- public:
-  // Initializes the process-wide registry. Should be called exactly once near
-  // the beginning of the process. The arguments are the various Python
-  // exception types (e.g. `cancelled_exc` corresponds to
-  // errors.CancelledError).
-  static void Init(PyObject* code_to_exc_type_map);
+            /// Adds an implementation of the method in a specific class.
+    void addClassMethodImpl(SILFunction *F, ClassDecl *C) {
+      assert(!isWitnessMethod);
+      implementingFunctions.push_back(FuncImpl(F, C));
     }
     
-    void absDiff(const Size2D &size,
-             const u16 *src0Base, ptrdiff_t src0Stride,
-             const u16 *src1Base, ptrdiff_t src1Stride,
-             u16 *dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, AbsDiff<u16>());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
+      AssociatedTypeIterator &operator++() {
+    const auto &ATR = this->operator*();
+    size_t Size = sizeof(AssociatedTypeDescriptor) +
+      ATR.NumAssociatedTypes * ATR.AssociatedTypeRecordSize;
+    const void *Next = reinterpret_cast<const char *>(Cur) + Size;
+    Cur = Next;
+    return *this;
+  }
+    
+    #include <stdint.h>
+    
+      /// The path to which we should emit a serialized module.
+  /// It is valid whenever there are any inputs.
+  ///
+  /// This binary format is used to describe the interface of a module when
+  /// imported by client source code. The swiftmodule format is described in
+  /// docs/Serialization.rst.
+  ///
+  /// \sa swift::serialize
+  std::string ModuleOutputPath;
+    
+    
+    {    result->AppendBoolean(success);
+    return;
+  } else if (method == 'UnregisterGlobalHotKey') {
+    int object_id = -1;
+    arguments.GetInteger(0, &object_id);
+    Shortcut* shortcut =
+        static_cast<Shortcut*>(DispatcherHost::GetApiObject(object_id));
+    GlobalShortcutListener::GetInstance()->UnregisterAccelerator(
+        shortcut->GetAccelerator(), shortcut);
+    return;
+  } else if (method == 'SetProxyConfig') {
+    std::string proxy_config;
+    arguments.GetString(0, &proxy_config);
+    SetProxyConfig(GetRenderProcessHost(), proxy_config);
+    return;
+  } else if (method == 'DoneMenuShow') {
+    dispatcher_host->quit_run_loop();
+    return;
+  }
+    
+      static void Call(content::Shell* shell,
+                   const std::string& method,
+                   const base::ListValue& arguments,
+                   base::ListValue* result,
+                   DispatcherHost* dispatcher_host);
+    
+    EventListener::EventListener(int id,
+  const base::WeakPtr<DispatcherHost>& dispatcher_host,
+  const base::DictionaryValue& option) : Base(id, dispatcher_host, option) {
+    }
+    
+    void Menu::Remove(MenuItem* menu_item, int pos) {
+  std::vector<MenuItem*>::iterator begin = menu_items.begin();
+  menu_items.erase(begin+pos);
+  gtk_container_remove(GTK_CONTAINER(menu_), menu_item->menu_item_);
 }
     
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVTS_FUNC(s32, u8, 8,
-    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
-    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.32 {d4-d5}, [%[src1]]                              \n\t'
-            'vld1.32 {d6-d7}, [%[src2]]                              \n\t'
-            'vcvt.f32.s32 q4, q2                                     \n\t'
-            'vcvt.f32.s32 q5, q3                                     \n\t'
-            'vmul.f32 q6, q4, q0                                     \n\t'
-            'vmul.f32 q7, q5, q0                                     \n\t'
-            'vadd.f32 q8, q6, q1                                     \n\t'
-            'vadd.f32 q9, q7, q1                                     \n\t'
-            'vcvt.s32.f32 q10, q8                                    \n\t'
-            'vcvt.s32.f32 q11, q9                                    \n\t'
-            'vqmovun.s32 d24, q10                                    \n\t'
-            'vqmovun.s32 d25, q11                                    \n\t'
-            'vqmovn.u16  d26, q12                                    \n\t'
-            'vst1.8 {d26}, [%[dst]]                                  \n\t'
-            : /*no output*/
-            : [src1] 'r' (_src + i + 0),
-              [src2] 'r' (_src + i + 4),
-              [dst] 'r' (_dst + i),
-              'w'  (vscale), 'w' (vshift)
-            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26'
-        );
-    }
-})
-#else
-CVTS_FUNC(s32, u8, 8,
-    float32x4_t vscale = vdupq_n_f32((f32)alpha);
-    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        int32x4_t vline1_s32 = vld1q_s32(_src + i + 0);
-        int32x4_t vline2_s32 = vld1q_s32(_src + i + 4);
-        float32x4_t vline1_f32 = vcvtq_f32_s32(vline1_s32);
-        float32x4_t vline2_f32 = vcvtq_f32_s32(vline2_s32);
-        vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        vline1_f32 = vaddq_f32(vline1_f32, vshift);
-        vline2_f32 = vaddq_f32(vline2_f32, vshift);
-        vline1_s32 = vcvtq_s32_f32(vline1_f32);
-        vline2_s32 = vcvtq_s32_f32(vline2_f32);
-        uint16x4_t vRes1 = vqmovun_s32(vline1_s32);
-        uint16x4_t vRes2 = vqmovun_s32(vline2_s32);
-        uint8x8_t vRes = vqmovn_u16(vcombine_u16(vRes1, vRes2));
-        vst1_u8(_dst + i, vRes);
-    }
-})
-#endif
-    
-                    v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t0_16s), kernelBase[5]);
-                v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t1_16s), kernelBase[4]);
-                v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t2_16s), kernelBase[3]);
-    
-    f64 dotProduct(const Size2D &_size,
-               const s8 * src0Base, ptrdiff_t src0Stride,
-               const s8 * src1Base, ptrdiff_t src1Stride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    Size2D size(_size);
-    if (src0Stride == src1Stride &&
-        src0Stride == (ptrdiff_t)(size.width))
-    {
-        size.width *= size.height;
-        size.height = 1;
-    }
+    void Menu::Append(MenuItem* menu_item) {
+  if (menu_item->submenu_)
+    menu_model_->AddSubMenu(menu_item->id(), menu_item->label_,
+                            menu_item->submenu_->menu_model_.get());
+  else if (menu_item->type_ == 'normal')
+    menu_model_->AddItem(menu_item->id(), menu_item->label_);
+  else if (menu_item->type_ == 'checkbox')
+    menu_model_->AddCheckItem(menu_item->id(), menu_item->label_);
+  else if (menu_item->type_ == 'separator')
+    menu_model_->AddSeparator(ui::NORMAL_SEPARATOR);
     }
     
-    void makeOffsets(ptrdiff_t pixel[], ptrdiff_t row_stride)
-{
-    pixel[0] = 0 + row_stride * 3;
-    pixel[1] = 1 + row_stride * 3;
-    pixel[2] = 2 + row_stride * 2;
-    pixel[3] = 3 + row_stride * 1;
-    pixel[4] = 3 + row_stride * 0;
-    pixel[5] = 3 + row_stride * -1;
-    pixel[6] = 2 + row_stride * -2;
-    pixel[7] = 1 + row_stride * -3;
-    pixel[8] = 0 + row_stride * -3;
-    pixel[9] = -1 + row_stride * -3;
-    pixel[10] = -2 + row_stride * -2;
-    pixel[11] = -3 + row_stride * -1;
-    pixel[12] = -3 + row_stride * 0;
-    pixel[13] = -3 + row_stride * 1;
-    pixel[14] = -2 + row_stride * 2;
-    pixel[15] = -1 + row_stride * 3;
-}
-    
-      Table(const Table&) = delete;
-  Table& operator=(const Table&) = delete;
-    
-    #include <cstddef>
-#include <cstdlib>
-#include <sstream>
-#include <limits>
-#include <map>
-#include <set>
-#include <typeinfo>
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <utility>
-    
-    /*!
- * \brief Thread pool.
- */
-class ThreadPool {
- public:
-  /*! \brief Signal event upon destruction, even for exceptions (RAII) */
-  struct SetReadyOnDestroy {
-    explicit inline SetReadyOnDestroy(const std::shared_ptr<dmlc::ManualEvent>& event)
-      : event_(event) {
-    }
-    inline ~SetReadyOnDestroy() {
-      if (event_) {
-        event_->signal();
-      }
-    }
-    std::shared_ptr<dmlc::ManualEvent>  event_;
-  };
-    }
-    
-      for (uint32_t nid = 0; nid < idx.num_nodes(); ++nid) {
-    const auto& inode = idx[nid];
-    if (inode.source->op() != ewise_plus_op) continue;
-    int sid = storage_id[idx.entry_id(inode.inputs[0])];
-    if (sid != storage_id[idx.entry_id(nid, 0)]) continue;
-    if (idx[inode.inputs[0].node_id].source->is_variable()) continue;
-    if (idx[inode.inputs[1].node_id].source->is_variable()) continue;
-    uint32_t eid_rhs  = idx.entry_id(inode.inputs[1]);
-    if (ref_count[eid_rhs] != 1) continue;
-    if (inode.inputs[0].node_id >= inode.inputs[1].node_id) continue;
-    // TODO(haibin) support inplace addto for Dynamic Storage
-    if (storage_id[eid_rhs] == kDynamicStorageID) continue;
-    CHECK_NE(storage_id[eid_rhs], sid);
-    storage_id[eid_rhs] = sid;
-    addto_entry[eid_rhs] = 1;
-    storage_inplace_index[eid_rhs] = -1;
-    skip_plus_node[nid] = 1;
-  }
-    
-      /*! \brief internal next function, inlined for fater processing. */
-  inline bool Next_(void) {
-    if (!base_->Next()) return false;
-    const DataInst &src = base_->Value();
-    this->SetOutImg(src);
-    out_.data.resize(2);
-    out_.data[0] = outimg_;
-    out_.data[1] = src.data[1];
-    out_.index = src.index;
-    out_.extra_data = src.extra_data;
-    return true;
-  }
-  /*!
-   * \brief Set the output image, after augmentation and normalization.
-   * \param src The source image.
-   */
-  inline void SetOutImg(const DataInst &src) {
-    using namespace mshadow::expr;  // NOLINT(*)
-    }
-    
-    /*!
- *  Copyright (c) 2018 by Contributors
- * \file transformer.cc
- * \brief CPU implementation of the operators used in Transformer
- */
-#include <mxnet/base.h>
-#include './transformer-inl.h'
-#include '../tensor/elemwise_unary_op.h'
-    
-      virtual void Forward(const OpContext &ctx,
-                       const std::vector<TBlob> &in_data,
-                       const std::vector<OpReqType> &req,
-                       const std::vector<TBlob> &out_data,
-                       const std::vector<TBlob> &aux_args) {
-    using namespace mshadow;
-    CHECK_EQ(req[bs::kOut], kWriteTo);
-    CHECK_EQ(in_data.size(), 2U);
-    CHECK_EQ(out_data.size(), 2U);
-    Stream<gpu> *s = ctx.get_stream<gpu>();
-    }
-    
-    namespace mxnet {
-namespace op {
-template<typename DType>
-class CuDNNLocalResponseNormOp : public Operator {
- public:
-  explicit CuDNNLocalResponseNormOp(LRNParam param) {
-    param_ = param;
-    init_cudnn_ = false;
-    dtype_ = mshadow::DataType<DType>::kCudnnFlag;
-  }
-    }
-    }
-    }
-    
-    /*!
- * Copyright (c) 2016 by Contributors
- * \file cudnn_spatial_transformer-inl.h
- * \brief
- * \author Wei Wu
-*/
-#ifndef MXNET_OPERATOR_CUDNN_SPATIAL_TRANSFORMER_INL_H_
-#define MXNET_OPERATOR_CUDNN_SPATIAL_TRANSFORMER_INL_H_
-    
-    Operator* NativeOpProp::CreateOperator(Context ctx) const {
-  DO_BIND_DISPATCH(CreateOp, param_);
-}
-    
-    DMLC_REGISTER_PARAMETER(NDArrayOpParam);
-    
-    
-    {
-    {NNVM_REGISTER_OP(IdentityAttachKLSparseReg)
-.set_attr<nnvm::FSetInputVarAttrOnCompose>('FSetInputVarAttrOnCompose',
-    [](const nnvm::NodeAttrs& attrs, nnvm::NodePtr var, const int index) {
-      if (var->attrs.dict.find('__init__') != var->attrs.dict.end()) return;
-      if (index == 1) {
-        var->attrs.dict['__init__'] = '[\'zero\', {}]';
-      }
-    });
-}  // namespace op
-}  // namespace mxnet
-    
-      const dmlc::RowBlock<IndexType>& Value() const override {
-    return out_;
-  }
-    
-    namespace php {
-    }
-    
-    void Assembler::bctrl() {
-  // The concept of a conditional call is not existent for upper layers.
-  // Therefore no bcctrl is defined despite being possible.
-  // Only bctrl is defined.
-  BranchParams bp(BranchConditions::Always);
-  EmitXLForm(19, bp.bo(), bp.bi(), (0 /*bh*/ & 0x3), 528, 1);
-}
-    
-      void EmitXX2Form(const uint8_t op,
-                   const RegNumber t,
-                   const uint8_t uim,
-                   const RegNumber b,
-                   const uint16_t xo,
-                   const bool bx,
-                   const bool tx)  {
-    XX2_form_t xx2_formater {{
-      tx,
-      bx,
-      xo,
-      static_cast<uint32_t>(b),
-      static_cast<uint32_t>(uim & 0x3),
-      static_cast<uint32_t>(t),
-      op
-    }};
-    dword(xx2_formater.instruction);
-  }
-    
-    void ArrayDirectory::rewind() {
-  m_it.rewind();
+    caffe2::NetDef fakeNet() {
+  using namespace caffe2::testing;
+  caffe2::NetDef net;
+  NetMutator(&net)
+      .newOp('Fake', {'X'}, {'Y'})
+      .newOp('Fake', {'Y'}, {'Z'})
+      .newOp('Fake', {'Z', 'X'}, {'W'})
+      .externalInputs({'X'})
+      .externalOutputs({'Y', 'W'});
+  return net;
 }
     
     
-    {}
+    {} // namespace caffe2
 
     
-      void onReceived(const DHTPingReplyMessage* message);
+    X before running op:
+[[ 3.813361   -1.319647    5.2089314  -4.931328    0.6218652 ]
+ [ 7.2757645   5.5552588   5.785643   -2.4790506  -0.41400087]
+ [ 1.1541046  -6.933266    3.3754056   1.6569928  -1.7670316 ]
+ [-3.4932013   4.891472    1.5530115  -3.2443287  -4.605099  ]
+ [-4.574543   -7.360948    5.91305    -8.196495   -5.357458  ]]
+X after running op:
+[[ 3. -2.  5. -5.  0.]
+ [ 7.  5.  5. -3. -1.]
+ [ 1. -7.  3.  1. -2.]
+ [-4.  4.  1. -4. -5.]
+ [-5. -8.  5. -9. -6.]]
     
-      virtual ~DHTResponseMessage();
     
-    DHTRoutingTable::~DHTRoutingTable() = default;
+    {          return out;
+        })
+    .Input(0, 'X', '4-tensor in NCHW or NHWC.')
+    .Output(
+        0,
+        'Y',
+        '4-tensor. For NCHW: N x (C x kH x kW) x outH x outW.'
+        'For NHWC: N x outH x outW x (kH x kW x C');
     
-    class DHTRoutingTable {
-private:
-  std::shared_ptr<DHTNode> localNode_;
+                    if (clip_rect.x < fb_width && clip_rect.y < fb_height && clip_rect.z >= 0.0f && clip_rect.w >= 0.0f)
+                {
+                    // Apply scissor/clipping rectangle
+                    if (clip_origin_lower_left)
+                        glScissor((int)clip_rect.x, (int)(fb_height - clip_rect.w), (int)(clip_rect.z - clip_rect.x), (int)(clip_rect.w - clip_rect.y));
+                    else
+                        glScissor((int)clip_rect.x, (int)clip_rect.y, (int)clip_rect.z, (int)clip_rect.w); // Support for GL 4.5 rarely used glClipControl(GL_UPPER_LEFT)
     }
     
-    #include 'common.h'
+    IMGUI_IMPL_API bool     ImGui_ImplGlfw_InitForOpenGL(GLFWwindow* window, bool install_callbacks);
+IMGUI_IMPL_API bool     ImGui_ImplGlfw_InitForVulkan(GLFWwindow* window, bool install_callbacks);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplGlfw_NewFrame();
     
-      virtual std::shared_ptr<DHTTask>
-  createPingTask(const std::shared_ptr<DHTNode>& remoteNode,
-                 int numRetry = 0) = 0;
-    
-      DHTMessageDispatcher* dispatcher_;
-    
-    bool DHTTokenTracker::validateToken(const std::string& token,
-                                    const unsigned char* infoHash,
-                                    const std::string& ipaddr,
-                                    uint16_t port) const
-{
-  for (auto& elem : secret_) {
-    if (generateToken(infoHash, ipaddr, port, elem) == token) {
-      return true;
+        // Create window with graphics context
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+    SDL_DisplayMode current;
+    SDL_GetCurrentDisplayMode(0, &current);
+    SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
+    g_Window = SDL_CreateWindow('Dear ImGui Emscripten example', SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
+    g_GLContext = SDL_GL_CreateContext(g_Window);
+    if (!g_GLContext)
+    {
+        fprintf(stderr, 'Failed to initialize WebGL context!\n');
+        return 1;
     }
+    SDL_GL_SetSwapInterval(1); // Enable vsync
+    
+      template<class SerDe>
+  typename std::enable_if<SerDe::deserializing>::type
+  serde(SerDe& sd) {
+    Map m;
+    sd(m);
+    lookup(std::move(m));
   }
-  return false;
+    
+          tmp = get_node(fault->children, 'faultactor');
+      if (tmp != nullptr && tmp->children != nullptr) {
+        Variant zv =
+          master_to_zval(get_conversion(dataTypeToSoap(KindOfString)), tmp);
+        faultactor = zv.toString();
+      }
+    
+    /**
+ * A super-fast hierarchical data structure, wrapped around ClearSilver's HDF
+ * data format: http://www.clearsilver.net/docs/man_hdf.hdf
+ *
+ * HDF is a serialization format that emphasizes cleanness and simplicity when
+ * representing hierarchical data. It's designed to be fast parsing and
+ * accessing. One example is,
+ *
+ *   Server {
+ *     Name = MyTestServer
+ *     IP.1 = 192.168.100.100
+ *     IP.2 = 192.168.100.101
+ *   }
+ */
+struct HdfRaw; // reference counting HDF* raw pointer, implmented in .cpp file
+struct Hdf {
+  /**
+   * Constructors.
+   */
+  Hdf();                                          // create an empty HDF tree
+  explicit Hdf(const char *filename);             // open the specified file
+  explicit Hdf(const std::string &filename);      // open the specified file
+  explicit Hdf(const Hdf *hdf, const char *name); // constructing a sub-node
+           Hdf(const Hdf &hdf);                   // make a copy by reference
+  explicit Hdf(HDF *hdf);                         // attaching a raw pointer
+  ~Hdf();
+    }
+    
+    static void init_entity_table() {
+  for (unsigned int i = 0; entity_map[i].charset != cs_terminator; i++) {
+    const html_entity_map &em = entity_map[i];
+    const entity_charset charset = entity_map[i].charset;
+    }
+    }
+    
+    void RangeState::reserve() {
+  auto const base = reinterpret_cast<void*>(low());
+  auto const size = capacity();
+  auto ret = mmap(base, size, PROT_NONE,
+                  MAP_ANONYMOUS | MAP_PRIVATE | MAP_NORESERVE, -1, 0);
+  if (ret != base) {
+    char msg[128];
+    if (ret == MAP_FAILED) {
+      std::snprintf(msg, sizeof(msg),
+                    'failed to reserve address range 0x%p to 0x%' PRIuPTR
+                    ', errno = %d',
+                    base, high(), errno);
+    } else {
+      munmap(ret, capacity());
+      std::snprintf(msg, sizeof(msg),
+                    'failed to reserve address range 0x%p to 0x%' PRIuPTR
+                    ', got 0x%p instead',
+                    base, high(), ret);
+    }
+    throw std::runtime_error{msg};
+  }
 }
     
-    public:
-  DHTTokenTracker();
+      // Form a linked list of mappers for the same range.
+  static void append(RangeMapper**& ptail, RangeMapper* next) {
+    assert((*ptail) == nullptr);        // always keep track of the tail.
+    *ptail = next;
+    ptail = &(next->m_fallback);
+    assert((*ptail) == nullptr);        // next already has fallback?
+  }
     
-    void DHTUnknownMessage::doReceivedAction() {}
+    // Specify the mount point of hugetlbfs with 1G page size.  Returns whether the
+// operation succeeded, i.e., the specified path is accessible, and is on a
+// hugetlbfs with 1G page size.
+bool set_hugetlbfs_path(const char* path);
     
-        const std::string& getGoodAddr() const;
+    
+    {
+    {    // Now iterate over all the compilation units again. Only actually print out
+    // compilation units if they lie within the begin/end parameter range.
+    dwarf.forEachTopLevelUnit(
+      [&] (Dwarf_Die cu) {
+        auto context = cu->context;
+        auto type_offset = GlobalOff { context->typeOffset, context->isInfo };
+        auto pair = std::make_pair(context->typeSignature, type_offset);
+        const auto offset = dwarf.getDIEOffset(cu).offset();
+        if (offset >= end) return false;
+        if ((!last || offset >= *last)) {
+          printDIE(
+            os,
+            dwarf,
+            cu,
+            &pair,
+            // If this compilation unit entirely lies within the begin/end
+            // range, specify a begin parameter of '0', which will stop
+            // printDIE() from doing range checks (which is more efficient).
+            (!last || (offset > *last)) ? 0 : begin,
+            end
+          );
+        }
+        return true;
+      },
+      isInfo
+    );
+  }
+  std::string m_filename;
+};
+    
+    
+    {    // Check the length of the class vectors.  If the candidate's is at least
+    // as long as the potential base (`rhsCls'), it might be a subclass.
+    auto const sf = v.makeReg();
+    emitCmpVecLen(v, sf, static_cast<int32_t>(rhsCls->classVecLen()),
+                  lhs[Class::classVecLenOff()]);
+    return check_subcls(v, sf, d, lhs, rhsCls, rhsCls->classVecLen());
+  };
+    
+    struct InlineReturnTarget {
+  /*
+   * Block that will serve as a branch target for returning to the caller.
+   */
+  Block* callerTarget;
+    }
