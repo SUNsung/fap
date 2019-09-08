@@ -1,179 +1,308 @@
 
         
-              it 'returns an active nav link with menu' do
-        stub(self).current_page?('/things') { true }
-        stub(self).current_page?('/things/stuff') { false }
-        nav = nav_link('Things', '/things') { nav_link('Stuff', '/things/stuff') }
-        expect(nav).to be_html_safe
-        a0 = Nokogiri(nav).at('li.dropdown.dropdown-hover.active > a[href='/things']')
-        expect(a0).to be_a Nokogiri::XML::Element
-        expect(a0.text.strip).to eq('Things')
-        a1 = Nokogiri(nav).at('li.dropdown.dropdown-hover.active > li:not(.active) > a[href='/things/stuff']')
-        expect(a1).to be_a Nokogiri::XML::Element
-        expect(a1.text.strip).to eq('Stuff')
+          desc 'Generate generated pages and publish to GitHub Pages'
+  task :publish => :generated_pages do
+    puts 'GitHub Pages now compiles our docs site on every push to the `master` branch. Cool, huh?'
+    exit 1
+  end
+    
+          context 'include existing file above you' do
+        setup do
+          @content = <<~CONTENT
+            ---
+            title: higher file
+            ---
+    
+      p.option 'source', '-s', '--source [DIR]', 'Source directory (defaults to ./)'
+  p.option 'destination', '-d', '--destination [DIR]',
+    'Destination directory (defaults to ./_site)'
+  p.option 'safe', '--safe', 'Safe mode (defaults to false)'
+  p.option 'plugins_dir', '-p', '--plugins PLUGINS_DIR1[,PLUGINS_DIR2[,...]]', Array,
+    'Plugins directory (defaults to ./_plugins)'
+  p.option 'layouts_dir', '--layouts DIR', String,
+    'Layouts directory (defaults to ./_layouts)'
+  p.option 'profile', '--profile', 'Generate a Liquid rendering profile'
+    
+              unless method_called_ever?(body_node, :go_resource)
+            # processed_source.ast is passed instead of body_node because `require` would be outside body_node
+            find_method_with_args(processed_source.ast, :require, 'language/go') do
+              problem 'require \'language/go\' is unnecessary unless using `go_resource`s'
+            end
+          end
+    
+        def cat
+      version.to_sym
+    end
+    
+      it 'prints the file used to cache the Cask' do
+    transmission_location = CurlDownloadStrategy.new(
+      local_transmission.url.to_s, local_transmission.token, local_transmission.version,
+      cache: Cask::Cache.path, **local_transmission.url.specs
+    ).cached_location
+    caffeine_location = CurlDownloadStrategy.new(
+      local_caffeine.url.to_s, local_caffeine.token, local_caffeine.version,
+      cache: Cask::Cache.path, **local_caffeine.url.specs
+    ).cached_location
+    
+            errors
       end
     
-        it 'does not output links to other agents outside of the incoming set' do
-      Link.create!(:source_id => agents(:jane_weather_agent).id, :receiver_id => agents(:jane_website_agent).id)
-      Link.create!(:source_id => agents(:jane_website_agent).id, :receiver_id => agents(:jane_rain_notifier_agent).id)
+        it 'returns true if installed' do
+      expect(machine.communicate).to receive(:test).
+        with(command, sudo: true).and_return(true)
+      subject.chef_installed(machine, 'chef_solo', version)
+    end
     
-    describe ConvertWebsiteAgentTemplateForMerge do
-  let :old_extract do
-    {
-      'url' => { 'css' => '#comic img', 'value' => '@src' },
-      'title' => { 'css' => '#comic img', 'value' => '@alt' },
-      'hovertext' => { 'css' => '#comic img', 'value' => '@title' }
-    }
+      before do
+    allow(machine).to receive(:communicate).and_return(communicator)
   end
     
-      describe '#check' do
-    it 'should check that initial run creates an event' do
-      @checker.memory[:last_updated_at] = '2016-03-15T14:01:05+00:00'
-      expect { @checker.check }.to change { Event.count }.by(1)
+        it 'returns true if installed' do
+      expect(machine.communicate).to receive(:test).
+        with(command, sudo: true).and_return(true)
+      subject.chef_installed(machine, 'chef_solo', version)
+    end
+    
+            # This is a special pseudo-state so that we don't set the
+        # NOT_CREATED_ID while we're setting up the machine. This avoids
+        # clearing the data dir.
+        state_id = :preparing if @machine.id == 'preparing'
+    
+          expect { subject.usable?(true) }.
+        to raise_error(Vagrant::Errors::VirtualBoxInvalidVersion)
     end
   end
-end
-
     
-      def authenticate_with_2fa
-    self.resource = find_user
-    
-    if rails_env != 'development'
-  config('path vendor/bundle')
-  config('frozen true')
-  config('disable_shared_gems true')
-end
-    
-      def create_hash(model, opts={})
-    opts[:range] ||= 1.day
-    plural = model.to_s.underscore.pluralize
-    eval(<<DATA
-      @#{plural} = {
-        :day_before => #{model}.where(:created_at => ((Time.now.midnight - #{opts[:range]*2})..Time.now.midnight - #{opts[:range]})).count,
-        :yesterday => #{model}.where(:created_at => ((Time.now.midnight - #{opts[:range]})..Time.now.midnight)).count
-      }
-      @#{plural}[:change] = percent_change(@#{plural}[:yesterday], @#{plural}[:day_before])
-DATA
-    )
-  end
-    
-          def auth_user_unless_prompt_none!
-        prompt = params[:prompt]
-        if prompt && prompt.include?('none')
-          handle_prompt_none
-        elsif prompt && prompt.include?('login')
-          new_params = params.except('controller', 'action').permit!.to_h.merge(prompt: prompt.remove('login'))
-          reauthenticate(new_params)
-        else
-          authenticate_user!
+            opts = OptionParser.new do |o|
+          o.banner = 'Usage: vagrant global-status'
+          o.separator ''
+          o.on('--prune', 'Prune invalid entries.') do |p|
+            options[:prune] = true
+          end
         end
-      end
     
-          def get_key_from_kid(keys, kid)
-        keys.each do |key|
-          return key if key.has_value?(kid)
-        end
-      end
+        target_account = ActivityPub::FetchRemoteAccountService.new.call(target_uri)
     
-        @contact = current_user.share_with(@person, @aspect)
-    
-      def set_up_contacts
-    if params[:a_id].present?
-      @aspect = current_user.aspects.find(params[:a_id])
-      gon.preloads[:aspect] = AspectPresenter.new(@aspect).as_json
-    end
-    @contacts_size = current_user.contacts.size
-  end
-    
-      private
-    
-        respond_to do |format|
-      format.html
-      format.xml { render :xml => @notifications.to_xml }
-      format.json {
-        render json: render_as_json(@unread_notification_count, @grouped_unread_notification_counts, @notifications)
-      }
-    end
-  end
-    
-            if Utils::HttpClient.remote_file_exist?(uri)
-          PluginManager.ui.debug('Found package at: #{uri}')
-          return LogStash::PluginManager::PackInstaller::Remote.new(uri)
-        else
-          PluginManager.ui.debug('Package not found at: #{uri}')
-          return nil
-        end
-      rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
-        # This probably means there is a firewall in place of the proxy is not correctly configured.
-        # So lets skip this strategy but log a meaningful errors.
-        PluginManager.ui.debug('Network error, skipping Elastic pack, exception: #{e}')
-    
-        desc 'Generate a valid ssh-config'
-    task :ssh_config do
-      require 'json'
-      # Loop until the Vagrant box finishes SSH bootstrap
-      raw_ssh_config = Stud.try(50.times, LogStash::CommandExecutor::CommandError) do
-          LogStash::VagrantHelpers.fetch_config.stdout.split('\n');
-      end
-      parsed_ssh_config = LogStash::VagrantHelpers.parse(raw_ssh_config)
-      File.write('.vm_ssh_config', parsed_ssh_config.to_json)
+      context 'when a matching undo has been received first' do
+    let(:undo_json) do
+      {
+        '@context': 'https://www.w3.org/ns/activitystreams',
+        id: 'bar',
+        type: 'Undo',
+        actor: ActivityPub::TagManager.instance.uri_for(sender),
+        object: json,
+      }.with_indifferent_access
     end
     
-        context 'with a specific plugin' do
-      let(:plugin_name) { 'logstash-input-stdin' }
-      it 'list the plugin and display the plugin name' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name}$/)
-      end
-    
-        context 'update all the plugins' do
-      it 'has executed successfully' do
-        logstash.run_command_in_path('bin/logstash-plugin update --no-verify')
-        expect(logstash).to have_installed?(plugin_name, '0.1.1')
+          it 'does not create anything' do
+        expect(sender.statuses.count).to eq 0
       end
     end
   end
 end
 
     
-    Liquid::Template.register_tag('blockquote', Jekyll::Blockquote)
-
+    version = ['', 'ext/etc/'].find do |dir|
+  begin
+    break File.open(File.expand_path('../#{dir}/etc.c', __FILE__)) do |f|
+      f.gets '\n#define RUBY_ETC_VERSION '
+      f.gets[/'(.+)'/, 1]
+    end
+  rescue
+    next
+  end
+end
     
-        # Loops through the list of category pages and processes each one.
-    def write_category_indexes
-      if self.layouts.key? 'category_index'
-        dir = self.config['category_dir'] || 'categories'
-        self.categories.keys.each do |category|
-          self.write_category_index(File.join(dir, category.to_url), category)
+        ScratchPad.record []
+    while true
+      begin
+        ScratchPad << enum.next
+      rescue StopIteration
+        break
+      end
+    end
+    
+            it 'does not decrement pos' do
+          @gz.ungetbyte nil
+          @gz.pos.should == 0
         end
+      end
+    end
+  end
     
-          locations = Array.new
-      while (data.code.to_i == 301 || data.code.to_i == 302)
-        data = handle_gist_redirecting(data)
-        break if locations.include? data.header['Location']
-        locations << data.header['Location']
+          it 'makes eof? false' do
+        @gz.ungetc 'x'
+        @gz.eof?.should be_false
+      end
+    end
+    
+          # Generates and saves the Info.plist to the given path.
+      #
+      # @param  [Pathname] path
+      #         the path where the prefix header should be stored.
+      #
+      # @return [void]
+      #
+      def save_as(path)
+        contents = generate
+        path.open('w') do |f|
+          f.write(contents)
+        end
       end
     
-          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
-        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
-        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
-          @img['title']  = title
-          @img['alt']    = alt
+    module Pod
+  class Installer
+    class Analyzer
+      # Collects all {PodVariant}.
+      class PodVariantSet
+        # @return [Array<PodVariant>] the different variants within this set.
+        #
+        attr_reader :variants
+    
+          LAUNCHSCREEN_STORYBOARD_CONTENTS_IOS_8 = <<-XML.strip_heredoc.freeze
+              <?xml version='1.0' encoding='UTF-8' standalone='no'?>
+              <document type='com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB' version='3.0' toolsVersion='13122.16' systemVersion='17A277' targetRuntime='iOS.CocoaTouch' propertyAccessControl='none' useAutolayout='YES' launchScreen='YES' useTraitCollections='YES' colorMatched='YES' initialViewController='01J-lp-oVM'>
+                <dependencies>
+                  <plugIn identifier='com.apple.InterfaceBuilder.IBCocoaTouchPlugin' version='13104.12'/>
+                  <capability name='documents saved in the Xcode 8 format' minToolsVersion='8.0'/>
+                </dependencies>
+                <scenes>
+                  <!--View Controller-->
+                  <scene sceneID='EHf-IW-A2E'>
+                    <objects>
+                      <viewController id='01J-lp-oVM' sceneMemberID='viewController'>
+                        <layoutGuides>
+                          <viewControllerLayoutGuide type='top' id='rUq-ht-380'/>
+                          <viewControllerLayoutGuide type='bottom' id='a9l-8d-mfx'/>
+                        </layoutGuides>
+                        <view key='view' contentMode='scaleToFill' id='Ze5-6b-2t3'>
+                          <rect key='frame' x='0.0' y='0.0' width='375' height='667'/>
+                          <autoresizingMask key='autoresizingMask' widthSizable='YES' heightSizable='YES'/>
+                          <color key='backgroundColor' red='1' green='1' blue='1' alpha='1' colorSpace='custom' customColorSpace='sRGB'/>
+                        </view>
+                      </viewController>
+                      <placeholder placeholderIdentifier='IBFirstResponder' id='iYj-Kq-Ea1' userLabel='First Responder' sceneMemberID='firstResponder'/>
+                    </objects>
+                    <point key='canvasLocation' x='53' y='375'/>
+                  </scene>
+                </scenes>
+              </document>
+      XML
+    
+          def ==(other)
+        if other.class == self.class
+          other.source_path == @source_path && other.dsym_path == @dsym_path && other.bcsymbolmap_paths == @bcsymbolmap_paths
         else
-          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
+          false
         end
-        @img['class'].gsub!(/'/, '') if @img['class']
       end
-      super
+    
+            # @return [Array<Project>] projects
+        #         The list project to write.
+        #
+        attr_reader :projects
+    
+            # @return [Array<PodTarget>] pod_targets
+        #         Array of pod targets this project includes.
+        #
+        attr_reader :pod_targets
+    
+          # @return [String] Wraps a string taking into account the width of the
+      # terminal and an option indent. Adapted from
+      # https://macromates.com/blog/2006/wrapping-text-with-regular-expressions/
+      #
+      # @param [String] string  The string to wrap
+      #
+      # @param [String] indent  The string to use to indent the result.
+      #
+      # @return [String]        The formatted string.
+      #
+      # @note If CocoaPods is not being run in a terminal or the width of the
+      # terminal is too small a width of 80 is assumed.
+      #
+      def wrap_string(string, indent = 0)
+        if disable_wrap
+          (' ' * indent) + string
+        else
+          first_space = ' ' * indent
+          indented = CLAide::Command::Banner::TextWrapper.wrap_with_indent(string, indent, 9999)
+          first_space + indented
+        end
+      end
+    end
+  end
+  UI = UserInterface
+    
+          private
+    
+    desc 'Create a release build and push to rubygems'
+task :release => :build do
+  unless `git branch` =~ /^\* master$/
+    puts 'You must be on the master branch to release!'
+    exit!
+  end
+  sh 'git commit --allow-empty -a -m 'Release #{version}''
+  sh 'git pull --rebase origin master'
+  sh 'git tag v#{version}'
+  sh 'git push origin master'
+  sh 'git push origin v#{version}'
+  sh 'gem push pkg/#{name}-#{version}.gem'
+end
+    
+    # Read command line options into `options` hash
+begin
+  opts.parse!
+rescue OptionParser::InvalidOption
+  puts 'gollum: #{$!.message}'
+  puts 'gollum: try 'gollum --help' for more information'
+  exit
+end
+    
+        def reset
+      preferences.each do |name, _value|
+        set_preference name, preference_default(name)
+      end
     end
     
-    Liquid::Template.register_tag('include_code', Jekyll::IncludeCodeTag)
+            def self.create_inventory_units_from_order_and_params(order, inventory_unit_params)
+          inventory_unit_params.each_with_object([]) do |inventory_unit_param, inventory_units|
+            ensure_variant_id_from_params(inventory_unit_param)
+            existing = inventory_units.detect { |unit| unit.variant_id == inventory_unit_param[:variant_id] }
+            if existing
+              existing.quantity += 1
+            else
+              line_item = order.line_items.detect { |ln| ln.variant_id == inventory_unit_param[:variant_id] }
+              inventory_units << InventoryUnit.new(line_item: line_item, order_id: order.id, variant: line_item.variant, quantity: 1)
+            end
+          end
+        end
+    
+            def option_type_params
+          params.require(:option_type).permit(permitted_option_type_attributes)
+        end
+      end
+    end
+  end
+end
 
     
-          unless file.file?
-        return 'File #{file} could not be found'
-      end
+            def destroy
+          @return_authorization = order.return_authorizations.accessible_by(current_ability, :destroy).find(params[:id])
+          @return_authorization.destroy
+          respond_with(@return_authorization, status: 204)
+        end
     
-        def poster
-      'poster='#{@poster}'' if @poster
+    # The project root directory
+$root = ::File.dirname(__FILE__)
+    
+          Dir.chdir(code_path) do
+        code = file.read
+        @filetype = file.extname.sub('.','') if @filetype.nil?
+        title = @title ? '#{@title} (#{file.basename})' : file.basename
+        url = '/#{code_dir}/#{@file}'
+        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
+        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
+        TemplateWrapper::safe_wrap(source)
+      end
     end
+  end
