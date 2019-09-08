@@ -1,152 +1,120 @@
 
         
-              ENV['RAILS_ENV'] = 'development'
-      assert_match 'development', run_test_command('test/unit/env_test.rb')
-    end
+          # Most of the tests mess with the validations of Topic, so lets repair it all the time.
+  # Other classes we mess with will be dealt with in the specific tests
+  repair_validations(Topic)
     
-      def test_default_locale_template_is_used_when_locale_is_missing
-    I18n.locale = :dk
-    get :hello_world
-    assert_equal 'Hello World', @response.body
-  end
-    
-    require 'rails_helper'
-    
-      def diff
-    require_dependency 'discourse_diff'
-    
-        context 'When staff actions are extended' do
-      let(:plugin_extended_action) { :confirmed_ham }
-      before { UserHistory.stubs(:staff_actions).returns([plugin_extended_action]) }
-      after { UserHistory.unstub(:staff_actions) }
-    
-          subject.rsync_single(machine, ssh_info, opts)
-    end
-    
-        after do
-      FileUtils.rm_rf(scratch)
-    end
-    
-        it 'returns true if installed' do
-      expect(machine.communicate).to receive(:test).
-        with(command, sudo: true).and_return(true)
-      subject.chef_installed(machine, 'chef_solo', version)
-    end
-    
-            # @return [Pathname] data directory to store composition
-        attr_reader :data_directory
-        # @return [Vagrant::Machine]
-        attr_reader :machine
-    
-        it 'identifies unprivileged containers' do
-      allow(subject).to receive(:inspect_container)
-        .and_return({'HostConfig' => {'Privileged' => false}})
-      expect(subject).to_not be_privileged(cid)
-    end
-  end
-    
-      describe 'execute' do
-    context 'updating specific box' do
-      let(:argv) { ['--box', 'foo'] }
-    
-      def mark_as_processing!
-    redis.setex('move_in_progress:#{@account.id}', PROCESSING_COOLDOWN, true)
-  end
-end
-
-    
-      let(:json) do
-    {
-      '@context': 'https://www.w3.org/ns/activitystreams',
-      id: 'foo',
-      type: 'Move',
-      actor: old_account.uri,
-      object: old_account.uri,
-      target: new_account.uri,
-    }.with_indifferent_access
-  end
-    
-          it 'not calls errors.add' do
-        expect(errors).not_to have_received(:add).with(attribute, any_args)
+          def self.symbols
+        type_klass::SET.symbols
       end
     end
   end
 end
 
     
-        let(:follow)  { double(account: account, errors: errors) }
-    let(:errors)  { double(add: nil) }
-    let(:account) { double(nil?: _nil, local?: local, following_count: 0, followers_count: 0) }
-    let(:_nil)    { true }
-    let(:local)   { false }
+          # Run the command
+      #
+      def run
+        if updates.empty?
+          UI.puts 'No pod updates are available.'.yellow
+        else
+          UI.section 'The color indicates what happens when you run `pod update`' do
+            UI.puts '#{'<green>'.green}\t - Will be updated to the newest version'
+            UI.puts '#{'<blue>'.blue}\t - Will be updated, but not to the newest version because of specified version in Podfile'
+            UI.puts '#{'<red>'.red}\t - Will not be updated because of specified version in Podfile'
+            UI.puts ''
+          end if ansi_output?
+          UI.section 'The following pod updates are available:' do
+            updates.each do |(name, from_version, matching_version, to_version)|
+              color = :blue
+              if matching_version == to_version
+                color = :green
+              elsif from_version == matching_version
+                color = :red
+              end
+              # For the specs, its necessary that to_s is called here even though it is redundant
+              # https://github.com/CocoaPods/CocoaPods/pull/7204#issuecomment-342512015
+              UI.puts '- #{name} #{from_version.to_s.send(color)} -> #{matching_version.to_s.send(color)} ' \
+              '(latest version #{to_version.to_s})' # rubocop:disable Lint/StringConversionInInterpolation
+            end
+          end
+        end
     
-    class Scheduler::EmailScheduler
-  include Sidekiq::Worker
-    
-          private
-    
-            reaction
-      end
-    
-      describe '.token' do
-    it 'returns a unique masked version of the authenticity token' do
-      expect(Rack::Protection::AuthenticityToken.token(session)).not_to eq(masked_token)
-    end
-    
-        it 'can be memoized' do
-      q = Sidekiq::Queue.new('bar')
-      assert_equal 0, q.size
-      set = SetWorker.set(queue: :bar, foo: 'qaaz')
-      set.perform_async(1)
-      set.perform_async(1)
-      set.perform_async(1)
-      set.perform_async(1)
-      assert_equal 4, q.size
-      assert_equal 4, q.map{|j| j['jid'] }.uniq.size
-      set.perform_in(10, 1)
-    end
-    
-            s = Sidekiq::Stats.new
-        assert_equal 4, s.enqueued
-      end
-    end
-    
-      it 'allows delay of any ole class method' do
-    q = Sidekiq::Queue.new
-    assert_equal 0, q.size
-    SomeClass.delay.doit(Date.today)
-    assert_equal 1, q.size
-  end
-    
-      def options
-    { :concurrency => 3, :queues => ['default'] }
-  end
-    
-    
-  # Jekyll hook - the generate method is called by jekyll, and generates all of the category pages.
-  class GenerateCategories < Generator
-    safe true
-    priority :low
-    
-      if options.respond_to? 'keys'
-    options.each do |k,v|
-      unless v.nil?
-        v = v.join ',' if v.respond_to? 'join'
-        v = v.to_json if v.respond_to? 'keys'
-        output += ' data-#{k.sub'_','-'}='#{v}''
-      end
-    end
-  elsif options.respond_to? 'join'
-    output += ' data-value='#{config[key].join(',')}''
-  else
-    output += ' data-value='#{config[key]}''
-  end
-  output += '></#{tag}>'
+    if $PROGRAM_NAME == __FILE__ && !ENV['COCOAPODS_NO_BUNDLER']
+  ENV['BUNDLE_GEMFILE'] = File.expand_path('../../Gemfile', __FILE__)
+  require 'rubygems'
+  require 'bundler/setup'
+  $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+elsif ENV['COCOAPODS_NO_BUNDLER']
+  require 'rubygems'
+  gem 'cocoapods'
 end
     
-    end
-Liquid::Template.register_filter OctopressLiquidFilters
+          # A title opposed to a section is always visible
+      #
+      # @param [String] title
+      #        The title to print
+      #
+      # @param [String] verbose_prefix
+      #        See #message
+      #
+      # @param [FixNum] relative_indentation
+      #        The indentation level relative to the current,
+      #        when the message is printed.
+      #
+      def title(title, verbose_prefix = '', relative_indentation = 2)
+        if @treat_titles_as_messages
+          message(title, verbose_prefix)
+        else
+          title = verbose_prefix + title if config.verbose?
+          title = '\n#{title}' if @title_level < 2
+          if (color = @title_colors[@title_level])
+            title = title.send(color)
+          end
+          puts '#{title}'
+        end
     
-          unless file.file?
-        return 'File #{file} could not be found'
+        it 'should use the given template URL' do
+      template_url = 'https://github.com/custom/template.git'
+      @sut.any_instance.expects(:git!).with(['clone', template_url, 'TestPod']).once
+      run_command('lib', 'create', 'TestPod', '--template-url=#{template_url}')
+    end
+    
+                existing = config.base_configuration_reference
+    
+              # @!group Private Helpers
+    
+      it 'returns a plist containg the licenses' do
+    @generator.plist_hash.should == {
+      :Title => 'Acknowledgements',
+      :StringsTable => 'Acknowledgements',
+      :PreferenceSpecifiers => @generator.licenses,
+    }
+  end
+    
+      def symlinked?(symlink_path, target_path)
+    '[ #{symlink_path} -ef #{target_path} ]'
+  end
+    
+          def servers_by_key
+        @servers_by_key ||= {}
       end
+    
+          # Given a callable that provides a value, wrap the callable with another
+      # object that responds to `call`. This new object will perform validation
+      # and then return the original callable's value.
+      #
+      # If the callable is a `Question`, the object returned by this method will
+      # also be a `Question` (a `ValidatedQuestion`, to be precise). This
+      # ensures that `is_a?(Question)` remains true even after the validation
+      # wrapper is applied. This is needed so that `Configuration#is_question?`
+      # works as expected.
+      #
+      def assert_valid_later(key, callable)
+        validation_callback = lambda do
+          value = callable.call
+          assert_valid_now(key, value)
+          value
+        end
+    
+    set_if_empty :local_user, -> { ENV['USER'] || ENV['LOGNAME'] || ENV['USERNAME'] }
