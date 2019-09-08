@@ -1,304 +1,529 @@
 
         
-        class TestServiceImpl : public ::grpc::testing::EchoTestService::Service {
- public:
-  TestServiceImpl() : signal_client_(false), host_() {}
-  explicit TestServiceImpl(const grpc::string& host)
-      : signal_client_(false), host_(new grpc::string(host)) {}
-    }
-    
-    grpc::string ChannelArguments::GetSslTargetNameOverride() const {
-  for (unsigned int i = 0; i < args_.size(); i++) {
-    if (grpc::string(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG) == args_[i].key) {
-      return args_[i].value.string;
-    }
-  }
-  return '';
+        /// <summary>
+/// Initializes the singleton application object.  This is the first line of authored code
+/// executed, and as such is the logical equivalent of main() or WinMain().
+/// </summary>
+App::App()
+{
+    InitializeComponent();
+    Suspending += ref new SuspendingEventHandler(this, &App::OnSuspending);
 }
     
-    #include <grpcpp/create_channel_impl.h>
-#include <grpcpp/support/channel_arguments.h>
+    // Include the resource key ID from above into this vector to load it into memory for the engine to use
+inline constexpr std::array<std::wstring_view, 120> g_sids = { SIDS_PLUS_MINUS,
+                                                               SIDS_C,
+                                                               SIDS_CE,
+                                                               SIDS_BACKSPACE,
+                                                               SIDS_DECIMAL_SEPARATOR,
+                                                               SIDS_EMPTY_STRING,
+                                                               SIDS_AND,
+                                                               SIDS_OR,
+                                                               SIDS_XOR,
+                                                               SIDS_LSH,
+                                                               SIDS_RSH,
+                                                               SIDS_DIVIDE,
+                                                               SIDS_MULTIPLY,
+                                                               SIDS_PLUS,
+                                                               SIDS_MINUS,
+                                                               SIDS_MOD,
+                                                               SIDS_YROOT,
+                                                               SIDS_POW_HAT,
+                                                               SIDS_INT,
+                                                               SIDS_ROL,
+                                                               SIDS_ROR,
+                                                               SIDS_NOT,
+                                                               SIDS_SIN,
+                                                               SIDS_COS,
+                                                               SIDS_TAN,
+                                                               SIDS_SINH,
+                                                               SIDS_COSH,
+                                                               SIDS_TANH,
+                                                               SIDS_LN,
+                                                               SIDS_LOG,
+                                                               SIDS_SQRT,
+                                                               SIDS_XPOW2,
+                                                               SIDS_XPOW3,
+                                                               SIDS_NFACTORIAL,
+                                                               SIDS_RECIPROCAL,
+                                                               SIDS_DMS,
+                                                               SIDS_CUBEROOT,
+                                                               SIDS_POWTEN,
+                                                               SIDS_PERCENT,
+                                                               SIDS_SCIENTIFIC_NOTATION,
+                                                               SIDS_PI,
+                                                               SIDS_EQUAL,
+                                                               SIDS_MC,
+                                                               SIDS_MR,
+                                                               SIDS_MS,
+                                                               SIDS_MPLUS,
+                                                               SIDS_MMINUS,
+                                                               SIDS_EXP,
+                                                               SIDS_OPEN_PAREN,
+                                                               SIDS_CLOSE_PAREN,
+                                                               SIDS_0,
+                                                               SIDS_1,
+                                                               SIDS_2,
+                                                               SIDS_3,
+                                                               SIDS_4,
+                                                               SIDS_5,
+                                                               SIDS_6,
+                                                               SIDS_7,
+                                                               SIDS_8,
+                                                               SIDS_9,
+                                                               SIDS_A,
+                                                               SIDS_B,
+                                                               SIDS_C,
+                                                               SIDS_D,
+                                                               SIDS_E,
+                                                               SIDS_F,
+                                                               SIDS_FRAC,
+                                                               SIDS_SIND,
+                                                               SIDS_COSD,
+                                                               SIDS_TAND,
+                                                               SIDS_ASIND,
+                                                               SIDS_ACOSD,
+                                                               SIDS_ATAND,
+                                                               SIDS_SINR,
+                                                               SIDS_COSR,
+                                                               SIDS_TANR,
+                                                               SIDS_ASINR,
+                                                               SIDS_ACOSR,
+                                                               SIDS_ATANR,
+                                                               SIDS_SING,
+                                                               SIDS_COSG,
+                                                               SIDS_TANG,
+                                                               SIDS_ASING,
+                                                               SIDS_ACOSG,
+                                                               SIDS_ATANG,
+                                                               SIDS_ASINH,
+                                                               SIDS_ACOSH,
+                                                               SIDS_ATANH,
+                                                               SIDS_POWE,
+                                                               SIDS_POWTEN2,
+                                                               SIDS_SQRT2,
+                                                               SIDS_SQR,
+                                                               SIDS_CUBE,
+                                                               SIDS_CUBERT,
+                                                               SIDS_FACT,
+                                                               SIDS_RECIPROC,
+                                                               SIDS_DEGREES,
+                                                               SIDS_NEGATE,
+                                                               SIDS_RSH,
+                                                               SIDS_DIVIDEBYZERO,
+                                                               SIDS_DOMAIN,
+                                                               SIDS_UNDEFINED,
+                                                               SIDS_POS_INFINITY,
+                                                               SIDS_NEG_INFINITY,
+                                                               SIDS_ABORTED,
+                                                               SIDS_NOMEM,
+                                                               SIDS_TOOMANY,
+                                                               SIDS_OVERFLOW,
+                                                               SIDS_NORESULT,
+                                                               SIDS_INSUFFICIENT_DATA,
+                                                               SIDS_ERR_UNK_CH,
+                                                               SIDS_ERR_UNK_FN,
+                                                               SIDS_ERR_UNEX_NUM,
+                                                               SIDS_ERR_UNEX_CH,
+                                                               SIDS_ERR_UNEX_SZ,
+                                                               SIDS_ERR_MISMATCH_CLOSE,
+                                                               SIDS_ERR_UNEX_END,
+                                                               SIDS_ERR_SG_INV_ERROR,
+                                                               SIDS_ERR_INPUT_OVERFLOW,
+                                                               SIDS_ERR_OUTPUT_OVERFLOW };
+
     
+    void CCalcEngine::InitChopNumbers()
+{
+    // these rat numbers are set only once and then never change regardless of
+    // base or precision changes
+    assert(m_chopNumbers.size() >= 4);
+    m_chopNumbers[0] = Rational{ rat_qword };
+    m_chopNumbers[1] = Rational{ rat_dword };
+    m_chopNumbers[2] = Rational{ rat_word };
+    m_chopNumbers[3] = Rational{ rat_byte };
+    }
     
-    {
-    { private:
-  std::shared_ptr<grpc::Channel> CreateChannelWithInterceptors(
-      const string& target, const grpc::ChannelArguments& args,
-      std::vector<
-          std::unique_ptr<experimental::ClientInterceptorFactoryInterface>>
-          interceptor_creators) override {
-    grpc_channel_args channel_args;
-    args.SetChannelArgs(&channel_args);
-    return CreateChannelInternal(
-        '',
-        grpc_cronet_secure_channel_create(engine_, target.c_str(),
-                                          &channel_args, nullptr),
-        std::move(interceptor_creators));
+    /*
+ * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
+ * Method:    XGBoosterEvalOneIter
+ * Signature: (JI[J[Ljava/lang/String;)Ljava/lang/String;
+ */
+JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_XGBoosterEvalOneIter
+  (JNIEnv *jenv, jclass jcls, jlong jhandle, jint jiter, jlongArray jdmats, jobjectArray jevnames, jobjectArray jout) {
+  BoosterHandle handle = (BoosterHandle) jhandle;
+  std::vector<DMatrixHandle> dmats;
+  std::vector<std::string> evnames;
+  std::vector<const char*> evchars;
+    }
+    
+    // common regressions
+// linear regression
+struct LinearSquareLoss {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
+  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return true; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    return predt - label;
   }
-  void* engine_;
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    return 1.0f;
+  }
+  template <typename T>
+  static T PredTransform(T x) { return x; }
+  template <typename T>
+  static T FirstOrderGradient(T predt, T label) { return predt - label; }
+  template <typename T>
+  static T SecondOrderGradient(T predt, T label) { return T(1.0f); }
+  static bst_float ProbToMargin(bst_float base_score) { return base_score; }
+  static const char* LabelErrorMsg() { return ''; }
+  static const char* DefaultEvalMetric() { return 'rmse'; }
 };
-}  // namespace grpc
-namespace grpc_impl {
-std::shared_ptr<ChannelCredentials> CronetChannelCredentials(void* engine) {
-  return std::shared_ptr<ChannelCredentials>(
-      new grpc::CronetChannelCredentialsImpl(engine));
-}
-}  // namespace grpc_impl
-
     
-    // Provide an explicit override of health checking service interface.
-TEST_F(HealthServiceEnd2endTest, ExplicitlyOverride) {
-  EnableDefaultHealthCheckService(true);
-  EXPECT_TRUE(DefaultHealthCheckServiceEnabled());
-  std::unique_ptr<HealthCheckServiceInterface> override_service(
-      new CustomHealthCheckService(&health_check_service_impl_));
-  HealthCheckServiceInterface* underlying_service = override_service.get();
-  SetUpServer(false, false, true, std::move(override_service));
-  HealthCheckServiceInterface* service = server_->GetHealthCheckService();
-  EXPECT_TRUE(service == underlying_service);
+      void Write(const SparsePage& page, dmlc::Stream* fo) override {
+    const auto& offset_vec = page.offset.HostVector();
+    const auto& data_vec = page.data.HostVector();
+    CHECK(page.offset.Size() != 0 && offset_vec[0] == 0);
+    CHECK_EQ(offset_vec.back(), page.data.Size());
+    fo->Write(offset_vec);
+    if (page.data.Size() != 0) {
+      fo->Write(dmlc::BeginPtr(data_vec), page.data.Size() * sizeof(Entry));
     }
-    
-    // Add a second service with one async method.
-TEST_F(HybridEnd2endTest, GenericEchoAsyncRequestStream_AsyncDupService) {
-  typedef EchoTestService::WithAsyncMethod_RequestStream<
-      EchoTestService::WithGenericMethod_Echo<TestServiceImpl>>
-      SType;
-  SType service;
-  AsyncGenericService generic_service;
-  duplicate::EchoTestService::AsyncService dup_service;
-  SetUpServer(&service, &dup_service, &generic_service, nullptr);
-  ResetStub();
-  std::thread generic_handler_thread(HandleGenericCall, &generic_service,
-                                     cqs_[0].get());
-  std::thread request_stream_handler_thread(HandleClientStreaming<SType>,
-                                            &service, cqs_[1].get());
-  std::thread echo_handler_thread(
-      HandleEcho<duplicate::EchoTestService::AsyncService>, &dup_service,
-      cqs_[2].get(), true);
-  TestAllMethods();
-  SendEchoToDupService();
-  generic_handler_thread.join();
-  request_stream_handler_thread.join();
-  echo_handler_thread.join();
-}
-    
-                Windows::Globalization::DayOfWeek GetFirstDayOfWeek() const
-            {
-                return m_firstDayOfWeek;
-            }
-    
-    //----------------------------------------------------------------------------
-//
-//    FUNCTION: nRadixxtonum
-//
-//    ARGUMENTS: pointer to a number, base requested.
-//
-//    RETURN: number representation in radix requested.
-//
-//    DESCRIPTION: Does a base conversion on a number from
-//    internal to requested base. Assumes number being passed
-//    in is really in internal base form.
-//
-//----------------------------------------------------------------------------
-    
-    namespace CalculatorUnitTests
-{
-    static UCM::Unit UNIT1 = { 1, L'UNIT1', L'U1', true, false, false };
-    static UCM::Unit UNIT2 = { 2, L'UNIT2', L'U2', false, true, false };
-    static UCM::Unit UNIT3 = { 3, L'UNIT3', L'U3', false, false, false };
-    static UCM::Unit UNIT4 = { 4, L'UNIT4', L'U4', true, false, false };
-    static UCM::Unit UNIT5 = { 5, L'UNIT5', L'U5', false, false, false };
-    static UCM::Unit UNIT6 = { 6, L'UNIT6', L'U6', false, true, false };
-    static UCM::Unit UNIT7 = { 7, L'UNIT7', L'U7', false, true, false };
-    static UCM::Unit UNIT8 = { 8, L'UNIT8', L'U8', false, false, false };
-    static UCM::Unit UNIT9 = { 9, L'UNIT9', L'U9', true, false, false };
-    static UCM::Unit UNITWHIMSY = { 10, L'Whimsy', L'UW', true, false, true };
-    }
-    
-        if (nullptr != m_pHistoryDisplay)
-    {
-        unsigned int addedItemIndex = m_pHistoryDisplay->AddToHistory(m_spTokens, m_spCommands, numStr);
-        m_pCalcDisplay->OnHistoryItemAdded(addedItemIndex);
-    }
-    
-    
-    {        // we need to redraw to update the decimal point button
-        numChanged = true;
-    }
-    
-        class CalculatorHistory : public IHistoryDisplay
-    {
-    public:
-        CalculatorHistory(const size_t maxSize);
-        unsigned int AddToHistory(
-            _In_ std::shared_ptr<CalculatorVector<std::pair<std::wstring, int>>> const& spTokens,
-            _In_ std::shared_ptr<CalculatorVector<std::shared_ptr<IExpressionCommand>>> const& spCommands,
-            std::wstring_view result);
-        std::vector<std::shared_ptr<HISTORYITEM>> const& GetHistory();
-        std::shared_ptr<HISTORYITEM> const& GetHistoryItem(unsigned int uIdx);
-        void ClearHistory();
-        unsigned int AddItem(_In_ std::shared_ptr<HISTORYITEM> const& spHistoryItem);
-        bool RemoveItem(unsigned int uIdx);
-        size_t MaxHistorySize() const
-        {
-            return m_maxHistorySize;
-        }
-        ~CalculatorHistory(void);
-    }
-    
-    namespace CalcEngine
-{
-    class CalcNumSec
-    {
-    public:
-        CalcNumSec()
-            : value()
-            , m_isNegative(false)
-        {
-        }
-    }
-    }
-    
-    NarratorAnnouncement ^ CalculatorAnnouncement::GetOpenParenthesisCountChangedAnnouncement(String ^ announcement)
-{
-    return ref new NarratorAnnouncement(
-        announcement,
-        CalculatorActivityIds::OpenParenthesisCountChanged,
-        AutomationNotificationKind::ActionCompleted,
-        AutomationNotificationProcessing::ImportantMostRecent);
-}
-    
-      agent_a.WaitForFinish();
-  if (!FLAGS_only_one_send) {
-    agent_b.WaitForFinish();
-  }
-  param_ptr_a->print();
-  if (!FLAGS_only_one_send) {
-    param_ptr_b->print();
   }
     
+    #include <xgboost/data.h>
+#include <dmlc/io.h>
+#include <vector>
+#include <algorithm>
+#include <cstring>
+#include <string>
+#include <utility>
+#include <memory>
+#include <functional>
+    
     
     {
-    {}  // namespace planning
-}  // namespace apollo
+    {// use R's PRNG to replacd
+CustomGlobalRandomEngine::result_type
+CustomGlobalRandomEngine::operator()() {
+  return static_cast<result_type>(
+      std::floor(unif_rand() * CustomGlobalRandomEngine::max()));
+}
+}  // namespace common
+}  // namespace xgboost
 
     
-      std::mutex& mutex() { return mutex_; }
-  std::list<std::weak_ptr<TimerTask>>& task_list() { return task_list_; }
     
+    {template<typename IndexType, typename DType = real_t>
+Parser<IndexType> *
+CreateDenseLibSVMParser(const std::string& path,
+                        const std::map<std::string, std::string>& args,
+                        unsigned part_index,
+                        unsigned num_parts) {
+  CHECK_NE(args.count('num_col'), 0) << 'expect num_col in dense_libsvm';
+  return new DensifyParser<IndexType>(
+            Parser<IndexType>::Create(path.c_str(), part_index, num_parts, 'libsvm'),
+           uint32_t(atoi(args.at('num_col').c_str())));
+}
+}  // namespace data
     
-    {
-    {    if (emergency_mode && mode != Chassis::EMERGENCY_MODE) {
-      set_driving_mode(Chassis::EMERGENCY_MODE);
-      message_manager_->ResetSendMessages();
+    namespace xgboost {
+namespace common {
+/*!
+ * \brief experimental wsummary
+ * \tparam DType type of data content
+ * \tparam RType type of rank
+ */
+template<typename DType, typename RType>
+struct WQSummary {
+  /*! \brief an entry in the sketch summary */
+  struct Entry {
+    /*! \brief minimum rank */
+    RType rmin;
+    /*! \brief maximum rank */
+    RType rmax;
+    /*! \brief maximum weight */
+    RType wmin;
+    /*! \brief the value of data */
+    DType value;
+    // constructor
+    XGBOOST_DEVICE Entry() {}  // NOLINT
+    // constructor
+    XGBOOST_DEVICE Entry(RType rmin, RType rmax, RType wmin, DType value)
+        : rmin(rmin), rmax(rmax), wmin(wmin), value(value) {}
+    /*!
+     * \brief debug function,  check Valid
+     * \param eps the tolerate level for violating the relation
+     */
+    inline void CheckValid(RType eps = 0) const {
+      CHECK(rmin >= 0 && rmax >= 0 && wmin >= 0) << 'nonneg constraint';
+      CHECK(rmax- rmin - wmin > -eps) <<  'relation constraint: min/max';
     }
-    end = ::apollo::common::time::AsInt64<::apollo::common::time::micros>(
-        ::apollo::common::time::Clock::Now());
-    std::chrono::duration<double, std::micro> elapsed{end - start};
-    if (elapsed < default_period) {
-      std::this_thread::sleep_for(default_period - elapsed);
+    /*! \return rmin estimation for v strictly bigger than value */
+    XGBOOST_DEVICE inline RType RMinNext() const {
+      return rmin + wmin;
+    }
+    /*! \return rmax estimation for v strictly smaller than value */
+    XGBOOST_DEVICE inline RType RMaxPrev() const {
+      return rmax - wmin;
+    }
+  };
+  /*! \brief input data queue before entering the summary */
+  struct Queue {
+    // entry in the queue
+    struct QEntry {
+      // value of the instance
+      DType value;
+      // weight of instance
+      RType weight;
+      // default constructor
+      QEntry() = default;
+      // constructor
+      QEntry(DType value, RType weight)
+          : value(value), weight(weight) {}
+      // comparator on value
+      inline bool operator<(const QEntry &b) const {
+        return value < b.value;
+      }
+    };
+    // the input queue
+    std::vector<QEntry> queue;
+    // end of the queue
+    size_t qtail;
+    // push data to the queue
+    inline void Push(DType x, RType w) {
+      if (qtail == 0 || queue[qtail - 1].value != x) {
+        queue[qtail++] = QEntry(x, w);
+      } else {
+        queue[qtail - 1].weight += w;
+      }
+    }
+    inline void MakeSummary(WQSummary *out) {
+      std::sort(queue.begin(), queue.begin() + qtail);
+      out->size = 0;
+      // start update sketch
+      RType wsum = 0;
+      // construct data with unique weights
+      for (size_t i = 0; i < qtail;) {
+        size_t j = i + 1;
+        RType w = queue[i].weight;
+        while (j < qtail && queue[j].value == queue[i].value) {
+          w += queue[j].weight; ++j;
+        }
+        out->data[out->size++] = Entry(wsum, wsum + w, w, queue[i].value);
+        wsum += w; i = j;
+      }
+    }
+  };
+  /*! \brief data field */
+  Entry *data;
+  /*! \brief number of elements in the summary */
+  size_t size;
+  // constructor
+  WQSummary(Entry *data, size_t size)
+      : data(data), size(size) {}
+  /*!
+   * \return the maximum error of the Summary
+   */
+  inline RType MaxError() const {
+    RType res = data[0].rmax - data[0].rmin - data[0].wmin;
+    for (size_t i = 1; i < size; ++i) {
+      res = std::max(data[i].RMaxPrev() - data[i - 1].RMinNext(), res);
+      res = std::max(data[i].rmax - data[i].rmin - data[i].wmin, res);
+    }
+    return res;
+  }
+  /*!
+   * \brief query qvalue, start from istart
+   * \param qvalue the value we query for
+   * \param istart starting position
+   */
+  inline Entry Query(DType qvalue, size_t &istart) const { // NOLINT(*)
+    while (istart < size && qvalue > data[istart].value) {
+      ++istart;
+    }
+    if (istart == size) {
+      RType rmax = data[size - 1].rmax;
+      return Entry(rmax, rmax, 0.0f, qvalue);
+    }
+    if (qvalue == data[istart].value) {
+      return data[istart];
     } else {
-      AERROR << 'Too much time consumption in GemController looping process:'
-             << elapsed.count();
-    }
-  }
-}
-    
-    
-    {  boost::filesystem::recursive_directory_iterator itr(path);
-  while (itr != boost::filesystem::recursive_directory_iterator()) {
-    try {
-      if (apollo::common::util::EndWith(itr->path().string(), suffix)) {
-        files->push_back(itr->path().string());
-      }
-      ++itr;
-    } catch (const std::exception &ex) {
-      AWARN << 'Caught execption: ' << ex.what();
-      continue;
-    }
-  }
-  return true;
-}
-    
-    #include 'gtest/gtest.h'
-    
-    
-    {  if (writer->attributes().has_message_type()) {
-    *msg_type = writer->attributes().message_type();
-  }
-}
-    
-      ScopedEventBaseThread sebt{kThreadName};
-  sebt.getEventBase()->runInEventBaseThread([&] {
-    createdThreadName = folly::getCurrentThreadName();
-    done.post();
-  });
-    
-    #include <folly/Executor.h>
-#include <atomic>
-    
-    #include <folly/Range.h>
-    
-      /** push_retired */
-  void push_retired(hazptr_obj_list<Atom>& l, bool check = true) {
-    /*** Full fence ***/ asymmetricLightBarrier();
-    while (true) {
-      auto r = retired();
-      l.tail()->set_next(r);
-      if (retired_.compare_exchange_weak(
-              r,
-              l.head(),
-              std::memory_order_release,
-              std::memory_order_acquire)) {
-        break;
+      if (istart == 0) {
+        return Entry(0.0f, 0.0f, 0.0f, qvalue);
+      } else {
+        return Entry(data[istart - 1].RMinNext(),
+                     data[istart].RMaxPrev(),
+                     0.0f, qvalue);
       }
     }
-    rcount_.fetch_add(l.count(), std::memory_order_release);
-    if (check) {
-      check_cleanup_and_reclaim();
+  }
+  /*! \return maximum rank in the summary */
+  inline RType MaxRank() const {
+    return data[size - 1].rmax;
+  }
+  /*!
+   * \brief copy content from src
+   * \param src source sketch
+   */
+  inline void CopyFrom(const WQSummary &src) {
+    size = src.size;
+    std::memcpy(data, src.data, sizeof(Entry) * size);
+  }
+  inline void MakeFromSorted(const Entry* entries, size_t n) {
+    size = 0;
+    for (size_t i = 0; i < n;) {
+      size_t j = i + 1;
+      // ignore repeated values
+      for (; j < n && entries[j].value == entries[i].value; ++j) {}
+      data[size++] = Entry(entries[i].rmin, entries[i].rmax, entries[i].wmin,
+                           entries[i].value);
+      i = j;
     }
   }
-    
-      ~AsyncFileWriter();
-    
-    #include <folly/File.h>
-#include <folly/Range.h>
-#include <folly/Synchronized.h>
-#include <folly/logging/LogWriter.h>
-    
-    template <class Alloc>
-std::pair<typename Arena<Alloc>::Block*, size_t>
-Arena<Alloc>::Block::allocate(Alloc& alloc, size_t size, bool allowSlack) {
-  size_t allocSize = sizeof(Block) + size;
-  if (allowSlack) {
-    allocSize = ArenaAllocatorTraits<Alloc>::goodSize(alloc, allocSize);
+  /*!
+   * \brief debug function, validate whether the summary
+   *  run consistency check to check if it is a valid summary
+   * \param eps the tolerate error level, used when RType is floating point and
+   *        some inconsistency could occur due to rounding error
+   */
+  inline void CheckValid(RType eps) const {
+    for (size_t i = 0; i < size; ++i) {
+      data[i].CheckValid(eps);
+      if (i != 0) {
+        CHECK(data[i].rmin >= data[i - 1].rmin + data[i - 1].wmin) << 'rmin range constraint';
+        CHECK(data[i].rmax >= data[i - 1].rmax + data[i].wmin) << 'rmax range constraint';
+      }
+    }
   }
+  /*!
+   * \brief set current summary to be pruned summary of src
+   *        assume data field is already allocated to be at least maxsize
+   * \param src source summary
+   * \param maxsize size we can afford in the pruned sketch
+   */
+    }
+    }
     }
     
-    template <typename T>
-using SysArenaAllocator = ArenaAllocator<T, SysAllocator<void>>;
+      /**
+   * @brief Update the internal config data.
+   *
+   * @param config A map of domain or namespace to config data.
+   * @return If the config changes were applied.
+   */
+  Status update(const std::map<std::string, std::string>& config);
     
-    static_assert(AllocatorHasTrivialDeallocate<SysArena>::value, '');
+    #include <cstdlib>
     
-    TEST_F(FifoSemaphoreTest, basic) {
-  test_basic<FifoSemaphore>();
+    #pragma once
+    
+    
+    {  std::vector<rocksdb::ColumnFamilyDescriptor> descriptors;
+  for (const auto& column : column_families) {
+    descriptors.push_back(
+        rocksdb::ColumnFamilyDescriptor(column, handle.options));
+  }
+  std::vector<rocksdb::ColumnFamilyHandle*> column_family_handles;
+  rocksdb::DB* db = nullptr;
+  auto status = rocksdb::DB::Open(
+      handle.options, path, descriptors, &column_family_handles, &db);
+  if (status.IsInvalidArgument()) {
+    return createError(RocksdbMigrationError::InvalidArgument)
+           << status.ToString();
+  }
+  if (!status.ok()) {
+    return createError(RocksdbMigrationError::FailToOpen) << status.ToString();
+  }
+  handle.db_handle = std::unique_ptr<rocksdb::DB>(db);
+  for (const auto& ptr : column_family_handles) {
+    handle.handles[ptr->GetName()] =
+        std::unique_ptr<rocksdb::ColumnFamilyHandle>(ptr);
+  }
+  return std::move(handle);
 }
     
-      {
-    Pool pool(2);
-    std::vector<std::thread> thr(nthreads);
-    for (auto i = 0; i < nthreads; ++i) {
-      thr[i] = std::thread([&]() {
-        started.fetch_add(1);
-        while (!start.load()) {
-          ;
-        }
-        for (auto j = 0; j < count; ++j) {
-          uint32_t idx = pool.allocIndex();
-          if (idx != 0) {
-            pool.recycleIndex(idx);
-          }
-        }
-      });
+    Status LoggerPlugin::call(const PluginRequest& request,
+                          PluginResponse& response) {
+  std::vector<StatusLogLine> intermediate_logs;
+  if (request.count('string') > 0) {
+    return this->logString(request.at('string'));
+  } else if (request.count('snapshot') > 0) {
+    return this->logSnapshot(request.at('snapshot'));
+  } else if (request.count('init') > 0) {
+    deserializeIntermediateLog(request, intermediate_logs);
+    this->setProcessName(request.at('init'));
+    this->init(this->name(), intermediate_logs);
+    return Status(0);
+  } else if (request.count('status') > 0) {
+    deserializeIntermediateLog(request, intermediate_logs);
+    return this->logStatus(intermediate_logs);
+  } else if (request.count('event') > 0) {
+    return this->logEvent(request.at('event'));
+  } else if (request.count('action') && request.at('action') == 'features') {
+    size_t features = 0;
+    features |= (usesLogStatus()) ? LOGGER_FEATURE_LOGSTATUS : 0;
+    features |= (usesLogEvent()) ? LOGGER_FEATURE_LOGEVENT : 0;
+    return Status(static_cast<int>(features));
+  } else {
+    return Status(1, 'Unsupported call to logger plugin');
+  }
+}
+    
+    /**
+ * @brief Superclass for the pluggable logging facilities.
+ *
+ * In order to make the logging of osquery results and inline debug, warning,
+ * error status easy to integrate into your environment, we take advantage of
+ * a plugin interface which allows you to integrate osquery with your internal
+ * large-scale logging infrastructure.
+ *
+ * You may use flume, splunk, syslog, scribe, etc. In order to use your
+ * specific upstream logging systems, one simply needs to create a custom
+ * subclass of LoggerPlugin. That subclass should at least implement the
+ * LoggerPlugin::logString method.
+ *
+ * Consider the following example:
+ *
+ * @code{.cpp}
+ *   class TestLoggerPlugin : public LoggerPlugin {
+ *    public:
+ *     osquery::Status logString(const std::string& s) {
+ *       int i = 0;
+ *       internal::logStringToFlume(s, i);
+ *       std::string message;
+ *       if (i == 0) {
+ *         message = 'OK';
+ *       } else {
+ *         message = 'Failed';
+ *       }
+ *       return osquery::Status(i, message);
+ *     }
+ *  };
+ *
+ *  REGISTER(TestLoggerPlugin, 'logger', 'test');
+ * @endcode
+ */
+class LoggerPlugin : public Plugin {
+ public:
+  /// The LoggerPlugin PluginRequest action router.
+  Status call(const PluginRequest& request, PluginResponse& response) override;
     }
+    
+    
+    {  name_ = name;
+}
+    
+    
+    {  EXPECT_TRUE(db->putString(kPersistentSettings, 'test_key_string', 'string'));
+  auto string_value = db->getString(kPersistentSettings, 'test_key_string');
+  EXPECT_TRUE(string_value);
+  EXPECT_EQ(string_value.take(), 'string');
+}
+    
+    Status deserializeDiffResults(const rj::Value& doc, DiffResults& dr) {
+  if (!doc.IsObject()) {
+    return Status(1);
+  }
     }
