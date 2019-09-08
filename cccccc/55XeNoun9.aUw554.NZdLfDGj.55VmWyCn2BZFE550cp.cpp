@@ -1,301 +1,234 @@
 
         
-          for (const auto& node : item_.MainOpsFanin()) {
-    PrintNodeInfo(node, properties, debug, os);
-  }
-  for (const auto& node : item_.EnqueueOpsFanin()) {
-    PrintNodeInfo(node, properties, debug, os);
-  }
+        REGISTER_CPU_OPERATOR(
+    MergeMultiScalarFeatureTensorsGradient,
+    MergeMultiScalarFeatureTensorsGradientOp<CPUContext>);
+OPERATOR_SCHEMA(MergeMultiScalarFeatureTensorsGradient)
+    .SetDoc(
+        'Explode given multi-feature tensors with scalar features into many.' +
+        doc)
+    .NumInputs([](int n) { return n >= 2; })
+    .NumOutputs([](int n) { return n >= 1; })
+    .Input(0, 'in1_lengths', '.lengths')
+    .Input(1, 'out_values_grad', '.values_grad')
+    .Output(0, 'in1_values_grad', '.values_grad');
+REGISTER_GRADIENT(
+    MergeMultiScalarFeatureTensors,
+    GetMergeMultiScalarFeatureTensorsGradient);
     
-    // Returns the id number of the bfloat16 numpy type.
-int Bfloat16NumpyType();
+    OPERATOR_SCHEMA(Floor)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .AllowInplace({{0, 0}})
+    .SetDoc(R'DOC(
+Element-wise application of the floor function ($y=floor(x)$) to the input
+tensor `X`. Output tensor shape is the same as the input tensor. This
+operator can be used in an in-place fashion by using the same input blob as the
+output blob.
     
-        http://www.apache.org/licenses/LICENSE-2.0
+    Example 2 (with KEY):
+DATA  = [1, 2, 3, 4, 5, 6, 7, 8]
+KEY   = [0, 1, 3, 2, 1, 0, 1, 0]
+RANGES = [
+  [
+    [2, 4],
+    [0, 2],
+  ],
+  [
+    [0, 0],
+    [6, 2],
+  ]
+]
+lengths = [4, 2]
+OUTPUT[0] = [[6, 5, 4, 3], [0, 0, 0, 0]]
+OUTPUT[1] = [[1, 2], [8, 7]]
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
-    
-    // Safe container for an owned PyObject. On destruction, the reference count of
-// the contained object will be decremented.
-using Safe_PyObjectPtr = std::unique_ptr<PyObject, detail::PyDecrefDeleter>;
-Safe_PyObjectPtr make_safe(PyObject* o);
-    
-      const tensorflow::OpRegistrationData* op_reg_data;
-  auto status =
-      tensorflow::OpRegistry::Global()->LookUp(node_def.op(), &op_reg_data);
-  if (!status.ok()) {
-    LOG(WARNING) << 'Op ' << node_def.op() << ' not found: ' << status;
-    return '';
-  }
-  AddDefaultsToNodeDef(op_reg_data->op_def, &node_def);
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    namespace stream_executor {
-namespace host {
-    }
-    }
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    void Tesseract::PrerecAllWordsPar(const GenericVector<WordData>& words) {
-  // Prepare all the blobs.
-  GenericVector<BlobData> blobs;
-  for (int w = 0; w < words.size(); ++w) {
-    if (words[w].word->ratings != nullptr &&
-        words[w].word->ratings->get(0, 0) == nullptr) {
-      for (int s = 0; s < words[w].lang_words.size(); ++s) {
-        Tesseract* sub = s < sub_langs_.size() ? sub_langs_[s] : this;
-        const WERD_RES& word = *words[w].lang_words[s];
-        for (int b = 0; b < word.chopped_word->NumBlobs(); ++b) {
-          blobs.push_back(BlobData(b, sub, word));
-        }
-      }
-    }
-  }
-  // Pre-classify all the blobs.
-  if (tessedit_parallelize > 1) {
-#ifdef _OPENMP
-#pragma omp parallel for num_threads(10)
-#endif  // _OPENMP
-    for (int b = 0; b < blobs.size(); ++b) {
-      *blobs[b].choices =
-          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
-    }
-  } else {
-    // TODO(AMD) parallelize this.
-    for (int b = 0; b < blobs.size(); ++b) {
-      *blobs[b].choices =
-          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
-    }
-  }
-}
-    
-    class MutableIterator;
-    
-    #endif  // THIRD_PARTY_TESSERACT_CCUTIL_DOUBLEPTR_H_
-
-    
-     private:
-  // A hole in the heap exists at hole_index, and we want to fill it with the
-  // given pair. SiftUp sifts the hole upward to the correct position and
-  // returns the destination index without actually putting pair there.
-  int SiftUp(int hole_index, const Pair& pair) {
-    int parent;
-    while (hole_index > 0 && pair < heap_[parent = ParentNode(hole_index)]) {
-      heap_[hole_index] = heap_[parent];
-      hole_index = parent;
-    }
-    return hole_index;
-  }
-    
-    #include <Recast.h>
-    
-    	static _FORCE_INLINE_ uint32_t hash(const String &p_string) { return p_string.hash(); }
-	static _FORCE_INLINE_ uint32_t hash(const char *p_cstr) { return hash_djb2(p_cstr); }
-	static _FORCE_INLINE_ uint32_t hash(const uint64_t p_int) { return hash_one_uint64(p_int); }
-    
-    
-    {	return list;
-}
-    
-    public:
-	PowerIphone();
-	virtual ~PowerIphone();
-    
-    #endif // CRASH_HANDLER_OSX_H
-
-    
-    #include 'goo/gtypes.h'
-    
-    
-    {  GooList intervals;
-};
-
-    
-      if (!trans || !trans->isDict ()) {
-    ok = gFalse;
-    return;
-  }
-    
-    class PopplerCacheKey
-{
-  public:
-    virtual ~PopplerCacheKey();
-    virtual bool operator==(const PopplerCacheKey &key) const = 0;
-};
-    
-    #ifndef PROFILE_DATA_H
-#define PROFILE_DATA_H
-    
-    
-  if (obj->dictLookup('A', &tmp)->isBool()) {
-    autoPlay = tmp.getBool();
-  }
-  tmp.free();
-    
-      // defined in media play parameters, p 770
-  // correspond to 'fit' SMIL's attribute
-  MediaFittingPolicy fittingPolicy;        // fittingUndefined
-    
-    
-    {  return newsound;
-}
-
-    
-    
-    {  Object *streamObj;
-  SoundKind kind;
-  GooString *fileName;
-  double samplingRate;
-  int channels;
-  int bitsPerSample;
-  SoundEncoding encoding;
-};
-    
-    
-    {  ctm = state->getCTM();
-  mat[0] = (SplashCoord)ctm[0];
-  mat[1] = (SplashCoord)ctm[1];
-  mat[2] = (SplashCoord)ctm[2];
-  mat[3] = (SplashCoord)ctm[3];
-  mat[4] = (SplashCoord)ctm[4];
-  mat[5] = (SplashCoord)ctm[5];
-  splash->setMatrix(mat);
-}
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    
-      ALWAYS_INLINE
-  void emitMR8(X64Instr op, RegNumber br, RegNumber ir, int s, int disp,
-               RegNumber r) {
-    emitCMX(op, 0, br, ir, s, disp, r, true, 0, false, sz::byte);
-  }
-    
-      // DataBlock can optionally be growable. The initial expansion of DataBlock
-  // will allocate a new buffer that is owned by the DataBlock, subsequent
-  // expansions will use realloc to expand this block until m_maxGrow has been
-  // reached. Only DataBlocks which have a different m_base from m_destBase may
-  // be grown, as expansion may move the location of m_destBase.
-  struct Deleter final { void operator()(uint8_t* a) const { ::free(a); } };
-  std::unique_ptr<uint8_t, Deleter> m_destBuf{nullptr};
-    
-    #endif
-
-    
-      Slice Transform(const Slice& src) const override {
-    assert(InDomain(src));
-    return Slice(src.data(), std::min(cap_len_, src.size()));
-  }
-    
-    // Merge operator that picks the maximum operand, Comparison is based on
-// Slice::compare
-class MaxOperator : public MergeOperator {
+    template <typename T, class Context>
+class BernoulliJSDGradientOp final : public Operator<Context> {
  public:
-  bool FullMergeV2(const MergeOperationInput& merge_in,
-                   MergeOperationOutput* merge_out) const override {
-    Slice& max = merge_out->existing_operand;
-    if (merge_in.existing_value) {
-      max = Slice(merge_in.existing_value->data(),
-                  merge_in.existing_value->size());
-    } else if (max.data() == nullptr) {
-      max = Slice();
-    }
-    }
+  USE_SIMPLE_CTOR_DTOR(BernoulliJSDGradientOp);
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
+  bool RunOnDevice() override;
+};
+    
+    String ResourceImporterOGGVorbis::get_resource_type() const {
     }
     
-    // Returns an Env that translates paths such that the root directory appears to
-// be chroot_dir. chroot_dir should refer to an existing directory.
-Env* NewChrootEnv(Env* base_env, const std::string& chroot_dir);
+    	if (GjkEpa2::Penetration(p_shape_A, p_transform_A, p_shape_B, p_transform_B, p_transform_B.origin - p_transform_A.origin, res)) {
+		if (p_result_callback) {
+			if (p_swap)
+				p_result_callback(res.witnesses[1], res.witnesses[0], p_userdata);
+			else
+				p_result_callback(res.witnesses[0], res.witnesses[1], p_userdata);
+		}
+		return true;
+	}
     
-    std::string kDBPath = '/tmp/rocksdb_column_families_example';
+    void FileAccessNetwork::close() {
+    }
+    
+    		bool active;
+		Vector<Surface *> surfaces;
+		int blend_shape_count;
+		VS::BlendShapeMode blend_shape_mode;
+		AABB custom_aabb;
+		mutable uint64_t last_pass;
+		SelfList<MultiMesh>::List multimeshes;
+		_FORCE_INLINE_ void update_multimeshes() {
+    }
+    
+    void DictionaryPropertyEdit::_notif_changev(const String &p_v) {
+	_change_notify(p_v.utf8().get_data());
+}
+    
+    protected:
+	static void _bind_methods();
+    
+    	if (!singleton->make_flags.has(path)) {
+		singleton->make_flags[path] = 0;
+	}
     
     
-    {  rocksdb::WriteOptions wopts;
-  db->Merge(wopts, '0', 'bad');  // This is filtered out
-  db->Merge(wopts, '1', 'data1');
-  db->Merge(wopts, '1', 'bad');
-  db->Merge(wopts, '1', 'data2');
-  db->Merge(wopts, '1', 'bad');
-  db->Merge(wopts, '3', 'data3');
-  db->CompactRange(rocksdb::CompactRangeOptions(), nullptr, nullptr);
-  fprintf(stderr, 'filter.count_ = %d\n', filter.count_);
-  assert(filter.count_ == 0);
-  fprintf(stderr, 'filter.merge_count_ = %d\n', filter.merge_count_);
-  assert(filter.merge_count_ == 6);
+    {    // By default ImGuiFreeType will use IM_ALLOC()/IM_FREE().
+    // However, as FreeType does lots of allocations we provide a way for the user to redirect it to a separate memory heap if desired:
+    IMGUI_API void SetAllocatorFunctions(void* (*alloc_func)(size_t sz, void* user_data), void (*free_func)(void* ptr, void* user_data), void* user_data = NULL);
 }
 
     
-    #include <string>
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
     
-    // Move all L0 files to target_level skipping compaction.
-// This operation succeeds only if the files in L0 have disjoint ranges; this
-// is guaranteed to happen, for instance, if keys are inserted in sorted
-// order. Furthermore, all levels between 1 and target_level must be empty.
-// If any of the above condition is violated, InvalidArgument will be
-// returned.
-Status PromoteL0(DB* db, ColumnFamilyHandle* column_family,
-                 int target_level = 1);
-    
-    
-    {  virtual std::string GetPrintableOptions() const = 0;
-};
-    
-    namespace rocksdb {
-    }
-    
-    
-    {    SwooleG.main_reactor->once = false;
-}
-    
-        for (long i = 0; i < N; i++)
+        // Main loop
+    bool done = false;
+    while (!done)
     {
-        ASSERT_EQ(swThreadPool_dispatch(&pool, (void*) &result, sizeof(result)), SW_OK);
-    }
-    
-    
-    {
-    {    Exception(int code) : code(code)
-    {
-        msg = swoole_strerror(code);
-    }
-};
-}
-    
-    void ExampleQt::run() {
-    }
-    
-    const char* swoole_mime_type_get(const char *filename)
-{
-    auto suffix = get_suffix(filename);
-    auto i = mime_map.find(suffix);
-    if (i != mime_map.end())
-    {
-        return i->second.c_str();
-    }
-    return 'application/octet-stream';
-}
-    
-        for (i = 1; i < 1024; i++)
-    {
-        uint32_t key = (rand() % (20000 * 37));
-        if (key % 37 == 0)
+        // Poll and handle events (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
         {
-            continue;
+            ImGui_ImplSDL2_ProcessEvent(&event);
+            if (event.type == SDL_QUIT)
+                done = true;
+            if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window))
+                done = true;
         }
-        int ret = (int) (long) swRbtree_find(tree, key);
-        ASSERT_EQ(ret, 0);
     }
+    
+    // Auto-detect GL version
+#if !defined(IMGUI_IMPL_OPENGL_ES2) && !defined(IMGUI_IMPL_OPENGL_ES3)
+#if (defined(__APPLE__) && (TARGET_OS_IOS || TARGET_OS_TV)) || (defined(__ANDROID__))
+#define IMGUI_IMPL_OPENGL_ES3       // iOS, Android  -> GL ES 3, '#version 300 es'
+#elif defined(__EMSCRIPTEN__)
+#define IMGUI_IMPL_OPENGL_ES2       // Emscripten    -> GL ES 2, '#version 100'
+#endif
+#endif
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        CleanupDeviceD3D();
+    ::DestroyWindow(hwnd);
+    ::UnregisterClass(wc.lpszClassName, wc.hInstance);
+    
+        // out_of_range.109
+    try
+    {
+        // try to use an array index that is not a number
+        json::const_reference ref = j.at('/array/one'_json_pointer);
+    }
+    catch (json::parse_error& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+    
+        ret = p.write(&p, (void*) SW_STRS('hello world1'));
+    ASSERT_GT(ret, 0);
+    ret = p.write(&p, (void*) SW_STRS('hello world2'));
+    ASSERT_GT(ret, 0);
+    ret = p.write(&p, (void*) SW_STRS('hello world3'));
+    ASSERT_GT(ret, 0);
+    
+        un1.sun_family = AF_UNIX;
+    un2.sun_family = AF_UNIX;
+    
+        signals:
+        void finished();
+    
+            auto iter = cache_map.find(key);
+        if (iter != cache_map.end())
+        {
+            iter->second->second.first = expire_time;
+            iter->second->second.second = val;
+            cache_list.splice(cache_list.begin(), cache_list, iter->second);
+            return;
+        }
+    
+    
+    {    // prepare RSA public key
+    BIO *bio = NULL;
+    RSA *public_rsa = NULL;
+    if (sw_unlikely((bio = BIO_new_mem_buf((void *)rsa_public_key, -1)) == NULL))
+    {
+        swWarn('BIO_new_mem_buf publicKey error!');
+        goto _error;
+    }
+    // PEM_read_bio_RSA_PUBKEY
+    ERR_clear_error();
+    if (sw_unlikely((public_rsa = PEM_read_bio_RSA_PUBKEY(bio, NULL, NULL, NULL)) == NULL))
+    {
+        char err_buf[512];
+        ERR_load_crypto_strings();
+        ERR_error_string_n(ERR_get_error(), err_buf, sizeof(err_buf));
+        swWarn('[PEM_read_bio_RSA_PUBKEY ERROR]: %s', err_buf);
+        goto _error;
+    }
+    BIO_free_all(bio);
+    // encrypt with RSA public key
+    int rsa_len = RSA_size(public_rsa);
+    unsigned char encrypt_msg[rsa_len];
+    // RSA_public_encrypt
+    ERR_clear_error();
+    size_t flen = rsa_len - 42;
+    flen = password_bytes_length > flen ? flen : password_bytes_length;
+    swTraceLog(SW_TRACE_MYSQL_CLIENT, 'rsa_len=%d', rsa_len);
+    if (sw_unlikely(RSA_public_encrypt(flen, (const unsigned char *) password_bytes, (unsigned char *) encrypt_msg, public_rsa, RSA_PKCS1_OAEP_PADDING) < 0))
+    {
+        char err_buf[512];
+        ERR_load_crypto_strings();
+        ERR_error_string_n(ERR_get_error(), err_buf, sizeof(err_buf));
+        swWarn('[RSA_public_encrypt ERROR]: %s', err_buf);
+        goto _error;
+    }
+    RSA_free(public_rsa);
+    memcpy(data.body, (char *)encrypt_msg, rsa_len); // copy rsa to buf
+    set_header(rsa_len, raw_data_pakcet->header.number + 1);
+    swMysqlPacketDump(get_length(), get_number(), get_data(), 'Protocol::AuthSignatureResponse');
+#endif
+}
+    
+    #include <limits.h>
+#include <Zend/zend_llist.h>
+#ifdef ZTS
+#include <TSRM/TSRM.h>
+#endif
