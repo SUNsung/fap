@@ -1,205 +1,266 @@
 
         
-        // Initializes the specified startup info struct with the required properties and
-// updates its thread attribute list with the specified ConPTY handle
-HRESULT InitializeStartupInfoAttachedToPseudoConsole(STARTUPINFOEX* pStartupInfo, HPCON hPC)
-{
-    HRESULT hr{ E_UNEXPECTED };
+        STATISTIC(NumClassDevirt, 'Number of class_method applies devirtualized');
+STATISTIC(NumWitnessDevirt, 'Number of witness_method applies devirtualized');
+    
+        findAnchorsInTables();
+    
+    namespace swift {
     }
     
-        // use strings to print preset names in the perf test results:
-    String preset_string = get<0>(params);
-    int preset = DISOpticalFlow::PRESET_FAST;
-    if (preset_string == 'PRESET_ULTRAFAST')
-        preset = DISOpticalFlow::PRESET_ULTRAFAST;
-    else if (preset_string == 'PRESET_FAST')
-        preset = DISOpticalFlow::PRESET_FAST;
-    else if (preset_string == 'PRESET_MEDIUM')
-        preset = DISOpticalFlow::PRESET_MEDIUM;
-    Size sz = get<1>(params);
+      /// This class provides a non-trivial .cxx_construct or .cxx_destruct
+  /// implementation.
+  HasCXXStructors      = 0x00004,
+    
+      /// Read a swiftdeps file from \p buffer and return a SourceFileDepGraph if
+  /// successful.
+  Optional<SourceFileDepGraph> static loadFromBuffer(llvm::MemoryBuffer &);
+    
+        UMat tmp(Size(dst_frame1.cols / (1 << src_scale), dst_frame1.rows / (1 << src_scale)), CV_8U);
+    randu(tmp, 0, 255);
+    resize(tmp, dst_frame1, dst_frame1.size(), 0.0, 0.0, INTER_LINEAR_EXACT);
+    resize(tmp, dst_frame2, dst_frame2.size(), 0.0, 0.0, INTER_LINEAR_EXACT);
     
     
-//
-// Decode using a the 'One-Shift' strategy for decoding, with a 
-// small-ish table to accelerate decoding of short codes.
-//
-// If possible, try looking up codes into the acceleration table.
-// This has a few benifits - there's no search involved; We don't
-// need an additional lookup to map id to symbol; we don't need
-// a full 64-bits (so less refilling). 
-//
-    
-    
-OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_EXIT
-    
-    
-FrameBuffer::ConstIterator
-FrameBuffer::end () const
-{
-    return _map.end();
+    {    bufferNumBits -= numBits;
+    return (buffer >> bufferNumBits) & ((1 << numBits) - 1);
 }
     
+        //
+    // Number of bits in our acceleration table. Should match all
+    // codes up to TABLE_LOOKUP_BITS in length.
+    //
     
-Header::Header (const Box2i &displayWindow,
-		const Box2i &dataWindow,
-		float pixelAspectRatio,
-		const V2f &screenWindowCenter,
-		float screenWindowWidth,
-		LineOrder lineOrder,
-		Compression compression)
-:
-    _map()
+    template <>
+IMF_EXPORT
+void FloatVectorAttribute::readValueFrom
+    (OPENEXR_IMF_INTERNAL_NAMESPACE::IStream &, int, int);
+    
+    // file handling classes
+class OutputFile;
+class TiledInputFile;
+class ScanLineInputFile;
+class InputFile;
+class TiledOutputFile;
+class DeepScanLineInputFile;
+class DeepScanLineOutputFile;
+class DeepTiledInputFile;
+class DeepTiledOutputFile;
+class AcesInputFile;
+class AcesOutputFile;
+class TiledInputPart;
+class TiledInputFile;
+class TileOffsets;
+    
+    OPENEXR_IMF_INTERNAL_NAMESPACE_SOURCE_ENTER
+    
+    void GenericInputFile::readMagicNumberAndVersionField(OPENEXR_IMF_INTERNAL_NAMESPACE::IStream& is, int& version)
 {
-    staticInitialize();
+    //
+    // Read the magic number and the file format version number.
+    // Then check if we can read the rest of this file.
+    //
     }
     
-    #include <ImfIO.h>
-#include 'Iex.h'
-#include 'ImfNamespace.h'
+        if (parts == 1)
+    {
+        if (headers[0].type() == TILEDIMAGE)
+            version |= TILED_FLAG;
+    }
+    else
+    {
+        version |= MULTI_PART_FILE_FLAG;
+    }
     
-        virtual void	seekg (Int64 pos) = 0;
+    for (int i = 0; i < parts; i++)
+    {
+        if (usesLongNames (headers[i]))
+            version |= LONG_NAMES_FLAG;
+    }
     
     
-struct InputPartData
+//
+// DECODING
+//
+    
+    
+    //--------------------------
+    // Access to the file header
+    //--------------------------
+    
+    #endif /* IMFINPUTPARTDATA_H_ */
+
+    
+    #endif /* IMFINPUTSTREAMMUTEX_H_ */
+
+    
+    // Author: anuraag@google.com (Anuraag Agrawal)
+// Author: tibell@google.com (Johan Tibell)
+    
+    PyObject* MergeFrom(RepeatedCompositeContainer* self, PyObject* other) {
+  return Extend(self, other);
+}
+    
+    // Builds a RepeatedScalarContainer object, from a parent message and a
+// field descriptor.
+extern RepeatedScalarContainer* NewContainer(
+    CMessage* parent, const FieldDescriptor* parent_field_descriptor);
+    
+    #include <google/protobuf/stubs/logging.h>
+#include <google/protobuf/stubs/common.h>
+#include <google/protobuf/io/coded_stream.h>
+#include <google/protobuf/io/zero_copy_stream_impl_lite.h>
+#include <google/protobuf/arena.h>
+    
+      // Creates a ZeroCopyOutputStream which will insert code into the given file
+  // at the given insertion point.  See plugin.proto (plugin.pb.h) for more
+  // information on insertion points.  The default implementation
+  // assert-fails -- it exists only for backwards-compatibility.
+  //
+  // WARNING:  This feature is currently EXPERIMENTAL and is subject to change.
+  virtual io::ZeroCopyOutputStream* OpenForInsert(
+      const std::string& filename, const std::string& insertion_point);
+    
+      Context* context_;
+  ClassNameResolver* name_resolver_;
+    
+    #endif  // GOOGLE_PROTOBUF_COMPILER_JAVA_FILE_H__
+
+    
+    U_NAMESPACE_BEGIN
+    
+    #include 'unicode/scientificnumberformatter.h'
+#include 'unicode/dcfmtsym.h'
+#include 'unicode/fpositer.h'
+#include 'unicode/utf16.h'
+#include 'unicode/uniset.h'
+#include 'decfmtst.h'
+#include 'unicode/decimfmt.h'
+    
+    int32_t SearchIterator::first(UErrorCode &status)
 {
-        Header                  header;
-        int                     numThreads;
-        int                     partNumber;
-        int                     version;
-        InputStreamMutex*       mutex;
-        std::vector<Int64>      chunkOffsets;
-        bool                    completed;
+    if (U_FAILURE(status)) {
+        return USEARCH_DONE;
     }
+    setOffset(0, status);
+    return handleNext(0, status);
+}
     
-    OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_ENTER
+    #if !UCONFIG_NO_FORMATTING
     
-    #include 'caffe2/core/net_async_base.h'
-    
-    TEST_F(ModulesTest, Conv1d) {
-  Conv1d model(Conv1dOptions(3, 2, 3).stride(2));
-  auto x = torch::randn({2, 3, 5}, torch::requires_grad());
-  auto y = model(x);
-  torch::Tensor s = y.sum();
-    }
-    
-    /// Applies [Batch Normalization](https://arxiv.org/abs/1502.03167) to an input.
-///
-/// Refer to the documentation for
-/// [`BatchNorm1d`](https://pytorch.org/docs/stable/nn.html#torch.nn.BatchNorm1d)
-/// in PyTorch to learn more about the exact semantics of this module, __but see
-/// the note below regarding differences between the Python and C++ API__.
-///
-/// \rst
-/// .. attention::
-///   In the Python API, there are separate implementations for 1-D, 2-D and 3-D
-///   BatchNorm. In C++, there is only one `BatchNorm` module, which works for
-///   any of these dimensions.
-/// \endrst
-class TORCH_API BatchNormImpl : public torch::nn::Cloneable<BatchNormImpl> {
- public:
-  explicit BatchNormImpl(int64_t features)
-      : BatchNormImpl(BatchNormOptions(features)) {}
-  explicit BatchNormImpl(BatchNormOptions options);
-    }
-    
-    namespace caffe2 {
-    }
-    
-    REGISTER_CPU_OPERATOR(
-    MergeSingleScalarFeatureTensorsGradient,
-    MergeSingleScalarFeatureTensorsGradientOp<CPUContext>);
-OPERATOR_SCHEMA(MergeSingleScalarFeatureTensorsGradient)
-    .SetDoc(
-        'Explode multi-feature tensor of scalar features into one or more'
-        'single-feature tensors' +
-        doc)
-    .NumInputs([](int n) { return n >= 2; })
-    .NumOutputs([](int n) { return n >= 1; })
-    .Input(0, 'in1_presence', '.presence')
-    .Input(1, '.values_grad', '.values_grad')
-    .Output(0, 'in1_grad', '_grad of inputs');
-REGISTER_GRADIENT(
-    MergeSingleScalarFeatureTensors,
-    GetMergeSingleScalarFeatureTensorsGradient);
-    
-    OPERATOR_SCHEMA(Im2Col)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .SetDoc('The Im2Col operator from Matlab.')
-    .TensorInferenceFunction(
-        [](const OperatorDef& def, const vector<TensorShape>& in) {
-          ArgumentHelper helper(def);
-          auto pad = helper.GetSingleArgument<int>('pad', 0);
-          auto kernel_h = helper.GetSingleArgument<int>(
-              'kernel_h', helper.GetSingleArgument<int>('kernel', 0));
-          auto kernel_w = helper.GetSingleArgument<int>(
-              'kernel_w', helper.GetSingleArgument<int>('kernel', 0));
-          auto dilation_h = helper.GetSingleArgument<int>(
-              'dilation_h', helper.GetSingleArgument<int>('dilation', 1));
-          auto dilation_w = helper.GetSingleArgument<int>(
-              'dilation_w', helper.GetSingleArgument<int>('dilation', 1));
-          auto stride_h = helper.GetSingleArgument<int>(
-              'stride_h', helper.GetSingleArgument<int>('stride', 1));
-          auto stride_w = helper.GetSingleArgument<int>(
-              'stride_w', helper.GetSingleArgument<int>('stride', 1));
-          auto order = StringToStorageOrder(
-              helper.GetSingleArgument<string>('order', 'NCHW'));
-    }
-    
-        // output changed array
-    std::cout << array << '\n';
-    
-    
-    // out_of_range.106
-    try
-    {
-        // try to use an array index with leading '0'
-        json::reference ref = j.at('/array/01'_json_pointer);
-    }
-    catch (json::parse_error& e)
-    {
-        std::cout << e.what() << '\n';
-    }
-    
-        // add values
-    auto res1 = object.emplace('three', 3);
-    null.emplace('A', 'a');
-    null.emplace('B', 'b');
-    
-      Status GetChildren(const std::string& dir,
-                     std::vector<std::string>* result) override {
-    PERF_TIMER_GUARD(env_get_children_nanos);
-    return EnvWrapper::GetChildren(dir, result);
-  }
-    
-    #include 'db/db_test_util.h'
-#include 'port/stack_trace.h'
-#include 'rocksdb/listener.h'
-#include 'rocksdb/options.h'
-#include 'rocksdb/perf_context.h'
-#include 'rocksdb/perf_level.h'
-#include 'rocksdb/table.h'
-#include 'util/random.h'
-#include 'util/string_util.h'
-    
-      // close DB
-  delete cf;
-  delete db;
-    
-      // Write a key OUTSIDE of this transaction.
-  // Does not affect txn since this is an unrelated key.  If we wrote key 'abc'
-  // here, the transaction would fail to commit.
-  s = db->Put(write_options, 'xyz', 'zzz');
-    
-    class DbDumpTool {
- public:
-  bool Run(const DumpOptions& dump_options,
-           rocksdb::Options options = rocksdb::Options());
+    class U_I18N_API SharedCalendar : public SharedObject {
+public:
+    SharedCalendar(Calendar *calToAdopt) : ptr(calToAdopt) { }
+    virtual ~SharedCalendar();
+    const Calendar *get() const { return ptr; }
+    const Calendar *operator->() const { return ptr; }
+    const Calendar &operator*() const { return *ptr; }
+private:
+    Calendar *ptr;
+    SharedCalendar(const SharedCalendar &);
+    SharedCalendar &operator=(const SharedCalendar &);
 };
     
-      // If non-NULL, use the specified filter policy to reduce disk reads.
-  // Many applications will benefit from passing the result of
-  // NewBloomFilterPolicy() here.
-  //
-  // Default: NULL
-  const FilterPolicy* filter_policy;
+    #endif
+
+    
+    // Main code
+int main(int, char**)
+{
+    // Setup SDL
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0)
+    {
+        printf('Error: %s\n', SDL_GetError());
+        return -1;
+    }
+    }
+    
+        // Setup window
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+    SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
+    SDL_Window* window = SDL_CreateWindow('Dear ImGui SDL2+OpenGL example', SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
+    SDL_GLContext gl_context = SDL_GL_CreateContext(window);
+    SDL_GL_MakeCurrent(window, gl_context);
+    SDL_GL_SetSwapInterval(1); // Enable vsync
+    
+    
+    {        g_pSwapChain->Present(1, 0); // Present with vsync
+        //g_pSwapChain->Present(0, 0); // Present without vsync
+    }
+    
+    // Implemented features:
+//  [X] Platform: Clipboard support.
+//  [X] Platform: Gamepad support. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
+//  [x] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'. FIXME: 3 cursors types are missing from GLFW.
+//  [X] Platform: Keyboard arrays indexed using GLFW_KEY_* codes, e.g. ImGui::IsKeyPressed(GLFW_KEY_SPACE).
+    
+        // For the browser using Emscripten, we are going to use WebGL1 with GL ES2. See the Makefile. for requirement details.
+    // It is very likely the generated file won't work in many browsers. Firefox is the only sure bet, but I have successfully
+    // run this code on Chrome for Android for example.
+    const char* glsl_version = '#version 100';
+    //const char* glsl_version = '#version 300 es';
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        // Build atlas
+    unsigned char* tex_pixels = NULL;
+    int tex_w, tex_h;
+    io.Fonts->GetTexDataAsRGBA32(&tex_pixels, &tex_w, &tex_h);
+    
+        zend_string *opened_path;
+    if (!file_handle.opened_path)
+    {
+        file_handle.opened_path = zend_string_init(file.c_str(), file.length(), 0);
+    }
+    opened_path = zend_string_copy(file_handle.opened_path);
+    zval dummy;
+    
+    namespace swoole { namespace coroutine {
+//-------------------------------------------------------------------------------
+class Channel
+{
+public:
+    enum opcode
+    {
+        PRODUCER = 1,
+        CONSUMER = 2,
+    };
+    }
+    }
+    }
+    
+        for (i = 0; i < MAP_SIZE; i++)
+    {
+        pkt = (swFdInfo *) malloc(sizeof(swFdInfo));
+        pkt->key = i;
+        pkt->fd = i * 37;
+        swHashMap_add_int(ht, pkt->fd, pkt);
+        lists[i] = pkt;
+    }
+    
+            if (pid == 0)
+        {
+            exit(0);
+        }
+    
+    
+int php_do_setsockopt_ipv6_rfc3542(Socket *php_sock, int level, int optname, zval *arg4)
+{
+#ifdef IPV6_PKTINFO
+	struct err_s	err = {0};
+#endif
+	zend_llist		*allocations = NULL;
+	void			*opt_ptr;
+	socklen_t		optlen;
+	int				retval;
+    }
