@@ -1,255 +1,213 @@
 
         
-                paths = []
-        for manifest_url in (info.get('manifest') or {}).values():
-            if not manifest_url:
-                continue
-            manifest_url = update_url_query(manifest_url, {'filter': ''})
-            path = self._search_regex(r'https?://[^/]+/(.+?)\.ism/', manifest_url, 'path')
-            if path in paths:
-                continue
-            paths.append(path)
+            def _real_extract(self, url):
+        display_id = self._match_id(url)
     
-            return {
-            'id': video_id,
-            'title': title,
-            'formats': formats,
-            'thumbnails': thumbnails,
-            'description': video_data.get('short_description'),
-            'like_count': int_or_none(video_data.get('like_count')),
-            'timestamp': parse_iso8601(video_data.get('released_at')),
-            'series': series,
-            'episode': episode,
-            'season': season,
-            'season_id': season_id,
-            'season_number': season_number,
-            'episode_number': episode_number,
-            'subtitles': subtitles,
-            'age_limit': parse_age_limit(video_data.get('rating')),
-        }
+            subtitles = {}
+        for resource in video.get('resources', []):
+            if resource.startswith('closed_caption_'):
+                splitted_resource = resource.split('_')
+                if splitted_resource[2]:
+                    subtitles.setdefault('en', []).append({
+                        'url': 'https://resources.redbull.tv/%s/%s' % (video_id, resource),
+                        'ext': splitted_resource[2],
+                    })
+    
+                    for caption in asset.get('caption_metadata', []):
+                    caption_url = caption.get('source_url')
+                    if not caption_url:
+                        continue
+                    subtitles.setdefault(caption.get('language', 'en'), []).append({
+                        'url': caption_url,
+                        'ext': determine_ext(caption_url, 'vtt'),
+                    })
+            elif asset.get('type') == 'image':
+                asset_location = asset.get('location')
+                if not asset_location:
+                    continue
+                thumbnails.append({
+                    'url': asset_location,
+                    'width': int_or_none(asset.get('width')),
+                    'height': int_or_none(asset.get('height')),
+                })
+        self._sort_formats(formats)
+    
+    import codecs
+import subprocess
+    
+    header = oldreadme[:oldreadme.index('# OPTIONS')]
+footer = oldreadme[oldreadme.index('# CONFIGURATION'):]
+    
+    sys.path.insert(0, dirn(dirn((os.path.abspath(__file__)))))
+import youtube_dl
+    
+        def process_body(self, chunk: Union[str, bytes]) -> bytes:
+        if not isinstance(chunk, str):
+            # Text when a converter has been used,
+            # otherwise it will always be bytes.
+            chunk = chunk.decode(self.msg.encoding, 'replace')
+        chunk = self.formatting.format_body(content=chunk, mime=self.mime)
+        return chunk.encode(self.output_encoding, 'replace')
+    
+        def test_download_with_redirect_original_url_used_for_filename(self, httpbin):
+        # Redirect from `/redirect/1` to `/get`.
+        expected_filename = '1.json'
+        orig_cwd = os.getcwd()
+        os.chdir(tempfile.mkdtemp(prefix='httpie_download_test_'))
+        try:
+            assert os.listdir('.') == []
+            http('--download', httpbin.url + '/redirect/1')
+            assert os.listdir('.') == [expected_filename]
+        finally:
+            os.chdir(orig_cwd)
 
     
+            # Adding index on 'EventTag', fields ['environment_id', 'key', 'value']
+        db.create_index(u'tagstore_eventtag', ['environment_id', 'key_id', 'value_id'])
     
-def hex_str(int_list):
-    return codecs.encode(intlist_to_bytes(int_list), 'hex')
+        def backwards(self, orm):
+        # Adding model 'TagKey'
+        db.create_table(u'tagstore_tagkey', (
+            ('status', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(default=0)),
+            ('environment_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(null=True)),
+            ('values_seen', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(default=0)),
+            ('key', self.gf('django.db.models.fields.CharField')(max_length=32)),
+            ('project_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(db_index=True)),
+            ('id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(primary_key=True)),
+        ))
+        db.send_create_signal('tagstore', ['TagKey'])
     
-    print('Enter the PKCS1 private key, followed by a blank line:')
-privkey = b''
-while True:
-    try:
-        line = input()
-    except EOFError:
-        break
-    if line == '':
-        break
-    privkey += line.encode('ascii') + b'\n'
-privkey = rsa.PrivateKey.load_pkcs1(privkey)
+            # Adding unique constraint on 'EventTag', fields ['project_id', 'event_id', 'key', 'value']
+        db.create_unique(u'tagstore_eventtag', ['project_id', 'event_id', 'key_id', 'value_id'])
     
-    import youtube_dl
+            # Adding unique constraint on 'Association', fields ['handle', 'server_url']
+        db.create_unique('social_auth_association', ['handle', 'server_url'])
     
+            # Adding model 'Association'
+        db.create_table(u'social_auth_association', (
+            ('secret', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('handle', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('lifetime', self.gf('django.db.models.fields.IntegerField')()),
+            ('issued', self.gf('django.db.models.fields.IntegerField')(db_index=True)),
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('assoc_type', self.gf('django.db.models.fields.CharField')(max_length=64)),
+            ('server_url', self.gf('django.db.models.fields.CharField')(max_length=255)),
+        ))
+        db.send_create_signal('social_auth', ['Association'])
     
-def main():
-    parser = optparse.OptionParser(usage='%prog OUTFILE.md')
-    options, args = parser.parse_args()
-    if len(args) != 1:
-        parser.error('Expected an output filename')
-    
-        outfile, = args
-    
-    
-class AppidManager(object):
-    lock = threading.Lock()
-    
-    if __name__ == '__main__':
-    python_path = os.path.abspath( os.path.join(current_path, os.pardir, os.pardir, 'python27', '1.0'))
+        for i in range(len(s)):
+        result = s.iloc[i]
+        exp = s[s.index[i]]
+        assert_almost_equal(result, exp)
     
     
-
+def rmod(left, right):
+    # check if right is a string as % is the string
+    # formatting operation; this is a TypeError
+    # otherwise perform the op
+    if isinstance(right, str):
+        raise TypeError(
+            '{typ} cannot perform the operation mod'.format(typ=type(left).__name__)
+        )
     
     
-class MismatchedNotSetException(MismatchedSetException):
-    '''@brief Used for remote debugger deserialization'''
+    {
+    {    df = DataFrame([['foo}', 'bar'], ['foo'', 'bar']], columns=['a', 'b'])
+    result = df.to_json(orient='records', lines=True)
+    expected = '{'a':'foo}','b':'bar'}\n{'a':'foo\\'','b':'bar'}'
+    assert result == expected
+    assert_frame_equal(read_json(result, lines=True), df)
     
-    def __str__(self):
-        return 'MismatchedNotSetException(%r!=%r)' % (
-            self.getUnexpectedType(), self.expecting
-            )
-    __repr__ = __str__
-    
-    PYTHON3_IMPORTERROR_EXCEPTIONS = (
-    'ModuleNotFoundError',
+    import pandas as pd
+from pandas import DataFrame, Series
+import pandas.util.testing as tm
+from pandas.util.testing import (
+    assert_almost_equal,
+    assert_frame_equal,
+    assert_series_equal,
+    ensure_clean,
 )
     
-        def test_path_like_ob(self):
-        filename = 'LICENSE.txt'
-        filepath = pathlib.Path(filename)
-        filepath_with_abs_dir = pathlib.Path('/dir/'+filename)
-        filepath_relative = pathlib.Path('../dir/'+filename)
-        path_dir = pathlib.Path('./')
-    
-            Optional `rest' argument can be a string that is sent as the
-        argument to a REST command.  This is essentially a server
-        marker used to tell the server to skip over any data up to the
-        given marker.
+            Returns
+        -------
+        str
         '''
-        size = None
-        if self.passiveserver:
-            host, port = self.makepasv()
-            conn = socket.create_connection((host, port), self.timeout,
-                                            source_address=self.source_address)
-            try:
-                if rest is not None:
-                    self.sendcmd('REST %s' % rest)
-                resp = self.sendcmd(cmd)
-                # Some servers apparently send a 200 reply to
-                # a LIST or STOR command, before the 150 reply
-                # (and way before the 226 reply). This seems to
-                # be in violation of the protocol (which only allows
-                # 1xx or error messages for LIST), so we just discard
-                # this response.
-                if resp[0] == '2':
-                    resp = self.getresp()
-                if resp[0] != '1':
-                    raise error_reply(resp)
-            except:
-                conn.close()
-                raise
-        else:
-            with self.makeport() as sock:
-                if rest is not None:
-                    self.sendcmd('REST %s' % rest)
-                resp = self.sendcmd(cmd)
-                # See above.
-                if resp[0] == '2':
-                    resp = self.getresp()
-                if resp[0] != '1':
-                    raise error_reply(resp)
-                conn, sockaddr = sock.accept()
-                if self.timeout is not _GLOBAL_DEFAULT_TIMEOUT:
-                    conn.settimeout(self.timeout)
-        if resp[:3] == '150':
-            # this is conditional in case we received a 125
-            size = parse150(resp)
-        return conn, size
+        output = '{type}\nFile path: {path}\n'.format(
+            type=type(self), path=pprint_thing(self._path)
+        )
+        if self.is_open:
+            lkeys = sorted(list(self.keys()))
+            if len(lkeys):
+                keys = []
+                values = []
     
-            Result is tuple of 2 ints (message count, mailbox size)
-        '''
-        retval = self._shortcmd('STAT')
-        rets = retval.split()
-        if self._debugging: print('*stat*', repr(rets))
-        numMessages = int(rets[1])
-        sizeMessages = int(rets[2])
-        return (numMessages, sizeMessages)
+            pat = re.compile(r'\s+')
+        column_names = [col_name for col_name, _, _ in column_names_and_types]
+        if any(map(pat.search, column_names)):
+            warnings.warn(_SAFE_NAMES_WARNING, stacklevel=6)
     
-        def consume_timeout(self, q, results, sentinel):
-        while True:
-            while True:
-                try:
-                    val = q.get(timeout=1e-5)
-                except self.queue.Empty:
-                    pass
-                else:
-                    break
-            if val == sentinel:
-                return
-            results.append(val)
+    default_encoding = sys.getfilesystemencoding()
     
-            The payload will either be a list object or a string.  If you mutate
-        the list object, you modify the message's payload in place.  Optional
-        i returns that index into the payload.
+    import jieba
+import jieba.analyse
+from optparse import OptionParser
     
     
-        def _communicate(self, input, endtime, orig_timeout):
-            # Start reader threads feeding into a list hanging off of this
-            # object, unless they've already been started.
-            if self.stdout and not hasattr(self, '_stdout_buff'):
-                self._stdout_buff = []
-                self.stdout_thread = \
-                        threading.Thread(target=self._readerthread,
-                                         args=(self.stdout, self._stdout_buff))
-                self.stdout_thread.daemon = True
-                self.stdout_thread.start()
-            if self.stderr and not hasattr(self, '_stderr_buff'):
-                self._stderr_buff = []
-                self.stderr_thread = \
-                        threading.Thread(target=self._readerthread,
-                                         args=(self.stderr, self._stderr_buff))
-                self.stderr_thread.daemon = True
-                self.stderr_thread.start()
-    
-            async def test():
-            async with asyncio.StreamServer(handle_client, '127.0.0.1', 0) as server:
-                await server.start_serving()
-                task = asyncio.create_task(client(server))
-                await fut1
-                fut2.set_result(None)
-                await server.close()
-                await task
-    
-        #Parsing the arguments
-    parser = argparse.ArgumentParser()
-    parser.add_argument('dir_path', help = 'Path to tldr 'pages' directory')
-    parser.add_argument('-c', choices=['solarized-light', 'solarized-dark'], help='Color scheme of the PDF')
-    args = parser.parse_args()
-    
-    loc = args.dir_path
-    if args.c == 'solarized-light' or args.c == 'solarized-dark':
-        colorscheme = args.c
-        
-    main(loc, colorscheme)
 
     
-            # Use GaussianFill for class-agnostic mask prediction; fills based on
-        # fan-in can be too large in this case and cause divergence
-        fill = (
-            cfg.MRCNN.CONV_INIT
-            if cfg.MRCNN.CLS_SPECIFIC_MASK else 'GaussianFill'
-        )
-        blob_out = model.Conv(
-            blob_in,
-            'mask_fcn_logits',
-            dim,
-            num_cls,
-            kernel=1,
-            pad=0,
-            stride=1,
-            weight_init=(fill, {'std': 0.001}),
-            bias_init=const_fill(0.0)
-        )
+        # create notification on bucket
+    queue_url = queue_info['QueueUrl']
+    queue_arn = aws_stack.sqs_queue_arn(TEST_QUEUE_NAME_FOR_S3)
+    events = ['s3:ObjectCreated:*', 's3:ObjectRemoved:Delete']
+    filter_rules = {
+        'FilterRules': [{
+            'Name': 'prefix',
+            'Value': 'testupload/'
+        }, {
+            'Name': 'suffix',
+            'Value': 'testfile.txt'
+        }]
+    }
+    s3_client.put_bucket_notification_configuration(
+        Bucket=TEST_BUCKET_NAME_WITH_NOTIFICATIONS,
+        NotificationConfiguration={
+            'QueueConfigurations': [{
+                'Id': 'id123456',
+                'QueueArn': queue_arn,
+                'Events': events,
+                'Filter': {
+                    'Key': filter_rules
+                }
+            }]
+        }
+    )
     
-        def test_handles_odd_length_arrays(self):
-        X = np.random.randn(77).astype(np.float32)
-        Y_exp = np.copy(X)
-        Y_exp[0::2] = 0.0
-        Y_act = self._run_zero_even_op(X)
-        np.testing.assert_allclose(Y_act, Y_exp)
+        def test_delivery_stream_tags(self):
+        result = firehose_api.get_delivery_stream_tags(TEST_STREAM_NAME)
+        self.assertEquals(TEST_TAGS, result['Tags'])
+        result = firehose_api.get_delivery_stream_tags(TEST_STREAM_NAME, exclusive_start_tag_key='MyTag')
+        self.assertEquals([TEST_TAG_2], result['Tags'])
+        result = firehose_api.get_delivery_stream_tags(TEST_STREAM_NAME, limit=1)
+        self.assertEquals([TEST_TAG_1], result['Tags'])
+        self.assertEquals(True, result['HasMore'])
+
     
-        return all_results
+            # run state machine
+        state_machines = self.sfn_client.list_state_machines()['stateMachines']
+        sm_arn = [m['stateMachineArn'] for m in state_machines if m['name'] == STATE_MACHINE_NAME][0]
+        result = self.sfn_client.start_execution(stateMachineArn=sm_arn)
+        self.assertTrue(result.get('executionArn'))
     
-        cdo_cuda = mutils.get_device_option_cuda()
-    cdo_cpu = mutils.get_device_option_cpu()
+        if filename is None:
+        # Found nothing, return unaltered
+        return data
     
-    # mapping coco categories to cityscapes (our converted json) id
-# cityscapes
-# INFO roidb.py: 220: 1       bicycle: 7286
-# INFO roidb.py: 220: 2           car: 53684
-# INFO roidb.py: 220: 3        person: 35704
-# INFO roidb.py: 220: 4         train: 336
-# INFO roidb.py: 220: 5         truck: 964
-# INFO roidb.py: 220: 6    motorcycle: 1468
-# INFO roidb.py: 220: 7           bus: 758
-# INFO roidb.py: 220: 8         rider: 3504
+        # make sure we can fake adding tags to a domain
+    response = es_client.add_tags(ARN='string', TagList=[{'Key': 'SOME_TAG', 'Value': 'SOME_VALUE'}])
+    assert_equal(200, response['ResponseMetadata']['HTTPStatusCode'])
     
     
-def get_im_prefix(name):
-    '''Retrieve the image prefix for the dataset.'''
-    return _DATASETS[name][_IM_PREFIX] if _IM_PREFIX in _DATASETS[name] else ''
-    
-    from detectron.core.config import cfg
-from detectron.modeling.generate_anchors import generate_anchors
-from detectron.utils.c2 import const_fill
-from detectron.utils.c2 import gauss_fill
-from detectron.utils.net import get_group_gn
-import detectron.modeling.ResNet as ResNet
-import detectron.utils.blob as blob_utils
-import detectron.utils.boxes as box_utils
+def publish_lambda_result(time_before, result, kwargs):
+    if isinstance(result, Response) and result.status_code >= 400:
+        return publish_lambda_error(time_before, kwargs)
+    publish_lambda_metric('Invocations', 1, kwargs)
