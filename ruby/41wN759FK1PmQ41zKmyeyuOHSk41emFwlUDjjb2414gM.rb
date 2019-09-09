@@ -1,267 +1,163 @@
 
         
-                it 'creates a reblog by sender of status' do
-          reblog = sender.statuses.first
+                  enabled_services = services.select { |_k, v| v == true || (v != false && v.to_s != 'off') }.map { |k, v| [k, v == true || v.to_s == 'on' ? 'on' : v] }.to_h
+          disabled_services = services.select { |_k, v| v == false || v.to_s == 'off' }.map { |k, v| [k, 'off'] }.to_h
     
-      # Tell browsers whether to use the native HTML5 validations (novalidate form option).
-  # These validations are enabled in SimpleForm's internal config but disabled by default
-  # in this configuration, which is recommended due to some quirks from different browsers.
-  # To stop SimpleForm from generating the novalidate option, enabling the HTML5 validations,
-  # change this configuration to true.
-  config.browser_validations = false
-    
-        it 'makes followers unfollow old account' do
-      expect(follower.following?(old_account)).to be false
-    end
-    
-        # .y file from ruby-php-serialization gem
-    
-        RDoc::Require.new '\'foo\'', ''
-    assert_equal 'foo', @req.name
-    
-          assert_equal(nil, Readline::HISTORY.shift)
-    rescue NotImplementedError
-    end
-  end
-    
-      def test_append_after
-    assert_equal(Reline::KillRing::State::FRESH, @kill_ring.instance_variable_get(:@state))
-    @kill_ring.append('a')
-    assert_equal(Reline::KillRing::State::CONTINUED, @kill_ring.instance_variable_get(:@state))
-    @kill_ring.process
-    assert_equal(Reline::KillRing::State::PROCESSED, @kill_ring.instance_variable_get(:@state))
-    @kill_ring.append('b')
-    assert_equal(Reline::KillRing::State::CONTINUED, @kill_ring.instance_variable_get(:@state))
-    @kill_ring.process
-    assert_equal(Reline::KillRing::State::PROCESSED, @kill_ring.instance_variable_get(:@state))
-    assert_equal('ab', @kill_ring.yank)
-    assert_equal(Reline::KillRing::State::YANK, @kill_ring.instance_variable_get(:@state))
-    assert_equal('ab', @kill_ring.yank)
-    assert_equal(Reline::KillRing::State::YANK, @kill_ring.instance_variable_get(:@state))
-    assert_equal(['ab', 'ab'], @kill_ring.yank_pop)
-    assert_equal(Reline::KillRing::State::YANK, @kill_ring.instance_variable_get(:@state))
-    assert_equal(['ab', 'ab'], @kill_ring.yank_pop)
-    assert_equal(Reline::KillRing::State::YANK, @kill_ring.instance_variable_get(:@state))
-  end
-    
-    get '/stream', :provides => 'text/event-stream' do
-  stream :keep_open do |out|
-    connections << out
-    out.callback { connections.delete(out) }
-  end
-end
-    
-          # Checks the client's masked token to see if it matches the
-      # session token.
-      def valid_token?(session, token)
-        return false if token.nil? || token.empty?
-    
-          def call(env)
-        status, headers, body = super
-        response = Rack::Response.new(body, status, headers)
-        request = Rack::Request.new(env)
-        remove_bad_cookies(request, response)
-        response.finish
+            # Maps nice developer param names to Shenzhen's `ipa build` arguments
+        params.collect do |k, v|
+          v ||= ''
+          if ARGS_MAP[k]
+            if k == :clean
+              v == true ? '--clean' : '--no-clean'
+            elsif k == :archive
+              v == true ? '--archive' : '--no-archive'
+            else
+              value = (v.to_s.length > 0 ? '\'#{v}\'' : '')
+              '#{ARGS_MAP[k]} #{value}'.strip
+            end
+          end
+        end.compact
       end
     
-      it 'accepts post form requests with masked authenticity_token field' do
-    post('/', {'authenticity_token' => masked_token}, 'rack.session' => session)
-    expect(last_response).to be_ok
+          def self.example_code
+        [
+          'make_changelog_from_jenkins(
+            # Optional, lets you set a changelog in the case is not generated on Jenkins or if ran outside of Jenkins
+            fallback_changelog: 'Bug fixes and performance enhancements'
+          )'
+        ]
+      end
+    
+          def self.is_supported?(platform)
+        [:ios, :mac].include?(platform)
+      end
+    
+        describe 'when external tester is removed' do
+      it 'removes the tester without error' do
+        allow(tester_manager).to receive(:find_app_tester).and_return(fake_tester)
+        allow(fake_app).to receive(:get_beta_groups).and_return([custom_tester_group])
+    
+        depends_on(deps) if add_mac_dependency?(args)
   end
     
-          # Try to add the gems to the current gemfile and lock file, if successful
-      # both of them will be updated. This injector is similar to Bundler's own injector class
-      # minus the support for additionals source and doing local resolution only.
-      ::Bundler::LogstashInjector.inject!(pack)
+      def initialize
+    @resource = Resource.new
+    @resources = {}
+    @dependency_collector = DependencyCollector.new
+    @bottle_specification = BottleSpecification.new
+    @patches = []
+    @options = Options.new
+    @flags = ARGV.flags_only
+    @deprecated_flags = []
+    @deprecated_options = []
+    @build = BuildOptions.new(Options.create(@flags), options)
+    @compiler_failures = []
+    @bottle_disable_reason = nil
+  end
     
-        # remove any version constrain from the Gemfile so the plugin(s) can be updated to latest version
-    # calling update without requirements will remove any previous requirements
-    plugins = plugins_to_update(previous_gem_specs_map)
-    # Skipping the major version validation when using a local cache as we can have situations
-    # without internet connection.
-    filtered_plugins = plugins.map { |plugin| gemfile.find(plugin) }
-      .compact
-      .reject { |plugin| REJECTED_OPTIONS.any? { |key| plugin.options.has_key?(key) } }
-      .each   { |plugin| gemfile.update(plugin.name) }
+        it 'acts like #depends_on' do
+      f = formula 'foo' do
+        url 'foo-1.0'
     
-        desc 'Run one single machine acceptance test'
-    task :single, :machine do |t, args|
-      ENV['LS_VAGRANT_HOST']  = args[:machine]
-      exit(RSpec::Core::Runner.run([Rake::FileList['acceptance/spec/lib/**/**/*_spec.rb']]))
+          sdk_path(v)
     end
+    
+                if dir.empty? || dir == CLT::PKG_PATH || !File.directory?(dir)
+              path = bundle_path
+              path/'Contents/Developer' if path
+            else
+              # Use cleanpath to avoid pathological trailing slash
+              Pathname.new(dir).cleanpath
+            end
+          end
+      end
+    
+      it 'properly handles Casks that are not present' do
+    expect {
+      described_class.run('notacask')
+    }.to raise_error(Cask::CaskUnavailableError)
   end
 end
 
     
-      describe 'on #{logstash.hostname}' do
-    context 'with a direct internet connection' do
-      context 'when the plugin exist' do
-        context 'from a local `.GEM` file' do
-          let(:gem_name) { 'logstash-filter-qatest-0.1.1.gem' }
-          let(:gem_path_on_vagrant) { '/tmp/#{gem_name}' }
-          before(:each) do
-            logstash.download('https://rubygems.org/gems/#{gem_name}', gem_path_on_vagrant)
-          end
+    module LogStash
+  module PluginManager
+    class Error < StandardError; end
     
-          it 'list the plugin with his version' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name} \(\d+\.\d+.\d+\)/)
-      end
-    end
-  end
-end
-
+            PluginManager.ui.debug('Looking if package named: #{plugin_name} exists at #{uri}')
     
-          Spree.check_unused_translations
-      if false && Spree.unused_translation_messages.any?
-        puts '\nThere are unused translations within Spree:'
-        puts Spree.unused_translation_messages.sort
-        exit(1)
-      end
-    end
-  end
-end
-
-    
-            def update
-          @image = scope.images.accessible_by(current_ability, :update).find(params[:id])
-          if @image.update(image_params)
-            respond_with(@image, default_template: :show)
-          else
-            invalid_resource!(@image)
+              it 'successfully install the plugin' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install #{gem_path_on_vagrant}')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-dns')
           end
         end
     
-            def create
-          authorize! :create, Spree::OptionType
-          @option_type = Spree::OptionType.new(option_type_params)
-          if @option_type.save
-            render :show, status: 201
-          else
-            invalid_resource!(@option_type)
-          end
-        end
     
-            def update
-          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
-          if @return_authorization.update(return_authorization_params)
-            respond_with(@return_authorization, default_template: :show)
-          else
-            invalid_resource!(@return_authorization)
-          end
-        end
-    
-    # Example for adding special attributes
-package.attributes[:deb_group] = 'super-useful'
-package.attributes[:rpm_group] = 'super-useful'
-    
-          @command.dependencies.tap do |dependencies|
-        # Verify dependencies don't include commas (#257)
-        dependencies.each do |dep|
-          next unless dep.include?(',')
-          splitdeps = dep.split(/\s*,\s*/)
-          @messages << 'Dependencies should not ' \
-            'include commas. If you want to specify multiple dependencies, use ' \
-            'the '-d' flag multiple times. Example: ' + \
-            splitdeps.map { |d| '-d '#{d}'' }.join(' ')
-        end
-      end
-    
-      # This method is invoked on a package when it has been converted to a new
-  # package format. The purpose of this method is to do any extra conversion
-  # steps, like translating dependency conditions, etc.
-  def converted_from(origin)
-    # nothing to do by default. Subclasses may implement this.
-    # See the RPM package class for an example.
-  end # def converted
-    
-        # Follow similar rules to these used in ``to_s_fullversion`` method.
-    # FIXME: maybe epoch should also be introduced somehow ('#{version},#{epoch})?
-    #        should it go to pkgdata['version'] or to another place?
-    # https://www.freebsd.org/doc/en/books/porters-handbook/makefile-naming.html
-    pkg_version = (iteration and (iteration.to_i > 0)) ?  '#{version}-#{iteration}' : '#{version}'
-    
-      def self.default_prefix
-    npm_prefix = safesystemout('npm', 'prefix', '-g').chomp
-    if npm_prefix.count('\n') > 0
-      raise FPM::InvalidPackageConfiguration, '`npm prefix -g` returned unexpected output.'
-    elsif !File.directory?(npm_prefix)
-      raise FPM::InvalidPackageConfiguration, '`npm prefix -g` returned a non-existent directory'
-    end
-    logger.info('Setting default npm install prefix', :prefix => npm_prefix)
-    npm_prefix
-  end
-    
-      # Default specfile generator just makes one specfile, whatever that is for
-  # this package.
-  def generate_specfile(builddir)
-    paths = []
-    logger.info('PWD: #{File.join(builddir, unpack_data_to)}')
-    fileroot = File.join(builddir, unpack_data_to)
-    Dir.chdir(fileroot) do
-      Find.find('.') do |p|
-        next if p == '.'
-        paths << p
-      end
-    end
-    logger.info(paths[-1])
-    manifests = %w{package.pp package/remove.pp}
-    
-    # Support for self extracting sh files (.sh files)
+# This is a non obvious hack,
+# EllipticalCurve are not completely implemented in JRuby 9k and the new version of SSH from the standard library
+# use them.
 #
-# This class only supports output of packages.
-#
-# The sh package is a single sh file with a tar payload concatenated to the end.
-# The script can unpack the tarball to install it and call optional post install scripts.
-class FPM::Package::Sh < FPM::Package
+# Details: https://github.com/jruby/jruby-openssl/issues/105
+Net::SSH::Transport::Algorithms::ALGORITHMS.values.each { |algs| algs.reject! { |a| a =~ /^ecd(sa|h)-sha2/ } }
+Net::SSH::KnownHosts::SUPPORTED_TYPE.reject! { |t| t =~ /^ecd(sa|h)-sha2/ }
     
-    # TODO(sissel): Add dependency checking support.
-# IIRC this has to be done as a 'checkinstall' step.
-class FPM::Package::Solaris < FPM::Package
+        it_behaves_like 'non literal', '(x && false)'
+    it_behaves_like 'non literal', '(x == false)'
+    it_behaves_like 'non literal', '(x or false)'
+    it_behaves_like 'non literal', '[some_method_call]'
+    it_behaves_like 'non literal', '{ :sym => some_method_call }'
+    it_behaves_like 'non literal', '{ some_method_call => :sym }'
+    it_behaves_like 'non literal', '/.#{some_method_call}/'
+    it_behaves_like 'non literal', '%r{abx#{foo}}ixo'
+    it_behaves_like 'non literal', 'some_method_call'
+    it_behaves_like 'non literal', 'some_method_call(x, y)'
+  end
     
-                  unless self.class.namespace_inheritable(:do_not_route_options) || allowed_methods.include?(Grape::Http::Headers::OPTIONS)
-                config[:endpoint].options[:options_route_enabled] = true
-              end
+          it { expect(self_class_node.body.begin_type?).to be(true) }
+    end
     
-          # (see #global_setting)
-      def namespace_inheritable(key, value = nil)
-        get_or_set :namespace_inheritable, key, value
+          def all_on_same_line?(nodes)
+        return true if nodes.empty?
+    
+          it 'registers an offense even if a non-singleton-class method is ' \
+        'defined' do
+        src = <<~RUBY
+          #{keyword} A
+            def method1
+            end
+            class << self
+              #{modifier}
+            end
+          end
+        RUBY
+        inspect_source(src)
+        expect(cop.offenses.size).to eq(1)
       end
+    end
     
-          expect(@session.current_window).to eq(orig_window)
-      # Maximizing the browser affects all tabs so this may not be valid in real browsers
-      # expect(@session.current_window.size).to eq(@initial_size)
+                return if next_line_empty?(heredoc_line(node, heredoc_node))
     
-          def included(base)
-        warn 'including Capybara::DSL in the global scope is not recommended!' if base == Object
-        if defined?(::RSpec::Matchers) && base.include?(::RSpec::Matchers)
-          base.send(:include, ::Capybara::RSpecMatcherProxies)
+      it 'does not register offense when guard clause is after single line ' \
+     'heredoc' do
+    expect_no_offenses(<<~RUBY)
+      def foo
+        raise ArgumentError, <<-MSG unless path
+          Must be called with mount point
+        MSG
+    
+        it 'can schedule' do
+      ss = Sidekiq::ScheduledSet.new
+      q = Sidekiq::Queue.new
+    
+      it 'stubs the async call when in testing mode' do
+    assert InlineWorker.perform_async(true)
+    
+        def read(request)
+      request.cookies.each do |name, value|
+        @cookies[name.to_s] = value
+      end
+    end
+    
+              namespace_stackable(:error_formatters, format.to_sym => formatter)
         end
-        super
-      end
-    end
-  end
-    
-      it 'should raise ElementNotFound when nothing was found' do
-    expect do
-      @session.first('//div[@id='nosuchthing']')
-    end.to raise_error Capybara::ElementNotFound
-  end
-    
-      describe_node_filters do |disabled: nil, **|
-    ' that is disabled' if disabled == true
-  end
-end
-
-    
-      context 'called with two styles' do
-    it 'applies to alternating sides' do
-      rule = 'border-style: dotted dashed'
-    
-          expect('.border-width-alternate').to have_rule(rule)
-    end
-  end
-    
-      context 'called with one size' do
-    it 'applies same width to both height and width' do
-      rule = 'height: 10px; width: 10px;'
