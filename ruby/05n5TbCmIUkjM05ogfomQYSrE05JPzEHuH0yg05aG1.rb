@@ -1,151 +1,163 @@
 
         
-            def not_implemented
-      raise 'Not implemented.'
-    end
+                def initialize(project, base_dir, extension, categories = {})
+          @categories     = categories
+          @extension      = extension
+          @repository     = project.repository
+          @commit         = @repository.head_commit if @repository.exists?
     
-      def user_ids
-    [ topic.user_id, topic.last_post_user_id, *topic.featured_user_ids ]
-  end
+          context 'and user can admin_group_member' do
+        before do
+          allow(presenter).to receive(:can?).with(user, :admin_group_member, group).and_return(true)
+        end
     
-      def handle_spam
-    if @spam
-      GroupMessage.create(Group[:moderators].name,
-                           :spam_post_blocked,
-                           user: @user,
-                           limit_once_per: 24.hours,
-                           message_params: { domains: @post.linked_hosts.keys.join(', ') })
-    elsif @post && errors.blank? && !skip_validations?
-      SpamRule::FlagSockpuppets.new(@post).perform
-    end
-  end
+            def diffs
+          @diffs ||= diffable.raw_diffs(diff_options)
+        end
     
-          it 'removes the file from s3 on multisite' do
-        test_multisite_connection('default') do
-          upload = build_upload
-          store.expects(:get_depth_for).with(upload.id).returns(0)
-          s3_helper.expects(:s3_bucket).returns(s3_bucket).at_least_once
-          upload.update!(url: '//s3-upload-bucket.s3.dualstack.us-west-1.amazonaws.com/uploads/default/original/1X/#{upload.sha1}.png')
-          s3_object = stub
+        def chronic_duration_attr_writer(virtual_attribute, source_attribute, parameters = {})
+      chronic_duration_attr_reader(virtual_attribute, source_attribute)
     
-      context 'editing category' do
+            desc 'Updates a badge of a #{source_type}.' do
+          detail 'This feature was introduced in GitLab 10.6.'
+          success Entities::Badge
+        end
+        params do
+          optional :link_url, type: String, desc: 'URL of the badge link'
+          optional :image_url, type: String, desc: 'URL of the badge image'
+        end
+        put ':id/badges/:badge_id' do
+          source = find_source_if_admin(source_type)
     
-          if !shadowed_val.nil?
-        setup_shadowed_methods(name, shadowed_val)
-      else
-        setup_methods(name)
+          desc 'Get single deploy key' do
+        success Entities::DeployKeysProject
       end
-    end
+      params do
+        requires :key_id, type: Integer, desc: 'The ID of the deploy key'
+      end
+      get ':id/deploy_keys/:key_id' do
+        key = find_by_deploy_key(user_project, params[:key_id])
+    
+      # Returns real navigational formats which are supported by Rails
+  def navigational_formats
+    @navigational_formats ||= Devise.navigational_formats.select { |format| Mime::EXTENSION_LOOKUP[format.to_s] }
   end
     
-      def test_font_helper_without_suffix
-    assert_match %r(url\(['']?/assets/.*eot['']?\)), @css
-  end
-    
-          super(argv)
-    ensure
-      UI.print_warnings
-    end
-    
-            def attrs
-          attrs = {
-            'size' => size,
-            'mtime' => mtime,
-          }.reject { |_k, v| v.nil? }
-          return nil if attrs.empty?
-          attrs.to_s
+                bypass_sign_in(user)
+          DEPRECATION
+          warden.session_serializer.store(resource, scope)
+        elsif warden.user(scope) == resource && !options.delete(:force)
+          # Do nothing. User already signed in and we are not forcing it.
+          true
+        else
+          warden.set_user(resource, options.merge!(scope: scope))
         end
       end
     
-          LAUNCHSCREEN_STORYBOARD_CONTENTS_IOS_8 = <<-XML.strip_heredoc.freeze
-              <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-              <document type='com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB' version='3.0' toolsVersion='13122.16' systemVersion='17A277' targetRuntime='iOS.CocoaTouch' propertyAccessControl='none' useAutolayout='YES' launchScreen='YES' useTraitCollections='YES' colorMatched='YES' initialViewController='01J-lp-oVM'>
-                <dependencies>
-                  <plugIn identifier='com.apple.InterfaceBuilder.IBCocoaTouchPlugin' version='13104.12'/>
-                  <capability name='documents saved in the Xcode 8 format' minToolsVersion='8.0'/>
-                </dependencies>
-                <scenes>
-                  <!--View Controller-->
-                  <scene sceneID='EHf-IW-A2E'>
-                    <objects>
-                      <viewController id='01J-lp-oVM' sceneMemberID='viewController'>
-                        <layoutGuides>
-                          <viewControllerLayoutGuide type='top' id='rUq-ht-380'/>
-                          <viewControllerLayoutGuide type='bottom' id='a9l-8d-mfx'/>
-                        </layoutGuides>
-                        <view key='view' contentMode='scaleToFill' id='Ze5-6b-2t3'>
-                          <rect key='frame' x='0.0' y='0.0' width='375' height='667'/>
-                          <autoresizingMask key='autoresizingMask' widthSizable='YES' heightSizable='YES'/>
-                          <color key='backgroundColor' red='1' green='1' blue='1' alpha='1' colorSpace='custom' customColorSpace='sRGB'/>
-                        </view>
-                      </viewController>
-                      <placeholder placeholderIdentifier='IBFirstResponder' id='iYj-Kq-Ea1' userLabel='First Responder' sceneMemberID='firstResponder'/>
-                    </objects>
-                    <point key='canvasLocation' x='53' y='375'/>
-                  </scene>
-                </scenes>
-              </document>
-      XML
+          def self.generate_helpers!(routes=nil)
+        routes ||= begin
+          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
+          Devise::URL_HELPERS.slice(*mappings)
+        end
     
-                  <% if frame.post_context %>
-              <ol start='<%=h frame.lineno + 1 %>' class='post-context'
-                  id='post-<%= id %>' onclick='toggle(<%= id %>);'>
-                <% frame.post_context.each do |line| %>
-                <li class='post-context-line'><code><%=h line %></code></li>
-                <% end %>
-              </ol>
-              <% end %>
-              <div class='clear'></div>
-            </li>
+        def default_defaults(options)
+      @defaults = Hash.new
+      @defaults.merge!(options[:defaults]) if options[:defaults]
+    end
     
-      task :index do
-    doc = File.read('README.md')
-    file = 'doc/rack-protection-readme.md'
-    Dir.mkdir 'doc' unless File.directory? 'doc'
-    puts 'writing #{file}'
-    File.open(file, 'w') { |f| f << doc }
+      module Generator
+    autoload :Acknowledgements,        'cocoapods/generator/acknowledgements'
+    autoload :Markdown,                'cocoapods/generator/acknowledgements/markdown'
+    autoload :Plist,                   'cocoapods/generator/acknowledgements/plist'
+    autoload :BridgeSupport,           'cocoapods/generator/bridge_support'
+    autoload :Constant,                'cocoapods/generator/constant'
+    autoload :CopyResourcesScript,     'cocoapods/generator/copy_resources_script'
+    autoload :DummySource,             'cocoapods/generator/dummy_source'
+    autoload :EmbedFrameworksScript,   'cocoapods/generator/embed_frameworks_script'
+    autoload :FileList,                'cocoapods/generator/file_list'
+    autoload :Header,                  'cocoapods/generator/header'
+    autoload :InfoPlistFile,           'cocoapods/generator/info_plist_file'
+    autoload :ModuleMap,               'cocoapods/generator/module_map'
+    autoload :PrefixHeader,            'cocoapods/generator/prefix_header'
+    autoload :UmbrellaHeader,          'cocoapods/generator/umbrella_header'
+    autoload :AppTargetHelper,         'cocoapods/generator/app_target_helper'
   end
     
-    module Rack
-  module Protection
-    class Base
-      DEFAULT_OPTIONS = {
-        :reaction    => :default_reaction, :logging   => true,
-        :message     => 'Forbidden',       :encryptor => Digest::SHA1,
-        :session_key => 'rack.session',    :status    => 403,
-        :allow_empty_referrer => true,
-        :report_key           => 'protection.failed',
-        :html_types           => %w[text/html application/xhtml text/xml application/xml]
-      }
-    
-          def call(env)
-        status, headers, body = @app.call(env)
-        header = options[:report_only] ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'
-        headers[header] ||= csp_policy if html? headers
-        [status, headers, body]
+          # @return [Hash{String => Array<Pathname>}] A hash that describes the
+      #         resource bundles of the Pod. The keys represent the name of
+      #         the bundle while the values the path of the resources.
+      #
+      def resource_bundles
+        result = {}
+        spec_consumer.resource_bundles.each do |name, file_patterns|
+          paths = expanded_paths(file_patterns,
+                                 :exclude_patterns => spec_consumer.exclude_files,
+                                 :include_dirs => true)
+          result[name] = paths
+        end
+        result
       end
-    end
+    
+          # In verbose mode it shows the sections and the contents.
+      # In normal mode it just prints the title.
+      #
+      # @return [void]
+      #
+      def titled_section(title, options = {})
+        relative_indentation = options[:relative_indentation] || 0
+        verbose_prefix = options[:verbose_prefix] || ''
+        if config.verbose?
+          title(title, verbose_prefix, relative_indentation)
+        else
+          puts title
+        end
+    
+      it 'writes a plist to disk at the given path' do
+    basepath = config.sandbox.root + 'Pods-acknowledgements'
+    given_path = @generator.class.path_from_basepath(basepath)
+    expected_path = config.sandbox.root + 'Pods-acknowledgements.plist'
+    Xcodeproj::Plist.expects(:write_to_path).with(equals(@generator.plist_hash), equals(expected_path))
+    @generator.save_as(given_path)
   end
 end
 
     
-          def redirect(env)
-        request = Request.new(env)
-        warn env, 'attack prevented by #{self.class}'
-        [302, {'Content-Type' => 'text/html', 'Location' => request.path}, []]
-      end
+          PluginManager.ui.info('Installing file: #{local_file}')
+      uncompressed_path = uncompress(local_file)
+      PluginManager.ui.debug('Pack uncompressed to #{uncompressed_path}')
+      pack = LogStash::PluginManager::PackInstaller::Pack.new(uncompressed_path)
+      raise PluginManager::InvalidPackError, 'The pack must contains at least one plugin' unless pack.valid?
     
-        headers = get('/', {}, 'wants' => 'text/html').headers
-    expect(headers['Content-Security-Policy']).to be_nil
-    expect(headers['Content-Security-Policy-Report-Only']).to eq('connect-src 'self'; default-src none; img-src 'self'; report-uri /my_amazing_csp_report_parser; script-src 'self'; style-src 'self'')
+          it 'list the plugins with their versions' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose')
+        result.stdout.split('\n').each do |plugin|
+          expect(plugin).to match(/^logstash-\w+-\w+\s\(\d+\.\d+.\d+(.\w+)?\)/)
+        end
+      end
+    end
+    
+    SpecsHelper.configure(selected_boxes)
+    
+          attr_reader :wiki
+    
+    # test/spec/mini 3
+# http://gist.github.com/25455
+# chris@ozmm.org
+# file:lib/test/spec/mini.rb
+def context(*args, &block)
+  return super unless (name = args.first) && block
+  require 'test/unit'
+  klass = Class.new(defined?(ActiveSupport::TestCase) ? ActiveSupport::TestCase : Test::Unit::TestCase) do
+    def self.test(name, &block)
+      define_method('test_#{name.gsub(/\W/, '_')}', &block) if block
+    end
+    
+      test 'extract destination file name in case of path renaming' do
+    view = Precious::Views::LatestChanges.new
+    assert_equal 'newname.md', view.extract_renamed_path_destination('oldname.md => newname.md')
+    assert_equal 'newDirectoryName/fileName.md', view.extract_renamed_path_destination('{oldDirectoryName => newDirectoryName}/fileName.md')
   end
     
-      context 'escaping' do
-    it 'escapes html entities' do
-      mock_app do |env|
-        request = Rack::Request.new(env)
-        [200, {'Content-Type' => 'text/plain'}, [request.params['foo']]]
-      end
-      get '/', :foo => '<bar>'
-      expect(body).to eq('&lt;bar&gt;')
-    end
+        post '/edit/PG', :page => 'PG', :content => '바뀐 text', :message => 'ghi'
+    follow_redirect!
+    assert last_response.ok?
