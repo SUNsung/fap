@@ -1,281 +1,388 @@
 
         
-          // Computes all the cross product distances of the points from the line,
-  // storing the actual (signed) cross products in distances_.
-  // Ignores distances of points that are further away than the previous point,
-  // and overlaps the previous point by at least half.
-  void ComputeDistances(const ICOORD& start, const ICOORD& end);
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-      /* Reject modes generated after MM_ACCEPT but before QUALITY_ACCEPT */
-  R_BAD_QUALITY,  // TEMP Quality metrics bad for WERD
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-      // Simple accessors.
-  bool empty() const {
-    return heap_.empty();
-  }
-  int size() const {
-    return heap_.size();
-  }
-  int size_reserved() const {
-    return heap_.size_reserved();
-  }
-  void clear() {
-    // Clear truncates to 0 to keep the number reserved in tact.
-    heap_.truncate(0);
-  }
-  // Provides access to the underlying vector.
-  // Caution! any changes that modify the keys will invalidate the heap!
-  GenericVector<Pair>* heap() {
-    return &heap_;
-  }
-  // Provides read-only access to an element of the underlying vector.
-  const Pair& get(int index) const {
-    return heap_[index];
-  }
-    
-    // Displays classification as the given shape_id. Creates as many windows
-// as it feels fit, using index as a guide for placement. Adds any created
-// windows to the windows output and returns a new index that may be used
-// by any subsequent classifiers. Caller waits for the user to view and
-// then destroys the windows by clearing the vector.
-int TessClassifier::DisplayClassifyAs(
-    const TrainingSample& sample, Pix* page_pix, int unichar_id, int index,
-    PointerVector<ScrollView>* windows) {
-  int shape_id = unichar_id;
-  // TODO(rays) Fix this so it works with both flat and real shapetables.
-  //  if (GetShapeTable() != nullptr)
-  //  shape_id = BestShapeForUnichar(sample, page_pix, unichar_id, nullptr);
-  if (shape_id < 0) return index;
-  if (UnusedClassIdIn(classify_->PreTrainedTemplates, shape_id)) {
-    tprintf('No built-in templates for class/shape %d\n', shape_id);
-    return index;
-  }
-  classify_->ShowBestMatchFor(shape_id, sample.features(),
-                              sample.num_features());
-  return index;
-}
-    
-    
-    {}  // namespace grpc_core
+    #endif  // TENSORFLOW_COMPILER_XLA_SERVICE_GPU_COPY_THUNK_H_
 
     
-    #include <stdio.h>
-#include <string.h>
+    #include 'tensorflow/compiler/xla/service/gpu/buffer_allocations.h'
+#include 'tensorflow/compiler/xla/service/gpu/hlo_execution_profiler.h'
+#include 'tensorflow/compiler/xla/service/gpu/sequential_thunk.h'
+#include 'tensorflow/compiler/xla/service/gpu/thunk.h'
+#include 'tensorflow/compiler/xla/service/hlo_instruction.h'
+#include 'tensorflow/core/platform/stream_executor_no_cuda.h'
     
-    #ifndef GRPCPP_SUPPORT_CHANNEL_ARGUMENTS_H
-#define GRPCPP_SUPPORT_CHANNEL_ARGUMENTS_H
+    #include 'tensorflow/compiler/xla/service/gpu/infeed_thunk.h'
+#include 'tensorflow/compiler/xla/service/gpu/hlo_execution_profiler.h'
+#include 'tensorflow/compiler/xla/service/gpu/infeed_manager.h'
+#include 'tensorflow/compiler/xla/util.h'
+#include 'tensorflow/core/platform/stream_executor_no_cuda.h'
+    
+      // The thread and block dimension used to launch the kernel.
+  // Will be set by IrEmitterUnnested.
+  LaunchDimensions launch_dimensions_;
+    
+    Status Memset32BitValueThunk::ExecuteOnStream(const ExecuteParams& params) {
+  se::DeviceMemoryBase dest_data =
+      params.buffer_allocations->GetDeviceAddress(dest_);
+  auto op_profiler =
+      params.profiler->MakeScopedInstructionProfiler(hlo_instruction());
+  params.stream->ThenMemset32(&dest_data, value_, dest_data.size());
+  return Status::OK();
+}
+    
+      Status ExecuteOnStream(const ExecuteParams& params) override;
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    TEST_F(JsonObjectWriterTest, TestWebsafeByteEncoding) {
+  ow_ = new JsonObjectWriter('', out_stream_);
+  ow_->set_use_websafe_base64_for_bytes(true);
+  ow_->StartObject('')
+      ->RenderBytes('bytes', '\x03\xef\xc0\x10')
+      ->EndObject();
+    }
+    
+    #include <google/protobuf/compiler/command_line_interface.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/io/printer.h>
+    
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
     
     
     {
-    { private:
-  std::shared_ptr<grpc::Channel> CreateChannelWithInterceptors(
-      const string& target, const grpc::ChannelArguments& args,
-      std::vector<
-          std::unique_ptr<experimental::ClientInterceptorFactoryInterface>>
-          interceptor_creators) override {
-    grpc_channel_args channel_args;
-    args.SetChannelArgs(&channel_args);
-    return CreateChannelInternal(
-        '',
-        grpc_cronet_secure_channel_create(engine_, target.c_str(),
-                                          &channel_args, nullptr),
-        std::move(interceptor_creators));
-  }
-  void* engine_;
-};
-}  // namespace grpc
-namespace grpc_impl {
-std::shared_ptr<ChannelCredentials> CronetChannelCredentials(void* engine) {
-  return std::shared_ptr<ChannelCredentials>(
-      new grpc::CronetChannelCredentialsImpl(engine));
-}
-}  // namespace grpc_impl
+    {
+    {}  // namespace io
+}  // namespace protobuf
+}  // namespace google
 
     
     
-    {  std::unique_ptr<grpc::testing::EchoTestService::Stub> stub_;
-  std::unique_ptr<Server> server_;
-  std::ostringstream server_address_;
-  TestServiceImpl service_;
+    {  static void ScrubMessage(DescriptorProto *message_type) {
+    message_type->mutable_extension()->Clear();
+    for (int i = 0; i < message_type->mutable_extension()->size(); i++) {
+      message_type->mutable_extension(i)->clear_default_value();
+      if (ShouldClearLabel(message_type->mutable_extension(i))) {
+        message_type->mutable_extension(i)->clear_label();
+      }
+    }
+    for (int i = 0; i < message_type->mutable_field()->size(); i++) {
+      message_type->mutable_field(i)->clear_default_value();
+      if (ShouldClearLabel(message_type->mutable_field(i))) {
+        message_type->mutable_field(i)->clear_label();
+      }
+    }
+    for (int i = 0; i < message_type->mutable_nested_type()->size(); i++) {
+      ScrubMessage(message_type->mutable_nested_type(i));
+    }
+  }
 };
     
+      // Increments the reference count fo the current object.
+  // Should not be called when no object is held.
+  void inc() const { Py_INCREF(ptr_); }
     
-    {
-    {}  // namespace common
-}  // namespace xgboost
-    
-    /*!
- * \brief Find the maximum iterator within the iterators
- * \param begin The begining iterator.
- * \param end The end iterator.
- * \return the iterator point to the maximum value.
- * \tparam Iterator The type of the iterator.
- */
-template<typename Iterator>
-XGBOOST_DEVICE inline Iterator FindMaxIndex(Iterator begin, Iterator end) {
-  Iterator maxit = begin;
-  for (Iterator it = begin; it != end; ++it) {
-    if (*it > *maxit) maxit = it;
-  }
-  return maxit;
-}
+    // KSI: This function is possibly stupid: it's nonsensical to talk about the entire
+// cache being snapshotted -- we want some subtree to be snapshotted, at least.
+// However, if you quickly release the superblock, you'll release any snapshotting of
+// secondary index nodes that you could not possibly access.
+void get_btree_superblock_and_txn_for_reading(
+        cache_conn_t *cache_conn,
+        cache_snapshotted_t snapshotted,
+        scoped_ptr_t<real_superblock_t> *got_superblock_out,
+        scoped_ptr_t<txn_t> *txn_out) {
+    txn_t *txn = new txn_t(cache_conn, read_access_t::read);
+    txn_out->init(txn);
+    }
     
     
-    {    this->Stat(nid).loss_chg = loss_change;
-    this->Stat(nid).base_weight = base_weight;
-    this->Stat(nid).sum_hess = sum_hess;
-  }
+void store_t::acquire_all_sindex_superblocks_for_write(
+        block_id_t sindex_block_id,
+        buf_parent_t parent,
+        sindex_access_vector_t *sindex_sbs_out)
+    THROWS_ONLY(sindex_not_ready_exc_t) {
+    assert_thread();
+    }
     
-      /**
-  * \brief Column sampler constructor.
-  * \note This constructor synchronizes the RNG seed across processes.
-  */
-  ColumnSampler() {
-    uint32_t seed = common::GlobalRandom()();
-    rabit::Broadcast(&seed, sizeof(seed), 0);
-    rng_.seed(seed);
-  }
+        void register_sindex_queue(
+            disk_backed_queue_wrapper_t<rdb_modification_report_t> *disk_backed_queue,
+            const key_range_t &construction_range,
+            const new_mutex_in_line_t *acq);
     
-    /*!
- * \brief template for all quantile sketch algorithm
- *        that uses merge/prune scheme
- * \tparam DType type of data content
- * \tparam RType type of rank
- * \tparam TSummary actual summary data structure it uses
- */
-template<typename DType, typename RType, class TSummary>
-class QuantileSketchTemplate {
+            {
+            //Read that data
+            read_token_t token;
+            store.new_read_token(&token);
+    }
+    
+        cond_t dummy_interruptor;
+    
+    // This helper class can be used to mock out Google Test failure reporting
+// so that we can test Google Test or code that builds on Google Test.
+//
+// An object of this class appends a TestPartResult object to the
+// TestPartResultArray object given in the constructor whenever a Google Test
+// failure is reported. It can either intercept only failures that are
+// generated in the same thread that created this object or it can intercept
+// all generated failures. The scope of this mock object can be controlled with
+// the second argument to the two arguments constructor.
+class GTEST_API_ ScopedFakeTestPartResultReporter
+    : public TestPartResultReporterInterface {
  public:
-  /*! \brief type of summary type */
-  using Summary = TSummary;
-  /*! \brief the entry type */
-  using Entry = typename Summary::Entry;
-  /*! \brief same as summary, but use STL to backup the space */
-  struct SummaryContainer : public Summary {
-    std::vector<Entry> space;
-    SummaryContainer(const SummaryContainer &src) : Summary(nullptr, src.size) {
-      this->space = src.space;
-      this->data = dmlc::BeginPtr(this->space);
-    }
-    SummaryContainer() : Summary(nullptr, 0) {
-    }
-    /*! \brief reserve space for summary */
-    inline void Reserve(size_t size) {
-      if (size > space.size()) {
-        space.resize(size);
-        this->data = dmlc::BeginPtr(space);
-      }
-    }
-    /*!
-     * \brief set the space to be merge of all Summary arrays
-     * \param begin beginning position in the summary array
-     * \param end ending position in the Summary array
-     */
-    inline void SetMerge(const Summary *begin,
-                         const Summary *end) {
-      CHECK(begin < end) << 'can not set combine to empty instance';
-      size_t len = end - begin;
-      if (len == 1) {
-        this->Reserve(begin[0].size);
-        this->CopyFrom(begin[0]);
-      } else if (len == 2) {
-        this->Reserve(begin[0].size + begin[1].size);
-        this->SetMerge(begin[0], begin[1]);
-      } else {
-        // recursive merge
-        SummaryContainer lhs, rhs;
-        lhs.SetCombine(begin, begin + len / 2);
-        rhs.SetCombine(begin + len / 2, end);
-        this->Reserve(lhs.size + rhs.size);
-        this->SetCombine(lhs, rhs);
-      }
-    }
-    /*!
-     * \brief do elementwise combination of summary array
-     *        this[i] = combine(this[i], src[i]) for each i
-     * \param src the source summary
-     * \param max_nbyte maximum number of byte allowed in here
-     */
-    inline void Reduce(const Summary &src, size_t max_nbyte) {
-      this->Reserve((max_nbyte - sizeof(this->size)) / sizeof(Entry));
-      SummaryContainer temp;
-      temp.Reserve(this->size + src.size);
-      temp.SetCombine(*this, src);
-      this->SetPrune(temp, space.size());
-    }
-    /*! \brief return the number of bytes this data structure cost in serialization */
-    inline static size_t CalcMemCost(size_t nentry) {
-      return sizeof(size_t) + sizeof(Entry) * nentry;
-    }
-    /*! \brief save the data structure into stream */
-    template<typename TStream>
-    inline void Save(TStream &fo) const {  // NOLINT(*)
-      fo.Write(&(this->size), sizeof(this->size));
-      if (this->size != 0) {
-        fo.Write(this->data, this->size * sizeof(Entry));
-      }
-    }
-    /*! \brief load data structure from input stream */
-    template<typename TStream>
-    inline void Load(TStream &fi) {  // NOLINT(*)
-      CHECK_EQ(fi.Read(&this->size, sizeof(this->size)), sizeof(this->size));
-      this->Reserve(this->size);
-      if (this->size != 0) {
-        CHECK_EQ(fi.Read(this->data, this->size * sizeof(Entry)),
-                 this->size * sizeof(Entry));
-      }
-    }
+  // The two possible mocking modes of this object.
+  enum InterceptMode {
+    INTERCEPT_ONLY_CURRENT_THREAD,  // Intercepts only thread local failures.
+    INTERCEPT_ALL_THREADS           // Intercepts all failures.
   };
-  /*!
-   * \brief initialize the quantile sketch, given the performance specification
-   * \param maxn maximum number of data points can be feed into sketch
-   * \param eps accuracy level of summary
-   */
-  inline void Init(size_t maxn, double eps) {
-    LimitSizeLevel(maxn, eps, &nlevel, &limit_size);
-    // lazy reserve the space, if there is only one value, no need to allocate space
-    inqueue.queue.resize(1);
-    inqueue.qtail = 0;
-    data.clear();
-    level.clear();
+    }
+    
+      // Gets the number of all test cases that contain at least one test
+  // that should run.
+  int test_case_to_run_count() const;
+    
+      // # of exponent bits in a number.
+  static const size_t kExponentBitCount = kBitCount - 1 - kFractionBitCount;
+    
+      template <GTEST_8_TYPENAMES_(U)>
+  tuple& CopyFrom(const GTEST_8_TUPLE_(U)& t) {
+    f0_ = t.f0_;
+    f1_ = t.f1_;
+    f2_ = t.f2_;
+    f3_ = t.f3_;
+    f4_ = t.f4_;
+    f5_ = t.f5_;
+    f6_ = t.f6_;
+    f7_ = t.f7_;
+    return *this;
   }
+    
+    // A unique struct template used as the default value for the
+// arguments of class template Templates.  This allows us to simulate
+// variadic templates (e.g. Templates<int>, Templates<int, double>,
+// and etc), which C++ doesn't support directly.
+template <typename T>
+struct NoneT {};
+    
+    void Top::_appendStatsEntry(BSONObjBuilder& b, const char* statsName, const UsageData& map) const {
+    BSONObjBuilder bb(b.subobjStart(statsName));
+    bb.appendNumber('time', map.time);
+    bb.appendNumber('count', map.count);
+    bb.done();
+}
+    
+    
+    {}  // namespace
+
+    
+    U_NAMESPACE_BEGIN
+    
+    #define DOT               ((UChar)0x002E)
+#define SINGLE_QUOTE      ((UChar)0x0027)
+#define SLASH             ((UChar)0x002F)
+#define BACKSLASH         ((UChar)0x005C)
+#define SPACE             ((UChar)0x0020)
+#define TAB               ((UChar)0x0009)
+#define QUOTATION_MARK    ((UChar)0x0022)
+#define ASTERISK          ((UChar)0x002A)
+#define COMMA             ((UChar)0x002C)
+#define HYPHEN            ((UChar)0x002D)
+#define U_ZERO            ((UChar)0x0030)
+#define U_ONE             ((UChar)0x0031)
+#define U_TWO             ((UChar)0x0032)
+#define U_THREE           ((UChar)0x0033)
+#define U_FOUR            ((UChar)0x0034)
+#define U_FIVE            ((UChar)0x0035)
+#define U_SIX             ((UChar)0x0036)
+#define U_SEVEN           ((UChar)0x0037)
+#define U_EIGHT           ((UChar)0x0038)
+#define U_NINE            ((UChar)0x0039)
+#define COLON             ((UChar)0x003A)
+#define SEMI_COLON        ((UChar)0x003B)
+#define CAP_A             ((UChar)0x0041)
+#define CAP_B             ((UChar)0x0042)
+#define CAP_R             ((UChar)0x0052)
+#define CAP_Z             ((UChar)0x005A)
+#define LOWLINE           ((UChar)0x005F)
+#define LEFTBRACE         ((UChar)0x007B)
+#define RIGHTBRACE        ((UChar)0x007D)
+    
+                // Let's check the status.
+            double statusValue = 0;
+            auto status = ::CNTK::MakeSharedObject<::CNTK::NDArrayView>(::CNTK::DataType::Double, ::CNTK::NDShape{ 1 }, &statusValue, sizeof(double), ::CNTK::DeviceDescriptor::CPUDevice());
+            std::vector<::CNTK::NDArrayViewPtr> aggregatedStatus { status };
+            m_communicator->AggregateInPlace(aggregatedStatus, m_communicator->Workers());
+    
+    template <typename ElemType>
+NDLScript<ElemType> NDLScript<ElemType>::s_global('global');
+    
+        virtual void UpdateFunctionMBSize() = 0; // recalculate our column dimensions from MBLayout. Override to update temps.
+    
+    
+// ----------------------------------------------------------------------------
+// Basic interface
+// ----------------------------------------------------------------------------
+    
+             virtual void OnEpochEnd(const std::list<ComputationNodeBasePtr>&    LearnableNodes,
+                                    std::list<MatrixBasePtr>&                   smoothedGradients,
+                                    size_t                                      samplesSinceLastSync 
+                                    )
+         {
+             m_MAworkerStatus[m_myRank] = MAWorkerStatus::DataEnd;
+             Timer syncPointTimer; syncPointTimer.Start(); 
+             bool read2sync = UpdateWorkerStatus(MAWorkerStatus::DataEnd);
+             syncPointTimer.Stop();
+             m_perfReporter.OnArriveAtSyncPoint(syncPointTimer.ElapsedSeconds(), true);
+             // assert(read2sync); 
+             size_t totalSamplesProcessed = 0;
+             float secondsOnCommunication = 0.0f; 
+             if (read2sync)
+             {
+                 m_numSyncPerformed++;
+                 ModelAggregationProcessing(samplesSinceLastSync, LearnableNodes, smoothedGradients, totalSamplesProcessed, secondsOnCommunication);
+                 m_perfReporter.OnMAPerformed(samplesSinceLastSync, totalSamplesProcessed, secondsOnCommunication);
+             }
+             
+             m_pMPI->WaitAll();             
+             m_perfReporter.OnEpochEnd();
+         }
+    
+        template<class ElemType2 = ElemType>
+    void TypedUpdateWeights(Matrix<ElemType2>& functionValues, Matrix<ElemType2>& gradientValues,
+                       Matrix<ElemType2>& smoothedGradient, double& smoothedCount,
+                       const double learnRatePerSample, const double momentumPerSample,
+                       size_t actualMBSize,
+                       const double L2RegWeight, const double L1RegWeight,
+                       const bool needAveMultiplier,
+                       const bool useNesterovMomentum) const;
+public:
+    // return -1 if nothing exists
+    int DetermineStartEpoch(const bool makeMode);
+    
+            size_t beta = (nodeContainsAccumulatedResult || reset) ? 0 : 1;
+        size_t numSamples = GetNumSamples(m_criterionNodes[i], numSamplesInMinibatch, nodeContainsAccumulatedResult);
+        // Note: numSamples == 0 if numSamplesInMinibatch == 0 meaning empty minibatch.
+    
+    static bool protect_stack(void *top, size_t stack_size, uint32_t page)
+{
+    if (stack_size <= SwooleG.pagesize * (page + 1))
+    {
+        swoole_error_log(SW_LOG_ERROR, SW_ERROR_CO_PROTECT_STACK_FAILED, 'getpagesize() failed');
+        return false;
+    }
+#ifdef PROT_NONE
+    void *protect_page_addr = ((size_t) top & 0xfff) ? (void*) (((size_t) top & ~(size_t) 0xfff) + 0x1000) : top;
+    if (-1 == mprotect(protect_page_addr, SwooleG.pagesize * page, PROT_NONE))
+    {
+        swSysWarn(
+            'mprotect() failed: origin_addr:%p, align_addr:%p, page_size:%d, protect_page:%u',
+            top, protect_page_addr, SwooleG.pagesize, page
+        );
+        return false;
+    }
+    else
+    {
+        swDebug('origin_addr:%p, align_addr:%p, page_size:%d, protect_page:%u', top, protect_page_addr, page, SwooleG.pagesize);
+        return true;
+    }
+#endif
+}
+static bool unprotect_stack(void *top, uint32_t page)
+{
+    void *protect_page_addr = ((size_t) top & 0xfff) ? (void*) (((size_t) top & ~(size_t) 0xfff) + 0x1000) : top;
+#ifdef PROT_READ
+    if (-1 == mprotect(protect_page_addr, SwooleG.pagesize * page, PROT_READ | PROT_WRITE))
+    {
+        swSysWarn(
+            'mprotect() failed: origin_addr:%p, align_addr:%p, page_size:%d, protect_page:%u',
+            top, protect_page_addr, SwooleG.pagesize, page
+        );
+        return false;
+    }
+    else
+    {
+        swDebug('origin_addr:%p, align_addr:%p, page_size:%d, protect_page:%u', top, protect_page_addr, page, SwooleG.pagesize);
+        return true;
+    }
+#endif
+}
+#endif
+    
+    Context::~Context()
+{
+    if (stack_)
+    {
+        swTraceLog(SW_TRACE_COROUTINE, 'free stack: ptr=%p', stack_);
+#ifdef SW_CONTEXT_PROTECT_STACK_PAGE
+        if (protect_page_)
+        {
+            unprotect_stack(stack_, protect_page_);
+        }
+#endif
+    }
     }
     
-    /**
- * Default implementations of the accessor hooks. A property handler
- * class is supposed to implement `getProp`, `setProp`, `issetProp`,
- * `unsetProp`, and  `isPropSupported`. If a method cannot handle property,
- * it should return sigil `Native::prop_not_handled` value.
- *
- * Example:
- *
- * struct ElementPropHandler {
- *   static Variant getProp(const Object& this_, const String& name) {
- *     // get `name` prop
- *   }
- *   ...
- * }
- */
-    
-    bool fill_bfd_cache(folly::StringPiece filename, BfdCache& p) {
-  // Hard to avoid heap here!
-  auto abfd = bfd_openr(filename.begin(), nullptr);
-  if (abfd == nullptr) return true;
+        zval retval;
+    zend_op_array *new_op_array;
+    ZVAL_NULL(&dummy);
+    if (zend_hash_add(&EG(included_files), opened_path, &dummy))
+    {
+        new_op_array = zend_compile_file(&file_handle, ZEND_REQUIRE);
+        zend_destroy_file_handle(&file_handle);
+    }
+    else
+    {
+        new_op_array = NULL;
+        zend_file_handle_dtor(&file_handle);
+    }
+    zend_string_release(opened_path);
+    if (!new_op_array)
+    {
+        return false;
     }
     
-    #include 'hphp/util/assertions.h'
-#include <atomic>
-#include <folly/portability/SysMman.h>
+    #include 'swoole.h'
+#include <string>
     
-      // Parent pointers should point to the node that has a given node as
-  // a child.
-  assert(node->parent == expectedParent);
     
-    TRACE_SET_MOD(irlower);
+    {    ASSERT_GT(cid, 0);
+    Coroutine::get_by_cid(cid)->resume();
+    ASSERT_EQ(cid, _cid);
+}
+
     
-    struct InlineState {
-  /*
-   * The current depth of inlining.  0 means we're not inlining.
-   */
-  uint16_t depth{0};
-    }
+    
+    {
+    {        ASSERT_EQ(WEXITSTATUS(status), 0);
+    });
+}
+
+    
+            void addWrite() {
+            if (m_write) return;
+            m_write = new QSocketNotifier(m_ctx->c.fd, QSocketNotifier::Write, 0);
+            connect(m_write, SIGNAL(activated(int)), this, SLOT(write()));
+        }
+    
+        shared_ptr<string> val_str = make_shared<string>('hello');
+    cache.set('test1', val_str); // update test1 and will del test2
+    ASSERT_EQ(cache.get('test1').get(), val_str.get());
+    ASSERT_EQ(dtor_num, 2);
