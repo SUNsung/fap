@@ -1,154 +1,118 @@
 
         
-            should 'not filter symlink entries when safe mode disabled' do
-      allow(File).to receive(:symlink?).with('symlink.js').and_return(true)
-      files = %w(symlink.js)
-      assert_equal files, @site.reader.filter_entries(files)
+              respond_to_on_destroy
     end
+  end
     
-        # --
-    # NOTE: Pathutil#in_path? gets the realpath.
-    # @param [<Anything>] entry the entry you want to validate.
-    # Check if a path is outside of our given root.
-    # --
-    def symlink_outside_site_source?(entry)
-      !Pathutil.new(entry).in_path?(
-        site.in_source_dir
-      )
+        def translation_scope
+      'devise.unlocks'
     end
-    
-          def key?(key)
-        (key != 'posts' && @obj.collections.key?(key)) || super
-      end
-    
-    require 'rdoc/task'
-Rake::RDocTask.new do |rdoc|
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = '#{name} #{version}'
-  rdoc.rdoc_files.include('README*')
-  rdoc.rdoc_files.include('lib/**/*.rb')
-end
-    
-    Nullam luctus fermentum est id blandit. Phasellus consectetur ullamcorper
-ligula, {% if author == 'Jane Doe' %} at finibus eros laoreet id. {% else %}
-Etiam sit amet est in libero efficitur.{% endif %}
-tristique. Ut nec magna augue. Quisque ut fringilla lacus, ac dictum enim.
-Aliquam vel ornare mauris. Suspendisse ornare diam tempor nulla facilisis
-aliquet. Sed ultrices placerat ultricies.
-LIQUID
-    
-    require 'benchmark/ips'
-require 'pathutil'
-    
-    # No trailing slash
-Benchmark.ips do |x|
-  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
-  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
-  x.compare!
 end
 
     
-          def step_name(_keyword, _step_match, status, _source_indent, _background, _file_colon_line)
-        @io.print CHARS[status]
-        @io.print ' '
-      end
-      # rubocop:enable Metrics/ParameterLists
-    
-        context 'if compliant?' do
-      let(:compliant) { true }
-    
-        it 'returns http success' do
-      expect(response).to have_http_status(200)
+        def confirmation_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :confirmation_instructions, opts)
     end
     
-      def refresh_poll
-    ActivityPub::FetchRemotePollService.new.call(@poll, current_account) if user_signed_in? && @poll.possibly_stale?
-  end
-end
-
-    
-          respond_with do |format|
-        format.html do
-          gon.preloads[:pods] = pods_json
-          gon.unchecked_count = Pod.unchecked.count
-          gon.version_failed_count = Pod.version_failed.count
-          gon.error_count = Pod.check_failed.count
-    
-    class AdminsController < Admin::AdminController
-  include ApplicationHelper
-    
-      rescue_from ActiveRecord::RecordNotFound do
-    render plain: I18n.t('aspect_memberships.destroy.no_membership'), status: 404
-  end
-    
-      private
-    
-      respond_to :html, :mobile
-  respond_to :json, :only => :show
-    
-        it { expect(self_class_node.identifier.self_type?).to be(true) }
-  end
-    
-            # If the call has a second argument, we can insert a line
-        # break before the second argument and the rest of the
-        # argument will get auto-formatted onto separate lines
-        # by other cops.
-        has_second_element = elements.length >= 2
-    
-          context 'and AllowUnusedKeywordArguments set' do
-        let(:cop_config) { { 'AllowUnusedKeywordArguments' => true } }
-    
-            rhs
-      end
-    end
-  end
-end
-
-    
-      describe '.new' do
-    context 'with a regular if statement' do
-      let(:source) { 'if foo?; :bar; end' }
-    
-          preliminary_path = '#{@path}_#{rand(1_000_000_000)}'
-      # RuboCop must be in control of where its cached data is stored. A
-      # symbolic link anywhere in the cache directory tree can be an
-      # indication that a symlink attack is being waged.
-      return if symlink_protection_triggered?(dir)
-    
-          # Returns the iteration variable of the `for` loop.
+          # Sign in a user bypassing the warden callbacks and stores the user
+      # straight in session. This option is useful in cases the user is already
+      # signed in, but we want to refresh the credentials in session.
       #
-      # @return [Node] The iteration variable of the `for` loop
-      def variable
-        node_parts[0]
+      # Examples:
+      #
+      #   bypass_sign_in @user, scope: :user
+      #   bypass_sign_in @user
+      def bypass_sign_in(resource, scope: nil)
+        scope ||= Devise::Mapping.find_scope!(resource)
+        expire_data_after_sign_in!
+        warden.session_serializer.store(resource, scope)
       end
     
-          def line_class(line)
-        if line =~ /^@@/
-          'gc'
-        elsif line =~ /^\+/
-          'gi'
-        elsif line =~ /^\-/
-          'gd'
+            routes.each do |module_name, actions|
+          [:path, :url].each do |path_or_url|
+            actions.each do |action|
+              action = action ? '#{action}_' : ''
+              method = :'#{action}#{module_name}_#{path_or_url}'
+    
+          def rememberable_value
+        if respond_to?(:remember_token)
+          remember_token
+        elsif respond_to?(:authenticatable_salt) && (salt = authenticatable_salt.presence)
+          salt
         else
-          ''
+          raise 'authenticatable_salt returned nil for the #{self.class.name} model. ' \
+            'In order to use rememberable, you must ensure a password is always set ' \
+            'or have a remember_token column in your model or implement your own ' \
+            'rememberable_value in the model with custom logic.'
         end
       end
     
-          def mathjax_config
-        @mathjax_config
+        photo
+  end
+    
+      describe '#show' do
+    it 'should return 404 for nonexistent stuff on mobile devices' do
+      expect {
+        get :show, params: {person_id: bob.person.guid, id: 772_831}, format: :mobile
+      }.to raise_error ActiveRecord::RecordNotFound
+    end
+    
+          def handle_jwt_bearer(req)
+        jwt_string = req['client_assertion']
+        jwt = JSON::JWT.decode jwt_string, :skip_verification
+        o_auth_app = Api::OpenidConnect::OAuthApplication.find_by(client_id: jwt['iss'])
+        raise Rack::OAuth2::Server::Authorize::BadRequest(:invalid_request) unless o_auth_app
+        public_key = fetch_public_key(o_auth_app, jwt)
+        JSON::JWT.decode(jwt_string, JSON::JWK.new(public_key).to_key)
+        req.update_param('client_id', o_auth_app.client_id)
+        req.update_param('client_secret', o_auth_app.client_secret)
       end
     
-        @wiki.clear_cache
-    page = @wiki.page(name)
-    assert_not_equal 'abc', page.raw_data
+      respond_to :html,
+             :js,
+             :json
+    
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   Cookie Tossing
+    # Supported browsers:: all
+    # More infos::         https://github.com/blog/1466-yummy-cookies-across-domains
+    #
+    # Does not accept HTTP requests if the HTTP_COOKIE header contains more than one
+    # session cookie. This does not protect against a cookie overflow attack.
+    #
+    # Options:
+    #
+    # session_key:: The name of the session cookie (default: 'rack.session')
+    class CookieTossing < Base
+      default_reaction :deny
+    
+          def call(env)
+        request  = Request.new(env)
+        get_was  = handle(request.GET)
+        post_was = handle(request.POST) rescue nil
+        app.call env
+      ensure
+        request.GET.replace  get_was  if get_was
+        request.POST.replace post_was if post_was
+      end
+    
+      it 'accepts post requests with masked X-CSRF-Token header' do
+    post('/', {}, 'rack.session' => session, 'HTTP_X_CSRF_TOKEN' => masked_token)
+    expect(last_response).to be_ok
   end
     
-      test 'extracting paths from URLs' do
-    assert_nil extract_path('Eye-Of-Sauron')
-    assert_equal 'Mordor', extract_path('Mordor/Sauron')
-    assert_equal 'Mordor/Sauron', extract_path('Mordor/Sauron/Evil')
-  end
+                expect(subject.shipping_rates(package).sort_by(&:cost).map(&:selected)).to eq [true, false]
+          end
     
-    def gemspec_file
-  '#{name}.gemspec'
-end
+            def create
+          authorize! :create, ProductProperty
+          @product_property = @product.product_properties.new(product_property_params)
+          if @product_property.save
+            respond_with(@product_property, status: 201, default_template: :show)
+          else
+            invalid_resource!(@product_property)
+          end
+        end
