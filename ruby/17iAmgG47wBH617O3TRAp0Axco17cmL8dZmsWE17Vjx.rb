@@ -1,203 +1,98 @@
 
         
-                UI.success('Successfully exported CSV to #{file}')
-      end
+            # The path used after resending confirmation instructions.
+    def after_resending_confirmation_instructions_path_for(resource_name)
+      is_navigational_format? ? new_session_path(resource_name) : '/'
     end
     
-          #
-      # API
-      #
-    
-          attr_mapping({
-        'capabilityType' => 'capabilityType',
-        'settings' => 'email'
-      })
-    
-          module CertificateType
-        IOS_DEVELOPMENT = 'IOS_DEVELOPMENT'
-        IOS_DISTRIBUTION = 'IOS_DISTRIBUTION'
-        MAC_APP_DISTRIBUTION = 'MAC_APP_DISTRIBUTION'
-        MAC_INSTALLER_DISTRIBUTION = 'MAC_INSTALLER_DISTRIBUTION'
-        MAC_APP_DEVELOPMENT = 'MAC_APP_DEVELOPMENT'
-        DEVELOPER_ID_KEXT = 'DEVELOPER_ID_KEXT'
-        DEVELOPER_ID_APPLICATION = 'DEVELOPER_ID_APPLICATION'
-      end
-    
-          #
-      # API
-      #
-    
-          def self.all(filter: {}, includes: nil, limit: nil, sort: nil)
-        resps = Spaceship::ConnectAPI.get_profiles(filter: filter, includes: includes).all_pages
-        return resps.map(&:to_models).flatten
-      end
+        # The path used after sending unlock password instructions
+    def after_sending_unlock_instructions_path_for(resource)
+      new_session_path(resource) if is_navigational_format?
     end
+    
+          def extract_path_from_location(location)
+        uri = parse_uri(location)
+    
+            token
+      end
+    
+          def timeout_in
+        self.class.timeout_in
+      end
+    
+        stub_request(:post, 'https://example.org/inbox').to_return(status: 200)
+    stub_request(:post, 'https://example.com/inbox').to_return(status: 200)
+    
+    RSpec.describe ActivityPub::Activity::Block do
+  let(:sender)    { Fabricate(:account) }
+  let(:recipient) { Fabricate(:account) }
+    
+        before do
+      get :show, params: { id: user.account.id }
+    end
+    
+      it 'does still notify when sender\'s domain is blocked but sender is followed' do
+    recipient.block_domain!(sender.domain)
+    recipient.follow!(sender)
+    is_expected.to change(Notification, :count)
   end
-end
-
     
-          def self.all(filter: {}, includes: nil, limit: nil, sort: nil)
-        return Spaceship::ConnectAPI.get_users(filter: filter, includes: includes)
-      end
+      let(:user)   { Fabricate(:user, account: Fabricate(:account, username: 'alice')) }
+  let(:scopes) { 'read:statuses' }
+  let(:token)  { Fabricate(:accessible_access_token, resource_owner_id: user.id, scopes: scopes) }
     
-        def aes256_gcm_decrypt(value)
-      return unless value
+        context 'when the sender is relayed' do
+      let!(:relay_account) { Fabricate(:account, inbox_url: 'https://relay.example.com/inbox') }
+      let!(:relay) { Fabricate(:relay, inbox_url: 'https://relay.example.com/inbox') }
     
-              parsed_filters << filter
+      # Default class for buttons
+  config.button_class = 'btn'
+    
+          while (stime + ctimeout > Time.now.to_i)
+        begin
+          client = Rex::Socket::Udp.create(
+            'PeerHost' => rhost,
+            'PeerPort' => lport.to_i,
+            'Proxies'  => datastore['Proxies'],
+            'Context'  =>
+              {
+                'Msf'        => framework,
+                'MsfPayload' => self,
+                'MsfExploit' => assoc_exploit
+              })
+        rescue Rex::ConnectionError => e
+          vprint_error(e.message)
+        rescue
+          wlog('Exception caught in bind handler: #{$!.class} #{$!}')
         end
     
-          stats_mock = double(Gitaly::DiffStats, path: '.gitignore', additions: 758, deletions: 120)
-      stub_stats_find_by_path(stub_path, stats_mock)
-    
-      # GET /resource/confirmation?confirmation_token=abcdef
-  def show
-    self.resource = resource_class.confirm_by_token(params[:confirmation_token])
-    yield resource if block_given?
-    
-      # POST /resource/sign_in
-  def create
-    self.resource = warden.authenticate!(auth_options)
-    set_flash_message!(:notice, :signed_in)
-    sign_in(resource_name, resource)
-    yield resource if block_given?
-    respond_with resource, location: after_sign_in_path_for(resource)
-  end
-    
-      # Proxy to devise map name
-  def resource_name
-    devise_mapping.name
-  end
-  alias :scope_name :resource_name
-    
-          def parse_uri(location)
-        location && URI.parse(location)
-      rescue URI::InvalidURIError
-        nil
+        state.badchars.each_byte do |byte|
+      # Last ditch effort, if any of the normal characters used by base64
+      # are badchars, try to replace them with something that will become
+      # the appropriate thing on the other side.
+      if b64.include?(byte.chr)
+        b64.gsub!(byte.chr, '.chr(#{byte}).')
       end
+    end
     
-      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
-     options[:store] != false && !env['devise.skip_timeoutable']
-    last_request_at = warden.session(scope)['last_request_at']
+            # encode the bytes as \x hex string, print using bash's echo, and pass to plutil
+        shadow_plist = cmd_exec('/bin/bash -c 'echo -ne \'#{plist_bytes}\' | plutil -convert xml1 - -o -'')
     
-          def self.required_fields(klass)
-        []
-      end
-    
-        def check_sha256_no_check_if_latest
-      odebug 'Verifying sha256 :no_check with version :latest'
-      return unless cask.version.latest?
-      return if cask.sha256 == :no_check
-    
-                problem ':#{requirement} is deprecated. Usage should be \'#{dependency}\'.'
-          end
-    
-    require_relative 'shared_examples/requires_cask_token'
-require_relative 'shared_examples/invalid_option'
-    
-        if params[:user][:otp_attempt].present? && session[:otp_user_id]
-      authenticate_with_two_factor_via_otp(resource)
     else
-      strategy = Warden::Strategies[:database_authenticatable].new(warden.env, :user)
-      prompt_for_two_factor(strategy.user) if strategy.valid? && strategy._run!.successful?
-    end
-  end
-    
-    if rails_env == 'production'
-  config('without test:development')
-elsif rails_env == 'test'
-  config('without development')
-end
-    
-      def user_search
-    if params[:admins_controller_user_search]
-      search_params = params.require(:admins_controller_user_search)
-                            .permit(:username, :email, :guid, :under13)
-      @search = UserSearch.new(search_params)
-      @users = @search.perform
-    end
-    
-    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
-    
-      def create
-    conversation = Conversation.find(params[:conversation_id])
-    
-        types.each_with_object(current_user.unread_notifications.group_by(&:type)) {|(name, type), notifications|
-      @grouped_unread_notification_counts[name] = notifications.has_key?(type) ? notifications[type].count : 0
-    }
-    
-              @processed_source = processed_source
-    
-    RSpec.describe RuboCop::Cop::Lint::UnusedMethodArgument, :config do
-  subject(:cop) { described_class.new(config) }
-    
-          module_function
-    
-        context 'with nested conditionals in elsif clause' do
-      let(:source) do
-        ['if foo?',
-         '  1',
-         'elsif bar?',
-         '  if baz; 4; end',
-         'else',
-         '  3',
-         'end'].join('\n')
-      end
-    
-              node.last_line + num_of_heredoc_lines + END_OF_HEREDOC_LINE
-        end
-    
-          def sidebar
-        if @sidebar.nil?
-          if page = @page.sidebar
-            @sidebar = page.text_data
-          else
-            @sidebar = false
-          end
-        end
-        @sidebar
-      end
-    
-          def use_identicon
-        @page.wiki.user_icons == 'identicon'
-      end
-    
-        get '/pages'
-    
-      test 'remove page extentions' do
-    view = Precious::Views::LatestChanges.new
-    assert_equal 'page', view.remove_page_extentions('page.wiki')
-    assert_equal 'page-wiki', view.remove_page_extentions('page-wiki.md')
-    assert_equal 'file.any_extention', view.remove_page_extentions('file.any_extention')
-  end
-    
-      teardown do
-    FileUtils.rm_rf(@path)
-  end
-    
-      def self.assets_path
-    ::File.expand_path('gollum/public', ::File.dirname(__FILE__))
-  end
-    
-        it 'can enumerate retries' do
-      add_retry
-    
-    describe Sidekiq::ExceptionHandler do
-  describe 'with mock logger' do
-    before do
-      @old_logger = Sidekiq.logger
-      @str_logger = StringIO.new
-      Sidekiq.logger = Logger.new(@str_logger)
-    end
-    
-          I18n.enforce_available_locales = false
-      I18n.available_locales = nil
-    end
-  end
+  print_error('This version of Meterpreter is not supported with this Script!')
+  raise Rex::Script::Completed
 end
 
     
-      describe 'lifecycle events' do
-    it 'handles invalid input' do
-      Sidekiq.options[:lifecycle_events][:startup].clear
+          it 'does not create the ApiSecret' do
+        expect { post '/users/api_secrets', params: { api_secret: invalid_params } }.
+          not_to(change { user.api_secrets.count })
+      end
+    
+          # Below article HTML variant
+      it 'renders below article html variant' do
+        html_variant = create(:html_variant, published: true, approved: true, group: 'article_show_below_article_cta')
+        article.update_column(:body_markdown, rand(36**1000).to_s(36).to_s) # min length for article
+        get article.path + '?variant_version=0'
+        expect(response.body).to include html_variant.html
+      end
