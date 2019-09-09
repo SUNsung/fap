@@ -1,207 +1,186 @@
 
         
-            assert actual_body == expected_body
-    
-        def filter(self, by_type=Type[BasePlugin]):
-        return [plugin for plugin in self if issubclass(plugin, by_type)]
-    
-    This module provides the capabilities for the Requests hooks system.
-    
-    if is_py2:
-    from urllib import (
-        quote, unquote, quote_plus, unquote_plus, urlencode, getproxies,
-        proxy_bypass, proxy_bypass_environment, getproxies_environment)
-    from urlparse import urlparse, urlunparse, urljoin, urlsplit, urldefrag
-    from urllib2 import parse_http_list
-    import cookielib
-    from Cookie import Morsel
-    from StringIO import StringIO
-    # Keep OrderedDict for backwards compatibility.
-    from collections import Callable, Mapping, MutableMapping, OrderedDict
-    
-        def lower_items(self):
-        '''Like iteritems(), but with all lowercase keys.'''
-        return (
-            (lowerkey, keyval[1])
-            for (lowerkey, keyval)
-            in self._store.items()
-        )
-    
-    setup(
-    name=about['__title__'],
-    version=about['__version__'],
-    description=about['__description__'],
-    long_description=readme,
-    long_description_content_type='text/markdown',
-    author=about['__author__'],
-    author_email=about['__author_email__'],
-    url=about['__url__'],
-    packages=packages,
-    package_data={'': ['LICENSE', 'NOTICE'], 'requests': ['*.pem']},
-    package_dir={'requests': 'requests'},
-    include_package_data=True,
-    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*',
-    install_requires=requires,
-    license=about['__license__'],
-    zip_safe=False,
-    classifiers=[
-        'Development Status :: 5 - Production/Stable',
-        'Intended Audience :: Developers',
-        'Natural Language :: English',
-        'License :: OSI Approved :: Apache Software License',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: Implementation :: CPython',
-        'Programming Language :: Python :: Implementation :: PyPy'
-    ],
-    cmdclass={'test': PyTest},
-    tests_require=test_requirements,
-    extras_require={
-        'security': ['pyOpenSSL >= 0.14', 'cryptography>=1.3.4', 'idna>=2.0.0'],
-        'socks': ['PySocks>=1.5.6, !=1.5.7'],
-        'socks:sys_platform == 'win32' and python_version == '2.7'': ['win_inet_pton'],
-    },
-    project_urls={
-        'Documentation': 'http://docs.python-requests.org',
-        'Source': 'https://github.com/kennethreitz/requests',
-    },
-)
+        print('Train...')
+model.fit(x_train, y_train,
+          batch_size=batch_size,
+          epochs=15,
+          validation_data=(x_test, y_test))
+score, acc = model.evaluate(x_test, y_test,
+                            batch_size=batch_size)
+print('Test score:', score)
+print('Test accuracy:', acc)
 
     
-    # There are two options for replacing |today|: either, you set today to
-# some non-false value, then it is used:
-#today = ''
-# Else, today_fmt is used as the format for a strftime call.
-#today_fmt = '%B %d, %Y'
+    from keras.datasets import boston_housing
+from keras.datasets import imdb
+from keras.datasets import reuters
     
-    # Get the face encodings for the known images
-obama_face_encoding = face_recognition.face_encodings(known_obama_image)[0]
-biden_face_encoding = face_recognition.face_encodings(known_biden_image)[0]
+        def get_config(self):
+        config = {
+            'filters': self.filters,
+            'kernel_size': self.kernel_size,
+            'strides': self.strides,
+            'padding': self.padding,
+            'activation': activations.serialize(self.activation),
+            'use_bias': self.use_bias,
+            'kernel_initializer': initializers.serialize(self.kernel_initializer),
+            'bias_initializer': initializers.serialize(self.bias_initializer),
+            'kernel_regularizer': regularizers.serialize(self.kernel_regularizer),
+            'bias_regularizer': regularizers.serialize(self.bias_regularizer),
+            'activity_regularizer':
+                regularizers.serialize(self.activity_regularizer),
+            'kernel_constraint': constraints.serialize(self.kernel_constraint),
+            'bias_constraint': constraints.serialize(self.bias_constraint)
+        }
+        base_config = super(LocallyConnected1D, self).get_config()
+        return dict(list(base_config.items()) + list(config.items()))
     
-        # 将每一个人脸与已知样本图片比对
-    for face_encoding in face_encodings:
-        # 看是否属于奥巴马或者拜登
-        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
-        name = '<Unknown Person>'
+    Input may optionally be reversed, shown to increase performance in many tasks in:
+'Learning to Execute'
+http://arxiv.org/abs/1410.4615
+and
+'Sequence to Sequence Learning with Neural Networks'
+http://papers.nips.cc/paper/5346-sequence-to-sequence-learning-with-neural-networks.pdf
+Theoretically it introduces shorter term dependencies between source and target.
     
-    # You can change this to any folder on your system
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
     
-        # Load a second sample picture and learn how to recognize it.
-    biden_image = face_recognition.load_image_file('biden.jpg')
-    biden_face_encoding = face_recognition.face_encodings(biden_image)[0]
+def gae_application(environ, start_response):
+    cookie = environ.get('HTTP_COOKIE', '')
+    options = environ.get('HTTP_X_GOA_OPTIONS', '')
+    if environ['REQUEST_METHOD'] == 'GET' and not cookie:
+        if '204' in environ['QUERY_STRING']:
+            start_response('204 No Content', [])
+            yield ''
+        else:
+            timestamp = long(os.environ['CURRENT_VERSION_ID'].split('.')[1])/2**28
+            ctime = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(timestamp+8*3600))
+            html = u'GoAgent Python Server %s \u5df2\u7ecf\u5728\u5de5\u4f5c\u4e86\uff0c\u90e8\u7f72\u65f6\u95f4 %s\n' % (__version__, ctime)
+            start_response('200 OK', [('Content-Type', 'text/plain; charset=utf-8')])
+            yield html.encode('utf8')
+        raise StopIteration
     
-                if offscreen:
+    - CommonTokenStream: A basic and most commonly used TokenStream
+  implementation.
+- TokenRewriteStream: A modification of CommonTokenStream that allows the
+  stream to be altered (by the Parser). See the 'tweak' example for a usecase.
     
-        Defaults files should be named <plugin_name>_defaults.py
-    Any items placed into this file will automatically get added to the relevant config .ini files
-    within the faceswap/config folder.
+            Python does not have any size restrictions, but the compilation of
+        such large source files seems to be pretty memory hungry. The memory
+        consumption of the python process grew to >1.5GB when importing a
+        15MB lexer, eating all my swap space and I was to impacient to see,
+        if it could finish at all. With packed initializers that are unpacked
+        at import time of the lexer module, everything works like a charm.
+        
+        '''
+        
+        ret = []
+        for i in range(len(string) / 2):
+            (n, v) = ord(string[i*2]), ord(string[i*2+1])
     
-                       <option_name> should always be lower text.
-                   <metadata> dictionary requirements are listed below.
+            Using setter/getter methods is deprecated. Use o.charPositionInLine instead.'''
     
-        def launch_detector(self):
-        ''' Launch the face detector '''
-        logger.debug('Launching Detector')
-        kwargs = {'in_queue': self.queues['extract_detect_in'],
-                  'out_queue': self.queues['extract_align_in']}
-        mp_func = PoolProcess if self.detector.parent_is_pool else SpawnProcess
-        process = mp_func(self.detector.run, **kwargs)
+        def forwards(self, orm):
     
-        def progress_update(self, message, position, update_position=True):
-        ''' Update the GUIs progress bar and position '''
-        self.pbar_message.set(message)
-        if update_position:
-            self.pbar_position.set(position)
+    from django.conf import settings
+from social_auth.utils import custom_user_frozen_models
+    
+        complete_apps = ['social_auth']
 
     
-            # Deleting model 'GroupTagValue'
-        db.delete_table(u'tagstore_grouptagvalue')
+    
+def get_logger():
+    'Attach a file handler to the logger if there isn't one already.'
+    debug_on = getattr(settings, 'SOUTH_LOGGING_ON', False)
+    logging_file = getattr(settings, 'SOUTH_LOGGING_FILE', False)
     
     
-def main():
-    '''
-    # Counting to two...
-    >>> for number in count_to_two():
-    ...     print(number)
-    one
-    two
+def test_iloc():
+    s = Series(np.random.randn(10), index=list(range(0, 20, 2)))
     
-        >>> Order(1000, discount_strategy=on_sale_discount)
-    <Price: 1000, price after discount: 730.0>
-    '''
+        @pytest.mark.parametrize('str_dtype', [object])  # TODO
+    def test_as_json_table_type_string_dtypes(self, str_dtype):
+        assert as_json_table_type(str_dtype) == 'string'
     
     
-def get_text():
-    return 'plain-text'
+    
+            # check that target_as_index IntervalIndex is compatible
+        if isinstance(target_as_index, IntervalIndex):
+            common_subtype = find_common_type(
+                [self.dtype.subtype, target_as_index.dtype.subtype]
+            )
+            if self.closed != target_as_index.closed or is_object_dtype(common_subtype):
+                # different closed or incompatible subtype -> no matches
+                return (
+                    np.repeat(-1, len(target_as_index)),
+                    np.arange(len(target_as_index)),
+                )
+    
+        # Calling directly the omnifunc may move the cursor position. This is the
+    # case with the default Vim omnifunc for C-family languages
+    # (ccomplete#Complete) which calls searchdecl to find a declaration. This
+    # function is supposed to move the cursor to the found declaration but it
+    # doesn't when called through the omni completion mapping (CTRL-X CTRL-O).
+    # So, we restore the cursor position after the omnifunc calls.
+    line, column = vimsupport.CurrentLineAndColumn()
+    
+        # If not a dictionary or a list, the response is necessarily a
+    # scalar: boolean, number, string, etc. In this case, we print
+    # it to the user.
+    if not isinstance( self._response, ( dict, list ) ):
+      return self._HandleBasicResponse()
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
     
-class Cat(object):
-    def speak(self):
-        return 'meow'
-    
-        def __init__(self):
-        self.__dict__ = self.__shared_state
-        self.state = 'Init'
-    
-    The first example achieves this by using an abstract base
-class for a building, where the initializer (__init__ method) specifies the
-steps needed, and the concrete subclasses implement these steps.
-    
-        @property
-    def _lazy_property(self):
-        if not hasattr(self, attr):
-            setattr(self, attr, fn(self))
-        return getattr(self, attr)
-    
-    *TL;DR
-Stores a set of initialized objects kept ready to use.
-'''
-    
-    *TL;DR
-Allows object composition to achieve the same code reuse as inheritance.
-'''
-    
-    ### OUTPUT ###
-# API1.circle at 1:2 radius 7.5
-# API2.circle at 5:7 radius 27.5
-
-    
-    shutil.rmtree(os.path.join(CURRENT_DIR, 'mxnet'), ignore_errors=True)
-shutil.rmtree(os.path.join(CURRENT_DIR, 'dmlc_tracker'), ignore_errors=True)
-shutil.copytree(os.path.join(CURRENT_DIR, 'mxnet-build/python/mxnet'),
-                os.path.join(CURRENT_DIR, 'mxnet'))
-shutil.copytree(os.path.join(CURRENT_DIR, 'mxnet-build/3rdparty/dmlc-core/tracker/dmlc_tracker'),
-                os.path.join(CURRENT_DIR, 'dmlc_tracker'))
-shutil.copy(LIB_PATH[0], os.path.join(CURRENT_DIR, 'mxnet'))
-    
-            net = _get_test_network()
-        ce_loss = loss.SoftmaxCrossEntropyLoss()
-        acc = mx.metric.Accuracy()
-        est = estimator.Estimator(net, loss=ce_loss, metrics=acc)
-        train_metrics, val_metrics = est.prepare_loss_and_metrics()
-        logging_handler = event_handler.LoggingHandler(file_name=file_name,
-                                                       file_location=tmpdir,
-                                                       train_metrics=train_metrics,
-                                                       val_metrics=val_metrics)
-        est.fit(test_data, event_handlers=[logging_handler], epochs=3)
-        assert logging_handler.batch_index == 0
-        assert logging_handler.current_epoch == 3
-        assert os.path.isfile(output_dir)
+def FormatDebugInfoResponse_ExtraConfFoundAndLoaded_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'extra_conf' ].update( {
+    'is_loaded': True,
+    'path': '/path/to/extra/conf'
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Extra configuration file found and loaded\n'
+      'Extra configuration path: /path/to/extra/conf\n'
+    )
+  )
     
     
-def test_incomplete_infer_convolution():
-    a = mx.sym.Variable('a', shape=(0, 10, 0, 0))
-    b = mx.sym.Convolution(data=a, num_filter=21, kernel=(3, 3), dilate=(1, 1), pad=(1, 1))
-    c = mx.sym.Variable('c', shape=(5, 21, 32, 32))
-    d = b + c
-    arg_shapes, _, _ = d.infer_shape()
-    arg_names = d.list_arguments()
-    arg_shapes = {k: v for k, v in zip(arg_names, arg_shapes)}
-    assert arg_shapes['a'] == (5, 10, 32, 32)
+def KeywordsFromSyntaxListOutput_Basic_test():
+  assert_that( syntax_parse._KeywordsFromSyntaxListOutput( '''
+foogroup xxx foo bar
+             zoo goo
+             links to Statement''' ),
+              contains_inanyorder( 'foo', 'bar', 'zoo', 'goo' ) )
+    
+        Returns:
+        An iterator that yields the given Futures as they complete (finished or
+        cancelled).
+    
+        >>> Point = namedtuple('Point', 'x y')
+    >>> Point.__doc__                   # docstring for the new class
+    'Point(x, y)'
+    >>> p = Point(11, y=22)             # instantiate with positional args or keywords
+    >>> p[0] + p[1]                     # indexable like a plain tuple
+    33
+    >>> x, y = p                        # unpack like a regular tuple
+    >>> x, y
+    (11, 22)
+    >>> p.x + p.y                       # fields also accessable by name
+    33
+    >>> d = p._asdict()                 # convert to a dictionary
+    >>> d['x']
+    11
+    >>> Point(**d)                      # convert from a dictionary
+    Point(x=11, y=22)
+    >>> p._replace(x=100)               # _replace() is like str.replace() but targets named fields
+    Point(x=100, y=22)
+    
+    def _process_worker(call_queue, result_queue):
+    '''Evaluates calls from call_queue and places the results in result_queue.
