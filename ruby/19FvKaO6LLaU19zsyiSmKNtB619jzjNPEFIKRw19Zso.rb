@@ -1,68 +1,86 @@
 
         
-            desc 'Get the text for a specific license' do
-      detail 'This feature was introduced in GitLab 8.7.'
-      success ::API::Entities::License
+        helpers do
+  # Returns a segment tracking ID such that local development is not
+  # tracked to production systems.
+  def segmentId()
+    if (ENV['ENV'] == 'production')
+      'wFMyBE4PJCZttWfu0pNhYdWr7ygW0io4'
+    else
+      '0EXTgkNx0Ydje2PGXVbRhpKKoe5wtzcE'
     end
-    params do
-      requires :name, type: String, desc: 'The name of the template'
+  end
+    
+      let(:iso_env) do
+    # We have to create a Vagrantfile so there is a root path
+    env = isolated_environment
+    env.vagrantfile('')
+    env.create_vagrant_env
+  end
+    
+    describe VagrantPlugins::Chef::Cap::Windows::ChefInstalled do
+  include_context 'unit'
+    
+        # This executes the push with the given name, raising any exceptions that
+    # occur.
+    #
+    # Precondition: the push is not nil and exists.
+    def push(name)
+      @logger.info('Getting push: #{name}')
+    
+          expect(subject.machine_names_and_options).to eq({
+        foo: { config_version: '2' },
+        bar: { config_version: '2', autostart: false },
+        baz: { config_version: '2', autostart: true },
+      })
     end
-    get 'templates/licenses/:name', requirements: { name: /[\w\.-]+/ } do
-      template = TemplateFinder.build(:licenses, nil, name: params[:name]).execute
+  end
     
-      sidekiq_options retry: 3
-    
-        def sha256(value)
-      salt = Settings.attr_encrypted_db_key_base_truncated
-      ::Digest::SHA256.base64digest('#{value}#{salt}')
+          expect(Vagrant::Util::Subprocess).to receive(:execute).
+        with('echo', 'hi', options)
+      expect { subject.send(:run, shell_config, on_error, exit_codes) }.to raise_error(Vagrant::Errors::TriggersBadExitCodes)
     end
+  end
     
-            it { expect(presenter.can_resend_invite?).to eq(true) }
-      end
-    
-            def diffs
-          @diffs ||= diffable.raw_diffs(diff_options)
+      # Use Ruby Resolv in place of libc
+  #
+  # @return [boolean] enabled or not
+  def self.enable_resolv_replace
+    if ENV['VAGRANT_ENABLE_RESOLV_REPLACE']
+      if !ENV['VAGRANT_DISABLE_RESOLV_REPLACE']
+        begin
+          require 'resolv-replace'
+          true
+        rescue
+          false
         end
-    
-        def env
-      LOGSTASH_ENV
-    end
-    
-      describe '#system?' do
-    context 'when the pipeline is a system pipeline' do
-      let(:settings) { mock_settings({ 'pipeline.system' => true })}
-    
-    Sidekiq.logger.level = Logger::ERROR
-    
-      it 'throws away dead processors' do
-    mgr = new_manager(options)
-    init_size = mgr.workers.size
-    processor = mgr.workers.first
-    begin
-      mgr.processor_died(processor, 'ignored')
-    
-          I18n.enforce_available_locales = false
-      I18n.available_locales = nil
-    end
-  end
-end
-
-    
-          Time.stub(:now, created_time) do
-        @retry.schedule (enqueued_time - 60).to_f, @error_1.merge!('created_at' => created_time.to_f)
-        @retry.schedule (enqueued_time - 50).to_f, @error_2.merge!('created_at' => created_time.to_f)
-        @retry.schedule (enqueued_time + 60).to_f, @error_3.merge!('created_at' => created_time.to_f)
-        @scheduled.schedule (enqueued_time - 60).to_f, @future_1.merge!('created_at' => created_time.to_f)
-        @scheduled.schedule (enqueued_time - 50).to_f, @future_2.merge!('created_at' => created_time.to_f)
-        @scheduled.schedule (enqueued_time + 60).to_f, @future_3.merge!('created_at' => created_time.to_f)
-      end
-    
-        it 'stubs the delay call on models' do
-      assert_raises InlineError do
-        InlineFooModel.delay.bar('three')
+      else
+        false
       end
     end
   end
     
-    class SinatraWorker
-  include Sidekiq::Worker
+          # Below article HTML variant
+      it 'renders below article html variant' do
+        html_variant = create(:html_variant, published: true, approved: true, group: 'article_show_below_article_cta')
+        article.update_column(:body_markdown, rand(36**1000).to_s(36).to_s) # min length for article
+        get article.path + '?variant_version=0'
+        expect(response.body).to include html_variant.html
+      end
+    
+          # return path set in app.rb not @page.path
+      def path
+        @path
+      end
+    
+          def toc_content
+        @toc_content
+      end
+    
+    $contexts = []
+    
+    context 'Unicode Support' do
+  setup do
+    @path = cloned_testpath('examples/revert.git')
+    @wiki = Gollum::Wiki.new(@path)
+  end
