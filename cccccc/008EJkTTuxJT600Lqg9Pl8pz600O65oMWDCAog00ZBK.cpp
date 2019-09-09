@@ -1,317 +1,178 @@
 
         
-        
-    {private:
-    Ui::OpenURIDialog *ui;
+        //
+// Read the next few bits out of a bitstream. Will be given a backing buffer
+// (buffer) that may still have data left over from previous reads
+// (bufferNumBits).  Bitstream pointer (currByte) will be advanced when needed.
+//
+    
+    OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_ENTER
+    
+    #include <ImfFramesPerSecond.h>
+#include 'ImathFun.h'
+    
+    	    if (dataWindow.min.y % i.channel().ySampling)
+	    {
+		THROW (IEX_NAMESPACE::ArgExc, 'The minimum y coordinate of the '
+				    'image's data window is not a multiple '
+				    'of the y subsampling factor of '
+				    'the \'' << i.name() << '\' channel.');
+	    }
+    
+    #include 'ImfNamespace.h'
+    
+    //-------------------------------------------------------------------
+// class InputPart:
+//
+// Same interface as InputFile. Please refer to InputFile.
+//-------------------------------------------------------------------
+    
+      // Setup STARTUPINFO to redirect handles.
+  STARTUPINFOA startup_info;
+  ZeroMemory(&startup_info, sizeof(startup_info));
+  startup_info.cb = sizeof(startup_info);
+  startup_info.dwFlags = STARTF_USESTDHANDLES;
+  startup_info.hStdInput = stdin_pipe_read;
+  startup_info.hStdOutput = stdout_pipe_write;
+  startup_info.hStdError = GetStdHandle(STD_ERROR_HANDLE);
+    
+    TEST_F(DefaultFieldComparatorTest,
+       FloatingPointComparisonWithinFractionOrMargin) {
+  const FieldDescriptor* field_float =
+      descriptor_->FindFieldByName('optional_float');
+  const FieldDescriptor* field_double =
+      descriptor_->FindFieldByName('optional_double');
+    }
+    
+    TEST_F(JsonObjectWriterTest, EmptyList) {
+  ow_ = new JsonObjectWriter('', out_stream_);
+  ow_->StartObject('')
+      ->RenderString('test', 'value')
+      ->StartList('empty')
+      ->EndList()
+      ->EndObject();
+  EXPECT_EQ('{\'test\':\'value\',\'empty\':[]}', CloseStreamAndGetString());
+}
+    
+    #include <google/protobuf/stubs/logging.h>
+#include <google/protobuf/stubs/common.h>
+    
+    void MapLiteTestUtil::ExpectMapFieldsModified(
+    const unittest::TestMapLite& message) {
+  MapTestUtilImpl::ExpectMapFieldsModified<unittest::MapEnumLite,
+                                           unittest::MAP_ENUM_BAR_LITE,
+                                           unittest::MAP_ENUM_FOO_LITE>(
+      message);
+}
+    
+    TEST(TemplateUtilTest, TestIdentity) {
+  EXPECT_TRUE(
+      (type_equals_<GOOGLE_NAMESPACE::identity_<int>::type, int>::value));
+  EXPECT_TRUE(
+      (type_equals_<GOOGLE_NAMESPACE::identity_<void>::type, void>::value));
+}
+    
+    OPERATOR_SCHEMA(GatherRangesToDense)
+    .NumInputs(2, 3)
+    .NumOutputs(1, INT_MAX)
+    .SetDoc(R'DOC(
+Given DATA tensor of rank 1, and RANGES tensor of rank 3, gather values
+corresponding to each range into a separate output tensor. If the optional input
+KEY tensor is also given, the output will be sorted by KEY for each example.
+    
+    // Given a MutableIterator to the start of a block, run DetectParagraphs on
+// that block and commit the results to the underlying ROW and BLOCK structs,
+// saving the ParagraphModels in models.  Caller owns the models.
+// We use unicharset during the function to answer questions such as 'is the
+// first letter of this word upper case?'
+void DetectParagraphs(int debug_level,
+                      bool after_text_recognition,
+                      const MutableIterator *block_start,
+                      GenericVector<ParagraphModel *> *models);
+    
+    // Size of buffer used to read a line from a box file.
+const int kBoxReadBufSize = 1024;
+    
+    
+    {  // Best available image.
+  Pix* pix_;
+  // True if the source image is white-on-black.
+  bool inverse_;
+  // Block the word came from. If not null, block->re_rotation() takes the
+  // 'untransformed' coordinates even further back to the original image.
+  // Used only on the first DENORM in a chain.
+  const BLOCK* block_;
+  // Rotation to apply between translation to the origin and scaling.
+  const FCOORD* rotation_;
+  // Previous transformation in a chain.
+  const DENORM* predecessor_;
+  // Non-linear transformation maps directly from each integer offset from the
+  // origin to the corresponding x-coord. Owned by the DENORM.
+  GenericVector<float>* x_map_;
+  // Non-linear transformation maps directly from each integer offset from the
+  // origin to the corresponding y-coord. Owned by the DENORM.
+  GenericVector<float>* y_map_;
+  // x-coordinate to be mapped to final_xshift_ in the result.
+  float x_origin_;
+  // y-coordinate to be mapped to final_yshift_ in the result.
+  float y_origin_;
+  // Scale factors for x and y coords. Applied to pre-rotation system.
+  float x_scale_;
+  float y_scale_;
+  // Destination coords of the x_origin_ and y_origin_.
+  float final_xshift_;
+  float final_yshift_;
 };
     
-    int secp256k1_ecdsa_recoverable_signature_convert(const secp256k1_context* ctx, secp256k1_ecdsa_signature* sig, const secp256k1_ecdsa_recoverable_signature* sigin) {
-    secp256k1_scalar r, s;
-    int recid;
-    }
+      // Provides access to the ShapeTable that this classifier works with.
+  virtual const ShapeTable* GetShapeTable() const = 0;
+  // Provides access to the UNICHARSET that this classifier works with.
+  // Must be overridden IFF GetShapeTable() returns nullptr.
+  virtual const UNICHARSET& GetUnicharset() const;
     
-    /* Tests several edge cases. */
-void test_ecdsa_recovery_edge_cases(void) {
-    const unsigned char msg32[32] = {
-        'T', 'h', 'i', 's', ' ', 'i', 's', ' ',
-        'a', ' ', 'v', 'e', 'r', 'y', ' ', 's',
-        'e', 'c', 'r', 'e', 't', ' ', 'm', 'e',
-        's', 's', 'a', 'g', 'e', '.', '.', '.'
-    };
-    const unsigned char sig64[64] = {
-        /* Generated by signing the above message with nonce 'This is the nonce we will use...'
-         * and secret key 0 (which is not valid), resulting in recid 0. */
-        0x67, 0xCB, 0x28, 0x5F, 0x9C, 0xD1, 0x94, 0xE8,
-        0x40, 0xD6, 0x29, 0x39, 0x7A, 0xF5, 0x56, 0x96,
-        0x62, 0xFD, 0xE4, 0x46, 0x49, 0x99, 0x59, 0x63,
-        0x17, 0x9A, 0x7D, 0xD1, 0x7B, 0xD2, 0x35, 0x32,
-        0x4B, 0x1B, 0x7D, 0xF3, 0x4C, 0xE1, 0xF6, 0x8E,
-        0x69, 0x4F, 0xF6, 0xF1, 0x1A, 0xC7, 0x51, 0xDD,
-        0x7D, 0xD7, 0x3E, 0x38, 0x7E, 0xE4, 0xFC, 0x86,
-        0x6E, 0x1B, 0xE8, 0xEC, 0xC7, 0xDD, 0x95, 0x57
-    };
-    secp256k1_pubkey pubkey;
-    /* signature (r,s) = (4,4), which can be recovered with all 4 recids. */
-    const unsigned char sigb64[64] = {
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04,
-    };
-    secp256k1_pubkey pubkeyb;
-    secp256k1_ecdsa_recoverable_signature rsig;
-    secp256k1_ecdsa_signature sig;
-    int recid;
-    }
-    
-    int64_t UniValue::get_int64() const
-{
-    if (typ != VNUM)
-        throw std::runtime_error('JSON value is not an integer as expected');
-    int64_t retval;
-    if (!ParseInt64(getValStr(), &retval))
-        throw std::runtime_error('JSON integer out of range');
-    return retval;
-}
-    
-    #ifndef BITCOIN_BECH32_H
-#define BITCOIN_BECH32_H
+                // Let's check the status.
+            double statusValue = 0;
+            auto status = ::CNTK::MakeSharedObject<::CNTK::NDArrayView>(::CNTK::DataType::Double, ::CNTK::NDShape{ 1 }, &statusValue, sizeof(double), ::CNTK::DeviceDescriptor::CPUDevice());
+            std::vector<::CNTK::NDArrayViewPtr> aggregatedStatus { status };
+            m_communicator->AggregateInPlace(aggregatedStatus, m_communicator->Workers());
     
     
-    {    CRIPEMD160();
-    CRIPEMD160& Write(const unsigned char* data, size_t len);
-    void Finalize(unsigned char hash[OUTPUT_SIZE]);
-    CRIPEMD160& Reset();
-};
-    
-    section .data
-align 64
-K256:
-    dd	0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5
-    dd	0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5
-    dd	0xd807aa98,0x12835b01,0x243185be,0x550c7dc3
-    dd	0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174
-    dd	0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc
-    dd	0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da
-    dd	0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7
-    dd	0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967
-    dd	0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13
-    dd	0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85
-    dd	0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3
-    dd	0xd192e819,0xd6990624,0xf40e3585,0x106aa070
-    dd	0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5
-    dd	0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3
-    dd	0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208
-    dd	0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2
-    
-      FileState() : pos_(-1), pos_at_last_sync_(-1), pos_at_last_flush_(-1) {}
-    
-    
-    {  // Errors
-  static const char* errors[] = {
-    '',
-    'foo',
-    'foo-dx-100.log',
-    '.log',
-    '',
-    'manifest',
-    'CURREN',
-    'CURRENTX',
-    'MANIFES',
-    'MANIFEST',
-    'MANIFEST-',
-    'XMANIFEST-3',
-    'MANIFEST-3x',
-    'LOC',
-    'LOCKx',
-    'LO',
-    'LOGx',
-    '18446744073709551616.log',
-    '184467440737095516150.log',
-    '100',
-    '100.',
-    '100.lop'
-  };
-  for (int i = 0; i < sizeof(errors) / sizeof(errors[0]); i++) {
-    std::string f = errors[i];
-    ASSERT_TRUE(!ParseFileName(f, &number, &type)) << f;
-  }
-}
-    
-        virtual Ptr<BackendNode> initHalide(const std::vector<Ptr<BackendWrapper> > &inputs) CV_OVERRIDE
-    {
-#ifdef HAVE_HALIDE
-        Halide::Buffer<float> input = halideBuffer(inputs[0]);
-        Halide::Var x('x'), y('y'), c('c'), n('n');
-        Halide::Func top = attachHalide(input(x, y, c, n));
-        return Ptr<BackendNode>(new HalideBackendNode(top));
-#endif  // HAVE_HALIDE
-        return Ptr<BackendNode>();
-    }
-    
-    
-    {    if (fourcc == CC_X264 || fourcc == CC_H264 || fourcc == CC_AVC)
-        return MFX_CODEC_AVC;
-    else if (fourcc == CC_H265 || fourcc == CC_HEVC)
-        return MFX_CODEC_HEVC;
-    else if (fourcc == CC_MPG2)
-        return MFX_CODEC_MPEG2;
-    else
-        return (mfxU32)-1;
-}
-    
-                            FAIL() << '  Absolute difference (=' << max << ') between argument \''
-                               << node.name() << '[' <<  idx << ']\' and expected value is greater than ' << eps;
-                    }
-                }
-                else if (err == ERROR_RELATIVE)
-                {
-                    double maxv, maxa;
-                    int violations = countViolations(expected, actual, diff, eps, &maxv, &maxa);
-                    if (violations > 0)
-                    {
-                        if(expected.total() * expected.channels() < 12)
-                            std::cout << ' Expected: ' << std::endl << expected << std::endl << ' Actual:' << std::endl << actual << std::endl;
-    
-    static float rngIn(float from, float to) { return from + (to-from) * (float)theRNG(); }
-    
-            EXPECT_NEAR(0., cvtest::norm(aff_est, aff, NORM_INF), 1e-3);
-    
-    void  FillGrayPalette( PaletteEntry* palette, int bpp, bool negative = false );
-bool  IsColorPalette( PaletteEntry* palette, int bpp );
-void  CvtPaletteToGray( const PaletteEntry* palette, uchar* grayPalette, int entries );
-uchar* FillUniColor( uchar* data, uchar*& line_end, int step, int width3,
-                     int& y, int height, int count3, PaletteEntry clr );
-uchar* FillUniGray( uchar* data, uchar*& line_end, int step, int width3,
-                     int& y, int height, int count3, uchar clr );
-    
-    /** Write log message */
-CV_EXPORTS void writeLogMessage(LogLevel logLevel, const char* message);
-    
-        /* Now branch off to do other commands and functions.                 */
-    switch (wParam)
-    {
-    case IDC_CLEAR: /* Total clear.                                       */
-    {
-        if (!m_bChangeOp)
+    {            nodePtr = builder.CreateLearnableParameter(name, rows, cols);
+            nodePtr->SetLearningRateMultiplier(0);
+        }
+        else if (pass == ndlPassFinal || (dynamic_pointer_cast<ComputationNode<ElemType>> (nodePtr))->Value().GetNumElements() != 0)
         {
-            // Preserve history, if everything done before was a series of unary operations.
-            CheckAndAddLastBinOpToHistory(false);
+            ElemType val = parameter[0]->GetScalar();
+            m_net->InitLearnableParameters(nodePtr, L'fixedValue', val);
         }
     }
-    }
-    
-        uint8_t state = START; // state is the state of the input state machine.
-    wchar_t curChar;
-    for (const auto& c : numberString)
+    else if (cnNodeType == L'RowSlice') // Note: This now maps onto SliceNode which specifies the end differently.
     {
-        // If the character is the decimal separator, use L'.' for the purposes of the state machine.
-        curChar = (c == g_decimalSeparator ? L'.' : c);
-    }
+        if (parameter.size() != 3)
+            RuntimeError('RowSlice should have three parameters. Usage: RowSlice(startRowIndex, numRows, origNodeName.');
     
-    // Called after = with the result of the equation
-// Responsible for clearing the top line of current running history display, as well as adding yet another element to
-// history of equations
-void CHistoryCollector::CompleteHistoryLine(wstring_view numStr)
-{
-    if (nullptr != m_pCalcDisplay)
+    template class NDLScript<half>;
+template class NDLScript<float>;
+template class NDLScript<double>;
+    
+        ComputationNetwork::BumpEvalTimeStamp(m_inputNodes);
+    this->m_net->ForwardProp(m_outputNodes);
+    
+    
+    {        std::vector<MAWorkerStatus> m_MAworkerStatus; 
+        int                         m_numSyncPerformed; 
+        size_t                      m_numWorkers; 
+        size_t                      m_myRank;
+        MASGDPerfStats              m_perfReporter;
+        MPIWrapperPtr               m_pMPI;
+        NcclComm                    m_nccl;
+        DEVICEID_TYPE               m_deviceId;
+ };
+    
+        bool ContainsAccumulatedResult(const ComputationNodeBasePtr& node) const
     {
-        m_pCalcDisplay->SetExpressionDisplay(
-            std::make_shared<CalculatorVector<std::pair<std::wstring, int>>>(), std::make_shared<CalculatorVector<std::shared_ptr<IExpressionCommand>>>());
-    }
-    }
-    
-    #include <cassert>
-#include 'CalculatorHistory.h'
-    
-    void LiveRegionHost::Announce(NarratorAnnouncement ^ announcement)
-{
-    if (m_host == nullptr)
-    {
-        m_host = ref new TextBlock();
-        AutomationProperties::SetLiveSetting(m_host, AutomationLiveSetting::Assertive);
-    }
-    }
-    
-        IMGUI_API bool BuildFontAtlas(ImFontAtlas* atlas, unsigned int extra_flags = 0);
-    
-    int main(int, char**)
-{
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    }
-    
-    // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
-// To link with VS2010-era libraries, VS2015+ requires linking with legacy_stdio_definitions.lib, which we do using this pragma.
-// Your own project should not be affected, as you are likely to link with a newer binary of GLFW that is adequate for your version of Visual Studio.
-#if defined(_MSC_VER) && (_MSC_VER >= 1900) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS)
-#pragma comment(lib, 'legacy_stdio_definitions')
-#endif
-    
-            // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
-        }
-    
-    // Main code
-int main(int, char**)
-{
-    // Create application window
-    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
-    ::RegisterClassEx(&wc);
-    HWND hwnd = ::CreateWindow(wc.lpszClassName, _T('Dear ImGui DirectX11 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
-    }
-    
-    // Render function.
-// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
-void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
-{
-    // Avoid rendering when minimized
-    if (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f)
-        return;
-    }
-    
-    // Originally from rocksdb/utilities/ldb_cmd.h
-bool Slice::DecodeHex(std::string* result) const {
-  std::string::size_type len = size_;
-  if (len % 2) {
-    // Hex string must be even number of hex digits to get complete bytes back
-    return false;
-  }
-  if (!result) {
-    return false;
-  }
-  result->clear();
-  result->reserve(len / 2);
-    }
-    
-    #ifndef ROCKSDB_LITE
-    
-    std::shared_ptr<MergeOperator> MergeOperators::CreateDeprecatedPutOperator() {
-  return std::make_shared<PutOperator>();
-}
-    
-    Status WriteBatchBase::Delete(const SliceParts& key) {
-  std::string key_buf;
-  Slice key_slice(key, &key_buf);
-  return Delete(key_slice);
-}
-    
-      // atomic write
-  WriteBatch batch;
-  batch.Put(handles[0], Slice('key2'), Slice('value2'));
-  batch.Put(handles[1], Slice('key3'), Slice('value3'));
-  batch.Delete(handles[0], Slice('key'));
-  s = db->Write(WriteOptions(), &batch);
-  assert(s.ok());
-    
-    struct DumpOptions {
-  // Database that will be dumped
-  std::string db_path;
-  // File location that will contain dump output
-  std::string dump_location;
-  // Don't include db information header in the dump
-  bool anonymous = false;
-};
-    
-    // Move all L0 files to target_level skipping compaction.
-// This operation succeeds only if the files in L0 have disjoint ranges; this
-// is guaranteed to happen, for instance, if keys are inserted in sorted
-// order. Furthermore, all levels between 1 and target_level must be empty.
-// If any of the above condition is violated, InvalidArgument will be
-// returned.
-Status PromoteL0(DB* db, ColumnFamilyHandle* column_family,
-                 int target_level = 1);
-    
-    namespace rocksdb {
+        // Node contains accumulated result if it can be found in the list of accumulation nodes specified in
+        // CriterionAccumulator constructor.
+        return std::find(m_accumulatorCriterionNodes.begin(), m_accumulatorCriterionNodes.end(), node) !=
+               m_accumulatorCriterionNodes.end();
     }
