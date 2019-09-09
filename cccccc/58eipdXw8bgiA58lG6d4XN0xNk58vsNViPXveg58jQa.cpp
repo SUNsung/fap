@@ -1,239 +1,412 @@
 
         
-          if (engine == LRNParameter_Engine_DEFAULT) {
-#ifdef USE_CUDNN
-    engine = LRNParameter_Engine_CUDNN;
-#else
-    engine = LRNParameter_Engine_CAFFE;
-#endif
+        Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    namespace xla {
+namespace gpu {
+    }
+    }
+    
+    #endif  // TENSORFLOW_COMPILER_XLA_SERVICE_GPU_FOR_THUNK_H_
+
+    
+    #include 'tensorflow/compiler/xla/service/gpu/infeed_thunk.h'
+#include 'tensorflow/compiler/xla/service/gpu/hlo_execution_profiler.h'
+#include 'tensorflow/compiler/xla/service/gpu/infeed_manager.h'
+#include 'tensorflow/compiler/xla/util.h'
+#include 'tensorflow/core/platform/stream_executor_no_cuda.h'
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    
+    {
+    {}  // namespace gpu
+}  // namespace xla
+
+    
+      module->AddEntryComputation(builder.Build());
+  EXPECT_EQ(module->MakeComputationPostOrder().size(), 2);
+    
+    
+    {
+    {    xla::XlaOp loss, backprop;
+    std::tie(loss, backprop) =
+        CrossEntropyWithLogits(ctx, type, xla_type, logits, labels);
+    ctx->SetOutput(0, loss);
+    ctx->SetOutput(1, backprop);
+  }
+};
+    
+      // shutdown should trigger cancellation causing everything to shutdown
+  auto deadline =
+      std::chrono::system_clock::now() + std::chrono::microseconds(100);
+  server_->Shutdown(deadline);
+  EXPECT_GE(std::chrono::system_clock::now(), deadline);
+    
+    extern grpc_tcp_server_vtable grpc_windows_tcp_server_vtable;
+extern grpc_tcp_client_vtable grpc_windows_tcp_client_vtable;
+extern grpc_timer_vtable grpc_generic_timer_vtable;
+extern grpc_pollset_vtable grpc_windows_pollset_vtable;
+extern grpc_pollset_set_vtable grpc_windows_pollset_set_vtable;
+extern grpc_address_resolver_vtable grpc_windows_resolver_vtable;
+    
+    bool g_config_error_function_called;
+    
+    ChannelCredentials::~ChannelCredentials() {}
+    
+    
+    {
+    { private:
+  std::shared_ptr<grpc::Channel> CreateChannelWithInterceptors(
+      const string& target, const grpc::ChannelArguments& args,
+      std::vector<
+          std::unique_ptr<experimental::ClientInterceptorFactoryInterface>>
+          interceptor_creators) override {
+    grpc_channel_args channel_args;
+    args.SetChannelArgs(&channel_args);
+    return CreateChannelInternal(
+        '',
+        grpc_cronet_secure_channel_create(engine_, target.c_str(),
+                                          &channel_args, nullptr),
+        std::move(interceptor_creators));
+  }
+  void* engine_;
+};
+}  // namespace grpc
+namespace grpc_impl {
+std::shared_ptr<ChannelCredentials> CronetChannelCredentials(void* engine) {
+  return std::shared_ptr<ChannelCredentials>(
+      new grpc::CronetChannelCredentialsImpl(engine));
+}
+}  // namespace grpc_impl
+
+    
+    
+    {  grpc::testing::TestEnvironment env(argc, argv);
+  ::testing::InitGoogleTest(&argc, argv);
+  // Order seems to matter on these tests: run three times to eliminate that
+  for (int i = 0; i < 3; i++) {
+    if (RUN_ALL_TESTS() != 0) {
+      return 1;
+    }
+  }
+  return 0;
+}
+
+    
+      void Shutdown() override { impl_->Shutdown(); }
+    
+      void DoResponseStream() {
+    EchoRequest request;
+    EchoResponse response;
+    request.set_message('hello world');
+    }
+    
+    // Client uses proto, server uses generic codegen, server streaming
+TEST_F(RawEnd2EndTest, RawServerServerStreaming) {
+  typedef grpc::testing::EchoTestService::WithRawMethod_ResponseStream<
+      grpc::testing::EchoTestService::Service>
+      SType;
+  ResetStub();
+  auto service = BuildAndStartServer<SType>();
+  grpc::GenericServerAsyncWriter srv_stream(&srv_ctx_);
+    }
+    
+      void UpdatePlugins(
+      std::vector<std::unique_ptr<ServerBuilderPlugin>>* plugins) override {
+    plugins->clear();
+    }
+    
+    
+    {    return Status(static_cast<StatusCode>(server_return_status_code), '');
   }
     
-    TYPED_TEST(NeuronLayerTest, TestPReLUConsistencyReLU) {
-  typedef typename TypeParam::Dtype Dtype;
-  LayerParameter prelu_layer_param;
-  LayerParameter relu_layer_param;
-  relu_layer_param.mutable_relu_param()->set_negative_slope(0.25);
-  PReLULayer<Dtype> prelu(prelu_layer_param);
-  ReLULayer<Dtype> relu(relu_layer_param);
-  // Set up blobs
-  vector<Blob<Dtype>*> blob_bottom_vec_2;
-  vector<Blob<Dtype>*> blob_top_vec_2;
-  shared_ptr<Blob<Dtype> > blob_bottom_2(new Blob<Dtype>());
-  shared_ptr<Blob<Dtype> > blob_top_2(new Blob<Dtype>());
-  blob_bottom_vec_2.push_back(blob_bottom_2.get());
-  blob_top_vec_2.push_back(blob_top_2.get());
-  blob_bottom_2->CopyFrom(*this->blob_bottom_, false, true);
-  // SetUp layers
-  prelu.SetUp(this->blob_bottom_vec_, this->blob_top_vec_);
-  relu.SetUp(blob_bottom_vec_2, blob_top_vec_2);
-  // Check forward
-  prelu.Forward(this->blob_bottom_vec_, this->blob_top_vec_);
-  relu.Forward(this->blob_bottom_vec_, blob_top_vec_2);
-  for (int s = 0; s < blob_top_2->count(); ++s) {
-    EXPECT_EQ(this->blob_top_->cpu_data()[s], blob_top_2->cpu_data()[s]);
+      void ClientMakeEchoCalls(const grpc::string& lb_id,
+                           const grpc::string& lb_tag,
+                           const grpc::string& message, size_t num_requests) {
+    auto stub = EchoTestService::NewStub(
+        grpc::CreateChannel(server_address_, InsecureChannelCredentials()));
+    grpc::string lb_token = lb_id + lb_tag;
+    for (int i = 0; i < num_requests; ++i) {
+      ClientContext ctx;
+      if (!lb_token.empty()) ctx.AddMetadata(GRPC_LB_TOKEN_MD_KEY, lb_token);
+      EchoRequest request;
+      EchoResponse response;
+      request.set_message(message);
+      Status status = stub->Echo(&ctx, request, &response);
+      if (message == kOkMessage) {
+        ASSERT_EQ(status.error_code(), StatusCode::OK);
+        ASSERT_EQ(request.message(), response.message());
+      } else if (message == kServerErrorMessage) {
+        ASSERT_EQ(status.error_code(), StatusCode::UNKNOWN);
+      } else if (message == kClientErrorMessage) {
+        ASSERT_EQ(status.error_code(), StatusCode::FAILED_PRECONDITION);
+      }
+    }
   }
-  // Check backward
-  shared_ptr<Blob<Dtype> > tmp_blob(new Blob<Dtype>());
-  tmp_blob->ReshapeLike(*blob_top_2.get());
-  FillerParameter filler_param;
-  GaussianFiller<Dtype> filler(filler_param);
-  filler.Fill(tmp_blob.get());
-  caffe_copy(blob_top_2->count(), tmp_blob->cpu_data(),
-      this->blob_top_->mutable_cpu_diff());
-  caffe_copy(blob_top_2->count(), tmp_blob->cpu_data(),
-      blob_top_2->mutable_cpu_diff());
-  vector<bool> propagate_down;
-  propagate_down.push_back(true);
-  prelu.Backward(this->blob_top_vec_, propagate_down, this->blob_bottom_vec_);
-  relu.Backward(blob_top_vec_2, propagate_down, blob_bottom_vec_2);
-  for (int s = 0; s < blob_bottom_2->count(); ++s) {
-    EXPECT_EQ(this->blob_bottom_->cpu_diff()[s], blob_bottom_2->cpu_diff()[s]);
+    
+      virtual ~DHTResponseMessage();
+    
+    namespace aria2 {
+    }
+    
+    
+    {} // namespace aria2
+    
+      virtual void addPeriodicTask1(const std::shared_ptr<DHTTask>& task) = 0;
+    
+    class DHTTaskQueueImpl : public DHTTaskQueue {
+private:
+  DHTTaskExecutor periodicTaskQueue1_;
+    }
+    
+      std::string generateToken(const unsigned char* infoHash,
+                            const std::string& ipaddr, uint16_t port,
+                            const unsigned char* secret) const;
+    
+    namespace aria2 {
+    }
+    
+    
+    {            auto timeRange     = fr.GetTimeRange();
+            auto sequenceRange = fr.GetSequenceRange();
+            m_beingUnrolled = true;
+            for (auto t = timeRange.first; t < timeRange.second; t++)
+                for (auto s = sequenceRange.first; s < sequenceRange.second; s++)
+                    ForwardProp(fr.WithTimeStep(t).Sequence(s));
+            m_beingUnrolled = false;
+            return;
+        }
+    
+    
+    {                Matrix<ElemType>& NodeValue = pnode->Value();
+                if (m_blockLevelSmoothedGradient.find(name) == m_blockLevelSmoothedGradient.end())
+                {
+                    // has not been initialized yet
+                    auto pSmoothedGrad = make_shared<Matrix<ElemType>> (NodeValue.GetDeviceId());
+                    pSmoothedGrad->Resize(NodeValue.GetNumRows(), NodeValue.GetNumCols());
+                    pSmoothedGrad->SetValue((ElemType)0); 
+                    m_blockLevelSmoothedGradient[name] = pSmoothedGrad; 
+                }
+                if (m_prevParameters.find(name) == m_prevParameters.end())
+                {
+                    auto pValue = make_shared<Matrix<ElemType>>  (NodeValue.GetDeviceId());
+                    pValue->SetValue(NodeValue);
+                    m_prevParameters[name] = pValue;
+                }
+                else
+                {
+                    m_prevParameters[name]->SetValue(NodeValue);
+                }
+            }
+            fprintf(stderr, 'Parallel training (%d workers) using BlockMomentumSGD with '
+                            'block momentum = %6.4f, '
+                            'block momentum time constant (per worker) = %6.4f, '
+                            'block learning rate = %6.4f, '
+                            'block size per worker = %d samples, '
+                            '%s'
+                            '%s'
+                            '\n',
+                            (int)m_pMPI->NumNodesInUse(),      
+                            BlockMomentumSGD<double>::TimeConstant2Momentum(m_blockMomentumAsTimeConstantPerWorker, m_syncPeriodPerWorker), 
+                            m_blockMomentumAsTimeConstantPerWorker,
+                            m_blockLearningRate, 
+                            (int)m_syncPeriodPerWorker, 
+                            m_useNesterovMomentum ? 'using Nesterov-style block momentum, ' : '' , 
+                            m_resetSGDMomentumAfterAggregation ? 'resetting SGD momentum after sync.' : '.'
+                );
+        }
+        /*virtual*/ void OnEpochEnd(const std::list<ComputationNodeBasePtr>& LearnableNodes, 
+            std::list<MatrixBasePtr>&                   smoothedGradients,
+            size_t                                      samplesSinceLastSync) override
+        {
+            Base::OnEpochEnd(LearnableNodes, smoothedGradients, samplesSinceLastSync);
+        }
+        /*virtual*/ void ModelAggregationProcessing(
+            size_t samplesSinceLastSync,
+            const std::list<ComputationNodeBasePtr>& learnableNodes,
+            std::list<MatrixBasePtr>& smoothedGradients,
+            size_t& totalSamplesProcessed,
+            float& secondsOnCommunication
+            ) override
+        {
+            //----------------------------------------
+            // 1. communicate with other nodes to negotiate contribution weights
+            //----------------------------------------
+            int   nTotalSamples = samplesSinceLastSync;
+            ElemType blockMomentum = (ElemType)BlockMomentumSGD<double>::TimeConstant2Momentum(m_blockMomentumAsTimeConstantPerWorker, m_syncPeriodPerWorker);
+            Timer commTimer;
+            secondsOnCommunication = 0.0f;
+            commTimer.Start();
+            m_pMPI->AllReduce(&nTotalSamples, 1);
+            commTimer.Stop();
+            secondsOnCommunication += (float)commTimer.ElapsedSeconds();
+            totalSamplesProcessed = nTotalSamples;
+    
+    
+    {
+    {        // the rest is done in a lambda that is only evaluated when a virgin network is needed
+        // Note that evaluating the BrainScript *is* instantiating the network, so the evaluate call must be inside the lambda.
+        createNetworkFn = [expr](DEVICEID_TYPE /*deviceId*/)
+        {
+            // evaluate the parse tree, particularly the top-level field 'network'
+            // Evaluating it will create the network.
+            let object = EvaluateField(expr, L'network');                   // this comes back as a BS::Object
+            let network = dynamic_pointer_cast<ComputationNetwork>(object); // cast it
+            if (!network)
+                LogicError('BuildNetworkFromDescription: ComputationNetwork not what it was meant to be');
+            return network;
+        };
+        return true;
+    }
+    else
+        return false;
+}
+    
+    template <class ElemType>
+ComputationNetworkPtr SimpleNetworkBuilder<ElemType>::BuildClassLSTMNetworkFromDescription()
+{
+    ComputationNetworkBuilder<ElemType> builder(*m_net);
+    if (m_net->GetTotalNumberOfNodes() < 1) // not built yet
+    {
+        unsigned long randomSeed = 1;
+    }
+    }
+    
+        // sparse matrix size is optionally specified
+    // ComputationNodePtr CreateSparseLearnableParameter(const std::wstring & paramName, const size_t rows, const size_t cols, const size_t size = 0);
+    ComputationNodePtr CreateInputNode(const std::wstring& inputName, const size_t rows, const wstring& dynamicAxisName = L'');
+    ComputationNodePtr CreateSparseInputNode(const std::wstring& inputName, const size_t rows, const wstring& dynamicAxisName = L'');
+    shared_ptr<ComputationNode<ElemType>> CreateInputNode(const std::wstring& inputName, const TensorShape& sampleLayout, const wstring& dynamicAxisName = L'')
+    {
+        return this->template TypedCreateInputNode<ElemType>(inputName, sampleLayout, dynamicAxisName);
+    }
+    template<class ValueType>
+    shared_ptr<ComputationNode<ValueType>> TypedCreateInputNode(const std::wstring& inputName, const TensorShape& sampleLayout, const wstring& dynamicAxisName);
+    shared_ptr<ComputationNode<ElemType>> CreateSparseInputNode(const std::wstring& inputName, const TensorShape& sampleLayout, const wstring& dynamicAxisName = L'')
+    {
+        return this->template TypedCreateSparseInputNode<ElemType>(inputName, sampleLayout, dynamicAxisName);
+    }
+    template<class ValueType>
+    shared_ptr<ComputationNode<ValueType>> TypedCreateSparseInputNode(const std::wstring& inputName, const TensorShape& sampleLayout, const wstring& dynamicAxisName);
+    ComputationNodePtr CreateConvolutionNode(const std::wstring& nodeName, const TensorShape& kernelShape, const TensorShape& mapCount, const TensorShape& strideShape,
+                                             const std::vector<bool>& sharing, const std::vector<bool>& autoPadding, const TensorShape& lowerPad, const TensorShape& upperPad,
+                                             bool transpose, const TensorShape& outputShape, ImageLayoutKind imageLayout, size_t maxTempMemSizeInSamples);
+    ComputationNodePtr CreateConvolutionNode(const std::wstring& nodeName, const size_t kernelWidth, const size_t kernelHeight, const size_t outputChannels, 
+                                             const size_t horizontalSubsample, const size_t verticalSubsample, 
+                                             ImageLayoutKind imageLayoutKind, const bool zeroPadding = false, const size_t maxTempMemSizeInSamples = 0);
+    ComputationNodePtr CreatePoolingNode(const std::wstring& nodeName, PoolKind poolKind, const TensorShape& kernelShape, const TensorShape& strideShape,
+                                         const std::vector<bool>& autoPadding, const TensorShape& lowerPad, const TensorShape& upperPad, bool ceilOutDim,
+                                         const bool includePad, ImageLayoutKind imageLayout);
+    ComputationNodePtr CreateMaxPoolingNode(const std::wstring& nodeName, const size_t windowWidth, const size_t windowHeight, const size_t horizontalSubsample, const size_t verticalSubsample, ImageLayoutKind imageLayoutKind);
+    ComputationNodePtr CreateAveragePoolingNode(const std::wstring& nodeName, const size_t windowWidth, const size_t windowHeight, const size_t horizontalSubsample, const size_t verticalSubsample, ImageLayoutKind imageLayoutKind);
+    ComputationNodePtr CreateROIPoolingNode(const std::wstring& nodeName, PoolKind poolKind, const TensorShape& roiOutputShape, double spatialScale);
+    ComputationNodePtr CreateReconcileDynamicAxisNode(const std::wstring& nodeName);
+    // this is the catch-all for all cases not covered as special cases above
+    // Unlike the specialized ones above, this one creates nodes by type given as a string.
+    ComputationNodePtr CreateComputationNode(const std::wstring& nodeType, const std::wstring& nodeName);
+    // The following functions create nodes and link them to the network and their inputs.
+    // TODO: Do we need both this set and the one above that does not add inputs? Can they share more code?
+    ComputationNodePtr BatchNormalization(const ComputationNodePtr input, const ComputationNodePtr scale, const ComputationNodePtr bias,
+                                          const ComputationNodePtr runMean, const ComputationNodePtr runVariance, const ComputationNodePtr runSampleCount,
+                                          bool spatial = false, double normalizationTimeConstant = 0, double blendTimeConstant = 0, double epsilon = 1e-5, bool useCntkEngine = true,
+                                          bool disableRegularization = false, ImageLayoutKind imageLayoutKind = ImageLayoutKind::CHW, const std::wstring nodeName = L'');
+    ComputationNodePtr Convolution(const ComputationNodePtr weight,
+                                   const ComputationNodePtr inputValues,
+                                   const size_t kernelWidth, const size_t kernelHeight, const size_t outputChannels,
+                                   const size_t horizontalSubsample, const size_t verticalSubsample, ImageLayoutKind imageLayoutKind,
+                                   const bool zeroPadding = false, const size_t maxTempMemSizeInSamples = 0,
+                                   const std::wstring nodeName = L'');
+    ComputationNodePtr Convolution(const ComputationNodePtr weight,
+                                   const ComputationNodePtr inputValues,
+                                   const TensorShape& kernelShape, const TensorShape& mapCount, const TensorShape& strideShape,
+                                   const std::vector<bool>& sharing, const std::vector<bool>& autoPadding, const TensorShape& lowerPad, const TensorShape& upperPad,
+                                   bool transpose, const TensorShape& outputShape, ImageLayoutKind imageLayout, size_t maxTempMemSizeInSamples,
+                                   const std::wstring nodeName = L'');
+    ComputationNodePtr Pooling(const ComputationNodePtr inputValues, 
+                               PoolKind poolKind, const TensorShape& kernelShape, const TensorShape& strideShape,
+                               const std::vector<bool>& autoPadding, const TensorShape& lowerPad, const TensorShape& upperPad, bool ceilOutDim, const bool includePad,
+                               ImageLayoutKind imageLayout,
+                               const std::wstring nodeName = L'');
+    ComputationNodePtr MaxUnpooling(const ComputationNodePtr unpoolInputValues,
+                                    const ComputationNodePtr poolInputValues,
+                                    const TensorShape& kernelShape, const TensorShape& strideShape,
+                                    const std::vector<bool>& autoPadding, const TensorShape& lowerPad, const TensorShape& upperPad,
+                                    ImageLayoutKind imageLayout,
+                                    const std::wstring nodeName = L'');
+    ComputationNodePtr MaxPooling(const ComputationNodePtr inputValues,
+                                  const size_t windowWidth, const size_t windowHeight, const size_t horizontalSubsample, const size_t verticalSubsample, ImageLayoutKind imageLayoutKind,
+                                  const std::wstring nodeName = L'');
+    ComputationNodePtr AveragePooling(const ComputationNodePtr inputValues,
+                                      const size_t windowWidth, const size_t windowHeight, const size_t horizontalSubsample, const size_t verticalSubsample, ImageLayoutKind imageLayoutKind,
+                                      const std::wstring nodeName = L'');
+    ComputationNodePtr ROIPooling(const ComputationNodePtr inputValues, const ComputationNodePtr inputROIs, PoolKind poolKind, const TensorShape& roiOutputShape, double spatialScale, const std::wstring nodeName = L'');
+    ComputationNodePtr ReconcileDynamicAxis(const ComputationNodePtr dataInput, const ComputationNodePtr layoutInput, const std::wstring nodeName = L'');
+    
+    
+    {            m_tableLength.push_back(layerSize);
+        }
+    
+        // Prepare header.
+    const size_t c_evalNodes = 1;
+    if (gradHeader == nullptr)
+        gradHeader.reset(DistGradHeader::Create(c_evalNodes),
+                         [](DistGradHeader* ptr) { DistGradHeader::Destroy(ptr); });
+    gradHeader->numEvalNode = c_evalNodes;
+    gradHeader->numSamples = sampleCount;
+    gradHeader->numSamplesWithLabel = sampleCount;
+    gradHeader->criterion = 0.0; // (not used here)
+    for (size_t i = 0; i < c_evalNodes; i++)
+        // Not used here, but at least one is required by aggregation.
+        gradHeader->evalErrors[i] = std::make_pair<double, size_t>(0.0, 0);
+    
+    
+    {  is_first_time_refresh = false;
+  loaded_ = true;
+  return status;
+}
+    
+    boost::filesystem::path const& getTestConfigDirectory();
+    
+    bool Flag::isDefault(const std::string& name) {
+  flags::CommandLineFlagInfo info;
+  if (!flags::GetCommandLineFlagInfo(name.c_str(), &info)) {
+    return false;
+  }
+    }
+    
+    
+    {  for (auto& line : doc.GetArray()) {
+    log.push_back({
+        static_cast<StatusLogSeverity>(line['s'].GetInt()),
+        line['f'].GetString(),
+        line['i'].GetUint64(),
+        line['m'].GetString(),
+        line['c'].GetString(),
+        line['u'].GetUint64(),
+        line['h'].GetString(),
+    });
   }
 }
     
       /**
-   * @brief For an already initialized net, implicitly copies (i.e., using no
-   *        additional memory) the pre-trained layers from another Net.
+   * @brief Optionally handle each published event via the logger.
+   *
+   * It is possible to skip the database representation of event subscribers
+   * and instead forward each added event to the active logger plugin.
    */
-  void ShareTrainedLayersWith(const Net* other);
-  // For an already initialized net, CopyTrainedLayersFrom() copies the already
-  // trained layers from another net parameter instance.
-  /**
-   * @brief For an already initialized net, copies the pre-trained layers from
-   *        another Net.
-   */
-  void CopyTrainedLayersFrom(const NetParameter& param);
-  void CopyTrainedLayersFrom(const string& trained_filename);
-  void CopyTrainedLayersFromBinaryProto(const string& trained_filename);
-  void CopyTrainedLayersFromHDF5(const string& trained_filename);
-  /// @brief Writes the net to a proto.
-  void ToProto(NetParameter* param, bool write_diff = false) const;
-  /// @brief Writes the net to an HDF5 file.
-  void ToHDF5(const string& filename, bool write_diff = false) const;
-    
-    template <typename Dtype>
-void Net<Dtype>::ShareWeights() {
-  for (int i = 0; i < params_.size(); ++i) {
-    if (param_owners_[i] < 0) { continue; }
-    params_[i]->ShareData(*params_[param_owners_[i]]);
-    params_[i]->ShareDiff(*params_[param_owners_[i]]);
+  virtual Status logEvent(const std::string& /*s*/) {
+    return Status(1, 'Not enabled');
   }
-}
     
-    	if (cc) {
-		DEBUG_PRINT('\nFragment Code:\n\n' + String(cc->fragment_globals));
-	}
-	DEBUG_PRINT('\nFragment Code:\n\n' + String(code_string.get_data()));
-#endif
-    
-    void ShaderGLES3::finish() {
-    }
-    
-    	static Ref<EditorSettings> singleton;
-    
-    class EditorImportPlugin : public ResourceImporter {
-	GDCLASS(EditorImportPlugin, ResourceImporter);
-    }
-    
-    
-    {public:
-	virtual uint32_t get_import_flags() const;
-	virtual void get_extensions(List<String> *r_extensions) const;
-	virtual Node *import_scene(const String &p_path, uint32_t p_flags, int p_bake_fps, List<String> *r_missing_deps, Error *r_err = NULL);
-	virtual Ref<Animation> import_animation(const String &p_path, uint32_t p_flags, int p_bake_fps);
-};
-    
-    #ifdef __linux__
-#if defined __i386 || defined __x86_64
-#define BREAKPOINT __asm__ volatile ('int3')
-#else   /* not x86/amd64 */
-#define BREAKPOINT (raise(SIGTRAP))
-#endif  /* x86/amd64 */
-#elif defined(__MACH__)
-#define BREAKPOINT (raise(SIGTRAP))
-#elif defined(_WIN32)
-#define BREAKPOINT DebugBreak()
-#else
-#error 'BREAKPOINT not defined for this operating system'
-#endif
-    
-    
-    {                    buf_write_t buf_write(&kv_location.buf);
-                    auto leaf_node = static_cast<leaf_node_t *>(buf_write.get_data_write());
-                    leaf::remove(sizer,
-                                 leaf_node,
-                                 keys[i].btree_key(),
-                                 repli_timestamp_t::distant_past,
-                                 kv_location.buf.get_recency(),
-                                 key_modification_proof_t::real_proof());
-                }
-                check_and_handle_underfull(sizer, &kv_location.buf,
-                        &kv_location.last_buf, kv_location.superblock,
-                        keys[i].btree_key(),
-                        deletion_context->balancing_detacher());
-    
-                    store.acquire_superblock_for_write(
-                    1, write_durability_t::SOFT, &token,
-                    &txn, &super_block, &dummy_interruptor);
-    
-      // Opaque implementation object.  This field is never changed once
-  // the object is constructed.  We don't mark it as const here, as
-  // doing so will cause a warning in the constructor of UnitTest.
-  // Mutable state in *impl_ is protected by mutex_.
-  internal::UnitTestImpl* impl_;
-    
-    
-    {  str = tree.DumpModel(fmap, false, 'text');
-  ASSERT_EQ(str.find('cover'), std::string::npos);
-}
-    
-    /*
- * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
- * Method:    XGBoosterGetModelRaw
- * Signature: (J[[B)I
- */
-JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_XGBoosterGetModelRaw
-  (JNIEnv * jenv, jclass jcls, jlong jhandle, jobjectArray jout) {
-  BoosterHandle handle = (BoosterHandle) jhandle;
-  bst_ulong len = 0;
-  const char* result;
-  int ret = XGBoosterGetModelRaw(handle, &len, &result);
-    }
-    
-    template <typename T>
-struct TestTransformRange {
-  void XGBOOST_DEVICE operator()(size_t _idx,
-                                 Span<bst_float> _out, Span<const bst_float> _in) {
-    _out[_idx] = _in[_idx];
-  }
-};
-    
-    namespace xgboost {
-namespace obj {
-    }
-    }
-    
-    template<typename DType>
-inline void CompressArray<DType>::Write(dmlc::Stream* fo) {
-  encoded_chunks_.clear();
-  encoded_chunks_.push_back(0);
-  for (size_t i = 0; i < out_buffer_.size(); ++i) {
-    encoded_chunks_.push_back(encoded_chunks_.back() + out_buffer_[i].length());
-  }
-  fo->Write(raw_chunks_);
-  fo->Write(encoded_chunks_);
-  for (const std::string& buf : out_buffer_) {
-    fo->Write(dmlc::BeginPtr(buf), buf.length());
-  }
-}
-    
-    namespace xgboost {
-namespace data {
-/*!
- * \brief Format specification of SparsePage.
- */
-class SparsePageFormat {
- public:
-  /*! \brief virtual destructor */
-  virtual ~SparsePageFormat() = default;
-  /*!
-   * \brief Load all the segments into page, advance fi to end of the block.
-   * \param page The data to read page into.
-   * \param fi the input stream of the file
-   * \return true of the loading as successful, false if end of file was reached
-   */
-  virtual bool Read(SparsePage* page, dmlc::SeekStream* fi) = 0;
-  /*!
-   * \brief read only the segments we are interested in, advance fi to end of the block.
-   * \param page The page to load the data into.
-   * \param fi the input stream of the file
-   * \param sorted_index_set sorted index of segments we are interested in
-   * \return true of the loading as successful, false if end of file was reached
-   */
-  virtual bool Read(SparsePage* page,
-                    dmlc::SeekStream* fi,
-                    const std::vector<bst_uint>& sorted_index_set) = 0;
-  /*!
-   * \brief save the data to fo, when a page was written.
-   * \param fo output stream
-   */
-  virtual void Write(const SparsePage& page, dmlc::Stream* fo) = 0;
-  /*!
-   * \brief Create sparse page of format.
-   * \return The created format functors.
-   */
-  static SparsePageFormat* Create(const std::string& name);
-  /*!
-   * \brief decide the format from cache prefix.
-   * \return pair of row format, column format type of the cache prefix.
-   */
-  static std::pair<std::string, std::string> DecideFormat(const std::string& cache_prefix);
-};
-    }
-    }
-    
-    template <typename T>
-void HostDeviceVector<T>::Copy(const HostDeviceVector<T>& other) {
-  CHECK_EQ(Size(), other.Size());
-  std::copy(other.HostVector().begin(), other.HostVector().end(), HostVector().begin());
-}
+      /// Allow a specialized plugin type to act when an external plugin is removed.
+  static void removeExternal(const std::string& /*name*/) {}
