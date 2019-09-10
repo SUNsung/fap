@@ -1,134 +1,176 @@
 
         
-            strings = []
-    with open(filepath, 'r') as f:
+                # 'MODE READER' is sometimes necessary to enable 'reader' mode.
+        # However, the order in which 'MODE READER' and 'AUTHINFO' need to
+        # arrive differs between some NNTP servers. If _setreadermode() fails
+        # with an authorization failed error, it will set this to True;
+        # the login() routine will interpret that as a request to try again
+        # after performing its normal function.
+        # Enable only if we're not already in READER mode anyway.
+        self.readermode_afterauth = False
+        if readermode and 'READER' not in self._caps:
+            self._setreadermode()
+            if not self.readermode_afterauth:
+                # Capabilities might have changed after MODE READER
+                self._caps = None
+                self.getcapabilities()
     
-        def set_appid_not_exist(self, appid):
-        self.logger.warn('APPID_manager, set_appid_not_exist %s', appid)
-        with self.lock:
-            if appid not in self.not_exist_appids:
-                self.not_exist_appids.append(appid)
-            try:
-                self.config.GAE_APPIDS.remove(appid)
-            except:
-                pass
+        def test_many_threads(self):
+        # Test multiple concurrent put() and get()
+        N = 50
+        q = self.q
+        inputs = list(range(10000))
+        results = self.run_threads(N, N, q, inputs, self.feed, self.consume)
     
-            # Check cert keyfile exists
-        if hasattr(OpenSSL.crypto, 'load_publickey'):
-            if os.path.exists(CertUtil.cert_keyfile):
-                with open(CertUtil.cert_keyfile, 'rb') as fp:
-                    CertUtil.cert_publickey = OpenSSL.crypto.load_publickey(OpenSSL.crypto.FILETYPE_PEM, fp.read())
-            else:
-                CertUtil.generate_cert_keyfile()
-        else:
-            CertUtil.cert_keyfile = None
+            'mixed_text_message_rfc822': (
+            (None, None, 1),
+            (2,),
+            (1, 2),
+            textwrap.dedent('''\
+                To: foo@example.com
+                MIME-Version: 1.0
+                Content-Type: multipart/mixed; boundary='==='
     
-            if network_ok:
-            self.last_check_time = time.time()
-            self.report_ok()
-            xlog.debug('network %s is ok, cost:%d ms', self.type, 1000 * (time.time() - time_now))
-        else:
-            xlog.warn('network %s fail', self.type)
-            self.network_stat = 'Fail'
-            self.last_check_time = time.time()
     
-        if prober.nat_type in ('cone', 'restricted'):
-        usable = 'usable'
-    elif prober.nat_type == 'offline':
-        usable = 'unusable'
+class SizeofTest:
+    
+        def setUp(self):
+        self.cx = sqlite.connect(':memory:')
+        cu = self.cx.cursor()
+        cu.execute('create table test(id integer primary key, name text)')
+        cu.execute('insert into test(name) values (?)', ('foo',))
+    
+        try:
+        _strptime = sys.modules['_strptime']
+    except KeyError:
+        pass
     else:
-        usable = 'unknown'
-    
-        if netloc.startswith(('127.0.0.', '::1', 'localhost')):
-        start_response('400 Bad Request', [('Content-Type', 'text/html')])
-        html = ''.join('<a href='https://%s/'>%s</a><br/>' % (x, x) for x in ('google.com', 'mail.google.com'))
-        yield message_html('GoAgent %s is Running' % __version__, 'Now you can visit some websites', html)
-        raise StopIteration
+        _strptime._regex_cache.clear()
     
     
-  def Start( self ):
-    request_data = BuildRequestData()
-    request_data.update( { 'filetypes': self.filetypes } )
-    self._response = self.PostDataToHandler( request_data,
-                                             'semantic_completion_available' )
+def _test():
+    ''''''
+    file_path = r'./data.txt'
     
     
-  def Start( self ):
-    request_data = BuildRequestData()
-    if self._extra_data:
-      request_data.update( self._extra_data )
-    self._response = self.PostDataToHandler( request_data,
-                                             'debug_info',
-                                             display_message = False )
+# def get_all_subset(tokens: list):
+#     '''获取 tokens 的所有非空子集'''
+#     tokens = set(tokens)
+#
+#     ret = []
+#     for i in range(1, len(tokens) + 1):
+#         ret.extend(list(combinations(tokens, i)))
+#
+#     return ret
     
     
-  def Start( self ):
-    self._keepalive_thread.start()
+def relu(x):
+    '''ReLU
+    `o = max(0., x)`
+    '''
+    return tf.nn.relu(x)
+    
+                # Input shape: [128, 5, 32]
+            x = tf.constant(np.arange(10240, dtype=np.float32).reshape([128, 16, 5]))
     
     
-@YouCompleteMeInstance()
-@patch( 'ycm.vimsupport.PostVimMessage', new_callable = ExtendedMock )
-def SendCompletionRequest_ResponseContainingError_test( ycm, post_vim_message ):
-  current_buffer = VimBuffer( 'buffer' )
+def highway_conv2d(x, kernel_size,
+                   act_fn=relu,
+                   strides=1,
+                   padding='SAME',
+                   carry_bias=-1.0,
+                   name=None):
+    '''用于 conv2d 的 highway
+    Input shape:  [batch_size, in_h, in_w, in_channels]
+    Output shape: [batch_size, in_h, in_w, in_channels]
     
     
-  def done( self ):
-    return self._done
+'''预定义好的正则化器
+'''
+l1_regularizer = L1L2Regularizer(l1=0.01)
     
-        def _adjust_thread_count(self):
-        # When the executor gets lost, the weakref callback will wake up
-        # the worker threads.
-        def weakref_cb(_, q=self._work_queue):
-            q.put(None)
-        # TODO(bquinlan): Should avoid creating new threads if there are more
-        # idle threads than items in the work queue.
-        if len(self._threads) < self._max_workers:
-            t = threading.Thread(target=_worker,
-                                 args=(weakref.ref(self, weakref_cb),
-                                       self._work_queue))
-            t.daemon = True
-            t.start()
-            self._threads.add(t)
-            _threads_queues[t] = self._work_queue
+        References:
+        K.permute_dimensions()
+    '''
+    return tf.transpose(x, perm)
     
-    PRIMES = [
-    112272535095293,
-    112582705942171,
-    112272535095293,
-    115280095190773,
-    115797848077099,
-    117450548693743,
-    993960000099397]
+        # test slice is a view
+    result[:] = 0
+    assert (s[1:3] == 0).all()
     
-    # 0 : illegal
-# 1 : very unlikely
-# 2 : normal
-# 3 : very likely
-Latin1ClassModel = (
-# UDF OTH ASC ASS ACV ACO ASV ASO
-    0,  0,  0,  0,  0,  0,  0,  0,  # UDF
-    0,  3,  3,  3,  3,  3,  3,  3,  # OTH
-    0,  3,  3,  3,  3,  3,  3,  3,  # ASC
-    0,  3,  3,  3,  1,  1,  3,  3,  # ASS
-    0,  3,  3,  3,  1,  2,  1,  2,  # ACV
-    0,  3,  3,  3,  3,  3,  3,  3,  # ACO
-    0,  3,  1,  3,  1,  1,  1,  3,  # ASV
-    0,  3,  1,  3,  1,  1,  3,  3,  # ASO
-)
+            to_convert = to_convert.insert(0, breaks[0])
+        expected = expected.insert(0, float(breaks[0].value))
+        result = index._maybe_convert_i8(to_convert)
+        tm.assert_index_equal(result, expected)
     
-    CP949_SM_MODEL = {'class_table': CP949_CLS,
-                  'class_factor': 10,
-                  'state_table': CP949_ST,
-                  'char_len_table': CP949_CHAR_LEN_TABLE,
-                  'name': 'CP949'}
+                # see gh-10483
+            datetime_series.to_csv(path, header=True)
+            ts_h = self.read_csv(path, header=0)
+            assert ts_h.name == 'ts'
     
-    from .mbcharsetprober import MultiByteCharSetProber
-from .codingstatemachine import CodingStateMachine
-from .chardistribution import SJISDistributionAnalysis
-from .jpcntx import SJISContextAnalysis
-from .mbcssm import SJIS_SM_MODEL
-from .enums import ProbingState, MachineState
+        def drop_table(self, name, schema=None):
+        drop_sql = 'DROP TABLE {name}'.format(name=_get_valid_sqlite_name(name))
+        self.execute(drop_sql)
     
-            if self.state == ProbingState.DETECTING:
-            if self.get_confidence() > self.SHORTCUT_THRESHOLD:
-                self._state = ProbingState.FOUND_IT
+        :param int n: Number of unique groups
+    :param iter iterable: An iterable to split up
+    :return: a list of new iterables derived from the original iterable
+    :rtype: list
+    '''
+    
+    
+def test_allow_unknown_with_of_rules():
+    # https://github.com/pyeve/cerberus/issues/251
+    schema = {
+        'test': {
+            'oneof': [
+                {
+                    'type': 'dict',
+                    'allow_unknown': True,
+                    'schema': {'known': {'type': 'string'}},
+                },
+                {'type': 'dict', 'schema': {'known': {'type': 'string'}}},
+            ]
+        }
+    }
+    # check regression and that allow unknown does not cause any different
+    # than expected behaviour for one-of.
+    document = {'test': {'known': 's'}}
+    assert_fail(
+        document,
+        schema,
+        error=('test', ('test', 'oneof'), errors.ONEOF, schema['test']['oneof']),
+    )
+    # check that allow_unknown is actually applied
+    document = {'test': {'known': 's', 'unknown': 'asd'}}
+    assert_success(document, schema)
+    
+        Returns
+    -------
+    str
+        The code to be evaluated by the shell
+    '''
+    from jinja2 import Environment, FileSystemLoader
+    if shell in [None, 'auto']:
+        shell = get_auto_shell()
+    if not isinstance(shell, Shell):
+        shell = Shell[shell]
+    prog_name = prog_name or click.get_current_context().find_root().info_name
+    env_name = env_name or '_%s_COMPLETE' % prog_name.upper().replace('-', '_')
+    extra_env = extra_env if extra_env else {}
+    env = Environment(loader=FileSystemLoader(os.path.dirname(__file__)))
+    template = env.get_template('%s.j2' % shell.name)
+    return template.render(prog_name=prog_name, complete_var=env_name, extra_env=extra_env)
+    
+    tf.flags.DEFINE_string(
+    'tpu_name', None,
+    'The Cloud TPU to use for training. This should be either the name '
+    'used when creating the Cloud TPU, or a grpc://ip.address.of.tpu:8470 '
+    'url.')
+    
+            return {
+            'masked_lm_accuracy': masked_lm_accuracy,
+            'masked_lm_loss': masked_lm_mean_loss,
+            'next_sentence_accuracy': next_sentence_accuracy,
+            'next_sentence_loss': next_sentence_mean_loss,
+        }
