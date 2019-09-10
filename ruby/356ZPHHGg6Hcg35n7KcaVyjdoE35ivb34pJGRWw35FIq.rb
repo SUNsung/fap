@@ -1,173 +1,148 @@
 
         
-        World(VagrantHelpers)
-
+        get '/' do
+  halt erb(:login) unless params[:user]
+  erb :chat, :locals => { :user => params[:user].gsub(/\W/, '') }
+end
     
-        def role_properties_for(names, &block)
-      servers.role_properties_for(names, &block)
-    end
-    
-          def question
-        if default.nil?
-          I18n.t(:question, key: key, scope: :capistrano)
-        else
-          I18n.t(:question_default, key: key, default_value: default, scope: :capistrano)
-        end
-      end
-    
-        private
-    
-            expect(cop.messages).to eq(['Empty line missing at block body '\
-                                    'beginning.',
-                                    'Empty line missing at block body end.'])
-      end
-    
-            it { expect(send_node.parenthesized?).to be_falsey }
-      end
-    
-          expect(new_source).to eq(<<~RUBY)
-        def foo
-          super({}, something)
-        end
-      RUBY
+    namespace :doc do
+  task :readmes do
+    Dir.glob 'lib/rack/protection/*.rb' do |file|
+      excluded_files = %w[lib/rack/protection/base.rb lib/rack/protection/version.rb]
+      next if excluded_files.include?(file)
+      doc  = File.read(file)[/^  module Protection(\n)+(    #[^\n]*\n)*/m].scan(/^ *#(?!#) ?(.*)\n/).join('\n')
+      file = 'doc/#{file[4..-4].tr('/_', '-')}.rdoc'
+      Dir.mkdir 'doc' unless File.directory? 'doc'
+      puts 'writing #{file}'
+      File.open(file, 'w') { |f| f << doc }
     end
   end
     
-            expect(new_source).to eq(<<~RUBY)
-          def func
-            [1, 2, 3].each do |n|
-              puts n
-            end
-          end
+            if unmasked_token?(token)
+          compare_with_real_token token, session
+    
+          def call(env)
+        status, headers, body = @app.call(env)
+        header = options[:report_only] ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'
+        headers[header] ||= csp_policy if html? headers
+        [status, headers, body]
+      end
+    end
+  end
+end
+
+    
+          def redirect(env)
+        request = Request.new(env)
+        warn env, 'attack prevented by #{self.class}'
+        [302, {'Content-Type' => 'text/html', 'Location' => request.path}, []]
+      end
+    
+      it 'prevents ajax requests without a valid token' do
+    expect(post('/', {}, 'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest')).not_to be_ok
+  end
+    
+        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
+      env = {'HTTP_HOST' => 'foo.com'}
+      subject.options[:allow_empty_referrer] = false
+      expect(subject.referrer(env)).to be_nil
+    end
+    
+        it 'copes with nested arrays' do
+      mock_app do |env|
+        request = Rack::Request.new(env)
+        [200, {'Content-Type' => 'text/plain'}, [request.params['foo']['bar']]]
+      end
+      get '/', :foo => {:bar => '<bar>'}
+      expect(body).to eq('&lt;bar&gt;')
+    end
+    
+        context 'with a multi-expression body' do
+      let(:source) do
+        'class << self; bar; baz; end'
+      end
+    
+            false
+      end
+    
+            def autocorrect(range)
+          PunctuationCorrector.swap_comma(range)
+        end
+    
+            it_behaves_like 'nonmatching'
+      end
+    
+              something_else
         RUBY
       end
     end
     
-        it_behaves_like 'accepts', 'b.value == 2'
-    it_behaves_like 'accepts', 'b&.value == 2'
-    it_behaves_like 'accepts', '@value == 2'
-    it_behaves_like 'accepts', '@@value == 2'
-    it_behaves_like 'accepts', 'b = 1; b == 2'
-    it_behaves_like 'accepts', '$var == 5'
-    it_behaves_like 'accepts', 'foo == 'bar''
-    it_behaves_like 'accepts', 'foo[0] > 'bar' || baz != 'baz''
-    it_behaves_like 'accepts', 'node = last_node.parent'
-    it_behaves_like 'accepts', '(first_line - second_line) > 0'
-    it_behaves_like 'accepts', '5 == 6'
-    it_behaves_like 'accepts', '[1, 2, 3] <=> [4, 5, 6]'
-    it_behaves_like 'accepts', '!true'
-    it_behaves_like 'accepts', 'not true'
-    it_behaves_like 'accepts', '0 <=> val'
-    it_behaves_like 'accepts', ''foo' === bar'
+            rhs
+      end
+    end
+  end
+end
+
     
+          it { expect(if_node.inverse_keyword).to eq('if') }
+    end
     
-    {      # Checks whether the `hash` literal is delimited by curly braces.
+          # Checks whether the `block` literal is delimited by `do`-`end` keywords.
       #
-      # @return [Boolean] whether the `hash` literal is enclosed in braces
-      def braces?
-        loc.end&.is?('}')
+      # @return [Boolean] whether the `block` literal is enclosed in `do`-`end`
+      def keywords?
+        loc.end&.is?('end')
       end
-    end
-  end
-end
-
     
-    module RuboCop
-  module AST
-    # A node extension for `kwsplat` nodes. This will be used in place of a
-    # plain  node when the builder constructs the AST, making its methods
-    # available to all `kwsplat` nodes within RuboCop.
-    class KeywordSplatNode < Node
-      include HashElementNode
+            self
+      end
     
-      def self.check_unused_translations
-    self.used_translations ||= []
-    self.unused_translation_messages = []
-    self.unused_translations = []
-    load_translations(translations)
-    translation_diff = unused_translations - used_translations
-    translation_diff.each do |translation|
-      Spree.unused_translation_messages << '#{translation} (#{I18n.locale})'
-    end
-  end
     
-          # the order builds a shipment on its own on transition to delivery, but we want
-      # the original exchange shipment, not the built one
-      order.shipments.destroy_all
-      shipments.each { |shipment| shipment.update(order_id: order.id) }
-      order.update!(state: 'confirm')
+#
+# Documentation
+#
     
-              it 'links the shipping rate and the tax rate' do
-            shipping_rates = subject.shipping_rates(package)
-            expect(shipping_rates.first.tax_rate).to eq(tax_rate)
+    num_workers.times do |num|
+  God.watch do |w|
+    w.dir      = '#{rails_root}'
+    w.name     = 'resque-#{num}'
+    w.group    = 'resque'
+    w.interval = 30.seconds
+    w.env      = {'QUEUE'=>'critical,high,low', 'RAILS_ENV'=>rails_env}
+    w.start    = '/usr/bin/rake -f #{rails_root}/Rakefile environment resque:work'
+    
+          def self.each(offset = 0, limit = self.count, queue = :failed, class_name = nil, order = 'desc')
+        items = all(offset, limit, queue)
+        items = [items] unless items.is_a? Array
+        reversed = false
+        if order.eql? 'desc'
+          items.reverse!
+          reversed = true
+        end
+        items.each_with_index do |item, i|
+          if !class_name || (item['payload'] && item['payload']['class'] == class_name)
+            id = reversed ? (items.length - 1) + (offset - i) : offset + i
+            yield id, item
           end
         end
+      end
     
-            def create
-          authorize! :create, Image
-          @image = scope.images.new(image_params)
-          if @image.save
-            respond_with(@image, status: 201, default_template: :show)
-          else
-            invalid_resource!(@image)
-          end
-        end
-    
-            def update
-          @option_value = scope.accessible_by(current_ability, :update).find(params[:id])
-          if @option_value.update(option_value_params)
-            render :show
-          else
-            invalid_resource!(@option_value)
-          end
-        end
-    
-            def product_property_params
-          params.require(:product_property).permit(permitted_product_properties_attributes)
+          failure_hooks(plugin).each do |hook|
+        if hook.to_s.end_with?('failure')
+          raise LintError, '#{plugin}.#{hook} is not namespaced'
         end
       end
     end
-  end
-end
-
     
-            def new
-          authorize! :admin, ReturnAuthorization
-        end
-    
-          get 'array', ids: %w[1 2 890]
-      expect(last_response.status).to eq(200)
-      expect(last_response.body).to eq('array int works')
+      def failed_end_at
+    if failed_start_at + failed_per_page > failed_size
+      failed_size
+    else
+      failed_start_at  + failed_per_page - 1
     end
+  end
     
-          module ClassMethods
-        # Add helper methods that will be accessible from any
-        # endpoint within this namespace (and child namespaces).
-        #
-        # When called without a block, all known helpers within this scope
-        # are included.
-        #
-        # @param [Array] new_modules optional array of modules to include
-        # @param [Block] block optional block of methods to include
-        #
-        # @example Define some helpers.
-        #
-        #     class ExampleAPI < Grape::API
-        #       helpers do
-        #         def current_user
-        #           User.find_by_id(params[:token])
-        #         end
-        #       end
-        #     end
-        #
-        # @example Include many modules
-        #
-        #     class ExampleAPI < Grape::API
-        #       helpers Authentication, Mailer, OtherModule
-        #     end
-        #
-        def helpers(*new_modules, &block)
-          include_new_modules(new_modules) if new_modules.any?
-          include_block(block) if block_given?
-          include_all_in_scope if !block_given? && new_modules.empty?
-        end
+        # What time did this worker start? Returns an instance of `Time`
+    def started
+      data_store.worker_start_time(self)
+    end
