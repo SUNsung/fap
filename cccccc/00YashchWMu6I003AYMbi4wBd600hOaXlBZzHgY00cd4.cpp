@@ -1,275 +1,154 @@
 
         
-        class OrientationDetector {
- public:
-  OrientationDetector(const GenericVector<int>* allowed_scripts,
-                      OSResults* results);
-  bool detect_blob(BLOB_CHOICE_LIST* scores);
-  int get_orientation();
- private:
-  OSResults* osr_;
-  const GenericVector<int>* allowed_scripts_;
+        // Author: kenton@google.com (Kenton Varda)
+    
+    void MapLiteTestUtil::ExpectArenaMapFieldsSet(
+    const unittest::TestArenaMapLite& message) {
+  MapTestUtilImpl::ExpectArenaMapFieldsSet<unittest::MapEnumLite,
+                                           unittest::MAP_ENUM_BAR_LITE,
+                                           unittest::MAP_ENUM_BAZ_LITE>(
+      message);
+}
+    
+    TEST(StatusOr, TestPointerCopyCtorStatusOk) {
+  const int kI = 0;
+  StatusOr<const int*> original(&kI);
+  StatusOr<const int*> copy(original);
+  EXPECT_EQ(original.status(), copy.status());
+  EXPECT_EQ(original.ValueOrDie(), copy.ValueOrDie());
+}
+    
+    int main(int argc, char *argv[]) {
+  if (argc % 2 == 0 || argc == 1) {
+    std::cerr << 'Usage: [input_files] [output_file_names] where ' <<
+        'input_files are one to one mapping to output_file_names.' <<
+        std::endl;
+    return 1;
+  }
+    }
+    
+        std::unique_ptr<google::protobuf::io::ZeroCopyOutputStream> output(
+        context->Open(basename + '.proto'));
+    string content = new_pool_.BuildFile(new_file)->DebugString();
+    Printer printer(output.get(), '$');
+    printer.WriteRaw(content.c_str(), content.size());
+    
+    
+    {  const std::multimap<grpc::string, grpc::string> additional_metadata_;
 };
     
-    // This structure captures all information needed about a text line for the
-// purposes of paragraph detection.  It is meant to be exceedingly light-weight
-// so that we can easily test paragraph detection independent of the rest of
-// Tesseract.
-class RowInfo {
- public:
-  // Constant data derived from Tesseract output.
-  STRING text;        // the full UTF-8 text of the line.
-  bool ltr;           // whether the majority of the text is left-to-right
-                      // TODO(eger) make this more fine-grained.
+    
+    {  thr.join();
+}
+    
+    #include <errno.h>
+#include <fcntl.h>
+#include <string.h>
+    
+      void SetUpServer(bool register_sync_test_service, bool add_async_cq,
+                   bool explicit_health_service,
+                   std::unique_ptr<HealthCheckServiceInterface> service) {
+    int port = grpc_pick_unused_port_or_die();
+    server_address_ << 'localhost:' << port;
     }
     
-    #include 'dppoint.h'
-#include 'errcode.h'
-#include 'tprintf.h'
+    int maybe_assert_non_blocking_poll(struct pollfd* pfds, nfds_t nfds,
+                                   int timeout) {
+  if (gpr_tls_get(&g_is_nonblocking_test)) {
+    GPR_ASSERT(timeout == 0);
+  }
+  return poll(pfds, nfds, timeout);
+}
     
     
-    {  /* Accept modes which occur between the above rejection groups */
-  R_NN_ACCEPT,          // NN acceptance
-  R_HYPHEN_ACCEPT,      // Hyphen acceptance
-  R_MM_ACCEPT,          // Matrix match acceptance
-  R_QUALITY_ACCEPT,     // Accept word in good quality doc
-  R_MINIMAL_REJ_ACCEPT  // Accept EVERYTHING except tess failures
+    {    const protobuf::Descriptor* desc = desc_pool_->FindMessageTypeByName(type);
+    const protobuf::Descriptor* ref_desc =
+        ref_desc_pool_->FindMessageTypeByName(type);
+    EXPECT_TRUE(desc != nullptr);
+    EXPECT_TRUE(ref_desc != nullptr);
+    EXPECT_EQ(desc->DebugString(), ref_desc->DebugString());
+  }
+    
+    
+    {  Status Echo(ServerContext* context, const EchoRequest* request,
+              EchoResponse* response) override {
+    if (request->message() == kServerErrorMessage) {
+      return Status(StatusCode::UNKNOWN, 'Server error requested');
+    }
+    if (request->message() == kClientErrorMessage) {
+      return Status(StatusCode::FAILED_PRECONDITION, 'Client error requested');
+    }
+    response->set_message(request->message());
+    ::grpc::load_reporter::experimental::AddLoadReportingCost(
+        context, kMetricName, kMetricValue);
+    return Status::OK;
+  }
 };
     
-    // A smart pointer class that implements a double-ended pointer. Each end
-// points to the other end. The copy constructor and operator= have MOVE
-// semantics, meaning that the relationship with the other end moves to the
-// destination of the copy, leaving the source unattached.
-// For this reason both the copy constructor and the operator= take a non-const
-// reference argument, and the const reference versions cannot be used.
-// DoublePtr is useful to incorporate into structures that are part of a
-// collection such as GenericVector or STL containers, where reallocs can
-// relocate the members. DoublePtr is also useful in a GenericHeap, where it
-// can correctly maintain the pointer to an element of the heap despite it
-// getting moved around on the heap.
-class DoublePtr {
+        TableBuilder* builder = new TableBuilder(options, file);
+    meta->smallest.DecodeFrom(iter->key());
+    for (; iter->Valid(); iter->Next()) {
+      Slice key = iter->key();
+      meta->largest.DecodeFrom(key);
+      builder->Add(key, iter->value());
+    }
+    
+      Open();
+  std::string new_manifest = ManifestFileName();
+  ASSERT_NE(old_manifest, new_manifest);
+  ASSERT_GT(10000, FileSize(new_manifest));
+  ASSERT_EQ('bar', Get('foo'));
+    
+      VersionEdit edit;
+  for (int i = 0; i < 4; i++) {
+    TestEncodeDecode(edit);
+    edit.AddFile(3, kBig + 300 + i, kBig + 400 + i,
+                 InternalKey('foo', kBig + 500 + i, kTypeValue),
+                 InternalKey('zoo', kBig + 600 + i, kTypeDeletion));
+    edit.DeleteFile(4, kBig + 700 + i);
+    edit.SetCompactPointer(i, InternalKey('x', kBig + 900 + i, kTypeValue));
+  }
+    
+    TEST(WriteBatchTest, Multiple) {
+  WriteBatch batch;
+  batch.Put(Slice('foo'), Slice('bar'));
+  batch.Delete(Slice('box'));
+  batch.Put(Slice('baz'), Slice('boo'));
+  WriteBatchInternal::SetSequence(&batch, 100);
+  ASSERT_EQ(100, WriteBatchInternal::Sequence(&batch));
+  ASSERT_EQ(3, WriteBatchInternal::Count(&batch));
+  ASSERT_EQ(
+      'Put(baz, boo)@102'
+      'Delete(box)@101'
+      'Put(foo, bar)@100',
+      PrintContents(&batch));
+}
+    
+    #include 'leveldb/export.h'
+    
+    // Thinly wraps std::mutex.
+class LOCKABLE Mutex {
  public:
-  DoublePtr() : other_end_(nullptr) {}
-  // Copy constructor steals the partner off src and is therefore a non
-  // const reference arg.
-  // Copying a const DoublePtr generates a compiler error.
-  DoublePtr(DoublePtr& src) {
-    other_end_ = src.other_end_;
-    if (other_end_ != nullptr) {
-      other_end_->other_end_ = this;
-      src.other_end_ = nullptr;
-    }
-  }
-  // Operator= steals the partner off src, and therefore needs src to be a non-
-  // const reference.
-  // Assigning from a const DoublePtr generates a compiler error.
-  void operator=(DoublePtr& src) {
-    Disconnect();
-    other_end_ = src.other_end_;
-    if (other_end_ != nullptr) {
-      other_end_->other_end_ = this;
-      src.other_end_ = nullptr;
-    }
-  }
+  Mutex() = default;
+  ~Mutex() = default;
     }
     
-      // Add entry to the heap, keeping the smallest item at the top, by operator<.
-  // Note that *entry is used as the source of operator=, but it is non-const
-  // to allow for a smart pointer to be contained within.
-  // Time = O(log n).
-  void Push(Pair* entry) {
-    int hole_index = heap_.size();
-    // Make a hole in the end of heap_ and sift it up to be the correct
-    // location for the new *entry. To avoid needing a default constructor
-    // for primitive types, and to allow for use of DoublePtr in the Pair
-    // somewhere, we have to incur a double copy here.
-    heap_.push_back(*entry);
-    *entry = heap_.back();
-    hole_index = SiftUp(hole_index, *entry);
-    heap_[hole_index] = *entry;
-  }
-    
-    #endif  // TESSERACT_CLASSIFY_SHAPECLASSIFIER_H_
-
-    
-    // Classifies the given [training] sample, writing to results.
-// See ShapeClassifier for a full description.
-int TessClassifier::UnicharClassifySample(
-    const TrainingSample& sample, Pix* page_pix, int debug,
-    UNICHAR_ID keep_this, GenericVector<UnicharRating>* results) {
-  const int old_matcher_level = classify_->matcher_debug_level;
-  const int old_matcher_flags = classify_->matcher_debug_flags;
-  const int old_classify_level = classify_->classify_debug_level;
-  if (debug) {
-    // Explicitly set values of various control parameters to generate debug
-    // output if required, restoring the old values after classifying.
-    classify_->matcher_debug_level.set_value(2);
-    classify_->matcher_debug_flags.set_value(25);
-    classify_->classify_debug_level.set_value(3);
-  }
-  classify_->CharNormTrainingSample(pruner_only_, keep_this, sample, results);
-  if (debug) {
-    classify_->matcher_debug_level.set_value(old_matcher_level);
-    classify_->matcher_debug_flags.set_value(old_matcher_flags);
-    classify_->classify_debug_level.set_value(old_classify_level);
-  }
-  return results->size();
-}
-    
-      bool operator==(uint64_t v) const { return compare(v) == 0;}
-  bool operator!=(uint64_t v) const { return compare(v) != 0;}
-  bool operator>=(uint64_t v) const { return compare(v) >= 0;}
-  bool operator<=(uint64_t v) const { return compare(v) <= 0;}
-  bool operator> (uint64_t v) const { return compare(v) >  0;}
-  bool operator< (uint64_t v) const { return compare(v) <  0;}
-    
-    void StackTraceNoHeap::ClearAllExtraLogging() {
-  StackTraceLog::s_logData->data.clear();
-}
-    
-    // Get the total/available number of huge pages on a node, -1 means all
-// nodes.
-HugePageInfo get_huge1g_info(int node = -1);
-HugePageInfo get_huge2m_info(int node = -1);
-    
-      const Mutex& getMutex() const { return m_mutex; }
-  Mutex& getMutex() { return m_mutex; }
-    
-    TEST_F(ProxygenTransportBasicTest, valid_expect_overlarge_length) {
-  auto req = getRequest(HTTPMethod::POST);
-  auto length = folly::to<std::string>(RuntimeOption::MaxPostSize + 1);
-  req->getHeaders().add(HTTP_HEADER_CONTENT_LENGTH, length);
-  req->getHeaders().add(HTTP_HEADER_EXPECT, '100-continue');
-  EXPECT_CALL(m_server, onRequestError(_));
-  EXPECT_CALL(m_txn, sendHeaders(IsResponseStatusCode(417)));
-  EXPECT_CALL(m_txn, sendEOM());
-  m_transport->onHeadersComplete(std::move(req));
+    Iterator* Table::NewIterator(const ReadOptions& options) const {
+  return NewTwoLevelIterator(
+      rep_->index_block->NewIterator(rep_->options.comparator),
+      &Table::BlockReader, const_cast<Table*>(this), options);
 }
     
     
-    { private:
-  template <typename F> friend void scan(const ReflectionTypeAliasHandle&, F&);
-  const TypeAliasReq* m_req;
-};
-    
-    template<class vinst>
-void implArithO(Vout& v, IRLS& env, const IRInstruction* inst) {
-  auto const sf = implBinopSF<vinst>(v, env, inst);
-  v << jcc{CC_O, sf, {label(env, inst->next()), label(env, inst->taken())}};
+    {  Slice input(s);
+  Slice v;
+  ASSERT_TRUE(GetLengthPrefixedSlice(&input, &v));
+  ASSERT_EQ('', v.ToString());
+  ASSERT_TRUE(GetLengthPrefixedSlice(&input, &v));
+  ASSERT_EQ('foo', v.ToString());
+  ASSERT_TRUE(GetLengthPrefixedSlice(&input, &v));
+  ASSERT_EQ('bar', v.ToString());
+  ASSERT_TRUE(GetLengthPrefixedSlice(&input, &v));
+  ASSERT_EQ(std::string(200, 'x'), v.ToString());
+  ASSERT_EQ('', input.ToString());
 }
-    
-    #include 'hphp/runtime/base/array-data.h'
-#include 'hphp/runtime/base/array-data-defs.h'
-#include 'hphp/runtime/base/array-init.h'
-#include 'hphp/runtime/base/array-iterator.h'
-#include 'hphp/runtime/base/mixed-array-defs.h'
-#include 'hphp/runtime/base/object-data.h'
-#include 'hphp/runtime/base/set-array.h'
-#include 'hphp/runtime/base/packed-array.h'
-#include 'hphp/runtime/base/type-variant.h'
-    
-    /**
- * Start processing TEST_SIZE number of requests at the same time with
- * that many threads. This is mainly testing global variables to make sure
- * all handling are thread-safe.
- */
-bool TestServer::TestRequestHandling() {
-  RuntimeOption::AllowedFiles.insert('/string');
-  TestTransportPtrVec transports(TEST_SIZE);
-  TestTransportAsyncFuncPtrVec funcs(TEST_SIZE);
-  for (unsigned int i = 0; i < TEST_SIZE; i++) {
-    TestTransport *transport = new TestTransport();
-    transports[i] = TestTransportPtr(transport);
-    funcs[i] = TestTransportAsyncFuncPtr
-      (new TestTransportAsyncFunc(transport, &TestTransport::process));
-  }
-    }
-    
-    
-    {  return true;
-}
-    
-    Context::~Context()
-{
-    if (stack_)
-    {
-        swTraceLog(SW_TRACE_COROUTINE, 'free stack: ptr=%p', stack_);
-#ifdef SW_CONTEXT_PROTECT_STACK_PAGE
-        if (protect_page_)
-        {
-            unprotect_stack(stack_, protect_page_);
-        }
-#endif
-#ifdef USE_VALGRIND
-        VALGRIND_STACK_DEREGISTER(valgrind_stack_id);
-#endif
-        sw_free(stack_);
-        stack_ = NULL;
-    }
-}
-    
-        ret = p.write(&p, (void*) SW_STRS('hello world1'));
-    ASSERT_GT(ret, 0);
-    ret = p.write(&p, (void*) SW_STRS('hello world2'));
-    ASSERT_GT(ret, 0);
-    ret = p.write(&p, (void*) SW_STRS('hello world3'));
-    ASSERT_GT(ret, 0);
-    
-        int length;
-    char address[256];
-    int port = 0;
-    int ret;
-    
-    TEST(thread_pool, dispatch)
-{
-    ASSERT_EQ(swThreadPool_create(&pool, 4), SW_OK);
-    pool.onTask = thread_onTask;
-    ASSERT_EQ(swThreadPool_run(&pool), SW_OK);
-    sw_atomic_long_t result = 0;
-    }
-    
-    TEST(coroutine_base, get_current)
-{
-    long _cid;
-    long cid = Coroutine::create([](void *arg)
-    {
-        auto co = Coroutine::get_current();
-        *(long *) arg = co->get_cid();
-    }, &_cid);
-    }
-    
-        friend
-    void RedisQtDelRead(void * adapter) {
-        RedisQtAdapter * a = static_cast<RedisQtAdapter *>(adapter);
-        a->delRead();
-    }
-    
-        redisReply * reply = static_cast<redisReply *>(r);
-    ExampleQt * ex = static_cast<ExampleQt *>(privdata);
-    if (reply == nullptr || ex == nullptr) return;
-    
-    bool swoole_mime_type_delete(const char *suffix, const char *mime_type)
-{
-    if (mime_map.find(suffix) == mime_map.end())
-    {
-        return false;
-    }
-    else
-    {
-        mime_map.erase(string(suffix));
-        return true;
-    }
-}
-    
-        for (i = 1; i < 1024; i++)
-    {
-        uint32_t key = ((rand() % 19999) + 1) * 37;
-        int ret = (int) (long) swRbtree_find(tree, key);
-        ASSERT_GT(ret, 0);
-        lists.insert(key);
-    }
-    
-        event.handler = [](swAio_event *event)
-    {
-        (*(atomic<int> *) event->object)++;
-    };
