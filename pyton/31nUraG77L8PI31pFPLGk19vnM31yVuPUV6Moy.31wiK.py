@@ -1,65 +1,45 @@
 
         
-        import os, json, imp
-here = os.path.abspath(os.path.dirname(__file__))
-proj_info = json.loads(open(os.path.join(here, PROJ_METADATA), encoding='utf-8').read())
-try:
-    README = open(os.path.join(here, 'README.rst'), encoding='utf-8').read()
-except:
-    README = ''
-CHANGELOG = open(os.path.join(here, 'CHANGELOG.rst'), encoding='utf-8').read()
-VERSION = imp.load_source('version', os.path.join(here, 'src/%s/version.py' % PACKAGE_NAME)).__version__
-    
-        stream_types = [  #this is just a sample. Will make it in prepare()
-        # {'id': '1080'},
-        # {'id': '720'},
-        # {'id': '360'},
-        # {'id': '288'},
-        # {'id': '190'},
-        # {'id': '180'},
         
-    ]
-    
-    def rebuilt_url(url):
-    path = urllib.parse.urlparse(url).path
-    aid = path.split('/')[-1].split('_')[0]
-    return 'http://www.dailymotion.com/embed/video/{}?autoplay=1'.format(aid)
-    
-    
-def huomaotv_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    room_id_pattern = r'huomao.com/(\d+)'
-    room_id = match1(url, room_id_pattern)
-    html = get_content(get_mobile_room_url(room_id))
-    
-    def ifeng_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-# old pattern /uuid.shtml
-# now it could be #uuid
-    id = r1(r'([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', url)
-    if id:
-        return ifeng_download_by_id(id, None, output_dir = output_dir, merge = merge, info_only = info_only)
-    
-    import codecs
-import errno
-import os
-import sys
-import warnings
-from tempfile import mkdtemp
-    
-        def write(self, text=None):
-        if not self.write_to_stdout:
-            return self.write_err(text)
-        if text is None or isinstance(text, six.string_types) and text == 'None':
-            pass
-        if not self.stdout.closed:
-            stdout = self.stdout
+def search_tokens(tokens, inverse_index, word_freq=None):
+    ''''''
+    ret = dict()
+    for term in tokens:
+        if term in inverse_index:
+            ret[frozenset([term])] = inverse_index[term]
         else:
-            stdout = sys.stdout
-        stdout.write(decode_output(u'\r', target_stream=stdout))
-        text = to_text(text)
-        line = decode_output(u'{0}\n'.format(text), target_stream=stdout)
-        stdout.write(line)
-        stdout.write(CLEAR_LINE)
+            ret[frozenset([term])] = set()
+    return ret
     
-        @property
-    def language(self):
-        raise NotImplementedError
+        in_channels = get_shape(x)[-1]
+    kernel_shape = list(kernel_size) + [in_channels, out_channels]  # [kernel_h, kernel_w, in_channels, out_channels]
+    
+            # h_tilde(h~): question to context attended query vectors
+        b = tf.reduce_max(S, axis=2)  # [N, T]
+        b = softmax(b, axis=-1)  # [N, T]
+        b = tf.expand_dims(b, axis=1)  # [N, 1, T]
+        h_tilde = tf.matmul(b, h)  # [N, 1, d]
+        h_tilde = tf.tile(h_tilde, [1, T, 1])  # [N, T, d]
+    
+    default_encoding = sys.getfilesystemencoding()
+    
+        def __init__(self):
+        self.tokenizer = self.postokenizer = jieba.posseg.dt
+        self.stop_words = self.STOP_WORDS.copy()
+        self.pos_filt = frozenset(('ns', 'n', 'vn', 'v'))
+        self.span = 5
+    
+        def get_idf(self):
+        return self.idf_freq, self.median_idf
+    
+    PROB_START_P = 'prob_start.p'
+PROB_TRANS_P = 'prob_trans.p'
+PROB_EMIT_P = 'prob_emit.p'
+    
+        def _lcut_internal(self, sentence):
+        return list(self.__cut_internal(sentence))
+    
+    print(','.join(tags))
+    
+    t2 = time.time()
+tm_cost = t2-t1
