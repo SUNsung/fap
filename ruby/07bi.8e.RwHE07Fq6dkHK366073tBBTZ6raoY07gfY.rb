@@ -1,136 +1,132 @@
 
         
-              headers['Access-Control-Allow-Origin'] = origin || cors_origins[0]
-      headers['Access-Control-Allow-Headers'] = 'Content-Type, Cache-Control, X-Requested-With, X-CSRF-Token, Discourse-Visible, User-Api-Key, User-Api-Client-Id'
-      headers['Access-Control-Allow-Credentials'] = 'true'
-      headers['Access-Control-Allow-Methods'] = 'POST, PUT, GET, OPTIONS, DELETE'
-    end
+              # Pure data class which describes an umbrella target.
+      #
+      class UmbrellaTargetDescription
+        # @return [Xcodeproj::Project] The user project into which this target
+        #         is integrated.
+        #
+        attr_reader :user_project
     
-        it 'no-ops on invalid values' do
-      previous = builder.build
-    
-        # remove old drafts
-    delete_drafts_older_than_n_days = SiteSetting.delete_drafts_older_than_n_days.days.ago
-    Draft.where('updated_at < ?', delete_drafts_older_than_n_days).destroy_all
+    module Pod
+  class PlainInformative
+    include CLAide::InformativeError
   end
     
-        def clear_theme_extensions_cache!
-      cache.clear
+            # @private
+        # @return [Hash<PodVariant, String>]
+        #
+        def scope_by_platform
+          grouped_variants = group_by { |v| v.platform.name }
+          if grouped_variants.all? { |set| set.variants.count == 1 }
+            # => Platform name
+            platform_name_proc = proc { |v| Platform.string_name(v.platform.symbolic_name).tr(' ', '') }
+          else
+            grouped_variants = group_by(&:platform)
+            # => Platform name + SDK version
+            platform_name_proc = proc { |v| v.platform.to_s.tr(' ', '') }
+          end
+          scope_if_necessary(grouped_variants.map(&:scope_without_suffix), &platform_name_proc)
+        end
+    
+    module Pod
+  module UserInterface
+    # Redirects GH-issues delegate callbacks to CocoaPods UI methods.
+    #
+    class InspectorReporter
+      # Called just as the investigation has begun.
+      # Lets the user know that it's looking for an issue.
+      #
+      # @param [query] String unused
+      #
+      # @param [GhInspector::Inspector] inspector
+      #        The current inspector
+      #
+      # @return [void]
+      #
+      def inspector_started_query(_, inspector)
+        UI.puts 'Looking for related issues on #{inspector.repo_owner}/#{inspector.repo_name}...'
+      end
+    
+            get '/pipelines' do
+          opts = {:graph => as_boolean(params.fetch('graph', false)),
+                  :vertices => as_boolean(params.fetch('vertices', false))}
+          payload = node.pipelines(opts)
+          halt(404) if payload.empty?
+          respond_with(:pipelines => payload )
+        end
+    
+    ::Bundler.with_friendly_errors do
+  ::Bundler::CLI.start(ARGV, :debug => true)
+end
+
+    
+    require 'clamp'
+require 'pluginmanager/util'
+require 'pluginmanager/gemfile'
+require 'pluginmanager/install'
+require 'pluginmanager/remove'
+require 'pluginmanager/list'
+require 'pluginmanager/update'
+require 'pluginmanager/pack'
+require 'pluginmanager/unpack'
+require 'pluginmanager/generate'
+require 'pluginmanager/prepare_offline_pack'
+require 'pluginmanager/proxy_support'
+configure_proxy
+    
+          options = {:debug => ENV['LS_QA_DEBUG']}
+      puts 'Destroying #{machines}'
+      LogStash::VagrantHelpers.destroy(machines, options)
+      puts 'Bootstrapping #{machines}'
+      LogStash::VagrantHelpers.bootstrap(machines, options)
     end
     
-        def html_response?(headers)
-      headers['Content-Type'] && headers['Content-Type'] =~ /html/
+          context 'the getter' do
+        before do
+          subject.send('#{item}=', value)
+        end
+        it 'returns the value set previously' do
+          expect(subject.send(item)).to(be == value)
+        end
+      end
+    end
+  end
+    
+          # Scan to find the location of the two contiguous null records
+      open(target_path, 'rb') do |file|
+    
+        @session.save_and_open_screenshot(custom_path)
+    
+        @session.save_screenshot
+    
+        it 'happily clicks on links which incorrectly have the disabled attribute' do
+      @session.visit('/with_html')
+      @session.click_link_or_button('Disabled link')
+      expect(@session).to have_content('Bar')
+    end
+  end
+    
+      it 'should not raise an exception if the current_url is nil' do
+    allow(@session).to receive(:current_url).and_return(nil)
+    allow(@session.page).to receive(:current_url).and_return(nil) if @session.respond_to? :page
+    
+      it 'allows Regexp for value matching' do
+    expect(@session.find(:css, '#first')).to match_style(display: /^bl/)
+    expect(@session.find(:css, '#first').matches_style?('display' => /^bl/)).to be true
+    expect(@session.find(:css, '#first').matches_style?(display: /^in/)).to be false
+  end
+    
+              filter_context(ctx).instance_exec(subject, value, **options, &@block)
+        end
+      end
     end
   end
 end
 
     
-      describe 'worker-src' do
-    it 'always has self and blob' do
-      worker_srcs = parse(policy)['worker-src']
-      expect(worker_srcs).to eq(%w[
-        'self'
-        blob:
-      ])
-    end
+      it 'should raise when unused parameters are passed' do
+    expect do
+      @session.first(:css, 'h1', 'unused text')
+    end.to raise_error ArgumentError, /Unused parameters passed.*unused text/
   end
-    
-      def self.update_first_unread(last_seen, limit: 10_000)
-    DB.exec(<<~SQL, min_date: last_seen, limit: limit, now: 10.minutes.ago)
-      UPDATE user_stats us
-      SET first_unread_at = COALESCE(Y.min_date, :now)
-      FROM (
-        SELECT u1.id user_id,
-           X.min min_date
-        FROM users u1
-        LEFT JOIN
-          (SELECT u.id AS user_id,
-                  min(topics.updated_at) min
-           FROM users u
-           LEFT JOIN topic_users tu ON tu.user_id = u.id
-           LEFT JOIN topics ON tu.topic_id = topics.id
-           JOIN user_stats AS us ON us.user_id = u.id
-           JOIN user_options AS uo ON uo.user_id = u.id
-           JOIN categories c ON c.id = topics.category_id
-           WHERE u.id IN (
-               SELECT id
-               FROM users
-               WHERE last_seen_at IS NOT NULL
-                AND last_seen_at > :min_date
-                ORDER BY last_seen_at DESC
-                LIMIT :limit
-              )
-             AND topics.archetype <> 'private_message'
-             AND (('topics'.'deleted_at' IS NULL
-                   AND tu.last_read_post_number < CASE
-                                                      WHEN u.admin
-                                                           OR u.moderator THEN topics.highest_staff_post_number
-                                                      ELSE topics.highest_post_number
-                                                  END
-                   AND COALESCE(tu.notification_level, 1) >= 2)
-                  OR (1=0))
-             AND (topics.visible
-                  OR u.admin
-                  OR u.moderator)
-             AND topics.deleted_at IS NULL
-             AND (NOT c.read_restricted
-                  OR u.admin
-                  OR category_id IN
-                    (SELECT c2.id
-                     FROM categories c2
-                     JOIN category_groups cg ON cg.category_id = c2.id
-                     JOIN group_users gu ON gu.user_id = u.id
-                     AND cg.group_id = gu.group_id
-                     WHERE c2.read_restricted ))
-             AND NOT EXISTS
-               (SELECT 1
-                FROM category_users cu
-                WHERE last_read_post_number IS NULL
-                  AND cu.user_id = u.id
-                  AND cu.category_id = topics.category_id
-                  AND cu.notification_level = 0)
-           GROUP BY u.id,
-                    u.username) AS X ON X.user_id = u1.id
-        WHERE u1.id IN
-            (
-             SELECT id
-             FROM users
-             WHERE last_seen_at IS NOT NULL
-              AND last_seen_at > :min_date
-              ORDER BY last_seen_at DESC
-              LIMIT :limit
-            )
-      ) Y
-      WHERE Y.user_id = us.user_id
-    SQL
-  end
-    
-            # Parses the options given an OptionParser instance.
-        #
-        # This is a convenience method that properly handles duping the
-        # originally argv array so that it is not destroyed.
-        #
-        # This method will also automatically detect '-h' and '--help'
-        # and print help. And if any invalid options are detected, the help
-        # will be printed, as well.
-        #
-        # If this method returns `nil`, then you should assume that help
-        # was printed and parsing failed.
-        def parse_options(opts=nil)
-          # Creating a shallow copy of the arguments so the OptionParser
-          # doesn't destroy the originals.
-          argv = @argv.dup
-    
-    group :development do
-  cp_gem 'claide',                'CLAide'
-  cp_gem 'cocoapods-core',        'Core'
-  cp_gem 'cocoapods-deintegrate', 'cocoapods-deintegrate'
-  cp_gem 'cocoapods-downloader',  'cocoapods-downloader'
-  cp_gem 'cocoapods-plugins',     'cocoapods-plugins'
-  cp_gem 'cocoapods-search',      'cocoapods-search'
-  cp_gem 'cocoapods-stats',       'cocoapods-stats'
-  cp_gem 'cocoapods-trunk',       'cocoapods-trunk'
-  cp_gem 'cocoapods-try',         'cocoapods-try'
-  cp_gem 'molinillo',             'Molinillo'
-  cp_gem 'nanaimo',               'Nanaimo'
-  cp_gem 'xcodeproj',             'Xcodeproj'
