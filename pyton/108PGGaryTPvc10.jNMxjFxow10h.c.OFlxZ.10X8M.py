@@ -1,154 +1,143 @@
 
         
-        import getopt
-import os
-import platform
-import sys
-from .version import script_name, __version__
-from .util import git, log
+            :param cookie_dict: Dict of key/values to insert into CookieJar.
+    :param cookiejar: (optional) A cookiejar to add the cookies to.
+    :param overwrite: (optional) If False, will not replace cookies
+        already in the jar with new ones.
+    :rtype: CookieJar
+    '''
+    if cookiejar is None:
+        cookiejar = RequestsCookieJar()
     
-    def baomihua_download_by_id(id, title=None, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html('http://play.baomihua.com/getvideourl.aspx?flvid=%s&devicetype=phone_app' % id)
-    host = r1(r'host=([^&]*)', html)
-    assert host
-    type = r1(r'videofiletype=([^&]*)', html)
-    assert type
-    vid = r1(r'&stream_name=([^&]*)', html)
-    assert vid
-    dir_str = r1(r'&dir=([^&]*)', html).strip()
-    url = 'http://%s/%s/%s.%s' % (host, dir_str, vid, type)
-    _, ext, size = url_info(url)
-    print_info(site_info, title, type, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir, merge = merge)
+    # A dictionary with options for the search language support, empty by default.
+# Now only 'ja' uses this config value
+# html_search_options = {'type': 'default'}
     
-            if self.tree.find('result').text != '1':
-            log.wtf('API result says failed!')
-            raise 
+    if is_py2:
+    from urllib import (
+        quote, unquote, quote_plus, unquote_plus, urlencode, getproxies,
+        proxy_bypass, proxy_bypass_environment, getproxies_environment)
+    from urlparse import urlparse, urlunparse, urljoin, urlsplit, urldefrag
+    from urllib2 import parse_http_list
+    import cookielib
+    from Cookie import Morsel
+    from StringIO import StringIO
+    # Keep OrderedDict for backwards compatibility.
+    from collections import Callable, Mapping, MutableMapping, OrderedDict
     
-        return video_dict
+        def test_copy(self):
+        cid = CaseInsensitiveDict({
+            'Accept': 'application/json',
+            'user-Agent': 'requests',
+        })
+        cid_copy = cid.copy()
+        assert cid == cid_copy
+        cid['changed'] = True
+        assert cid != cid_copy
     
-        for quality in ['1080','720','480','380','240','144','auto']:
-        try:
-            real_url = info[quality][1]['url']
-            if real_url:
-                break
-        except KeyError:
-            pass
-    
-        @classmethod
-    def get_cdninfo(cls, hashid):
-        url = 'http://jobsfe.funshion.com/query/v1/mp4/{}.json'.format(hashid)
-        meta = json.loads(get_content(url, decoded=False).decode('utf8'))
-        return meta['playlist'][0]['urls']
-    
-            pdf = match1(content, r'name='filename'\s*value='([^']+\.pdf)'')
-        if pdf: pdf = 'http://res.infoq.com/downloads/pdfdownloads/%s' % pdf
-    
-        The following variables should be defined:
-        _HELPTEXT: A string describing what this plugin does
-        _DEFAULTS: A dictionary containing the options, defaults and meta information. The
-                   dictionary should be defined as:
-                       {<option_name>: {<metadata>}}
-    
-    
-class Adjustment():
-    ''' Parent class for scaling adjustments '''
-    def __init__(self, configfile=None, config=None):
-        logger.debug('Initializing %s: (configfile: %s, config: %s)',
-                     self.__class__.__name__, configfile, config)
-        self.config = self.set_config(configfile, config)
-        logger.debug('config: %s', self.config)
-        logger.debug('Initialized %s', self.__class__.__name__)
-    
-    
-def _is_iterable(obj):
-    ''' Check if object is iterable '''
-    try:
-        _ = iter(obj)
-    except Exception:  # pylint: disable=broad-except
-        return False
-    return True
-    
-            dest_format = self.get_dest_format()
-        if len(self.args.alignments_file) == 1:
-            retval = AlignmentData(self.args.alignments_file[0], dest_format)
+            This function eventually generates a ``Cookie`` header from the
+        given cookies using cookielib. Due to cookielib's design, the header
+        will not be regenerated if it already exists, meaning this function
+        can only be called once for the life of the
+        :class:`PreparedRequest <PreparedRequest>` object. Any subsequent calls
+        to ``prepare_cookies`` will have no actual effect, unless the 'Cookie'
+        header is removed beforehand.
+        '''
+        if isinstance(cookies, cookielib.CookieJar):
+            self._cookies = cookies
         else:
-            retval = [AlignmentData(a_file, dest_format) for a_file in self.args.alignments_file]
-        logger.debug('Alignments: %s', retval)
-        return retval
+            self._cookies = cookiejar_from_dict(cookies)
     
-        def draw_extract_box(self, color_id=2, thickness=1):
-        ''' Draw the extracted face box '''
-        if not self.roi:
-            return
-        color = self.colors[color_id]
-        for idx, roi in enumerate(self.roi):
-            logger.trace('Drawing Extract Box: (idx: %s, roi: %s)', idx, roi)
-            top_left = [point for point in roi.squeeze()[0]]
-            top_left = (top_left[0], top_left[1] - 10)
-            cv2.putText(self.image,  # pylint: disable=no-member
-                        str(idx),
-                        top_left,
-                        cv2.FONT_HERSHEY_DUPLEX,  # pylint: disable=no-member
-                        1.0,
-                        color,
-                        thickness)
-            cv2.polylines(self.image, [roi], True, color, thickness)  # pylint: disable=no-member
+    with open('README.md', 'r', 'utf-8') as f:
+    readme = f.read()
+with open('HISTORY.md', 'r', 'utf-8') as f:
+    history = f.read()
     
+        def test_basic_response(self):
+        '''the basic response server returns an empty http response'''
+        with Server.basic_response_server() as (host, port):
+            r = requests.get('http://{}:{}'.format(host, port))
+            assert r.status_code == 200
+            assert r.text == u''
+            assert r.headers['Content-Length'] == '0'
     
-def main():
-    test = TestSetOfStacks()
-    test.test_set_of_stacks()
+       >>> payload = dict(key1='value1', key2='value2')
+   >>> r = requests.post('https://httpbin.org/post', data=payload)
+   >>> print(r.text)
+   {
+     ...
+     'form': {
+       'key1': 'value1',
+       'key2': 'value2'
+     },
+     ...
+   }
     
-            print('Success: test_sort_stack')
-    
-      # Implements linear decay of the learning rate.
-  learning_rate = tf.train.polynomial_decay(
-      learning_rate,
-      global_step,
-      num_train_steps,
-      end_learning_rate=0.0,
-      power=1.0,
-      cycle=False)
-    
-            scaffold_fn = tpu_scaffold
-      else:
-        tf.train.init_from_checkpoint(init_checkpoint, assignment_map)
-    
-      if FLAGS.do_predict:
-    predict_examples = processor.get_test_examples(FLAGS.data_dir)
-    if FLAGS.use_tpu:
-      # Discard batch remainder if running on TPU
-      n = len(predict_examples)
-      predict_examples = predict_examples[:(n - n % FLAGS.predict_batch_size)]
+            with warnings.catch_warnings():
+            warnings.simplefilter('ignore', ScrapyDeprecationWarning)
+            lx = BaseSgmlLinkExtractor(tag=tag_func, attr=attr_func,
+                                       unique=unique, process_value=process_value, strip=strip,
+                                       canonicalized=canonicalize)
     
     
-def convert_by_vocab(vocab, items):
-  '''Converts a sequence of [tokens|ids] using the vocab.'''
-  output = []
-  for item in items:
-    output.append(vocab[item])
-  return output
+def issue_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
+    ref = 'https://github.com/scrapy/scrapy/issues/' + text
+    set_classes(options)
+    node = nodes.reference(rawtext, 'issue ' + text, refuri=ref, **options)
+    return [node], []
     
-        def _get_page(self, topic, request_options=None):
     
-    def log(text):
+class Root(Resource):
+    
+    # Scrapy version
+import pkgutil
+__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
+version_info = tuple(int(v) if v.isdigit() else v
+                     for v in __version__.split('.'))
+del pkgutil
+    
+        def run_loop(self):
+        while self.blackboard.common_state['progress'] < 100:
+            for expert in self.blackboard.experts:
+                if expert.is_eager_to_contribute:
+                    expert.contribute()
+        return self.blackboard.common_state['contributions']
+    
     '''
-    Log error `text` (if it does not start with 'Too many queries')
+https://www.djangospin.com/design-patterns-python/mediator/
+    
+        def not_specification(self):
+        raise NotImplementedError()
+    
+    
+class Borg(object):
+    __shared_state = {}
+    
+        def product_information(self, product):
+        return self.data['products'].get(product, None)
+    
     '''
-    if not text.startswith('Too many queries'):
-        print(text)
-        logging.info(text)
-
+*What is this pattern about?
+The composite pattern describes a group of objects that is treated the
+same way as a single instance of the same type of object. The intent of
+a composite is to 'compose' objects into tree structures to represent
+part-whole hierarchies. Implementing the composite pattern lets clients
+treat individual objects and compositions uniformly.
     
-            answer = self._get_page_dict(topic, topic_type, request_options=request_options)
-        if isinstance(answer, dict):
-            if 'cache' in answer:
-                cache_needed = answer['cache']
-    
-        search.limit
-'''
-    
-    import config
-config.CONFIG['cache.type'] = 'none'
+        >>> arr = [1, 2, 3, 4, 999]
+    >>> import scipy.stats
+    >>> fmt = '{0:.6f}'  # limit the printed precision to 6 digits
+    >>> print(fmt.format(scipy.stats.kurtosis(arr[:-1], bias=False)))
+    -1.200000
+    >>> print(fmt.format(scipy.stats.kurtosis(arr, bias=False)))
+    4.999874
+    >>> s = pd.Series(arr)
+    >>> s.expanding(4).kurt()
+    0         NaN
+    1         NaN
+    2         NaN
+    3   -1.200000
+    4    4.999874
+    dtype: float64
+    '''
+    )
