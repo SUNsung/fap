@@ -1,101 +1,125 @@
 
         
-            def error?
-      code == 0 || code != 404 && code != 403 && code >= 400 && code <= 599
-    end
+          private
     
-            css('pre[name]').each do |node|
-          node.before(%(<div class='pre-title'>#{node['name']}</div>))
+    require 'omniauth'
+require 'openssl'
+require 'jwt'
+    
+      describe '#can_remove?' do
+    context 'when user can destroy_group_member' do
+      before do
+        allow(presenter).to receive(:can?).with(user, :destroy_group_member, presenter).and_return(true)
+      end
+    
+      describe '#can_update?' do
+    context 'when user can update_project_member' do
+      before do
+        allow(presenter).to receive(:can?).with(user, :update_project_member, presenter).and_return(true)
+      end
+    
+            def write_cache
+          # No-op
         end
     
-      def serialize_options(resource)
-    methods = resource_class.authentication_keys.dup
-    methods = methods.keys if methods.is_a?(Hash)
-    methods << :password if resource.respond_to?(:password)
-    { methods: methods, only: [:password] }
-  end
-    
-          protected
-    
-          def mailer_from(mapping)
-        mailer_sender(mapping, :from)
-      end
-    
-    module Devise
-  module Models
-    # Timeoutable takes care of verifying whether a user session has already
-    # expired or not. When a session expires after the configured time, the user
-    # will be asked for credentials again, it means, they will be redirected
-    # to the sign in page.
-    #
-    # == Options
-    #
-    # Timeoutable adds the following options to devise_for:
-    #
-    #   * +timeout_in+: the interval to timeout the user session without activity.
-    #
-    # == Examples
-    #
-    #   user.timedout?(30.minutes.ago)
-    #
-    module Timeoutable
-      extend ActiveSupport::Concern
-    
-          converted_row = row.collect do |field|
-        quote(field)
-      end
-      line = converted_row.join(@column_separator) + @row_separator
-      if @output_encoding
-        line = line.encode(@output_encoding)
-      end
-      @output << line
-    
-      def test_marshal_dump_ivar
-    s = 'data with ivar'
-    s.instance_variable_set(:@t, 42)
-    t = Bug8276.new(s)
-    s = Marshal.dump(t)
-    assert_raise(FrozenError) {Marshal.load(s)}
-  end
-    
-      before :each do
-    @data = '{'a':1234}'
-    @zip = [31, 139, 8, 0, 0, 0, 0, 0, 0, 3, 171, 86, 74, 84, 178, 50,
-            52, 50, 54, 169, 5, 0, 196, 20, 118, 213, 10, 0, 0, 0].pack('C*')
-    @io = StringIO.new @zip
-  end
-    
-    end
-
-    
-        gz.read 5
-    gz.pos.should == 5
-    
-      def dashboard
-    gon.push(pod_version: pod_version)
-  end
-    
-          def render_error(error_description, detailed_error=nil)
-        @error_description = error_description
-        @detailed_error = detailed_error
-        if request.format == :mobile
-          render 'api/openid_connect/error/error.mobile', layout: 'application.mobile'
-        else
-          render 'api/openid_connect/error/error', layout: 'with_header_with_footer'
-        end
+          File.open('bower.json', 'w') do |f|
+        f.puts JSON.pretty_generate(spec)
       end
     end
   end
 end
 
     
-        raise ActiveRecord::RecordNotFound unless membership.present?
-    
-        respond_to do |format|
-      format.html
-      format.xml { render :xml => @notifications.to_xml }
-      format.json {
-        render json: render_as_json(@unread_notification_count, @grouped_unread_notification_counts, @notifications)
-      }
+        def byte_to_str_pos(pos)
+      @s.string.byteslice(0, pos).length
     end
+    
+      def test_font_helper_with_suffix_sharp
+    assert_match %r(url\(['']?/assets/.*svg#.+['']?\)), @css
   end
+    
+    @@ layout
+<html>
+  <head>
+    <title>Super Simple Chat with Sinatra</title>
+    <meta charset='utf-8' />
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js'></script>
+  </head>
+  <body><%= yield %></body>
+</html>
+    
+            # See if it's actually a masked token or not. We should be able
+        # to handle any unmasked tokens that we've issued without error.
+    
+    if $0 == __FILE__
+  begin
+    LogStash::PluginManager::Main.run('bin/logstash-plugin', ARGV)
+  rescue LogStash::PluginManager::Error => e
+    $stderr.puts(e.message)
+    exit(1)
+  end
+end
+
+    
+        platforms.types.each do |type|
+      desc 'Run acceptance test in #{type} machines'
+      task type do
+        ENV['LS_TEST_PLATFORM']=type
+        exit(RSpec::Core::Runner.run([Rake::FileList['acceptance/spec/lib/*_spec.rb']]))
+      end
+    end
+    
+        # the File::Spec module comes from the PathTools CPAN distribution
+    insist { subject.name } == 'perl-PathTools'
+  end
+    
+    # Determine default value of a given easy_install's option
+def easy_install_default(python_bin, option)
+  result = nil
+  execmd({:PYTHONPATH=>'#{example_dir}'}, python_bin, :stderr=>false) do |stdin,stdout|
+    stdin.write('from easy_install_default import default_options\n' \
+                'print default_options.#{option}\n')
+    stdin.close
+    result = stdout.read.chomp
+  end
+  return result
+end
+    
+      describe '#maintainer' do
+    require 'socket'
+    default_maintainer = '<#{ENV['USER']}@#{Socket.gethostname}>'
+    it_behaves_like :Default, description.gsub(/^#/, '').to_sym, default_maintainer
+    it_behaves_like :Mutator, description.gsub(/^#/, '').to_sym
+  end
+    
+      def to_s_fullversion()
+    # iteration (PORTREVISION on FreeBSD) shall be appended only(?) if non-zero.
+    # https://www.freebsd.org/doc/en/books/porters-handbook/makefile-naming.html
+    (iteration and (iteration.to_i > 0)) ?  '#{version}_#{iteration}' : '#{version}'
+  end
+    
+      def self.default_prefix
+    npm_prefix = safesystemout('npm', 'prefix', '-g').chomp
+    if npm_prefix.count('\n') > 0
+      raise FPM::InvalidPackageConfiguration, '`npm prefix -g` returned unexpected output.'
+    elsif !File.directory?(npm_prefix)
+      raise FPM::InvalidPackageConfiguration, '`npm prefix -g` returned a non-existent directory'
+    end
+    logger.info('Setting default npm install prefix', :prefix => npm_prefix)
+    npm_prefix
+  end
+    
+      def data_tar_flags
+    data_tar_flags = []
+    if attributes[:pacman_use_file_permissions?].nil?
+      if !attributes[:pacman_user].nil?
+        if attributes[:pacman_user] == 'root'
+          data_tar_flags += [ '--numeric-owner', '--owner', '0' ]
+        else
+          data_tar_flags += [ '--owner', attributes[:deb_user] ]
+        end
+      end
+    
+            prototype.puts([type, klass, path, mode, attributes[:solaris_user], attributes[:solaris_group]].join(' '))
+      end # popen 'pkgproto ...'
+    end # File prototype
