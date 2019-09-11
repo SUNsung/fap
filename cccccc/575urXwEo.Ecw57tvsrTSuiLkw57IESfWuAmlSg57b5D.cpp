@@ -1,222 +1,208 @@
 
         
-        #endif // BITCOIN_QT_NETWORKSTYLE_H
-
+            // Try to check if the exact dynamic type of the instance is statically
+    // known.
+    if (auto Instance = getInstanceWithExactDynamicType(CMI->getOperand(), CHA))
+      return tryDevirtualizeClassMethod(FAS, Instance, CD, ORE);
     
-    namespace Ui {
-    class SignVerifyMessageDialog;
-}
-    
-    #ifndef BITCOIN_REVERSELOCK_H
-#define BITCOIN_REVERSELOCK_H
-    
-    int secp256k1_ecdsa_recoverable_signature_convert(const secp256k1_context* ctx, secp256k1_ecdsa_signature* sig, const secp256k1_ecdsa_recoverable_signature* sigin) {
-    secp256k1_scalar r, s;
-    int recid;
-    }
-    
-    void run_recovery_tests(void) {
-    int i;
-    for (i = 0; i < count; i++) {
-        test_ecdsa_recovery_api();
-    }
-    for (i = 0; i < 64*count; i++) {
-        test_ecdsa_recovery_end_to_end();
-    }
-    test_ecdsa_recovery_edge_cases();
-}
-    
-    #endif // BITCOIN_CRYPTO_RIPEMD160_H
-
-    
-    
-    {}  // namespace
-    
-      // Return the ith key
-  Slice Key(int i, std::string* storage) const {
-    char buf[100];
-    snprintf(buf, sizeof(buf), '%016d', i);
-    storage->assign(buf, strlen(buf));
-    return Slice(*storage);
+      switch (type->getKind()) {
+  case MetadataKind::Class: {
+    auto classType = static_cast<const ClassMetadata *>(type);
+#if SWIFT_OBJC_INTEROP
+    // Peek through artificial subclasses.
+    while (classType->isTypeMetadata() && classType->isArtificialSubclass())
+      classType = classType->Superclass;
+#endif
+    description = classType->getDescription();
+    break;
+  }
+  case MetadataKind::Enum:
+  case MetadataKind::Optional: {
+    auto enumType = static_cast<const EnumMetadata *>(type);
+    description = enumType->Description;
+    break;
+  }
+  case MetadataKind::Struct: {
+    auto structType = static_cast<const StructMetadata *>(type);
+    description = structType->Description;
+    break;
+  }
+  case MetadataKind::ForeignClass: {
+    auto foreignType = static_cast<const ForeignClassMetadata *>(type);
+    description = foreignType->Description;
+    break;
+  }
+  default:
+    return nullptr;
   }
     
-    // Return the name of the sstable with the specified number
-// in the db named by 'dbname'.  The result will be prefixed with
-// 'dbname'.
-extern std::string TableFileName(const std::string& dbname, uint64_t number);
-    
-    TEST_F(ModulesTest, FunctionalWithTorchFunction) {
-  auto functional = Functional(torch::relu);
-  ASSERT_EQ(functional(torch::ones({})).item<float>(), 1);
-  ASSERT_EQ(functional(torch::ones({})).item<float>(), 1);
-  ASSERT_EQ(functional(torch::ones({}) * -1).item<float>(), 0);
-}
-    
-    template <>
-template <typename T>
-bool EnforceFiniteOp<CPUContext>::DoRunWithType() {
-  EnforceOnCPU<T>(Input(0));
-  return true;
-}
-    
-    
-    {    return SingleGradientDef(
-        'MergeMultiListFeatureTensorsGradient',
-        '',
-        input_blob_names,
-        output_blob_names);
-  }
-    
-    Github Link:
-- https://github.com/pytorch/pytorch/blob/master/caffe2/operators/floor_op.cc
-    
-    
-    {} // namespace caffe2
-    
-    // Main entry point for Paragraph Detection Algorithm.
-//
-// Given a set of equally spaced textlines (described by row_infos),
-// Split them into paragraphs.  See http://goto/paragraphstalk
-//
-// Output:
-//   row_owners - one pointer for each row, to the paragraph it belongs to.
-//   paragraphs - this is the actual list of PARA objects.
-//   models - the list of paragraph models referenced by the PARA objects.
-//            caller is responsible for deleting the models.
-void DetectParagraphs(int debug_level,
-                      GenericVector<RowInfo> *row_infos,
-                      GenericVector<PARA *> *row_owners,
-                      PARA_LIST *paragraphs,
-                      GenericVector<ParagraphModel *> *models);
-    
-      double m() const;  // get gradient
-  double c(double m) const;            // get constant
-  double rms(double m, double c) const;            // get error
-  double pearson() const;  // get correlation coefficient.
-    
-    bool ParagraphModel::ValidBodyLine(int lmargin, int lindent,
-                                   int rindent, int rmargin) const {
-  switch (justification_) {
-    case JUSTIFICATION_LEFT:
-      return NearlyEqual(lmargin + lindent, margin_ + body_indent_,
-                         tolerance_);
-    case JUSTIFICATION_RIGHT:
-      return NearlyEqual(rmargin + rindent, margin_ + body_indent_,
-                         tolerance_);
-    case JUSTIFICATION_CENTER:
-      return NearlyEqual(lindent, rindent, tolerance_ * 2);
-    default:
-      // shouldn't happen
-      return false;
-  }
-}
-    
-      bool is_list_item;
-    
-    
-    {}  // namespace tesseract
-
-    
-    
-    {  // Size of the indexed feature space.
-  int size_;
-  // Total weight of features currently stored in the maps.
-  double total_feature_weight_;
-  // Pointer to IntFeatureMap given at Init to find offset features.
-  const IntFeatureMap* feature_map_;
-  // Array of bools indicating presence of a feature.
-  bool* features_;
-  // Array indicating the presence of a feature offset by one unit.
-  bool* features_delta_one_;
-  // Array indicating the presence of a feature offset by two units.
-  bool* features_delta_two_;
-};
-    
-    #include 'db/dbformat.h'
-#include 'db/filename.h'
-#include 'db/table_cache.h'
-#include 'db/version_edit.h'
-#include 'leveldb/db.h'
-#include 'leveldb/env.h'
-#include 'leveldb/iterator.h'
-    
-    #endif  // STORAGE_LEVELDB_DB_BUILDER_H_
-
-    
-    namespace leveldb {
+        // The core of the algorithm: Mark functions as alive which can be reached
+    // from the anchors.
+    while (!Worklist.empty()) {
+      SILFunction *F = Worklist.back();
+      Worklist.pop_back();
+      scanFunction(F);
     }
     
-      // Removes a SnapshotImpl from this list.
-  //
-  // The snapshot must have been created by calling New() on this list.
-  //
-  // The snapshot pointer should not be const, because its memory is
-  // deallocated. However, that would force us to change DB::ReleaseSnapshot(),
-  // which is in the API, and currently takes a const Snapshot.
-  void Delete(const SnapshotImpl* snapshot) {
-#if !defined(NDEBUG)
-    assert(snapshot->list_ == this);
-#endif  // !defined(NDEBUG)
-    snapshot->prev_->next_ = snapshot->next_;
-    snapshot->next_->prev_ = snapshot->prev_;
-    delete snapshot;
-  }
-    
-    static void TestEncodeDecode(const VersionEdit& edit) {
-  std::string encoded, encoded2;
-  edit.EncodeTo(&encoded);
-  VersionEdit parsed;
-  Status s = parsed.DecodeFrom(encoded);
-  ASSERT_TRUE(s.ok()) << s.ToString();
-  parsed.EncodeTo(&encoded2);
-  ASSERT_EQ(encoded, encoded2);
+    /// Determine whether the given reflection protocol name matches.
+static bool reflectionNameMatches(Demangler &dem,
+                                  StringRef reflectionName,
+                                  StringRef searchName) {
+  auto normalized = normalizeReflectionName(dem, reflectionName);
+  return searchName.equals(normalized);
 }
     
+      bool isAddressValid(RemoteAddress Addr, uint64_t Size) const {
+    return (uintptr_t)Memory.data() <= Addr.getAddressData() &&
+           Addr.getAddressData() + Size <=
+               (uintptr_t)Memory.data() + Memory.size();
+  }
     
-    {  static void Append(WriteBatch* dst, const WriteBatch* src);
-};
+    #ifndef SWIFT_FRONTEND_SUPPLEMENTARYOUTPUTPATHS_H
+#define SWIFT_FRONTEND_SUPPLEMENTARYOUTPUTPATHS_H
     
-      // Insert a mapping from key->value into the cache and assign it
-  // the specified charge against the total cache capacity.
+    struct VorbisDecoder;
+struct OpusDecoder;
+    
+      if (i != j || i > jj || i <= ii)
+    return false;
+    
+    #if defined(MBEDTLS_ECP_RANDOMIZE_JAC_ALT) && !defined(MBEDTLS_ECP_INTERNAL_ALT)
+#error 'MBEDTLS_ECP_RANDOMIZE_JAC_ALT defined, but not all prerequisites'
+#endif
+    
+        object_buffer_t<fifo_enforcer_sink_t::exit_write_t>::destruction_sentinel_t destroyer(&token->main_write_token);
+    wait_interruptible(token->main_write_token.get(), interruptor);
+    
+    #ifndef GTEST_INCLUDE_GTEST_GTEST_TEST_PART_H_
+#define GTEST_INCLUDE_GTEST_GTEST_TEST_PART_H_
+    
+    // Returns a newly created InternalRunDeathTestFlag object with fields
+// initialized from the GTEST_FLAG(internal_run_death_test) flag if
+// the flag is specified; otherwise returns NULL.
+InternalRunDeathTestFlag* ParseInternalRunDeathTestFlag();
+    
+     private:
+  template <typename U>
+  friend class linked_ptr;
+    
+      // Clones a 0-terminated C string, allocating memory using new.  The
+  // caller is responsible for deleting the return value using
+  // delete[].  Returns the cloned string, or NULL if the input is
+  // NULL.
   //
-  // Returns a handle that corresponds to the mapping.  The caller
-  // must call this->Release(handle) when the returned mapping is no
-  // longer needed.
-  //
-  // When the inserted entry is no longer needed, the key and
-  // value will be passed to 'deleter'.
-  virtual Handle* Insert(const Slice& key, void* value, size_t charge,
-                         void (*deleter)(const Slice& key, void* value)) = 0;
+  // This is different from strdup() in string.h, which allocates
+  // memory using malloc().
+  static const char* CloneCString(const char* c_str);
     
-    class Slice;
+    // AssertyTypeEq<T1, T2>::type is defined iff T1 and T2 are the same
+// type.  This can be used as a compile-time assertion to ensure that
+// two types are equal.
     
-    class Comparator;
-class Iterator;
+    int main(int argc, char** argv)
+{
+    // Create GLUT window
+    glutInit(&argc, argv);
+#ifdef __FREEGLUT_EXT_H__
+    glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
+#endif
+    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_MULTISAMPLE);
+    glutInitWindowSize(1280, 720);
+    glutCreateWindow('Dear ImGui GLUT+OpenGL2 Example');
+    }
     
-      if (s.ok()) {
-    BlockContents contents;
-    if (block_cache != nullptr) {
-      char cache_key_buffer[16];
-      EncodeFixed64(cache_key_buffer, table->rep_->cache_id);
-      EncodeFixed64(cache_key_buffer + 8, handle.offset());
-      Slice key(cache_key_buffer, sizeof(cache_key_buffer));
-      cache_handle = block_cache->Lookup(key);
-      if (cache_handle != nullptr) {
-        block = reinterpret_cast<Block*>(block_cache->Value(cache_handle));
-      } else {
-        s = ReadBlock(table->rep_->file, options, handle, &contents);
-        if (s.ok()) {
-          block = new Block(contents);
-          if (contents.cachable && options.fill_cache) {
-            cache_handle = block_cache->Insert(key, block, block->size(),
-                                               &DeleteCachedBlock);
-          }
+        // Main loop
+    bool done = false;
+    while (!done)
+    {
+        // Poll and handle events (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
+        {
+            ImGui_ImplSDL2_ProcessEvent(&event);
+            if (event.type == SDL_QUIT)
+                done = true;
+            if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window))
+                done = true;
         }
-      }
-    } else {
-      s = ReadBlock(table->rep_->file, options, handle, &contents);
-      if (s.ok()) {
-        block = new Block(contents);
-      }
     }
-  }
+    
+        // Main loop
+    bool running = true;
+    while (running)
+    {
+        // Poll and handle events (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        ALLEGRO_EVENT ev;
+        while (al_get_next_event(queue, &ev))
+        {
+            ImGui_ImplAllegro5_ProcessEvent(&ev);
+            if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+                running = false;
+            if (ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE)
+            {
+                ImGui_ImplAllegro5_InvalidateDeviceObjects();
+                al_acknowledge_resize(display);
+                ImGui_ImplAllegro5_CreateDeviceObjects();
+            }
+        }
+    }
+    
+    
+    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+            ImGui::End();
+        }
+    
+            static float f = 0.0f;
+        ImGui::Text('Hello, world!');
+        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
+        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
+        ImGui::ShowDemoWindow(NULL);
+    
+    // Specific OpenGL versions
+//#define IMGUI_IMPL_OPENGL_ES2     // Auto-detected on Emscripten
+//#define IMGUI_IMPL_OPENGL_ES3     // Auto-detected on iOS/Android
+    
+                newConfig.Insert(name, config(name));
+            newConfig.Insert('run', name);
+        }
+        else
+        {
+            std::string networkConfigString = networkConfig;
+            if (networkConfigString.find_first_of('+') != std::string::npos)
+                RuntimeError('\'+\' not allowed in \'networkDescription\' value.  Multiple files cannot be specified via \'networkDescription\' parameter. '
+                             'In order to load multiple NDL files (eg, for loading several files of macros), use the \'ndlMacros\' parameter.');
+    
+            // now get the parameters to the macro added
+        ConfigValue paramString = node->GetParamString();
+        ParseParameters(newNode, paramString, true /*createNew*/);
+        newNode->SetParamString(paramString);
+    
+            size_t numRecurrentLayers = m_recurrentLayers.size();
+    
+                Matrix<ElemType> S(-1), U(-1), VT(-1), W(-1);
+            chrono::time_point<chrono::system_clock> stTime = chrono::system_clock::now();
+            Matrix<ElemType>::SVD(A, S, U, VT, W);
+            chrono::time_point<chrono::system_clock> enTime = chrono::system_clock::now();
+    
+        // Check if this transform is compatible with given one.
+    void CheckCompatibility(const SpaceTransform& other) const
+    {
+        // Transforms are compatible if they have same number of axis transforms.
+        if (m_axisTransforms.size() != other.m_axisTransforms.size())
+        {
+            RuntimeError('Incompatible space transforms.');
+        }
+    }
+    
+        // a few more handy operations that occurred multiple times
+    bool IsNan() const { return std::isnan(first); }
+    EpochCriterion operator-(const EpochCriterion& other) const { return EpochCriterion(first - other.first, second - other.second); }
+    void operator+=(const EpochCriterion& other) { first += other.first; second += other.second; }
