@@ -1,77 +1,191 @@
 
         
-            def initialize(*args)
-      @s = StringScanner.new(*args)
+                # @event randomly becomes 'OnCompleted' here. Try to wait until it matches.
+        # https://ci.appveyor.com/project/ruby/ruby/builds/19963142/job/8gaxepksa0i3b998
+        assert_match_with_retries(/OnObjectReady/, :@event)
+      end
+    
+        assert_equal (0),                                          CMath.atan2(0,1)
+    assert_in_delta (1.3389725222944935+0.4023594781085251i),  CMath.atan2(1+2i,1)
+    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.atan2('0', 1) }
+  end
+    
+      before :each do
+    @data = '12345abcde'
+    @zip = [31, 139, 8, 0, 44, 220, 209, 71, 0, 3, 51, 52, 50, 54, 49, 77,
+            76, 74, 78, 73, 5, 0, 157, 5, 0, 36, 10, 0, 0, 0].pack('C*')
+    @io = StringIO.new @zip
+  end
+    
+    describe 'GzipReader#rewind' do
+    
+      before do
+    @zeros    = Zlib::Deflate.deflate('0' * 100_000)
+    @inflator = Zlib::Inflate.new
+    @chunks   = []
+    
+        # Ensure that the master spec repo exists
+    #
+    # @return [void]
+    #
+    def ensure_master_spec_repo_exists!
+      unless config.sources_manager.master_repo_functional?
+        Setup.new(CLAide::ARGV.new([])).run
+      end
     end
     
-        def puts(*args)
-      STDERR.puts *args unless @silence
+        it 'returns the right output' do
+      cmd = ['-e', <<-RB]
+        puts 'foo'
+        puts 'bar'
+      RB
+      Executable.execute_command('ruby', cmd, true).should == 'foo\nbar\n'
     end
     
-    Given(/^I make (\d+) deployments$/) do |count|
-  step 'all linked files exists in shared path'
+          # Creates a default app host 'main.m' file.
+      #
+      # @param  [Project] project
+      #         the Xcodeproj to generate the target into.
+      #
+      # @param  [Symbol] platform
+      #         the platform of the target. Can be `:ios` or `:osx`.
+      #
+      # @param  [String] name
+      #         The name of the folder to use and save the generated main file.
+      #
+      # @return [Pathname] the new source file that was generated.
+      #
+      def self.create_app_host_main_file(project, platform, name = 'App')
+        source_file = project.path.dirname.+('#{name}/main.m')
+        source_file.parent.mkpath
+        source_file.open('w') do |f|
+          case platform
+          when :ios, :tvos
+            f << IOS_APP_HOST_MAIN_CONTENTS
+          when :osx
+            f << MACOS_APP_HOST_MAIN_CONTENTS
+          end
+        end
+        source_file
+      end
     
-      def vagrant_cli_command(command)
-    puts '[vagrant] #{command}'
-    stdout, stderr, status = Dir.chdir(VAGRANT_ROOT) do
-      Open3.capture3('#{VAGRANT_BIN} #{command}')
-    end
-    
-        def filter(list)
-      setup_filters if @filters.nil?
-      @filters.reduce(list) { |l, f| f.filter l }
-    end
-    
-          def add_host(host, properties={})
-        new_host = Server[host]
-        new_host.port = properties[:port] if properties.key?(:port)
-        # This matching logic must stay in sync with `Server#matches?`.
-        key = ServerKey.new(new_host.hostname, new_host.port)
-        existing = servers_by_key[key]
-        if existing
-          existing.user = new_host.user if new_host.user
-          existing.with(properties)
-        else
-          servers_by_key[key] = new_host.with(properties)
+          def unlocked_pods
+        @unlocked_pods ||= begin
+          pods = []
+          UI.titled_section('Analyzing dependencies') do
+            pods = Installer::Analyzer.new(config.sandbox, config.podfile).
+              analyze(:outdated).
+              specs_by_target.values.flatten.uniq
+          end
+          pods
         end
       end
     
-          def initialize(variables)
-        super(variables)
-        @validators = {}
+      autoload :AggregateTarget,           'cocoapods/target/aggregate_target'
+  autoload :Command,                   'cocoapods/command'
+  autoload :Deintegrator,              'cocoapods_deintegrate'
+  autoload :Executable,                'cocoapods/executable'
+  autoload :ExternalSources,           'cocoapods/external_sources'
+  autoload :Installer,                 'cocoapods/installer'
+  autoload :HooksManager,              'cocoapods/hooks_manager'
+  autoload :PodTarget,                 'cocoapods/target/pod_target'
+  autoload :Project,                   'cocoapods/project'
+  autoload :Resolver,                  'cocoapods/resolver'
+  autoload :Sandbox,                   'cocoapods/sandbox'
+  autoload :Target,                    'cocoapods/target'
+  autoload :Validator,                 'cocoapods/validator'
+    
+            # @return [Project] Generated and prepared project.
+        #
+        def generate!
+          project = create_project(path, object_version, pod_target_subproject)
+          prepare(sandbox, project, pod_targets, build_configurations, platforms, podfile_path)
+          project
+        end
+    
+          # @param  [Pathname] framework
+      #         The vendored framework to search into.
+      # @return [Pathname] The path of the header directory of the
+      #         vendored framework.
+      #
+      def self.vendored_frameworks_headers_dir(framework)
+        dir = framework + 'Headers'
+        dir.directory? ? dir.realpath : dir
       end
     
-    # This is basically a copy of the original bundler 'bundle' shim
-# with the addition of the loading of our Bundler patches that
-# modify Bundler's caching behaviour.
+            self.indentation_level += relative_indentation
+        self.title_level += 1
+        yield if block_given?
+      ensure
+        self.indentation_level -= relative_indentation
+        self.title_level -= 1
+      end
     
-    require 'clamp'
-require 'pluginmanager/util'
-require 'pluginmanager/gemfile'
-require 'pluginmanager/install'
-require 'pluginmanager/remove'
-require 'pluginmanager/list'
-require 'pluginmanager/update'
-require 'pluginmanager/pack'
-require 'pluginmanager/unpack'
-require 'pluginmanager/generate'
-require 'pluginmanager/prepare_offline_pack'
-require 'pluginmanager/proxy_support'
-configure_proxy
+          # Called when there have been networking issues in creating the report.
+      #
+      # @param [Error] error
+      #        The error returned during networking
+      #
+      # @param [String] query
+      #        The original search query
+      #
+      # @param [GhInspector::Inspector] inspector
+      #        The current inspector
+      #
+      # @return [void]
+      #
+      def inspector_could_not_create_report(error, query, inspector)
+        safe_query = URI.escape query
+        UI.puts 'Could not access the GitHub API, you may have better luck via the website.'
+        UI.puts 'https://github.com/#{inspector.repo_owner}/#{inspector.repo_name}/search?q=#{safe_query}&type=Issues&utf8=✓'
+        UI.puts 'Error: #{error.name}'
+      end
     
-        def self.find_by_name_with_wildcards(pattern)
-      re = transform_pattern_into_re(pattern)
-      ::Gem::Specification.find_all.select do |specification|
-        specification.name =~ re
+          def third_party_scm_name?
+        !built_in_scm_name?
+      end
+    
+        it { expect(alias_node.old_identifier.sym_type?).to be(true) }
+    it { expect(alias_node.old_identifier.children.first).to eq(:bar) }
+  end
+end
+
+    
+            def correct_for_blockarg_type(node)
+          lambda do |corrector|
+            range = range_with_surrounding_space(range: node.source_range,
+                                                 side: :left)
+            range = range_with_surrounding_comma(range, :left)
+            corrector.remove(range)
+          end
+        end
+      end
+    end
+  end
+end
+
+    
+              something_else
+        RUBY
       end
     end
     
-          # Install the gems to make them available locally when bundler does his local resolution
-      post_install_messages = []
-      pack.gems.each do |packed_gem|
-        PluginManager.ui.debug('Installing, #{packed_gem.name}, version: #{packed_gem.version} file: #{packed_gem.file}')
-        post_install_messages << LogStash::PluginManager::GemInstaller::install(packed_gem.file, packed_gem.plugin?)
-      end
+      context 'when an access modifier is followed by a ' \
+    'class method defined on constant' do
+    it 'registers an offense' do
+      expect_offense(<<~RUBY)
+        class SomeClass
+          protected
+          ^^^^^^^^^ Useless `protected` access modifier.
+          def SomeClass.some_method
+          end
+        end
+      RUBY
+    end
+  end
     
-    ROOT = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', '..'))
-$LOAD_PATH.unshift File.join(ROOT, 'logstash-core/lib')
+          def on_send(node)
+        rhs = extract_rhs(node)
+    
+        context 'with a ternary operator' do
+      let(:source) { 'foo? ? :foo : 42' }
