@@ -1,82 +1,264 @@
 
         
-        SECP256K1_INLINE static void secp256k1_fe_sqr_inner(uint64_t *r, const uint64_t *a) {
-/**
- * Registers: rdx:rax = multiplication accumulator
- *            r9:r8   = c
- *            rcx:rbx = d
- *            r10-r14 = a0-a4
- *            r15     = M (0xfffffffffffff)
- *            rdi     = r
- *            rsi     = a / t?
- */
-  uint64_t tmp1, tmp2, tmp3;
-__asm__ __volatile__(
-    'movq 0(%%rsi),%%r10\n'
-    'movq 8(%%rsi),%%r11\n'
-    'movq 16(%%rsi),%%r12\n'
-    'movq 24(%%rsi),%%r13\n'
-    'movq 32(%%rsi),%%r14\n'
-    'movq $0xfffffffffffff,%%r15\n'
+        class OpenURIDialog : public QDialog
+{
+    Q_OBJECT
     }
     
-    int secp256k1_ecdsa_sign_recoverable(const secp256k1_context* ctx, secp256k1_ecdsa_recoverable_signature *signature, const unsigned char *msg32, const unsigned char *seckey, secp256k1_nonce_function noncefp, const void* noncedata) {
-    secp256k1_scalar r, s;
-    secp256k1_scalar sec, non, msg;
-    int recid;
-    int ret = 0;
-    int overflow = 0;
-    VERIFY_CHECK(ctx != NULL);
-    ARG_CHECK(secp256k1_ecmult_gen_context_is_built(&ctx->ecmult_gen_ctx));
-    ARG_CHECK(msg32 != NULL);
-    ARG_CHECK(signature != NULL);
-    ARG_CHECK(seckey != NULL);
-    if (noncefp == NULL) {
-        noncefp = secp256k1_nonce_function_default;
-    }
+    #include <QDialog>
+    
+        ~reverse_lock() {
+        templock.lock();
+        templock.swap(lock);
     }
     
-        /* Check bad contexts and NULLs for signing */
-    ecount = 0;
-    CHECK(secp256k1_ecdsa_sign_recoverable(none, &recsig, message, privkey, NULL, NULL) == 0);
-    CHECK(ecount == 1);
-    CHECK(secp256k1_ecdsa_sign_recoverable(sign, &recsig, message, privkey, NULL, NULL) == 1);
-    CHECK(ecount == 1);
-    CHECK(secp256k1_ecdsa_sign_recoverable(vrfy, &recsig, message, privkey, NULL, NULL) == 0);
-    CHECK(ecount == 2);
-    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, privkey, NULL, NULL) == 1);
-    CHECK(ecount == 2);
-    CHECK(secp256k1_ecdsa_sign_recoverable(both, NULL, message, privkey, NULL, NULL) == 0);
-    CHECK(ecount == 3);
-    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, NULL, privkey, NULL, NULL) == 0);
-    CHECK(ecount == 4);
-    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, NULL, NULL, NULL) == 0);
-    CHECK(ecount == 5);
-    /* This will fail or succeed randomly, and in either case will not ARG_CHECK failure */
-    secp256k1_ecdsa_sign_recoverable(both, &recsig, message, privkey, recovery_test_nonce_function, NULL);
-    CHECK(ecount == 5);
-    /* These will all fail, but not in ARG_CHECK way */
-    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, zero_privkey, NULL, NULL) == 0);
-    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, over_privkey, NULL, NULL) == 0);
-    /* This one will succeed. */
-    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, privkey, NULL, NULL) == 1);
-    CHECK(ecount == 5);
     
-    BOOST_AUTO_TEST_SUITE_END()
-    
-    void InternalKeyComparator::FindShortSuccessor(std::string* key) const {
-  Slice user_key = ExtractUserKey(*key);
-  std::string tmp(user_key.data(), user_key.size());
-  user_comparator_->FindShortSuccessor(&tmp);
-  if (tmp.size() < user_key.size() &&
-      user_comparator_->Compare(user_key, tmp) < 0) {
-    // User key has become shorter physically, but larger logically.
-    // Tack on the earliest possible number to the shortened user key.
-    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
-    assert(this->Compare(*key, tmp) < 0);
-    key->swap(tmp);
-  }
+    {    /* d = (a0*2) * a3 */
+    'leaq (%%r10,%%r10,1),%%rax\n'
+    'mulq %%r13\n'
+    'movq %%rax,%%rbx\n'
+    'movq %%rdx,%%rcx\n'
+    /* d += (a1*2) * a2 */
+    'leaq (%%r11,%%r11,1),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c = a4 * a4 */
+    'movq %%r14,%%rax\n'
+    'mulq %%r14\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += (c & M) * R */
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* t3 (tmp1) = d & M */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    'movq %%rsi,%q1\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* a4 *= 2 */
+    'addq %%r14,%%r14\n'
+    /* d += a0 * a4 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d+= (a1*2) * a3 */
+    'leaq (%%r11,%%r11,1),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += a2 * a2 */
+    'movq %%r12,%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += c * R */
+    'movq %%r8,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* t4 = d & M (%%rsi) */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* tx = t4 >> 48 (tmp3) */
+    'movq %%rsi,%%rax\n'
+    'shrq $48,%%rax\n'
+    'movq %%rax,%q3\n'
+    /* t4 &= (M >> 4) (tmp2) */
+    'movq $0xffffffffffff,%%rax\n'
+    'andq %%rax,%%rsi\n'
+    'movq %%rsi,%q2\n'
+    /* c = a0 * a0 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r10\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += a1 * a4 */
+    'movq %%r11,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += (a2*2) * a3 */
+    'leaq (%%r12,%%r12,1),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* u0 = d & M (%%rsi) */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* u0 = (u0 << 4) | tx (%%rsi) */
+    'shlq $4,%%rsi\n'
+    'movq %q3,%%rax\n'
+    'orq %%rax,%%rsi\n'
+    /* c += u0 * (R >> 4) */
+    'movq $0x1000003d1,%%rax\n'
+    'mulq %%rsi\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[0] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,0(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* a0 *= 2 */
+    'addq %%r10,%%r10\n'
+    /* c += a0 * a1 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a2 * a4 */
+    'movq %%r12,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += a3 * a3 */
+    'movq %%r13,%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c += (d & M) * R */
+    'movq %%rbx,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* r[1] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,8(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a0 * a2 (last use of %%r10) */
+    'movq %%r10,%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* fetch t3 (%%r10, overwrites a0),t4 (%%rsi) */
+    'movq %q2,%%rsi\n'
+    'movq %q1,%%r10\n'
+    /* c += a1 * a1 */
+    'movq %%r11,%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a3 * a4 */
+    'movq %%r13,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c += (d & M) * R */
+    'movq %%rbx,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 (%%rbx only) */
+    'shrdq $52,%%rcx,%%rbx\n'
+    /* r[2] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,16(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += t3 */
+    'addq %%r10,%%r8\n'
+    /* c += d * R */
+    'movq %%rbx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[3] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,24(%%rdi)\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* c += t4 (%%r8 only) */
+    'addq %%rsi,%%r8\n'
+    /* r[4] = c */
+    'movq %%r8,32(%%rdi)\n'
+: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
+: 'D'(r)
+: '%rax', '%rbx', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
+);
 }
+    
+    double UniValue::get_real() const
+{
+    if (typ != VNUM)
+        throw std::runtime_error('JSON value is not a number as expected');
+    double retval;
+    if (!ParseDouble(getValStr(), &retval))
+        throw std::runtime_error('JSON double out of range');
+    return retval;
+}
+    
+    ROTATE_ARGS
+	movdqa	XTMP2, XTMP3	; XTMP2 = W[-15]
+    mov	y0, e		; y0 = e
+    mov	y1, a		; y1 = a
+	movdqa	XTMP4, XTMP3	; XTMP4 = W[-15]
+    ror	y0, (25-11)	; y0 = e >> (25-11)
+    xor	y0, e		; y0 = e ^ (e >> (25-11))
+    mov	y2, f		; y2 = f
+    ror	y1, (22-13)	; y1 = a >> (22-13)
+	pslld	XTMP3, (32-18)
+    xor	y1, a		; y1 = a ^ (a >> (22-13)
+    ror	y0, (11-6)	; y0 = (e >> (11-6)) ^ (e >> (25-6))
+    xor	y2, g		; y2 = f^g
+	psrld	XTMP2, 18
+    ror	y1, (13-2)	; y1 = (a >> (13-2)) ^ (a >> (22-2))
+    xor	y0, e		; y0 = e ^ (e >> (11-6)) ^ (e >> (25-6))
+    and	y2, e		; y2 = (f^g)&e
+    ror	y0, 6		; y0 = S1 = (e>>6) & (e>>11) ^ (e>>25)
+	pxor	XTMP1, XTMP3
+    xor	y1, a		; y1 = a ^ (a >> (13-2)) ^ (a >> (22-2))
+    xor	y2, g		; y2 = CH = ((f^g)&e)^g
+	psrld	XTMP4, 3	; XTMP4 = W[-15] >> 3
+    add	y2, y0		; y2 = S1 + CH
+    add	y2, [rsp + _XFER + 1*4]	; y2 = k + w + S1 + CH
+    ror	y1, 2		; y1 = S0 = (a>>2) ^ (a>>13) ^ (a>>22)
+	pxor	XTMP1, XTMP2	; XTMP1 = W[-15] ror 7 ^ W[-15] ror 18
+    mov	y0, a		; y0 = a
+    add	h, y2		; h = h + S1 + CH + k + w
+    mov	y2, a		; y2 = a
+	pxor	XTMP1, XTMP4	; XTMP1 = s0
+    or	y0, c		; y0 = a|c
+    add	d, h		; d = d + h + S1 + CH + k + w
+    and	y2, c		; y2 = a&c
+	;; compute low s1
+	pshufd	XTMP2, X3, 11111010b	; XTMP2 = W[-2] {BBAA}
+    and	y0, b		; y0 = (a|c)&b
+    add	h, y1		; h = h + S1 + CH + k + w + S0
+	paddd	XTMP0, XTMP1	; XTMP0 = W[-16] + W[-7] + s0
+    or	y0, y2		; y0 = MAJ = (a|c)&b)|(a&c)
+    add	h, y0		; h = h + S1 + CH + k + w + S0 + MAJ
     
     // Filter policy wrapper that converts from internal keys to user keys
 class InternalFilterPolicy : public FilterPolicy {
@@ -89,207 +271,283 @@ class InternalFilterPolicy : public FilterPolicy {
   virtual bool KeyMayMatch(const Slice& key, const Slice& filter) const;
 };
     
-      // When start user key is prefix of limit user key
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foobar', 200, kTypeValue)));
-    
-    Status SetCurrentFile(Env* env, const std::string& dbname,
-                      uint64_t descriptor_number) {
-  // Remove leading 'dbname/' and add newline to manifest file name
-  std::string manifest = DescriptorFileName(dbname, descriptor_number);
-  Slice contents = manifest;
-  assert(contents.starts_with(dbname + '/'));
-  contents.remove_prefix(dbname.size() + 1);
-  std::string tmp = TempFileName(dbname, descriptor_number);
-  Status s = WriteStringToFileSync(env, contents.ToString() + '\n', tmp);
-  if (s.ok()) {
-    s = env->RenameFile(tmp, CurrentFileName(dbname));
-  }
-  if (!s.ok()) {
-    env->DeleteFile(tmp);
+    Status FaultInjectionTestEnv::DropUnsyncedFileData() {
+  Status s;
+  MutexLock l(&mutex_);
+  for (std::map<std::string, FileState>::const_iterator it =
+           db_file_state_.begin();
+       s.ok() && it != db_file_state_.end(); ++it) {
+    const FileState& state = it->second;
+    if (!state.IsFullySynced()) {
+      s = state.DropUnsyncedData();
+    }
   }
   return s;
 }
     
-    // If filename is a leveldb file, store the type of the file in *type.
-// The number encoded in the filename is stored in *number.  If the
-// filename was successfully parsed, returns true.  Else return false.
-extern bool ParseFileName(const std::string& filename,
-                          uint64_t* number,
-                          FileType* type);
+    std::string LogFileName(const std::string& name, uint64_t number) {
+  assert(number > 0);
+  return MakeFileName(name, number, 'log');
+}
     
-    bool HandleDumpCommand(Env* env, char** files, int num) {
-  StdoutPrinter printer;
-  bool ok = true;
-  for (int i = 0; i < num; i++) {
-    Status s = DumpFile(env, files[i], &printer);
-    if (!s.ok()) {
-      fprintf(stderr, '%s\n', s.ToString().c_str());
-      ok = false;
+    // Return the legacy file name for an sstable with the specified number
+// in the db named by 'dbname'. The result will be prefixed with
+// 'dbname'.
+extern std::string SSTTableFileName(const std::string& dbname, uint64_t number);
+    
+        if (type == kZeroType && length == 0) {
+      // Skip zero length record without reporting any drops since
+      // such records are produced by the mmap based writing code in
+      // env_posix.cc that preallocates file regions.
+      buffer_.clear();
+      return kBadRecord;
+    }
+    
+    
+    {        err = vkResetFences(g_Device, 1, &fd->Fence);
+        check_vk_result(err);
+    }
+    {
+        err = vkResetCommandPool(g_Device, fd->CommandPool, 0);
+        check_vk_result(err);
+        VkCommandBufferBeginInfo info = {};
+        info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+        info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+        err = vkBeginCommandBuffer(fd->CommandBuffer, &info);
+        check_vk_result(err);
+    }
+    {
+        VkRenderPassBeginInfo info = {};
+        info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+        info.renderPass = wd->RenderPass;
+        info.framebuffer = fd->Framebuffer;
+        info.renderArea.extent.width = wd->Width;
+        info.renderArea.extent.height = wd->Height;
+        info.clearValueCount = 1;
+        info.pClearValues = &wd->ClearValue;
+        vkCmdBeginRenderPass(fd->CommandBuffer, &info, VK_SUBPASS_CONTENTS_INLINE);
+    }
+    
+    // Forward declarations of helper functions
+bool CreateDeviceD3D(HWND hWnd);
+void CleanupDeviceD3D();
+void CreateRenderTarget();
+void CleanupRenderTarget();
+LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+    
+            // 3. Show another simple window.
+        if (show_another_window)
+        {
+            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
+        }
+    
+            // 3. Show another simple window.
+        if (show_another_window)
+        {
+            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
+        }
+    
+    // Render function.
+// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
+void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
+{
+    // Avoid rendering when minimized
+    if (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f)
+        return;
+    }
+    
+      std::shared_ptr<DHTNode> newNode_;
+    
+    #include <vector>
+#include <string>
+#include <memory>
+    
+    #endif // D_DHT_TASK_EXECUTOR_H
+
+    
+    void DHTTaskQueueImpl::executeTask()
+{
+  A2_LOG_DEBUG('Updating periodicTaskQueue1');
+  periodicTaskQueue1_.update();
+  A2_LOG_DEBUG('Updating periodicTaskQueue2');
+  periodicTaskQueue2_.update();
+  A2_LOG_DEBUG('Updating immediateTaskQueue');
+  immediateTaskQueue_.update();
+}
+    
+    
+    {} // namespace aria2
+    
+    #ifndef incl_HPHP_MYSQLSTATS_H_
+#define incl_HPHP_MYSQLSTATS_H_
+    
+              /* Get value of parameter */
+          cur = get_node_ex(resp, (char*)name, (char*)ns);
+          if (!cur) {
+            cur = get_node(resp, (char*)name);
+            /* TODO: produce warning invalid ns */
+          }
+          if (!cur && fnb->style == SOAP_RPC) {
+            cur = resp;
+          }
+          if (cur) {
+            if (fnb->style == SOAP_DOCUMENT) {
+              val = cur;
+            } else {
+              val = get_node(cur->children, (char*)param->paramName.c_str());
+              if (res_count == 1) {
+                if (val == nullptr) {
+                  val = get_node(cur->children, 'return');
+                }
+                if (val == nullptr) {
+                  val = get_node(cur->children, 'result');
+                }
+                if (val == nullptr && cur->children && !cur->children->next) {
+                  val = cur->children;
+                }
+              }
+            }
+          }
+    
+    
+    { protected:
+  RangeState& m_state;
+  uint32_t m_maxHugePages{0};
+  uint32_t m_currHugePages{0};
+  uint32_t m_interleaveMask;            // 0 indicates no NUMA
+  short m_nextNode{0};
+  bool m_failed{false};
+  RangeMapper* m_fallback{nullptr};
+};
+    
+    HealthLevel HostHealthMonitor::evaluate() {
+#ifdef USE_JEMALLOC
+  mallctl_epoch();
+#endif
+  HealthLevel res = HealthLevel::Bold;
+  std::lock_guard<std::mutex> g(m_lock);
+  for (auto metric : m_metrics) {
+    res = std::max(res, metric->evaluate());
+  }
+  return res;
+}
+    
+    std::string insertSchema(const char* path) {
+  assert(strstr(repoSchemaId().begin(), kSchemaPlaceholder) == nullptr);
+  std::string result = path;
+  size_t idx;
+  if ((idx = result.find(kSchemaPlaceholder)) != std::string::npos) {
+    result.replace(idx, strlen(kSchemaPlaceholder), repoSchemaId().begin());
+  }
+  return result;
+}
+    
+    struct InlineState {
+  /*
+   * The current depth of inlining.  0 means we're not inlining.
+   */
+  uint16_t depth{0};
+    }
+    
+    /**
+ * @brief Return true if the failed query is no longer blacklisted.
+ *
+ * There are two scenarios where a blacklisted query becomes 'unblacklisted'.
+ * The first is simple, the amount of time it was blacklisted for has expired.
+ * The second is more complex, the query failed but the schedule has requested
+ * that the query should not be blacklisted.
+ *
+ * @param blt The time the query was originally blacklisted.
+ * @param query The scheduled query and its options.
+ */
+static inline bool blacklistExpired(size_t blt, const ScheduledQuery& query) {
+  if (getUnixTime() > blt) {
+    return true;
+  }
+    }
+    
+    Expected<int32_t, DatabaseError> RocksdbDatabase::getInt32(
+    const std::string& domain, const std::string& key) {
+  Expected<std::string, DatabaseError> buffer = getRawBytes(domain, key);
+  if (buffer) {
+    std::string value = buffer.take();
+    if (BOOST_LIKELY(validateInt32StorageBuffer(value))) {
+      int32_t result = *(reinterpret_cast<const int32_t*>(value.data()));
+      return ntohl(result);
+    } else {
+      auto type_error = createError(RocksdbError::UnexpectedValueType)
+                        << 'Fetching string as integer';
+      auto error =
+          createError(DatabaseError::KeyNotFound, std::move(type_error));
+      assert(false && error.getMessage().c_str());
+      LOG(ERROR) << error.getMessage();
+      debug_only::fail(error.getMessage().c_str());
+      return std::move(error);
     }
   }
-  return ok;
+  return buffer.takeError();
 }
     
-    uint32_t
-RuleBasedCollator::setVariableTop(const UChar *varTop, int32_t len, UErrorCode &errorCode) {
-    if(U_FAILURE(errorCode)) { return 0; }
-    if(varTop == NULL && len !=0) {
-        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
+    
+    {
+    {    auto status = db.db_handle->Get(options,
+                                    raw_handle,
+                                    std::string('database_schema_version'),
+                                    &version_str);
+    if (status.IsNotFound()) {
+      // Fallback to old version storage
+      auto default_family_handle_iter = db.handles.find('default');
+      if (default_family_handle_iter != db.handles.end()) {
+        status = db.db_handle->Get(options,
+                                   default_family_handle_iter->second.get(),
+                                   std::string('results_version'),
+                                   &version_str);
+      }
     }
-    if(len < 0) { len = u_strlen(varTop); }
-    if(len == 0) {
-        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
+    if (!status.ok()) {
+      return createError(RocksdbMigrationError::FailToGetVersion)
+             << status.ToString();
     }
-    UBool numeric = settings->isNumeric();
-    int64_t ce1, ce2;
-    if(settings->dontCheckFCD()) {
-        UTF16CollationIterator ci(data, numeric, varTop, varTop, varTop + len);
-        ce1 = ci.nextCE(errorCode);
-        ce2 = ci.nextCE(errorCode);
-    } else {
-        FCDUTF16CollationIterator ci(data, numeric, varTop, varTop, varTop + len);
-        ce1 = ci.nextCE(errorCode);
-        ce2 = ci.nextCE(errorCode);
+    auto result = tryTo<int>(version_str);
+    if (result) {
+      return *result;
     }
-    if(ce1 == Collation::NO_CE || ce2 != Collation::NO_CE) {
-        errorCode = U_CE_NOT_FOUND_ERROR;
-        return 0;
-    }
-    setVariableTop((uint32_t)(ce1 >> 32), errorCode);
-    return settings->variableTop;
+    return createError(RocksdbMigrationError::FailToGetVersion,
+                       result.takeError());
+  }
+  return createError(RocksdbMigrationError::FailToGetVersion)
+         << 'Verion data is not found';
 }
     
-    #define LOW_A             ((UChar)0x0061)
-#define LOW_B             ((UChar)0x0062)
-#define LOW_C             ((UChar)0x0063)
-#define LOW_D             ((UChar)0x0064)
-#define LOW_E             ((UChar)0x0065)
-#define LOW_F             ((UChar)0x0066)
-#define LOW_G             ((UChar)0x0067)
-#define LOW_H             ((UChar)0x0068)
-#define LOW_I             ((UChar)0x0069)
-#define LOW_J             ((UChar)0x006a)
-#define LOW_K             ((UChar)0x006B)
-#define LOW_L             ((UChar)0x006C)
-#define LOW_M             ((UChar)0x006D)
-#define LOW_N             ((UChar)0x006E)
-#define LOW_O             ((UChar)0x006F)
-#define LOW_P             ((UChar)0x0070)
-#define LOW_Q             ((UChar)0x0071)
-#define LOW_R             ((UChar)0x0072)
-#define LOW_S             ((UChar)0x0073)
-#define LOW_T             ((UChar)0x0074)
-#define LOW_U             ((UChar)0x0075)
-#define LOW_V             ((UChar)0x0076)
-#define LOW_W             ((UChar)0x0077)
-#define LOW_X             ((UChar)0x0078)
-#define LOW_Y             ((UChar)0x0079)
-#define LOW_Z             ((UChar)0x007A)
+    enum class RocksdbMigrationError {
+  InvalidArgument = 1,
+  FailToOpen = 2,
+  FailToGetVersion = 3,
+  NoMigrationFromCurrentVersion = 5,
+  MigrationLogicError = 6,
+  FailToOpenSrcDatabase = 7,
+  FailMoveDatabase = 8,
+};
     
-    template <class ElemType>
-shared_ptr<ComputationNode<ElemType>> ComputationNetworkBuilder<ElemType>::Atan(const ComputationNodePtr a, const std::wstring nodeName)
-{
-    return net.AddNodeToNetAndAttachInputs(New<AtanNode<ElemType>>(net.GetDeviceId(), nodeName), { a });
+    TEST_F(RocksdbDatabaseTest, test_unknown_key) {
+  auto db = std::make_unique<RocksdbDatabase>('test', path_);
+  ASSERT_TRUE(db->open());
+  EXPECT_TRUE(db->putInt32(kPersistentSettings, 'key', 12));
+  auto result = db->getInt32(kPersistentSettings, 'key_');
+  EXPECT_FALSE(result);
+  EXPECT_EQ(result.takeError(), DatabaseError::KeyNotFound);
 }
     
-           void LoadParameters(File& f, map<wstring, shared_ptr<Matrix<ElemType>>>& parameters, DEVICEID_TYPE deviceID)
-       {
-           unsigned int size = 0;
-           unsigned int pair = 0;
-           f >> size;
-           f >> pair;
-           if (size != sizeof(ElemType))
-           {
-               LogicError('Mismatched ElemType in loading BlockMomentumSGD checkpoint. Expecting %s, while loading element size=%d\n',
-                   sizeof(ElemType) == 4 ? 'float' : 'double',
-                   size
-                   );
-           }
-           parameters.clear();
-           for (size_t i = 0; i < pair; i++)
-           {
-               wstring name;
-               f >> name;
-               shared_ptr<Matrix<ElemType>> mat = make_shared<Matrix<ElemType>>(deviceID);
-               f >> *mat;
-               parameters[name] = mat;
-           }
-       }
     
-        virtual ComputationNetworkPtr BuildNetworkFromDescription(ComputationNetwork* = nullptr)
-    {
-        if (m_net->GetTotalNumberOfNodes() < 1) // not built yet
-            LoadNetworkFromConfig(m_networkConfig);
-        else
-            m_net->ResetEvalTimeStamps();
-        return m_net;
-    }
-    
-        // parallel training
-    // The top-level 'parallelTrain' is a bool, not to be confused with the parallelTrain block inside SGD.
-    shared_ptr<Microsoft::MSR::CNTK::MPIWrapper> mpi;
-    auto ensureMPIWrapperCleanup = MakeScopeExit(&MPIWrapper::DeleteInstance);
-    
-    // when running under MPI with more than one node, use 'true' as the default value for parallelTrain,
-    // 'false' otherwise.
-    bool paralleltrain = config(L'parallelTrain', (EnvironmentUtil::GetTotalNumberOfMPINodes() > 1));
-    
-                // end + 1 - start = the length of the string, including opening and closing braces.
-            std::size_t varLength = (end + 1 - start) - (openBraceVarSize + closingBraceVarSize);
-            std::string varName = newConfigLine.substr(start + openBraceVarSize, varLength);
-    
-            node->Load(fstream, modelVersion);
-    
-        void ReleaseMatrixToPool(shared_ptr<Matrix<ElemType>>& matrixPtr, MatrixPool& matrixPool, bool aliasing = false)
-    {
-        TypedReleaseMatrixToPool<ElemType>(matrixPtr, matrixPool, aliasing);
-    }
-    
-    #include 'Basics.h'
-#include 'ComputationNetwork.h'
-#include 'Config.h'
-#include 'SGD.h'
-#include 'Matrix.h'
-#include 'MPIWrapper.h'
-#include 'TimerUtility.h'
-#include 'NcclComm.h'
-#include <vector>
-#include <string>
-#include <stdexcept>
-#include <chrono> 
-#include <random>
-    
-            '       G1 = RowSlice(0, cellDim, wxxpbpwhh)\n'
-        '       G2 = RowSlice(cellDim, cellDim, wxxpbpwhh)\n'
-        '       G3 = RowSlice(cellDimX2, cellDim, wxxpbpwhh);\n'
-        '   G4 = RowSlice(cellDimX3, cellDim, wxxpbpwhh);\n'
-    
-        // a few more handy operations that occurred multiple times
-    bool IsNan() const { return std::isnan(first); }
-    EpochCriterion operator-(const EpochCriterion& other) const { return EpochCriterion(first - other.first, second - other.second); }
-    void operator+=(const EpochCriterion& other) { first += other.first; second += other.second; }
-    
-        // serialize the JSON objects
-    std::cout << j_object_t << '\n';
-    std::cout << j_map << '\n';
-    std::cout << j_umap << '\n';
-    std::cout << j_mmap << '\n';
-    std::cout << j_ummap << '\n\n';
-    
-        template<typename T>
-    std::string Point<T>::toString() const
-    {
-        try
-        {
-            return '[' + std::to_string(x) + ', ' + std::to_string(y) + ']';
-        }
-        catch (const std::exception& e)
-        {
-            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
-            return '';
-        }
-    }
+    // Constant parameters
+    const auto HAND_CCN_DECREASE_FACTOR = 8.f;
+    const std::string HAND_PROTOTXT{'hand/pose_deploy.prototxt'};
+    const std::string HAND_TRAINED_MODEL{'hand/pose_iter_102000.caffemodel'};
