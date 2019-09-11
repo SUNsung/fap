@@ -1,97 +1,143 @@
 
         
-          end
-    
-        expect(cooked).to include('class='poll'')
-    expect(cooked).to include('data-poll-status='open'')
-    expect(cooked).to include('data-poll-name='poll'')
-    expect(cooked).to include('data-poll-type='multiple'')
-    expect(cooked).to include('data-poll-min='1'')
-    expect(cooked).to include('data-poll-max='3'')
-    expect(cooked).to include('data-poll-public='true'')
-  end
-    
-          topic.update_status(
-        :closed, true, Discourse.system_user,
-        message: I18n.t(
-          'topic_statuses.autoclosed_topic_max_posts',
-          count: SiteSetting.auto_close_topics_post_count
-        )
+              m1 = NumericData.find_by(
+        bank_balance: BigDecimal('NaN'),
+        big_bank_balance: BigDecimal('NaN')
       )
-    end
-  end
     
-          let(:filename) { 'utf-8.txt' }
-      let(:file) { file_from_fixtures(filename, 'encodings') }
+      def test_touching_a_record_updates_its_timestamp
+    previous_salary = @developer.salary
+    @developer.salary = previous_salary + 10000
+    @developer.touch
     
-        before(:each) do
-      SiteSetting.s3_upload_bucket = 'some-really-cool-bucket'
-      SiteSetting.s3_access_key_id = 's3-access-key-id'
-      SiteSetting.s3_secret_access_key = 's3-secret-access-key'
-      SiteSetting.enable_s3_uploads = true
-      SiteSetting.prevent_anons_from_downloading_files = true
-    end
+            private
     
-          <% id = 1 %>
-      <% frames.each do |frame| %>
-          <% if frame.context_line && frame.context_line != '#' %>
-    
-            # Set these key values to boolean 'true' to include in policy
-        NO_ARG_DIRECTIVES.each do |d|
-          if options.key?(d) && options[d].is_a?(TrueClass)
-            directives << d.to_s.sub(/_/, '-')
-          end
+              super(base_dir)
         end
     
-      it 'should allow changing the protection settings' do
-    mock_app do
-      use Rack::Protection::ContentSecurityPolicy, :default_src => 'none', :script_src => 'https://cdn.mybank.net', :style_src => 'https://cdn.mybank.net', :img_src => 'https://cdn.mybank.net', :connect_src => 'https://api.mybank.com', :frame_src => 'self', :font_src => 'https://cdn.mybank.net', :object_src => 'https://cdn.mybank.net', :media_src => 'https://cdn.mybank.net', :report_uri => '/my_amazing_csp_report_parser', :sandbox => 'allow-scripts'
+        Projects::CleanupService.new(project, user).execute
     
-        scope :checkout, -> { with_state('checkout') }
-    scope :completed, -> { with_state('completed') }
-    scope :pending, -> { with_state('pending') }
-    scope :processing, -> { with_state('processing') }
-    scope :failed, -> { with_state('failed') }
+      class_methods do
+    def chronic_duration_attr_reader(virtual_attribute, source_attribute)
+      define_method(virtual_attribute) do
+        chronic_duration_attributes[virtual_attribute] || output_chronic_duration_attribute(source_attribute)
+      end
+    end
     
-          def protect_from_connection_error
-        yield
-      rescue ActiveMerchant::ConnectionError => e
-        gateway_error(e)
+          desc 'Get single deploy key' do
+        success Entities::DeployKeysProject
+      end
+      params do
+        requires :key_id, type: Integer, desc: 'The ID of the deploy key'
+      end
+      get ':id/deploy_keys/:key_id' do
+        key = find_by_deploy_key(user_project, params[:key_id])
+    
+        def reset_password_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :reset_password_instructions, opts)
+    end
+    
+          def remember_cookie_values(resource)
+        options = { httponly: true }
+        options.merge!(forget_cookie_values(resource))
+        options.merge!(
+          value: resource.class.serialize_into_cookie(resource),
+          expires: resource.remember_expires_at
+        )
       end
     
-    module Spree
-  class ReturnItem::EligibilityValidator::Default < Spree::ReturnItem::EligibilityValidator::BaseValidator
-    class_attribute :permitted_eligibility_validators
-    self.permitted_eligibility_validators = [
-      ReturnItem::EligibilityValidator::OrderCompleted,
-      ReturnItem::EligibilityValidator::TimeSincePurchase,
-      ReturnItem::EligibilityValidator::RMARequired,
-      ReturnItem::EligibilityValidator::InventoryShipped,
-      ReturnItem::EligibilityValidator::NoReimbursements
-    ]
+          # Sign out a given user or scope. This helper is useful for signing out a user
+      # after deleting accounts. Returns true if there was a logout and false if there
+      # is no user logged in on the referred scope
+      #
+      # Examples:
+      #
+      #   sign_out :user     # sign_out(scope)
+      #   sign_out @user     # sign_out(resource)
+      #
+      def sign_out(resource_or_scope=nil)
+        return sign_out_all_scopes unless resource_or_scope
+        scope = Devise::Mapping.find_scope!(resource_or_scope)
+        user = warden.user(scope: scope, run_callbacks: false) # If there is no user
     
-      def self.load_translations(hash, root = [])
-    hash.each do |k, v|
-      if v.is_a?(Hash)
-        load_translations(v, root.dup << k)
+          def add_fragment_back_to_path(uri, path)
+        [path, uri.fragment].compact.join('#')
+      end
+    end
+  end
+end
+
+    
+        if record.timedout?(last_request_at) &&
+        !env['devise.skip_timeout'] &&
+        !proxy.remember_me_is_active?(record)
+      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
+      throw :warden, scope: scope, message: :timeout
+    end
+    
+    require 'devise/models/authenticatable'
+
+    
+          b = $count
+      assert_equal a, b
+      assert_equal false, p.thread.status
+      refute mgr.latest_error, mgr.latest_error.to_s
+    end
+  end
+end
+
+    
+        assert_equal dead_set.find_job('123123').value, serialized_job
+  end
+    
+        describe 'when the exception does not have a backtrace' do
+      it 'does not fail' do
+        exception = ExceptionHandlerTestException.new
+        assert_nil exception.backtrace
+    
+      it 'allows delay of any ole class method' do
+    q = Sidekiq::Queue.new
+    assert_equal 0, q.size
+    SomeClass.delay.doit(Date.today)
+    assert_equal 1, q.size
+  end
+    
+    require 'stringex'
+    
+        def render(context)
+      if parts = @text.match(/([a-zA-Z\d]*) (.*)/)
+        gist, file = parts[1].strip, parts[2].strip
       else
-        key = (root + [k]).join('.')
-        unused_translations << key
+        gist, file = @text.strip, ''
+      end
+      if gist.empty?
+        ''
+      else
+        script_url = script_url_for gist, file
+        code       = get_cached_gist(gist, file) || get_gist_from_web(gist, file)
+        html_output_for script_url, code
       end
     end
+    
+      class IncludeCodeTag < Liquid::Tag
+    def initialize(tag_name, markup, tokens)
+      @title = nil
+      @file = nil
+      if markup.strip =~ /\s*lang:(\S+)/i
+        @filetype = $1
+        markup = markup.strip.sub(/lang:\S+/i,'')
+      end
+      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
+        @title = $1 || nil
+        @file = $3
+      end
+      super
+    end
+    
+      # Checks for excerpts (helpful for template conditionals)
+  def has_excerpt(input)
+    input =~ /<!--\s*more\s*-->/i ? true : false
   end
     
-          let!(:shipping_method) { create(:shipping_method) }
-      let(:package)          { build(:stock_package, contents: inventory_units.map { |_i| ContentItem.new(inventory_unit) }) }
-      let(:ship_address)     { create(:ship_address) }
-      let(:order)            { build(:order_with_line_items, ship_address: ship_address) }
-      let(:inventory_units)  { order.inventory_units }
-    
-            scope
-      end
-    
-            def show
-          authorize! :admin, ReturnAuthorization
-          @return_authorization = order.return_authorizations.accessible_by(current_ability, :show).find(params[:id])
-          respond_with(@return_authorization)
-        end
+    module Jekyll
