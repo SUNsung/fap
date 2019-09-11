@@ -1,321 +1,305 @@
 
         
-          if (auto *CD = dyn_cast<ClassDecl>(NTD))
-    if (auto superclass = CD->getSuperclass())
-      useConformancesFromType(superclass->getCanonicalType(genericSig));
+        TEST(ClusteredBitVector, CopyClearIntoAllocated) {
+  ClusteredBitVector temp;
+  temp.appendSetBits(94);
+    }
     
-        paramType->addChild(totalInput, Dem);
-    parameters->addChild(paramType, Dem);
+    /// Knows how to make a deep copy of a debug scope.
+class ScopeCloner {
+  llvm::SmallDenseMap<const SILDebugScope *,
+                      const SILDebugScope *> ClonedScopeCache;
+  SILFunction &NewFn;
+public:
+  /// ScopeCloner expects NewFn to be a clone of the original
+  /// function, with all debug scopes and locations still pointing to
+  /// the original function.
+  ScopeCloner(SILFunction &NewFn);
+  /// Return a (cached) deep copy of a scope.
+  const SILDebugScope *getOrCreateClonedScope(const SILDebugScope *OrigScope);
+};
     
-      /// Tail-allocated SILVTable entries.
-  Entry Entries[1];
+    /// An ASTVisitor for generating SIL from top-level declarations in a module.
+class LLVM_LIBRARY_VISIBILITY SILGenModule : public ASTVisitor<SILGenModule> {
+public:
+  /// The Module being constructed.
+  SILModule &M;
+  
+  /// The type converter for the module.
+  TypeConverter &Types;
+  
+  /// The Swift module we are visiting.
+  ModuleDecl *SwiftModule;
+  
+  /// TopLevelSGF - The SILGenFunction used to visit top-level code, or null if
+  /// the current source file is not a script source file.
+  SILGenFunction /*nullable*/ *TopLevelSGF;
+    }
     
-        virtual ~Holder() { }
+    #include 'swift/Basic/LLVM.h'
     
-      /// Emit the default witness table for a resilient protocol.
-  void emitDefaultWitnessTable(ProtocolDecl *protocol);
-    
-    
-    {}  // namespace caffe
-    
-    TYPED_TEST(NeuronLayerTest, TestDropoutGradientTest) {
-  typedef typename TypeParam::Dtype Dtype;
-  LayerParameter layer_param;
-  layer_param.set_phase(TEST);
-  DropoutLayer<Dtype> layer(layer_param);
-  GradientChecker<Dtype> checker(1e-2, 1e-3);
-  checker.CheckGradientEltwise(&layer, this->blob_bottom_vec_,
-      this->blob_top_vec_);
-}
-    
-    template <typename Dtype>
-void InnerProductLayer<Dtype>::Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top) {
-  // Figure out the dimensions
-  const int axis = bottom[0]->CanonicalAxisIndex(
-      this->layer_param_.inner_product_param().axis());
-  const int new_K = bottom[0]->count(axis);
-  CHECK_EQ(K_, new_K)
-      << 'Input size incompatible with inner product parameters.';
-  // The first 'axis' dimensions are independent inner products; the total
-  // number of these is M_, the product over these dimensions.
-  M_ = bottom[0]->count(0, axis);
-  // The top shape will be the bottom shape with the flattened axes dropped,
-  // and replaced by a single axis with dimension num_output (N_).
-  vector<int> top_shape = bottom[0]->shape();
-  top_shape.resize(axis + 1);
-  top_shape[axis] = N_;
-  top[0]->Reshape(top_shape);
-  // Set up the bias multiplier
-  if (bias_term_) {
-    vector<int> bias_shape(1, M_);
-    bias_multiplier_.Reshape(bias_shape);
-    caffe_set(M_, Dtype(1), bias_multiplier_.mutable_cpu_data());
+    // Class to hold a Pixa collection of debug images with captions and save them
+// to a PDF file.
+class DebugPixa {
+ public:
+  // TODO(rays) add another constructor with size control.
+  DebugPixa() {
+    pixa_ = pixaCreate(0);
+    fonts_ = bmfCreate(nullptr, 14);
   }
-}
-    
-     protected:
-  string SnapshotFilename(const string& extension);
-  string SnapshotToBinaryProto();
-  string SnapshotToHDF5();
-  // The test routine
-  void TestAll();
-  void Test(const int test_net_id = 0);
-  virtual void SnapshotSolverState(const string& model_filename) = 0;
-  virtual void RestoreSolverStateFromHDF5(const string& state_file) = 0;
-  virtual void RestoreSolverStateFromBinaryProto(const string& state_file) = 0;
-  void DisplayOutputBlobs(const int net_id);
-  void UpdateSmoothedLoss(Dtype loss, int start_iter, int average_loss);
-    
-    using caffe::Datum;
-using boost::scoped_ptr;
-using std::string;
-namespace db = caffe::db;
-    
-      /* Load the network. */
-  net_.reset(new Net<float>(model_file, TEST));
-  net_->CopyTrainedLayersFrom(trained_file);
-    
-      image_file.read(reinterpret_cast<char*>(&magic), 4);
-  magic = swap_endian(magic);
-  CHECK_EQ(magic, 2051) << 'Incorrect image file magic.';
-  label_file.read(reinterpret_cast<char*>(&magic), 4);
-  magic = swap_endian(magic);
-  CHECK_EQ(magic, 2049) << 'Incorrect label file magic.';
-  image_file.read(reinterpret_cast<char*>(&num_items), 4);
-  num_items = swap_endian(num_items);
-  label_file.read(reinterpret_cast<char*>(&num_labels), 4);
-  num_labels = swap_endian(num_labels);
-  CHECK_EQ(num_items, num_labels);
-  image_file.read(reinterpret_cast<char*>(&rows), 4);
-  rows = swap_endian(rows);
-  image_file.read(reinterpret_cast<char*>(&cols), 4);
-  cols = swap_endian(cols);
-    
-            backfill_debug_key(w.key, strprintf('upsert %' PRIu64, timestamp.longtime));
-    
-    void check_keys_are_present(store_t *store,
-        sindex_name_t sindex_name) {
-    for (int i = 0; i < MAX_RETRIES_FOR_SINDEX_POSTCONSTRUCT; ++i) {
-        try {
-            _check_keys_are_present(store, sindex_name);
-            return;
-        } catch (const sindex_not_ready_exc_t&) { }
-        /* Unfortunately we don't have an easy way right now to tell if the
-         * sindex has actually been postconstructed so we just need to
-         * check by polling. */
-        nap(500);
+  // If the filename_ has been set and there are any debug images, they are
+  // written to the set filename_.
+  ~DebugPixa() {
+    pixaDestroy(&pixa_);
+    bmfDestroy(&fonts_);
+  }
     }
-    ADD_FAILURE() << 'Sindex still not available after many tries.';
-}
     
-    #ifndef GTEST_INCLUDE_GTEST_GTEST_DEATH_TEST_H_
-#define GTEST_INCLUDE_GTEST_GTEST_DEATH_TEST_H_
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31>
-internal::ValueArray31<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
-    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-    T29, T30, T31> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7,
-    T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15,
-    T16 v16, T17 v17, T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23,
-    T24 v24, T25 v25, T26 v26, T27 v27, T28 v28, T29 v29, T30 v30, T31 v31) {
-  return internal::ValueArray31<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
-      T26, T27, T28, T29, T30, T31>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10,
-      v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23, v24,
-      v25, v26, v27, v28, v29, v30, v31);
-}
-    
-    // A set of macros for testing Google Test assertions or code that's expected
-// to generate Google Test fatal failures.  It verifies that the given
-// statement will cause exactly one fatal Google Test failure with 'substr'
-// being part of the failure message.
-//
-// There are two different versions of this macro. EXPECT_FATAL_FAILURE only
-// affects and considers failures generated in the current thread and
-// EXPECT_FATAL_FAILURE_ON_ALL_THREADS does the same but for all threads.
-//
-// The verification of the assertion is done correctly even when the statement
-// throws an exception or aborts the current function.
-//
-// Known restrictions:
-//   - 'statement' cannot reference local non-static variables or
-//     non-static members of the current object.
-//   - 'statement' cannot return a value.
-//   - You cannot stream a failure message to this macro.
-//
-// Note that even though the implementations of the following two
-// macros are much alike, we cannot refactor them to use a common
-// helper macro, due to some peculiarity in how the preprocessor
-// works.  The AcceptsMacroThatExpandsToUnprotectedComma test in
-// gtest_unittest.cc will fail to compile if we do that.
-#define EXPECT_FATAL_FAILURE(statement, substr) \
-  do { \
-    class GTestExpectFatalFailureHelper {\
-     public:\
-      static void Execute() { statement; }\
-    };\
-    ::testing::TestPartResultArray gtest_failures;\
-    ::testing::internal::SingleFailureChecker gtest_checker(\
-        &gtest_failures, ::testing::TestPartResult::kFatalFailure, (substr));\
-    {\
-      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
-          ::testing::ScopedFakeTestPartResultReporter:: \
-          INTERCEPT_ONLY_CURRENT_THREAD, &gtest_failures);\
-      GTestExpectFatalFailureHelper::Execute();\
-    }\
-  } while (::testing::internal::AlwaysFalse())
-    
-      // Clones a 0-terminated C string, allocating memory using new.  The
-  // caller is responsible for deleting the return value using
-  // delete[].  Returns the cloned string, or NULL if the input is
-  // NULL.
-  //
-  // This is different from strdup() in string.h, which allocates
-  // memory using malloc().
-  static const char* CloneCString(const char* c_str);
-    
-    bool NcclComm::IsSupported()
-{
-    return m_ncclComm != nullptr;
-}
-    
-    template <class ElemType>
-shared_ptr<ComputationNode<ElemType>> ComputationNetworkBuilder<ElemType>::Atan(const ComputationNodePtr a, const std::wstring nodeName)
-{
-    return net.AddNodeToNetAndAttachInputs(New<AtanNode<ElemType>>(net.GetDeviceId(), nodeName), { a });
-}
-    
-    
-    {    // Clear - clear out everything in the structure
-    // NOTE: this deletes the network and the NDLScript, use with care!
-    void Clear()
-    {
-        cn.reset();
-        delete ndl;
-        ndl = nullptr;
-        ClearLastNodes();
+    // A UNICHARMAP stores unique unichars. Each of them is associated with one
+// UNICHAR_ID.
+class UNICHARMAP {
+ public:
     }
+    
+    namespace tesseract {
+  // Generates a TrainingSample from a TBLOB. Extracts features and sets
+  // the bounding box, so classifiers that operate on the image can work.
+  // TODO(rays) BlobToTrainingSample must remain a global function until
+  // the FlexFx and FeatureDescription code can be removed and LearnBlob
+  // made a member of Classify.
+  TrainingSample* BlobToTrainingSample(
+      const TBLOB& blob, bool nonlinear_norm, INT_FX_RESULT_STRUCT* fx_info,
+      GenericVector<INT_FEATURE_STRUCT>* bl_features);
+}
+    
+      // Free up any currently unused dawgs.
+  void DeleteUnusedDawgs() {
+    dawgs_.DeleteUnusedObjects();
+  }
+    
+    /*! \brief namespace of base64 decoding and encoding table */
+namespace base64 {
+const char DecodeTable[] = {
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  62,  // '+'
+  0, 0, 0,
+  63,  // '/'
+  52, 53, 54, 55, 56, 57, 58, 59, 60, 61,  // '0'-'9'
+  0, 0, 0, 0, 0, 0, 0,
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  // 'A'-'Z'
+  0, 0, 0, 0, 0, 0,
+  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
+  39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // 'a'-'z'
 };
-    
-    
-    {                pastValue = builder.PastValue(NULL, m_defaultHiddenActivity, m_layerSizes[1], 1);
-                // unless there is a good algorithm to detect loops, use this explicit setup
-                output = ApplyNonlinearFunction(
-                    builder.Plus(
-                        builder.Times(u, input), builder.Times(w, pastValue)),
-                    0);
-                pastValue->AttachInputs({ output });
-                recur_idx++;
-            }
-            else
-            {
-                output = SimpleNetworkBuilder<ElemType>::ApplyNonlinearFunction(builder.Plus(builder.Times(u, input), b), 0);
-                // TODO: Why the ^^ namespace?
-                // output = builder.Times(u, input);
-            }
-    
-            Matrix<ElemType> mat(numRows, numCols, m_deviceId);
-    
-        // -----------------------------------------------------------------------
-    // network editing
-    // -----------------------------------------------------------------------
-    
-             virtual bool OnArrivingAtSyncPoint(
-            const std::list<ComputationNodeBasePtr>& LearnableNodes,        /* input/output: */
-            std::list<MatrixBasePtr>& smoothedGradients,                     /* input/output: under some setup, it will reset to zero*/
-            size_t  samplesSinceLastSync                                    /* input:  samples processed since last sync on this worker only */
-             )
-         {
-             Timer syncPointTimer; 
-             syncPointTimer.Start();
-             bool read2Sync=UpdateWorkerStatus(MAWorkerStatus::DataProcessing);
-             syncPointTimer.Stop();
-             m_perfReporter.OnArriveAtSyncPoint(syncPointTimer.ElapsedSeconds(),read2Sync);
-    }
-    
-        // enable tracing. Nodes listed here get their m_traceNodeValueXXX flags set
-    std::vector<std::wstring> m_traceNodeNamesReal;
-    std::vector<std::wstring> m_traceNodeNamesCategory;
-    std::vector<std::wstring> m_traceNodeNamesSparse;
-    
-    
-    {        if (m_useAsyncAggregation)
-        {
-            m_bufferedGradHeader = DistGradHeader::Create(numEvalNodes);
-            m_bufferedGradHeader->Clear();
+static const char EncodeTable[] =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+}  // namespace base64
+/*! \brief the stream that reads from base64, note we take from file pointers */
+class Base64InStream: public dmlc::Stream {
+ public:
+  explicit Base64InStream(dmlc::Stream *fs) : reader_(256) {
+    reader_.set_stream(fs);
+    num_prev = 0; tmp_ch = 0;
+  }
+  /*!
+   * \brief initialize the stream position to beginning of next base64 stream
+   * call this function before actually start read
+   */
+  inline void InitPosition(void) {
+    // get a character
+    do {
+      tmp_ch = reader_.GetChar();
+    } while (isspace(tmp_ch));
+  }
+  /*! \brief whether current position is end of a base64 stream */
+  inline bool IsEOF(void) const {
+    return num_prev == 0 && (tmp_ch == EOF || isspace(tmp_ch));
+  }
+  virtual size_t Read(void *ptr, size_t size) {
+    using base64::DecodeTable;
+    if (size == 0) return 0;
+    // use tlen to record left size
+    size_t tlen = size;
+    unsigned char *cptr = static_cast<unsigned char*>(ptr);
+    // if anything left, load from previous buffered result
+    if (num_prev != 0) {
+      if (num_prev == 2) {
+        if (tlen >= 2) {
+          *cptr++ = buf_prev[0];
+          *cptr++ = buf_prev[1];
+          tlen -= 2;
+          num_prev = 0;
+        } else {
+          // assert tlen == 1
+          *cptr++ = buf_prev[0]; --tlen;
+          buf_prev[0] = buf_prev[1];
+          num_prev = 1;
         }
-        m_initialized = true;
+      } else {
+        // assert num_prev == 1
+        *cptr++ = buf_prev[0]; --tlen; num_prev = 0;
+      }
+    }
+    if (tlen == 0) return size;
+    int nvalue;
+    // note: everything goes with 4 bytes in Base64
+    // so we process 4 bytes a unit
+    while (tlen && tmp_ch != EOF && !isspace(tmp_ch)) {
+      // first byte
+      nvalue = DecodeTable[tmp_ch] << 18;
+      {
+        // second byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
+        nvalue |= DecodeTable[tmp_ch] << 12;
+        *cptr++ = (nvalue >> 16) & 0xFF; --tlen;
+        }
+      {
+        // third byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
+        // handle termination
+        if (tmp_ch == '=') {
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == '=') << 'invalid base64 format';
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == EOF || isspace(tmp_ch))
+              << 'invalid base64 format';
+          break;
+        }
+        nvalue |= DecodeTable[tmp_ch] << 6;
+        if (tlen) {
+          *cptr++ = (nvalue >> 8) & 0xFF; --tlen;
+        } else {
+          buf_prev[num_prev++] = (nvalue >> 8) & 0xFF;
+        }
+      }
+      {
+        // fourth byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch))
+            << 'invalid base64 format';
+        if (tmp_ch == '=') {
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == EOF || isspace(tmp_ch))
+              << 'invalid base64 format';
+          break;
+        }
+        nvalue |= DecodeTable[tmp_ch];
+        if (tlen) {
+          *cptr++ = nvalue & 0xFF; --tlen;
+        } else {
+          buf_prev[num_prev ++] = nvalue & 0xFF;
+        }
+      }
+      // get next char
+      tmp_ch = reader_.GetChar();
+    }
+    if (kStrictCheck) {
+      CHECK_EQ(tlen, 0) << 'Base64InStream: read incomplete';
+    }
+    return size - tlen;
+  }
+  virtual void Write(const void *ptr, size_t size) {
+    LOG(FATAL) << 'Base64InStream do not support write';
+  }
     }
     
-        // Aggregate accumulator sums.
-    bool samplesProcessed = distGradAgg->AggregateGradients(accumulatorValues, gradHeader.get(), /*resetState =*/false);
-    if (!samplesProcessed)
-        RuntimeError('Couldn't aggregate accumulator values.');
-    
-    struct NormalizedInstruction;
-struct RegionContext;
-    
-    // When you already have the memory mapped in, remap them it to use huge pages,
-// and try to interleave across all enabled numa nodes.  Return the number of
-// pages that are actually backed by hugetlb pages (the rest may be implemented
-// as transparent huge pages).
-//
-// Beware this function wipes out data on existing pages.
-int remap_interleaved_2m_pages(void* addr, size_t pages);
-    
-    
-    {  // Make sure the thread is gone after hphp_process_exit().  The node
-  // is intentionally leaked.
-  new InitFiniNode(
-    [] { folly::Singleton<HostHealthMonitor>::try_get()->waitForEnd(); },
-    InitFiniNode::When::ProcessExit
-  );
+    uint64_t Velodyne32Parser::GetTimestamp(double base_time, float time_offset,
+                                        uint16_t block_id) {
+  double t = base_time - time_offset;
+  if (config_.model() == VLP32C) {
+    t = base_time + time_offset;
+  }
+  uint64_t timestamp = GetGpsStamp(t, &previous_packet_stamp_, &gps_base_usec_);
+  return timestamp;
 }
     
+      RecordViewer viewer_2(reader, end_time, begin_time);
+  EXPECT_EQ(CheckCount(viewer_2), 0);
+  EXPECT_EQ(begin_time, viewer_2.end_time());
     
-    { private:
-  Mutex m_mutex;
-  pthread_cond_t m_cond;
-};
-    
-    #include 'hphp/runtime/ext/extension.h'
-#include 'hphp/runtime/vm/native-data.h'
-    
-    
-    {  static void merge_result(
-    result_type& workerResult,
-    DArrayInit& outResArr,
-    const HPHP::String& path
-  ) {
-    try {
-      if (workerResult.hasValue() && !workerResult.value().value.empty()) {
-        outResArr.set(
-          path,
-          Variant::attach(
-            HHVM_FN(json_decode)(
-              String(workerResult.value().value),
-              true,
-              512,
-              k_JSON_FB_LOOSE | k_JSON_FB_DARRAYS_AND_VARRAYS
-            )
-          )
-        );
-      }
-      else {
-        outResArr.set(path, uninit_null());
-      }
+    class GraphSegmentorTest : public testing::Test {
+ protected:
+  void SetUp() {
+    edges_ = new Edge[10];
+    edges_[0].w = 6.f;
+    edges_[0].a = 1;
+    edges_[0].b = 2;
+    edges_[1].w = 1.f;
+    edges_[1].a = 1;
+    edges_[1].b = 3;
+    edges_[2].w = 5.f;
+    edges_[2].a = 1;
+    edges_[2].b = 4;
+    edges_[3].w = 5.f;
+    edges_[3].a = 3;
+    edges_[3].b = 2;
+    edges_[4].w = 5.f;
+    edges_[4].a = 3;
+    edges_[4].b = 4;
+    edges_[5].w = 3.f;
+    edges_[5].a = 5;
+    edges_[5].b = 2;
+    edges_[6].w = 6.f;
+    edges_[6].a = 3;
+    edges_[6].b = 5;
+    edges_[7].w = 4.f;
+    edges_[7].a = 3;
+    edges_[7].b = 0;
+    edges_[8].w = 2.f;
+    edges_[8].a = 4;
+    edges_[8].b = 0;
+    edges_[9].w = 6.f;
+    edges_[9].a = 5;
+    edges_[9].b = 0;
+  }
     }
-    catch (std::runtime_error& e) {
-      FTRACE(1, 'Error during json conversion {}: {}\n', path, e.what());
-    }
-  };
-};
     
-      static ArrayData* ToShape(ArrayData*, bool);
+    bool ConfigManager::Init() {
+  MutexLock lock(&mutex_);
+  return InitInternal();
+}
+    
+    int main(int argc, char *argv[]) {
+  apollo::cyber::Init('cyber_python');
+  apollo::cyber::proto::Chatter chat;
+  apollo::cyber::PyNode node('listener');
+  pr = node.create_reader('channel/chatter', chat.GetTypeName());
+  pr->register_func(cbfun);
+    }
+    
+      common::Status ApplyRule(Frame* const frame,
+                           ReferenceLineInfo* const reference_line_info);
+    
+      DataProvider::InitOptions dp_init_options;
+  dp_init_options.sensor_name = 'front_6mm';
+    
+    // Implementation
+namespace op
+{
+    UserPostProcessing::UserPostProcessing()
+    {
+        try
+        {
+        }
+        catch (const std::exception& e)
+        {
+            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
+        }
+    }
+    }
+    
+            /**
+         * Greater comparison operator.
+         * @param point Point<T> to be compared.
+         * @result Whether the instance satisfies the condition with respect to point.
+         */
+        inline bool operator>(const Point<T>& point) const
+        {
+            return area() > point.area();
+        }
+    
+            virtual ~PersonIdExtractor();
