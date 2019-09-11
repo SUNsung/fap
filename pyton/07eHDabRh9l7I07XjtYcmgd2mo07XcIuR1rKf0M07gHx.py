@@ -1,150 +1,91 @@
 
         
-            response, info = fetch_url(module=module, url=url, headers=headers, data=rawdata, method=method)
-    status = info['status']
-    content = ''
-    if response:
-        content = response.read()
-    if status == 204:
-        return True, content
-    elif status == 200 or status == 201:
-        return True, json.loads(content)
-    else:
-        return False, str(status) + ': ' + content
-    
-            if aa_policy_id and aa_policy_id != current_aa_policy_id:
-            self._modify_aa_policy(
-                self.clc,
-                self.module,
-                acct_alias,
-                server.id,
-                aa_policy_id)
-            changed = True
-        return changed
-    
-    # Add a user to a password file suitable for use by libpam-pwdfile
-- htpasswd:
-    path: /etc/mail/passwords
-    name: alex
-    password: oedu2eGh
-    crypt_scheme: md5_crypt
-'''
-    
-        def resource_scopes_set(self, state, fact_name, scope_uris):
-        '''
-        Generic implementation of the scopes update PATCH for the OneView resources.
-        It checks if the resource needs to be updated with the current scopes.
-        This method is meant to be run after ensuring the present state.
-        :arg dict state: Dict containing the data from the last state results in the resource.
-            It needs to have the 'msg', 'changed', and 'ansible_facts' entries.
-        :arg str fact_name: Name of the fact returned to the Ansible.
-        :arg list scope_uris: List with all the scope URIs to be added to the resource.
-        :return: A dictionary with the expected arguments for the AnsibleModule.exit_json
-        '''
-        if scope_uris is None:
-            scope_uris = []
-        resource = state['ansible_facts'][fact_name]
-        operation_data = dict(operation='replace', path='/scopeUris', value=scope_uris)
-    
-        # create a client object
-    client = MatrixClient(module.params['hs_url'])
-    if module.params['token'] is not None:
-        client.api.token = module.params['token']
-    else:
-        client.login(module.params['user_id'], module.params['password'], sync=False)
+            # incorporate derivatives flowing through the checkpointed nodes
+    checkpoints_sorted_lists = tf_toposort(checkpoints, within_ops=fwd_ops)
+    for ts in checkpoints_sorted_lists[::-1]:
+        debug_print('Processing list {}'.format(ts))
+        checkpoints_other = [r for r in checkpoints if r not in ts]
+        checkpoints_disconnected_other = [checkpoints_disconnected[r] for r in checkpoints_other]
     
     
-def post_sendgrid_api(module, username, password, from_address, to_addresses,
-                      subject, body, api_key=None, cc=None, bcc=None, attachments=None,
-                      html_body=False, from_name=None, headers=None):
+class Mask():
+    ''' Parent class for masks
     
     
-DOCUMENTATION = '''
----
-module: ipmi_power
-short_description: Power management for machine
-description:
-  - Use this module for power management
-version_added: '2.2'
-options:
-  name:
-    description:
-      - Hostname or ip address of the BMC.
-    required: true
-  port:
-    description:
-      - Remote RMCP port.
-    default: 623
-  user:
-    description:
-      - Username to use to connect to the BMC.
-    required: true
-  password:
-    description:
-      - Password to connect to the BMC.
-    required: true
-  state:
-    description:
-      - Whether to ensure that the machine in desired state.
-    required: true
-    choices:
-        - on -- Request system turn on
-        - off -- Request system turn off without waiting for OS to shutdown
-        - shutdown -- Have system request OS proper shutdown
-        - reset -- Request system reset without waiting for OS
-        - boot -- If system is off, then 'on', else 'reset'
-  timeout:
-    description:
-      - Maximum number of seconds before interrupt request.
-    default: 300
-requirements:
-  - 'python >= 2.6'
-  - pyghmi
-author: 'Bulat Gaifullin (@bgaifullin) <gaifullinbf@gmail.com>'
-'''
+_HELPTEXT = (
+    'CV2 DNN Detector options.\n'
+    'A CPU only extractor, is the least reliable, but uses least resources and runs fast on CPU. '
+    'Use this if not using a GPU and time is important'
+)
     
-    - name: Remove Boot Policy Using JSON objects list
-  ucs_managed_objects:
-    hostname: 172.16.143.150
-    username: admin
-    password: password
-    objects:
-    - {
-          'module': 'ucsmsdk.mometa.lsboot.LsbootPolicy',
-          'class': 'LsbootPolicy',
-          'properties': {
-              'parent_mo_or_dn': 'org-root',
-              'name': 'Python_SDS'
-          }
-      }
-    state: absent
-    
-            data2 = (b'--------------------------3c48c744237517ac\r\nContent-Disposition: form-data; name='key'\r\n\r\n'
-                 b'uploads/20170826T181315.679087009Z/upload/pixel.png\r\n--------------------------3c48c744237517ac'
-                 b'--\r\n')
-    
-            # put object
-        object_key = 'key-by-hostname'
-        self.s3_client.put_object(Bucket=bucket_name, Key=object_key, Body='something')
-        url = self.s3_client.generate_presigned_url(
-            'get_object', Params={'Bucket': bucket_name, 'Key': object_key}
-        )
-    
-    # file paths by API
-API_FILE_PATHS = {}
+    import numpy as np
+import tensorflow as tf
+from keras import backend as K
+from keras import initializers
+from keras.utils.generic_utils import get_custom_objects
     
     
-def test_elasticsearch_get_document():
-    article_path = '{}/{}/employee/{}?pretty'.format(
-        ES_URL, TEST_INDEX, TEST_DOC_ID)
-    resp = requests.get(article_path, headers=COMMON_HEADERS)
+def read_file(input_path):
+    with open(input_path, 'r') as fb:
+        return fb.read()
     
-            # Disable TTL for given table
-        response = testutil.send_update_dynamodb_ttl_request(TEST_DDB_TABLE_NAME_3, False)
-        assert response.status_code == 200
-        assert json.loads(response._content)['TimeToLiveSpecification']['Enabled'] is False
+            # It is no more the first time...
+        self.first_grab = False
     
-    from tornado.concurrent import Future
-from tornado import gen
-from tornado.ioloop import IOLoop
-from tornado.netutil import Resolver, is_valid_ip
+        @percents.setter
+    def percents(self, value):
+        self.__percent = value
+    
+            # Wait duration (in s) time
+        exitkey = False
+        countdown = Timer(duration)
+        # Set the default timeout (in ms) for the getch method
+        self.term_window.timeout(int(duration * 1000))
+        while not countdown.finished() and not exitkey:
+            # Getkey
+            pressedkey = self.__catch_key(return_to_browser=return_to_browser)
+            # Is it an exit key ?
+            exitkey = (pressedkey == ord('\x1b') or pressedkey == ord('q'))
+            if not exitkey and pressedkey > -1:
+                # Redraw display
+                self.flush(stats, cs_status=cs_status)
+                # Overwrite the timeout with the countdown
+                self.term_window.timeout(int(countdown.get() * 1000))
+    
+            try:
+            res = urlopen(PYPI_API_URL, timeout=3).read()
+        except (HTTPError, URLError, CertificateError) as e:
+            logger.debug('Cannot get Glances version from the PyPI RESTful API ({})'.format(e))
+        else:
+            self.data[u'latest_version'] = json.loads(nativestr(res))['info']['version']
+            logger.debug('Save Glances version to the cache file')
+    
+    
+def safe_rmtree(path):
+    def onerror(fun, path, excinfo):
+        exc = excinfo[1]
+        if exc.errno != errno.ENOENT:
+            raise
+    
+    from glances.logger import logger
+from glances.amps.glances_amp import GlancesAmp
+    
+        @staticmethod
+    def find_active_ip_address():
+        '''Try to find the active IP addresses.'''
+        import netifaces
+        # Interface of the default gateway
+        gateway_itf = netifaces.gateways()['default'][netifaces.AF_INET][1]
+        # IP address for the interface
+        return netifaces.ifaddresses(gateway_itf)[netifaces.AF_INET][0]['addr']
+    
+            Example for the mem plugin:
+        {'percent': [
+            (datetime.datetime(2018, 3, 24, 16, 27, 47, 282070), 51.8),
+            (datetime.datetime(2018, 3, 24, 16, 27, 47, 540999), 51.9),
+            (datetime.datetime(2018, 3, 24, 16, 27, 50, 653390), 52.0),
+            (datetime.datetime(2018, 3, 24, 16, 27, 53, 749702), 52.0),
+            (datetime.datetime(2018, 3, 24, 16, 27, 56, 825660), 52.0),
+            ...
+            ]
+        }
