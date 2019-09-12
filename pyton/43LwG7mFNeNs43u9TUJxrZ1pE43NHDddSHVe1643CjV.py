@@ -1,316 +1,232 @@
 
         
-            t = Template('This is a view that modifies the session.',
-                 name='Session Modifying View Template')
-    c = Context()
-    return HttpResponse(t.render(c))
+        
+class CBSNewsLiveVideoIE(InfoExtractor):
+    IE_NAME = 'cbsnews:livevideo'
+    IE_DESC = 'CBS News Live Videos'
+    _VALID_URL = r'https?://(?:www\.)?cbsnews\.com/live/video/(?P<id>[^/?#]+)'
     
     
-class InlineAdminForm(AdminForm):
-    '''
-    A wrapper around an inline form for use in the admin system.
-    '''
-    def __init__(self, formset, form, fieldsets, prepopulated_fields, original,
-                 readonly_fields=None, model_admin=None, view_on_site_url=None):
-        self.formset = formset
-        self.model_admin = model_admin
-        self.original = original
-        self.show_url = original and view_on_site_url is not None
-        self.absolute_url = view_on_site_url
-        super().__init__(form, fieldsets, prepopulated_fields, readonly_fields, model_admin)
+def openssl_encode(algo, key, iv):
+    cmd = ['openssl', 'enc', '-e', '-' + algo, '-K', hex_str(key), '-iv', hex_str(iv)]
+    prog = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+    out, _ = prog.communicate(secret_msg)
+    return out
+    
+    with open('update/LATEST_VERSION', 'w') as f:
+    f.write(version)
+    
+    print('Enter the PKCS1 private key, followed by a blank line:')
+privkey = b''
+while True:
+    try:
+        line = input()
+    except EOFError:
+        break
+    if line == '':
+        break
+    privkey += line.encode('ascii') + b'\n'
+privkey = rsa.PrivateKey.load_pkcs1(privkey)
+    
+    youtube\-dl \- download videos from youtube.com or other video platforms
+    
+        flags = [opt.get_opt_string() for opt in opts]
     
     
-class AuthorAdmin(admin.ModelAdmin):
-    inlines = [
-        BookInline, NonAutoPKBookTabularInline, NonAutoPKBookStackedInline,
-        EditablePKBookTabularInline, EditablePKBookStackedInline,
-        NonAutoPKBookChildTabularInline,
-    ]
-    
-        def test_tabular_inline_show_change_link_false_registered(self):
-        'Inlines `show_change_link` disabled by default.'
-        poll = Poll.objects.create(name='New poll')
-        Question.objects.create(poll=poll)
-        response = self.client.get(reverse('admin:admin_inlines_poll_change', args=(poll.pk,)))
-        self.assertTrue(response.context['inline_admin_formset'].opts.has_registered_model)
-        self.assertNotContains(response, INLINE_CHANGELINK_HTML)
-    
-            for version in versions:
-            with self.subTest(version=version):
-                ops = FakePostGISOperations(version[0])
-                actual = ops.spatial_version
-                self.assertEqual(version[1:], actual)
+class ActionForm(forms.Form):
+    action = forms.ChoiceField(label=_('Action:'))
+    select_across = forms.BooleanField(
+        label='',
+        required=False,
+        initial=0,
+        widget=forms.HiddenInput({'class': 'select-across'}),
+    )
     
     
-class classonlymethod(classmethod):
-    def __get__(self, instance, cls=None):
-        if instance is not None:
-            raise AttributeError('This method is available only on the class, not on instances.')
-        return super().__get__(instance, cls)
+class NonAutoPKBookChildTabularInline(admin.TabularInline):
+    model = NonAutoPKBookChild
+    classes = ('collapse',)
     
-                # {% trans %} with a filter
-            for minor_part in 'abcdefgh':  # Iterate from #7.1a to #7.1h template markers
-                self.assertIn('msgctxt 'context #7.1{}''.format(minor_part), po_contents)
-                self.assertMsgId('Translatable literal #7.1{}'.format(minor_part), po_contents)
+    from django.core.exceptions import ImproperlyConfigured
+from django.db import ProgrammingError
     
-        def _set_spatial_filter(self, filter):
-        if isinstance(filter, OGRGeometry):
-            capi.set_spatial_filter(self.ptr, filter.ptr)
-        elif isinstance(filter, (tuple, list)):
-            if not len(filter) == 4:
-                raise ValueError('Spatial filter list/tuple must have 4 elements.')
-            # Map c_double onto params -- if a bad type is passed in it
-            # will be caught here.
-            xmin, ymin, xmax, ymax = map(c_double, filter)
-            capi.set_spatial_filter_rect(self.ptr, xmin, ymin, xmax, ymax)
-        elif filter is None:
-            capi.set_spatial_filter(self.ptr, None)
-        else:
-            raise TypeError('Spatial filter must be either an OGRGeometry instance, a 4-tuple, or None.')
+              # We can also increment through all of the fields
+          #  attached to this feature.
+          for field in feature:
+              # Get the name of the field (e.g. 'description')
+              nm = field.name
     
     
-def test_unicode_digest_auth(httpbin):
-    # it doesn't really authenticate us because httpbin
-    # doesn't interpret the utf8-encoded auth
-    http('--auth-type=digest',
-         '--auth', u'test:%s' % UNICODE,
-         httpbin.url + u'/digest-auth/auth/test/' + UNICODE)
-
+class OFTInteger64List(Field):
+    pass
     
+        @property
+    def convex_hull(self):
         '''
-    abbrevs = [
-        (1 << 50, 'PB'),
-        (1 << 40, 'TB'),
-        (1 << 30, 'GB'),
-        (1 << 20, 'MB'),
-        (1 << 10, 'kB'),
-        (1, 'B')
-    ]
+        Return the smallest convex Polygon that contains all the points
+        in the Geometry.
+        '''
+        return self._topology(capi.geos_convexhull(self.ptr))
     
-        @classmethod
-    def from_args(
-        cls,
-        request_item_args: List[KeyValueArg],
-        as_form=False,
-        chunked=False
-    ) -> 'RequestItems':
-        instance = RequestItems(as_form=as_form, chunked=chunked)
-        rules: Dict[str, Tuple[Callable, dict]] = {
-            SEPARATOR_HEADER: (
-                process_header_arg,
-                instance.headers,
-            ),
-            SEPARATOR_HEADER_EMPTY: (
-                process_empty_header_arg,
-                instance.headers,
-            ),
-            SEPARATOR_QUERY_PARAM: (
-                process_query_param_arg,
-                instance.params,
-            ),
-            SEPARATOR_FILE_UPLOAD: (
-                process_file_upload_arg,
-                instance.files,
-            ),
-            SEPARATOR_DATA_STRING: (
-                process_data_item_arg,
-                instance.data,
-            ),
-            SEPARATOR_DATA_EMBED_FILE_CONTENTS: (
-                process_data_embed_file_contents_arg,
-                instance.data,
-            ),
-            SEPARATOR_DATA_RAW_JSON: (
-                process_data_raw_json_embed_arg,
-                instance.data,
-            ),
-            SEPARATOR_DATA_EMBED_RAW_JSON_FILE: (
-                process_data_embed_raw_json_file_arg,
-                instance.data,
-            ),
-        }
+        def test_mark_safe_decorator_does_not_affect_dunder_html(self):
+        '''
+        mark_safe doesn't affect a callable that has an __html__() method.
+        '''
+        class SafeStringContainer:
+            def __html__(self):
+                return '<html></html>'
     
-        def test_binary_file_path(self, httpbin):
-        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
-        r = http('--print=B', 'POST', httpbin.url + '/post',
-                 '@' + BIN_FILE_PATH_ARG, env=env, )
-        assert r == BIN_FILE_CONTENT
+        # Loading and vectorizing the data:
+    print('====== %s ======' % dat)
+    print('--- Fetching data...')
+    if dat in ['http', 'smtp', 'SF', 'SA']:
+        dataset = fetch_kddcup99(subset=dat, shuffle=True,
+                                 percent10=True, random_state=random_state)
+        X = dataset.data
+        y = dataset.target
     
-        def get_converters(self) -> List[Type[ConverterPlugin]]:
-        return self.filter(ConverterPlugin)
+    Show below is a logistic-regression classifiers decision boundaries on the
+first two dimensions (sepal length and width) of the `iris
+<https://en.wikipedia.org/wiki/Iris_flower_data_set>`_ dataset. The datapoints
+are colored according to their labels.
     
-        def __init__(self, directory: Union[str, Path] = DEFAULT_CONFIG_DIR):
-        super().__init__()
-        self.update(self.DEFAULTS)
-        self.directory = Path(directory)
+    # Turn up tolerance for faster convergence
+clf = LogisticRegression(
+    C=50. / train_samples, penalty='l1', solver='saga', tol=0.1
+)
+clf.fit(X_train, y_train)
+sparsity = np.mean(clf.coef_ == 0) * 100
+score = clf.score(X_test, y_test)
+# print('Best C % .4f' % clf.C_)
+print('Sparsity with L1 penalty: %.2f%%' % sparsity)
+print('Test score with L1 penalty: %.4f' % score)
     
-    When starting from the default values (alpha_init = 1.90, lambda_init = 1.),
-the bias of the resulting curve is large, and the variance is small.
-So, lambda_init should be relatively small (1.e-3) so as to reduce the bias.
+        Parameters
+    ----------
+    X : CSR or CSC sparse matrix, shape=(n_samples, n_features)
+        Matrix whose two columns are to be swapped.
     
-        # now do a benchmark where the number of points is fixed
-    # and the variable is the number of features
+        n = 10
+    step = 10000
+    n_samples = 10000
+    dim = 10
+    n_classes = 10
+    for i in range(n):
+        print('============================================')
+        print('Entering iteration %s of %s' % (i, n))
+        print('============================================')
+        n_samples += step
+        X = np.random.randn(n_samples, dim)
+        Y = np.random.randint(0, n_classes, (n_samples,))
+        bench_scikit_tree_classifier(X, Y)
+        Y = np.random.randn(n_samples)
+        bench_scikit_tree_regressor(X, Y)
     
-        An example with a long-untouched module that everyone has
-    >>> _linkcode_resolve('py', {'module': 'tty',
-    ...                          'fullname': 'setraw'},
-    ...                   package='tty',
-    ...                   url_fmt='http://hg.python.org/cpython/file/'
-    ...                           '{revision}/Lib/{package}/{path}#L{lineno}',
-    ...                   revision='xxxx')
-    'http://hg.python.org/cpython/file/xxxx/Lib/tty/tty.py#L18'
-    '''
+        # TASK: print the mean and std for each candidate along with the parameter
+    # settings for all the candidates explored by grid search.
+    n_candidates = len(grid_search.cv_results_['params'])
+    for i in range(n_candidates):
+        print(i, 'params - %s; mean - %0.2f; std - %0.2f'
+                 % (grid_search.cv_results_['params'][i],
+                    grid_search.cv_results_['mean_test_score'][i],
+                    grid_search.cv_results_['std_test_score'][i]))
     
-    '''
-# Author: Olivier Grisel <olivier.grisel@ensta.org>
-# License: Simplified BSD
+        if f == os.path.basename(__file__):
+        continue
     
-        in_exercise_region = False
+    Second, when using a connectivity matrix, single, average and complete
+linkage are unstable and tend to create a few clusters that grow very
+quickly. Indeed, average and complete linkage fight this percolation behavior
+by considering all the distances between two clusters when merging them (
+while single linkage exaggerates the behaviour by considering only the
+shortest distance between clusters). The connectivity graph breaks this
+mechanism for average and complete linkage, making them resemble the more
+brittle single linkage. This effect is more pronounced for very sparse graphs
+(try decreasing the number of neighbors in kneighbors_graph) and with
+complete linkage. In particular, having a very small number of neighbors in
+the graph, imposes a geometry that is close to that of single linkage,
+which is well known to have this percolation instability. '''
+# Authors: Gael Varoquaux, Nelle Varoquaux
+# License: BSD 3 clause
     
-    plt.matshow(np.outer(np.sort(model.row_labels_) + 1,
-                     np.sort(model.column_labels_) + 1),
-            cmap=plt.cm.Blues)
-plt.title('Checkerboard structure of rearranged data')
+    digits = datasets.load_digits()
+images = digits.images
+X = np.reshape(images, (len(images), -1))
+connectivity = grid_to_graph(*images[0].shape)
     
-    # Now predict the value of the digit on the second half:
-expected = digits.target[n_samples // 2:]
-predicted = classifier.predict(data[n_samples // 2:])
+        verifyThirdPartyFile(url, recipe['checksum'], sourceArchive)
+    print('Extracting archive for %s'%(name,))
+    buildDir=os.path.join(WORKDIR, '_bld')
+    if not os.path.exists(buildDir):
+        os.mkdir(buildDir)
     
+            expected = {9: 1, 18: 2, 19: 2, 27: 3, 28: 3, 29: 3, 36: 4, 37: 4,
+                    38: 4, 39: 4, 45: 5, 46: 5, 47: 5, 48: 5, 49: 5, 54: 6,
+                    55: 6, 56: 6, 57: 6, 58: 6, 59: 6, 63: 7, 64: 7, 65: 7,
+                    66: 7, 67: 7, 68: 7, 69: 7, 72: 8, 73: 8, 74: 8, 75: 8,
+                    76: 8, 77: 8, 78: 8, 79: 8, 81: 9, 82: 9, 83: 9, 84: 9,
+                    85: 9, 86: 9, 87: 9, 88: 9, 89: 9}
+        actual = {k: v for v in range(10) for k in range(v * 9, v * 10)}
+        self.assertEqual(k, 'Local Variable')
+        self.assertEqual(actual, expected)
     
-X = np.concatenate((x, y))
-X += .7 * np.random.randn(2, n_samples)
-X = X.T
+    class NNTPPermanentError(NNTPError):
+    '''5xx errors'''
+    pass
     
-    We generate data from three groups of waveforms. Two of the waveforms
-(waveform 1 and waveform 2) are proportional one to the other. The cosine
-distance is invariant to a scaling of the data, as a result, it cannot
-distinguish these two waveforms. Thus even with no noise, clustering
-using this distance will not separate out waveform 1 and 2.
+    __all__ = ['Empty', 'Full', 'Queue', 'PriorityQueue', 'LifoQueue', 'SimpleQueue']
     
-        ax.w_xaxis.set_ticklabels([])
-    ax.w_yaxis.set_ticklabels([])
-    ax.w_zaxis.set_ticklabels([])
-    ax.set_xlabel('Petal width')
-    ax.set_ylabel('Sepal length')
-    ax.set_zlabel('Petal length')
-    ax.set_title(titles[fignum - 1])
-    ax.dist = 12
-    fignum = fignum + 1
+        def test_unreadable(self):
+        class UnReadable(self.BytesIO):
+            def readable(self):
+                return False
+        txt = self.TextIOWrapper(UnReadable())
+        self.assertRaises(OSError, txt.read)
     
-    plt.show()
-
+        def CheckInTransaction(self):
+        # Can't use db from setUp because we want to test initial state.
+        cx = sqlite.connect(':memory:')
+        cu = cx.cursor()
+        self.assertEqual(cx.in_transaction, False)
+        cu.execute('create table transactiontest(id integer primary key, name text)')
+        self.assertEqual(cx.in_transaction, False)
+        cu.execute('insert into transactiontest(name) values (?)', ('foo',))
+        self.assertEqual(cx.in_transaction, True)
+        cu.execute('select name from transactiontest where name=?', ['foo'])
+        row = cu.fetchone()
+        self.assertEqual(cx.in_transaction, True)
+        cx.commit()
+        self.assertEqual(cx.in_transaction, False)
+        cu.execute('select name from transactiontest where name=?', ['foo'])
+        row = cu.fetchone()
+        self.assertEqual(cx.in_transaction, False)
     
-            ddb_deserializer = TypeDeserializer()
-        if ddb.get('OldImage'):
-            result['old_image'] = ddb_deserializer.deserialize({'M': ddb.get('OldImage')})
-        if ddb.get('NewImage'):
-            result['new_image'] = ddb_deserializer.deserialize({'M': ddb.get('NewImage')})
+    if sys.platform[:3] == 'win':
+    class WindowsDefault(BaseBrowser):
+        def open(self, url, new=0, autoraise=True):
+            sys.audit('webbrowser.open', url)
+            try:
+                os.startfile(url)
+            except OSError:
+                # [Error 22] No application is associated with the specified
+                # file for this operation: '<URL>'
+                return False
+            else:
+                return True
     
-        # subscribe SQS to SNS, publish message
-    sns_client.subscribe(TopicArn=topic_info['TopicArn'], Protocol='sqs',
-        Endpoint=aws_stack.sqs_queue_arn(TEST_QUEUE_NAME_FOR_SNS))
-    test_value = short_uid()
-    sns_client.publish(TopicArn=topic_info['TopicArn'], Message='test message for SQS',
-        MessageAttributes={'attr1': {'DataType': 'String', 'StringValue': test_value}})
+        # Clear ABC registries, restoring previously saved ABC registries.
+    abs_classes = [getattr(collections.abc, a) for a in collections.abc.__all__]
+    abs_classes = filter(isabstract, abs_classes)
+    for abc in abs_classes:
+        for obj in abc.__subclasses__() + [abc]:
+            for ref in abcs.get(obj, set()):
+                if ref() is not None:
+                    obj.register(ref())
+            obj._abc_caches_clear()
     
-            Data is given as multipart form submission bytes, and redirect is found
-        in the success_action_redirect field according to Amazon S3
-        documentation for Post uploads:
-        http://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectPOST.html
-    '''
-    _, params = cgi.parse_header(headers.get('Content-Type', ''))
-    key, redirect_url = None, None
-    
-        T, N, K = 7, 1, 1
-    lags = nd.array([[6, 7, 8, 3, 2, 1, 7]]).astype(_dtype)
-    marks = nd.array([[0, 0, 0, 0, 0, 0, 0]]).astype(np.int32)
-    valid_length = nd.array([7]).astype(_dtype)
-    
-    def test_tutorial_downloadable():
-    '''
-    Make sure that every tutorial that isn't in the whitelist has the placeholder
-    that enables notebook download
-    '''
-    download_button_string = '<!-- INSERT SOURCE DOWNLOAD BUTTONS -->'
-    
-    
-def test_transpose_partial_shape():
-    # test converting tensor shape
-    # from channels first to channels last
-    # with batch size unknown
-    axes = [0, 3, 2, 1]
-    x = mx.sym.Variable('x')
-    y = mx.sym.transpose(x, axes=axes)
-    _, result, _ = y.infer_shape_partial(x=(0, 3, 224, 224))
-    assert result == [(0, 224, 224, 3)]
-    
-            wd = self._get_wd(index)
-        num_rows = weight.shape[0]
-        coef1 = 1. - self.beta1**t
-        coef2 = 1. - self.beta2**t
-        lr *= math.sqrt(coef2)/coef1
-        for row in range(num_rows):
-            # check row slices of all zeros
-            all_zeros = mx.test_utils.almost_equal(grad[row].asnumpy(), np.zeros_like(grad[row].asnumpy()))
-            # skip zeros during lazy update
-            if all_zeros and self.lazy_update:
-                continue
-            grad[row] = grad[row] * self.rescale_grad + wd * weight[row]
-            # clip gradients
-            if self.clip_gradient is not None:
-                mx.nd.clip(grad[row], -self.clip_gradient, self.clip_gradient, out=grad[row])
-            # update mean
-            mean[row] *= self.beta1
-            mean[row] += grad[row] * (1. - self.beta1)
-            # update variance
-            variance[row] *= self.beta2
-            variance[row] += (1 - self.beta2) * mx.nd.square(grad[row], out=grad[row])
-            # update weight
-            weight[row] -= lr*mean[row]/(mx.nd.sqrt(variance[row]) + self.epsilon)
-    
-    
-def test_rnn_unroll_variant_length():
-    # Test for imperative usage
-    cell_list = []
-    for base_cell_class in [gluon.rnn.RNNCell, gluon.rnn.LSTMCell, gluon.rnn.GRUCell]:
-        cell_list.append(base_cell_class(20))
-        cell_list.append(gluon.rnn.BidirectionalCell(
-                         l_cell=base_cell_class(20),
-                         r_cell=base_cell_class(20)))
-        cell_list.append(gluon.contrib.rnn.VariationalDropoutCell(base_cell=base_cell_class(20)))
-    stack_res_rnn_cell = gluon.rnn.SequentialRNNCell()
-    stack_res_rnn_cell.add(gluon.rnn.ResidualCell(base_cell=gluon.rnn.RNNCell(20)))
-    stack_res_rnn_cell.add(gluon.rnn.ResidualCell(base_cell=gluon.rnn.RNNCell(20)))
-    cell_list.append(stack_res_rnn_cell)
-    batch_size = 4
-    max_length = 10
-    valid_length = [3, 10, 5, 6]
-    valid_length_nd = mx.nd.array(valid_length)
-    for cell in cell_list:
-        cell.collect_params().initialize()
-        cell.hybridize()
-        # Test for NTC layout
-        data_nd = mx.nd.random.normal(0, 1, shape=(batch_size, max_length, 20))
-        outs, states = cell.unroll(length=max_length, inputs=data_nd,
-                                   valid_length=valid_length_nd,
-                                   merge_outputs=True,
-                                   layout='NTC')
-        for i, ele_length in enumerate(valid_length):
-            # Explicitly unroll each sequence and compare the final states and output
-            ele_out, ele_states = cell.unroll(length=ele_length,
-                                              inputs=data_nd[i:(i+1), :ele_length, :],
-                                              merge_outputs=True,
-                                              layout='NTC')
-            assert_allclose(ele_out.asnumpy(), outs[i:(i+1), :ele_length, :].asnumpy(),
-                            atol=1E-4, rtol=1E-4)
-            if ele_length < max_length:
-                # Check the padded outputs are all zero
-                assert_allclose(outs[i:(i+1), ele_length:max_length, :].asnumpy(), 0)
-            for valid_out_state, gt_state in zip(states, ele_states):
-                assert_allclose(valid_out_state[i:(i+1)].asnumpy(), gt_state.asnumpy(),
-                                atol=1E-4, rtol=1E-4)
-    
-        Inputs:
-        - **data**: Tensor of shape ``(N, f1*f2*f3*C, D, H, W)``.
-    Outputs:
-        - **out**: Tensor of shape ``(N, C, D*f1, H*f2, W*f3)``.
+        def try_open_calltip_event(self, event):
+        '''Happens when it would be nice to open a calltip, but not really
+        necessary, for example after an opening bracket, so function calls
+        won't be made.
+        '''
+        self.open_calltip(False)
