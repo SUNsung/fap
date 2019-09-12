@@ -1,115 +1,151 @@
 
         
-            # The path used after sending unlock password instructions
-    def after_sending_unlock_instructions_path_for(resource)
-      new_session_path(resource) if is_navigational_format?
-    end
-    
-      # Attempt to find the mapped route for devise based on request path
-  def devise_mapping
-    @devise_mapping ||= request.env['devise.mapping']
+        class Devise::ConfirmationsController < DeviseController
+  # GET /resource/confirmation/new
+  def new
+    self.resource = resource_class.new
   end
     
-    Rails.application.routes.draw do
-  devise_for :users
+      def failure_message
+    exception = request.respond_to?(:get_header) ? request.get_header('omniauth.error') : request.env['omniauth.error']
+    error   = exception.error_reason if exception.respond_to?(:error_reason)
+    error ||= exception.error        if exception.respond_to?(:error)
+    error ||= (request.respond_to?(:get_header) ? request.get_header('omniauth.error.type') : request.env['omniauth.error.type']).to_s
+    error.to_s.humanize if error
+  end
     
-            if uri 
-          path = remove_domain_from_uri(uri)
-          path = add_fragment_back_to_path(uri, path)
+          def headers_for(action, opts)
+        headers = {
+          subject: subject_for(action),
+          to: resource.email,
+          from: mailer_sender(devise_mapping),
+          reply_to: mailer_reply_to(devise_mapping),
+          template_path: template_paths,
+          template_name: action
+        }.merge(opts)
     
     module Devise
-  module Controllers
-    # Create url helpers to be used with resource/scope configuration. Acts as
-    # proxies to the generated routes created by devise.
-    # Resource param can be a string or symbol, a class, or an instance object.
-    # Example using a :user resource:
-    #
-    #   new_session_path(:user)      => new_user_session_path
-    #   session_path(:user)          => user_session_path
-    #   destroy_session_path(:user)  => destroy_user_session_path
-    #
-    #   new_password_path(:user)     => new_user_password_path
-    #   password_path(:user)         => user_password_path
-    #   edit_password_path(:user)    => edit_user_password_path
-    #
-    #   new_confirmation_path(:user) => new_user_confirmation_path
-    #   confirmation_path(:user)     => user_confirmation_path
-    #
-    # Those helpers are included by default to ActionController::Base.
-    #
-    # In case you want to add such helpers to another class, you can do
-    # that as long as this new class includes both url_helpers and
-    # mounted_helpers. Example:
-    #
-    #     include Rails.application.routes.url_helpers
-    #     include Rails.application.routes.mounted_helpers
-    #
-    module UrlHelpers
-      def self.remove_helpers!
-        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
-          remove_method method
-        end
+  # Responsible for handling devise mappings and routes configuration. Each
+  # resource configured by devise_for in routes is actually creating a mapping
+  # object. You can refer to devise_for in routes for usage options.
+  #
+  # The required value in devise_for is actually not used internally, but it's
+  # inflected to find all other values.
+  #
+  #   map.devise_for :users
+  #   mapping = Devise.mappings[:user]
+  #
+  #   mapping.name #=> :user
+  #   # is the scope used in controllers and warden, given in the route as :singular.
+  #
+  #   mapping.as   #=> 'users'
+  #   # how the mapping should be search in the path, given in the route as :as.
+  #
+  #   mapping.to   #=> User
+  #   # is the class to be loaded from routes, given in the route as :class_name.
+  #
+  #   mapping.modules  #=> [:authenticatable]
+  #   # is the modules included in the class
+  #
+  class Mapping #:nodoc:
+    attr_reader :singular, :scoped_path, :path, :controllers, :path_names,
+                :class_name, :sign_out_via, :format, :used_routes, :used_helpers,
+                :failure_app, :router_name
+    
+        # The hook which is called inside devise.
+    # So your ORM can include devise compatibility stuff.
+    def devise_modules_hook!
+      yield
+    end
+  end
+end
+    
+        def clear_cache
+      downloader.clear_cache if force
+    end
+    
+        it 'returns true if installed' do
+      expect(machine.communicate).to receive(:test).
+        with(command, sudo: true).and_return(true)
+      subject.chef_installed(machine, 'chef_solo', version)
+    end
+    
+        it 'returns false if not installed' do
+      expect(machine.communicate).to receive(:test).
+        with(command, sudo: true).and_return(false)
+      expect(subject.chef_installed(machine, 'chef_solo', version)).to be_falsey
+    end
+  end
+end
+
+    
+      before do
+    allow(machine).to receive(:communicate).and_return(communicator)
+  end
+    
+        it 'should return the name and provider of active machines' do
+      machines = instance.local_data_path.join('machines')
+    
+          # Create the machine and cache it for future calls. This will also
+      # return the machine from this method.
+      return Machine.new(name, provider, provider_cls, provider_config,
+        provider_options, config, data_path, box, env, self)
+    end
+    
+          if @allow_parallel
+        par = true
+        @logger.info('Enabling parallelization by default.')
       end
     
-            # Recreate the user based on the stored cookie
-        def serialize_from_cookie(*args)
-          id, token, generated_at = *args
+          def execute
+        options = {}
     
-    module Devise
-  module Models
-    # Timeoutable takes care of verifying whether a user session has already
-    # expired or not. When a session expires after the configured time, the user
-    # will be asked for credentials again, it means, they will be redirected
-    # to the sign in page.
-    #
-    # == Options
-    #
-    # Timeoutable adds the following options to devise_for:
-    #
-    #   * +timeout_in+: the interval to timeout the user session without activity.
-    #
-    # == Examples
-    #
-    #   user.timedout?(30.minutes.ago)
-    #
-    module Timeoutable
-      extend ActiveSupport::Concern
+            def scope
+          @scope ||= if params[:option_type_id]
+                       Spree::OptionType.find(params[:option_type_id]).option_values.accessible_by(current_ability, :show)
+                     else
+                       Spree::OptionValue.accessible_by(current_ability, :show).load
+                     end
+        end
     
-        def_delegators :@s, :scan_until, :skip_until, :string
+            def new; end
     
-        def log_transform(*args, from: caller[1][/`.*'/][1..-2].sub(/^block in /, ''))
-      puts '    #{cyan from}#{cyan ': #{args * ', '}' unless args.empty?}'
+            def cancel
+          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
+          if @return_authorization.cancel
+            respond_with @return_authorization, default_template: :show
+          else
+            invalid_resource!(@return_authorization)
+          end
+        end
+    
+            def zone_params
+          attrs = params.require(:zone).permit!
+          if attrs[:zone_members]
+            attrs[:zone_members_attributes] = attrs.delete(:zone_members)
+          end
+          attrs
+        end
+    
+    def get_stdin(message)
+  print message
+  STDIN.gets.chomp
+end
+    
+      if options.respond_to? 'keys'
+    options.each do |k,v|
+      unless v.nil?
+        v = v.join ',' if v.respond_to? 'join'
+        v = v.to_json if v.respond_to? 'keys'
+        output += ' data-#{k.sub'_','-'}='#{v}''
+      end
     end
-    
-      def update_remote_path
-    unless self.unprocessed_image.url.match(/^https?:\/\//)
-      remote_path = '#{AppConfig.pod_uri.to_s.chomp('/')}#{self.unprocessed_image.url}'
-    else
-      remote_path = self.unprocessed_image.url
-    end
-    
-            diaspora_answer1 = diaspora_poll.poll_answers.first
-        diaspora_answer2 = diaspora_poll.poll_answers.second
-        federation_answer1 = federation_poll.poll_answers.first
-        federation_answer2 = federation_poll.poll_answers.second
-    
-        if @aspect.update_attributes!(aspect_params)
-      flash[:notice] = I18n.t 'aspects.update.success', :name => @aspect.name
-    else
-      flash[:error] = I18n.t 'aspects.update.failure', :name => @aspect.name
-    end
-    render :json => { :id => @aspect.id, :name => @aspect.name }
+  elsif options.respond_to? 'join'
+    output += ' data-value='#{config[key].join(',')}''
+  else
+    output += ' data-value='#{config[key]}''
   end
+  output += '></#{tag}>'
+end
     
-          # Used for mentions in the publisher and pagination on the contacts page
-      format.json {
-        @people = if params[:q].present?
-                    mutual = params[:mutual].present? && params[:mutual]
-                    Person.search(params[:q], current_user, only_contacts: true, mutual: mutual).limit(15)
-                  else
-                    set_up_contacts_json
-                  end
-        render json: @people
-      }
-    end
-  end
+    module Jekyll
