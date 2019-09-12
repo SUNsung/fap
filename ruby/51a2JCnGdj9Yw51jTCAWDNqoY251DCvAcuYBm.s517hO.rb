@@ -1,203 +1,251 @@
 
         
-                private
+            # Localised app details values
+    LOCALISED_APP_VALUES = [:name, :subtitle, :privacy_url, :apple_tv_privacy_policy]
     
-        def sha256(value)
-      salt = Settings.attr_encrypted_db_key_base_truncated
-      ::Digest::SHA256.base64digest('#{value}#{salt}')
-    end
+          attr_accessor :asset_token
     
-      describe '#can_resend_invite?' do
-    context 'when group_member is invited' do
-      before do
-        expect(group_member).to receive(:invite?).and_return(true)
+              count = version.screenshots['English'].count
+          version.upload_screenshot!(screenshot_path, 4, 'English', 'iphone4', true)
+          expect(version.screenshots['English'].count).to eq(count + 1)
+        end
+    
+          def self.author
+        'pvinis'
       end
     
-            it { expect(presenter.can_resend_invite?).to eq(false) }
+    describe Match::CommandsGenerator do
+  let(:available_options) { Match::Options.available_options }
+    
+          def self.example_code
+        [
+          'sync_code_signing(type: 'appstore', app_identifier: 'tools.fastlane.app')',
+          'sync_code_signing(type: 'development', readonly: true)',
+          'sync_code_signing(app_identifier: ['tools.fastlane.app', 'tools.fastlane.sleepy'])',
+          'match   # alias for 'sync_code_signing''
+        ]
       end
-    end
-  end
     
-            a_split.each_with_index { |s, i| a_split[i] = s.to_i unless i == a_length - 1 }
-        b_split.each_with_index { |s, i| b_split[i] = s.to_i unless i == b_length - 1 }
+          def on_module(node)
+        name, body = *node
+        return unless name.source == 'SharedValues'
+        return if body.nil?
     
-        def push(*names)
-      @filters.push *filter_const(names)
-    end
-    
-                  ssh_info = opts[:machine].ssh_info
-              begin
-                start = Time.now
-                RsyncHelper.rsync_single(opts[:machine], ssh_info, opts[:opts])
-                finish = Time.now
-                @logger.info('Time spent in rsync: #{finish-start} (in seconds)')
-              rescue Vagrant::Errors::MachineGuestNotReady
-                # Error communicating to the machine, probably a reload or
-                # halt is happening. Just notify the user but don't fail out.
-                opts[:machine].ui.error(I18n.t(
-                  'vagrant.rsync_communicator_not_ready_callback'))
-              rescue Vagrant::Errors::RSyncPostCommandError => e
-                # Error executing rsync chown command
-                opts[:machine].ui.error(I18n.t(
-                  'vagrant.rsync_auto_post_command_error', message: e.to_s))
-              rescue Vagrant::Errors::RSyncError => e
-                # Error executing rsync, so show an error
-                opts[:machine].ui.error(I18n.t(
-                  'vagrant.rsync_auto_rsync_error', message: e.to_s))
-              end
-            end
+                resulting_path = File.join('.', language, file_name)
+            @data_by_language[language][output_name] << resulting_path
+            @data_by_screen[screen_name][output_name][language] = resulting_path
+            break # to not include iPhone 6 and 6 Plus (name is contained in the other name)
           end
         end
       end
+    
+          def self.available_options
+        [
+          # Authorization
+          FastlaneCore::ConfigItem.new(
+            key: :json_key,
+            env_name: 'SUPPLY_JSON_KEY',
+            short_option: '-j',
+            conflicting_options: [:json_key_data],
+            optional: true, # optional until it is possible specify either json_key OR json_key_data are required
+            description: 'The path to a file containing service account JSON, used to authenticate with Google',
+            code_gen_sensitive: true,
+            default_value: CredentialsManager::AppfileConfig.try_fetch_value(:json_key_file),
+            default_value_dynamic: true,
+            verify_block: proc do |value|
+              UI.user_error!('Could not find service account json file at path '#{File.expand_path(value)}'') unless File.exist?(File.expand_path(value))
+              UI.user_error!(''#{value}' doesn't seem to be a JSON file') unless FastlaneCore::Helper.json_file?(File.expand_path(value))
+            end
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :json_key_data,
+            env_name: 'SUPPLY_JSON_KEY_DATA',
+            short_option: '-c',
+            conflicting_options: [:json_key],
+            optional: true,
+            description: 'The raw service account JSON data used to authenticate with Google',
+            code_gen_sensitive: true,
+            default_value: CredentialsManager::AppfileConfig.try_fetch_value(:json_key_data_raw),
+            default_value_dynamic: true,
+            verify_block: proc do |value|
+              begin
+                JSON.parse(value)
+              rescue JSON::ParserError
+                UI.user_error!('Could not parse service account json: JSON::ParseError')
+              end
+            end
+          ),
+          FastlaneCore::ConfigItem.new(key: :developer_account_id,
+            short_option: '-k',
+            env_name: 'SUPPLY_DEVELOPER_ACCOUNT_ID',
+            description: 'The ID of your Google Play Console account. Can be obtained from the URL when you log in (`https://play.google.com/apps/publish/?account=...` or when you 'Obtain private app publishing rights' (https://developers.google.com/android/work/play/custom-app-api/get-started#retrieve_the_developer_account_id)',
+            code_gen_sensitive: true,
+            default_value: CredentialsManager::AppfileConfig.try_fetch_value(:developer_account_id),
+            default_value_dynamic: true),
+          # APK
+          FastlaneCore::ConfigItem.new(
+            key: :apk,
+            env_name: 'SUPPLY_APK',
+            description: 'Path to the APK file to upload',
+            short_option: '-b',
+            code_gen_sensitive: true,
+            default_value: Dir['*.apk'].last || Dir[File.join('app', 'build', 'outputs', 'apk', 'app-release.apk')].last,
+            default_value_dynamic: true,
+            verify_block: proc do |value|
+              UI.user_error!('No value found for 'apk'') if value.to_s.length == 0
+              UI.user_error!('Could not find apk file at path '#{value}'') unless File.exist?(value)
+              UI.user_error!('apk file is not an apk') unless value.end_with?('.apk')
+            end
+          ),
+          # Title
+          FastlaneCore::ConfigItem.new(key: :app_title,
+            env_name: 'SUPPLY_APP_TITLE',
+            short_option: '-q',
+            description: 'App Title'),
+          # Language
+          FastlaneCore::ConfigItem.new(key: :language,
+            short_option: '-m',
+            env_name: 'SUPPLY_LANGUAGE',
+            description: 'Default app language (e.g. 'en_US')',
+            default_value: 'en_US',
+            verify_block: proc do |language|
+              unless Supply::Languages::ALL_LANGUAGES.include?(language)
+                UI.user_error!('Please enter one of the available languages: #{Supply::Languages::ALL_LANGUAGES}')
+              end
+            end),
+          # Google Play API
+          FastlaneCore::ConfigItem.new(key: :root_url,
+            env_name: 'SUPPLY_ROOT_URL',
+            description: 'Root URL for the Google Play API. The provided URL will be used for API calls in place of https://www.googleapis.com/',
+            optional: true,
+            verify_block: proc do |value|
+              UI.user_error!('Could not parse URL '#{value}'') unless value =~ URI.regexp
+            end),
+          FastlaneCore::ConfigItem.new(key: :timeout,
+            env_name: 'SUPPLY_TIMEOUT',
+            optional: true,
+            description: 'Timeout for read, open, and send (in seconds)',
+            type: Integer,
+            default_value: 300)
+        ]
+      end
+    
+          def close_body(body)
+        body.close if body.respond_to?(:close)
+      end
     end
   end
 end
 
     
-      let(:helper_class) { VagrantPlugins::SyncedFolderRSync::RsyncHelper }
+        it 'redirects requests with sneaky encoded session cookies' do
+      get '/path', {}, 'HTTP_COOKIE' => 'rack.%73ession=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
+      expect(last_response).to be_redirect
+      expect(last_response.location).to eq('/path')
+    end
+  end
     
-              user = Process.uid
+        it 'leaves TempFiles untouched' do
+      mock_app do |env|
+        request = Rack::Request.new(env)
+        [200, {'Content-Type' => 'text/plain'}, [request.params['file'][:filename] + '\n' + \
+                                                 request.params['file'][:tempfile].read + '\n' + \
+                                                 request.params['other']]]
+      end
     
-          expect(a).to_not eq(b)
+    ROOT = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', '..'))
+$LOAD_PATH.unshift File.join(ROOT, 'logstash-core/lib')
+    
+      describe '#old_identifier' do
+    let(:source) do
+      'alias foo bar'
     end
     
-            class ChefError < Vagrant::Errors::VagrantError
-          error_namespace('vagrant.provisioners.chef')
+        context 'within a module definition node' do
+      let(:src) { 'module M; def method; end; 1; end' }
+    
+          def contained_by_multiline_collection_that_could_be_broken_up?(node)
+        node.each_ancestor.find do |ancestor|
+          if ancestor.hash_type? || ancestor.array_type?
+            if breakable_collection?(ancestor, ancestor.children)
+              return children_could_be_broken_up?(ancestor.children)
+            end
+          end
+    
+        it 'registers an offense if no method is defined' do
+      src = <<~RUBY
+        A.instance_eval do
+          #{modifier}
         end
-    
-        provider_cls
-  end
-    
-                it 'overrides download options from machine with options from CLI' do
-              expect(box).to receive(:has_update?).
-                with(machine.config.vm.box_version,
-                     {download_options:
-                       {ca_cert: 'foo', ca_path: 'bar', client_cert: 'baz',
-                        insecure: true}}).
-                and_return([md, md.version('1.1'),
-                            md.version('1.1').provider('virtualbox')])
-    
-        User.find(session[:otp_user_id]) if session[:otp_user_id]
-  end
-    
-        if run? && ARGV.any?
-      require 'optparse'
-      OptionParser.new { |op|
-        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
-        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
-        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
-        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
-        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
-        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
-      }.parse!(ARGV.dup)
+      RUBY
+      inspect_source(src)
+      expect(cop.offenses.size).to eq(1)
     end
+    
+            true
+      end
+    RUBY
   end
     
-      # insert data
-  fields.each do |field, values|
-    updated = '  s.#{field} = ['
-    updated << values.map { |v| '\n    %p' % v }.join(',')
-    updated << '\n  ]'
-    content.sub!(/  s\.#{field} = \[\n(    .*\n)*  \]/, updated)
-  end
-    
-          def self.random_token
-        SecureRandom.base64(TOKEN_LENGTH)
+          # Checks whether this node body is a void context.
+      # Always `true` for `for`.
+      #
+      # @return [true] whether the `for` node body is a void context
+      def void_context?
+        true
       end
     
-    def with_logging(lvl=Logger::DEBUG)
-  old = Sidekiq.logger.level
-  begin
-    Sidekiq.logger.level = lvl
-    yield
-  ensure
-    Sidekiq.logger.level = old
+          assert_equal 0, q.size
+      assert_equal 1, ss.size
+    
+        after do
+      Sidekiq.logger = @old_logger
+    end
+    
+          Time.stub(:now, enqueued_time) do
+        @poller.enqueue
+    
+          assert SomeScheduledWorker.perform_in(1.month, 'mike')
+      assert_equal 2, ss.size
+    
+      describe 'redis info' do
+    it 'calls the INFO command which returns at least redis_version' do
+      output = Sidekiq.redis_info
+      assert_includes output.keys, 'redis_version'
+    end
   end
 end
 
     
-        it 'can be memoized' do
-      q = Sidekiq::Queue.new('bar')
-      assert_equal 0, q.size
-      set = SetWorker.set(queue: :bar, foo: 'qaaz')
-      set.perform_async(1)
-      set.perform_async(1)
-      set.perform_async(1)
-      set.perform_async(1)
-      assert_equal 4, q.size
-      assert_equal 4, q.map{|j| j['jid'] }.uniq.size
-      set.perform_in(10, 1)
-    end
-    
-    describe 'Actors' do
-  class JoeWorker
-    include Sidekiq::Worker
-    def perform(slp)
-      raise 'boom' if slp == 'boom'
-      sleep(slp) if slp > 0
-      $count += 1
-    end
-  end
-    
-      it 'should remove dead jobs older than Sidekiq::DeadSet.timeout' do
-    Sidekiq::DeadSet.stub(:timeout, 10) do
-      Time.stub(:now, Time.now - 11) do
-        dead_set.kill(Sidekiq.dump_json(jid: '000103', class: 'MyWorker3', args: [])) # the oldest
-      end
-    
-      def new_manager(opts)
-    Sidekiq::Manager.new(opts)
-  end
-    
-      it 'execute only jobs with assigned JID' do
-    4.times do |i|
-      jid = SpecificJidWorker.perform_async(nil)
-      if i % 2 == 0
-        SpecificJidWorker.jobs[-1]['args'] = ['wrong_jid']
-      else
-        SpecificJidWorker.jobs[-1]['args'] = [jid]
+      describe 'delay' do
+    require 'action_mailer'
+    class InlineFooMailer < ActionMailer::Base
+      def bar(str)
+        raise InlineError
       end
     end
     
-        before do
-      Sidekiq::Extensions.enable_delay!
+        def tmux_pre_command
+      _send_target(tab.pre.shellescape) if tab.pre
     end
     
-    Sidekiq::Extensions.enable_delay!
-
-    
-    $redis = Redis.new
-    
-      context 'given a distribution without a META.* file' do
-    it 'should package IPC::Session' do
-      pending('Disabled on travis-ci because it always fails, and there is no way to debug it?') if is_travis
-    
-        it 'should not cause errors when reading rpm with triggers in input (#802)' do
-      @generator.attributes[:rpm_trigger_before_install] = [['test','#!/bin/sh\necho before_install trigger executed\n']]
-      @generator.attributes[:rpm_trigger_after_install] = [['test','#!/bin/sh\necho after_install trigger executed\n']]
-      @generator.attributes[:rpm_trigger_before_uninstall] = [['test','#!/bin/sh\necho before_uninstall trigger executed\n']]
-      @generator.attributes[:rpm_trigger_after_target_uninstall] = [['test','#!/bin/sh\necho after_target_uninstall trigger executed\n']]
-    
-    package = FPM::Package::Dir.new
-    
-    require 'pleaserun/cli'
-    
-      # Helper for user lookup
-  def uid2user(uid)
-    begin
-      pwent = Etc.getpwuid(uid)
-      return pwent.name
-    rescue ArgumentError => e
-      # Invalid user id? No user? Return the uid.
-      logger.warn('Failed to find username for uid #{uid}')
-      return uid.to_s
+          '#{project.tmux} send-keys -t #{tmux_window_target} #{project.pre_window.shellescape} C-m'
     end
-  end # def uid2user
     
-    # Support for self extracting sh files (.sh files)
-#
-# This class only supports output of packages.
-#
-# The sh package is a single sh file with a tar payload concatenated to the end.
-# The script can unpack the tarball to install it and call optional post install scripts.
-class FPM::Package::Sh < FPM::Package
+      factory :project_with_deprecations, class: Tmuxinator::Project do
+    transient do
+      file { yaml_load('spec/fixtures/sample.deprecations.yml') }
+    end
+    
+      subject { instance }
+    
+            Dir.mktmpdir do |dir|
+          config_parent = '#{dir}/non_existant_parent/s'
+          allow(XDG).to receive(:[]).with('CONFIG').and_return config_parent
+          expect(described_class.directory).
+            to eq '#{config_parent}/tmuxinator'
+          expect(File.directory?('#{config_parent}/tmuxinator')).to be true
+        end
+      end
+    end
+  end
