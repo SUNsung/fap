@@ -1,21 +1,22 @@
 
         
-          private
-    
-    describe LogStash::Config::PipelineConfig do
-  let(:source) { LogStash::Config::Source::Local }
-  let(:pipeline_id) { :main }
-  let(:ordered_config_parts) do
-    [
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/1', 0, 0, 'input { generator1 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/2', 0, 0,  'input { generator2 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/3', 0, 0, 'input { generator3 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/4', 0, 0, 'input { generator4 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/5', 0, 0, 'input { generator5 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/6', 0, 0, 'input { generator6 }'),
-      org.logstash.common.SourceWithMetadata.new('string', 'config_string', 0, 0, 'input { generator1 }'),
-    ]
+        version = ['', 'ext/etc/'].find do |dir|
+  begin
+    break File.open(File.expand_path('../#{dir}/etc.c', __FILE__)) do |f|
+      f.gets '\n#define RUBY_ETC_VERSION '
+      f.gets[/'(.+)'/, 1]
+    end
+  rescue
+    next
   end
+end
     
-    task :spec    => 'spec:all'
-task :default => :spec
+        val = '{' + val + '}\n'
+    sym == :ACTION  or raise ScanError, 'is not action!'
+    val == ok       or raise ScanError, '\n>>>\n#{ok}----\n#{val}<<<'
+    
+              can_event = 'can_#{@event}?'
+    
+      private
+    
+      private
