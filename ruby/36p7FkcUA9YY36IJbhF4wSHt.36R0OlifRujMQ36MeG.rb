@@ -1,71 +1,112 @@
 
         
-            def editor(screenshot)
-      if screenshot.mac?
-        return MacEditor.new(screenshot)
-      else
-        return Editor.new(screenshot, Frameit.config[:debug_mode])
+            assert_equal (0),                                          CMath.atan2(0,1)
+    assert_in_delta (1.3389725222944935+0.4023594781085251i),  CMath.atan2(1+2i,1)
+    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.atan2('0', 1) }
+  end
+    
+      def test_parent_file_name
+    assert_equal '(unknown)', @co.parent_file_name
+    assert_equal 'xref_data.rb', @c1.parent_file_name
+  end
+    
+      def refute_ref name
+    assert_equal name, @xref.resolve(name, name)
+  end
+    
+        assert_equal [e1_m1, e1_m2, e1_m3, e1_m4, e1_k0_m4], m1_k1.extends
+    assert_equal ['Object'], m1_k1.ancestors
+    
+      def test_text_eh
+    refute @xref_data.text?
+    
+      def test_append_chain_two
+    assert_equal(Reline::KillRing::State::FRESH, @kill_ring.instance_variable_get(:@state))
+    @kill_ring.append('a')
+    assert_equal(Reline::KillRing::State::CONTINUED, @kill_ring.instance_variable_get(:@state))
+    @kill_ring.process
+    assert_equal(Reline::KillRing::State::PROCESSED, @kill_ring.instance_variable_get(:@state))
+    @kill_ring.append('b')
+    assert_equal(Reline::KillRing::State::CONTINUED, @kill_ring.instance_variable_get(:@state))
+    @kill_ring.process
+    assert_equal(Reline::KillRing::State::PROCESSED, @kill_ring.instance_variable_get(:@state))
+    @kill_ring.process
+    assert_equal(Reline::KillRing::State::FRESH, @kill_ring.instance_variable_get(:@state))
+    @kill_ring.append('c')
+    assert_equal(Reline::KillRing::State::CONTINUED, @kill_ring.instance_variable_get(:@state))
+    @kill_ring.process
+    assert_equal(Reline::KillRing::State::PROCESSED, @kill_ring.instance_variable_get(:@state))
+    @kill_ring.append('d')
+    assert_equal(Reline::KillRing::State::CONTINUED, @kill_ring.instance_variable_get(:@state))
+    @kill_ring.process
+    assert_equal(Reline::KillRing::State::PROCESSED, @kill_ring.instance_variable_get(:@state))
+    assert_equal('cd', @kill_ring.yank)
+    assert_equal(Reline::KillRing::State::YANK, @kill_ring.instance_variable_get(:@state))
+    assert_equal('cd', @kill_ring.yank)
+    assert_equal(Reline::KillRing::State::YANK, @kill_ring.instance_variable_get(:@state))
+    assert_equal(['ab', 'cd'], @kill_ring.yank_pop)
+    assert_equal(Reline::KillRing::State::YANK, @kill_ring.instance_variable_get(:@state))
+    assert_equal(['cd', 'ab'], @kill_ring.yank_pop)
+    assert_equal(Reline::KillRing::State::YANK, @kill_ring.instance_variable_get(:@state))
+  end
+    
+          spec['main'] =
+          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
+          find_files.(Bootstrap.fonts_path) +
+          %w(assets/javascripts/bootstrap.js)
+    
+      # Version of your assets, change this if you want to expire all your assets.
+  config.assets.version = '1.0'
+    
+      def test_font_helper_with_suffix_question
+    assert_match %r(url\(['']?/assets/.*eot\?.*['']?\)), @css
+  end
+    
+          def pack_uri(plugin_name)
+        url = '#{elastic_pack_base_uri}/#{plugin_name}/#{plugin_name}-#{LOGSTASH_VERSION}.#{PACK_EXTENSION}'
+        URI.parse(url)
       end
+    
+    describe LogStash::Config::PipelineConfig do
+  let(:source) { LogStash::Config::Source::Local }
+  let(:pipeline_id) { :main }
+  let(:ordered_config_parts) do
+    [
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/1', 0, 0, 'input { generator1 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/2', 0, 0,  'input { generator2 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/3', 0, 0, 'input { generator3 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/4', 0, 0, 'input { generator4 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/5', 0, 0, 'input { generator5 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/6', 0, 0, 'input { generator6 }'),
+      org.logstash.common.SourceWithMetadata.new('string', 'config_string', 0, 0, 'input { generator1 }'),
+    ]
+  end
+    
+        def call(*args)
+      @recorder << [@name, 'before']
+      yield
+      @recorder << [@name, 'after']
     end
   end
-end
-
     
-              disabled_services_object = self.service_object
-          disabled_services.each do |k, v|
-            disabled_services_object.__hash__[k] = true
-            disabled_services_object.send('#{k}=', v)
-          end
-          Produce::Service.disable(disabled_services_object, nil) unless disabled_services.empty?
+      describe 'error handling' do
+    it 'deals with user-specified error handlers which raise errors' do
+      output = capture_logging do
+        begin
+          Sidekiq.error_handlers << proc {|x, hash|
+            raise 'boom'
+          }
+          cli = Sidekiq::CLI.new
+          cli.handle_exception(RuntimeError.new('hello'))
+        ensure
+          Sidekiq.error_handlers.pop
         end
       end
-    
-            new_appendix = new_appendix.sub('.', '') if new_appendix.start_with?('.')
-        major = version_match[:major].to_i
-        minor = version_match[:minor].to_i || 0
-        patch = version_match[:patch].to_i || 0
-    
-          @app ||= Spaceship::ConnectAPI::App.get(app_id: @app_id)
-      unless @app
-        UI.user_error!('Could not find app with #{(config[:apple_id] || config[:app_identifier])}')
-      end
-      return @app
-    end
-    
-              metric = (tester.beta_tester_metrics || []).first
-          if metric.installed?
-            install_version = '#{metric.installed_cf_bundle_short_version_string} (#{metric.installed_cf_bundle_version})'
-            pretty_date = metric.installed_cf_bundle_version
-          end
-    
-        private
-    
-          def self.get(bundle_id_id: nil, includes: nil)
-        return Spaceship::ConnectAPI.get_bundle_id(bundle_id_id: bundle_id_id, includes: includes).first
-      end
+      assert_includes output, 'boom'
+      assert_includes output, 'ERROR'
     end
   end
+    
+      def perform
+  end
 end
-
-    
-        def check_sha256_actually_256(sha256: cask.sha256, stanza: 'sha256')
-      odebug 'Verifying #{stanza} string is a legal SHA-256 digest'
-      return unless sha256.is_a?(String)
-      return if sha256.length == 64 && sha256[/^[0-9a-f]+$/i]
-    
-    module RuboCop
-  module Cop
-    module FormulaAudit
-      # This cop checks for various miscellaneous Homebrew coding styles.
-      class Lines < FormulaCop
-        def audit_formula(_node, _class_node, _parent_class_node, _body_node)
-          [:automake, :ant, :autoconf, :emacs, :expat, :libtool, :mysql, :perl,
-           :postgresql, :python, :python3, :rbenv, :ruby].each do |dependency|
-            next unless depends_on?(dependency)
-    
-        it 'works with tags' do
-      spec.uses_from_macos('foo' => :head, :after => :el_capitan)
-    
-    module Cask
-  class Download
-    attr_reader :cask
