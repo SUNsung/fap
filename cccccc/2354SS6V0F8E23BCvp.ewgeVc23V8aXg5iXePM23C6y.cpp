@@ -1,324 +1,328 @@
 
         
-            Settings::KeyModifiers KeyChord::Modifiers()
-    {
-        return _modifiers;
-    }
-    
-    #endif   // CAFFE_UTIL_HDF5_H_
-#endif   // USE_HDF5
-
-    
-    template <typename Dtype>
-void SGDSolver<Dtype>::SnapshotSolverStateToHDF5(
-    const string& model_filename) {
-// This code is taken from https://github.com/sh1r0/caffe-android-lib
-#ifdef USE_HDF5
-  string snapshot_filename =
-      Solver<Dtype>::SnapshotFilename('.solverstate.h5');
-  LOG(INFO) << 'Snapshotting solver state to HDF5 file ' << snapshot_filename;
-  hid_t file_hid = H5Fcreate(snapshot_filename.c_str(), H5F_ACC_TRUNC,
-      H5P_DEFAULT, H5P_DEFAULT);
-  CHECK_GE(file_hid, 0)
-      << 'Couldn't open ' << snapshot_filename << ' to save solver state.';
-  hdf5_save_int(file_hid, 'iter', this->iter_);
-  hdf5_save_string(file_hid, 'learned_net', model_filename);
-  hdf5_save_int(file_hid, 'current_step', this->current_step_);
-  hid_t history_hid = H5Gcreate2(file_hid, 'history', H5P_DEFAULT, H5P_DEFAULT,
-      H5P_DEFAULT);
-  CHECK_GE(history_hid, 0)
-      << 'Error saving solver state to ' << snapshot_filename << '.';
-  for (int i = 0; i < history_.size(); ++i) {
-    ostringstream oss;
-    oss << i;
-    hdf5_save_nd_dataset<Dtype>(history_hid, oss.str(), *history_[i]);
-  }
-  H5Gclose(history_hid);
-  H5Fclose(file_hid);
-// This code is taken from https://github.com/sh1r0/caffe-android-lib
-#else
-  LOG(FATAL) << 'SnapshotSolverStateToHDF5 requires hdf5;'
-             << ' compile with USE_HDF5.';
-#endif  // USE_HDF5
-}
-    
-    template<typename TypeParam>
-void HDF5OutputLayerTest<TypeParam>::CheckBlobEqual(const Blob<Dtype>& b1,
-                                                    const Blob<Dtype>& b2) {
-  EXPECT_EQ(b1.num(), b2.num());
-  EXPECT_EQ(b1.channels(), b2.channels());
-  EXPECT_EQ(b1.height(), b2.height());
-  EXPECT_EQ(b1.width(), b2.width());
-  for (int n = 0; n < b1.num(); ++n) {
-    for (int c = 0; c < b1.channels(); ++c) {
-      for (int h = 0; h < b1.height(); ++h) {
-        for (int w = 0; w < b1.width(); ++w) {
-          EXPECT_EQ(b1.data_at(n, c, h, w), b2.data_at(n, c, h, w));
+        
+    {    secp256k1_scalar_get_b32(brx, sigr);
+    r = secp256k1_fe_set_b32(&fx, brx);
+    (void)r;
+    VERIFY_CHECK(r); /* brx comes from a scalar, so is less than the order; certainly less than p */
+    if (recid & 2) {
+        if (secp256k1_fe_cmp_var(&fx, &secp256k1_ecdsa_const_p_minus_order) >= 0) {
+            return 0;
         }
-      }
+        secp256k1_fe_add(&fx, &secp256k1_ecdsa_const_order_as_fe);
     }
-  }
+    if (!secp256k1_ge_set_xo_var(&x, &fx, recid & 1)) {
+        return 0;
+    }
+    secp256k1_gej_set_ge(&xj, &x);
+    secp256k1_scalar_inverse_var(&rn, sigr);
+    secp256k1_scalar_mul(&u1, &rn, message);
+    secp256k1_scalar_negate(&u1, &u1);
+    secp256k1_scalar_mul(&u2, &rn, sigs);
+    secp256k1_ecmult(ctx, &qj, &xj, &u2, &u1);
+    secp256k1_ge_set_gej_var(pubkey, &qj);
+    return !secp256k1_gej_is_infinity(&qj);
 }
     
-    string hdf5_load_string(hid_t loc_id, const string& dataset_name) {
-  // Get size of dataset
-  size_t size;
-  H5T_class_t class_;
-  herr_t status = \
-    H5LTget_dataset_info(loc_id, dataset_name.c_str(), NULL, &class_, &size);
-  CHECK_GE(status, 0) << 'Failed to get dataset info for ' << dataset_name;
-  char *buf = new char[size];
-  status = H5LTread_dataset_string(loc_id, dataset_name.c_str(), buf);
-  CHECK_GE(status, 0)
-    << 'Failed to load int dataset with name ' << dataset_name;
-  string val(buf);
-  delete[] buf;
-  return val;
-}
+      bool DeleteAnSSTFile() {
+    std::vector<std::string> filenames;
+    ASSERT_OK(env_->GetChildren(dbname_, &filenames));
+    uint64_t number;
+    FileType type;
+    for (size_t i = 0; i < filenames.size(); i++) {
+      if (ParseFileName(filenames[i], &number, &type) && type == kTableFile) {
+        ASSERT_OK(env_->DeleteFile(TableFileName(dbname_, number)));
+        return true;
+      }
+    }
+    return false;
+  }
+    
+    // Return the name of the sstable with the specified number
+// in the db named by 'dbname'.  The result will be prefixed with
+// 'dbname'.
+extern std::string TableFileName(const std::string& dbname, uint64_t number);
+    
+    #include <string>
     
     template <typename Dtype>
-void Solver<Dtype>::CheckSnapshotWritePermissions() {
-  if (Caffe::root_solver() && param_.snapshot()) {
-    CHECK(param_.has_snapshot_prefix())
-        << 'In solver params, snapshot is specified but snapshot_prefix is not';
-    string probe_filename = SnapshotFilename('.tempfile');
-    std::ofstream probe_ofs(probe_filename.c_str());
-    if (probe_ofs.good()) {
-      probe_ofs.close();
-      std::remove(probe_filename.c_str());
-    } else {
-      LOG(FATAL) << 'Cannot write to snapshot prefix ''
-          << param_.snapshot_prefix() << ''.  Make sure '
-          << 'that the directory exists and is writable.';
-    }
-  }
+string Solver<Dtype>::SnapshotToHDF5() {
+  string model_filename = SnapshotFilename('.caffemodel.h5');
+  LOG(INFO) << 'Snapshotting to HDF5 file ' << model_filename;
+  net_->ToHDF5(model_filename, param_.snapshot_diff());
+  return model_filename;
 }
     
+    private:
+    // Helper function to clear out a secondary index that has been
+    // marked as deleted and drop it at the end. To be run in a coroutine.
+    void delayed_clear_and_drop_sindex(
+            secondary_index_t sindex,
+            auto_drainer_t::lock_t store_keepalive)
+            THROWS_NOTHING;
+    // Drops a secondary index. Assumes that the index has previously been cleared
+    // through `clear_sindex_data()`.
+    void drop_sindex(uuid_u sindex_id) THROWS_NOTHING;
     
-    {  /* Print the top N predictions. */
-  for (size_t i = 0; i < predictions.size(); ++i) {
-    Prediction p = predictions[i];
-    std::cout << std::fixed << std::setprecision(4) << p.second << ' - \''
-              << p.first << '\'' << std::endl;
-  }
-}
-#else
-int main(int argc, char** argv) {
-  LOG(FATAL) << 'This example requires OpenCV; compile with USE_OPENCV.';
-}
-#endif  // USE_OPENCV
-
+                    bool sindex_exists = store.acquire_sindex_superblock_for_write(
+                    name,
+                    '',
+                    super_block.get(),
+                    &sindex_super_block,
+                    &sindex_uuid);
+                ASSERT_TRUE(sindex_exists);
     
-      // Returns the mode: running on CPU or GPU.
-  inline static Brew mode() { return Get().mode_; }
-  // The setters for the variables
-  // Sets the mode. It is recommended that you don't change the mode halfway
-  // into the program since that may cause allocation of pinned memory being
-  // freed in a non-pinned way, which may cause problems - I haven't verified
-  // it personally but better to note it here in the header file.
-  inline static void set_mode(Brew mode) { Get().mode_ = mode; }
-  // Sets the random seed of both boost and curand
-  static void set_random_seed(const unsigned int seed);
-  // Sets the device. Since we have cublas and curand stuff, set device also
-  // requires us to reset those values.
-  static void SetDevice(const int device_id);
-  // Prints the current GPU status.
-  static void DeviceQuery();
-  // Check if specified device is available
-  static bool CheckDevice(const int device_id);
-  // Search from start_id to the highest possible device ordinal,
-  // return the ordinal of the first available device.
-  static int FindDevice(const int start_id = 0);
-  // Parallel training
-  inline static int solver_count() { return Get().solver_count_; }
-  inline static void set_solver_count(int val) { Get().solver_count_ = val; }
-  inline static int solver_rank() { return Get().solver_rank_; }
-  inline static void set_solver_rank(int val) { Get().solver_rank_ = val; }
-  inline static bool multiprocess() { return Get().multiprocess_; }
-  inline static void set_multiprocess(bool val) { Get().multiprocess_ = val; }
-  inline static bool root_solver() { return Get().solver_rank_ == 0; }
-    
-    /** @brief Fills a Blob with values @f$ x \in [0, 1] @f$
- *         such that @f$ \forall i \sum_j x_{ij} = 1 @f$.
- */
-template <typename Dtype>
-class PositiveUnitballFiller : public Filler<Dtype> {
- public:
-  explicit PositiveUnitballFiller(const FillerParameter& param)
-      : Filler<Dtype>(param) {}
-  virtual void Fill(Blob<Dtype>* blob) {
-    Dtype* data = blob->mutable_cpu_data();
-    DCHECK(blob->count());
-    caffe_rng_uniform<Dtype>(blob->count(), 0, 1, blob->mutable_cpu_data());
-    // We expect the filler to not be called very frequently, so we will
-    // just use a simple implementation
-    int dim = blob->count() / blob->shape(0);
-    CHECK(dim);
-    for (int i = 0; i < blob->shape(0); ++i) {
-      Dtype sum = 0;
-      for (int j = 0; j < dim; ++j) {
-        sum += data[i * dim + j];
-      }
-      for (int j = 0; j < dim; ++j) {
-        data[i * dim + j] /= sum;
-      }
-    }
-    CHECK_EQ(this->filler_param_.sparse(), -1)
-         << 'Sparsity not supported by this Filler.';
-  }
-};
-    
-    /*
- * Class:     org_rocksdb_CompactionOptions
- * Method:    compression
- * Signature: (J)B
- */
-jbyte Java_org_rocksdb_CompactionOptions_compression(
-    JNIEnv*, jclass, jlong jhandle) {
-  auto* compact_opts =
-      reinterpret_cast<rocksdb::CompactionOptions*>(jhandle);
-  return rocksdb::CompressionTypeJni::toJavaCompressionType(
-      compact_opts->compression);
-}
-    
-    #include <jni.h>
-    
-    /*
- * Class:     org_rocksdb_CompressionOptions
- * Method:    maxDictBytes
- * Signature: (J)I
- */
-jint Java_org_rocksdb_CompressionOptions_maxDictBytes(
-    JNIEnv*, jobject, jlong jhandle) {
-  auto* opt = reinterpret_cast<rocksdb::CompressionOptions*>(jhandle);
-  return static_cast<jint>(opt->max_dict_bytes);
-}
-    
-      std::vector<rocksdb::ColumnFamilyDescriptor> column_families;
-  const jsize len_cols = env->GetArrayLength(jcolumn_names);
-  if (len_cols > 0) {
-    if (env->EnsureLocalCapacity(len_cols) != 0) {
-      // out of memory
-      env->ReleaseStringUTFChars(jdb_path, db_path);
-      return nullptr;
+    void _check_keys_are_present(store_t *store,
+        sindex_name_t sindex_name) {
+    ql::configured_limits_t limits;
+    for (int i = 0; i < TOTAL_KEYS_TO_INSERT; ++i) {
+        ql::grouped_t<ql::stream_t> groups =
+            read_row_via_sindex(store, sindex_name, i * i);
+        ASSERT_EQ(1, groups.size());
+        // The order of `groups` doesn't matter because this is a small unit test.
+        ql::stream_t *stream = &groups.begin()->second;
+        ASSERT_TRUE(stream != nullptr);
+        ASSERT_EQ(1ul, stream->substreams.size());
+        ql::raw_stream_t *raw_stream = &stream->substreams.begin()->second.stream;
+        ASSERT_EQ(1ul, raw_stream->size());
     }
     }
     
-    /*
- * Class:     org_rocksdb_DBOptions
- * Method:    copyDBOptions
- * Signature: (J)J
- */
-jlong Java_org_rocksdb_DBOptions_copyDBOptions(
-    JNIEnv*, jclass, jlong jhandle) {
-  auto new_opt =
-      new rocksdb::DBOptions(*(reinterpret_cast<rocksdb::DBOptions*>(jhandle)));
-  return reinterpret_cast<jlong>(new_opt);
-}
-    
-    /*
- * Class:     org_rocksdb_RocksDB
- * Method:    flushWal
- * Signature: (JZ)V
- */
-void Java_org_rocksdb_RocksDB_flushWal(
-    JNIEnv* env, jobject, jlong jdb_handle, jboolean jsync) {
-  auto* db = reinterpret_cast<rocksdb::DB*>(jdb_handle);
-  auto s = db->FlushWAL(jsync == JNI_TRUE);
-  if (!s.ok()) {
-    rocksdb::RocksDBExceptionJni::ThrowNew(env, s);
+      // Instead of 1/0, we want to see true/false for bool values.
+  Message& operator <<(bool b) {
+    return *this << (b ? 'true' : 'false');
   }
+    
+    // To distinguish different instances of the pattern, (yes, you
+// can instantiate it more then once) the first argument to the
+// INSTANTIATE_TEST_CASE_P macro is a prefix that will be added to the
+// actual test case name. Remember to pick unique prefixes for different
+// instantiations. The tests from the instantiation above will have
+// these names:
+//
+//    * InstantiationName/FooTest.DoesBlah/0 for 'meeny'
+//    * InstantiationName/FooTest.DoesBlah/1 for 'miny'
+//    * InstantiationName/FooTest.DoesBlah/2 for 'moe'
+//    * InstantiationName/FooTest.HasBlahBlah/0 for 'meeny'
+//    * InstantiationName/FooTest.HasBlahBlah/1 for 'miny'
+//    * InstantiationName/FooTest.HasBlahBlah/2 for 'moe'
+//
+// You can use these names in --gtest_filter.
+//
+// This statement will instantiate all tests from FooTest again, each
+// with parameter values 'cat' and 'dog':
+    
+    TYPED_TEST_P(FooTest, HasPropertyA) { ... }
+    
+      // Returns true if the death test passed; that is, the test process
+  // exited during the test, its exit status matches a user-supplied
+  // predicate, and its stderr output matches a user-supplied regular
+  // expression.
+  // The user-supplied predicate may be a macro expression rather
+  // than a function pointer or functor, or else Wait and Passed could
+  // be combined.
+  virtual bool Passed(bool exit_status_ok) = 0;
+    
+      // Create the directory so that path exists. Returns true if successful or
+  // if the directory already exists; returns false if unable to create the
+  // directory for any reason, including if the parent directory does not
+  // exist. Not named 'CreateDirectory' because that's a macro on Windows.
+  bool CreateFolder() const;
+    
+        void ComputeCurrentValue() {
+      if (!AtEnd())
+        current_value_ = ParamType(*current1_, *current2_, *current3_,
+            *current4_, *current5_, *current6_);
+    }
+    bool AtEnd() const {
+      // We must report iterator past the end of the range when either of the
+      // component iterators has reached the end of its range.
+      return
+          current1_ == end1_ ||
+          current2_ == end2_ ||
+          current3_ == end3_ ||
+          current4_ == end4_ ||
+          current5_ == end5_ ||
+          current6_ == end6_;
+    }
+    
+    #include 'cyber/timer/timer_task.h'
+    
+    Status PlanningBase::Init(const PlanningConfig& config) {
+  PlanningContext::Instance()->Instance()->Init();
+  TaskFactory::Init(config);
+  return Status::OK();
 }
     
-    namespace rocksdb {
-TableFilterJniCallback::TableFilterJniCallback(
-    JNIEnv* env, jobject jtable_filter)
-    : JniCallback(env, jtable_filter) {
-  m_jfilter_methodid =
-      AbstractTableFilterJni::getFilterMethod(env);
-  if(m_jfilter_methodid == nullptr) {
-    // exception thrown: NoSuchMethodException or OutOfMemoryError
+    Status ControllerAgent::ComputeControlCommand(
+    const localization::LocalizationEstimate *localization,
+    const canbus::Chassis *chassis, const planning::ADCTrajectory *trajectory,
+    control::ControlCommand *cmd) {
+  for (auto &controller : controller_list_) {
+    ADEBUG << 'controller:' << controller->Name() << ' processing ...';
+    double start_timestamp = Clock::NowInSeconds();
+    controller->ComputeControlCommand(localization, chassis, trajectory, cmd);
+    double end_timestamp = Clock::NowInSeconds();
+    const double time_diff_ms = (end_timestamp - start_timestamp) * 1000;
+    }
+    }
+    
+      DataProvider::InitOptions dp_init_options;
+  dp_init_options.sensor_name = 'front_6mm';
+    
+    
+    {
+    {
+    {void WriteFusionTracking(std::ofstream &fout, int frame_num,
+                         const std::string &camera_name,
+                         const std::vector<base::ObjectPtr> &tracked_object) {
+  if (!fout.is_open()) {
+    AERROR << 'Failed to write tracking!';
     return;
   }
+  AINFO << 'Write track results: ' << frame_num;
+  if (camera_name == 'front_12mm') {
+    for (size_t i = 0; i < tracked_object.size(); ++i) {
+      base::ObjectPtr ptr = tracked_object[i];
+      char output[300];
+      snprintf(output, sizeof(output),
+               '%d %d %s -1 -1 %2.3f %4.3f %4.3f %4.3f %4.3f '
+               '%2.6f %2.6f %2.6f %2.3f %2.3f %2.3f %2.3f %.3f '
+               '%2.6f %2.6f %2.6f',
+               frame_num, ptr->track_id,
+               sub_type_string[static_cast<int>(ptr->sub_type)].c_str(),
+               ptr->camera_supplement.alpha, ptr->camera_supplement.box.xmin,
+               ptr->camera_supplement.box.ymin, ptr->camera_supplement.box.xmax,
+               ptr->camera_supplement.box.ymax, ptr->size[2], ptr->size[1],
+               ptr->size[0], ptr->center[0], ptr->center[1], ptr->center[2],
+               ptr->theta, ptr->type_probs[static_cast<int>(ptr->type)],
+               ptr->velocity[0], ptr->velocity[1], ptr->velocity[2]);
+      fout << output << std::endl;
     }
+  } else if (camera_name == 'front_6mm') {
+    for (size_t i = 0; i < tracked_object.size(); ++i) {
+      base::ObjectPtr ptr = tracked_object[i];
+      char output[300];
+      snprintf(output, sizeof(output),
+               '%d %d %s -1 -1 %2.3f %4.3f %4.3f %4.3f %4.3f '
+               '%2.6f %2.6f %2.6f %2.3f %2.3f %2.3f %2.3f %.3f '
+               '%2.6f %2.6f %2.6f',
+               frame_num, ptr->track_id,
+               sub_type_string[static_cast<int>(ptr->sub_type)].c_str(),
+               ptr->camera_supplement.alpha,
+               ptr->camera_supplement.projected_box.xmin,
+               ptr->camera_supplement.projected_box.ymin,
+               ptr->camera_supplement.projected_box.xmax,
+               ptr->camera_supplement.projected_box.ymax, ptr->size[2],
+               ptr->size[1], ptr->size[0], ptr->center[0], ptr->center[1],
+               ptr->center[2], ptr->theta,
+               ptr->type_probs[static_cast<int>(ptr->type)], ptr->velocity[0],
+               ptr->velocity[1], ptr->velocity[2]);
+      fout << output << std::endl;
     }
-    
-    /*
- * Class:     org_rocksdb_TtlDB
- * Method:    closeDatabase
- * Signature: (J)V
- */
-void Java_org_rocksdb_TtlDB_closeDatabase(
-    JNIEnv* /* env */, jclass, jlong /* jhandle */) {
-  //auto* ttl_db = reinterpret_cast<rocksdb::DBWithTTL*>(jhandle);
-  //assert(ttl_db != nullptr);
-  //rocksdb::Status s = ttl_db->Close();
-  //rocksdb::RocksDBExceptionJni::ThrowNew(env, s);
-    }
-    
-    extern JSClass  *jsb_cocos2d_EventMouse_class;
-extern JSObject *jsb_cocos2d_EventMouse_prototype;
-    
-    cocos2d::Node* CSLoader::createNode(const Data& data)
-{
-    return createNode(data, nullptr);
+  } else {
+    AERROR << 'Unknown camera name: ' << camera_name;
+  }
 }
+}  // namespace camera
+}  // namespace perception
+}  // namespace apollo
+
     
-    static int lua_cocos2dx_ActionTimeline_setFrameEventCallFunc(lua_State* L)
-{
-    if (nullptr == L)
-        return 0;
+        for (const auto& op : merge_in.operand_list) {
+      if (max.compare(op) < 0) {
+        max = op;
+      }
+    }
     
-    int argc = 0;
-    cocostudio::timeline::ActionTimeline* self = nullptr;
+      // Will be called while on the write thread before the write executes.  If
+  // this function returns a non-OK status, the write will be aborted and this
+  // status will be returned to the caller of DB::Write().
+  virtual Status Callback(DB* db) = 0;
     
-#if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-	if (!tolua_isusertype(L,1,'ccs.ActionTimeline',0,&tolua_err)) goto tolua_lerror;
-#endif
+      // Need to refill more than one interval. Need to sleep longer. Check
+  // whether expiration will hit
     
-    self = static_cast<cocostudio::timeline::ActionTimeline*>(tolua_tousertype(L,1,0));
+    class Env;
+class WriteControllerToken;
     
-#if COCOS2D_DEBUG >= 1
-	if (nullptr == self) {
-		tolua_error(L,'invalid 'self' in function 'lua_cocos2dx_ActionTimeline_setFrameEventCallFunc'\n', NULL);
-		return 0;
-	}
-#endif
-    argc = lua_gettop(L) - 1;
+      const Snapshot* snapshot = txn->GetSnapshot();
     
-    if (1 == argc)
-    {
-#if COCOS2D_DEBUG >= 1
-        if (!toluafix_isfunction(L,2,'LUA_FUNCTION',0,&tolua_err) )
+    #pragma once
+    
+      // Starts a new Transaction.
+  //
+  // Caller is responsible for deleting the returned transaction when no
+  // longer needed.
+  //
+  // If old_txn is not null, BeginTransaction will reuse this Transaction
+  // handle instead of allocating a new one.  This is an optimization to avoid
+  // extra allocations when repeatedly creating transactions.
+  virtual Transaction* BeginTransaction(
+      const WriteOptions& write_options,
+      const OptimisticTransactionOptions& txn_options =
+          OptimisticTransactionOptions(),
+      Transaction* old_txn = nullptr) = 0;
+    
+            /**
+         * Not equal comparison operator.
+         * @param point Point<T> to be compared.
+         * @result Whether the instance satisfies the condition with respect to point.
+         */
+        inline bool operator!=(const Point<T>& point) const
         {
-            goto tolua_lerror;
+            return area() != point.area();
         }
-#endif
-        
-        LUA_FUNCTION handler = (  toluafix_ref_function(L,2,0));
-        self->setFrameEventCallFunc([=](cocostudio::timeline::Frame* frame){
-            toluafix_pushusertype_ccobject(L, frame->_ID, &frame->_luaID, (void*)frame, getLuaTypeName(frame, 'ccs.Frame'));
-            LuaEngine::getInstance()->getLuaStack()->executeFunctionByHandler(handler, 1);
-        });
-        
-        return 0;
+    
+    /*! \class Image1DBuffer
+ * \brief Image interface for 1D buffer images.
+ */
+class Image1DBuffer : public Image
+{
+public:
+    Image1DBuffer(
+        const Context& context,
+        cl_mem_flags flags,
+        ImageFormat format,
+        size_type width,
+        const Buffer &buffer,
+        cl_int* err = NULL)
+    {
+        cl_int error;
+        cl_image_desc desc =
+        {
+            CL_MEM_OBJECT_IMAGE1D_BUFFER,
+            width,
+            0, 0, 0, 0, 0, 0, 0,
+            buffer()
+        };
+        object_ = ::clCreateImage(
+            context(), 
+            flags, 
+            &format, 
+            &desc, 
+            NULL, 
+            &error);
+    }
     }
     
-    
-    luaL_error(L, ''setFrameEventCallFunc' function of ActionTimeline has wrong number of arguments: %d, was expecting %d\n', argc, 1);
-    
-#if COCOS2D_DEBUG >= 1
-tolua_lerror:
-    tolua_error(L,'#ferror in function 'setFrameEventCallFunc'.',&tolua_err);
-#endif
-    return 0;
-}
-    
-            checkBox2->setName('swallow');
-        _uiLayer->addChild(checkBox2);
-    
-            Button* titleButton = Button::create('cocosui/backtotopnormal.png', 'cocosui/backtotoppressed.png');
-        titleButton->setTitleText('Title Button');
-        titleButton->setPosition(Vec2(innerWidth / 2.0f, button->getBottomBoundary() - button->getContentSize().height));
-        scrollView->addChild(titleButton);
+        // Static methods
+    template<typename T>
+    Rectangle<T> recenter(const Rectangle<T>& rectangle, const T newWidth, const T newHeight)
+    {
+        try
+        {
+            Rectangle<T> result;
+            const auto centerPoint = rectangle.center();
+            result.x = centerPoint.x - T(newWidth / 2.f);
+            result.y = centerPoint.y - T(newHeight / 2.f);
+            result.width = newWidth;
+            result.height = newHeight;
+            return result;
+        }
+        catch (const std::exception& e)
+        {
+            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
+            return Rectangle<T>{};
+        }
+    }
