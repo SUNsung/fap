@@ -1,142 +1,142 @@
 
         
-            def respond_to_mime
-      respond_to do |type|
-        type.json do
-          render json: JsonRenderable.new
+        def envygeeks(url)
+  return url if url.end_with?(FORWARD_SLASH) || url == FORWARD_SLASH
+    
+    require 'benchmark/ips'
+require 'pathutil'
+    
+          File.open('bower.json', 'w') do |f|
+        f.puts JSON.pretty_generate(spec)
+      end
+    end
+  end
+end
+
+    
+    require_relative 'converter/fonts_conversion'
+require_relative 'converter/less_conversion'
+require_relative 'converter/js_conversion'
+require_relative 'converter/logger'
+require_relative 'converter/network'
+    
+        alias log puts
+    
+      def test_image_helper
+    assert_match %r(url\(['']?/assets/apple-touch-icon-144-precomposed.*png['']?\)), @css
+  end
+    
+          it 'returns false' do
+        expect(node.pure?).to be(false)
+      end
+    end
+    
+        context 'with a multi-expression body' do
+      let(:source) do
+        'class << self; bar; baz; end'
+      end
+    
+              node.values.find do |v|
+            heredoc = extract_heredoc(v)
+            return heredoc if heredoc
+          end
         end
-        type.js   { render json: 'JS', callback: 'alert' }
-        type.csv  { render csv: CsvRenderable.new    }
-        type.xml  { render xml: XmlRenderable.new     }
-        type.html { render body: 'HTML'    }
-        type.rss  { render body: 'RSS'     }
-        type.all  { render body: 'Nothing' }
-        type.any(:js, :xml) { render body: 'Either JS or XML' }
-      end
-    end
-  end
     
-          cattr_accessor :type_klass
+            def on_send(node)
+          return unless node.arguments? && node.parenthesized?
     
-    ActionController::Base.helpers_path = File.expand_path('../../fixtures/helpers', __dir__)
-    
-            # how to operate
-        FastlaneCore::ConfigItem.new(key: :force,
-                                     short_option: '-f',
-                                     description: 'Skip the HTML report file verification',
-                                     is_string: false,
-                                     default_value: false),
-        FastlaneCore::ConfigItem.new(key: :overwrite_screenshots,
-                                     env_name: 'DELIVER_OVERWRITE_SCREENSHOTS',
-                                     description: 'Clear all previously uploaded screenshots before uploading the new ones',
-                                     is_string: false,
-                                     default_value: false),
-        FastlaneCore::ConfigItem.new(key: :submit_for_review,
-                                     env_name: 'DELIVER_SUBMIT_FOR_REVIEW',
-                                     description: 'Submit the new version for Review after uploading everything',
-                                     is_string: false,
-                                     default_value: false),
-        FastlaneCore::ConfigItem.new(key: :reject_if_possible,
-                                     env_name: 'DELIVER_REJECT_IF_POSSIBLE',
-                                     description: 'Rejects the previously submitted build if it's in a state where it's possible',
-                                     is_string: false,
-                                     default_value: false),
-    
-          it 'deletes the watch app data' do
-        version.upload_watch_icon!(nil)
-        expect(version.watch_app_icon.url).to eq(nil)
-        expect(version.watch_app_icon.original_file_name).to eq(nil)
-        expect(version.watch_app_icon.asset_token).to eq(nil)
-      end
-    end
-    
-          def self.is_supported?(platform)
-        platform == :android
-      end
-    
-        class MakeChangelogFromJenkinsAction < Action
-      def self.run(params)
-        require 'json'
-        require 'net/http'
-    
-            version_podspec_file = Helper::PodspecHelper.new(podspec_path, params[:require_variable_prefix])
-    
-            # Login
-        credentials = JSON.parse(json_key_data)
-        callback_uri = 'https://fastlane.github.io/managed_google_play-callback/callback.html'
-        uri = 'https://play.google.com/apps/publish/delegatePrivateApp?service_account=#{credentials['client_email']}&continueUrl=#{URI.escape(callback_uri)}'
-    
-      # GET /resource/unlock/new
-  def new
-    self.resource = resource_class.new
-  end
-    
-        def confirmation_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :confirmation_instructions, opts)
-    end
-    
-    # Each time a record is set we check whether its session has already timed out
-# or not, based on last request time. If so, the record is logged out and
-# redirected to the sign in page. Also, each time the request comes and the
-# record is set, we set the last request time inside its scoped session to
-# verify timeout in the following request.
-Warden::Manager.after_set_user do |record, warden, options|
-  scope = options[:scope]
-  env   = warden.request.env
-    
-          attr_reader :scope_name, :resource
-    
-        # Include the chosen devise modules in your model:
-    #
-    #   devise :database_authenticatable, :confirmable, :recoverable
-    #
-    # You can also give any of the devise configuration values in form of a hash,
-    # with specific values for this model. Please check your Devise initializer
-    # for a complete description on those values.
-    #
-    def devise(*modules)
-      options = modules.extract_options!.dup
-    
-            # Recreate the user based on the stored cookie
-        def serialize_from_cookie(*args)
-          id, token, generated_at = *args
-    
-      private
-  def update_all?
-    plugins_arg.size == 0
-  end
-    
-          it 'list the plugins with their versions' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose')
-        result.stdout.split('\n').each do |plugin|
-          expect(plugin).to match(/^logstash-\w+-\w+\s\(\d+\.\d+.\d+(.\w+)?\)/)
+            def offense_location(node)
+          if node.loc.respond_to?(:end) && node.loc.end
+            :end
+          else
+            :expression
+          end
         end
       end
     end
+  end
+end
+
     
-        def attach?
-      yaml_attach = if yaml['attach'].nil?
-                      true
-                    else
-                      yaml['attach']
-                    end
-      attach = force_attach || !force_detach && yaml_attach
-      attach
+          def sidebar
+        if @sidebar.nil?
+          if page = @page.sidebar
+            @sidebar = page.text_data
+          else
+            @sidebar = false
+          end
+        end
+        @sidebar
+      end
+    
+          # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
+      def left_shift int, shift
+        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
+        # 1>>31, 2**32
+        (r & 2147483648) == 0 ? r : r - 4294967296
+      end
+    
+    # Silence locale validation warning
+require 'i18n'
+I18n.enforce_available_locales = false
+    
+        assert_no_match /Edit Page/,             last_response.body, ''Edit Page' link not blocked in compare template'
+    assert_no_match /Revert Changes/,        last_response.body, ''Revert Changes' link not blocked in compare template'
+  end
+    
+          private
+    
+          def gateway_options
+        order.reload
+        gateway_options_class.new(self).to_hash
+      end
+    
+        alias get get_preference
+    
+            def find_order
+          @order = Spree::Order.find_by!(number: order_id)
+        end
+    
+            def update
+          @image = scope.images.accessible_by(current_ability, :update).find(params[:id])
+          if @image.update(image_params)
+            respond_with(@image, default_template: :show)
+          else
+            invalid_resource!(@image)
+          end
+        end
+    
+            def void
+          perform_payment_action(:void_transaction)
+        end
+    
+            def destroy
+          authorize! :destroy, @product_property
+          @product_property.destroy
+          respond_with(@product_property, status: 204)
+        end
+    
+        initialize_with { Tmuxinator::Project.load(file) }
+  end
+end
+
+    
+        it 'joins array using ;' do
+      expect(project.send('hook_#{hook_name}')).
+        to eq('echo 'on hook'; echo 'another command here'')
     end
+  end
+end
     
-      describe '#enviroment' do
-    context 'environment variable $TMUXINATOR_CONFIG is not empty' do
-      it 'is $TMUXINATOR_CONFIG' do
-        allow(ENV).to receive(:[]).with('TMUXINATOR_CONFIG').
-          and_return 'expected'
-        # allow(XDG).to receive(:[]).with('CONFIG').and_return 'expected'
-        allow(File).to receive(:directory?).and_return true
-        expect(described_class.environment).to eq 'expected'
+        msg = 'Actual pane does not match expected'
+    msg << '\n  Expected #{@commands} but has #{actual.commands}' if @commands
+    msg << '\n  Expected pane to have #{@expected_attrs}' if @expected_attrs
+  end
+    
+        context 'without project yml' do
+      let(:expected) { '#{directory}/new-project.yml' }
+      it 'gets the project as path to the yml file' do
+        expect(described_class.project('new-project')).to eq expected
       end
     end
-    
-        context '$EDITOR is not set' do
-      before do
-        allow(ENV).to receive(:[]).with('EDITOR') { nil }
-      end
+  end
