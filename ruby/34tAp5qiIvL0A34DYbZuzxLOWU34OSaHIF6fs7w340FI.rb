@@ -1,143 +1,99 @@
 
         
-              m1 = NumericData.find_by(
-        bank_balance: BigDecimal('NaN'),
-        big_bank_balance: BigDecimal('NaN')
-      )
+            should 'return false with all not match path' do
+      data = ['a*', 'b?']
+      assert !@filter.glob_include?(data, 'ca.txt')
+      assert !@filter.glob_include?(data, 'ba.txt')
+    end
     
-      def test_touching_a_record_updates_its_timestamp
-    previous_salary = @developer.salary
-    @developer.salary = previous_salary + 10000
-    @developer.touch
+          private def_delegator :@obj, :config, :fallback_data
     
-            private
+    # Just a slash
+Benchmark.ips do |x|
+  path = '/'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
+end
     
-              super(base_dir)
+    DATA = {'foo'=>'bar', 'alpha'=>{'beta'=>'gamma'}, 'lipsum'=>['lorem', 'ipsum', 'dolor']}
+    
+        before_validation :validate_source
+    
+          def exchange_multiplier
+        @payment.payment_method.try(:exchange_multiplier) || 1.0
+      end
+    end
+  end
+end
+
+    
+                if response.cvv_result
+              self.cvv_response_code = response.cvv_result['code']
+              self.cvv_response_message = response.cvv_result['message']
+            end
+          end
+          send('#{success_state}!')
+        else
+          send(failure_state)
+          gateway_error(response)
+        end
+      end
+    
+        def validators
+      @validators ||= permitted_eligibility_validators.map { |v| v.new(@return_item) }
+    end
+  end
+end
+
+    
+                inventory_units.each do |inventory_unit|
+              inventory_unit.shipment = shipment
+    
+    class UnableToChargeForUnreturnedItems < StandardError; end
+
+    
+            unprocessable_entity(exception.message)
+      end
+    
+            def create
+          authorize! :create, Image
+          @image = scope.images.new(image_params)
+          if @image.save
+            respond_with(@image, status: 201, default_template: :show)
+          else
+            invalid_resource!(@image)
+          end
         end
     
-        Projects::CleanupService.new(project, user).execute
+              unless inventory_unit.respond_to?(can_event) &&
+              inventory_unit.send(can_event)
+            render plain: { exception: 'cannot transition to #{@event}' }.to_json,
+                   status: 200
+            false
+          end
+        end
     
-      class_methods do
-    def chronic_duration_attr_reader(virtual_attribute, source_attribute)
-      define_method(virtual_attribute) do
-        chronic_duration_attributes[virtual_attribute] || output_chronic_duration_attribute(source_attribute)
-      end
-    end
+            def create
+          @order.validate_payments_attributes([payment_params])
+          @payment = @order.payments.build(payment_params)
+          if @payment.save
+            respond_with(@payment, status: 201, default_template: :show)
+          else
+            invalid_resource!(@payment)
+          end
+        end
     
-          desc 'Get single deploy key' do
-        success Entities::DeployKeysProject
-      end
-      params do
-        requires :key_id, type: Integer, desc: 'The ID of the deploy key'
-      end
-      get ':id/deploy_keys/:key_id' do
-        key = find_by_deploy_key(user_project, params[:key_id])
+              @properties = if params[:ids]
+                          @properties.where(id: params[:ids].split(',').flatten)
+                        else
+                          @properties.ransack(params[:q]).result
+                        end
     
-        def reset_password_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :reset_password_instructions, opts)
-    end
-    
-          def remember_cookie_values(resource)
-        options = { httponly: true }
-        options.merge!(forget_cookie_values(resource))
-        options.merge!(
-          value: resource.class.serialize_into_cookie(resource),
-          expires: resource.remember_expires_at
-        )
-      end
-    
-          # Sign out a given user or scope. This helper is useful for signing out a user
-      # after deleting accounts. Returns true if there was a logout and false if there
-      # is no user logged in on the referred scope
-      #
-      # Examples:
-      #
-      #   sign_out :user     # sign_out(scope)
-      #   sign_out @user     # sign_out(resource)
-      #
-      def sign_out(resource_or_scope=nil)
-        return sign_out_all_scopes unless resource_or_scope
-        scope = Devise::Mapping.find_scope!(resource_or_scope)
-        user = warden.user(scope: scope, run_callbacks: false) # If there is no user
-    
-          def add_fragment_back_to_path(uri, path)
-        [path, uri.fragment].compact.join('#')
-      end
-    end
-  end
-end
-
-    
-        if record.timedout?(last_request_at) &&
-        !env['devise.skip_timeout'] &&
-        !proxy.remember_me_is_active?(record)
-      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
-      throw :warden, scope: scope, message: :timeout
-    end
-    
-    require 'devise/models/authenticatable'
-
-    
-          b = $count
-      assert_equal a, b
-      assert_equal false, p.thread.status
-      refute mgr.latest_error, mgr.latest_error.to_s
-    end
-  end
-end
-
-    
-        assert_equal dead_set.find_job('123123').value, serialized_job
-  end
-    
-        describe 'when the exception does not have a backtrace' do
-      it 'does not fail' do
-        exception = ExceptionHandlerTestException.new
-        assert_nil exception.backtrace
-    
-      it 'allows delay of any ole class method' do
-    q = Sidekiq::Queue.new
-    assert_equal 0, q.size
-    SomeClass.delay.doit(Date.today)
-    assert_equal 1, q.size
-  end
-    
-    require 'stringex'
-    
-        def render(context)
-      if parts = @text.match(/([a-zA-Z\d]*) (.*)/)
-        gist, file = parts[1].strip, parts[2].strip
-      else
-        gist, file = @text.strip, ''
-      end
-      if gist.empty?
-        ''
-      else
-        script_url = script_url_for gist, file
-        code       = get_cached_gist(gist, file) || get_gist_from_web(gist, file)
-        html_output_for script_url, code
-      end
-    end
-    
-      class IncludeCodeTag < Liquid::Tag
-    def initialize(tag_name, markup, tokens)
-      @title = nil
-      @file = nil
-      if markup.strip =~ /\s*lang:(\S+)/i
-        @filetype = $1
-        markup = markup.strip.sub(/lang:\S+/i,'')
-      end
-      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
-        @title = $1 || nil
-        @file = $3
-      end
-      super
-    end
-    
-      # Checks for excerpts (helpful for template conditionals)
-  def has_excerpt(input)
-    input =~ /<!--\s*more\s*-->/i ? true : false
-  end
-    
-    module Jekyll
+            def remove
+          quantity = if params.key?(:quantity)
+                       params[:quantity].to_i
+                     else
+                       @shipment.inventory_units_for(variant).sum(:quantity)
+                     end
