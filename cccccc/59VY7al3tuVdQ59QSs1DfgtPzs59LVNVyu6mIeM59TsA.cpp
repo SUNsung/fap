@@ -1,226 +1,280 @@
 
         
-            std::array<CalcEngine::Rational, NUM_WIDTH_LENGTH> m_chopNumbers;      // word size enforcement
-    std::array<std::wstring, NUM_WIDTH_LENGTH> m_maxDecimalValueStrings;   // maximum values represented by a given word width based off m_chopNumbers
-    static std::unordered_map<std::wstring, std::wstring> s_engineStrings; // the string table shared across all instances
-    wchar_t m_decimalSeparator;
-    wchar_t m_groupSeparator;
-    
-            *this = Rational{ lhsRat };
-        destroyrat(lhsRat);
-    
-                bool TryParseWebResponses(
-                _In_ Platform::String ^ staticDataJson,
-                _In_ Platform::String ^ allRatiosJson,
-                _Inout_ std::vector<UCM::CurrencyStaticData>& staticData,
-                _Inout_ CurrencyRatioMap& allRatiosData);
-            bool TryParseStaticData(_In_ Platform::String ^ rawJson, _Inout_ std::vector<UCM::CurrencyStaticData>& staticData);
-            bool TryParseAllRatiosData(_In_ Platform::String ^ rawJson, _Inout_ CurrencyRatioMap& allRatiosData);
-            concurrency::task<void> FinalizeUnits(_In_ const std::vector<UCM::CurrencyStaticData>& staticData, _In_ const CurrencyRatioMap& ratioMap);
-            void GuaranteeSelectedUnits();
-    
-    
-    {
-    {        std::shared_ptr<UCM::IUnitConverterVMCallback> m_vmCallback;
-        std::vector<std::tuple<std::wstring, UCM::Unit>> m_suggestedList;
-        std::wstring m_curValue;
-    };
+        
+    {  return exports;
 }
-
     
-    // Gets the number in memory for UI to keep it persisted and set it again to a different instance
-// of CCalcEngine. Otherwise it will get destructed with the CalcEngine
-unique_ptr<Rational> CCalcEngine::PersistedMemObject()
+    
+    {}  // namespace
+    
+    #include 'shell/browser/api/atom_api_browser_window.h'
+    
+    namespace electron {
+    }
+    
+    namespace electron {
+    }
+    
+    #ifdef __INTEL_COMPILER // ICC built-in swap for LE hosts
+    #if defined (__i386__) || defined(__x86_64__)
+        #undef  READ64
+        #define READ64(c) _bswap64 (*(const Int64*)(c))
+    #endif
+#endif
+    
+    #include <ImfFloatAttribute.h>
+    
+    #include <ImfFloatVectorAttribute.h>
+    
+    
+inline
+Header::Iterator::Iterator (): _i()
 {
-    return move(m_memoryValue);
+    // empty
 }
     
-        class CalculatorHistory : public IHistoryDisplay
-    {
-    public:
-        CalculatorHistory(const size_t maxSize);
-        unsigned int AddToHistory(
-            _In_ std::shared_ptr<CalculatorVector<std::pair<std::wstring, int>>> const& spTokens,
-            _In_ std::shared_ptr<CalculatorVector<std::shared_ptr<IExpressionCommand>>> const& spCommands,
-            std::wstring_view result);
-        std::vector<std::shared_ptr<HISTORYITEM>> const& GetHistory();
-        std::shared_ptr<HISTORYITEM> const& GetHistoryItem(unsigned int uIdx);
-        void ClearHistory();
-        unsigned int AddItem(_In_ std::shared_ptr<HISTORYITEM> const& spHistoryItem);
-        bool RemoveItem(unsigned int uIdx);
-        size_t MaxHistorySize() const
-        {
-            return m_maxHistorySize;
-        }
-        ~CalculatorHistory(void);
+    void
+hufDecode
+    (const Int64 * 	hcode,	// i : encoding table
+     const HufDec * 	hdecod,	// i : decoding table
+     const char* 	in,	// i : compressed input buffer
+     int		ni,	// i : input size (in bits)
+     int		rlc,	// i : run-length code
+     int		no,	// i : expected output size (in bytes)
+     unsigned short*	out)	//  o: uncompressed output buffer
+{
+    Int64 c = 0;
+    int lc = 0;
+    unsigned short * outb = out;
+    unsigned short * oe = out + no;
+    const char * ie = in + (ni + 7) / 8; // input byte size
     }
     
-      Status NewRandomRWFile(const std::string& fname,
-                         std::unique_ptr<RandomRWFile>* result,
-                         const EnvOptions& options) override {
-    auto status_and_enc_path = EncodePathWithNewBasename(fname);
-    if (!status_and_enc_path.first.ok()) {
-      return status_and_enc_path.first;
-    }
-    return EnvWrapper::NewRandomRWFile(status_and_enc_path.second, result,
-                                       options);
-  }
     
-    /*
- * Class:     org_rocksdb_CompactionJobStats
- * Method:    fileFsyncNanos
- * Signature: (J)J
- */
-jlong Java_org_rocksdb_CompactionJobStats_fileFsyncNanos(
-    JNIEnv*, jclass, jlong jhandle) {
-  auto* compact_job_stats =
-      reinterpret_cast<rocksdb::CompactionJobStats*>(jhandle);
-  return static_cast<jlong>(
-      compact_job_stats->file_fsync_nanos);
-}
-    
-    /*
- * Class:     org_rocksdb_CompressionOptions
- * Method:    enabled
- * Signature: (J)Z
- */
-jboolean Java_org_rocksdb_CompressionOptions_enabled(
-    JNIEnv*, jobject, jlong jhandle) {
-  auto* opt = reinterpret_cast<rocksdb::CompressionOptions*>(jhandle);
-  return static_cast<bool>(opt->enabled);
-}
-/*
- * Class:     org_rocksdb_CompressionOptions
- * Method:    disposeInternal
- * Signature: (J)V
- */
-void Java_org_rocksdb_CompressionOptions_disposeInternal(
-    JNIEnv*, jobject, jlong jhandle) {
-  delete reinterpret_cast<rocksdb::CompressionOptions*>(jhandle);
-}
+OPENEXR_IMF_INTERNAL_NAMESPACE_SOURCE_EXIT
 
     
-    /*
- * Class:     org_rocksdb_EnvOptions
- * Method:    setWritableFileMaxBufferSize
- * Signature: (JJ)V
- */
-void Java_org_rocksdb_EnvOptions_setWritableFileMaxBufferSize(
-    JNIEnv*, jobject, jlong jhandle, jlong writable_file_max_buffer_size) {
-  ENV_OPTIONS_SET_SIZE_T(jhandle, writable_file_max_buffer_size);
-}
+    	    while (modp (xStart, toSlice.xSampling) != 0)
+		++xStart;
     
     
-    {  rocksdb::RocksDBExceptionJni::ThrowNew(env, s);
-  return nullptr;
-}
     
-    /*
- * Class:     org_rocksdb_SstFileManager
- * Method:    disposeInternal
- * Signature: (J)V
- */
-void Java_org_rocksdb_SstFileManager_disposeInternal(JNIEnv* /*env*/,
-                                                     jobject /*jobj*/,
-                                                     jlong jhandle) {
-  auto* sptr_sst_file_manager =
-      reinterpret_cast<std::shared_ptr<rocksdb::SstFileManager>*>(jhandle);
-  delete sptr_sst_file_manager;
-}
-
-    
-    #include <jni.h>
-#include <functional>
-#include <memory>
-    
-    /*
- * Class:     org_rocksdb_ThreadStatus
- * Method:    getOperationStageName
- * Signature: (B)Ljava/lang/String;
- */
-jstring Java_org_rocksdb_ThreadStatus_getOperationStageName(
-    JNIEnv* env, jclass, jbyte joperation_stage_value) {
-  auto name = rocksdb::ThreadStatus::GetOperationStageName(
-      rocksdb::OperationStageJni::toCppOperationStage(joperation_stage_value));
-  return rocksdb::JniUtil::toJavaString(env, &name, true);
-}
-    
-      bool readWithPriority(T& item, size_t priority) {
-    return queues_[priority].readIfNotEmpty(item);
+      for (int idx = 0; idx < m_simple_tags_count; ++idx) {
+    m_simple_tags[idx].ShallowCopy(displays[idx]);
   }
     
-      Fingerprint& update(StringPiece str) {
-    // TODO(tudorb): We could be smart and do update64 or update32 if aligned
-    for (auto c : str) {
-      update8(uint8_t(c));
+      // Returns ContentEncryption represented by |idx|. Returns NULL if |idx|
+  // is out of bounds.
+  const ContentEncryption* GetEncryptionByIndex(unsigned long idx) const;
+    
+    /*All of these macros should expect floats as arguments.*/
+#define OC_MAXF(_a,_b)      ((_a)<(_b)?(_b):(_a))
+#define OC_MINF(_a,_b)      ((_a)>(_b)?(_b):(_a))
+#define OC_CLAMPF(_a,_b,_c) (OC_MINF(_a,OC_MAXF(_b,_c)))
+#define OC_FABSF(_f)        ((float)fabs(_f))
+#define OC_SQRTF(_f)        ((float)sqrt(_f))
+#define OC_POWF(_b,_e)      ((float)pow(_b,_e))
+#define OC_LOGF(_f)         ((float)log(_f))
+#define OC_IFLOORF(_f)      ((int)floor(_f))
+#define OC_ICEILF(_f)       ((int)ceil(_f))
+    
+    static const static_bookblock _resbook_16s_0={
+  {
+    {0},
+    {0,0,&_16c0_s_p1_0},
+    {0},
+    {0,0,&_16c0_s_p3_0},
+    {0,0,&_16c0_s_p4_0},
+    {0,0,&_16c0_s_p5_0},
+    {0,0,&_16c0_s_p6_0},
+    {&_16c0_s_p7_0,&_16c0_s_p7_1},
+    {&_16c0_s_p8_0,&_16c0_s_p8_1},
+    {&_16c0_s_p9_0,&_16c0_s_p9_1,&_16c0_s_p9_2}
+   }
+};
+static const static_bookblock _resbook_16s_1={
+  {
+    {0},
+    {0,0,&_16c1_s_p1_0},
+    {0},
+    {0,0,&_16c1_s_p3_0},
+    {0,0,&_16c1_s_p4_0},
+    {0,0,&_16c1_s_p5_0},
+    {0,0,&_16c1_s_p6_0},
+    {&_16c1_s_p7_0,&_16c1_s_p7_1},
+    {&_16c1_s_p8_0,&_16c1_s_p8_1},
+    {&_16c1_s_p9_0,&_16c1_s_p9_1,&_16c1_s_p9_2}
+   }
+};
+static const static_bookblock _resbook_16s_2={
+  {
+    {0},
+    {0,0,&_16c2_s_p1_0},
+    {0,0,&_16c2_s_p2_0},
+    {0,0,&_16c2_s_p3_0},
+    {0,0,&_16c2_s_p4_0},
+    {&_16c2_s_p5_0,&_16c2_s_p5_1},
+    {&_16c2_s_p6_0,&_16c2_s_p6_1},
+    {&_16c2_s_p7_0,&_16c2_s_p7_1},
+    {&_16c2_s_p8_0,&_16c2_s_p8_1},
+    {&_16c2_s_p9_0,&_16c2_s_p9_1,&_16c2_s_p9_2}
+   }
+};
+    
+    /***** residue backends *********************************************/
+    
+    #define toBARK(n)   (13.1f*atan(.00074f*(n))+2.24f*atan((n)*(n)*1.85e-8f)+1e-4f*(n))
+#define fromBARK(z) (102.f*(z)-2.f*pow(z,2.f)+.4f*pow(z,3.f)+pow(1.46f,z)-1.f)
+#define toMEL(n)    (log(1.f+(n)*.001f)*1442.695f)
+#define fromMEL(m)  (1000.f*exp((m)/1442.695f)-1000.f)
+    
+    #if CONFIG_MULTITHREAD && defined(_WIN32)
+#include <windows.h>
+#include <stdlib.h>
+/* Declare a per-compilation-unit state variable to track the progress
+ * of calling func() only once. This must be at global scope because
+ * local initializers are not thread-safe in MSVC prior to Visual
+ * Studio 2015.
+ *
+ * As a static, once_state will be zero-initialized as program start.
+ */
+static LONG once_state;
+static void once(void (*func)(void))
+{
+    /* Try to advance once_state from its initial value of 0 to 1.
+     * Only one thread can succeed in doing so.
+     */
+    if (InterlockedCompareExchange(&once_state, 1, 0) == 0) {
+        /* We're the winning thread, having set once_state to 1.
+         * Call our function. */
+        func();
+        /* Now advance once_state to 2, unblocking any other threads. */
+        InterlockedIncrement(&once_state);
+        return;
     }
-    return *this;
+    }
+    
+    #define MULADDC_STOP                                    \
+            'str    r2, %0                      \n\t'   \
+            'str    r1, %1                      \n\t'   \
+            'str    r0, %2                      \n\t'   \
+         : '=m' (c),  '=m' (d), '=m' (s)        \
+         : 'm' (s), 'm' (d), 'm' (c), 'm' (b)   \
+         : 'r0', 'r1', 'r2', 'r3', 'r4', 'r5',  \
+           'r6', 'r7', 'cc'                     \
+         );
+    
+    int main()
+{
+    // create a JSON value
+    const json j =
+    {
+        {'number', 1}, {'string', 'foo'}, {'array', {1, 2}}
+    };
+    }
+    
+    class DistanceApproachIPOPTInterfaceTest : public ::testing::Test {
+ public:
+  virtual void SetUp() {
+    FLAGS_planner_open_space_config_filename =
+        '/apollo/modules/planning/testdata/conf/'
+        'open_space_standard_parking_lot.pb.txt';
+    CHECK(apollo::cyber::common::GetProtoFromFile(
+        FLAGS_planner_open_space_config_filename, &planner_open_space_config_))
+        << 'Failed to load open space config file '
+        << FLAGS_planner_open_space_config_filename;
+    }
+    }
+    
+    namespace apollo {
+namespace planning {
+namespace scenario {
+namespace lane_follow {
+    }
+    }
+    }
+    }
+    
+    
+    {
+    {    ++nr_transformed_obj;
   }
-    
-    
-    {  // Restart the I/O thread
-  restartThread();
+  return nr_transformed_obj > 0;
 }
     
     
     {
-    {    M map2(map);
-    M map3(std::move(map));
-    map = map2;
-    map2.clear();
-    map2 = std::move(map3);
+    {
+    {
+    {}  // namespace valet_parking
+}  // namespace scenario
+}  // namespace planning
+}  // namespace apollo
+
+    
+        // 1. horizontal control check
+    if ((mode == Chassis::COMPLETE_AUTO_DRIVE ||
+         mode == Chassis::AUTO_STEER_ONLY) &&
+        !CheckResponse(CHECK_RESPONSE_STEER_UNIT_FLAG, false)) {
+      ++horizontal_ctrl_fail;
+      if (horizontal_ctrl_fail >= kMaxFailAttempt) {
+        emergency_mode = true;
+        set_chassis_error_code(Chassis::MANUAL_INTERVENTION);
+      }
+    } else {
+      horizontal_ctrl_fail = 0;
+    }
+    
+    namespace apollo {
+namespace drivers {
+namespace video {
+    }
+    }
+    }
+    
+    
+    {
+    {}  // namespace prediction
+}  // namespace apollo
+
+    
+    bool ChannelManager::IsMessageTypeMatching(const std::string& lhs,
+                                           const std::string& rhs) {
+  if (lhs == rhs) {
+    return true;
   }
-  EXPECT_TRUE(ranHasher);
-  EXPECT_TRUE(ranEqual);
-  EXPECT_TRUE(ranAlloc);
-  EXPECT_TRUE(ranDealloc);
+  if (exempted_msg_types_.count(lhs) > 0) {
+    return true;
+  }
+  if (exempted_msg_types_.count(rhs) > 0) {
+    return true;
+  }
+  return false;
 }
     
-    template <class Alloc>
-void Arena<Alloc>::merge(Arena<Alloc>&& other) {
-  blocks_.splice_after(blocks_.before_begin(), other.blocks_);
-  other.blocks_.clear();
-  other.ptr_ = other.end_ = nullptr;
-  totalAllocatedSize_ += other.totalAllocatedSize_;
-  other.totalAllocatedSize_ = 0;
+      /**
+   * @brief Wait or cleanup a process, usually a child process.
+   *
+   * This will wait for a process to cleanup. Use this after requesting a
+   * graceful shutdown.
+   *
+   * @return true if the process was cleaned, otherwise false.
+   */
+  bool cleanup() const;
+    
+    #include <vector>
+    
+      ~Carver();
+    
+    bool Pack::checkVersion() const {
+  return checkVersion(version_);
 }
     
+    #include <osquery/filesystem/filesystem.h>
     
-    {  Sem sem;
-  std::array<std::thread, nthreads> threads;
-  for (auto i = 0ull; i < rounds; ++i) {
-    std::vector<uint64_t> wait_seq;
-    std::vector<uint64_t> wake_seq;
-    WaitForAll ready(nthreads); // first nthreads waits, then nthreads posts
-    for (auto thi = 0ull; thi < nthreads; ++thi) {
-      threads[thi] = std::thread([&, thi] {
-        sem.wait(
-            [&, thi] { wait_seq.push_back(thi), ready.post(); },
-            [&, thi] { wake_seq.push_back(thi); });
-      });
-    }
-    ready.wait(); // first nthreads waits, then nthreads posts
-    for (auto thi = 0ull; thi < nthreads; ++thi) {
-      sem.post();
-    }
-    for (auto thi = 0ull; thi < nthreads; ++thi) {
-      threads[thi].join();
-    }
-    EXPECT_EQ(nthreads, wait_seq.size());
-    EXPECT_EQ(nthreads, wake_seq.size());
-    switch (wake_policy(sem)) {
-      case SemaphoreWakePolicy::Fifo:
-        break;
-      case SemaphoreWakePolicy::Lifo:
-        std::reverse(wake_seq.begin(), wake_seq.end());
-        break;
-    }
-    EXPECT_EQ(wait_seq, wake_seq);
-  }
-}
-    
-      virtual void importKeysFromRdb(ConnectionsTree::DatabaseItem& ns) override;
-    
-      if (m_operation->isRunning()) {
-    return false;
-  }
+    JSON getExamplePacksConfig();
+JSON getUnrestrictedPack();
+JSON getRestrictedPack();
+JSON getPackWithDiscovery();
+JSON getPackWithValidDiscovery();
+JSON getPackWithFakeVersion();
