@@ -1,192 +1,218 @@
 
         
-          it 'imports a scenario that does not exist yet' do
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
-    click_on 'Start Import'
-    expect(page).to have_text('This scenario has a few agents to get you started. Feel free to change them or delete them as you see fit!')
-    expect(page).not_to have_text('This Scenario already exists in your system.')
-    check('I confirm that I want to import these Agents.')
-    click_on 'Finish Import'
-    expect(page).to have_text('Import successful!')
-  end
-    
-      describe '#style_colors' do
-    it 'returns a css style-formated version of the scenario foreground and background colors' do
-      expect(style_colors(scenario)).to eq('color:#AAAAAA;background-color:#000000')
-    end
-    
-        it 'outputs control links to agents within the incoming set, but not outside it' do
-      agents(:jane_rain_notifier_agent).control_targets = [agents(:jane_weather_agent), agents(:jane_basecamp_agent)]
-      agents(:jane_rain_notifier_agent).save!
-    
-          expect(@scheduler.scheduler_agent_jobs.map(&:scheduler_agent)).to eq([@agent2])
-    end
-    
-          @log.level = 4
-      expect(@log).to be_valid
-    
-        context 'to configure' do
-      let(:real_target) {
-        Agents::TriggerAgent.create!(
-          name: 'somename',
-          options: {
-            expected_receive_period_in_days: 2,
-            rules: [
-              {
-                'type' => 'field<value',
-                'value' => '200.0',
-                'path' => 'price',
-              }
-            ],
-            keep_event: 'true'
-          },
-          user: users(:bob)
-        )
-      }
-    
-        context 'serializing' do
-      before(:each) do
-        @checker.options['mode'] = 'serialize'
-        @checker.options['data_path'] = '$.data'
-        @checker.options['data_key'] = 'data'
+              def self.all(filter: {}, includes: nil, limit: nil, sort: nil)
+        resps = Spaceship::ConnectAPI.get_apps(filter: filter, includes: includes, limit: limit, sort: sort).all_pages
+        return resps.map(&:to_models).flatten
       end
     
-        def initial_page?
-      root_page? || context[:initial_paths].include?(subpath)
+          #
+      # API
+      #
+    
+    module Spaceship
+  class ConnectAPI
+    module Provisioning
+      class Client < Spaceship::ConnectAPI::Client
+        def self.instance
+          # Verify there is a token or a client that can be used
+          if Spaceship::ConnectAPI.token
+            if @client.nil? || @client.token != Spaceship::ConnectAPI.token
+              @client = Spaceship::ConnectAPI::Provisioning::Client.new(token: Spaceship::ConnectAPI.token)
+            end
+          elsif Spaceship::Portal.client
+            # Initialize new client if new or if team changed
+            if @client.nil? || @client.team_id != Spaceship::Portal.client.team_id
+              @client = Spaceship::ConnectAPI::Provisioning::Client.client_with_authorization_from(Spaceship::Portal.client)
+            end
+          end
+    
+      before do
+    allow(machine).to receive(:communicate).and_return(communicator)
+  end
+    
+    require 'vagrant/box_metadata'
+    
+        # The root path is the path where the top-most (loaded last)
+    # Vagrantfile resides. It can be considered the project root for
+    # this environment.
+    #
+    # @return [String]
+    def root_path
+      return @root_path if defined?(@root_path)
+    
+        it 'raise an error if nothing else is usable' do
+      plugin_providers[:foo] = [provider_usable_class(false), { priority: 5 }]
+      plugin_providers[:bar] = [provider_usable_class(false), { priority: 5 }]
+      plugin_providers[:baz] = [provider_usable_class(false), { priority: 5 }]
+    
+          # Load once so that we can get the proper box value
+      config, config_warnings, config_errors = @loader.load(keys)
+    
+                exit_status = true
+            if Thread.current[:error]
+              # We had an error, print the stack trace and exit immediately.
+              exit_status = false
+              error = Thread.current[:error]
+              @logger.error(error.inspect)
+              @logger.error(error.message)
+              @logger.error(error.backtrace.join('\n'))
+            end
+    
+          after_triggers = triggers.after_triggers
+      expect(after_triggers.size).to eq(3)
+      subject.send(:filter_triggers, after_triggers, 'ubuntu-guest', :action)
+      expect(after_triggers.size).to eq(3)
     end
+  end
+    
+          expect(communicator).to receive(:test).with(/# Function/, { error_check: false, shell: :powershell }).and_return(0)
+      expect(communicator).to receive(:execute).with(/shutdown/, { shell: :powershell }).and_return(0)
+      expect(described_class).to receive(:wait_for_reboot)
+    
+      def cmd_wdigest(*args)
+    method = Proc.new { client.mimikatz.wdigest }
+    mimikatz_request('wdigest', method)
+  end
+    
+      #
+  # Nothing to speak of.
+  #
+  def stop_handler
+    # Stop the listener threads
+    self.listener_threads.each do |t|
+      t.kill
+    end
+    self.listener_threads = []
+    self.listener_pairs = {}
+  end
+    
+      def self.handler_type_alias
+    'bind_tcp_rc4'
+  end
+    
+        # iterate over all users
+    get_nonsystem_accounts.each do |user_info|
+      user = user_info['name']
+      next if datastore['MATCHUSER'].present? and datastore['MATCHUSER'] !~ user
+      print_status 'Attempting to grab shadow for user #{user}...'
+      if gt_lion? # 10.8+
+        # pull the shadow from dscl
+        shadow_bytes = grab_shadow_blob(user)
+        next if shadow_bytes.blank?
+    
+      public class Exploit {
+      public Exploit(){
+          try {
+              Payload.main(null);
+          } catch (Exception e) { }
+    }
+    }
+    
+    stager_file = ARGV[0]
+data = File.binread(stager_file)
+macho = MachO::MachOFile.new_from_bin(data)
+main_func = macho[:LC_MAIN].first
+entry_offset = main_func.entryoff
+    
+          paths.each do |browser_path|
+        if file?(browser_path)
+          found_browser_path = browser_path
+          break
+        end
+      end
+    
+          # Keep track of the columns that we were given, in
+      # the order we are given them, while removing duplicates
+      columns = []
+      existing = Set.new
+      accounts[k].each do |acct|
+        acct.keys.each do |k|
+          unless existing.include?(k)
+            columns << k
+            existing.add(k)
+          end
+        end
+      end
+    
+      # Local service functionality should probably be replaced with upstream Post
+  def remove_dyn_service(file_path)
+    service_stop(datastore['SVC_NAME'])
+    if service_delete(datastore['SVC_NAME'])['GetLastError'] == 0
+      vprint_good('Service #{datastore['SVC_NAME']} Removed, deleting #{file_path.gsub('\\','\\\\')}')
+      session.fs.file.rm(file_path.gsub('\\','\\\\'))
+    else
+      print_error('Something went wrong, not deleting #{file_path.gsub('\\','\\\\')}')
+    end
+    return
+  end
+    
+    require 'rack/show_exceptions'
+    
+          def has_vector?(request, headers)
+        return false if request.xhr?
+        return false if options[:allow_if] && options[:allow_if].call(request.env)
+        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
+        origin(request.env).nil? and referrer(request.env) != request.host
+      end
+    
+        it 'leaves normal params untouched' do
+      mock_app do |env|
+        request = Rack::Request.new(env)
+        [200, {'Content-Type' => 'text/plain'}, [request.params['foo']]]
+      end
+      get '/', :foo => 'bar'
+      expect(body).to eq('bar')
+    end
+    
+      def test_display_illegal_args
+    o = Helpers.new
+    s = o.display_args([1,2,3])
+    assert_equal '1, 2, 3', s
+    s = o.display_args(['<html>', 12])
+    assert_equal '&quot;&lt;html&gt;&quot;, 12', s
+    s = o.display_args('<html>')
+    assert_equal 'Invalid job payload, args must be an Array, not String', s
+    s = o.display_args(nil)
+    assert_equal 'Invalid job payload, args is nil', s
+  end
+end
+
+    
+        it 'can start and stop' do
+      f = Sidekiq::Processor.new(Mgr.new)
+      f.terminate
+    end
+    
+      it 'allows until delay scheduling of AM mails' do
+    ss = Sidekiq::ScheduledSet.new
+    assert_equal 0, ss.size
+    UserMailer.delay_until(5.days.from_now).greetings(1, 2)
+    assert_equal 1, ss.size
+  end
+    
+        assert_equal 1, FirstWorker.count
+    assert_equal 1, SecondWorker.count
+  end
+    
+        def tmux_has_session?(name)
+      # Redirect stderr to /dev/null in order to prevent 'failed to connect
+      # to server: Connection refused' error message and non-zero exit status
+      # if no tmux sessions exist.
+      # Please see issues #402 and #414.
+      sessions = `#{tmux_command} ls 2> /dev/null`
     
         private
     
-        def as_json
-      { name: name, path: path, type: type }
-    end
-  end
-end
-
-    
-        def initialize
-      @pages = {}
-    end
-    
-          def stub(path, &block)
-        @stubs[path] = block
-        @stubs
-      end
-    end
-    
-            css('pre').each do |node|
-          node.content = node.content.strip
-    
-            css('.note h3', '.warning h3').each do |node|
-          node.before('<p><strong>#{node.inner_html}</strong></p>').remove
-        end
-    
-      let(:iso_env) do
-    # We have to create a Vagrantfile so there is a root path
-    env = isolated_environment
-    env.vagrantfile('')
-    env.create_vagrant_env
-  end
-    
-      let(:machine) { iso_env.machine(iso_env.machine_names[0], :dummy) }
-  let(:communicator) { VagrantTests::DummyCommunicator::Communicator.new(machine) }
-  let(:config)  { double('config') }
-    
-        let(:network_settings) { {'NetworkSettings' => {'Bridge'=>'', 'SandboxID'=>'randomid', 'HairpinMode'=>false, 'LinkLocalIPv6Address'=>'', 'LinkLocalIPv6PrefixLen'=>0, 'Ports'=>{'443/tcp'=>nil, '80/tcp'=>nil}, 'SandboxKey'=>'/var/run/docker/netns/158b7024a9e4', 'SecondaryIPAddresses'=>nil, 'SecondaryIPv6Addresses'=>nil, 'EndpointID'=>'randomEndpointID', 'Gateway'=>'172.17.0.1', 'GlobalIPv6Address'=>'', 'GlobalIPv6PrefixLen'=>0, 'IPAddress'=>'127.0.0.1', 'IPPrefixLen'=>16, 'IPv6Gateway'=>'', 'MacAddress'=>'02:42:ac:11:00:02', 'Networks'=>{'bridge'=>{'IPAMConfig'=>nil, 'Links'=>nil, 'Aliases'=>nil, 'NetworkID'=>'networkIDVar', 'EndpointID'=>'endpointIDVar', 'Gateway'=>'127.0.0.1', 'IPAddress'=>'127.0.0.1', 'IPPrefixLen'=>16, 'IPv6Gateway'=>'', 'GlobalIPv6Address'=>'', 'GlobalIPv6PrefixLen'=>0, 'MacAddress'=>'02:42:ac:11:00:02', 'DriverOpts'=>nil}}}} }
-    
-          # This is a process-local mutex that can be used by parallel
-      # providers to lock the host VM access.
-      def host_vm_mutex
-        @@host_vm_mutex
-      end
-    
-      def new_machine(options)
-    double('machine').tap do |m|
-      allow(m).to receive(:provider_name).and_return(provider_name)
-      allow(m).to receive(:provider_options).and_return(options)
-      allow(m).to receive(:action) do |action, opts|
-        lock.synchronize do
-          called_actions << [m, action, opts]
-        end
-      end
-    end
-  end
-    
-        # Fallback to the default
-    path ||= '~/.vagrant.d'
-    
-      let(:machine) { iso_env.machine(iso_env.machine_names[0], :dummy) }
-    
-          expect(response).to redirect_to(settings_preferences_notifications_path)
-      user.reload
-      expect(user.settings['notification_emails']['follow']).to be true
-      expect(user.settings['interactions']['must_be_follower']).to be false
-    end
-  end
-end
-
-    
-            let(:object_json) do
-          {
-            id: 'https://example.com/actor#bar',
-            type: 'Note',
-            content: 'Lorem ipsum',
-            to: 'http://example.com/followers',
-            attributedTo: 'https://example.com/actor',
-          }
-        end
-    
-      def save
-    case action
-    when 'unfollow'
-      unfollow!
-    when 'remove_from_followers'
-      remove_from_followers!
-    when 'block_domains'
-      block_domains!
-    when 'approve'
-      approve!
-    when 'reject'
-      reject!
-    end
-  end
-    
-        @inboxes = [@status.mentions, @status.reblogs, @status.preloadable_poll.votes].flat_map do |relation|
-      relation.includes(:account).map do |record|
-        record.account.preferred_inbox_url if !record.account.local? && record.account.activitypub?
-      end
-    end
-    
-    class ActivityPub::UpdateDistributionWorker
-  include Sidekiq::Worker
-  include Payloadable
-    
       before do
-    sign_in user, scope: :user
-  end
+    allow(project).to receive(:name).and_return 'foo'
+    allow(project).to receive(:base_index).and_return 0
+    allow(project).to receive(:pane_base_index).and_return 1
     
-      let(:json) do
-    {
-      '@context': 'https://www.w3.org/ns/activitystreams',
-      id: 'foo',
-      type: 'Move',
-      actor: old_account.uri,
-      object: old_account.uri,
-      target: new_account.uri,
-    }.with_indifferent_access
-  end
-    
-        # advance scanner to pos after the next match of pattern and return the match
-    def scan_next(pattern)
-      return unless @s.scan_until(pattern)
-      @s.matched
-    end
-    
-        def puts(*args)
-      STDERR.puts *args unless @silence
-    end
-    
-      # Show full error reports and disable caching.
-  config.consider_all_requests_local       = true
-  config.action_controller.perform_caching = false
+          # Sorted list of all .yml files, including duplicates
+      def configs
+        directories.map do |directory|
+          Dir['#{directory}/**/*.yml'].map do |path|
+            path.gsub('#{directory}/', '').gsub('.yml', '')
+          end
+        end.flatten.sort
+      end
