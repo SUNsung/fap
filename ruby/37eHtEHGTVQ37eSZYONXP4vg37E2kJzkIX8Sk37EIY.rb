@@ -1,82 +1,135 @@
 
         
-              it 'yields command output' do
-        expect_command('ls', '-la', exitstatus: 1, output: 'Heeeelp! Something went wrong.')
-        Fastlane::Actions.sh('ls', '-la') do |status, result|
-          expect(status.exitstatus).to eq(1)
-          expect(result).to eq('Heeeelp! Something went wrong.')
-        end
+            context '(de)activating users' do
+      it 'does not show deactivation buttons for the current user' do
+        visit admin_users_path
+        expect(page).to have_no_css('a[href='/admin/users/#{users(:jane).id}/deactivate']')
       end
     
-        # [Boolean] Set if the variable is sensitive, such as a password or API token, to prevent echoing when prompted for the parameter
-    # If a default value exists, it won't be used during code generation as default values can read from environment variables.
-    attr_accessor :sensitive
-    
-          it 'should not be fooled by 10 local code signing identities available' do
-        allow(FastlaneCore::CertChecker).to receive(:wwdr_certificate_installed?).and_return(true)
-        allow(FastlaneCore::CertChecker).to receive(:list_available_identities).and_return('     10 valid identities found\n')
-        expect(FastlaneCore::UI).not_to(receive(:error))
-    
-    exec_arr = ['fastlane', tool_name] + ARGV
-    
-            it 'sets up screenshots folder in current folder' do
-          expect(options[:screenshots_path]).to eq('./screenshots')
-        end
-    
-      describe :split_keywords do
-    context 'only commas' do
-      let(:keywords) { 'One,Two, Three, Four Token,' }
-    
-          def self.authors
-        # So no one will ever forget your contribution to fastlane :) You are awesome btw!
-        ['Your GitHub/Twitter Name']
-      end
-    
-            Redis::Cache.with do |redis|
-          redis.multi do |m|
-            m.sadd(key, value)
-            m.expire(key, timeout)
-          end
-        end
-      end
-    
-    module Gitlab
-  module GithubImport
-    module Representation
-      class User
-        include ToHash
-        include ExposeAttribute
-    
-          def action_for_grape(env)
-        endpoint = env[ENDPOINT_KEY]
-        route = endpoint.route rescue nil
-    
-      def test_imaginary
-    assert_equal [],
-                 scan('imaginary', '')
-    assert_equal ['1i', '10ri', '10.0i', '10.1ri'],
-                 scan('imaginary', 'm(1i,10ri,10.0i,10.1ri)')
+      it 'renders the import form' do
+    visit new_scenario_imports_path
+    expect(page).to have_text('Import a Public Scenario')
   end
     
-        a = %w(a a)
-    b = a.uniq {|v| v }
-    assert_equal(%w(a a), a)
-    assert(a.none?(&:frozen?))
-    assert_equal(%w(a), b)
-    assert(b.none?(&:frozen?))
-  end
-    
-    untrace_var :$x
-    
-    # Get bundled gems on load path
-Dir.glob('#{src_testdir}/../gems/*/*.gemspec')
-  .reject {|f| f =~ /minitest|test-unit|power_assert/ }
-  .map {|f| $LOAD_PATH.unshift File.join(File.dirname(f), 'lib') }
-    
-          t1 = Tempfile.new('expected'); t1.puts d1; t1.close
-      t2 = Tempfile.new('actual'); t2.puts d2; t2.close
-      system('diff -u #{t1.path} #{t2.path}') # use diff if available
-      exit(1)
+    describe ApplicationHelper do
+  describe '#icon_tag' do
+    it 'returns a Glyphicon icon element' do
+      icon = icon_tag('glyphicon-help')
+      expect(icon).to be_html_safe
+      expect(Nokogiri(icon).at('span.glyphicon.glyphicon-help')).to be_a Nokogiri::XML::Element
     end
-    i2
+    
+          it 'generates a richer DOT script' do
+        expect(agents_dot(@agents, rich: true)).to match(%r{
+          \A
+          digraph \x20 'Agent \x20 Event \x20 Flow' \{
+            (graph \[ [^\]]+ \];)?
+            node \[ [^\]]+ \];
+            edge \[ [^\]]+ \];
+            (?<foo>\w+) \[label=foo,tooltip='Dot \x20 Foo',URL='#{Regexp.quote(agent_path(@foo))}'\];
+            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
+            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
+            \k<bar1> \[label=bar1,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar1))}'\];
+            \k<bar2> \[label=bar2,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar2))}',style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
+            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
+            \k<bar3> \[label=bar3,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar3))}'\];
+          \}
+          \z
+        }x)
+      end
+    end
   end
+    
+            end
+        it 'restarts dead workers' do
+          stub.instance_of(HuginnScheduler).thread { OpenStruct.new(alive?: false) }
+          mock.instance_of(HuginnScheduler).run!
+          @agent_runner.send(:restart_dead_workers)
+        end
+      end
+    end
+  end
+    
+      describe 'up' do
+    it 'should update extract and template options for an existing WebsiteAgent' do
+      expect(agent.options).to include('extract' => old_extract,
+                                       'template' => old_template)
+      ConvertWebsiteAgentTemplateForMerge.new.up
+      agent.reload
+      expect(agent.options).to include('extract' => new_extract,
+                                       'template' => new_template)
+    end
+  end
+    
+        if resource.errors.empty?
+      set_flash_message! :notice, :unlocked
+      respond_with_navigational(resource){ redirect_to after_unlock_path_for(resource) }
+    else
+      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
+    end
+  end
+    
+            if is_navigational_format?
+          session.delete(session_key)
+        else
+          session[session_key]
+        end
+      end
+    
+          # Configure default email options
+      def devise_mail(record, action, opts = {}, &block)
+        initialize_from_record(record)
+        mail headers_for(action, opts), &block
+      end
+    
+          @class_name = (options[:class_name] || name.to_s.classify).to_s
+      @klass = Devise.ref(@class_name)
+    
+          accessors.each do |accessor|
+        mod.class_eval <<-METHOD, __FILE__, __LINE__ + 1
+          def #{accessor}
+            if defined?(@#{accessor})
+              @#{accessor}
+            elsif superclass.respond_to?(:#{accessor})
+              superclass.#{accessor}
+            else
+              Devise.#{accessor}
+            end
+          end
+    
+      require 'cocoapods/core_overrides'
+end
+
+    
+          # Prints a title taking an optional verbose prefix and
+      # a relative indentation valid for the UI action in the passed
+      # block.
+      #
+      # In verbose mode titles are printed with a color according
+      # to their level. In normal mode titles are printed only if
+      # they have nesting level smaller than 2.
+      #
+      # @todo Refactor to title (for always visible titles like search)
+      #       and sections (titles that represent collapsible sections).
+      #
+      # @param [String] title
+      #        The title to print
+      #
+      # @param [String] verbose_prefix
+      #        See #message
+      #
+      # @param [FixNum] relative_indentation
+      #        The indentation level relative to the current,
+      #        when the message is printed.
+      #
+      def section(title, verbose_prefix = '', relative_indentation = 0)
+        if config.verbose?
+          title(title, verbose_prefix, relative_indentation)
+        elsif title_level < 1
+          puts title
+        end
+    
+          # Taken from https://stackoverflow.com/questions/195740/how-do-you-do-relative-time-in-rails
+      def pretty_date(date_string)
+        date = Time.parse(date_string)
+        a = (Time.now - date).to_i
