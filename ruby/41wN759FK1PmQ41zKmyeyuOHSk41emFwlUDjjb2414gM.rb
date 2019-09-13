@@ -1,163 +1,120 @@
 
         
-                  enabled_services = services.select { |_k, v| v == true || (v != false && v.to_s != 'off') }.map { |k, v| [k, v == true || v.to_s == 'on' ? 'on' : v] }.to_h
-          disabled_services = services.select { |_k, v| v == false || v.to_s == 'off' }.map { |k, v| [k, 'off'] }.to_h
+              def get_type
+        return if root_page?
     
-            # Maps nice developer param names to Shenzhen's `ipa build` arguments
-        params.collect do |k, v|
-          v ||= ''
-          if ARGS_MAP[k]
-            if k == :clean
-              v == true ? '--clean' : '--no-clean'
-            elsif k == :archive
-              v == true ? '--archive' : '--no-archive'
-            else
-              value = (v.to_s.length > 0 ? '\'#{v}\'' : '')
-              '#{ARGS_MAP[k]} #{value}'.strip
-            end
-          end
-        end.compact
-      end
-    
-          def self.example_code
-        [
-          'make_changelog_from_jenkins(
-            # Optional, lets you set a changelog in the case is not generated on Jenkins or if ran outside of Jenkins
-            fallback_changelog: 'Bug fixes and performance enhancements'
-          )'
-        ]
-      end
-    
-          def self.is_supported?(platform)
-        [:ios, :mac].include?(platform)
-      end
-    
-        describe 'when external tester is removed' do
-      it 'removes the tester without error' do
-        allow(tester_manager).to receive(:find_app_tester).and_return(fake_tester)
-        allow(fake_app).to receive(:get_beta_groups).and_return([custom_tester_group])
-    
-        depends_on(deps) if add_mac_dependency?(args)
-  end
-    
-      def initialize
-    @resource = Resource.new
-    @resources = {}
-    @dependency_collector = DependencyCollector.new
-    @bottle_specification = BottleSpecification.new
-    @patches = []
-    @options = Options.new
-    @flags = ARGV.flags_only
-    @deprecated_flags = []
-    @deprecated_options = []
-    @build = BuildOptions.new(Options.create(@flags), options)
-    @compiler_failures = []
-    @bottle_disable_reason = nil
-  end
-    
-        it 'acts like #depends_on' do
-      f = formula 'foo' do
-        url 'foo-1.0'
-    
-          sdk_path(v)
+        def initialize(options = {})
+      @request_options = options.extract!(:request_options)[:request_options].try(:dup) || {}
+      options[:max_concurrency] ||= 20
+      options[:pipelining] = 0
+      super
     end
     
-                if dir.empty? || dir == CLT::PKG_PATH || !File.directory?(dir)
-              path = bundle_path
-              path/'Contents/Developer' if path
-            else
-              # Use cleanpath to avoid pathological trailing slash
-              Pathname.new(dir).cleanpath
+            @doc = at_css('#api-doc, .content')
+    
+      def test_module_ivar
+    assert_raise(TypeError) {Marshal.load('\x04\x08Im\x1cTestMarshal::TestModule\x06:\x0e@ivar_bug\'\x08bug')}
+    assert_raise(TypeError) {Marshal.load('\x04\x08IM\x1cTestMarshal::TestModule\x06:\x0e@ivar_bug\'\x08bug')}
+    assert_not_operator(TestModule, :instance_variable_defined?, :@bug)
+  end
+    
+    
+if ARGV.delete '--print' then
+  $raccs_print_type = true
+  printonly = true
+else
+  printonly = false
+end
+    
+      before :each do
+    @data = '{'a':1234}'
+    @zip = [31, 139, 8, 0, 0, 0, 0, 0, 0, 3, 171, 86, 74, 84, 178, 50,
+            52, 50, 54, 169, 5, 0, 196, 20, 118, 213, 10, 0, 0, 0].pack('C*')
+    @io = StringIO.new @zip
+  end
+    
+        quarantine! do # https://bugs.ruby-lang.org/issues/13675
+      describe 'with nil' do
+        it 'does not prepend anything to the stream' do
+          @gz.ungetbyte nil
+          @gz.read.should == '12345abcde'
+        end
+    
+          def updates
+        @updates ||= begin
+          ensure_external_podspecs_present!
+          spec_sets.map do |set|
+            spec = set.specification
+            source_version = set.versions.first
+            pod_name = spec.root.name
+            lockfile_version = lockfile.version(pod_name)
+            if source_version > lockfile_version
+              matching_spec = unlocked_pods.find { |s| s.name == pod_name }
+              matching_version =
+                matching_spec ? matching_spec.version : '(unused)'
+              [pod_name, lockfile_version, matching_version, source_version]
             end
-          end
+          end.compact.uniq
+        end
       end
     
-      it 'properly handles Casks that are not present' do
-    expect {
-      described_class.run('notacask')
-    }.to raise_error(Cask::CaskUnavailableError)
-  end
-end
+            # @return [Bool] Bool indicating if this project is a pod target subproject.
+        # Used by `generate_multiple_pod_projects` installation option.
+        #
+        attr_reader :pod_target_subproject
+    
+          # A title opposed to a section is always visible
+      #
+      # @param [String] title
+      #        The title to print
+      #
+      # @param [String] verbose_prefix
+      #        See #message
+      #
+      # @param [FixNum] relative_indentation
+      #        The indentation level relative to the current,
+      #        when the message is printed.
+      #
+      def title(title, verbose_prefix = '', relative_indentation = 2)
+        if @treat_titles_as_messages
+          message(title, verbose_prefix)
+        else
+          title = verbose_prefix + title if config.verbose?
+          title = '\n#{title}' if @title_level < 2
+          if (color = @title_colors[@title_level])
+            title = title.send(color)
+          end
+          puts '#{title}'
+        end
+    
+      # spec.public_header_files = 'Classes/**/*.h'
+    
+          require 'open3'
+      command = command.map(&:to_s)
+      case capture
+      when :merge then Open3.capture2e(env, [bin, bin], *command, **kwargs)
+      when :both then Open3.capture3(env, [bin, bin], *command, **kwargs)
+      when :out then Open3.capture3(env, [bin, bin], *command, **kwargs).values_at(0, -1)
+      when :err then Open3.capture3(env, [bin, bin], *command, **kwargs).drop(1)
+      when :none then Open3.capture3(env, [bin, bin], *command, **kwargs).last
+      end
+    end
+    
+              file = AppTargetHelper.create_app_host_main_file(project, :ios)
+          file.basename.to_s.should == 'main.m'
+          file.read.should == AppTargetHelper::IOS_APP_HOST_MAIN_CONTENTS
+        end
+    
+    World(RemoteCommandHelpers)
 
     
-    module LogStash
-  module PluginManager
-    class Error < StandardError; end
-    
-            PluginManager.ui.debug('Looking if package named: #{plugin_name} exists at #{uri}')
-    
-              it 'successfully install the plugin' do
-            command = logstash.run_command_in_path('bin/logstash-plugin install #{gem_path_on_vagrant}')
-            expect(command).to install_successfully
-            expect(logstash).to have_installed?('logstash-filter-dns')
-          end
-        end
-    
-    
-# This is a non obvious hack,
-# EllipticalCurve are not completely implemented in JRuby 9k and the new version of SSH from the standard library
-# use them.
-#
-# Details: https://github.com/jruby/jruby-openssl/issues/105
-Net::SSH::Transport::Algorithms::ALGORITHMS.values.each { |algs| algs.reject! { |a| a =~ /^ecd(sa|h)-sha2/ } }
-Net::SSH::KnownHosts::SUPPORTED_TYPE.reject! { |t| t =~ /^ecd(sa|h)-sha2/ }
-    
-        it_behaves_like 'non literal', '(x && false)'
-    it_behaves_like 'non literal', '(x == false)'
-    it_behaves_like 'non literal', '(x or false)'
-    it_behaves_like 'non literal', '[some_method_call]'
-    it_behaves_like 'non literal', '{ :sym => some_method_call }'
-    it_behaves_like 'non literal', '{ some_method_call => :sym }'
-    it_behaves_like 'non literal', '/.#{some_method_call}/'
-    it_behaves_like 'non literal', '%r{abx#{foo}}ixo'
-    it_behaves_like 'non literal', 'some_method_call'
-    it_behaves_like 'non literal', 'some_method_call(x, y)'
-  end
-    
-          it { expect(self_class_node.body.begin_type?).to be(true) }
-    end
-    
-          def all_on_same_line?(nodes)
-        return true if nodes.empty?
-    
-          it 'registers an offense even if a non-singleton-class method is ' \
-        'defined' do
-        src = <<~RUBY
-          #{keyword} A
-            def method1
-            end
-            class << self
-              #{modifier}
-            end
-          end
-        RUBY
-        inspect_source(src)
-        expect(cop.offenses.size).to eq(1)
+          def keys
+        values.keys
       end
-    end
     
-                return if next_line_empty?(heredoc_line(node, heredoc_node))
-    
-      it 'does not register offense when guard clause is after single line ' \
-     'heredoc' do
-    expect_no_offenses(<<~RUBY)
-      def foo
-        raise ArgumentError, <<-MSG unless path
-          Must be called with mount point
-        MSG
-    
-        it 'can schedule' do
-      ss = Sidekiq::ScheduledSet.new
-      q = Sidekiq::Queue.new
-    
-      it 'stubs the async call when in testing mode' do
-    assert InlineWorker.perform_async(true)
-    
-        def read(request)
-      request.cookies.each do |name, value|
-        @cookies[name.to_s] = value
-      end
-    end
-    
-              namespace_stackable(:error_formatters, format.to_sym => formatter)
+          def calculate_column_widths(rows)
+        num_columns = rows.map { |row| row.values.length }.max
+        Array.new(num_columns) do |col|
+          rows.map { |row| row.values[col].to_s.length }.max
         end
+      end
