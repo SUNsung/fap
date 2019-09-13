@@ -1,220 +1,187 @@
 
         
-                  theme.create!
-          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
-                             ' is ready for you in #{theme.path.to_s.cyan}!'
-          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
+                css('.edit-page-link', '.hash-link', 'hr').remove
+    
+            css('pre > code').each do |node|
+          node['class'] ||= ''
+          lang = if node['class'].include?('lang-html') || node.content =~ /\A</
+            'html'
+          elsif node['class'].include?('lang-css')
+            'css'
+          elsif node['class'].include?('lang-js') || node['class'].include?('lang-javascript')
+            'javascript'
+          end
+          node.parent['data-language'] = lang if lang
+          node.before(node.children).remove
         end
-        # rubocop:enable Metrics/AbcSize
+    
+        def build_and_queue_request(url, options, &block)
+      request = Request.new(url, request_options.merge(options))
+      request.on_complete(&block) if block
+      queue(request)
+      request
+    end
+    
+            css('> table:first-child + h1').each do |node|
+          node.previous_element.remove
+        end
+    
+              if ADD_SUB_ENTRIES_KEYWORDS.include?(node.at_css('.keyword').try(:content))
+            node.css('.subs > li').each do |sub_node|
+              sub_link = sub_node.at_css('a')
+              next unless sub_link['href'].start_with?('#')
+              sub_name = sub_node.content.strip
+              sub_name.remove! %r{\s.*}
+              sub_name.prepend '#{name} '
+              entries << [sub_name, sub_link['href'].remove('#')]
+            end
+          end
+    
+              if formula_tap == 'homebrew-core' && (depends_on?('veclibfort') || depends_on?('lapack'))
+            problem 'Formulae should use OpenBLAS as the default serial linear algebra library.'
+          end
+    
+          expect(f.class.stable.deps.first.name).to eq('foo')
+      expect(f.class.devel.deps.first.name).to eq('foo')
+      expect(f.class.head.deps.first.name).to eq('foo')
+    end
+  end
+end
+
+    
+        it 'allows specifying dependencies before certain version' do
+      spec.uses_from_macos('foo', before: :high_sierra)
+    
+          subdir = parent.join(leaf)
+    
+        odie 'This command requires at least one formula argument!' if ARGV.named.empty?
+    
+      attr_reader :mirrors, :specs, :using, :source_modified_time, :patches, :owner
+  attr_writer :version
+  attr_accessor :download_strategy, :checksum
+    
+            subject.call(json, forwarder)
       end
     end
   end
 end
 
     
-        def process(args)
-      arg_is_present? args, '--server', 'The --server command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--serve', 'The --serve command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--no-server', 'To build Jekyll without launching a server, \
-                          use the 'build' subcommand.'
-      arg_is_present? args, '--auto', 'The switch '--auto' has been replaced with \
-                          '--watch'.'
-      arg_is_present? args, '--no-auto', 'To disable auto-replication, simply leave off \
-                          the '--watch' switch.'
-      arg_is_present? args, '--pygments', 'The 'pygments'settings has been removed in \
-                          favour of 'highlighter'.'
-      arg_is_present? args, '--paginate', 'The 'paginate' setting can only be set in \
-                          your config files.'
-      arg_is_present? args, '--url', 'The 'url' setting can only be set in your \
-                          config files.'
-      no_subcommand(args)
+        before do
+      recipient.follow!(sender)
+      ActivityPub::Activity::Undo.new(undo_json, sender).perform
     end
     
-        # The path used after resending confirmation instructions.
-    def after_resending_confirmation_instructions_path_for(resource_name)
-      is_navigational_format? ? new_session_path(resource_name) : '/'
+    RSpec.describe UnreservedUsernameValidator, type: :validator do
+  describe '#validate' do
+    before do
+      allow(validator).to receive(:reserved_username?) { reserved_username }
+      validator.validate(account)
     end
     
-          # Sign in a user that already was authenticated. This helper is useful for logging
-      # users in after sign up. All options given to sign_in is passed forward
-      # to the set_user method in warden.
-      # If you are using a custom warden strategy and the timeoutable module, you have to
-      # set `env['devise.skip_timeout'] = true` in the request to use this method, like we do
-      # in the sessions controller: https://github.com/plataformatec/devise/blob/master/app/controllers/devise/sessions_controller.rb#L7
-      #
-      # Examples:
-      #
-      #   sign_in :user, @user                      # sign_in(scope, resource)
-      #   sign_in @user                             # sign_in(resource)
-      #   sign_in @user, event: :authentication     # sign_in(resource, options)
-      #   sign_in @user, store: false               # sign_in(resource, options)
-      #
-      def sign_in(resource_or_scope, *args)
-        options  = args.extract_options!
-        scope    = Devise::Mapping.find_scope!(resource_or_scope)
-        resource = args.last || resource_or_scope
+        existence_maps = grouped_codes.map { |c| c.map { |cc| [cc, File.exist?(Rails.root.join('public', 'emoji', codepoints_to_filename(cc) + '.svg'))] }.to_h }
+    map = {}
     
-              recoverable.reset_password_token = original_token if recoverable.reset_password_token.present?
-          recoverable
+      sidekiq_options unique: :until_executed, retry: 0
+    
+      describe 'follow' do
+    let(:follow) { sender.follow!(receiver.account) }
+    let(:mail) { NotificationMailer.follow(receiver.account, Notification.create!(account: receiver.account, activity: follow)) }
+    
+          it { expect(class_node.body).to be(nil) }
+    end
+  end
+end
+
+    
+              check(node, node.arguments, 'parameter of %<article>s method call',
+                node.last_argument.source_range.end_pos,
+                node.source_range.end_pos)
         end
+        alias on_csend on_send
     
-            # Initialize a new instance from its attributes.
-        #
-        # @param [Array<Specification>] specs      @see #specs
-        # @param [Array<Specification>] test_specs @see #test_specs
-        # @param [Array<Specification>] app_specs  @see #app_specs
-        # @param [Platform] platform               @see #platform
-        # @param [Target::BuildType] build_type    @see #build_type
-        #
-        def initialize(specs, test_specs, app_specs, platform, build_type = Target::BuildType.static_library)
-          @specs = specs
-          @test_specs = test_specs
-          @app_specs = app_specs
-          @platform = platform
-          @build_type = build_type
-          @hash = [specs, platform, build_type].hash
-        end
+            return unless rhs
     
-                spec_names = specs.map do |spec|
-              spec.root? ? '.root' : spec.name.split('/')[1..-1].join('_')
-            end.sort
-            if spec_names.empty?
-              omit_common_specs ? '.common' : nil
-            else
-              if omit_common_specs
-                spec_names.unshift('.common')
-              elsif omit_default_specs
-                spec_names.unshift('.default')
-              end
-              spec_names.reduce('') do |acc, name|
-                '#{acc}#{acc.empty? || name[0] == '.' ? '' : '-'}#{name}'
-              end
-            end
+        context 'with an unless statement' do
+      let(:source) { 'unless foo?; :bar; end' }
+    
+          cache_root ||= cache_root(config_store)
+      return unless File.exist?(cache_root)
+    
+                corrector.insert_after(node_range, '\n')
           end
         end
     
-              # Creates a script that copies the resources to the bundle of the client
-          # target.
-          #
-          # @note   The bridge support file needs to be created before the prefix
-          #         header, otherwise it will not be added to the resources script.
-          #
-          # @return [void]
-          #
-          def create_copy_resources_script
-            path = target.copy_resources_script_path
-            generator = Generator::CopyResourcesScript.new(target.resource_paths_by_config, target.platform)
-            update_changed_file(generator, path)
-            add_file_to_support_group(path)
-          end
+      it 'does not register offense for modifier if' do
+    expect_no_offenses(<<~RUBY)
+      def foo
+        foo += 1 if need_add?
+        foobar
+      end
+    RUBY
+  end
     
-    require 'rubygems'
-require 'bundler/setup'
-require 'bacon'
-require 'mocha-on-bacon'
-require 'pretty_bacon'
-require 'pathname'
-    
-    module Pod
-  class Target
-    describe BuildType do
-      describe '#initialize' do
-        it 'returns static library by default' do
-          BuildType.new.should == BuildType.static_library
-        end
-    
-          # Creates a default launchscreen storyboard.
+          # Checks whether this node body is a void context.
+      # Always `true` for `for`.
       #
-      # @param  [Project] project
-      #         the Xcodeproj to generate the launchscreen storyboard into.
-      #
-      # @param  [PBXNativeTarget] target
-      #         the native target to link the generated launchscreen storyboard into.
-      #
-      # @param  [Symbol] platform
-      #         the platform of the target. Can be `:ios` or `:osx`, etc.
-      #
-      # @param  [String] deployment_target
-      #         the deployment target for the platform.
-      #
-      # @param  [String] name
-      #         The name to use for the target, defaults to 'App'.
-      #
-      # @return [PBXFileReference] the created file reference of the launchscreen storyboard.
-      #
-      def self.add_launchscreen_storyboard(project, target, group, deployment_target, name = 'App')
-        launch_storyboard_file = AppTargetHelper.create_launchscreen_storyboard_file(project, deployment_target, name)
-        launch_storyboard_ref = group.new_file(launch_storyboard_file)
-        target.resources_build_phase.add_file_reference(launch_storyboard_ref)
+      # @return [true] whether the `for` node body is a void context
+      def void_context?
+        true
       end
     
-          def ==(other)
-        if other.class == self.class
-          other.source_path == @source_path && other.dsym_path == @dsym_path && other.bcsymbolmap_paths == @bcsymbolmap_paths
+          # Checks whether this `hash` uses a mix of hash rocket and colon
+      # delimiters for its pairs.
+      #
+      # @return [Boolean] whether the `hash` uses mixed delimiters
+      def mixed_delimiters?
+        pairs.map(&:delimiter).uniq.size > 1
+      end
+    
+    # The base module that gets included in ActiveRecord::Base. See the
+# documentation for Paperclip::ClassMethods for more useful information.
+module Paperclip
+  extend Helpers
+  extend Logger
+  extend ProcessorHelpers
+    
+          def available_log_types
+        types = execute :get_available_log_types
+        Array(types).map(&:to_sym)
+      rescue ::Selenium::WebDriver::Error::UnknownCommandError
+        raise NotImplementedError, LOG_MSG
+      end
+    
+      context 'with a locator that doesn't exist' do
+    it 'should raise an error' do
+      msg = /Unable to find field 'does not exist'/
+      expect do
+        @session.fill_in('does not exist', with: 'Blah blah')
+      end.to raise_error(Capybara::ElementNotFound, msg)
+    end
+  end
+    
+    require 'delegate'
+    
+            if @expected_path.is_a? Regexp
+          @actual_path.to_s.match?(@expected_path)
         else
-          false
+          ::Addressable::URI.parse(@expected_path) == ::Addressable::URI.parse(@actual_path)
         end
       end
     
-            it 'does not remove existing embed frameworks build phases from integrated framework targets' do
-          @pod_bundle.stubs(:build_type => Target::BuildType.dynamic_framework)
-          @target_integrator.integrate!
-          @pod_bundle.stubs(:requires_frameworks? => false)
-          target = @target_integrator.send(:native_targets).first
-          @target_integrator.integrate!
-          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
-          phase.should.not.be.nil
-        end
-    
-    def bump_version
-  old_file = File.read('lib/#{name}.rb')
-  old_version_line = old_file[/^\s*VERSION\s*=\s*.*/]
-  new_version = next_version
-  # replace first match of old vesion with new version
-  old_file.sub!(old_version_line, '  VERSION = '#{new_version}'')
-    
-        def self.private_key
-      @private_key ||= OpenSSL::PKey::RSA.new(File.open(Postal.lets_encrypt_private_key_path))
-    end
-    
-      #
-  # SPF
-  #
-    
-      expansion(:attachments) {
-    o.attachments.map do |attachment|
-      {
-        :filename => attachment.filename.to_s,
-        :content_type => attachment.mime_type,
-        :data => Base64.encode64(attachment.body.to_s),
-        :size => attachment.body.to_s.bytesize,
-        :hash => Digest::SHA1.hexdigest(attachment.body.to_s)
-      }
-    end
-  }
-    
-      def safe_params
-    params.require(:ip_address).permit(:ipv4, :ipv6, :hostname)
+    Capybara::SpecHelper.spec '#click_link_or_button' do
+  it 'should click on a link' do
+    @session.visit('/with_html')
+    @session.click_link_or_button('labore')
+    expect(@session).to have_content('Bar')
   end
     
-      def deliveries
-    render :json => {:html => render_to_string(:partial => 'deliveries', :locals => {:message => @message})}
-  end
+            def format
+          @options[:format]
+        end
     
-      def destroy
-    unless current_user.authenticate(params[:password])
-      respond_to do |wants|
-        wants.html do
-          redirect_to [:delete, organization, @server], :alert => 'The password you entered was not valid. Please check and try again.'
-        end
-        wants.json do
-          render :json => {:alert => 'The password you entere was invalid. Please check and try again'}
-        end
-      end
-      return
-    end
-    @server.soft_destroy
-    redirect_to_with_json organization_root_path(organization), :notice => '#{@server.name} has been deleted successfully'
+      it 'should return nil when nothing was found if count options allow no results' do
+    expect(@session.first('//div[@id='nosuchthing']', minimum: 0)).to be_nil
+    expect(@session.first('//div[@id='nosuchthing']', count: 0)).to be_nil
+    expect(@session.first('//div[@id='nosuchthing']', between: (0..3))).to be_nil
   end
