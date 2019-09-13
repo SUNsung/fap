@@ -1,230 +1,249 @@
 
         
-          def test_pretty_print_new
-    topic = Topic.new
-    actual = +''
-    PP.pp(topic, StringIO.new(actual))
-    expected = <<~PRETTY
-      #<Topic:0xXXXXXX
-       id: nil,
-       title: nil,
-       author_name: nil,
-       author_email_address: 'test@test.com',
-       written_on: nil,
-       bonus_time: nil,
-       last_read: nil,
-       content: nil,
-       important: nil,
-       approved: true,
-       replies_count: 0,
-       unique_replies_count: 0,
-       parent_id: nil,
-       parent_title: nil,
-       type: nil,
-       group: nil,
-       created_at: nil,
-       updated_at: nil>
-    PRETTY
-    assert actual.start_with?(expected.split('XXXXXX').first)
-    assert actual.end_with?(expected.split('XXXXXX').last)
+                    if editor.should_skip?
+              UI.message('Skipping framing of screenshot #{screenshot.path}.  No title provided in your Framefile.json or title.strings.')
+            else
+              Helper.show_loading_indicator('Framing screenshot '#{full_path}'')
+              editor.frame!
+            end
+          rescue => ex
+            UI.error(ex.to_s)
+            UI.error('Backtrace:\n\t#{ex.backtrace.join('\n\t')}') if FastlaneCore::Globals.verbose?
+          end
+        end
+      else
+        UI.error('Could not find screenshots in current directory: '#{File.expand_path(path)}'')
+      end
+    end
+    
+          expect(result).to eq({ :'identifier.1' => 'value.1', :'identifier.2' => 'value.2' })
+    end
+    
+            options = []
+        options += project_path_array
+        options << '-sdk '#{config[:sdk]}'' if config[:sdk]
+        options << '-derivedDataPath '#{derived_data_path}''
+        options << '-resultBundlePath '#{result_bundle_path}'' if result_bundle_path
+        options << config[:xcargs] if config[:xcargs]
+        return options
+      end
+    
+          def pipe(device_type, language, locale)
+        log_path = xcodebuild_log_path(device_type: device_type, language: language, locale: locale)
+        return ['| tee #{log_path.shellescape} | xcpretty #{Snapshot.config[:xcpretty_args]}']
+      end
+    
+            groups = [custom_tester_group]
+        group_names = groups.map(&:name).join(';')
+        expect(FastlaneCore::UI).to receive(:success).with('Successfully added tester #{fake_tester.email} to app #{fake_app_name} in group(s) #{group_names}')
+    
+      describe 'path request must exist' do
+    it 'should check that validation added if path does not exist' do
+      opts = @opts.tap { |o| o.delete('path') }
+      @checker = Agents::AftershipAgent.new(:name => 'tectonic', :options => opts)
+      @checker.user = users(:bob)
+      expect(@checker.save).to eq false
+      expect(@checker.errors.full_messages.first).to eq('You need to specify a path request')
+    end
   end
     
-        self.use_transactional_tests = false
-    
-    class ValidationsTest < ActiveRecord::TestCase
-  fixtures :topics, :developers
-    
-                {% include_relative missing.html %}
-          CONTENT
-        end
-    
-    WITH_JUST_LIQUID_VAR = <<-LIQUID.freeze
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce auctor libero at
-pharetra tempus. et metus fermentum, eu cursus lorem, ac dictum enim.
-mattis. Curabitur vel dui et lacus rutrum suscipit et {{ title }} neque.
-    
-          def self.service_object
-        service_object = Object.new
-        service_object.class.module_eval { attr_accessor :__hash__ }
-        service_object.__hash__ = {}
-        Produce::DeveloperCenter::ALLOWED_SERVICES.keys.each do |service|
-          name = self.services_mapping[service]
-          service_object.class.module_eval { attr_accessor :'#{name}' }
-        end
-        service_object
-      end
-    
-            UI.success('Successfully exported CSV to #{file}')
-      end
+          event = Event.new
+      event.agent = agents(:bob_rain_notifier_agent)
+      event.payload = {
+        'url' => 'http://xkcd.com',
+        'link' => 'Random',
+      }
+      agent.receive([event])
     end
     
-          attr_mapping({
-        'installCount' => 'install_count',
-        'crashCount' => 'crash_count',
-        'sessionCount' => 'session_count',
-        'betaTesterState' => 'beta_tester_state',
-        'lastModifiedDate' => 'last_modified_date',
-        'installedCfBundleShortVersionString' => 'installed_cf_bundle_short_version_string',
-        'installedCfBundleVersion' => 'installed_cf_bundle_version'
-      })
-    
-          attr_mapping({
-        'autoNotifyEnabled' => 'auto_notify_enabled',
-        'didNotify' => 'did_notify',
-        'internalBuildState' => 'internal_build_state',
-        'externalBuildState' => 'external_build_state'
-      })
-    
-          def self.all(filter: {}, includes: nil, limit: nil, sort: nil)
-        return users_client.get_users(filter: filter, includes: includes)
-      end
-    
-          module Status
-        ENABLED = 'ENABLED'
-        DISABLED = 'DISABLED'
-      end
-    
-        def pos
-      byte_to_str_pos @s.pos
+        def bad_sourceforge_url?
+      bad_url_format?(/sourceforge/,
+                      [
+                        %r{\Ahttps://sourceforge\.net/projects/[^/]+/files/latest/download\Z},
+                        %r{\Ahttps://downloads\.sourceforge\.net/(?!(project|sourceforge)\/)},
+                      ])
     end
     
-      # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  # config.action_controller.asset_host = 'http://assets.example.com'
+          def find_matching_tag(tag)
+        # Used primarily by developers testing beta macOS releases.
+        if OS::Mac.prerelease? && ARGV.skip_or_later_bottles?
+          generic_find_matching_tag(tag)
+        else
+          generic_find_matching_tag(tag) ||
+            find_older_compatible_tag(tag)
+        end
+      end
     
-      # Configure static asset server for tests with Cache-Control for performance.
-  if config.respond_to?(:serve_static_files)
-    # rails >= 4.2
-    config.serve_static_files = true
-  elsif config.respond_to?(:serve_static_assets)
-    # rails < 4.2
-    config.serve_static_assets = true
+        return false if args[:after] && OS::Mac.version < args[:after]
+    
+      include Msf::Post::File
+  include Msf::Post::OSX::Priv
+  include Msf::Post::OSX::System
+  include Msf::Auxiliary::Report
+    
+        it 'should return the result of echo 10 times' do
+      10.times do
+        test_string = Rex::Text.rand_text_alpha(4)
+        if session.platform.eql? 'windows'
+          output = cmd_exec('cmd.exe', '/c echo #{test_string}')
+        else
+          output = cmd_exec('echo #{test_string}')
+        end
+        return false unless output == test_string
+      end
+      true
+    end
+    vprint_status('Finished cmd_exec tests')
   end
-  config.static_cache_control = 'public, max-age=3600'
     
-      def setup
-    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
-    success = Dir.chdir DUMMY_PATH do
-      silence_stdout_if !ENV['VERBOSE'] do
-        system 'node', 'manifest.js', tmp_dir
+            indenter << 'hello'
+    
+            def attrs
+          attrs = {
+            'size' => size,
+            'mtime' => mtime,
+          }.reject { |_k, v| v.nil? }
+          return nil if attrs.empty?
+          attrs.to_s
+        end
+      end
+    
+            # Describes what makes each {PodVariant} distinct among the others.
+        #
+        # @return [Hash<PodVariant, String>]
+        #
+        def scope_suffixes
+          return { variants.first => nil } if variants.count == 1
+          Hash[scope_by_specs.map do |variant, scope|
+            require 'digest'
+            scope = Digest::MD5.hexdigest(scope)[0..7] if !scope.nil? && scope.length >= 50
+            [variant, scope]
+          end]
+        end
+    
+                if existing && existing != file_ref
+              if existing.real_path.to_path.start_with?(pod_bundle.sandbox.root.to_path << '/')
+                config.base_configuration_reference = file_ref
+              elsif !xcconfig_includes_target_xcconfig?(config.base_configuration_reference, path)
+                unless existing_config_is_identical_to_pod_config?(existing.real_path, pod_bundle.xcconfig_path(config.name))
+                  UI.warn 'CocoaPods did not set the base configuration of your ' \
+                  'project because your project already has a custom ' \
+                  'config set. In order for CocoaPods integration to work at ' \
+                  'all, please either set the base configurations of the target ' \
+                  '`#{target.name}` to `#{path}` or include the `#{path}` in your ' \
+                  'build configuration (#{UI.path(existing.real_path)}).'
+                end
+              end
+            elsif config.base_configuration_reference.nil? || file_ref.nil?
+              config.base_configuration_reference = file_ref
+            end
+          end
+    
+          # prints a message followed by a new line unless config is silent.
+      #
+      # @param [String] message
+      #        The message to print.
+      #
+      def print(message)
+        return if config.silent?
+        begin
+          (output_io || STDOUT).print(message)
+        rescue Errno::EPIPE
+          exit 0
+        end
+      end
+    
+        def price_options_cache_key
+      current_price_options.sort.map(&:last).map do |value|
+        value.try(:cache_key) || value
       end
     end
-    assert success, 'Node.js Mincer compilation failed'
-    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
-    css_name = manifest['assets']['application.css']
-    @css = File.read('#{tmp_dir}/#{css_name}')
   end
 end
 
     
-            def session_options
-          @context_el ||= nil
-          if @context_el.respond_to? :session_options
-            @context_el.session_options
-          elsif @context_el.respond_to? :current_scope
-            @context_el.current_scope.session_options
-          else
-            Capybara.session_options
-          end
-        end
+        # order state machine (see http://github.com/pluginaweek/state_machine/tree/master for details)
+    state_machine initial: :checkout do
+      # With card payments, happens before purchase or authorization happens
+      #
+      # Setting it after creating a profile and authorizing a full amount will
+      # prevent the payment from being authorized again once Order transitions
+      # to complete
+      event :started_processing do
+        transition from: [:checkout, :pending, :completed, :processing], to: :processing
+      end
+      # When processing during checkout fails
+      event :failure do
+        transition from: [:pending, :processing], to: :failed
+      end
+      # With card payments this represents authorizing the payment
+      event :pend do
+        transition from: [:checkout, :processing], to: :pending
+      end
+      # With card payments this represents completing a purchase or capture transaction
+      event :complete do
+        transition from: [:processing, :pending, :checkout], to: :completed
+      end
+      event :void do
+        transition from: [:pending, :processing, :completed, :checkout], to: :void
+      end
+      # when the card brand isnt supported
+      event :invalidate do
+        transition from: [:checkout], to: :invalid
       end
     
-    require 'capybara/rspec/matchers/base'
+          def handle_payment_preconditions
+        unless block_given?
+          raise ArgumentError, 'handle_payment_preconditions must be called with a block'
+        end
     
-    class Capybara::Selenium::SafariNode < Capybara::Selenium::Node
-  # include Html5Drag
+        def configure
+      yield(self) if block_given?
+    end
     
-        expect do
-      expect(el).to have_ancestor(:css, 'div').once
-    end.to raise_error(RSpec::Expectations::ExpectationNotMetError)
+        private
     
-    Capybara::SpecHelper.spec '#save_screenshot', requires: [:screenshot] do
-  let(:alternative_path) { File.join(Dir.pwd, 'save_screenshot_tmp') }
-  before do
-    @old_save_path = Capybara.save_path
-    Capybara.save_path = nil
-    @session.visit '/foo'
-  end
+            def index
+          authorize! :admin, ReturnAuthorization
+          @return_authorizations = order.return_authorizations.accessible_by(current_ability).
+                                   ransack(params[:q]).result.
+                                   page(params[:page]).per(params[:per_page])
+          respond_with(@return_authorizations)
+        end
     
-        if radio? then set_radio(value)
-    elsif checkbox? then set_checkbox(value)
-    elsif input_field? then set_input(value)
-    elsif textarea? then native['_capybara_raw_value'] = value.to_s
+    describe Sidekiq::Worker do
+  describe '#set' do
+    
+      it 'should remove dead jobs older than Sidekiq::DeadSet.timeout' do
+    Sidekiq::DeadSet.stub(:timeout, 10) do
+      Time.stub(:now, Time.now - 11) do
+        dead_set.kill(Sidekiq.dump_json(jid: '000103', class: 'MyWorker3', args: [])) # the oldest
+      end
+    
+          assert SomeScheduledWorker.perform_in(1.month, 'mike')
+      job = ss.first
+      assert job['created_at']
+      refute job['enqueued_at']
     end
   end
     
-        ##
-    # @!method always_include_port
-    #   See {Capybara.configure}
-    # @!method run_server
-    #   See {Capybara.configure}
-    # @!method default_selector
-    #   See {Capybara.configure}
-    # @!method default_max_wait_time
-    #   See {Capybara.configure}
-    # @!method ignore_hidden_elements
-    #   See {Capybara.configure}
-    # @!method automatic_reload
-    #   See {Capybara.configure}
-    # @!method match
-    #   See {Capybara.configure}
-    # @!method exact
-    #   See {Capybara.configure}
-    # @!method raise_server_errors
-    #   See {Capybara.configure}
-    # @!method visible_text_only
-    #   See {Capybara.configure}
-    # @!method automatic_label_click
-    #   See {Capybara.configure}
-    # @!method enable_aria_label
-    #   See {Capybara.configure}
-    # @!method save_path
-    #   See {Capybara.configure}
-    # @!method asset_host
-    #   See {Capybara.configure}
-    # @!method default_host
-    #   See {Capybara.configure}
-    # @!method app_host
-    #   See {Capybara.configure}
-    # @!method server_host
-    #   See {Capybara.configure}
-    # @!method server_port
-    #   See {Capybara.configure}
-    # @!method server_errors
-    #   See {Capybara.configure}
-    # @!method default_set_options
-    #   See {Capybara.configure}
-    # @!method disable_animation
-    #   See {Capybara.configure}
-    # @!method test_id
-    #   See {Capybara.configure}
-    # @!method default_normalize_ws
-    #   See {Capybara.configure}
-    # @!method w3c_click_offset
-    #   See {Capybara.configure}
-    
-              before :each, :exact_false do
-            Capybara.exact = false
-          end
-          # rubocop:enable RSpec/ScatteredSetup
-    
-    Capybara::SpecHelper.log_selenium_driver_version(Selenium::WebDriver::Edge) if ENV['CI']
-    
-      it 'can scroll an element to the bottom of the viewport' do
-    el = @session.find(:css, '#scroll')
-    @session.scroll_to(el, align: :bottom)
-    el_bottom = el.evaluate_script('this.getBoundingClientRect().bottom')
-    viewport_bottom = el.evaluate_script('document.body.clientHeight')
-    expect(el_bottom).to be_within(1).of(viewport_bottom)
-  end
-    
-    require 'spec_helper'
-require 'selenium-webdriver'
-require 'shared_selenium_session'
-require 'shared_selenium_node'
-require 'rspec/shared_spec_matchers'
-    
-      context 'with text' do
-    it 'should discard all matches where the given string is not contained' do
-      expect(@session).not_to have_no_css('p a', text: 'Redirect', count: 1)
-      expect(@session).to have_no_css('p a', text: 'Doesnotexist')
+      describe 'redis connection' do
+    it 'does not continually retry' do
+      assert_raises Redis::CommandError do
+        Sidekiq.redis do |c|
+          raise Redis::CommandError, 'READONLY You can't write against a replica.'
+        end
+      end
     end
+    
+      it 'stubs the push_bulk call when in testing mode' do
+    assert Sidekiq::Client.push_bulk({'class' => InlineWorker, 'args' => [[true], [true]]})
+    
+        ## Write the results to a file
+    ## Requires railsexpress patched MRI build
+    # brew install qcachegrind
+    #File.open('callgrind.profile', 'w') do |f|
+      #RubyProf::CallTreePrinter.new(result).print(f, :min_percent => 1)
+    #end
+  end
+end
