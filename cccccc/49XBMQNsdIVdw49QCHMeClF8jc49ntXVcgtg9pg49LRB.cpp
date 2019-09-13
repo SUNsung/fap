@@ -1,527 +1,748 @@
 
         
-        void MyComputedHashes::ComputeHashesForContent(const std::string& contents,
-                                             size_t block_size,
-                                             std::vector<std::string>* hashes) {
-  size_t offset = 0;
-  // Even when the contents is empty, we want to output at least one hash
-  // block (the hash of the empty string).
-  do {
-    const char* block_start = contents.data() + offset;
-    DCHECK(offset <= contents.size());
-    size_t bytes_to_read = std::min(contents.size() - offset, block_size);
-    std::unique_ptr<crypto::SecureHash> hash(
-        crypto::SecureHash::Create(crypto::SecureHash::SHA256));
-    hash->Update(block_start, bytes_to_read);
+        namespace xla {
+namespace gpu {
     }
     }
     
-    IPC_SYNC_MESSAGE_ROUTED1_1(ShellViewHostMsg_SetForceClose, bool, int)
+      Status ExecuteOnStream(const ExecuteParams& params) override;
     
-    // Tell browser to allocate a new object.
-// function AllocateObject(id, name, options);
-v8::Handle<v8::Value> AllocateObject(int routing_id,
-                                     int object_id,
-                                     const std::string& type,
-                                     v8::Handle<v8::Value> options);
+    #include 'absl/types/optional.h'
+#include 'tensorflow/compiler/xla/service/buffer_assignment.h'
+#include 'tensorflow/compiler/xla/service/gpu/buffer_allocations.h'
+#include 'tensorflow/compiler/xla/service/gpu/cudnn_conv_runner.h'
+#include 'tensorflow/compiler/xla/service/gpu/gpu_executable.h'
+#include 'tensorflow/compiler/xla/service/gpu/hlo_execution_profiler.h'
+#include 'tensorflow/compiler/xla/service/gpu/thunk.h'
+#include 'tensorflow/compiler/xla/service/hlo_instruction.h'
+#include 'tensorflow/compiler/xla/service/hlo_instructions.h'
+#include 'tensorflow/compiler/xla/types.h'
+#include 'tensorflow/compiler/xla/xla_data.pb.h'
+#include 'tensorflow/core/lib/core/status.h'
+#include 'tensorflow/core/platform/stream_executor_no_cuda.h'
     
-    Clipboard::Clipboard(int id,
-           const base::WeakPtr<DispatcherHost>& dispatcher_host,
-           const base::DictionaryValue& option)
-    : Base(id, dispatcher_host, option) {
-}
+    HostToDeviceCopyThunk::HostToDeviceCopyThunk(
+    const void* source_address,
+    const BufferAllocation::Slice& destination_buffer, uint64 mem_size,
+    const HloInstruction* hlo_instruction)
+    : Thunk(Kind::kCopy, hlo_instruction),
+      source_address_(source_address),
+      destination_buffer_(destination_buffer),
+      mem_size_(mem_size) {}
     
-    void MenuDelegate::ExecuteCommand(int command_id, int event_flags) {
-  if (command_id < 0)
-    return;
-    }
-    
-    void MenuItem::CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) {
-  if (method == 'GetChecked') {
-    result->AppendBoolean(GetChecked());
-  } else {
-    NOTREACHED() << 'Invalid call to MenuItem method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
-    
-    #include 'base/files/file_path.h'
-#include 'base/strings/string_util.h'
-#include 'base/strings/utf_string_conversions.h'
-#include 'base/threading/thread_restrictions.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menu/menu.h'
-#include 'content/nw/src/nw_base.h'
-#include 'content/nw/src/nw_content.h'
-#include 'content/nw/src/nw_package.h'
-#include 'ui/base/accelerators/accelerator.h'
-#include 'ui/gfx/image/image_skia_operations.h'
-#include 'ui/events/event_constants.h'//for modifier key code
-#include 'base/logging.h'
-    
-      // Ignore first non-switch arg if it's not a standalone package.
-  bool ignore_arg = !package->self_extract();
-  for (unsigned i = 1; i < argv.size(); ++i) {
-    if (ignore_arg && args.size() && argv[i] == args[0]) {
-      ignore_arg = false;
-      continue;
-    }
-    }
-    
-    class NwAppClearCacheFunction : public NWSyncExtensionFunction, public content::BrowsingDataRemover::Observer {
- public:
-  NwAppClearCacheFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-  void OnBrowsingDataRemoverDone() override;
-    }
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.clearSync', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwClipboardClearSyncFunction);
-};
-    
-    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
- public:
-  NwMenuGetNSStringWithFixupFunction(){}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    
- protected:
-  ~NwMenuGetNSStringWithFixupFunction() override {}
-    
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
-};
-    
-    bool NwObjAllocateIdFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  response->AppendInteger(nw::ObjectManager::AllocateId());
-  return true;
-}
-    
-        void operator()(const point_read_t &get) {
-        response->response = point_read_response_t();
-        point_read_response_t *res =
-            boost::get<point_read_response_t>(&response->response);
-        rdb_get(get.key, btree, superblock, res, trace);
-    }
-    
-      static void Print(const T& value, ::std::ostream* os) {
-    // Prints the address of the value.  We use reinterpret_cast here
-    // as static_cast doesn't compile when T is a function type.
-    *os << '@' << reinterpret_cast<const void*>(&value) << ' ';
-    }
-    
-    // When this flag is set with a 'host:port' string, on supported
-// platforms test results are streamed to the specified port on
-// the specified host machine.
-GTEST_DECLARE_string_(stream_result_to);
-    
-      // Create the directory so that path exists. Returns true if successful or
-  // if the directory already exists; returns false if unable to create the
-  // directory for any reason, including if the parent directory does not
-  // exist. Not named 'CreateDirectory' because that's a macro on Windows.
-  bool CreateFolder() const;
-    
-      // Returns the fraction bits of this number.
-  Bits fraction_bits() const { return kFractionBitMask & u_.bits_; }
+      Status ExecuteOnStream(const ExecuteParams& params) override;
     
     
     { private:
-  String();  // Not meant to be instantiated.
-};  // class String
+  uint32 value_;
+  const BufferAllocation::Slice dest_;
+};
     
-    int main() {
-  volatile int x = 0;
-  emscripten_sleep(1);
-  int jmpval = setjmp(buf);
-  if (!jmpval) {
-    x++;                  // should be properly restored once longjmp jumps back
-    first();              // when executed, setjmp returns 1
-    printf('skipped\n');  // does not print
-  } else if (jmpval == 1) {  // when first() jumps back, setjmp returns 1
-    printf('result: %d %d\n', x, jmpval);  // prints
-    x++;
-    emscripten_sleep(1);
-    second();                 // when executed, setjmp returns -1
-    emscripten_sleep(1);
-  } else if (jmpval == -1) {  // when second() jumps back, setjmp returns -1
-    printf('result: %d %d\n', x, jmpval);  // prints
-  }
-  emscripten_sleep(1);
-  finish(x);
-}
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    namespace xla {
+namespace gpu {
+    }
+    }
+    
+    #include 'absl/memory/memory.h'
+#include 'tensorflow/compiler/xla/service/gpu/hlo_execution_profiler.h'
+#include 'tensorflow/compiler/xla/util.h'
+#include 'tensorflow/core/lib/core/errors.h'
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    #include 'base/basictypes.h'
+#include '../dispatcher_host.h'
+    
+    
+    {}  // namespace nw
 
     
-      // Write the Xpdf procset.
-  void writeXpdfProcset();
-    
-      // read a token
-  i = 0;
-  buf[i++] = c;
-  if (c == '(') {
-    backslash = gFalse;
-    while ((c = lookChar()) != EOF) {
-      consumeChar();
-      if (i < size) {
-	buf[i++] = c;
-      }
-      if (c == '\\') {
-	backslash = gTrue;
-      } else if (!backslash && c == ')') {
-	break;
-      } else {
-	backslash = gFalse;
+    ui::KeyboardCode GetKeycodeFromText(std::string text){
+  ui::KeyboardCode retval = ui::VKEY_UNKNOWN;
+  if (text.size() != 0){
+    std::string upperText = base::ToUpperASCII(text);
+    std::string keyName = text;
+    bool found = false;
+    if (upperText.size() == 1){
+      char key = upperText[0];
+      if (key>='0' && key<='9'){//handle digital
+        keyName = 'Digit' + upperText;
+        found = true;
+      } else if (key>='A'&&key<='Z'){//handle alphabet
+        keyName = 'Key' + upperText;
+        found = true;
       }
     }
-  } else if (c == '<') {
-    while ((c = lookChar()) != EOF) {
-      consumeChar();
-      if (i < size && specialChars[c] != 1) {
-	buf[i++] = c;
-      }
-      if (c == '>') {
-	break;
-      }
-    }
-  } else if (c != '[' && c != ']') {
-    while ((c = lookChar()) != EOF && !specialChars[c]) {
-      consumeChar();
-      if (i < size) {
-	buf[i++] = c;
-      }
-    }
-  }
-  // Zero terminate token string
-  buf[i] = '\0';
-  // Return length of token
-  *length = i;
-    
-      // thumb
-  pageDict->lookupNF('Thumb', &thumb);
-  if (!(thumb.isStream() || thumb.isNull() || thumb.isRef())) {
-      error(-1, 'Page thumb object (page %d) is wrong type (%s)',
-            num, thumb.getTypeName());
-      thumb.initNull(); 
-  }
-    
-      XRef *xref;			// the xref table for this PDF file
-  Lexer *lexer;			// input stream
-  GBool allowStreams;		// parse stream objects?
-  Object buf1, buf2;		// next two tokens
-  int inlineImg;		// set when inline image data is encountered
-    
-    class ObjectItem : public PopplerCacheItem {
-  public:
-    ObjectItem(Object *obj)
-    {
-      obj->copy(&item);
     }
     }
     
-    
-    {  if (!ok) {
-    return gFalse;
-  }
-  if (authData) {
-    ownerPassword = ((StandardAuthData *)authData)->ownerPassword;
-    userPassword = ((StandardAuthData *)authData)->userPassword;
-  } else {
-    ownerPassword = NULL;
-    userPassword = NULL;
-  }
-  if (!Decrypt::makeFileKey(encVersion, encRevision, fileKeyLength,
-			    ownerKey, userKey, permFlags, fileID,
-			    ownerPassword, userPassword, fileKey,
-			    encryptMetadata, &ownerPasswordOk)) {
-    return gFalse;
-  }
-  return gTrue;
+    NwAppClearAppCacheFunction::NwAppClearAppCacheFunction() {
 }
     
-    void SplashOutputDev::drawSoftMaskedImage(GfxState *state, Object *ref,
-					  Stream *str, int width, int height,
-					  GfxImageColorMap *colorMap,
-					  GBool interpolate,
-					  Stream *maskStr,
-					  int maskWidth, int maskHeight,
-					  GfxImageColorMap *maskColorMap,
-					  GBool maskInterpolate) {
-  double *ctm;
-  SplashCoord mat[6];
-  SplashOutImageData imgData;
-  SplashOutImageData imgMaskData;
-  SplashColorMode srcMode;
-  SplashBitmap *maskBitmap;
-  Splash *maskSplash;
-  SplashColor maskColor;
-  GfxGray gray;
-  GfxRGB rgb;
-#if SPLASH_CMYK
-  GfxCMYK cmyk;
+    #include 'base/run_loop.h'
+#include 'content/public/browser/browsing_data_remover.h'
+#include 'extensions/browser/extension_function.h'
+    
+    
+    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.create', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwObjCreateFunction);
+};
+    
+    protected:
+    ComputationNetworkPtr m_net;
+    
+    template <typename ElemType, typename ElemType2> static inline const wchar_t* ElemTypeName2();
+template <> /*static*/ inline const wchar_t* ElemTypeName2<float,half>() { return L'float,half'; }
+template <> /*static*/ inline const wchar_t* ElemTypeName2<float,double>() { return L'float,double'; }
+template <> /*static*/ inline const wchar_t* ElemTypeName2<double,half>() { return L'double,half'; }
+template <> /*static*/ inline const wchar_t* ElemTypeName2<double,float>() { return L'double,float'; }
+template <> /*static*/ inline const wchar_t* ElemTypeName2<half,float>() { return L'half,float'; }
+template <> /*static*/ inline const wchar_t* ElemTypeName2<half,double>() { return L'half,double'; }
+    
+    BOOST_AUTO_TEST_CASE(EvalConstantPlusTest)
+{
+    // Setup model for adding two constants (1 + 2)
+    std::string modelDefinition =
+        'deviceId = -1 \n'
+        'precision = \'float\' \n'
+        'traceLevel = 1 \n'
+        'run=NDLNetworkBuilder \n'
+        'NDLNetworkBuilder=[ \n'
+        'v1 = Constant(1) \n'
+        'v2 = Constant(2) \n'
+        'ol = Plus(v1, v2, tag=\'output\') \n'
+        'FeatureNodes = (v1) \n'
+        '] \n';
+    }
+    
+    #include 'coroutine_channel.h'
+    
+        for (i = 0; i < MAP_SIZE; i++)
+    {
+        pkt = (swFdInfo *) malloc(sizeof(swFdInfo));
+        pkt->key = i;
+        pkt->fd = i * 37;
+        swHashMap_add_int(ht, pkt->fd, pkt);
+        lists[i] = pkt;
+    }
+    
+        long buf;
+    read(_pipe, (void*) &buf, sizeof(buf));
+    close(_pipe);
+    
+    const char* swoole_strerror(int code)
+{
+    if (code < SW_ERROR_START)
+    {
+        return strerror(code);
+    }
+    /* swstrerror {{{*/
+    switch(code)
+    {
+    case SW_ERROR_MALLOC_FAIL:
+        return 'Malloc fail';
+    case SW_ERROR_SYSTEM_CALL_FAIL:
+        return 'System call fail';
+    case SW_ERROR_PHP_FATAL_ERROR:
+        return 'PHP fatal error';
+    case SW_ERROR_NAME_TOO_LONG:
+        return 'Name too long';
+    case SW_ERROR_INVALID_PARAMS:
+        return 'Invalid params';
+    case SW_ERROR_QUEUE_FULL:
+        return 'Queue full';
+    case SW_ERROR_OPERATION_NOT_SUPPORT:
+        return 'Operation not support';
+    case SW_ERROR_FILE_NOT_EXIST:
+        return 'File not exist';
+    case SW_ERROR_FILE_TOO_LARGE:
+        return 'File too large';
+    case SW_ERROR_FILE_EMPTY:
+        return 'File empty';
+    case SW_ERROR_DNSLOOKUP_DUPLICATE_REQUEST:
+        return 'DNS Lookup duplicate request';
+    case SW_ERROR_DNSLOOKUP_RESOLVE_FAILED:
+        return 'DNS Lookup resolve failed';
+    case SW_ERROR_DNSLOOKUP_RESOLVE_TIMEOUT:
+        return 'DNS Lookup resolve timeout';
+    case SW_ERROR_BAD_IPV6_ADDRESS:
+        return 'Bad ipv6 address';
+    case SW_ERROR_UNREGISTERED_SIGNAL:
+        return 'Unregistered signal';
+    case SW_ERROR_SESSION_CLOSED_BY_SERVER:
+        return 'Session closed by server';
+    case SW_ERROR_SESSION_CLOSED_BY_CLIENT:
+        return 'Session closed by client';
+    case SW_ERROR_SESSION_CLOSING:
+        return 'Session closing';
+    case SW_ERROR_SESSION_CLOSED:
+        return 'Session closed';
+    case SW_ERROR_SESSION_NOT_EXIST:
+        return 'Session not exist';
+    case SW_ERROR_SESSION_INVALID_ID:
+        return 'Session invalid id';
+    case SW_ERROR_SESSION_DISCARD_TIMEOUT_DATA:
+        return 'Session discard timeout data';
+    case SW_ERROR_OUTPUT_BUFFER_OVERFLOW:
+        return 'Output buffer overflow';
+    case SW_ERROR_SSL_NOT_READY:
+        return 'SSL not ready';
+    case SW_ERROR_SSL_CANNOT_USE_SENFILE:
+        return 'SSL cannot use senfile';
+    case SW_ERROR_SSL_EMPTY_PEER_CERTIFICATE:
+        return 'SSL empty peer certificate';
+    case SW_ERROR_SSL_VEFIRY_FAILED:
+        return 'SSL vefiry failed';
+    case SW_ERROR_SSL_BAD_CLIENT:
+        return 'SSL bad client';
+    case SW_ERROR_SSL_BAD_PROTOCOL:
+        return 'SSL bad protocol';
+    case SW_ERROR_PACKAGE_LENGTH_TOO_LARGE:
+        return 'Package length too large';
+    case SW_ERROR_DATA_LENGTH_TOO_LARGE:
+        return 'Data length too large';
+    case SW_ERROR_TASK_PACKAGE_TOO_BIG:
+        return 'Task package too big';
+    case SW_ERROR_TASK_DISPATCH_FAIL:
+        return 'Task dispatch fail';
+    case SW_ERROR_HTTP2_STREAM_ID_TOO_BIG:
+        return 'Http2 stream id too big';
+    case SW_ERROR_HTTP2_STREAM_NO_HEADER:
+        return 'Http2 stream no header';
+    case SW_ERROR_HTTP2_STREAM_NOT_FOUND:
+        return 'Http2 stream not found';
+    case SW_ERROR_AIO_BAD_REQUEST:
+        return 'Aio bad request';
+    case SW_ERROR_AIO_CANCELED:
+        return 'Aio canceled';
+    case SW_ERROR_CLIENT_NO_CONNECTION:
+        return 'Client no connection';
+    case SW_ERROR_SOCKET_CLOSED:
+        return 'Socket closed';
+    case SW_ERROR_SOCKS5_UNSUPPORT_VERSION:
+        return 'Socks5 unsupport version';
+    case SW_ERROR_SOCKS5_UNSUPPORT_METHOD:
+        return 'Socks5 unsupport method';
+    case SW_ERROR_SOCKS5_AUTH_FAILED:
+        return 'Socks5 auth failed';
+    case SW_ERROR_SOCKS5_SERVER_ERROR:
+        return 'Socks5 server error';
+    case SW_ERROR_HTTP_PROXY_HANDSHAKE_ERROR:
+        return 'Http proxy handshake error';
+    case SW_ERROR_HTTP_INVALID_PROTOCOL:
+        return 'Http invalid protocol';
+    case SW_ERROR_WEBSOCKET_BAD_CLIENT:
+        return 'Websocket bad client';
+    case SW_ERROR_WEBSOCKET_BAD_OPCODE:
+        return 'Websocket bad opcode';
+    case SW_ERROR_WEBSOCKET_UNCONNECTED:
+        return 'Websocket unconnected';
+    case SW_ERROR_WEBSOCKET_HANDSHAKE_FAILED:
+        return 'Websocket handshake failed';
+    case SW_ERROR_SERVER_MUST_CREATED_BEFORE_CLIENT:
+        return 'Server must created before client';
+    case SW_ERROR_SERVER_TOO_MANY_SOCKET:
+        return 'Server too many socket';
+    case SW_ERROR_SERVER_WORKER_TERMINATED:
+        return 'Server worker terminated';
+    case SW_ERROR_SERVER_INVALID_LISTEN_PORT:
+        return 'Server invalid listen port';
+    case SW_ERROR_SERVER_TOO_MANY_LISTEN_PORT:
+        return 'Server too many listen port';
+    case SW_ERROR_SERVER_PIPE_BUFFER_FULL:
+        return 'Server pipe buffer full';
+    case SW_ERROR_SERVER_NO_IDLE_WORKER:
+        return 'Server no idle worker';
+    case SW_ERROR_SERVER_ONLY_START_ONE:
+        return 'Server only start one';
+    case SW_ERROR_SERVER_SEND_IN_MASTER:
+        return 'Server send in master';
+    case SW_ERROR_SERVER_INVALID_REQUEST:
+        return 'Server invalid request';
+    case SW_ERROR_SERVER_CONNECT_FAIL:
+        return 'Server connect fail';
+    case SW_ERROR_SERVER_WORKER_EXIT_TIMEOUT:
+        return 'Server worker exit timeout';
+    case SW_ERROR_CO_OUT_OF_COROUTINE:
+        return 'Coroutine out of coroutine';
+    case SW_ERROR_CO_HAS_BEEN_BOUND:
+        return 'Coroutine has been bound';
+    case SW_ERROR_CO_MUTEX_DOUBLE_UNLOCK:
+        return 'Coroutine mutex double unlock';
+    case SW_ERROR_CO_BLOCK_OBJECT_LOCKED:
+        return 'Coroutine block object locked';
+    case SW_ERROR_CO_BLOCK_OBJECT_WAITING:
+        return 'Coroutine block object waiting';
+    case SW_ERROR_CO_YIELD_FAILED:
+        return 'Coroutine yield failed';
+    case SW_ERROR_CO_GETCONTEXT_FAILED:
+        return 'Coroutine getcontext failed';
+    case SW_ERROR_CO_SWAPCONTEXT_FAILED:
+        return 'Coroutine swapcontext failed';
+    case SW_ERROR_CO_MAKECONTEXT_FAILED:
+        return 'Coroutine makecontext failed';
+    case SW_ERROR_CO_IOCPINIT_FAILED:
+        return 'Coroutine iocpinit failed';
+    case SW_ERROR_CO_PROTECT_STACK_FAILED:
+        return 'Coroutine protect stack failed';
+    case SW_ERROR_CO_STD_THREAD_LINK_ERROR:
+        return 'Coroutine std thread link error';
+    case SW_ERROR_CO_DISABLED_MULTI_THREAD:
+        return 'Coroutine disabled multi thread';
+    default:
+        static char buffer[32];
+#ifndef __MACH__
+        snprintf(buffer, sizeof(buffer), 'Unknown error %d', code);
+#else
+        snprintf(buffer, sizeof(buffer), 'Unknown error: %d', code);
 #endif
-  Guchar pix;
-  int n, i;
+        return buffer;
     }
-    
-      XRef *xref;			// xref table for current document
-    
-    XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(lz4i16hc)
-.describe('Apply LZ4 binary data compression(16 bit index mode) for ext memory.')
-.set_body([]() {
-    return new SparsePageLZ4Format<uint16_t>(true);
-  });
-    
-    /*!
- * \brief Macro to register sparse page format.
- *
- * \code
- * // example of registering a objective
- * XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(raw)
- * .describe('Raw binary data format.')
- * .set_body([]() {
- *     return new RawFormat();
- *   });
- * \endcode
- */
-#define XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(Name)                       \
-  DMLC_REGISTRY_REGISTER(::xgboost::data::SparsePageFormatReg, SparsePageFormat, Name)
-    
-    
-    {    // By default ImGuiFreeType will use IM_ALLOC()/IM_FREE().
-    // However, as FreeType does lots of allocations we provide a way for the user to redirect it to a separate memory heap if desired:
-    IMGUI_API void SetAllocatorFunctions(void* (*alloc_func)(size_t sz, void* user_data), void (*free_func)(void* ptr, void* user_data), void* user_data = NULL);
-}
-
-    
-            // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
-        }
-    
-        // Create Vulkan Instance
-    {
-        VkInstanceCreateInfo create_info = {};
-        create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-        create_info.enabledExtensionCount = extensions_count;
-        create_info.ppEnabledExtensionNames = extensions;
-    }
-    
-    // Main code
-int main(int, char**)
-{
-    // Create application window
-    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
-    ::RegisterClassEx(&wc);
-    HWND hwnd = ::CreateWindow(wc.lpszClassName, _T('Dear ImGui DirectX11 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
-    }
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
-    
-    void CleanupDeviceD3D()
-{
-    CleanupRenderTarget();
-    if (g_pSwapChain) { g_pSwapChain->Release(); g_pSwapChain = NULL; }
-    if (g_hSwapChainWaitableObject != NULL) { CloseHandle(g_hSwapChainWaitableObject); }
-    for (UINT i = 0; i < NUM_FRAMES_IN_FLIGHT; i++)
-        if (g_frameContext[i].CommandAllocator) { g_frameContext[i].CommandAllocator->Release(); g_frameContext[i].CommandAllocator = NULL; }
-    if (g_pd3dCommandQueue) { g_pd3dCommandQueue->Release(); g_pd3dCommandQueue = NULL; }
-    if (g_pd3dCommandList) { g_pd3dCommandList->Release(); g_pd3dCommandList = NULL; }
-    if (g_pd3dRtvDescHeap) { g_pd3dRtvDescHeap->Release(); g_pd3dRtvDescHeap = NULL; }
-    if (g_pd3dSrvDescHeap) { g_pd3dSrvDescHeap->Release(); g_pd3dSrvDescHeap = NULL; }
-    if (g_fence) { g_fence->Release(); g_fence = NULL; }
-    if (g_fenceEvent) { CloseHandle(g_fenceEvent); g_fenceEvent = NULL; }
-    if (g_pd3dDevice) { g_pd3dDevice->Release(); g_pd3dDevice = NULL; }
+/*}}}*/
 }
     
-    // CHANGELOG
-// (minor and older changes stripped away, please see git history for details)
-//  2019-05-29: DirectX9: Added support for large mesh (64K+ vertices), enable ImGuiBackendFlags_RendererHasVtxOffset flag.
-//  2019-04-30: DirectX9: Added support for special ImDrawCallback_ResetRenderState callback to reset render state.
-//  2019-03-29: Misc: Fixed erroneous assert in ImGui_ImplDX9_InvalidateDeviceObjects().
-//  2019-01-16: Misc: Disabled fog before drawing UI's. Fixes issue #2288.
-//  2018-11-30: Misc: Setting up io.BackendRendererName so it can be displayed in the About Window.
-//  2018-06-08: Misc: Extracted imgui_impl_dx9.cpp/.h away from the old combined DX9+Win32 example.
-//  2018-06-08: DirectX9: Use draw_data->DisplayPos and draw_data->DisplaySize to setup projection matrix and clipping rectangle.
-//  2018-05-07: Render: Saving/restoring Transform because they don't seem to be included in the StateBlock. Setting shading mode to Gouraud.
-//  2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback and exposed ImGui_ImplDX9_RenderDrawData() in the .h file so you can call it yourself.
-//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
+    #include 'example-qt.h'
     
-    #include 'DHTNode.h'
-#include 'DHTBucket.h'
-#include 'DHTBucketTree.h'
-#include 'DHTTaskQueue.h'
-#include 'DHTTaskFactory.h'
-#include 'DHTTask.h'
-#include 'util.h'
-#include 'LogFactory.h'
-#include 'Logger.h'
-#include 'fmt.h'
-    
-    #include <vector>
-#include <string>
-#include <memory>
-    
-    #endif // D_DHT_TASK_H
-
-    
-    #include <algorithm>
-    
-      void addTask(const std::shared_ptr<DHTTask>& task) { queue_.push_back(task); }
-    
-    class DHTTaskFactoryImpl : public DHTTaskFactory {
-private:
-  std::shared_ptr<DHTNode> localNode_;
+    class ExampleQt : public QObject {
     }
     
-      virtual ~DHTTaskQueueImpl();
+    static unordered_map<string, string> mime_map({
+    { 'ez', 'application/andrew-inset' },
+    { 'aw', 'application/applixware' },
+    { 'atom', 'application/atom+xml' },
+    { 'atomcat', 'application/atomcat+xml' },
+    { 'atomsvc', 'application/atomsvc+xml' },
+    { 'bdoc', 'application/bdoc' },
+    { 'ccxml', 'application/ccxml+xml' },
+    { 'cdmia', 'application/cdmi-capability' },
+    { 'cdmic', 'application/cdmi-container' },
+    { 'cdmid', 'application/cdmi-domain' },
+    { 'cdmio', 'application/cdmi-object' },
+    { 'cdmiq', 'application/cdmi-queue' },
+    { 'cu', 'application/cu-seeme' },
+    { 'mpd', 'application/dash+xml' },
+    { 'davmount', 'application/davmount+xml' },
+    { 'dbk', 'application/docbook+xml' },
+    { 'dssc', 'application/dssc+der' },
+    { 'xdssc', 'application/dssc+xml' },
+    { 'ecma', 'application/ecmascript' },
+    { 'emma', 'application/emma+xml' },
+    { 'epub', 'application/epub+zip' },
+    { 'exi', 'application/exi' },
+    { 'pfr', 'application/font-tdpfr' },
+    { 'woff', 'application/font-woff' },
+    { 'geojson', 'application/geo+json' },
+    { 'gml', 'application/gml+xml' },
+    { 'gpx', 'application/gpx+xml' },
+    { 'gxf', 'application/gxf' },
+    { 'gz', 'application/gzip' },
+    { 'hjson', 'application/hjson' },
+    { 'stk', 'application/hyperstudio' },
+    { 'ink', 'application/inkml+xml' },
+    { 'inkml', 'application/inkml+xml' },
+    { 'ipfix', 'application/ipfix' },
+    { 'jar', 'application/java-archive' },
+    { 'war', 'application/java-archive' },
+    { 'ear', 'application/java-archive' },
+    { 'ser', 'application/java-serialized-object' },
+    { 'class', 'application/java-vm' },
+    { 'js', 'application/javascript' },
+    { 'mjs', 'application/javascript' },
+    { 'json', 'application/json' },
+    { 'map', 'application/json' },
+    { 'json5', 'application/json5' },
+    { 'jsonml', 'application/jsonml+json' },
+    { 'jsonld', 'application/ld+json' },
+    { 'lostxml', 'application/lost+xml' },
+    { 'hqx', 'application/mac-binhex40' },
+    { 'cpt', 'application/mac-compactpro' },
+    { 'mads', 'application/mads+xml' },
+    { 'webmanifest', 'application/manifest+json' },
+    { 'mrc', 'application/marc' },
+    { 'mrcx', 'application/marcxml+xml' },
+    { 'ma', 'application/mathematica' },
+    { 'nb', 'application/mathematica' },
+    { 'mb', 'application/mathematica' },
+    { 'mathml', 'application/mathml+xml' },
+    { 'mbox', 'application/mbox' },
+    { 'mscml', 'application/mediaservercontrol+xml' },
+    { 'metalink', 'application/metalink+xml' },
+    { 'meta4', 'application/metalink4+xml' },
+    { 'mets', 'application/mets+xml' },
+    { 'mods', 'application/mods+xml' },
+    { 'm21', 'application/mp21' },
+    { 'mp21', 'application/mp21' },
+    { 'mp4s', 'application/mp4' },
+    { 'm4p', 'application/mp4' },
+    { 'doc', 'application/msword' },
+    { 'docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' },
+    { 'dot', 'application/msword' },
+    { 'mxf', 'application/mxf' },
+    { 'bin', 'application/octet-stream' },
+    { 'dms', 'application/octet-stream' },
+    { 'lrf', 'application/octet-stream' },
+    { 'mar', 'application/octet-stream' },
+    { 'so', 'application/octet-stream' },
+    { 'dist', 'application/octet-stream' },
+    { 'distz', 'application/octet-stream' },
+    { 'pkg', 'application/octet-stream' },
+    { 'bpk', 'application/octet-stream' },
+    { 'dump', 'application/octet-stream' },
+    { 'elc', 'application/octet-stream' },
+    { 'deploy', 'application/octet-stream' },
+    { 'exe', 'application/octet-stream' },
+    { 'dll', 'application/octet-stream' },
+    { 'deb', 'application/octet-stream' },
+    { 'dmg', 'application/octet-stream' },
+    { 'iso', 'application/octet-stream' },
+    { 'img', 'application/octet-stream' },
+    { 'msi', 'application/octet-stream' },
+    { 'msp', 'application/octet-stream' },
+    { 'msm', 'application/octet-stream' },
+    { 'buffer', 'application/octet-stream' },
+    { 'oda', 'application/oda' },
+    { 'opf', 'application/oebps-package+xml' },
+    { 'ogx', 'application/ogg' },
+    { 'omdoc', 'application/omdoc+xml' },
+    { 'onetoc', 'application/onenote' },
+    { 'onetoc2', 'application/onenote' },
+    { 'onetmp', 'application/onenote' },
+    { 'onepkg', 'application/onenote' },
+    { 'oxps', 'application/oxps' },
+    { 'xer', 'application/patch-ops-error+xml' },
+    { 'pdf', 'application/pdf' },
+    { 'pgp', 'application/pgp-encrypted' },
+    { 'asc', 'application/pgp-signature' },
+    { 'sig', 'application/pgp-signature' },
+    { 'prf', 'application/pics-rules' },
+    { 'p10', 'application/pkcs10' },
+    { 'p7m', 'application/pkcs7-mime' },
+    { 'p7c', 'application/pkcs7-mime' },
+    { 'p7s', 'application/pkcs7-signature' },
+    { 'p8', 'application/pkcs8' },
+    { 'ac', 'application/pkix-attr-cert' },
+    { 'cer', 'application/pkix-cert' },
+    { 'crl', 'application/pkix-crl' },
+    { 'pkipath', 'application/pkix-pkipath' },
+    { 'pki', 'application/pkixcmp' },
+    { 'pls', 'application/pls+xml' },
+    { 'ai', 'application/postscript' },
+    { 'eps', 'application/postscript' },
+    { 'ps', 'application/postscript' },
+    { 'pskcxml', 'application/pskc+xml' },
+    { 'raml', 'application/raml+yaml' },
+    { 'rdf', 'application/rdf+xml' },
+    { 'rif', 'application/reginfo+xml' },
+    { 'rnc', 'application/relax-ng-compact-syntax' },
+    { 'rl', 'application/resource-lists+xml' },
+    { 'rld', 'application/resource-lists-diff+xml' },
+    { 'rs', 'application/rls-services+xml' },
+    { 'gbr', 'application/rpki-ghostbusters' },
+    { 'mft', 'application/rpki-manifest' },
+    { 'roa', 'application/rpki-roa' },
+    { 'rsd', 'application/rsd+xml' },
+    { 'rss', 'application/rss+xml' },
+    { 'rtf', 'application/rtf' },
+    { 'sbml', 'application/sbml+xml' },
+    { 'scq', 'application/scvp-cv-request' },
+    { 'scs', 'application/scvp-cv-response' },
+    { 'spq', 'application/scvp-vp-request' },
+    { 'spp', 'application/scvp-vp-response' },
+    { 'sdp', 'application/sdp' },
+    { 'setpay', 'application/set-payment-initiation' },
+    { 'setreg', 'application/set-registration-initiation' },
+    { 'shf', 'application/shf+xml' },
+    { 'smi', 'application/smil+xml' },
+    { 'smil', 'application/smil+xml' },
+    { 'rq', 'application/sparql-query' },
+    { 'srx', 'application/sparql-results+xml' },
+    { 'gram', 'application/srgs' },
+    { 'grxml', 'application/srgs+xml' },
+    { 'sru', 'application/sru+xml' },
+    { 'ssdl', 'application/ssdl+xml' },
+    { 'ssml', 'application/ssml+xml' },
+    { 'tei', 'application/tei+xml' },
+    { 'teicorpus', 'application/tei+xml' },
+    { 'tfi', 'application/thraud+xml' },
+    { 'tsd', 'application/timestamped-data' },
+    { 'vxml', 'application/voicexml+xml' },
+    { 'wasm', 'application/wasm' },
+    { 'wgt', 'application/widget' },
+    { 'hlp', 'application/winhlp' },
+    { 'wsdl', 'application/wsdl+xml' },
+    { 'wspolicy', 'application/wspolicy+xml' },
+    { 'xaml', 'application/xaml+xml' },
+    { 'xdf', 'application/xcap-diff+xml' },
+    { 'xenc', 'application/xenc+xml' },
+    { 'xhtml', 'application/xhtml+xml' },
+    { 'xht', 'application/xhtml+xml' },
+    { 'xml', 'application/xml' },
+    { 'xsl', 'application/xml' },
+    { 'xsd', 'application/xml' },
+    { 'rng', 'application/xml' },
+    { 'dtd', 'application/xml-dtd' },
+    { 'xop', 'application/xop+xml' },
+    { 'xpl', 'application/xproc+xml' },
+    { 'xslt', 'application/xslt+xml' },
+    { 'xspf', 'application/xspf+xml' },
+    { 'mxml', 'application/xv+xml' },
+    { 'xhvml', 'application/xv+xml' },
+    { 'xvml', 'application/xv+xml' },
+    { 'xvm', 'application/xv+xml' },
+    { 'yang', 'application/yang' },
+    { 'yin', 'application/yin+xml' },
+    { 'zip', 'application/zip' },
+    { '*3gpp', 'audio/3gpp' },
+    { 'adp', 'audio/adpcm' },
+    { 'au', 'audio/basic' },
+    { 'snd', 'audio/basic' },
+    { 'mid', 'audio/midi' },
+    { 'midi', 'audio/midi' },
+    { 'kar', 'audio/midi' },
+    { 'rmi', 'audio/midi' },
+    { '*mp3', 'audio/mp3' },
+    { 'm4a', 'audio/mp4' },
+    { 'mp4a', 'audio/mp4' },
+    { 'mpga', 'audio/mpeg' },
+    { 'mp2', 'audio/mpeg' },
+    { 'mp2a', 'audio/mpeg' },
+    { 'mp3', 'audio/mpeg' },
+    { 'm2a', 'audio/mpeg' },
+    { 'm3a', 'audio/mpeg' },
+    { 'oga', 'audio/ogg' },
+    { 'ogg', 'audio/ogg' },
+    { 'spx', 'audio/ogg' },
+    { 's3m', 'audio/s3m' },
+    { 'sil', 'audio/silk' },
+    { 'wav', 'audio/wav' },
+    { '*wav', 'audio/wave' },
+    { 'weba', 'audio/webm' },
+    { 'xm', 'audio/xm' },
+    { 'ttc', 'font/collection' },
+    { 'otf', 'font/otf' },
+    { 'ttf', 'font/ttf' },
+    { '*woff', 'font/woff' },
+    { 'woff2', 'font/woff2' },
+    { 'apng', 'image/apng' },
+    { 'bmp', 'image/bmp' },
+    { 'cgm', 'image/cgm' },
+    { 'g3', 'image/g3fax' },
+    { 'gif', 'image/gif' },
+    { 'ief', 'image/ief' },
+    { 'jp2', 'image/jp2' },
+    { 'jpg2', 'image/jp2' },
+    { 'jpeg', 'image/jpeg' },
+    { 'jpg', 'image/jpeg' },
+    { 'jpe', 'image/jpeg' },
+    { 'jpm', 'image/jpm' },
+    { 'jpx', 'image/jpx' },
+    { 'jpf', 'image/jpx' },
+    { 'ktx', 'image/ktx' },
+    { 'png', 'image/png' },
+    { 'sgi', 'image/sgi' },
+    { 'svg', 'image/svg+xml' },
+    { 'svgz', 'image/svg+xml' },
+    { 'tiff', 'image/tiff' },
+    { 'tif', 'image/tiff' },
+    { 'webp', 'image/webp' },
+    { 'disposition-notification', 'message/disposition-notification' },
+    { 'u8msg', 'message/global' },
+    { 'u8dsn', 'message/global-delivery-status' },
+    { 'u8mdn', 'message/global-disposition-notification' },
+    { 'u8hdr', 'message/global-headers' },
+    { 'eml', 'message/rfc822' },
+    { 'mime', 'message/rfc822' },
+    { 'gltf', 'model/gltf+json' },
+    { 'glb', 'model/gltf-binary' },
+    { 'igs', 'model/iges' },
+    { 'iges', 'model/iges' },
+    { 'msh', 'model/mesh' },
+    { 'mesh', 'model/mesh' },
+    { 'silo', 'model/mesh' },
+    { 'wrl', 'model/vrml' },
+    { 'vrml', 'model/vrml' },
+    { 'x3db', 'model/x3d+binary' },
+    { 'x3dbz', 'model/x3d+binary' },
+    { 'x3dv', 'model/x3d+vrml' },
+    { 'x3dvz', 'model/x3d+vrml' },
+    { 'x3d', 'model/x3d+xml' },
+    { 'x3dz', 'model/x3d+xml' },
+    { 'appcache', 'text/cache-manifest' },
+    { 'manifest', 'text/cache-manifest' },
+    { 'ics', 'text/calendar' },
+    { 'ifb', 'text/calendar' },
+    { 'coffee', 'text/coffeescript' },
+    { 'litcoffee', 'text/coffeescript' },
+    { 'css', 'text/css' },
+    { 'csv', 'text/csv' },
+    { 'html', 'text/html' },
+    { 'htm', 'text/html' },
+    { 'shtml', 'text/html' },
+    { 'jade', 'text/jade' },
+    { 'jsx', 'text/jsx' },
+    { 'less', 'text/less' },
+    { 'markdown', 'text/markdown' },
+    { 'md', 'text/markdown' },
+    { 'mml', 'text/mathml' },
+    { 'n3', 'text/n3' },
+    { 'txt', 'text/plain' },
+    { 'text', 'text/plain' },
+    { 'conf', 'text/plain' },
+    { 'def', 'text/plain' },
+    { 'list', 'text/plain' },
+    { 'log', 'text/plain' },
+    { 'in', 'text/plain' },
+    { 'ini', 'text/plain' },
+    { 'rtx', 'text/richtext' },
+    { '*rtf', 'text/rtf' },
+    { 'sgml', 'text/sgml' },
+    { 'sgm', 'text/sgml' },
+    { 'shex', 'text/shex' },
+    { 'slim', 'text/slim' },
+    { 'slm', 'text/slim' },
+    { 'stylus', 'text/stylus' },
+    { 'styl', 'text/stylus' },
+    { 'tsv', 'text/tab-separated-values' },
+    { 't', 'text/troff' },
+    { 'tr', 'text/troff' },
+    { 'roff', 'text/troff' },
+    { 'man', 'text/troff' },
+    { 'me', 'text/troff' },
+    { 'ms', 'text/troff' },
+    { 'ttl', 'text/turtle' },
+    { 'uri', 'text/uri-list' },
+    { 'uris', 'text/uri-list' },
+    { 'urls', 'text/uri-list' },
+    { 'vcard', 'text/vcard' },
+    { 'vtt', 'text/vtt' },
+    { '*xml', 'text/xml' },
+    { 'yaml', 'text/yaml' },
+    { 'yml', 'text/yaml' },
+    { '3gp', 'video/3gpp' },
+    { '3gpp', 'video/3gpp' },
+    { '3g2', 'video/3gpp2' },
+    { 'h261', 'video/h261' },
+    { 'h263', 'video/h263' },
+    { 'h264', 'video/h264' },
+    { 'jpgv', 'video/jpeg' },
+    { '*jpm', 'video/jpm' },
+    { 'jpgm', 'video/jpm' },
+    { 'mj2', 'video/mj2' },
+    { 'mjp2', 'video/mj2' },
+    { 'ts', 'video/mp2t' },
+    { 'mp4', 'video/mp4' },
+    { 'mp4v', 'video/mp4' },
+    { 'mpg4', 'video/mp4' },
+    { 'mpeg', 'video/mpeg' },
+    { 'mpg', 'video/mpeg' },
+    { 'mpe', 'video/mpeg' },
+    { 'm1v', 'video/mpeg' },
+    { 'm2v', 'video/mpeg' },
+    { 'ogv', 'video/ogg' },
+    { 'qt', 'video/quicktime' },
+    { 'mov', 'video/quicktime' },
+    { 'webm', 'video/webm' },
+    // https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types
+    { 'aac', 'audio/aac' },
+    { 'abw', 'application/x-abiword' },
+    { 'arc', 'application/octet-stream' },
+    { 'avi', 'video/x-msvideo' },
+    { 'azw', 'application/vnd.amazon.ebook' },
+    { 'bz', 'application/x-bzip' },
+    { 'bz2', 'application/x-bzip2' },
+    { 'csh', 'application/x-csh' },
+    { 'eot', 'application/vnd.ms-fontobject' },
+    { 'es', 'application/ecmascript' },
+    { 'ico', 'image/x-icon' },
+    { 'mpkg', 'application/vnd.apple.installer+xml' },
+    { 'odp', 'application/vnd.oasis.opendocument.presentation' },
+    { 'ods', 'application/vnd.oasis.opendocument.spreadsheet' },
+    { 'odt', 'application/vnd.oasis.opendocument.text' },
+    { 'ppt', 'application/vnd.ms-powerpoint' },
+    { 'pptx', 'application/vnd.openxmlformats-officedocument.presentationml.presentation' },
+    { 'rar', 'application/x-rar-compressed' },
+    { 'sh', 'application/x-sh' },
+    { 'swf', 'application/x-shockwave-flash' },
+    { 'tar', 'application/x-tar' },
+    { 'vsd', 'application/vnd.visio' },
+    { 'xls', 'application/vnd.ms-excel' },
+    { 'xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' },
+    { 'xul', 'application/vnd.mozilla.xul+xml' },
+    { '7z', 'application/x-7z-compressed' }
+});
     
-      std::string generateToken(const unsigned char* infoHash,
-                            const std::string& ipaddr, uint16_t port,
-                            const unsigned char* secret) const;
     
-      // returns 'unknown'
-  virtual const std::string& getMessageType() const CXX11_OVERRIDE;
+    {  return qcompress::guessFormat(value.toByteArray());
+}
     
-      template <typename OutputIterator>
-  void findAll(OutputIterator out, const std::string& hostname,
-               uint16_t port) const
-  {
-    auto target = std::make_shared<CacheEntry>(hostname, port);
-    auto i = entries_.find(target);
-    if (i != entries_.end()) {
-      (*i)->getAllGoodAddrs(out);
-    }
+      if (op == Operation::DELETE_KEYS) {
+    m_operation = QSharedPointer<BulkOperations::AbstractOperation>(
+        new BulkOperations::DeleteOperation(connection, dbIndex,
+                                            callbackWrapper, keyPattern));
+  } else if (op == Operation::TTL) {
+    m_operation = QSharedPointer<BulkOperations::AbstractOperation>(
+        new BulkOperations::TtlOperation(connection, dbIndex, callbackWrapper,
+                                         keyPattern));
+  } else if (op == Operation::COPY_KEYS) {
+    m_operation = QSharedPointer<BulkOperations::AbstractOperation>(
+        new BulkOperations::CopyOperation(connection, dbIndex, callbackWrapper,
+                                          keyPattern));
+  } else if (op == Operation::IMPORT_RDB_KEYS) {
+    m_operation = QSharedPointer<BulkOperations::AbstractOperation>(
+        new BulkOperations::RDBImportOperation(
+            connection, dbIndex, callbackWrapper, m_python, keyPattern));
   }
     
-    template <class ConfigRecordType, typename ElemType>
-bool TryGetNetworkFactory(const ConfigRecordType& config, function<ComputationNetworkPtr(DEVICEID_TYPE)>& createNetworkFn)
+      virtual void getAffectedKeys(std::function<void(QVariant, QString)> callback);
+    
+            Then once you running ActionTween on the node, the method updateTweenAction will be invoked.
+*/
+class CC_DLL ActionTweenDelegate
 {
-    DEVICEID_TYPE deviceId = DeviceFromConfig(config);
-    }
-    
-    // Note: while ComputationNode and CompuationNetwork are (supposed to be) independent of ElemType, it is OK to keep this class dependent.
-template <class ElemType>
-ComputationNetworkPtr SimpleNetworkBuilder<ElemType>::BuildRNNFromDescription()
-{
-    ComputationNetworkBuilder<ElemType> builder(*m_net);
-    if (m_net->GetTotalNumberOfNodes() < 1) // not built yet
-    {
-        unsigned long randomSeed = 1;
-    }
-    }
-    
-        stringargvector m_nonLinearFunctions;
-    
-    int wmain(int argc, wchar_t* argv[]) // wmain wrapper that reports Win32 exceptions
-{
-    set_terminate(TerminateThis);    // insert a termination handler to ensure stderr gets flushed before actually terminating
-    }
-    
-    #include 'Basics.h'
-#include 'ComputationNode.h'
-#include 'ComputationNetwork.h'
-#include 'TrainingNodes.h'      // for NCEEvalMode
-#include 'ConvolutionalNodes.h' // for PoolKind
-#include 'ScriptableObjects.h'
-#include 'TensorShape.h'
-#include <string>
-    
-        public:
-        BasicModelAveragingSGD(const MPIWrapperPtr& pMPI, size_t reportFreq, DEVICEID_TYPE devID)
-            : Base(pMPI, reportFreq, devID)
-        {
-            fprintf(stderr, 'Parallel training (%d workers) using ModelAveraging\n',(int)m_pMPI->NumNodesInUse());
-        }
-    
-    template std::shared_ptr<IDistGradAggregator<float>> GetSimpleDistGradAggregator<float>(
-    const MPIWrapperPtr& mpi,
-    bool useAsyncAggregation,
-    int deviceId,
-    int syncStatsTrace,
-    size_t packThresholdSizeInBytes,
-    bool useFP16AllReduce);
-    
-        // Do the same via ValueRefs
-    ValueRefs<float> inputRefs(1);
-    inputRefs[0].m_buffer.InitFrom(inputBuffer[0].m_buffer);
-    inputRefs[0].m_colIndices.InitFrom(inputBuffer[0].m_colIndices);
-    inputRefs[0].m_indices.InitFrom(inputBuffer[0].m_indices);
-    ValueRefs<float> outputRefs(1);
-    std::vector<float> output(1);
-    outputRefs[0].m_buffer.InitFrom(output);
-    eval->ForwardPass(inputRefs, outputRefs);
-    BOOST_CHECK_EQUAL_COLLECTIONS(output.begin(), output.end(), expected.begin(), expected.end());
-    
-            /**
-         * Add your information about what your class does and their inputs/outputs.
-         * @param output is the modified cv::Mat.
-         * @param input is the input cv::Mat.
-         * @return If it is not void, add returning information here.
-         */
-        void doSomething(cv::Mat& output, const cv::Mat& input);
-    
-            Point<T> operator*(const T value) const;
-    
-    namespace op
-{
-    template<typename T>
-    struct Rectangle
-    {
-        T x;
-        T y;
-        T width;
-        T height;
-    }
-    }
-    
-        /*!
-     * Create a device command queue for a specified device in the passed context.
+public:
+    /**
+     * @js NA
+     * @lua NA
      */
-    DeviceCommandQueue(
-        const Context& context,
-        const Device& device,
-        DeviceQueueProperties properties = DeviceQueueProperties::None,
-        cl_int* err = NULL)
-    {
-        cl_int error;
+    virtual ~ActionTweenDelegate() {}
     }
     
-        template<typename T>
-    Rectangle<T> Rectangle<T>::operator/(const T value) const
+    void ClippingRectangleNode::visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t parentFlags)
+{
+    _beforeVisitCmdScissor.init(_globalZOrder);
+    _beforeVisitCmdScissor.func = CC_CALLBACK_0(ClippingRectangleNode::onBeforeVisitScissor, this);
+    renderer->addCommand(&_beforeVisitCmdScissor);
+    
+    Node::visit(renderer, parentTransform, parentFlags);
+    
+    _afterVisitCmdScissor.init(_globalZOrder);
+    _afterVisitCmdScissor.func = CC_CALLBACK_0(ClippingRectangleNode::onAfterVisitScissor, this);
+    renderer->addCommand(&_afterVisitCmdScissor);
+}
+    
+    
+    {protected:
+    ClippingRectangleNode()
+    : _clippingEnabled(true)
     {
-        try
-        {
-            return Rectangle<T>{T(x / value), T(y / value), T(width / value), T(height / value)};
-        }
-        catch (const std::exception& e)
-        {
-            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
-            return Rectangle<T>{};
-        }
     }
+    
+    void onBeforeVisitScissor();
+    void onAfterVisitScissor();
+    
+    Rect _clippingRegion;
+    bool _clippingEnabled;
+    
+    CustomCommand _beforeVisitCmdScissor;
+    CustomCommand _afterVisitCmdScissor;
+};
+    
+    NS_CC_BEGIN
