@@ -1,296 +1,172 @@
 
         
-        template <typename T>
-void DynamicStitchGPUImpl(const Eigen::GpuDevice& gpu_device,
-                          const int32 slice_size, const int32 first_dim_size,
-                          const GpuDeviceArrayStruct<int>& input_indices,
-                          const GpuDeviceArrayStruct<const T*>& input_ptrs,
-                          T* output);
-#define REGISTER_GPU(T)                                           \
-  extern template void DynamicStitchGPUImpl(                      \
-      const Eigen::GpuDevice& gpu_device, const int32 slice_size, \
-      const int32 first_dim_size,                                 \
-      const GpuDeviceArrayStruct<int32>& input_indices,           \
-      const GpuDeviceArrayStruct<const T*>& input_ptrs, T* output);
-TF_CALL_GPU_NUMBER_TYPES(REGISTER_GPU);
-TF_CALL_complex64(REGISTER_GPU);
-TF_CALL_complex128(REGISTER_GPU);
-TF_CALL_int64(REGISTER_GPU);
-TF_CALL_int32(REGISTER_GPU);
-#undef REGISTER_GPU
+        AutofillAgent::~AutofillAgent() = default;
     
-    struct TfLiteModelInfo {
-  std::vector<const TfLiteTensor*> inputs;
-  std::vector<const TfLiteTensor*> outputs;
-};
+    #if defined(OS_WIN)
+#include <windows.h>
+#endif  // defined(OS_WIN)
     
-    #endif  // GOOGLE_CUDA || TENSORFLOW_USE_ROCM
-
     
-    template <typename T>
-__global__ void MatrixDiagKernel(const int num_threads, const int num_rows,
-                                 const int num_cols, const int num_diags,
-                                 const int max_diag_len,
-                                 const int lower_diag_index,
-                                 const int upper_diag_index, const T padding,
-                                 const T* diag_ptr, T* output_ptr) {
-  GPU_1D_KERNEL_LOOP(index, num_threads) {
-    const int batch_and_row_index = index / num_cols;
-    const int col = index - batch_and_row_index * num_cols;
-    const int batch = batch_and_row_index / num_rows;
-    const int row = batch_and_row_index - batch * num_rows;
-    const int diag_index = col - row;
-    const int diag_index_in_input = upper_diag_index - diag_index;
-    const int index_in_the_diagonal = col - max(diag_index, 0);
-    if (lower_diag_index <= diag_index && diag_index <= upper_diag_index) {
-      output_ptr[index] =
-          diag_ptr[batch * num_diags * max_diag_len +
-                   diag_index_in_input * max_diag_len + index_in_the_diagonal];
-    } else {
-      output_ptr[index] = padding;
-    }
-  }
+    {        return true;
+      }
+    
+    #include 'base/callback_list.h'
+#include 'gin/handle.h'
+#include 'net/cookies/canonical_cookie.h'
+#include 'shell/browser/api/trackable_object.h'
+#include 'shell/browser/net/cookie_details.h'
+#include 'shell/common/promise_util.h'
+    
+    // About OpenGL function loaders: modern OpenGL doesn't have a standard header file and requires individual function pointers to be loaded manually.
+// Helper libraries are often used for this purpose! Here we are supporting a few common ones: gl3w, glew, glad.
+// You may use another loader/header of your choice (glext, glLoadGen, etc.), or chose to manually implement your own.
+#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
+#include <GL/gl3w.h>    // Initialize with gl3wInit()
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
+#include <GL/glew.h>    // Initialize with glewInit()
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
+#include <glad/glad.h>  // Initialize with gladLoadGL()
+#else
+#include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
+#endif
+    
+    static void FramePresent(ImGui_ImplVulkanH_Window* wd)
+{
+    VkSemaphore render_complete_semaphore = wd->FrameSemaphores[wd->SemaphoreIndex].RenderCompleteSemaphore;
+    VkPresentInfoKHR info = {};
+    info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+    info.waitSemaphoreCount = 1;
+    info.pWaitSemaphores = &render_complete_semaphore;
+    info.swapchainCount = 1;
+    info.pSwapchains = &wd->Swapchain;
+    info.pImageIndices = &wd->FrameIndex;
+    VkResult err = vkQueuePresentKHR(g_Queue, &info);
+    check_vk_result(err);
+    wd->SemaphoreIndex = (wd->SemaphoreIndex + 1) % wd->ImageCount; // Now we can use the next set of semaphores
 }
     
-    namespace tensorflow {
-namespace grappler {
-    }
-    }
     
-      // Null char in the string.
-    
-    void MapLiteTestUtil::ExpectMapFieldsSetInitialized(
-    const unittest::TestMapLite& message) {
-  MapTestUtilImpl::ExpectMapFieldsSetInitialized<unittest::MapEnumLite,
-                                                 unittest::MAP_ENUM_FOO_LITE>(
-      message);
-}
-    
-    TEST(StructurallyValidTest, ValidUTF8String) {
-  // On GCC, this string can be written as:
-  //   'abcd 1234 - \u2014\u2013\u2212'
-  // MSVC seems to interpret \u differently.
-  string valid_str('abcd 1234 - \342\200\224\342\200\223\342\210\222 - xyz789');
-  EXPECT_TRUE(IsStructurallyValidUTF8(valid_str.data(),
-                                      valid_str.size()));
-  // Additional check for pointer alignment
-  for (int i = 1; i < 8; ++i) {
-    EXPECT_TRUE(IsStructurallyValidUTF8(valid_str.data() + i,
-                                        valid_str.size() - i));
-  }
-}
-    
-    using google::protobuf::FileDescriptorProto;
-using google::protobuf::FileDescriptor;
-using google::protobuf::DescriptorPool;
-using google::protobuf::io::Printer;
-using google::protobuf::util::SchemaGroupStripper;
-using google::protobuf::util::EnumScrubber;
-    
-    
-    {  }
-    
-      // True when a ScopedPyObjectPtr and a raw pointer refer to the same object.
-  // Comparison operators are non reflexive.
-  bool operator==(const PyObjectStruct* p) const { return ptr_ == p; }
-  bool operator!=(const PyObjectStruct* p) const { return ptr_ != p; }
-    
-    /**
- * @brief Parses nano-seconds out of specified date strings and returns
- *        difference.
- *
- * @param iso1 Date string in format: 2017-05-01T16:08:43.661631023Z
- * @param iso2 Date string in format: 2017-05-01T16:08:43.661631023Z
- * @return Nano-seconds difference.
- */
-long diffNanos(const std::string& iso1, const std::string& iso2) {
-  if (iso1.empty() || iso2.empty()) {
-    return 0L;
-  }
+    {        // Rendering
+        ImGui::Render();
+        glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
+        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+        glClear(GL_COLOR_BUFFER_BIT);
+        //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
+        ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+        SDL_GL_SwapWindow(window);
     }
     
-    namespace osquery {
-    }
-    
-    
-    {} // namespace osquery
-
-    
-    
+        // Initialize OpenGL loader
+#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
+    bool err = gl3wInit() != 0;
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
+    bool err = glewInit() != GLEW_OK;
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
+    bool err = gladLoadGL() == 0;
+#else
+    bool err = false; // If you use IMGUI_IMPL_OPENGL_LOADER_CUSTOM, your loader is likely to requires some form of initialization.
+#endif
+    if (err)
     {
-    {  EXPECT_EQ(
-      hashFromFile(HashType::HASH_TYPE_SHA256,
-                   (getWorkingDir() / fs::path('test.data.extract')).string()),
-      hashFromFile(HashType::HASH_TYPE_SHA256, test_data_file.string()));
-}
-} // namespace osquery
-
-    
-      /// Update the refresh rate.
-  void setRefresh(size_t refresh_sec);
-    
-      // Updating with a new source will reconfigure.
-  get().update({{'data', '{\'options\':{}}'}, {'data1', '{}'}});
-  EXPECT_EQ(placebo->configures, 3U);
-  // Updating and not including a source is handled by the config plugin.
-  // The config will expect the other source to update asynchronously and does
-  // not consider the missing key as a delete request.
-  get().update({{'data', '{\'options\':{}}'}});
-  EXPECT_EQ(placebo->configures, 3U);
-    
-    std::map<std::string, std::string> getTestConfigMap(const std::string& file) {
-  std::string content;
-  auto const filepath = getTestConfigDirectory() / file;
-  auto status = readFile(filepath, content);
-  EXPECT_TRUE(status.ok())
-      << 'Could not read file: ' << boost::io::quoted(filepath.string())
-      << ', because: ' << status.what();
-  std::map<std::string, std::string> config;
-  config['awesome'] = content;
-  return config;
-}
-    
-    #include <map>
-#include <string>
-    
-      virtual ExpectedSuccess<DatabaseError> putInt32(const std::string& domain,
-                                                  const std::string& key,
-                                                  const int32_t value);
-  virtual ExpectedSuccess<DatabaseError> putString(
-      const std::string& domain,
-      const std::string& key,
-      const std::string& value) = 0;
-    
-      // Performance and optimization settings.
-  options.compression = rocksdb::kNoCompression;
-  options.compaction_style = rocksdb::kCompactionStyleLevel;
-  options.arena_block_size = (4 * 1024);
-  options.write_buffer_size = (4 * 1024) * FLAGS_rocksdb_buffer_blocks;
-  options.max_write_buffer_number =
-      static_cast<int>(FLAGS_rocksdb_write_buffer);
-  options.min_write_buffer_number_to_merge =
-      static_cast<int>(FLAGS_rocksdb_merge_number);
-    
-    std::string Flag::getValue(const std::string& name) {
-  const auto& custom = instance().custom_;
-  auto custom_flag = custom.find(name);
-  if (custom_flag != custom.end()) {
-    return custom_flag->second;
-  }
+        fprintf(stderr, 'Failed to initialize OpenGL loader!\n');
+        return 1;
     }
     
-    #include 'env/env_chroot.h'
     
-    /*
- * Class:     org_rocksdb_CompactionJobStats
- * Method:    fileRangeSyncNanos
- * Signature: (J)J
- */
-jlong Java_org_rocksdb_CompactionJobStats_fileRangeSyncNanos(
-    JNIEnv*, jclass, jlong jhandle) {
-  auto* compact_job_stats =
-      reinterpret_cast<rocksdb::CompactionJobStats*>(jhandle);
-  return static_cast<jlong>(
-      compact_job_stats->file_range_sync_nanos);
-}
+    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+            ImGui::End();
+        }
     
-    /*
- * Class:     org_rocksdb_CompressionOptions
- * Method:    maxDictBytes
- * Signature: (J)I
- */
-jint Java_org_rocksdb_CompressionOptions_maxDictBytes(
-    JNIEnv*, jobject, jlong jhandle) {
-  auto* opt = reinterpret_cast<rocksdb::CompressionOptions*>(jhandle);
-  return static_cast<jint>(opt->max_dict_bytes);
-}
     
-    /*
- * Class:     org_rocksdb_HdfsEnv
- * Method:    disposeInternal
- * Signature: (J)V
- */
-void Java_org_rocksdb_HdfsEnv_disposeInternal(
-    JNIEnv*, jobject, jlong jhandle) {
-  auto* e = reinterpret_cast<rocksdb::Env*>(jhandle);
-  assert(e != nullptr);
-  delete e;
-}
-    
-    /*
- * Class:     org_rocksdb_EnvOptions
- * Method:    setFallocateWithKeepSize
- * Signature: (JZ)V
- */
-void Java_org_rocksdb_EnvOptions_setFallocateWithKeepSize(
-    JNIEnv*, jobject, jlong jhandle, jboolean fallocate_with_keep_size) {
-  ENV_OPTIONS_SET_BOOL(jhandle, fallocate_with_keep_size);
-}
-    
-    /*
- * Class:     org_rocksdb_IngestExternalFileOptions
- * Method:    setAllowBlockingFlush
- * Signature: (JZ)V
- */
-void Java_org_rocksdb_IngestExternalFileOptions_setAllowBlockingFlush(
-    JNIEnv*, jobject, jlong jhandle, jboolean jallow_blocking_flush) {
-  auto* options =
-      reinterpret_cast<rocksdb::IngestExternalFileOptions*>(jhandle);
-  options->allow_blocking_flush = static_cast<bool>(jallow_blocking_flush);
-}
-    
-    /*
- * Class:     org_rocksdb_SstFileManager
- * Method:    isMaxAllowedSpaceReached
- * Signature: (J)Z
- */
-jboolean Java_org_rocksdb_SstFileManager_isMaxAllowedSpaceReached(
-    JNIEnv* /*env*/, jobject /*jobj*/, jlong jhandle) {
-  auto* sptr_sst_file_manager =
-      reinterpret_cast<std::shared_ptr<rocksdb::SstFileManager>*>(jhandle);
-  return sptr_sst_file_manager->get()->IsMaxAllowedSpaceReached();
-}
-    
-    namespace rocksdb {
+    {        g_pSwapChain->Present(1, 0); // Present with vsync
+        //g_pSwapChain->Present(0, 0); // Present without vsync
     }
     
-    void Ripple3D::update(float time)
+    // Main code
+int main(int, char**)
 {
-    int i, j;
+    // Create application window
+    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
+    ::RegisterClassEx(&wc);
+    HWND hwnd = ::CreateWindow(wc.lpszClassName, _T('Dear ImGui DirectX12 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
     }
     
-                    _currentTarget->currentAction->step(dt);
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
     
-    PageTurn3D *PageTurn3D::clone() const
+    bool ImGui_ImplDX9_Init(IDirect3DDevice9* device)
 {
-    // no copy constructor
-    return PageTurn3D::create(_duration, _gridSize);
-}
-    
-    /**
-@brief FadeOutDownTiles action.
-@details Fades out the target node with many tiles from top to bottom.
- */
-class CC_DLL FadeOutDownTiles : public FadeOutUpTiles
-{
-public:
-    /** 
-    * @brief Create the action with the grid size and the duration.
-    * @param duration Specify the duration of the FadeOutDownTiles action. It's a value in seconds.
-    * @param gridSize Specify the size of the grid.
-    * @return If the creation success, return a pointer of FadeOutDownTiles action; otherwise, return nil.
-    */
-    static FadeOutDownTiles* create(float duration, const Size& gridSize);
+    // Setup back-end capabilities flags
+    ImGuiIO& io = ImGui::GetIO();
+    io.BackendRendererName = 'imgui_impl_dx9';
+    io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;  // We can honor the ImDrawCmd::VtxOffset field, allowing for large meshes.
     }
     
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
+            // ------------------------------ Comparison operators ------------------------------ //
+        /**
+         * Less comparison operator.
+         * @param point Point<T> to be compared.
+         * @result Whether the instance satisfies the condition with respect to point.
+         */
+        inline bool operator<(const Point<T>& point) const
+        {
+            return area() < point.area();
+        }
     
-        std::vector<cocos2d::Vec2> rdp(const std::vector<cocos2d::Vec2>& v, float optimization);
-    float perpendicularDistance(const cocos2d::Vec2& i, const cocos2d::Vec2& start, const cocos2d::Vec2& end);
+            void generateMesh(const Array<float>& poseKeypoints3D, const Array<float>& faceKeypoints3D,
+                          const std::array<Array<float>, 2>& handKeypoints3D,
+                          const double* const adamPosePtr,
+                          const double* const adamTranslationPtr,
+                          const double* const vtVecPtr, const int vtVecRows,
+                          const double* const j0VecPtr, const int j0VecRows,
+                          const double* const adamFaceCoeffsExpPtr);
+    
+    
+    // Constant parameters
+    const auto HAND_CCN_DECREASE_FACTOR = 8.f;
+    const std::string HAND_PROTOTXT{'hand/pose_deploy.prototxt'};
+    const std::string HAND_TRAINED_MODEL{'hand/pose_iter_102000.caffemodel'};
+    
+            Array<long long> extractIdsLockThread(const Array<float>& poseKeypoints, const cv::Mat& cvMatInput,
+                                              const unsigned long long imageViewIndex,
+                                              const long long frameId);
+    
+        template<typename T>
+    Point<T>& Point<T>::operator+=(const T value)
+    {
+        try
+        {
+            x += value;
+            y += value;
+            // Return
+            return *this;
+        }
+        catch (const std::exception& e)
+        {
+            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
+            return *this;
+        }
+    }
+    
+        // Static methods
+    template<typename T>
+    Rectangle<T> recenter(const Rectangle<T>& rectangle, const T newWidth, const T newHeight)
+    {
+        try
+        {
+            Rectangle<T> result;
+            const auto centerPoint = rectangle.center();
+            result.x = centerPoint.x - T(newWidth / 2.f);
+            result.y = centerPoint.y - T(newHeight / 2.f);
+            result.width = newWidth;
+            result.height = newHeight;
+            return result;
+        }
+        catch (const std::exception& e)
+        {
+            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
+            return Rectangle<T>{};
+        }
+    }
