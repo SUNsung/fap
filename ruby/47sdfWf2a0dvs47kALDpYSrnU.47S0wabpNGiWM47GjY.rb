@@ -1,415 +1,145 @@
 
         
-          has_many :special_categories_with_conditions, -> { where(categorizations: { special: true }) }, through: :categorizations, source: :category
-  has_many :nonspecial_categories_with_conditions, -> { where(categorizations: { special: false }) }, through: :categorizations, source: :category
-    
-    class Book < ActiveRecord::Base
-  belongs_to :author
-    
-          def with_module
-        render inline: 'Module <%= included_method %>'
-      end
-    end
-    
-        self.conn_threads = []
-    self.listener_threads = []
-    self.listener_pairs = {}
-  end
-    
-      #
-  # Determine the maximum amount of space required for the features requested
-  #
-  def required_space
-    # Start with our cached default generated size
-    space = cached_size
-    
-      CachedSize = 616
-    
-      # List of known values and models
-  def devices_list
-    known_devices = {
-        :'AZ-D140W'=>
-            {:name=>'Azmoon', :model=>'AZ-D140W', :values=>[
-                [107367693, 13]
-            ]},
-        :'BiPAC 5102S'=>
-            {:name=>'Billion', :model=>'BiPAC 5102S', :values=>[
-                [107369694, 13]
-            ]},
-        :'BiPAC 5200'=>
-            {:name=>'Billion', :model=>'BiPAC 5200', :values=>[
-                [107369545, 9],
-                [107371218, 21]
-            ]},
-        :'BiPAC 5200A'=>
-            {:name=>'Billion', :model=>'BiPAC 5200A', :values=>[
-                [107366366, 25],
-                [107371453, 9]
-            ]},
-        :'BiPAC 5200GR4'=>
-            {:name=>'Billion', :model=>'BiPAC 5200GR4', :values=>[
-                [107367690, 21]
-            ]},
-        :'BiPAC 5200SRD'=>
-            {:name=>'Billion', :model=>'BiPAC 5200SRD', :values=>[
-                [107368270, 1],
-                [107371378, 3],
-                [107371218, 13]
-            ]},
-        :'DSL-2520U'=>
-            {:name=>'D-Link', :model=>'DSL-2520U', :values=>[
-                [107368902, 25]
-            ]},
-        :'DSL-2600U'=>
-            {:name=>'D-Link', :model=>'DSL-2600U', :values=>[
-                [107366496, 13],
-                [107360133, 20]
-            ]},
-        :'TD-8616'=>
-            {:name=> 'TP-Link', :model=>'TD-8616', :values=>[
-                [107371483, 21],
-                [107369790, 17],
-                [107371161, 1],
-                [107371426, 17],
-                [107370211, 5],
-            ]},
-        :'TD-8817'=>
-            {:name=> 'TP-Link', :model=>'TD-8817', :values=>[
-                [107369790, 17],
-                [107369788, 1],
-                [107369522, 25],
-                [107369316, 21],
-                [107369321, 9],
-                [107351277, 20]
-            ]},
-        :'TD-8820'=>
-            {:name=>'TP-Link', :model=>'TD-8820', :values=>[
-                [107369768, 17]
-            ]},
-        :'TD-8840T'=>
-            {:name=>'TP-Link', :model=>'TD-8840T', :values=>[
-                [107369845, 5],
-                [107369790, 17],
-                [107369570, 1],
-                [107369766, 1],
-                [107369764, 5],
-                [107369688, 17]
-            ]},
-        :'TD-W8101G'=>
-            {:name=>'TP-Link', :model=>'TD-W8101G', :values=>[
-                [107367772, 37],
-                [107367808, 21],
-                [107367751, 21],
-                [107367749, 13],
-                [107367765, 25],
-                [107367052, 25],
-                [107365835, 1]
-            ]},
-        :'TD-W8151N'=>
-            {:name=>'TP-Link', :model=>'TD-W8151N', :values=>[
-                [107353867, 24]
-            ]},
-        :'TD-W8901G'=>
-            {:name=> 'TP-Link', :model=>'TD-W8901G', :values=>[
-                [107367787, 21],
-                [107368013, 5],
-                [107367854, 9],
-                [107367751, 21],
-                [107367749, 13],
-                [107367765, 25],
-                [107367682, 21],
-                [107365835, 1],
-                [107367052, 25]
-            ]},
-        :'TD-W8901GB'=>
-            {:name=>'TP-Link', :model=>'TD-W8901GB', :values=>[
-                [107367756, 13],
-                [107369393, 21]
-            ]},
-        :'TD-W8901N'=>
-            {:name=>'TP-Link', :model=>'TD-W8901N', :values=>[
-                [107353880, 0]
-            ]},
-        :'TD-W8951ND'=>
-            {:name=>'TP-Link', :model=>'TD-W8951ND', :values=>[
-                [107369839, 25],
-                [107369876, 13],
-                [107366743, 21],
-                [107364759, 25],
-                [107364759, 13],
-                [107364760, 21]
-            ]},
-        :'TD-W8961NB'=>
-            {:name=>'TP-Link', :model=>'TD-W8961NB', :values=>[
-                [107369844, 17],
-                [107367629, 21],
-                [107366421, 13]
-            ]},
-        :'TD-W8961ND'=>
-            {:name=>'TP-Link', :model=>'TD-W8961ND', :values=>[
-                [107369839, 25],
-                [107369876, 13],
-                [107364732, 25],
-                [107364771, 37],
-                [107364762, 29],
-                [107353880, 0],
-                [107353414, 36]
-            ]},
-        :'P-660R-T3 v3'=> #This value works on devices with model P-660R-T3 v3 not P-660R-T3 v3s
-            {:name=>'ZyXEL', :model=>'P-660R-T3', :values=>[
-                [107369567, 21]
-            ]},
-        :'P-660RU-T3 v2'=> #Couldn't verify this
-            {:name=>'ZyXEL', :model=>'P-660R-T3', :values=>[
-                [107369567, 21]
-            ]},
-        :'ALL'=> # Used when `ForceAttempt` === true
-            {:name=>'Unknown', :model=>'Forced', :values=>[]
-            },
-    }
-    # collect all known cookies for a brute force option
-    all_cookies = []
-    known_devices.collect { |_, v| v[:values] }.each do |list|
-      all_cookies += list
-    end
-    known_devices[:'ALL'][:values] = all_cookies.uniq
-    known_devices
-  end
-    
-    def BigDecimal.new(*args, **kwargs)
-  return BigDecimal(*args) if kwargs.empty?
-  BigDecimal(*args, **kwargs)
-end
-# Remove bigdecimal warning - end
-    
-        block.call(data_service) if !data_service.nil? && self.active
-  end
-    
-          ])
-    
-      bins.each do |from, to|
-    next if (from != 'metsvc.exe' and remove)
-    to ||= from
-    print_status(' >> Uploading #{from}...')
-    fd = client.fs.file.new(tempdir + '\\' + to, 'wb')
-    path = (from == 'metsrv.x86.dll') ? MetasploitPayloads.meterpreter_path('metsrv','x86.dll') : File.join(based, from)
-    fd.write(::File.read(path, ::File.size(path)))
-    fd.close
-  end
-    
-        # .y file from csspool gem
-    
-        assert_equal [@parent, @xref_data], parents
-  end
-    
-        m1_k1 = m1.add_class RDoc::NormalClass, 'Klass1'
-    
-      def test_http_url
-    assert_equal 'prefix/path/top_level_rb.html', @top_level.http_url('prefix')
-  end
-    
-    
-    {
-    {
-    {
-    {
-    {
-    {
-    {
-    {
-    {
-    {
-    {
-    {  def test_vi_end_word
-    input_keys('aaa   b{b}}}b   ccc\C-[0')
-    assert_byte_pointer_size('')
-    assert_cursor(0)
-    assert_cursor_max(19)
-    input_keys('e')
-    assert_byte_pointer_size('aa')
-    assert_cursor(2)
-    assert_cursor_max(19)
-    input_keys('e')
-    assert_byte_pointer_size('aaa   ')
-    assert_cursor(6)
-    assert_cursor_max(19)
-    input_keys('e')
-    assert_byte_pointer_size('aaa   b')
-    assert_cursor(7)
-    assert_cursor_max(19)
-    input_keys('e')
-    assert_byte_pointer_size('aaa   b{')
-    assert_cursor(8)
-    assert_cursor_max(19)
-    input_keys('e')
-    assert_byte_pointer_size('aaa   b{b}}')
-    assert_cursor(11)
-    assert_cursor_max(19)
-    input_keys('e')
-    assert_byte_pointer_size('aaa   b{b}}}')
-    assert_cursor(12)
-    assert_cursor_max(19)
-    input_keys('e')
-    assert_byte_pointer_size('aaa   b{b}}}b   cc')
-    assert_cursor(18)
-    assert_cursor_max(19)
-    input_keys('e')
-    assert_byte_pointer_size('aaa   b{b}}}b   cc')
-    assert_cursor(18)
-    assert_cursor_max(19)
-    input_keys('03e')
-    assert_byte_pointer_size('aaa   b')
-    assert_cursor(7)
-    assert_cursor_max(19)
-    input_keys('3e')
-    assert_byte_pointer_size('aaa   b{b}}}')
-    assert_cursor(12)
-    assert_cursor_max(19)
-    input_keys('3e')
-    assert_byte_pointer_size('aaa   b{b}}}b   cc')
-    assert_cursor(18)
-    assert_cursor_max(19)
-  end
-    
-      def test_append_after
-    assert_equal(Reline::KillRing::State::FRESH, @kill_ring.instance_variable_get(:@state))
-    @kill_ring.append('a')
-    assert_equal(Reline::KillRing::State::CONTINUED, @kill_ring.instance_variable_get(:@state))
-    @kill_ring.process
-    assert_equal(Reline::KillRing::State::PROCESSED, @kill_ring.instance_variable_get(:@state))
-    @kill_ring.append('b')
-    assert_equal(Reline::KillRing::State::CONTINUED, @kill_ring.instance_variable_get(:@state))
-    @kill_ring.process
-    assert_equal(Reline::KillRing::State::PROCESSED, @kill_ring.instance_variable_get(:@state))
-    assert_equal('ab', @kill_ring.yank)
-    assert_equal(Reline::KillRing::State::YANK, @kill_ring.instance_variable_get(:@state))
-    assert_equal('ab', @kill_ring.yank)
-    assert_equal(Reline::KillRing::State::YANK, @kill_ring.instance_variable_get(:@state))
-    assert_equal(['ab', 'ab'], @kill_ring.yank_pop)
-    assert_equal(Reline::KillRing::State::YANK, @kill_ring.instance_variable_get(:@state))
-    assert_equal(['ab', 'ab'], @kill_ring.yank_pop)
-    assert_equal(Reline::KillRing::State::YANK, @kill_ring.instance_variable_get(:@state))
-  end
-    
-      # Defines which key will be used when confirming an account
-  # config.confirmation_keys = [ :email ]
-    
-      def html_safe_string_from_session_array(key)
-    return '' unless session[key].present?
-    return '' unless session[key].respond_to?(:join)
-    value = session[key].join(', ').html_safe
-    session[key] = nil
-    value
-  end
-    
-          PluginManager.ui.info('Installing file: #{local_file}')
-      uncompressed_path = uncompress(local_file)
-      PluginManager.ui.debug('Pack uncompressed to #{uncompressed_path}')
-      pack = LogStash::PluginManager::PackInstaller::Pack.new(uncompressed_path)
-      raise PluginManager::InvalidPackError, 'The pack must contains at least one plugin' unless pack.valid?
-    
-        platforms.types.each do |type|
-      desc 'Run acceptance test in #{type} machines'
-      task type do
-        ENV['LS_TEST_PLATFORM']=type
-        exit(RSpec::Core::Runner.run([Rake::FileList['acceptance/spec/lib/*_spec.rb']]))
-      end
-    end
-    
-          it 'list the plugin with his version' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name} \(\d+\.\d+.\d+\)/)
-      end
-    end
-  end
-end
-
-    
-          def field_container(model, method, options = {}, &block)
-        css_classes = options[:class].to_a
-        css_classes << 'field'
-        css_classes << 'withError' if error_message_on(model, method).present?
-        content_tag(
-          :div, capture(&block),
-          options.merge(class: css_classes.join(' '), id: '#{model}_#{method}_field')
-        )
+                it { expect(presenter.can_approve?).to eq(false) }
       end
     
-          diff   = variant.amount_in(current_currency) - product_amount
-      amount = Spree::Money.new(diff.abs, currency: current_currency).to_html
-      label  = diff > 0 ? :add : :subtract
-      '(#{Spree.t(label)}: #{amount})'.html_safe
+      spec.summary       = %q{Provides access to information typically stored in UNIX /etc directory.}
+  spec.description   = spec.summary
+  spec.homepage      = 'https://github.com/ruby/etc'
+  spec.license       = 'BSD-2-Clause'
+    
+        def test_gc_attrset
+      assert_separately(['-r-test-/symbol', '-r-ext-/symbol/noninterned_name', '-'], '#{<<-'begin;'}\n#{<<-'end;'}')
+      bug = '[ruby-core:62226] [Bug #9787]'
+      include Test_Symbol::NonInterned
+      names = Array.new(1000) {noninterned_name('gc')}
+      names.each {|n| n.to_sym}
+      GC.start(immediate_sweep: false)
+      names.each do |n|
+        eval(':#{n}=')
+        assert_nothing_raised(TypeError, bug) {eval('proc{self.#{n} = nil}')}
+      end
+      begin;
+      end;
     end
     
-            def create
-          authorize! :create, Image
-          @image = scope.images.new(image_params)
-          if @image.save
-            respond_with(@image, status: 201, default_template: :show)
-          else
-            invalid_resource!(@image)
-          end
+      it 'invokes seek method on the associated IO object' do
+    # first, prepare the mock object:
+    (obj = mock('io')).should_receive(:get_io).any_number_of_times.and_return(@io)
+    def obj.read(args); get_io.read(args); end
+    def obj.seek(pos, whence = 0)
+      ScratchPad.record :seek
+      get_io.seek(pos, whence)
+    end
+    
+            it 'does not decrement pos' do
+          @gz.ungetbyte nil
+          @gz.pos.should == 0
         end
+      end
+    end
+  end
     
-            def create
-          @order.validate_payments_attributes([payment_params])
-          @payment = @order.payments.build(payment_params)
-          if @payment.save
-            respond_with(@payment, status: 201, default_template: :show)
-          else
-            invalid_resource!(@payment)
-          end
-        end
+          def warn_add_git_to_capfile
+        $stderr.puts(<<-MESSAGE)
+[Deprecation Notice] Future versions of Capistrano will not load the Git SCM
+plugin by default. To silence this deprecation warning, add the following to
+your Capfile after `require 'capistrano/deploy'`:
     
-            def find_product
-          super(params[:product_id])
-        end
+    __END__
+    
+      it_behaves_like 'any rack application'
+    
+          def string_to_code string
+        # sha bytes
+        b = [Digest::SHA1.hexdigest(string)[0, 20]].pack('H*').bytes.to_a
+        # Thanks donpark's IdenticonUtil.java for this.
+        # Match the following Java code
+        # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
+        #	 ((b[2] & 0xFF) << 8) | (b[3] & 0xFF)
+    
+        # ascii only file names prevent UTF8 issues
+    # when using git repos across operating systems
+    # as this test demonstrates, translation is not
+    # great
+    assert_equal 'm-plus-F', 'μ†ℱ'.to_url
+  end
+    
+    
+    
+      teardown do
+    FileUtils.rm_r(File.join(File.dirname(__FILE__), *%w[examples test.git]))
+  end
+    
+        # Ensure path begins with a single leading slash
+    def clean_path(path)
+      if path
+        (path[0] != '/' ? path.insert(0, '/') : path).gsub(/\/{2,}/, '/')
+      end
+    end
+    
+          wiki = wiki_new
+    
+          # Takes the amount in cents to capture.
+      # Can be used to capture partial amounts of a payment, and will create
+      # a new pending payment record for the remaining amount to capture later.
+      def capture!(amount = nil)
+        return true if completed?
+    
+        alias get get_preference
+    
+    module Spree
+  class ReturnItem::EligibilityValidator::Default < Spree::ReturnItem::EligibilityValidator::BaseValidator
+    class_attribute :permitted_eligibility_validators
+    self.permitted_eligibility_validators = [
+      ReturnItem::EligibilityValidator::OrderCompleted,
+      ReturnItem::EligibilityValidator::TimeSincePurchase,
+      ReturnItem::EligibilityValidator::RMARequired,
+      ReturnItem::EligibilityValidator::InventoryShipped,
+      ReturnItem::EligibilityValidator::NoReimbursements
+    ]
+    
+          def load_user
+        @current_api_user = Spree.user_class.find_by(spree_api_key: api_key.to_s)
+      end
     
             def update
-          @shipment = Spree::Shipment.accessible_by(current_ability, :update).readonly(false).find_by!(number: params[:id])
-          @shipment.update_attributes_and_order(shipment_params)
+          authorize! :update, @order, order_token
+          @address = find_address
     
-            def get_store
-          @store = Store.find(params[:id])
+            def void
+          perform_payment_action(:void_transaction)
         end
     
-            def update
-          authorize! :update, taxonomy
-          if taxonomy.update(taxonomy_params)
-            respond_with(taxonomy, status: 200, default_template: :show)
+              if @product_property.update(product_property_params)
+            respond_with(@product_property, status: 200, default_template: :show)
           else
-            invalid_resource!(taxonomy)
+            invalid_resource!(@product_property)
           end
         end
     
-        def initialize(tag_name, markup, tokens)
-      @by = nil
-      @source = nil
-      @title = nil
-      if markup =~ FullCiteWithTitle
-        @by = $1
-        @source = $2 + $3
-        @title = $4.titlecase.strip
-      elsif markup =~ FullCite
-        @by = $1
-        @source = $2 + $3
-      elsif markup =~ AuthorTitle
-        @by = $1
-        @title = $2.titlecase.strip
-      elsif markup =~ Author
-        @by = $1
-      end
-      super
-    end
+      s.files         = Dir['lib/**/*', 'spec/**/*', 'bin/*', 'completion/*']
+  s.executables   = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  s.test_files    = s.files.grep(%r{^(test|spec|features)/})
+  s.require_paths = ['lib']
     
-        def render(context)
-      if @img
-        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
-      else
-        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
-      end
-    end
+      it 'creates an instance' do
+    expect(subject).to be_a(Tmuxinator::Pane)
   end
-end
     
+    require 'tmuxinator'
+require 'factory_bot'
     
+            # now generate a project file
+        expect(described_class.new.generate_project_file(name, path)).to eq path
+        expect(File).to exist path
+    
+        context 'environment variable $TMUXINATOR_CONFIG is nil' do
+      it 'is an empty string' do
+        allow(ENV).to receive(:[]).with('TMUXINATOR_CONFIG').
+          and_return nil
+        # allow(XDG).to receive(:[]).with('CONFIG').and_return nil
+        allow(File).to receive(:directory?).and_return true
+        expect(described_class.environment).to eq ''
+      end
+    end
