@@ -1,118 +1,188 @@
 
         
-        #include <cstdio>    // for FILE
-#include 'strngs.h'  // for STRING
-    
-      // Computes all the cross product distances of the points from the line,
-  // storing the actual (signed) cross products in distances_.
-  // Ignores distances of points that are further away than the previous point,
-  // and overlaps the previous point by at least half.
-  void ComputeDistances(const ICOORD& start, const ICOORD& end);
-    
-    
-    {  int delta = this - prev;
-  int32_t n = prev->n_ + 1;
-  int32_t sig_x = prev->sig_x_ + delta;
-  int64_t sig_xsq = prev->sig_xsq_ + delta * delta;
-  int64_t cost = (sig_xsq - sig_x * sig_x / n) / n;
-  cost += prev->total_cost_;
-  UpdateIfBetter(cost, prev->total_steps_ + 1, prev, n, sig_x, sig_xsq);
-  return cost;
-}
-    
-    
-    { private:
-  tesseract::ParagraphJustification justification_;
-  int margin_;
-  int first_indent_;
-  int body_indent_;
-  int tolerance_;
-};
-    
-    class QRSequenceGenerator {
- public:
-  // Object is initialized with the size of the output range.
-  explicit QRSequenceGenerator(int N) : N_(N), next_num_(0) {
-    num_bits_ = static_cast<int>(ceil(log(static_cast<double>(N)) / log(2.0)));
-  }
+        
+    {    secp256k1_scalar_set_b32(&sec, seckey, &overflow);
+    /* Fail if the secret key is invalid. */
+    if (!overflow && !secp256k1_scalar_is_zero(&sec)) {
+        unsigned char nonce32[32];
+        unsigned int count = 0;
+        secp256k1_scalar_set_b32(&msg, msg32, NULL);
+        while (1) {
+            ret = noncefp(nonce32, msg32, seckey, NULL, (void*)noncedata, count);
+            if (!ret) {
+                break;
+            }
+            secp256k1_scalar_set_b32(&non, nonce32, &overflow);
+            if (!secp256k1_scalar_is_zero(&non) && !overflow) {
+                if (secp256k1_ecdsa_sig_sign(&ctx->ecmult_gen_ctx, &r, &s, &sec, &msg, &non, &recid)) {
+                    break;
+                }
+            }
+            count++;
+        }
+        memset(nonce32, 0, 32);
+        secp256k1_scalar_clear(&msg);
+        secp256k1_scalar_clear(&non);
+        secp256k1_scalar_clear(&sec);
     }
-    
-    GPUSet GPUSet::All(GpuIdType gpu_id, GpuIdType n_gpus, int32_t n_rows) {
-  CHECK_GE(gpu_id, 0) << 'gpu_id must be >= 0.';
-  CHECK_GE(n_gpus, -1) << 'n_gpus must be >= -1.';
-    }
-    
-    /*!
- * \brief Registry entry for sparse page format.
- */
-struct SparsePageFormatReg
-    : public dmlc::FunctionRegEntryBase<SparsePageFormatReg,
-                                        std::function<SparsePageFormat* ()> > {
-};
-    
-    
-    {  EXPECT_EQ(pack_count, 1U);
-  c.reset();
-}
-    
-    template <typename T>
-Expected<T, DatabaseError> InMemoryDatabase::getValue(const std::string& domain,
-                                                      const std::string& key) {
-  debug_only::verifyTrue(is_open_, 'database is not open');
-  if (!is_open_) {
-    return createError(DatabaseError::DbIsNotOpen) << 'Database is closed';
-  }
-  auto storage_iter = storage_.find(domain);
-  if (storage_iter == storage_.end()) {
-    return domainNotFoundError(domain);
-  }
-  std::lock_guard<std::mutex> lock(storage_iter->second->getMutex());
-  auto result = storage_iter->second->get(key);
-  if (result) {
-    DataType value = result.take();
-    if (value.type() == typeid(T)) {
-      return boost::get<T>(value);
+    if (ret) {
+        secp256k1_ecdsa_recoverable_signature_save(signature, &r, &s, recid);
     } else {
-      auto error = createError(DatabaseError::KeyNotFound)
-                   << 'Requested wrong type for: ' << domain << ':' << key
-                   << ' stored type: ' << value.type().name()
-                   << ' requested type '
-                   << boost::core::demangle(typeid(T).name());
-      LOG(ERROR) << error.getMessage();
-      debug_only::fail(error.getMessage().c_str());
-      return std::move(error);
+        memset(signature, 0, sizeof(*signature));
     }
-  }
-  return result.takeError();
+    return ret;
 }
     
-    template <typename StorageType>
-class InMemoryStorage final {
- public:
-  void put(const std::string& key, const StorageType value);
-  Expected<StorageType, DatabaseError> get(const std::string& key) const;
-  std::vector<std::string> getKeys(const std::string& prefix = '') const;
+    #endif /* SECP256K1_MODULE_RECOVERY_TESTS_H */
+
+    
+    public:
+    static const size_t OUTPUT_SIZE = 20;
+    
+        __asm__ __volatile__(
+        'shl    $0x6,%2;'
+        'je     Ldone_hash_%=;'
+        'add    %1,%2;'
+        'mov    %2,%14;'
+        'mov    (%0),%3;'
+        'mov    0x4(%0),%4;'
+        'mov    0x8(%0),%5;'
+        'mov    0xc(%0),%6;'
+        'mov    0x10(%0),%k2;'
+        'mov    0x14(%0),%7;'
+        'mov    0x18(%0),%8;'
+        'mov    0x1c(%0),%9;'
+        'movdqa %18,%%xmm12;'
+        'movdqa %19,%%xmm10;'
+        'movdqa %20,%%xmm11;'
+    
+    Status SetCurrentFile(Env* env, const std::string& dbname,
+                      uint64_t descriptor_number) {
+  // Remove leading 'dbname/' and add newline to manifest file name
+  std::string manifest = DescriptorFileName(dbname, descriptor_number);
+  Slice contents = manifest;
+  assert(contents.starts_with(dbname + '/'));
+  contents.remove_prefix(dbname.size() + 1);
+  std::string tmp = TempFileName(dbname, descriptor_number);
+  Status s = WriteStringToFileSync(env, contents.ToString() + '\n', tmp);
+  if (s.ok()) {
+    s = env->RenameFile(tmp, CurrentFileName(dbname));
+  }
+  if (!s.ok()) {
+    env->DeleteFile(tmp);
+  }
+  return s;
+}
+    
+    // Return the name of the sstable with the specified number
+// in the db named by 'dbname'.  The result will be prefixed with
+// 'dbname'.
+extern std::string TableFileName(const std::string& dbname, uint64_t number);
+    
+    void grpc_socket_notify_on_write(grpc_winsocket* socket,
+                                 grpc_closure* closure) {
+  socket_notify_on_iocp(socket, closure, &socket->write_info);
+}
+    
+    static void test_stricmp(void) {
+  LOG_TEST_NAME('test_stricmp');
     }
     
-    #ifdef OSQUERY_WINDOWS
-#include <Winsock2.h>
-#else
-#include <arpa/inet.h>
-#endif
+    #include 'src/core/lib/gpr/env.h'
+#include 'src/core/lib/gprpp/global_config_env.h'
+#include 'src/core/lib/gprpp/memory.h'
     
-    Status Flag::getDefaultValue(const std::string& name, std::string& value) {
-  flags::CommandLineFlagInfo info;
-  if (!flags::GetCommandLineFlagInfo(name.c_str(), &info)) {
-    return Status(1, 'Flags name not found.');
-  }
+    CallCredentials::CallCredentials() { g_gli_initializer.summon(); }
+    
+    #include <gtest/gtest.h>
+    
+    // Regular Async, both peers use proto
+TEST_F(RawEnd2EndTest, PureAsyncService) {
+  typedef grpc::testing::EchoTestService::AsyncService SType;
+  ResetStub();
+  auto service = BuildAndStartServer<SType>();
+  grpc::ServerAsyncResponseWriter<EchoResponse> response_writer(&srv_ctx_);
     }
     
-      /**
-   * @brief Optionally handle each published event via the logger.
-   *
-   * It is possible to skip the database representation of event subscribers
-   * and instead forward each added event to the active logger plugin.
-   */
-  virtual Status logEvent(const std::string& /*s*/) {
-    return Status(1, 'Not enabled');
+      void ClientMakeEchoCalls(const grpc::string& lb_id,
+                           const grpc::string& lb_tag,
+                           const grpc::string& message, size_t num_requests) {
+    auto stub = EchoTestService::NewStub(
+        grpc::CreateChannel(server_address_, InsecureChannelCredentials()));
+    grpc::string lb_token = lb_id + lb_tag;
+    for (int i = 0; i < num_requests; ++i) {
+      ClientContext ctx;
+      if (!lb_token.empty()) ctx.AddMetadata(GRPC_LB_TOKEN_MD_KEY, lb_token);
+      EchoRequest request;
+      EchoResponse response;
+      request.set_message(message);
+      Status status = stub->Echo(&ctx, request, &response);
+      if (message == kOkMessage) {
+        ASSERT_EQ(status.error_code(), StatusCode::OK);
+        ASSERT_EQ(request.message(), response.message());
+      } else if (message == kServerErrorMessage) {
+        ASSERT_EQ(status.error_code(), StatusCode::UNKNOWN);
+      } else if (message == kClientErrorMessage) {
+        ASSERT_EQ(status.error_code(), StatusCode::FAILED_PRECONDITION);
+      }
+    }
   }
+    
+      static void clear(Data& data);
+    
+    DHTResponseMessage::DHTResponseMessage(
+    const std::shared_ptr<DHTNode>& localNode,
+    const std::shared_ptr<DHTNode>& remoteNode,
+    const std::string& transactionID)
+    : DHTAbstractMessage(localNode, remoteNode, transactionID)
+{
+}
+    
+      virtual const std::string& getType() const CXX11_OVERRIDE;
+    
+    bool DHTRoutingTable::addNode(const std::shared_ptr<DHTNode>& node)
+{
+  return addNode(node, false);
+}
+    
+      Time getSerializedTime() const { return serializedTime_; }
+    
+    namespace aria2 {
+    }
+    
+    std::shared_ptr<DHTTask>
+DHTTaskFactoryImpl::createNodeLookupTask(const unsigned char* targetID)
+{
+  auto task = std::make_shared<DHTNodeLookupTask>(targetID);
+  setCommonProperty(task);
+  return task;
+}
+    
+    namespace aria2 {
+    }
+    
+        const auto FACE_NUMBER_PARTS = 70u;
+    #define FACE_PAIRS_RENDER_GPU \
+        0,1,  1,2,  2,3,  3,4,  4,5,  5,6,  6,7,  7,8,  8,9,  9,10,  10,11,  11,12,  12,13,  13,14,  14,15,  15,16,  17,18,  18,19,  19,20, \
+        20,21,  22,23,  23,24,  24,25,  25,26,  27,28,  28,29,  29,30,  31,32,  32,33,  33,34,  34,35,  36,37,  37,38,  38,39,  39,40,  40,41, \
+        41,36,  42,43,  43,44,  44,45,  45,46,  46,47,  47,42,  48,49,  49,50,  50,51,  51,52,  52,53,  53,54,  54,55,  55,56,  56,57,  57,58, \
+        58,59,  59,48,  60,61,  61,62,  62,63,  63,64,  64,65,  65,66,  66,67,  67,60
+    #define FACE_SCALES_RENDER_GPU 1
+    const std::vector<unsigned int> FACE_PAIRS_RENDER {FACE_PAIRS_RENDER_GPU};
+    #define FACE_COLORS_RENDER_GPU 255.f,    255.f,    255.f
+    const std::vector<float> FACE_COLORS_RENDER{FACE_COLORS_RENDER_GPU};
+    const std::vector<float> FACE_SCALES_RENDER{FACE_SCALES_RENDER_GPU};
+    
+        template<typename T>
+    std::string Point<T>::toString() const
+    {
+        try
+        {
+            return '[' + std::to_string(x) + ', ' + std::to_string(y) + ']';
+        }
+        catch (const std::exception& e)
+        {
+            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
+            return '';
+        }
+    }
