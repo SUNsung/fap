@@ -1,228 +1,435 @@
 
         
-        // clear cache on the renderer side
-IPC_MESSAGE_CONTROL0(ShellViewMsg_ClearCache)
+            QString getURI();
     
-      int id() const { return id_; }
-  std::string extension_id_;
-  ObjectManager* object_manager() const { return object_manager_.get(); }
+    #ifndef BITCOIN_REVERSELOCK_H
+#define BITCOIN_REVERSELOCK_H
     
-    class Clipboard : public Base {
- public:
-  Clipboard(int id,
-            const base::WeakPtr<DispatcherHost>& dispatcher_host,
-            const base::DictionaryValue& option);
-  ~Clipboard() override;
+    SECP256K1_INLINE static void secp256k1_fe_mul_inner(uint64_t *r, const uint64_t *a, const uint64_t * SECP256K1_RESTRICT b) {
+/**
+ * Registers: rdx:rax = multiplication accumulator
+ *            r9:r8   = c
+ *            r15:rcx = d
+ *            r10-r14 = a0-a4
+ *            rbx     = b
+ *            rdi     = r
+ *            rsi     = a / t?
+ */
+  uint64_t tmp1, tmp2, tmp3;
+__asm__ __volatile__(
+    'movq 0(%%rsi),%%r10\n'
+    'movq 8(%%rsi),%%r11\n'
+    'movq 16(%%rsi),%%r12\n'
+    'movq 24(%%rsi),%%r13\n'
+    'movq 32(%%rsi),%%r14\n'
     }
     
-    EventListener::EventListener(int id,
-  const base::WeakPtr<DispatcherHost>& dispatcher_host,
-  const base::DictionaryValue& option) : Base(id, dispatcher_host, option) {
-    }
+        /* Check bad contexts and NULLs for recovery */
+    ecount = 0;
+    CHECK(secp256k1_ecdsa_recover(none, &recpubkey, &recsig, message) == 0);
+    CHECK(ecount == 1);
+    CHECK(secp256k1_ecdsa_recover(sign, &recpubkey, &recsig, message) == 0);
+    CHECK(ecount == 2);
+    CHECK(secp256k1_ecdsa_recover(vrfy, &recpubkey, &recsig, message) == 1);
+    CHECK(ecount == 2);
+    CHECK(secp256k1_ecdsa_recover(both, &recpubkey, &recsig, message) == 1);
+    CHECK(ecount == 2);
+    CHECK(secp256k1_ecdsa_recover(both, NULL, &recsig, message) == 0);
+    CHECK(ecount == 3);
+    CHECK(secp256k1_ecdsa_recover(both, &recpubkey, NULL, message) == 0);
+    CHECK(ecount == 4);
+    CHECK(secp256k1_ecdsa_recover(both, &recpubkey, &recsig, NULL) == 0);
+    CHECK(ecount == 5);
     
-    namespace nwapi {
-    }
+    #ifndef BITCOIN_CRYPTO_RIPEMD160_H
+#define BITCOIN_CRYPTO_RIPEMD160_H
     
-        int menu_id;
-    if (option.GetInteger('submenu', &menu_id))
-      SetSubmenu(dispatcher_host()->GetApiObject<Menu>(menu_id));
-    std::string key;
-    if (option.GetString('key',&key)){
-      enable_shortcut = true;
-      std::string modifiers = '';
-      option.GetString('modifiers',&modifiers);
-      modifiers_mask = GdkModifierType(0);
-      if (modifiers.size() != 0){
-        if (modifiers.find('ctrl') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_CONTROL_MASK);
-        }
-        if (modifiers.find('alt') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_MOD1_MASK);
-        }
-        if (modifiers.find('super') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_SUPER_MASK);
-        }
-        if (modifiers.find('meta') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_META_MASK);
-        }
-        
-        if (modifiers.find('shift') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_SHIFT_MASK);
-        }
-    }
-    }
+    ROTATE_ARGS
+	movdqa	XTMP3, XTMP2	; XTMP3 = W[-2] {BBAA}
+    mov	y0, e		; y0 = e
+    mov	y1, a		; y1 = a
+    ror	y0, (25-11)	; y0 = e >> (25-11)
+	movdqa	XTMP4, XTMP2	; XTMP4 = W[-2] {BBAA}
+    xor	y0, e		; y0 = e ^ (e >> (25-11))
+    ror	y1, (22-13)	; y1 = a >> (22-13)
+    mov	y2, f		; y2 = f
+    xor	y1, a		; y1 = a ^ (a >> (22-13)
+    ror	y0, (11-6)	; y0 = (e >> (11-6)) ^ (e >> (25-6))
+	psrlq	XTMP2, 17	; XTMP2 = W[-2] ror 17 {xBxA}
+    xor	y2, g		; y2 = f^g
+	psrlq	XTMP3, 19	; XTMP3 = W[-2] ror 19 {xBxA}
+    xor	y0, e		; y0 = e ^ (e >> (11-6)) ^ (e >> (25-6))
+    and	y2, e		; y2 = (f^g)&e
+	psrld	XTMP4, 10	; XTMP4 = W[-2] >> 10 {BBAA}
+    ror	y1, (13-2)	; y1 = (a >> (13-2)) ^ (a >> (22-2))
+    xor	y1, a		; y1 = a ^ (a >> (13-2)) ^ (a >> (22-2))
+    xor	y2, g		; y2 = CH = ((f^g)&e)^g
+    ror	y0, 6		; y0 = S1 = (e>>6) & (e>>11) ^ (e>>25)
+	pxor	XTMP2, XTMP3
+    add	y2, y0		; y2 = S1 + CH
+    ror	y1, 2		; y1 = S0 = (a>>2) ^ (a>>13) ^ (a>>22)
+    add	y2, [rsp + _XFER + 2*4]	; y2 = k + w + S1 + CH
+	pxor	XTMP4, XTMP2	; XTMP4 = s1 {xBxA}
+    mov	y0, a		; y0 = a
+    add	h, y2		; h = h + S1 + CH + k + w
+    mov	y2, a		; y2 = a
+	pshufb	XTMP4, SHUF_00BA	; XTMP4 = s1 {00BA}
+    or	y0, c		; y0 = a|c
+    add	d, h		; d = d + h + S1 + CH + k + w
+    and	y2, c		; y2 = a&c
+	paddd	XTMP0, XTMP4	; XTMP0 = {..., ..., W[1], W[0]}
+    and	y0, b		; y0 = (a|c)&b
+    add	h, y1		; h = h + S1 + CH + k + w + S0
+	;; compute high s1
+	pshufd	XTMP2, XTMP0, 01010000b	; XTMP2 = W[-2] {DDCC}
+    or	y0, y2		; y0 = MAJ = (a|c)&b)|(a&c)
+    add	h, y0		; h = h + S1 + CH + k + w + S0 + MAJ
     
-    namespace extensions {
-class AppWindowRegistry;
-class ExtensionService;
-    }
     
-    NwClipboardSetListSyncFunction::~NwClipboardSetListSyncFunction() {
+    {}  // namespace
+    
+    std::string DescriptorFileName(const std::string& dbname, uint64_t number) {
+  assert(number > 0);
+  char buf[100];
+  snprintf(buf, sizeof(buf), '/MANIFEST-%06llu',
+           static_cast<unsigned long long>(number));
+  return dbname + buf;
 }
     
-     protected:
-  ~NwClipboardClearSyncFunction() override;
+      fname = LogFileName('foo', 192);
+  ASSERT_EQ('foo/', std::string(fname.data(), 4));
+  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
+  ASSERT_EQ(192, number);
+  ASSERT_EQ(kLogFile, type);
     
-    NwObjCallObjectMethodAsyncFunction::NwObjCallObjectMethodAsyncFunction() {
+    #include 'content/nw/src/api/api_messages.h'
+#include 'content/nw/src/api/dispatcher_host.h'
+#include 'content/nw/src/api/shortcut/global_shortcut_listener.h'
+#include 'content/nw/src/api/shortcut/shortcut.h'
+#include 'content/nw/src/breakpad_linux.h'
+#include 'content/nw/src/browser/native_window.h'
+#include 'content/nw/src/browser/net_disk_cache_remover.h'
+#include 'content/nw/src/nw_package.h'
+#include 'content/nw/src/nw_shell.h'
+#include 'content/nw/src/shell_browser_context.h'
+#include 'content/common/view_messages.h'
+#include 'content/public/browser/browser_thread.h'
+#include 'content/public/browser/web_contents.h'
+#include 'content/public/browser/render_process_host.h'
+#include 'net/proxy/proxy_config.h'
+#include 'net/proxy/proxy_config_service_fixed.h'
+#include 'net/proxy/proxy_service.h'
+#include 'net/url_request/url_request_context.h'
+#include 'net/url_request/url_request_context_getter.h'
+    
+    bool MenuDelegate::IsCommandIdEnabled(int command_id) const {
+  if (command_id < 0)
+    return false;
+    }
+    
+    
+    {}  // namespace nw
+
+    
+    
+    {  gfx::Image originImage;
+  nw::Package* package = nw::InitNWPackage();
+  if (nw::GetImage(package, base::FilePath::FromUTF8Unsafe(icon), &originImage)) {
+    const gfx::ImageSkia* originImageSkia = originImage.ToImageSkia();
+    gfx::ImageSkia resizedImageSkia = gfx::ImageSkiaOperations::CreateResizedImage(*originImageSkia,
+                                                                                   skia::ImageOperations::RESIZE_GOOD,
+                                                                                   gfx::Size(kIconWidth, kIconHeight));
+    icon_ = gfx::Image(resizedImageSkia);
+  }
 }
     
-    void NwDesktopCaptureMonitor::OnSourceRemoved(DesktopMediaList* list, int index) {
-    std::unique_ptr<base::ListValue> args = nwapi::nw__screen::OnSourceRemoved::Create(index);
-    DispatchEvent(
-      events::HistogramValue::UNKNOWN, 
-      nwapi::nw__screen::OnSourceRemoved::kEventName,
-      std::move(args));
-  }
+    /****************************************************************************\
+*
+* DigitGroupingStringToGroupingVector
+*
+* Description:
+*   This will take the digit grouping string found in the regional applet and
+*   represent this string as a vector.
+*
+*   groupingString
+*   0;0      - no grouping
+*   3;0      - group every 3 digits
+*   3        - group 1st 3, then no grouping after
+*   3;0;0    - group 1st 3, then no grouping after
+*   3;2;0    - group 1st 3 and then every 2 digits
+*   4;0      - group every 4 digits
+*   5;3;2;0  - group 5, then 3, then every 2
+*   5;3;2    - group 5, then 3, then 2, then no grouping after
+*
+* Returns: the groupings as a vector
+*
+\****************************************************************************/
+vector<uint32_t> CCalcEngine::DigitGroupingStringToGroupingVector(wstring_view groupingString)
+{
+    vector<uint32_t> grouping{};
+    uint32_t currentGroup = 0;
+    wchar_t* next = nullptr;
+    for (const wchar_t* itr = groupingString.data(); *itr != L'\0'; ++itr)
+    {
+        // Try to parse a grouping number from the string
+        currentGroup = wcstoul(itr, &next, 10);
+    }
+    }
     
-    template <typename Dtype>
-void SGDSolver<Dtype>::SnapshotSolverStateToHDF5(
-    const string& model_filename) {
-// This code is taken from https://github.com/sh1r0/caffe-android-lib
-#ifdef USE_HDF5
-  string snapshot_filename =
-      Solver<Dtype>::SnapshotFilename('.solverstate.h5');
-  LOG(INFO) << 'Snapshotting solver state to HDF5 file ' << snapshot_filename;
-  hid_t file_hid = H5Fcreate(snapshot_filename.c_str(), H5F_ACC_TRUNC,
-      H5P_DEFAULT, H5P_DEFAULT);
-  CHECK_GE(file_hid, 0)
-      << 'Couldn't open ' << snapshot_filename << ' to save solver state.';
-  hdf5_save_int(file_hid, 'iter', this->iter_);
-  hdf5_save_string(file_hid, 'learned_net', model_filename);
-  hdf5_save_int(file_hid, 'current_step', this->current_step_);
-  hid_t history_hid = H5Gcreate2(file_hid, 'history', H5P_DEFAULT, H5P_DEFAULT,
-      H5P_DEFAULT);
-  CHECK_GE(history_hid, 0)
-      << 'Error saving solver state to ' << snapshot_filename << '.';
-  for (int i = 0; i < history_.size(); ++i) {
-    ostringstream oss;
-    oss << i;
-    hdf5_save_nd_dataset<Dtype>(history_hid, oss.str(), *history_[i]);
+    // Arithmetic expression evaluator error strings
+inline constexpr auto IDS_ERR_UNK_CH = CSTRINGSENGMAX + 1;
+inline constexpr auto IDS_ERR_UNK_FN = CSTRINGSENGMAX + 2;
+inline constexpr auto IDS_ERR_UNEX_NUM = CSTRINGSENGMAX + 3;
+inline constexpr auto IDS_ERR_UNEX_CH = CSTRINGSENGMAX + 4;
+inline constexpr auto IDS_ERR_UNEX_SZ = CSTRINGSENGMAX + 5;
+inline constexpr auto IDS_ERR_MISMATCH_CLOSE = CSTRINGSENGMAX + 6;
+inline constexpr auto IDS_ERR_UNEX_END = CSTRINGSENGMAX + 7;
+inline constexpr auto IDS_ERR_SG_INV_ERROR = CSTRINGSENGMAX + 8;
+inline constexpr auto IDS_ERR_INPUT_OVERFLOW = CSTRINGSENGMAX + 9;
+inline constexpr auto IDS_ERR_OUTPUT_OVERFLOW = CSTRINGSENGMAX + 10;
+    
+    
+    {
+    {        return Calc_ULongLongToULong(ull64Result, pulResult);
+    }
+}
+    
+    extern PNUMBER i32factnum(int32_t ini32, uint32_t radix);
+extern PNUMBER i32prodnum(int32_t start, int32_t stop, uint32_t radix);
+extern PNUMBER i32tonum(int32_t ini32, uint32_t radix);
+extern PNUMBER Ui32tonum(uint32_t ini32, uint32_t radix);
+extern PNUMBER numtonRadixx(PNUMBER a, uint32_t radix);
+    
+    #pragma once
+    
+    //////////////////////////////////////////////////
+//
+// CCalcEngine::CCalcEngine
+//
+//////////////////////////////////////////////////
+CCalcEngine::CCalcEngine(
+    bool fPrecedence,
+    bool fIntegerMode,
+    CalculationManager::IResourceProvider* const pResourceProvider,
+    __in_opt ICalcDisplay* pCalcDisplay,
+    __in_opt shared_ptr<IHistoryDisplay> pHistoryDisplay)
+    : m_fPrecedence(fPrecedence)
+    , m_fIntegerMode(fIntegerMode)
+    , m_pCalcDisplay(pCalcDisplay)
+    , m_resourceProvider(pResourceProvider)
+    , m_nOpCode(0)
+    , m_nPrevOpCode(0)
+    , m_bChangeOp(false)
+    , m_bRecord(false)
+    , m_bSetCalcState(false)
+    , m_input(DEFAULT_DEC_SEPARATOR)
+    , m_nFE(FMT_FLOAT)
+    , m_memoryValue{ make_unique<Rational>() }
+    , m_holdVal{}
+    , m_currentVal{}
+    , m_lastVal{}
+    , m_parenVals{}
+    , m_precedenceVals{}
+    , m_bError(false)
+    , m_bInv(false)
+    , m_bNoPrevEqu(true)
+    , m_radix(DEFAULT_RADIX)
+    , m_precision(DEFAULT_PRECISION)
+    , m_cIntDigitsSav(DEFAULT_MAX_DIGITS)
+    , m_decGrouping()
+    , m_numberString(DEFAULT_NUMBER_STR)
+    , m_nTempCom(0)
+    , m_openParenCount(0)
+    , m_nOp()
+    , m_nPrecOp()
+    , m_precedenceOpCount(0)
+    , m_nLastCom(0)
+    , m_angletype(ANGLE_DEG)
+    , m_numwidth(QWORD_WIDTH)
+    , m_HistoryCollector(pCalcDisplay, pHistoryDisplay, DEFAULT_DEC_SEPARATOR)
+    , m_groupSeparator(DEFAULT_GRP_SEPARATOR)
+{
+    InitChopNumbers();
+    }
+    
+    #endif /* __glu_h__ */
+
+    
+      // End a page.
+  virtual void endPage();
+    
+      // Get duration, the maximum length of time, in seconds,
+  // that the page is displayed before the presentation automatically
+  // advances to the next page
+  double getDuration() { return duration; }
+    
+    // if changed remember to keep in sync with frontend enums
+enum PageTransitionDirection {
+  transitionInward = 0,
+  transitionOutward
+};
+    
+    Object *Parser::getObj(Object *obj, Guchar *fileKey,
+           CryptAlgorithm encAlgorithm, int keyLength,
+           int objNum, int objGen) {
+  std::set<int> fetchOriginatorNums;
+  return getObj(obj, fileKey, encAlgorithm, keyLength, objNum, objGen, &fetchOriginatorNums);
+}
+    
+    #ifndef PARSER_H
+#define PARSER_H
+    
+    int PopplerCache::size()
+{
+  return cacheSize;
+}
+    
+      // Returns true if the operations performed since the last call to
+  // clearStats() included any transparency.
+  GBool usesTransparency() { return transparency; }
+    
+    
+    
+    
+    {  if (readAttrs)
+  {
+    Object tmp;
+    Dict *dict = streamObj->getStream()->getDict();
+    dict->lookup('F', &tmp);
+    if (!tmp.isNull()) {
+      Object obj1;
+      // valid 'F' key -> external file
+      kind = soundExternal;
+      if (getFileSpecNameForPlatform (&tmp, &obj1)) {
+        fileName = obj1.getString()->copy();
+        obj1.free();
+      }
+    } else {
+      // no file specification, then the sound data have to be
+      // extracted from the stream
+      kind = soundEmbedded;
+    }
+    tmp.free();
+    // sampling rate
+    dict->lookup('R', &tmp);
+    if (tmp.isNum()) {
+      samplingRate = tmp.getNum();
+    }
+    tmp.free();
+    // sound channels
+    dict->lookup('C', &tmp);
+    if (tmp.isInt()) {
+      channels = tmp.getInt();
+    }
+    tmp.free();
+    // bits per sample
+    dict->lookup('B', &tmp);
+    if (tmp.isInt()) {
+      bitsPerSample = tmp.getInt();
+    }
+    tmp.free();
+    // encoding format
+    dict->lookup('E', &tmp);
+    if (tmp.isName())
+    {
+      const char *enc = tmp.getName();
+      if (strcmp('Raw', enc) == 0) {
+        encoding = soundRaw;
+      } else if (strcmp('Signed', enc) == 0) {
+        encoding = soundSigned;
+      } else if (strcmp('muLaw', enc) == 0) {
+        encoding = soundMuLaw;
+      } else if (strcmp('ALaw', enc) == 0) {
+        encoding = soundALaw;
+      }
+    }
+    tmp.free();
   }
-  H5Gclose(history_hid);
-  H5Fclose(file_hid);
-// This code is taken from https://github.com/sh1r0/caffe-android-lib
+}
+    
+      // push a new stack entry
+  transpGroup = new SplashTransparencyGroup();
+  transpGroup->tx = tx;
+  transpGroup->ty = ty;
+  transpGroup->blendingColorSpace = blendingColorSpace;
+  transpGroup->isolated = isolated;
+  transpGroup->next = transpGroupStack;
+  transpGroupStack = transpGroup;
+    
+                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    
+        // Select Present Mode
+#ifdef IMGUI_UNLIMITED_FRAME_RATE
+    VkPresentModeKHR present_modes[] = { VK_PRESENT_MODE_MAILBOX_KHR, VK_PRESENT_MODE_IMMEDIATE_KHR, VK_PRESENT_MODE_FIFO_KHR };
 #else
-  LOG(FATAL) << 'SnapshotSolverStateToHDF5 requires hdf5;'
-             << ' compile with USE_HDF5.';
-#endif  // USE_HDF5
-}
-    
-    NcclComm::NcclComm(int deviceId, const MPIWrapperPtr& mpi)
-    : m_ncclComm(nullptr), m_stream(nullptr)
-{
-    if (deviceId == CPUDEVICE)
-    {
-        fprintf(stderr, 'NcclComm: disabled, at least one rank using CPU device\n');
-        return;
-    }
-    }
-    
-                if (InputRef(1).Gradient().GetMatrixType() == SPARSE)
-            {
-                // we only support dense * sparse to have sparse gradient for input0, so if input1 has sparse gradient, switch to dense
-                // this is a rare case and the performance is not optimized
-                InputRef(1).Gradient().SwitchToMatrixType(DENSE, matrixFormatDense, !overwriteInputGradient);
-            }
-            InputRef(1).SetPreferredGradientMatrixType(DENSE);
-    
-    
-    {    m_eval = nullptr; // pointer to an arbitrary eval structure
-    // script for macro calls, need to expand the macro for each call
-    // if it's not expanded the evalValue will be overwitten on multiple calls to a macro
-    m_script = (copyMe.m_script) ? new NDLScript<ElemType>(*copyMe.m_script) : nullptr;
-}
-template <typename ElemType>
-NDLScript<ElemType>::NDLScript(const NDLScript&& moveMe)
-    : ConfigParser(move(moveMe))
-{
-    m_baseName      = move(moveMe.m_baseName);
-    m_scriptString  = move(moveMe.m_scriptString);
-    m_script        = move(moveMe.m_script);        // script lines in parsed node order, macros will have definition followed by body
-    m_symbols       = move(moveMe.m_symbols);       // symbol table
-    m_macroNode     = move(moveMe.m_macroNode);     // set when interpretting a macro definition
-    m_noDefinitions = move(moveMe.m_noDefinitions); // no definitions can be made in this script, interpret all macro/function names as calls
-    m_definingMacro = move(moveMe.m_definingMacro);
-    m_children      = move(moveMe.m_children);      // child nodes. Note that m_script nodes may not be children of this object, they include macro nodes
-    m_cn            = move(moveMe.m_cn);            // computation network to use for backup symbol lookup. Used for MEL where NDL and network nodes are mixed
-}
-    
-        // ParseCall - parse the call syntax out into 'function' and variables
-    // token - string containing the 'call'
-    // return - Node pointer, the newly created node
-    NDLNode<ElemType>* ParseCall(const std::string& token)
-    {
-        std::string nameFunction, params;
-        NDLNode<ElemType>* ndlNode = CallStringParse(token, nameFunction, params);
-    }
-    
-    
-    {        return ival;
-    }
-//#if (SIZE_MAX != ULONG_MAX)     // on x64 GCC unsigned long == size_t, i.e. we'd get an ambigous declaration
-#ifdef _MSC_VER // somehow the above check does not work on GCC/Cygwin, causing an ambiguous declaration
-    operator unsigned long() const
-    {
-        return toulong();
-    }
-    
-    #include <stdio.h>
-#include <math.h>
-#define EVAL_EXPORTS // creating the exports here
-#include 'Eval.h'
-#include 'Actions.h'
-#include 'CNTKEval.h'
-#include 'CPUMatrix.h' // for SetNumThreads()
-#include 'SimpleOutputWriter.h'
-#include 'NDLNetworkBuilder.h'
-#ifdef LEAKDETECT
-#include <vld.h> // leak detection
+    VkPresentModeKHR present_modes[] = { VK_PRESENT_MODE_FIFO_KHR };
 #endif
-#include 'BestGpu.h'
-#include 'InputAndParamNodes.h'
-#include 'latticearchive.h'
-#include <limits>
-#include 'RecurrentNodes.h'
+    wd->PresentMode = ImGui_ImplVulkanH_SelectPresentMode(g_PhysicalDevice, wd->Surface, &present_modes[0], IM_ARRAYSIZE(present_modes));
+    //printf('[vulkan] Selected PresentMode = %d\n', wd->PresentMode);
     
-             virtual void OnEpochEnd(const std::list<ComputationNodeBasePtr>&    LearnableNodes,
-                                    std::list<MatrixBasePtr>&                   smoothedGradients,
-                                    size_t                                      samplesSinceLastSync 
-                                    )
-         {
-             m_MAworkerStatus[m_myRank] = MAWorkerStatus::DataEnd;
-             Timer syncPointTimer; syncPointTimer.Start(); 
-             bool read2sync = UpdateWorkerStatus(MAWorkerStatus::DataEnd);
-             syncPointTimer.Stop();
-             m_perfReporter.OnArriveAtSyncPoint(syncPointTimer.ElapsedSeconds(), true);
-             // assert(read2sync); 
-             size_t totalSamplesProcessed = 0;
-             float secondsOnCommunication = 0.0f; 
-             if (read2sync)
-             {
-                 m_numSyncPerformed++;
-                 ModelAggregationProcessing(samplesSinceLastSync, LearnableNodes, smoothedGradients, totalSamplesProcessed, secondsOnCommunication);
-                 m_perfReporter.OnMAPerformed(samplesSinceLastSync, totalSamplesProcessed, secondsOnCommunication);
-             }
-             
-             m_pMPI->WaitAll();             
-             m_perfReporter.OnEpochEnd();
-         }
+    // Implemented features:
+//  [X] Platform: Clipboard support.
+//  [X] Platform: Gamepad support. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
+//  [x] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'. FIXME: 3 cursors types are missing from GLFW.
+//  [X] Platform: Keyboard arrays indexed using GLFW_KEY_* codes, e.g. ImGui::IsKeyPressed(GLFW_KEY_SPACE).
     
-        // a few more handy operations that occurred multiple times
-    bool IsNan() const { return std::isnan(first); }
-    EpochCriterion operator-(const EpochCriterion& other) const { return EpochCriterion(first - other.first, second - other.second); }
-    void operator+=(const EpochCriterion& other) { first += other.first; second += other.second; }
+            // Process all the config files in order, and then add on the inital config,
+        // which will override run and load if they exist
+        std::string fileContents = m_script.ReadConfigFiles(filePaths);
+        fileContents += m_initialConfig;
     
-        // out_of_range.109
-    try
+        // CheckName - check for a name in our symbols, see if it exists
+    // name - name we are looking for
+    // localOnly - only look in the current scope, and not the global scope
+    // if it does exist return the node that represents the name
+    NDLNode<ElemType>* CheckName(const std::string& name, bool localOnly = false)
     {
-        // try to use an array index that is not a number
-        json::const_reference ref = j.at('/array/one'_json_pointer);
-    }
-    catch (json::parse_error& e)
-    {
-        std::cout << e.what() << '\n';
+        // first try local script
+        auto found = FindSymbol(name);
+        if (found != NULL)
+        {
+            return found;
+        }
     }
     
-        // create an array from std::unordered_set
-    std::unordered_set<std::string> c_uset {'one', 'two', 'three', 'four', 'one'};
-    json j_uset(c_uset); // only one entry for 'one' is used
+            //                input = builder.CreateSparseInputNode(L'features', m_layerSizes[0]);
+        input = builder.CreateInputNode(L'features', m_layerSizes[0]);
+        featin = input;
+        m_net->AddToNodeGroup(L'feature', input);
+    
+    extern 'C' EVAL_API void  GetEvalExtendedF(IEvaluateModelExtended<float>** peval)
+{
+    GetEvalExtended(peval);
+}
+extern 'C' EVAL_API void GetEvalExtendedD(IEvaluateModelExtended<double>** peval)
+{
+    GetEvalExtended(peval);
+}
+    
+        wstring GetModelNameForEpoch(const int epoch, bool bLastModel = false) const;
+    
+    
+    {    // After values of accumulators have been aggregated across nodes, we have to update evaluation results for
+    // evaluation nodes that accumulate results.
+    UpdateEpochEvaluationForAccumulatedResult<ElemType>(epochEvalErrors, evaluationNodes, localEpochEvalErrors,
+                                                        containsAccumulatedResult);
+}
+    
+    
+    {        return err;
+    }
+    
+            virtual ~GuiAdam();
+    
+        private:
+        const float mConfidenceThreshold;
+        const float mInlierRatioThreshold;
+        const float mDistanceThreshold;
+        const int mNumberFramesToDeletePerson;
+        long long mNextPersonId;
+        cv::Mat mImagePrevious;
+        std::vector<cv::Mat> mPyramidImagesPrevious;
+        std::unordered_map<int, PersonEntry> mPersonEntries;
+        // Thread-safe variables
+        std::atomic<long long> mLastFrameId;
