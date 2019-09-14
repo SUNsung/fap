@@ -1,260 +1,208 @@
 
         
-          auto conformance = conformanceRef.getConcrete();
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+#ifndef TENSORFLOW_LITE_KERNELS_CUSTOM_OPS_REGISTER_H_
+#define TENSORFLOW_LITE_KERNELS_CUSTOM_OPS_REGISTER_H_
     
-    const char *swift::_swift_stdlib_strtod_clocale(
-    const char * nptr, double *outResult) {
-  return _swift_stdlib_strtoX_clocale_impl(
-    nptr, outResult, HUGE_VAL, strtod_l);
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    #endif  // GOOGLE_CUDA || TENSORFLOW_USE_ROCM
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    TF_CALL_GPU_NUMBER_TYPES(REGISTER_MATRIX_DIAG_GPU);
+TF_CALL_bool(REGISTER_MATRIX_DIAG_GPU);
+TF_CALL_complex64(REGISTER_MATRIX_DIAG_GPU);
+TF_CALL_complex128(REGISTER_MATRIX_DIAG_GPU);
+#undef REGISTER_MATRIX_DIAG_GPU
+    
+    
+    {  {
+    std::vector<int64> shape_expected = {40, 20, 90, 40};
+    GetTensorProto(DT_INT64, {4}, shape_expected,
+                   /*tensor_content=*/true, &tensor_proto);
+    EXPECT_TRUE(
+        GetTensorShapeProtoFromTensorProto(tensor_proto, &tensor_shape_proto));
+    ExpectTensorShape(shape_expected, tensor_shape_proto);
+  }
 }
     
-      /// Find the conformance of the given Swift type to the
-  /// _BridgedStoredNSError protocol.
-  Optional<ProtocolConformanceRef>
-  getConformanceToBridgedStoredNSError(SILLocation loc, Type type);
+      if (src_op.type != OperatorType::kAny) {
+    const tensorflow::DataType params_type =
+        GetTensorFlowDataType(model, src_op.inputs[0]);
+    (*new_op->mutable_attr())['T'].set_type(params_type);
+  }
+  const tensorflow::DataType indices_type =
+      GetTensorFlowDataType(model, src_op.inputs[1]);
+  (*new_op->mutable_attr())['Tidx'].set_type(indices_type);
     
-      // On failure, fill out the cache with everything we know about.
-  std::vector<std::pair<std::string, const TypeRef *>> Fields;
-  for (auto &Info : ReflectionInfos) {
-    uint64_t TypeRefOffset = Info.Field.SectionOffset
-                           - Info.TypeReference.SectionOffset;
-    for (auto &FD : Info.Field.Metadata) {
-      if (!FD.hasMangledTypeName())
-        continue;
-      auto CandidateMangledName = FD.getMangledTypeName(TypeRefOffset);
-      auto NormalizedName = normalizeReflectionName(Dem, CandidateMangledName);
-      FieldTypeInfoCache[NormalizedName] = {&FD, &Info};
-      Dem.clear();
+        Output c =
+        ops::Const(s.WithOpName('c').WithDevice(kDeviceCPU0), 0.0f, {10, 10});
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+     protected:
+  template <typename T>
+  std::shared_ptr<Transposer> GetOrCreateIfNotFound(const string& key) {
+    auto& transposer = transposer_map_[key];
+    if (transposer == nullptr) {
+      transposer = std::make_shared<T>();
     }
+    return transposer;
   }
     
-      /// Append any retroactive conformances.
-  void appendRetroactiveConformances(Type type);
-  void appendRetroactiveConformances(SubstitutionMap subMap,
-                                     ModuleDecl *fromModule);
-  void appendImplFunctionType(SILFunctionType *fn);
+        run_fused(y_backprop, input, scale, offset, is_training ? empty : mean,
+              is_training ? empty : var, side_input, &fbn_ex_forward,
+              &fbn_ex_backward);
+    
+    KNOWN_STDLIB_TYPE_DECL(Optional, EnumDecl, 1)
+    
+      bool canStorageUseStoredKeyPathComponent(AbstractStorageDecl *decl,
+                                           ResilienceExpansion expansion);
+    
+    namespace swift {
+    }
+    
+    /// A value for `SymbolNamespace` which indicates that this type came
+/// from a C `typedef` that was imported as a distinct type instead
+/// of a `typealias`.  This can happen for reasons like:
+///
+/// - the `typedef` was declared with the `swift_wrapper` attribute
+/// - the `typedef` is a CF type
+constexpr static const char CTypedef[] = 't';
     
     
-    {  /// Produces a contextual type involving archetypes within the context of
-  /// the type.
-  Contextual,
+    {
+    {  bool haveModuleOrModuleDocOutputPaths() const {
+    return !SupplementaryOutputs.ModuleOutputPath.empty() ||
+           !SupplementaryOutputs.ModuleDocOutputPath.empty();
+  }
 };
+} // namespace swift
+    
+    // Sent by the renderer when the draggable regions are updated.
+IPC_MESSAGE_ROUTED1(ShellViewHostMsg_UpdateDraggableRegions,
+                    std::vector<extensions::DraggableRegion> /* regions */)
+    
+    #endif  // CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
+
+    
+    #include 'content/nw/src/api/base/base.h'
+#include 'ui/gfx/display_observer.h'
+    
+    class MenuDelegate : public ui::SimpleMenuModel::Delegate {
+ public:
+  MenuDelegate(ObjectManager* object_manager);
+  ~MenuDelegate() override;
+    }
+    
+    
+    {}  // namespace
+    
+    
+    {  submenu_ = menu;
+}
+    
+    NwAppQuitFunction::~NwAppQuitFunction() {
+}
+    
+      static void DoJob(AppWindowRegistry* registry, std::string id);
+ protected:
+  ~NwAppCloseAllWindowsFunction() override {}
+    
+      /// Applies batch normalization on the `input` using the given `mean` and
+  /// `variance` statistics.
+  Tensor pure_forward(
+      const Tensor& input,
+      const Tensor& mean,
+      const Tensor& variance);
+    
+      Multi-feature representation:
+  - scalar features:
+    <feature type>.lengths int32
+    <feature type>.keys int64
+    <feature type>.values T
+  - list features:
+    <feature type>.lengths int32
+    <feature type>.keys int64
+    <feature type>.values.lengths int32
+    <feature type>.values.values T
+  - map features:
+    <feature type>.lengths int32
+    <feature type>.keys int64
+    <feature type>.values.lengths int32
+    <feature type>.values.keys K
+    <feature type>.values.values V
+    
+    #include 'caffe2/operators/glu_op.h'
+    
+      static const Data& getData6() { return data6_; }
+    
+    void DHTReplaceNodeTask::startup() { sendMessage(); }
+    
+      Time getSerializedTime() const { return serializedTime_; }
+    
+    #include 'common.h'
+    
+    class DHTTask;
+    
+    
+    {} // namespace aria2
+    
+      virtual void executeTask() CXX11_OVERRIDE;
+    
+    
+    {  void updateTokenSecret();
+};
+    
+    DNSCache::CacheEntry::~CacheEntry() = default;
+    
+      bool DrawTrajectory(
+      const Obstacle& obstacle, const LaneSequence& lane_sequence,
+      const double lon_acceleration, const double total_time,
+      const double period,
+      std::vector<apollo::common::TrajectoryPoint>* trajectory_points);
+    
+    
+    {  Edge* edges_;
+  const int num_edges_ = 10;
+  const int num_vertices_ = 6;
+};
+    
+    int main(int argc, char *argv[]) {
+  apollo::cyber::Init('cyber_python');
+  apollo::cyber::proto::Chatter chat;
+  apollo::cyber::PyNode node('listener');
+  pr = node.create_reader('channel/chatter', chat.GetTypeName());
+  pr->register_func(cbfun);
+    }
     
     /**
- * Provides the minimal api for a simple out of line executor that can run non-cancellable
- * callbacks.
- *
- * The contract for scheduling work on an executor is that it never blocks the caller.  It doesn't
- * necessarily need to offer forward progress guarantees, but actual calls to schedule() should not
- * deadlock.
- *
- * If you manage the lifetime of your executor using a shared_ptr, you can begin a chain of
- * execution like this:
- *      ExecutorFuture(myExec)
- *          .then([] { return doThing1(); })
- *          .then([] { return doThing2(); })
- *          ...
+ * @file
+ * @brief This file provides several unit tests for the class
+ * 'NaviSpeedTsGraph'.
  */
-class OutOfLineExecutor {
-public:
-    using Task = unique_function<void(Status)>;
-    }
+    
+    using apollo::common::ErrorCode;
+using apollo::common::Status;
+using apollo::common::time::Clock;
     
     
-    {class ValidId : public Base {
-public:
-    void run() {
-        ASSERT(fixDocumentForInsert(_opCtx.getServiceContext(), BSON('_id' << 5)).isOK());
-        ASSERT(
-            fixDocumentForInsert(_opCtx.getServiceContext(), BSON('_id' << BSON('x' << 5))).isOK());
-        ASSERT(!fixDocumentForInsert(_opCtx.getServiceContext(), BSON('_id' << BSON('$x' << 5)))
-                    .isOK());
-        ASSERT(!fixDocumentForInsert(_opCtx.getServiceContext(), BSON('_id' << BSON('$oid' << 5)))
-                    .isOK());
-    }
+    { private:
+  ScenarioValetParkingConfig scenario_config_;
 };
-}  // namespace Insert
-    
-    //
-// Check that cursor relocates its end location properly if end location
-// changes during a yield
-//
-class QueryStageCountScanInsertNewDocsDuringYield : public CountBase {
-public:
-    void run() {
-        dbtests::WriteContextForTests ctx(&_opCtx, ns());
-    }
-    }
-    
-    public:
-    
-    //--------------------------------------------------------------------------
-//
-//    RegexPattern    Default Constructor
-//
-//--------------------------------------------------------------------------
-RegexPattern::RegexPattern() {
-    // Init all of this instances data.
-    init();
-}
-    
-    
-    {    // Compare identical level.
-    const Normalizer2Impl &nfcImpl = data->nfcImpl;
-    left += equalPrefixLength;
-    right += equalPrefixLength;
-    if(settings->dontCheckFCD()) {
-        UTF16NFDIterator leftIter(left, leftLimit);
-        UTF16NFDIterator rightIter(right, rightLimit);
-        return compareNFDIter(nfcImpl, leftIter, rightIter);
-    } else {
-        FCDUTF16NFDIterator leftIter(nfcImpl, left, leftLimit);
-        FCDUTF16NFDIterator rightIter(nfcImpl, right, rightLimit);
-        return compareNFDIter(nfcImpl, leftIter, rightIter);
-    }
-}
-    
-    U_NAMESPACE_END
-    
-    namespace apollo {
-namespace drivers {
-namespace velodyne {
-    }
-    }
-    }
-    
-    namespace apollo {
-namespace planning {
-    }
-    }
-    
-    
-    {    // wait for other agent receiving is ok.
-    while (!other_agent()->is_receiving()) {
-      std::this_thread::yield();
-    }
-    int64_t start = AsInt64<micros>(Clock::Now());
-    while (true) {
-      // param->print();
-      if (count >= FLAGS_agent_mutual_send_frames) {
-        break;
-      }
-      for (int32_t i = 0; i < MAX_CAN_SEND_FRAME_LEN; ++i) {
-        // frames[i].id = id_count & 0x3FF;
-        send_id = id;
-        frames[i].id = id;
-        frames[i].len = 8;
-        frames[i].data[7] = static_cast<uint8_t>(count % 256);
-        for (uint8_t j = 0; j < 7; ++j) {
-          frames[i].data[j] = j;
-        }
-        ++count;
-        ++id;
-        if (id > end_id) {
-          id = start_id;
-        }
-      }
-      int32_t frame_num = MAX_CAN_SEND_FRAME_LEN;
-      if (client->Send(frames, &frame_num) != ErrorCode::OK) {
-        param->send_err_cnt += MAX_CAN_SEND_FRAME_LEN;
-        AERROR << 'send_thread send msg failed!, id:' << send_id
-               << ', conf:' << param->conf.ShortDebugString();
-      } else {
-        param->send_cnt += frame_num;
-        param->send_lost_cnt += MAX_CAN_SEND_FRAME_LEN - frame_num;
-        AINFO << 'send_frames: ' << frame_num << 'send_frame#'
-              << frames[0].CanFrameString()
-              << ' send lost:' << MAX_CAN_SEND_FRAME_LEN - frame_num
-              << ', conf:' << param->conf.ShortDebugString();
-      }
-    }
-    int64_t end = AsInt64<micros>(Clock::Now());
-    param->send_time = static_cast<int32_t>(end - start);
-    // In case for finish too quick to receiver miss some msg
-    sleep(2);
-    AINFO << 'Send thread stopping...' << param->conf.ShortDebugString();
-    is_sending_finish(true);
-    return;
-  }
-    
-    Status ControllerAgent::Init(const ControlConf *control_conf) {
-  RegisterControllers(control_conf);
-  CHECK(InitializeConf(control_conf).ok()) << 'Failed to initialize config.';
-  for (auto &controller : controller_list_) {
-    if (controller == nullptr) {
-      return Status(ErrorCode::CONTROL_INIT_ERROR, 'Controller is null.');
-    }
-    if (!controller->Init(control_conf_).ok()) {
-      AERROR << 'Controller <' << controller->Name() << '> init failed!';
-      return Status(ErrorCode::CONTROL_INIT_ERROR,
-                    'Failed to init Controller:' + controller->Name());
-    }
-    AINFO << 'Controller <' << controller->Name() << '> init done!';
-  }
-  return Status::OK();
-}
-    
-    namespace apollo {
-namespace planning {
-namespace scenario {
-namespace traffic_light {
-    }
-    }
-    }
-    }
-    
-    
-    {  switch (sub_type) {
-    case base::ObjectSubType::TRAFFICCONE: {
-      const float *min_tmplt_cur_type = kMinTemplateHWL.at(sub_type).data();
-      const float *max_tmplt_cur_type = kMaxTemplateHWL.at(sub_type).data();
-      dimension_hwl[0] = std::min(dimension_hwl[0], max_tmplt_cur_type[0]);
-      dimension_hwl[0] = std::max(dimension_hwl[0], min_tmplt_cur_type[0]);
-      break;
-    }
-    case base::ObjectSubType::PEDESTRIAN:
-    case base::ObjectSubType::CYCLIST:
-    case base::ObjectSubType::MOTORCYCLIST: {
-      const float *min_tmplt_cur_type = kMinTemplateHWL.at(sub_type).data();
-      const float *mid_tmplt_cur_type = kMidTemplateHWL.at(sub_type).data();
-      const float *max_tmplt_cur_type = kMaxTemplateHWL.at(sub_type).data();
-      float dh_min = fabsf(dimension_hwl[0] - min_tmplt_cur_type[0]);
-      float dh_mid = fabsf(dimension_hwl[0] - mid_tmplt_cur_type[0]);
-      float dh_max = fabsf(dimension_hwl[0] - max_tmplt_cur_type[0]);
-      std::vector<std::pair<float, float>> diff_hs;
-      diff_hs.push_back(std::make_pair(dh_min, min_tmplt_cur_type[0]));
-      diff_hs.push_back(std::make_pair(dh_mid, mid_tmplt_cur_type[0]));
-      diff_hs.push_back(std::make_pair(dh_max, max_tmplt_cur_type[0]));
-      sort(diff_hs.begin(), diff_hs.end(),
-           [](const std::pair<float, float> &a,
-              const std::pair<float, float> &b) -> bool {
-             return a.first < b.first;
-           });
-      dimension_hwl[0] = diff_hs[0].second;
-      break;
-    }
-    case base::ObjectSubType::CAR:
-      type_min_vol_index =
-          kLookUpTableMinVolumeIndex.at(TemplateIndex::CAR_MIN_VOLUME_INDEX);
-      break;
-    case base::ObjectSubType::VAN:
-      type_min_vol_index =
-          kLookUpTableMinVolumeIndex.at(TemplateIndex::VAN_MIN_VOLUME_INDEX);
-      break;
-    case base::ObjectSubType::TRUCK:
-      type_min_vol_index =
-          kLookUpTableMinVolumeIndex.at(TemplateIndex::TRUCK_MIN_VOLUME_INDEX);
-      break;
-    case base::ObjectSubType::BUS:
-      type_min_vol_index =
-          kLookUpTableMinVolumeIndex.at(TemplateIndex::BUS_MIN_VOLUME_INDEX);
-      break;
-    default:
-      if (min_dimension_val < multicue_param_.min_dimension_val()) {
-        common::IScale3(dimension_hwl, multicue_param_.min_dimension_val() *
-                                           common::IRec(min_dimension_val));
-      }
-      break;
-  }
-  return type_min_vol_index;
-}
