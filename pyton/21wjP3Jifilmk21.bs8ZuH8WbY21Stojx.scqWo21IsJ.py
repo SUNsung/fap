@@ -1,126 +1,95 @@
 
         
-            def reducer(self, key, values):
-        '''Sum values for each key.
+        setup_face_landmarks = '''
+import face_recognition
     
-        def get_people(self, ids):
-        results = []
-        for id in ids:
-            if id in self.people:
-                results.append(self.people[id])
-        return results
+        # Find all the faces and face encodings in the current frame of video
+    face_locations = face_recognition.face_locations(output)
+    print('Found {} faces in image.'.format(len(face_locations)))
+    face_encodings = face_recognition.face_encodings(output, face_locations)
     
     
-class Cache(object):
+def image_files_in_folder(folder):
+    return [os.path.join(folder, f) for f in os.listdir(folder) if re.match(r'.*\.(jpg|jpeg|png)', f, flags=re.I)]
     
+        def test_command_line_interface_big_image(self):
+        target_string = 'obama3.jpg,obama'
+        runner = CliRunner()
+        image_folder = os.path.join(os.path.dirname(__file__), 'test_images')
+        image_file = os.path.join(os.path.dirname(__file__), 'test_images', 'obama3.jpg')
     
-class Page(object):
+        # Hit 'q' on the keyboard to quit!
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
     
-    site_info = 'baomihua.com'
-download = baomihua_download
-download_playlist = playlist_not_supported('baomihua')
+    # You can also save a copy of the new image to disk if you want by uncommenting this line
+# pil_image.save('image_with_boxes.jpg')
 
     
-            for i in self.tree.iterfind('video/quality'):
-            quality = i.attrib ['value']
-            url = i[0].attrib['playurl']
-            self.stream_types.append({'id': quality,
-                                      'video_profile': i.attrib ['desp']})
-            self.streams[quality] = {'url': url,
-                                     'video_profile': i.attrib ['desp']}
-            self.streams_sorted = [dict([('id', stream_type['id'])] + list(self.streams[stream_type['id']].items())) for stream_type in self.__class__.stream_types if stream_type['id'] in self.streams]
+    
+def _css_to_rect(css):
+    '''
+    Convert a tuple in (top, right, bottom, left) order to a dlib `rect` object
+    
+    # 初始化变量
+face_locations = []
+face_encodings = []
     
     
-class CNTV(VideoExtractor):
-    name = 'CNTV.com'
-    stream_types = [
-        {'id': '1', 'video_profile': '1280x720_2000kb/s', 'map_to': 'chapters4'},
-        {'id': '2', 'video_profile': '1280x720_1200kb/s', 'map_to': 'chapters3'},
-        {'id': '3', 'video_profile': '640x360_850kb/s', 'map_to': 'chapters2'},
-        {'id': '4', 'video_profile': '480x270_450kb/s', 'map_to': 'chapters'},
-        {'id': '5', 'video_profile': '320x180_200kb/s', 'map_to': 'lowChapters'},
-    ]
+@app.route('/', methods=['GET', 'POST'])
+def upload_image():
+    # 检测图片是否上传成功
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return redirect(request.url)
     
-    site_info = 'ehow.com'
-download = ehow_download
-download_playlist = playlist_not_supported('ehow')
-
-    
-        def _init_keypoints(self):
-        '''Initialize COCO keypoint information.'''
-        self.keypoints = None
-        self.keypoint_flip_map = None
-        self.keypoints_to_id_map = None
-        self.num_keypoints = 0
-        # Thus far only the 'person' category has keypoints
-        if 'person' in self.category_to_id_map:
-            cat_info = self.COCO.loadCats([self.category_to_id_map['person']])
-        else:
-            return
+    test_requirements = [
+    'tox',
+    'flake8==2.6.0'
+]
     
     
-class ZeroEvenOpTest(unittest.TestCase):
+class DiagnosticInterface( object ):
+  def __init__( self, bufnr, user_options ):
+    self._bufnr = bufnr
+    self._user_options = user_options
+    self._diagnostics = []
+    self._diag_filter = DiagnosticFilter.CreateFromOptions( user_options )
+    # Line and column numbers are 1-based
+    self._line_to_diags = defaultdict( list )
+    self._previous_diag_line_number = -1
+    self._diag_message_needs_clearing = False
     
-                try:
-                # Under some conditions (e.g., dynamic memory optimization)
-                # it is possible that the network frees some blobs when they are
-                # no longer needed. Handle this case...
-                output_shape = workspace.FetchBlob(output_name).shape
-            except BaseException:
-                output_shape = '<unknown>'
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
-    # Copyright (c) 2017-present, Facebook, Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the 'License');
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an 'AS IS' BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-##############################################################################
+        if self._response_future is None:
+      # First poll
+      self._SendRequest()
+      return True
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
     
-def _do_python_eval(json_dataset, salt, output_dir='output'):
-    info = voc_info(json_dataset)
-    year = info['year']
-    anno_path = info['anno_path']
-    image_set_path = info['image_set_path']
-    devkit_path = info['devkit_path']
-    cachedir = os.path.join(devkit_path, 'annotations_cache')
-    aps = []
-    # The PASCAL VOC metric changed in 2010
-    use_07_metric = True if int(year) < 2010 else False
-    logger.info('VOC07 metric? ' + ('Yes' if use_07_metric else 'No'))
-    if not os.path.isdir(output_dir):
-        os.mkdir(output_dir)
-    for _, cls in enumerate(json_dataset.classes):
-        if cls == '__background__':
-            continue
-        filename = _get_voc_results_file_template(
-            json_dataset, salt).format(cls)
-        rec, prec, ap = voc_eval(
-            filename, anno_path, image_set_path, cls, cachedir, ovthresh=0.5,
-            use_07_metric=use_07_metric)
-        aps += [ap]
-        logger.info('AP for {} = {:.4f}'.format(cls, ap))
-        res_file = os.path.join(output_dir, cls + '_pr.pkl')
-        save_object({'rec': rec, 'prec': prec, 'ap': ap}, res_file)
-    logger.info('Mean AP = {:.4f}'.format(np.mean(aps)))
-    logger.info('~~~~~~~~')
-    logger.info('Results:')
-    for ap in aps:
-        logger.info('{:.3f}'.format(ap))
-    logger.info('{:.3f}'.format(np.mean(aps)))
-    logger.info('~~~~~~~~')
-    logger.info('')
-    logger.info('----------------------------------------------------------')
-    logger.info('Results computed with the **unofficial** Python eval code.')
-    logger.info('Results should be very close to the official MATLAB code.')
-    logger.info('Use `./tools/reval.py --matlab ...` for your paper.')
-    logger.info('-- Thanks, The Management')
-    logger.info('----------------------------------------------------------')
+def _assert_accepts( filter, text ):
+  _assert_accept_equals( filter, text, True )
+    
+    
+  def result( self ):
+    return self._result
+    
+            if (return_when == FIRST_COMPLETED) and done:
+            return DoneAndNotDoneFutures(done, not_done)
+        elif (return_when == FIRST_EXCEPTION) and done:
+            if any(f for f in done
+                   if not f.cancelled() and f.exception() is not None):
+                return DoneAndNotDoneFutures(done, not_done)
