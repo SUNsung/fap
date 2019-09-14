@@ -1,154 +1,188 @@
 
         
-          def test_inspect_instance
-    topic = topics(:first)
-    assert_equal %(#<Topic id: 1, title: 'The First Topic', author_name: 'David', author_email_address: 'david@loudthinking.com', written_on: '#{topic.written_on.to_s(:db)}', bonus_time: '#{topic.bonus_time.to_s(:db)}', last_read: '#{topic.last_read.to_s(:db)}', content: 'Have a nice day', important: nil, approved: false, replies_count: 1, unique_replies_count: 0, parent_id: nil, parent_title: nil, type: nil, group: nil, created_at: '#{topic.created_at.to_s(:db)}', updated_at: '#{topic.updated_at.to_s(:db)}'>), topic.inspect
+            # In case for some reason we didn't have a redirect for the profile already, set it
+    origin_account.update(moved_to_account: target_account) if origin_account.moved_to_account_id.nil?
+    
+    RSpec.describe NotifyService, type: :service do
+  subject do
+    -> { described_class.new.call(recipient, activity) }
   end
     
-            assert_equal <<~MESSAGE, run_rake_routes
-                                         Prefix Verb   URI Pattern                                                                              Controller#Action
-                                           cart GET    /cart(.:format)                                                                          cart#show
-                  rails_mandrill_inbound_emails POST   /rails/action_mailbox/mandrill/inbound_emails(.:format)                                  action_mailbox/ingresses/mandrill/inbound_emails#create
-                  rails_postmark_inbound_emails POST   /rails/action_mailbox/postmark/inbound_emails(.:format)                                  action_mailbox/ingresses/postmark/inbound_emails#create
-                     rails_relay_inbound_emails POST   /rails/action_mailbox/relay/inbound_emails(.:format)                                     action_mailbox/ingresses/relay/inbound_emails#create
-                  rails_sendgrid_inbound_emails POST   /rails/action_mailbox/sendgrid/inbound_emails(.:format)                                  action_mailbox/ingresses/sendgrid/inbound_emails#create
-                   rails_mailgun_inbound_emails POST   /rails/action_mailbox/mailgun/inbound_emails/mime(.:format)                              action_mailbox/ingresses/mailgun/inbound_emails#create
-                 rails_conductor_inbound_emails GET    /rails/conductor/action_mailbox/inbound_emails(.:format)                                 rails/conductor/action_mailbox/inbound_emails#index
-                                                POST   /rails/conductor/action_mailbox/inbound_emails(.:format)                                 rails/conductor/action_mailbox/inbound_emails#create
-              new_rails_conductor_inbound_email GET    /rails/conductor/action_mailbox/inbound_emails/new(.:format)                             rails/conductor/action_mailbox/inbound_emails#new
-             edit_rails_conductor_inbound_email GET    /rails/conductor/action_mailbox/inbound_emails/:id/edit(.:format)                        rails/conductor/action_mailbox/inbound_emails#edit
-                  rails_conductor_inbound_email GET    /rails/conductor/action_mailbox/inbound_emails/:id(.:format)                             rails/conductor/action_mailbox/inbound_emails#show
-                                                PATCH  /rails/conductor/action_mailbox/inbound_emails/:id(.:format)                             rails/conductor/action_mailbox/inbound_emails#update
-                                                PUT    /rails/conductor/action_mailbox/inbound_emails/:id(.:format)                             rails/conductor/action_mailbox/inbound_emails#update
-                                                DELETE /rails/conductor/action_mailbox/inbound_emails/:id(.:format)                             rails/conductor/action_mailbox/inbound_emails#destroy
-          rails_conductor_inbound_email_reroute POST   /rails/conductor/action_mailbox/:inbound_email_id/reroute(.:format)                      rails/conductor/action_mailbox/reroutes#create
-                             rails_service_blob GET    /rails/active_storage/blobs/:signed_id/*filename(.:format)                               active_storage/blobs#show
-                      rails_blob_representation GET    /rails/active_storage/representations/:signed_blob_id/:variation_key/*filename(.:format) active_storage/representations#show
-                             rails_disk_service GET    /rails/active_storage/disk/:encoded_key/*filename(.:format)                              active_storage/disk#show
-                      update_rails_disk_service PUT    /rails/active_storage/disk/:encoded_token(.:format)                                      active_storage/disk#update
-                           rails_direct_uploads POST   /rails/active_storage/direct_uploads(.:format)                                           active_storage/direct_uploads#create
-        MESSAGE
+      let(:user)   { Fabricate(:user, account: Fabricate(:account, username: 'alice')) }
+  let(:scopes) { 'read:statuses' }
+  let(:token)  { Fabricate(:accessible_access_token, resource_owner_id: user.id, scopes: scopes) }
+    
+      def run_vagrant_command(command)
+    stdout, stderr, status = vagrant_cli_command('ssh -c #{command.inspect}')
+    return [stdout, stderr] if status.success?
+    raise VagrantSSHCommandError, status
+  end
+end
+    
+          # Returns an array of source file location(s) where the given key was
+      # assigned (i.e. where `set` was called). If the key was never assigned,
+      # returns `nil`.
+      def source_locations(key)
+        locations[key]
       end
     
-          # Pure data class which describes an umbrella target.
-      #
-      class UmbrellaTargetDescription
-        # @return [Xcodeproj::Project] The user project into which this target
-        #         is integrated.
-        #
-        attr_reader :user_project
-    
-        it 'prints the correct output to the console' do
-      io = ''
-      UI.indentation_level = 1
-      config.verbose = true
-      Executable::Indenter.any_instance.stubs(:io).returns(io)
-      cmd = ['-e', <<-RB]
-        3.times { |i| puts i }
-      RB
-      Executable.execute_command('ruby', cmd, true)
-      io.should == ' 0\n 1\n 2\n'
+            it 'is true only for the condition' do
+          expect(node.condition.used?).to be(true)
+          expect(node.if_branch.used?).to be(false)
+          expect(node.else_branch.used?).to be(false)
+        end
+      end
     end
     
-        it 'writes the module map to the disk for a library' do
-      path = temporary_directory + 'BananaLib.modulemap'
-      @pod_target.stubs(:build_type => Target::BuildType.static_library)
-      @gen.save_as(path)
-      path.read.should == <<-EOS.strip_heredoc
-        module BananaLib {
-          umbrella header 'BananaLib-umbrella.h'
-    }
+      describe '#identifier' do
+    let(:source) do
+      'module Foo; end'
+    end
     
-            it 'does not use testspecs for equality' do
-          k0 = PodVariant.new(@specs, @testspecs, [], @platform, false)
-          k1 = PodVariant.new(@specs, [], [], @platform, false)
-          k0.should == k1
-        end
-    
-                  FileUtils.expects(:ln_sf).with(relative_path, target_module_path)
-              native_target = mock(:build_configurations => [])
-              @installer.send(:create_module_map, native_target)
+                if external_trailing_comma?(node)
+              fix_external_trailing_comma(node, corrector)
             end
           end
+        end
     
-              BuildType.infer_from_spec(stub('spec', :root => stub('root_spec', :static_framework => true)), :host_requires_frameworks => false).
-            should == BuildType.static_library
-          BuildType.infer_from_spec(stub('spec', :root => stub('root_spec', :static_framework => false)), :host_requires_frameworks => false).
-            should == BuildType.static_library
-          BuildType.infer_from_spec(stub('spec', :root => stub('root_spec', :static_framework => true)), :host_requires_frameworks => true).
-            should == BuildType.static_framework
-          BuildType.infer_from_spec(stub('spec', :root => stub('root_spec', :static_framework => false)), :host_requires_frameworks => true).
-            should == BuildType.dynamic_framework
+          context 'with a node which meets all requirements of []' do
+        let(:ruby) { ''abc'' }
+    
+    module RuboCop
+  # Provides functionality for caching rubocop runs.
+  class ResultCache
+    NON_CHANGING = %i[color format formatters out debug fail_level auto_correct
+                      cache fail_fast stdin parallel].freeze
+    
+      it 'registers an offense for guard clause followed by empty line' \
+     'when guard clause including heredoc' do
+    expect_no_offenses(<<~RUBY)
+      def method
+        if truthy
+          raise <<-MSG
+            This is an error.
+          MSG
+        end
+    
+    module RuboCop
+  module AST
+    # A node extension for `for` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `for` nodes within RuboCop.
+    class ForNode < Node
+      # Returns the keyword of the `for` statement as a string.
+      #
+      # @return [String] the keyword of the `until` statement
+      def keyword
+        'for'
+      end
+    
+          def field_container(model, method, options = {}, &block)
+        css_classes = options[:class].to_a
+        css_classes << 'field'
+        css_classes << 'withError' if error_message_on(model, method).present?
+        content_tag(
+          :div, capture(&block),
+          options.merge(class: css_classes.join(' '), id: '#{model}_#{method}_field')
+        )
+      end
+    
+        # returns the formatted price for the specified variant as a difference from product price
+    def variant_price_diff(variant)
+      variant_amount = variant.amount_in(current_currency)
+      product_amount = variant.product.amount_in(current_currency)
+      return if variant_amount == product_amount || product_amount.nil?
+    
+            if requires_authentication? && api_key.blank? && order_token.blank?
+          must_specify_api_key and return
+        elsif order_token.blank? && (requires_authentication? || api_key.present?)
+          invalid_api_key and return
+        else
+          # An anonymous user
+          @current_api_user = Spree.user_class.new
         end
       end
     
-          alias eql? ==
+              if @address.update(address_params)
+            respond_with(@address, default_template: :show)
+          else
+            invalid_resource!(@address)
+          end
+        end
     
-    require 'clamp'
-require 'pluginmanager/util'
-require 'pluginmanager/gemfile'
-require 'pluginmanager/install'
-require 'pluginmanager/remove'
-require 'pluginmanager/list'
-require 'pluginmanager/update'
-require 'pluginmanager/pack'
-require 'pluginmanager/unpack'
-require 'pluginmanager/generate'
-require 'pluginmanager/prepare_offline_pack'
-require 'pluginmanager/proxy_support'
-configure_proxy
+              inventory_unit.transaction do
+            if inventory_unit.update(inventory_unit_params)
+              fire
+              render :show, status: 200
+            else
+              invalid_resource!(inventory_unit)
+            end
+          end
+        end
     
-          options = {:debug => ENV['LS_QA_DEBUG']}
-      puts 'Destroying #{machines}'
-      LogStash::VagrantHelpers.destroy(machines, options)
-      puts 'Bootstrapping #{machines}'
-      LogStash::VagrantHelpers.bootstrap(machines, options)
+            def create
+          authorize! :create, Spree::OptionType
+          @option_type = Spree::OptionType.new(option_type_params)
+          if @option_type.save
+            render :show, status: 201
+          else
+            invalid_resource!(@option_type)
+          end
+        end
+    
+            def order
+          @order ||= Spree::Order.find_by!(number: order_id)
+          authorize! :show, @order
+        end
+    
+              Spree::Dependencies.cart_remove_item_service.constantize.call(order: @shipment.order,
+                                                                        variant: variant,
+                                                                        quantity: quantity,
+                                                                        options: { shipment: @shipment })
+    
+            def scope
+          if params[:country_id]
+            @country = Country.accessible_by(current_ability, :show).find(params[:country_id])
+            @country.states.accessible_by(current_ability).order('name ASC')
+          else
+            State.accessible_by(current_ability).order('name ASC')
+          end
+        end
+      end
+    end
+  end
+end
+
+    
+            def show
+          @stock_item = scope.find(params[:id])
+          respond_with(@stock_item)
+        end
+    
+          # Create an Atom-feed for each index.
+      feed = CategoryFeed.new(self, self.source, category_dir, category)
+      feed.render(self.layouts, site_payload)
+      feed.write(self.dest)
+      # Record the fact that this page has been added, otherwise Site::cleanup will remove it.
+      self.pages << feed
     end
     
-              it 'fails when installing a non logstash plugin' do
-            command = logstash.run_command_in_path('bin/logstash-plugin install  bundler')
-            expect(command).not_to install_successfully
+        def initialize(tag_name, markup, tokens)
+      attributes = ['class', 'src', 'width', 'height', 'title']
+    
+            Dir.chdir(includes_dir) do
+          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
+          if choices.include?(file)
+            source = File.read(file)
+            partial = Liquid::Template.parse(source)
+            context.stack do
+              rtn = rtn + partial.render(context)
+            end
+          else
+            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
           end
-    
-        def default_attributes(&block)
-      return if @options.nil?
-      @options.each do |flag, param, help, options, _block|
-        attr = flag.first.gsub(/^-+/, '').gsub(/-/, '_').gsub('[no_]', '')
-        attr += '?' if param == :flag
-        yield attr.to_sym, options[:default]
+        end
       end
-    end # def default_attributes
-    
-              # directories have a magic string inserted into their name
-          full_record_path = extension_header[TAR_NAME_OFFSET_START..TAR_NAME_OFFSET_END].delete('\0')
-          full_record_path = add_paxstring(full_record_path)
-    
-      option '--php-bin', 'PHP_BIN',
-    'Specify php executable path if differs from the os used for packaging'
-    
-      option '--name', 'SERVICE_NAME', 'The name of the service you are creating'
-  option '--chdir', 'CHDIR', 'The working directory used by the service'
-    
-      def build!(params)
-    # TODO(sissel): Support these somehow, perhaps with execs and files.
-    self.scripts.each do |name, path|
-      case name
-        when 'pre-install'
-        when 'post-install'
-        when 'pre-uninstall'
-        when 'post-uninstall'
-      end # case name
-    end # self.scripts.each
-    
-    # Support for self extracting sh files (.sh files)
-#
-# This class only supports output of packages.
-#
-# The sh package is a single sh file with a tar payload concatenated to the end.
-# The script can unpack the tarball to install it and call optional post install scripts.
-class FPM::Package::Sh < FPM::Package
-    
-          # TODO(sissel): preinstall/postinstall
-      # strip @prefix, since BASEDIR will set prefix via the pkginfo file
-      IO.popen('pkgproto #{staging_path}/#{@prefix}=').each_line do |line|
-        type, klass, path, mode, user, group = line.split
+      rtn
+    end
+  end
