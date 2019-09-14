@@ -1,156 +1,156 @@
 
         
-                '''
-        self.enabled = True
-        self.kwargs = kwargs
+        :class:`sklearn.covariance.EllipticEnvelope` assumes the data is Gaussian and
+learns an ellipse. It thus degrades when the data is not unimodal. Notice
+however that this estimator is robust to outliers.
     
-        def test_GET_explicit_JSON_explicit_headers(self, httpbin):
-        r = http('--json', 'GET', httpbin.url + '/headers',
-                 'Accept:application/xml',
-                 'Content-Type:application/xml')
-        assert HTTP_OK in r
-        assert ''Accept': 'application/xml'' in r
-        assert ''Content-Type': 'application/xml'' in r
+    Show below is a logistic-regression classifiers decision boundaries on the
+first two dimensions (sepal length and width) of the `iris
+<https://en.wikipedia.org/wiki/Iris_flower_data_set>`_ dataset. The datapoints
+are colored according to their labels.
     
+    from sklearn.cluster import AgglomerativeClustering
     
-def rst_filenames():
-    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
-        if '.tox' not in root:
-            for filename in fnmatch.filter(filenames, '*.rst'):
-                yield os.path.join(root, filename)
+    import gc
     
     
-def test_unicode_digest_auth(httpbin):
-    # it doesn't really authenticate us because httpbin
-    # doesn't interpret the utf8-encoded auth
-    http('--auth-type=digest',
-         '--auth', u'test:%s' % UNICODE,
-         httpbin.url + u'/digest-auth/auth/test/' + UNICODE)
+def _linkcode_resolve(domain, info, package, url_fmt, revision):
+    '''Determine a link to online source for a class/method/function
+    
+    import sys
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.svm import LinearSVC
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import GridSearchCV
+from sklearn.datasets import load_files
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
+    
+    # Get data
+X1 = load_boston()['data'][:, [8, 10]]  # two clusters
+X2 = load_boston()['data'][:, [5, 12]]  # 'banana'-shaped
+    
+    This example demonstrates how to generate a dataset and bicluster it
+using the Spectral Co-Clustering algorithm.
+    
+    # compressed face
+plt.figure(2, figsize=(3, 2.2))
+plt.imshow(face_compressed, cmap=plt.cm.gray, vmin=vmin, vmax=vmax)
+    
+    def shorten_title(title):
+    m1 = re.search('[[0-9]*]', title)
+    m2 = re.search(''.*'', title)
+    if m1:
+        title = m1.group(0)
+    if m2:
+        title = ' '.join((title, m2.group(0)))   
+    return title[:50] + ' [...]'    
+    
+      with MockVimBuffers( [ current_buffer ], [ current_buffer ], ( 1, 2 ) ):
+    ycm.SendCompletionRequest( force_semantic = True )
+    assert_that(
+      ycm.GetCompletionResponse(),
+      has_entries( {
+        'completions': ToBytesOnPY2( ycm_completions ),
+        'completion_start_column': ycm_start_column
+      } )
+    )
+    
+        return _MasterDiagnosticFilter( compiled_by_type )
+    
+    
+  def GetErrorCount( self ):
+    return self._DiagnosticsCount( _DiagnosticIsError )
+    
+    
+def SendShutdownRequest():
+  request = ShutdownRequest()
+  # This is a blocking call.
+  request.Start()
 
     
     
-class ExitStatus:
-    '''Program exit code constants.'''
-    SUCCESS = 0
-    ERROR = 1
-    PLUGIN_ERROR = 7
+GENERIC_RESPONSE = {
+  'clang': {
+    'has_support': True,
+    'version': 'Clang version'
+  },
+  'completer': {
+    'items': [
+      {
+        'key': 'key',
+        'value': 'value'
+      }
+    ],
+    'name': 'Completer name',
+    'servers': [
+      {
+        'address': '127.0.0.1',
+        'executable': '/path/to/executable',
+        'extras': [
+          {
+            'key': 'key',
+            'value': 'value'
+          }
+        ],
+        'is_running': True,
+        'logfiles': [
+          '/path/to/stdout/logfile',
+          '/path/to/stderr/logfile'
+        ],
+        'name': 'Server name',
+        'pid': 12345,
+        'port': 1234
+      }
+    ]
+  },
+  'extra_conf': {
+    'is_loaded': False,
+    'path': '/path/to/extra/conf'
+  },
+  'python': {
+    'executable': '/path/to/python/interpreter',
+    'version': 'Python version'
+  }
+}
     
-    del sys
+      opts = { 'filter_diagnostics' : {
+    'java' : { 'regex' : '.*taco.*' },
+    'xml'  : { 'regex' : '.*burrito.*' } } }
+    
+    
+def KeywordsFromSyntaxListOutput_PhpSyntax_ContainsPreProc_test():
+  assert_that( syntax_parse._KeywordsFromSyntaxListOutput(
+                   ContentsOfTestFile( 'php_syntax' ) ),
+               has_items( 'skip', 'function' ) )
+    
+      def shutdown( self, wait=True ):
+    with self._shutdown_lock:
+      self._shutdown = True
+      self._work_queue.put( None )
+    if wait:
+      for t in self._threads:
+        t.join()
+  shutdown.__doc__ = _base.Executor.shutdown.__doc__
 
     
-        def process_options(self, args, opts):
-        ScrapyCommand.process_options(self, args, opts)
-        try:
-            opts.spargs = arglist_to_dict(opts.spargs)
-        except ValueError:
-            raise UsageError('Invalid -a value, use -a NAME=VALUE', print_help=False)
-        if opts.output:
-            if opts.output == '-':
-                self.settings.set('FEED_URI', 'stdout:', priority='cmdline')
-            else:
-                self.settings.set('FEED_URI', opts.output, priority='cmdline')
-            feed_exporters = without_none_values(
-                self.settings.getwithbase('FEED_EXPORTERS'))
-            valid_output_formats = feed_exporters.keys()
-            if not opts.output_format:
-                opts.output_format = os.path.splitext(opts.output)[1].replace('.', '')
-            if opts.output_format not in valid_output_formats:
-                raise UsageError('Unrecognized output format '%s', set one'
-                                 ' using the '-t' switch or as a file extension'
-                                 ' from the supported list %s' % (opts.output_format,
-                                                                  tuple(valid_output_formats)))
-            self.settings.set('FEED_FORMAT', opts.output_format, priority='cmdline')
     
-        return _S3Connection
-    
-            respcls = responsetypes.from_args(body=body)
-        return response.replace(body=body, cls=respcls)
+class TwitterServerShowUserHandler(RequestHandler):
+    def get(self, screen_name):
+        if screen_name == 'error':
+            raise HTTPError(500)
+        assert 'oauth_nonce' in self.request.arguments
+        assert 'oauth_timestamp' in self.request.arguments
+        assert 'oauth_signature' in self.request.arguments
+        assert self.get_argument('oauth_consumer_key') == 'test_twitter_consumer_key'
+        assert self.get_argument('oauth_signature_method') == 'HMAC-SHA1'
+        assert self.get_argument('oauth_version') == '1.0'
+        assert self.get_argument('oauth_token') == 'hjkl'
+        self.write(dict(screen_name=screen_name, name=screen_name.capitalize()))
     
     
-class DefaultHeadersMiddleware(object):
-    
-        def __init__(self, timeout=180):
-        self._timeout = timeout
-    
-        @nonce.decoder
-    def nonce(value):  # pylint: disable=missing-docstring,no-self-argument
-        try:
-            return jose.decode_b64jose(value)
-        except jose.DeserializationError as error:
-            # TODO: custom error
-            raise jose.DeserializationError('Invalid nonce: {0}'.format(error))
-    
-            cert_pem = test_util.load_vector(certs[0])
-        chain_pem = (test_util.load_vector(certs[0]) + test_util.load_vector(certs[1]))
-        candidate_cert_path = os.path.join(tmp_path, 'certs', 'cert_512.pem')
-        candidate_chain_path = os.path.join(tmp_path, 'chains', 'chain.pem')
-        candidate_fullchain_path = os.path.join(tmp_path, 'chains', 'fullchain.pem')
-        mock_parser.verb = 'certonly'
-        mock_parser.args = ['--cert-path', candidate_cert_path,
-                            '--chain-path', candidate_chain_path,
-                            '--fullchain-path', candidate_fullchain_path]
-    
-        def _get_rfc2136_client(self):
-        return _RFC2136Client(self.credentials.conf('server'),
-                              int(self.credentials.conf('port') or self.PORT),
-                              self.credentials.conf('name'),
-                              self.credentials.conf('secret'),
-                              self.ALGORITHMS.get(self.credentials.conf('algorithm'),
-                                                  dns.tsig.HMAC_MD5))
-    
-            self.webroot = os.path.join(self.nginx_root, 'webroot')
-        os.mkdir(self.webroot)
-        with open(os.path.join(self.webroot, 'index.html'), 'w') as file_handler:
-            file_handler.write('Hello World!')
-    
-        with open(context.nginx_config_path, 'r') as file_h:
-        current_nginx_config = file_h.read()
-    
-        @property
-    def problem(self):
-        '''Return the Exception raised during plugin setup, or None if all is well'''
-        if isinstance(self._prepared, Exception):
-            return self._prepared
-        return None
-    
-    
-def rand_(left, right):
-    return operator.and_(right, left)
-    
-        def time_pandas_dtype(self, dtype):
-        pandas_dtype(dtype)
-    
-        for fixit in fixit_completion:
-      vimsupport.ReplaceChunks( fixit[ 'chunks' ], silent=True )
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-        with patch( 'ycm.youcompleteme.SendCommandRequest' ) as send_request:
-      ycm.SendCommandRequest( [ 'GoTo', 'ft=python' ], '', False, 1, 1 )
-      send_request.assert_called_once_with( *expected_args )
-
-    
-      post_vim_message.assert_has_exact_calls( [
-    call( 'On the first day of Christmas, my VimScript gave to me',
-          warning=False,
-          truncate=True ),
-    call( 'A test file in a Command-T', warning=False, truncate=True ),
-    call( 'On the second day of Christmas, my VimScript gave to me',
-          warning=False,
-          truncate=True ),
-    call( 'Two popup menus, and a test file in a Command-T',
-          warning=False,
-          truncate=True ),
-  ] )
+class EscapeTestCase(unittest.TestCase):
+    def test_linkify(self):
+        for text, kwargs, html in linkify_tests:
+            linked = tornado.escape.linkify(text, **kwargs)
+            self.assertEqual(linked, html)
