@@ -1,205 +1,96 @@
 
         
-          expect(status).to be_success
+          # Get the user's like of a post, if there is one.
+  # @param [Post] post
+  # @return [Like]
+  def like_for(target)
+    if target.likes.loaded?
+      target.likes.find {|like| like.author_id == person.id }
+    else
+      Like.find_by(author_id: person.id, target_type: target.class.base_class.to_s, target_id: target.id)
+    end
+  end
+    
+    if rails_env != 'development'
+  config('path vendor/bundle')
+  config('frozen true')
+  config('disable_shared_gems true')
 end
     
-    World(RemoteCommandHelpers)
-
+        #@posts[:new_public] = Post.where(:type => ['StatusMessage','ActivityStreams::Photo'],
+    #                                 :public => true).order('created_at DESC').limit(15).all
     
-          # Given a callable that provides a value, wrap the callable with another
-      # object that responds to `call`. This new object will perform validation
-      # and then return the original callable's value.
-      #
-      # If the callable is a `Question`, the object returned by this method will
-      # also be a `Question` (a `ValidatedQuestion`, to be precise). This
-      # ensures that `is_a?(Question)` remains true even after the validation
-      # wrapper is applied. This is needed so that `Configuration#is_question?`
-      # works as expected.
-      #
-      def assert_valid_later(key, callable)
-        validation_callback = lambda do
-          value = callable.call
-          assert_valid_now(key, value)
-          value
-        end
-    
-          def delete(key)
-        values.delete(key)
-      end
-    
-          def page_name
-        @name.gsub('-', ' ')
-      end
-    
-          def versions
-        i = @versions.size + 1
-        @versions.map do |v|
-          i -= 1
-          { :id        => v.id,
-            :id7       => v.id[0..6],
-            :num       => i,
-            :author    => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
-            :message   => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
-            :date      => v.authored_date.strftime('%B %d, %Y'),
-            :gravatar  => Digest::MD5.hexdigest(v.author.email.strip.downcase),
-            :identicon => self._identicon_code(v.author.email),
-            :date_full => v.authored_date,
-            :files     => v.stats.files.map { |f,*rest|
-              page_path = extract_renamed_path_destination(f)
-              page_path = remove_page_extentions(page_path)
-              { :file => f,
-                :link => '#{page_path}/#{v.id}'
-              }
-            }
-          }
-        end
-      end
-    
-          attr_reader :name, :path
-    
-        # Test page_header_from_content(@content)
-    actual = @view.title
-    assert_equal '1 & 2', actual
+      rescue_from ActiveRecord::RecordNotFound do
+    render plain: I18n.t('aspect_memberships.destroy.no_membership'), status: 404
   end
     
-    # Configure Rails Environment
-ENV['RAILS_ENV'] = 'test'
+        @invalid_emails = html_safe_string_from_session_array(:invalid_email_invites)
+    @valid_emails   = html_safe_string_from_session_array(:valid_email_invites)
     
-          def content_type
-        case params[:format]
-        when 'json'
-          'application/json; charset=utf-8'
-        when 'xml'
-          'text/xml; charset=utf-8'
-        end
-      end
-    
-            def inventory_unit_params
-          params.require(:inventory_unit).permit(permitted_inventory_unit_attributes)
-        end
-      end
+      describe 'DELETE /chat_channel_memberships/:id' do
+    before do
+      user.add_role(:super_admin)
+      post '/chat_channel_memberships', params: {
+        chat_channel_membership: { user_id: second_user.id, chat_channel_id: chat_channel.id }
+      }
     end
-  end
-end
-
     
-            def show
-          respond_with(stock_location)
-        end
-    
-            def taxonomy
-          if params[:taxonomy_id].present?
-            @taxonomy ||= Spree::Taxonomy.accessible_by(current_ability, :show).find(params[:taxonomy_id])
-          end
-        end
-    
-            def update
-          @variant = scope.accessible_by(current_ability, :update).find(params[:id])
-          if @variant.update(variant_params)
-            respond_with(@variant, status: 200, default_template: :show)
-          else
-            invalid_resource!(@product)
-          end
-        end
-    
-      rescue Acme::Client::Error => e
-    @retries = 0
-    if e.is_a?(Acme::Client::Error::BadNonce) && @retries < 5
-      @retries += 1
-      logger.info 'Bad nounce encountered. Retrying (#{@retries} of 5 attempts)'
-      sleep 1
-      verify
-    else
-      logger.info 'Error: #{e.class} (#{e.message})'
-      return false
-    end
+      def new
+    @page = Page.new
   end
     
-      def update
-    if @address_endpoint.update(safe_params)
-      redirect_to_with_json [organization, @server, :address_endpoints]
-    else
-      render_form_errors 'edit', @address_endpoint
-    end
+      it 'shows comments', js: true do
+    create_list(:comment, 3, commentable: article)
+    visit '/#{user.username}/#{article.slug}'
+    expect(page).to have_selector('.single-comment-node', visible: true, count: 3)
   end
     
-      def create
-    @credential = @server.credentials.build(params.require(:credential).permit(:type, :name, :hold))
-    if @credential.save
-      redirect_to_with_json [organization, @server, :credentials]
-    else
-      render_form_errors 'new', @credential
-    end
+        it { expect(module_node.is_a?(described_class)).to be(true) }
   end
     
-      before_action :admin_required
-  before_action { @ip_pool = IPPool.find_by_uuid!(params[:ip_pool_id]) }
-  before_action { params[:id] && @ip_address = @ip_pool.ip_addresses.find(params[:id]) }
+            if contained_by_multiline_collection_that_could_be_broken_up?(node)
+          return true
+        end
     
-      def create
-    if params[:direction] == 'incoming'
-      session[:test_in_from] = params[:message][:from] if params[:message]
-      @message = IncomingMessagePrototype.new(@server, request.ip, 'web-ui', params[:message])
-      @message.attachments = [{:name => 'test.txt', :content_type => 'text/plain', :data => 'Hello world!'}]
-    else
-      session[:test_out_to] = params[:message][:to] if params[:message]
-      @message = OutgoingMessagePrototype.new(@server, request.ip, 'web-ui', params[:message])
-    end
-    if result = @message.create_messages
-      if result.size == 1
-        redirect_to_with_json organization_server_message_path(organization, @server, result.first.last[:id]), :notice => 'Message was queued successfully'
+        context 'when inside a union, with a nonmatching value' do
+      let(:pattern) { '{str (int %)}' }
+      let(:params) { [10] }
+      let(:ruby) { '1.0' }
+    
+    # The project root directory
+$root = ::File.dirname(__FILE__)
+    
+    module Jekyll
+    
+        def get_web_content(url)
+      raw_uri           = URI.parse url
+      proxy             = ENV['http_proxy']
+      if proxy
+        proxy_uri       = URI.parse(proxy)
+        https           = Net::HTTP::Proxy(proxy_uri.host, proxy_uri.port).new raw_uri.host, raw_uri.port
       else
-        redirect_to_with_json [:queue, organization, @server], :notice => 'Messages queued successfully '
+        https           = Net::HTTP.new raw_uri.host, raw_uri.port
       end
-    else
-      respond_to do |wants|
-        wants.html do
-          flash.now[:alert] = 'Your message could not be sent. Ensure that all fields are completed fully. #{result.errors.inspect}'
-          render 'new'
-        end
-        wants.json do
-          render :json => {:flash => {:alert => 'Your message could not be sent. Please check all field are completed fully.'}}
-        end
-      end
-    
-      def verify
-    if request.post?
-      if params[:code].to_s.strip == current_user.email_verification_token.to_s || (Rails.env.development? && params[:code].to_s.strip == '123456')
-        current_user.verify!
-        redirect_to_with_json [:return_to, root_path], :notice => 'Thanks - your e-mail address has been verified successfully.'
-      else
-        flash_now :alert, 'The code you've entered isn't correct. Please check and try again.'
-      end
+      https.use_ssl     = true
+      https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      request           = Net::HTTP::Get.new raw_uri.request_uri
+      data              = https.request request
     end
   end
     
-      argument :attachment_names, :required => true, :type => :array, :desc => 'The names of the attachment(s) to add.',
-           :banner => 'attachment_one attachment_two attachment_three ...'
+      class PostFilters < Octopress::Hooks::Post
+    def pre_render(post)
+      OctopressFilters::pre_filter(post)
+    end
     
-      # Provides configurability to Paperclip. The options available are:
-  # * whiny: Will raise an error if Paperclip cannot process thumbnails of
-  #   an uploaded image. Defaults to true.
-  # * log: Logs progress to the Rails log. Uses ActiveRecord's logger, so honors
-  #   log levels, etc. Defaults to true.
-  # * command_path: Defines the path at which to find the command line
-  #   programs if they are not visible to Rails the system's search path. Defaults to
-  #   nil, which uses the first executable found in the user's search path.
-  # * use_exif_orientation: Whether to inspect EXIF data to determine an
-  #   image's orientation. Defaults to true.
-  def self.options
-    @options ||= {
-      command_path: nil,
-      content_type_mappings: {},
-      log: true,
-      log_command: true,
-      read_timeout: nil,
-      swallow_stderr: true,
-      use_exif_orientation: true,
-      whiny: true,
-      is_windows: Gem.win_platform?
-    }
-  end
-    
-        def clear
-      @attachments = Hash.new { |h,k| h[k] = {} }
+      class RenderPartialTag < Liquid::Tag
+    include OctopressFilters
+    def initialize(tag_name, markup, tokens)
+      @file = nil
+      @raw = false
+      if markup =~ /^(\S+)\s?(\w+)?/
+        @file = $1.strip
+        @raw = $2 == 'raw'
+      end
+      super
     end
