@@ -1,222 +1,259 @@
 
         
-          v8::Local<v8::Promise> Get(const base::DictionaryValue& filter);
-  v8::Local<v8::Promise> Set(const base::DictionaryValue& details);
-  v8::Local<v8::Promise> Remove(const GURL& url, const std::string& name);
-  v8::Local<v8::Promise> FlushStore();
-    
-    class InAppPurchase : public mate::EventEmitter<InAppPurchase>,
-                      public in_app_purchase::TransactionObserver {
- public:
-  static mate::Handle<InAppPurchase> Create(v8::Isolate* isolate);
+        namespace opencv_test { namespace {
+    }
     }
     
+        //
+    // Longest compressed code length that ImfHuf supports (58 bits)
+    //
     
-OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_EXIT
+    #include <ImfFloatAttribute.h>
     
-    OPENEXR_IMF_INTERNAL_NAMESPACE_SOURCE_EXIT
+    
+OPENEXR_IMF_INTERNAL_NAMESPACE_SOURCE_EXIT 
 
     
     
-#endif /* IMFGENERICINPUTFILE_H_ */
-
-    
-    
-    {    return *tattr;
-}
-    
-        IMF_EXPORT
-    InputFile (OPENEXR_IMF_INTERNAL_NAMESPACE::IStream &is, int numThreads = globalThreadCount());
-    
-    
-    
-    
-template <>
-const char *
-IntAttribute::staticTypeName ()
+const Slice &
+FrameBuffer::operator [] (const string &name) const
 {
-    return 'int';
-}
-    
-    #include <string>
-    
-    
-    {} // namespace nwapi
-
-    
-    NwMenuModel::NwMenuModel(Delegate* delegate) : SimpleMenuModel(delegate) {
+    return this->operator[] (name.c_str());
 }
     
     
-    {  base::WaitableEvent done(base::WaitableEvent::ResetPolicy::AUTOMATIC,
-                           base::WaitableEvent::InitialState::NOT_SIGNALED);
-  base::PostTaskWithTraits(
-      FROM_HERE, {content::BrowserThread::IO},
-      base::BindOnce(&SetProxyConfigCallback, &done,
-                 base::WrapRefCounted(context_getter), config));
-  done.Wait();
-  return true;
-}
-    
-    
-    {
-    {    std::string error_;
-    std::unique_ptr<ui::ScopedClipboardWriter> scw_;
-  };
-}
-    
-    NwObjCallObjectMethodFunction::NwObjCallObjectMethodFunction() {
-}
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.callObjectMethod', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwObjCallObjectMethodFunction);
-};
-    
-      // implement nw.Screen.registerStream()
-  class NwScreenRegisterStreamFunction : public NWSyncExtensionFunction {
-  public:
-    NwScreenRegisterStreamFunction();
-    bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-    Basically, there is a flag for each sort of rejection or acceptance. This
-provides a history of what has happened to EACH character.
-    
-      // Visual debugger classifies the given sample, displays the results and
-  // solicits user input to display other classifications. Returns when
-  // the user has finished with debugging the sample.
-  // Probably doesn't need to be overridden if the subclass provides
-  // DisplayClassifyAs.
-  virtual void DebugDisplay(const TrainingSample& sample, Pix* page_pix,
-                            UNICHAR_ID unichar_id);
-    
-                        // Currency symbol precedence is either 0 or 1.
-                    // A value of 0 indicates the symbol follows the currency value.
-                    int currencySymbolPrecedence = 1;
-                    result = GetLocaleInfoEx(
-                        m_resolvedName.c_str(),
-                        LOCALE_IPOSSYMPRECEDES | LOCALE_RETURN_NUMBER,
-                        (LPWSTR)&currencySymbolPrecedence,
-                        sizeof(currencySymbolPrecedence) / sizeof(WCHAR));
-    
-    /****************************Module*Header***********************************\
-* Module Name: SCICOMM.C
-*
-* Module Description:
-*
-* Warnings:
-*
-* Created:
-*
-* Author:
-\****************************************************************************/
-    
-    inline constexpr auto IDS_DIVBYZERO = IDS_ERRORS_FIRST;
-inline constexpr auto IDS_DOMAIN = IDS_ERRORS_FIRST + 1;
-inline constexpr auto IDS_UNDEFINED = IDS_ERRORS_FIRST + 2;
-inline constexpr auto IDS_POS_INFINITY = IDS_ERRORS_FIRST + 3;
-inline constexpr auto IDS_NEG_INFINITY = IDS_ERRORS_FIRST + 4;
-inline constexpr auto IDS_NOMEM = IDS_ERRORS_FIRST + 6;
-inline constexpr auto IDS_TOOMANY = IDS_ERRORS_FIRST + 7;
-inline constexpr auto IDS_OVERFLOW = IDS_ERRORS_FIRST + 8;
-inline constexpr auto IDS_NORESULT = IDS_ERRORS_FIRST + 9;
-inline constexpr auto IDS_INSUFFICIENT_DATA = IDS_ERRORS_FIRST + 10;
-    
-        static UCM::Category CAT1 = { 1, L'CAT1', false }; // contains Unit1 - Unit3
-    static UCM::Category CAT2 = { 2, L'CAT2', false }; // contains Unit4 - Unit6
-    static UCM::Category CAT3 = { 3, L'CAT3', false }; // contains Unit7 - Unit9
-    
-    namespace CalcEngine
+void
+invalidTableSize ()
 {
-    class CalcNumSec
-    {
-    public:
-        CalcNumSec()
-            : value()
-            , m_isNegative(false)
+    throw InputExc ('Error in Huffman-encoded data '
+		    '(invalid code table size).');
+}
+    
+    //-----------------------------------------------------------------------------
+//
+//	class IntAttribute
+//
+//-----------------------------------------------------------------------------
+    
         {
-        }
-    }
+        blob_acq_t acq;
+        buffer_group_t write_group;
+        blob.expose_all(buf_parent_t(superblock->get()), access_t::write,
+                        &write_group, &acq);
     }
     
-    NarratorAnnouncement ^ CalculatorAnnouncement::GetMemoryItemChangedAnnouncement(String ^ announcement)
-{
-    return ref new NarratorAnnouncement(
-        announcement, CalculatorActivityIds::MemoryItemChanged, AutomationNotificationKind::ActionCompleted, AutomationNotificationProcessing::MostRecent);
+    void get_btree_superblock_and_txn_for_backfilling(
+        cache_conn_t *cache_conn,
+        cache_account_t *backfill_account,
+        scoped_ptr_t<real_superblock_t> *got_superblock_out,
+        scoped_ptr_t<txn_t> *txn_out);
+    
+        response->n_shards = 1;
+    if (trace.has()) {
+        response->event_log = std::move(*trace).extract_event_log();
+    }
+    // This is a tad hacky, this just adds a stop event to signal the end of the
+    // parallel task.
+    
+    // Overload for std::pair.
+template <typename T1, typename T2>
+void PrintTo(const ::std::pair<T1, T2>& value, ::std::ostream* os) {
+  *os << '(';
+  // We cannot use UniversalPrint(value.first, os) here, as T1 may be
+  // a reference type.  The same for printing value.second.
+  UniversalPrinter<T1>::Print(value.first, os);
+  *os << ', ';
+  UniversalPrinter<T2>::Print(value.second, os);
+  *os << ')';
 }
     
+    // FilePath - a class for file and directory pathname manipulation which
+// handles platform-specific conventions (like the pathname separator).
+// Used for helper functions for naming files in a directory for xml output.
+// Except for Set methods, all methods are const or static, which provides an
+// 'immutable value object' -- useful for peace of mind.
+// A FilePath with a value ending in a path separator ('like/this/') represents
+// a directory, otherwise it is assumed to represent a file. In either case,
+// it may or may not represent an actual file or directory in the file system.
+// Names are NOT checked for syntax correctness -- no checking for illegal
+// characters, malformed paths, etc.
     
-    {  for (Address* current = start_[index]; current < lazy_top_[index];
-       current++) {
-    Address addr = *current;
-    if (chunk == nullptr ||
-        MemoryChunk::BaseAddress(addr) != chunk->address()) {
-      chunk = MemoryChunk::FromAnyPointerAddress(addr);
+       private:
+    Iterator(const Iterator& other)
+        : base_(other.base_),
+        begin1_(other.begin1_),
+        end1_(other.end1_),
+        current1_(other.current1_),
+        begin2_(other.begin2_),
+        end2_(other.end2_),
+        current2_(other.current2_),
+        begin3_(other.begin3_),
+        end3_(other.end3_),
+        current3_(other.current3_),
+        begin4_(other.begin4_),
+        end4_(other.end4_),
+        current4_(other.current4_),
+        begin5_(other.begin5_),
+        end5_(other.end5_),
+        current5_(other.current5_) {
+      ComputeCurrentValue();
     }
-    if (IsDeletionAddress(addr)) {
-      last_inserted_addr = kNullAddress;
-      current++;
-      Address end = *current;
-      DCHECK(!IsDeletionAddress(end));
-      addr = UnmarkDeletionAddress(addr);
-      if (end) {
-        RememberedSet<OLD_TO_NEW>::RemoveRange(chunk, addr, end,
-                                               SlotSet::PREFREE_EMPTY_BUCKETS);
-      } else {
-        RememberedSet<OLD_TO_NEW>::Remove(chunk, addr);
-      }
-    } else {
-      DCHECK(!IsDeletionAddress(addr));
-      if (addr != last_inserted_addr) {
-        RememberedSet<OLD_TO_NEW>::Insert(chunk, addr);
-        last_inserted_addr = addr;
-      }
+    
+      // Compares two C strings.  Returns true iff they have the same content.
+  //
+  // Unlike strcmp(), this function can handle NULL argument(s).  A
+  // NULL C string is considered different to any non-NULL C string,
+  // including the empty string.
+  static bool CStringEquals(const char* lhs, const char* rhs);
+    
+    template <GTEST_8_TYPENAMES_(T)>
+inline GTEST_8_TUPLE_(T) make_tuple(const T0& f0, const T1& f1, const T2& f2,
+    const T3& f3, const T4& f4, const T5& f5, const T6& f6, const T7& f7) {
+  return GTEST_8_TUPLE_(T)(f0, f1, f2, f3, f4, f5, f6, f7);
+}
+    
+    private:
+    
+    #ifdef USE_GCC_PRAGMAS
+#pragma implementation
+#endif
+    
+      // Get direction
+  PageTransitionDirection getDirection() { return direction; }
+    
+    private:
+    
+    #ifndef POPPLER_CACHE_H
+#define POPPLER_CACHE_H
+    
+    
+    
+    #endif
+
+    
+    
+    // ============
+    // string types
+    // ============
+    
+        // add values
+    auto res1 = object.emplace('three', 3);
+    null.emplace('A', 'a');
+    null.emplace('B', 'b');
+    
+    
+    {  return local ? std::mktime(&tm) : (std::mktime(&tm) - diff);
+}
+    
+    namespace tables {
+    }
+    
+    /**
+ * The schedule is an iterable collection of Packs. When you iterate through
+ * a schedule, you only get the packs that should be running on the host that
+ * you're currently operating on.
+ */
+class Schedule : private boost::noncopyable {
+ public:
+  /// Under the hood, the schedule is just a list of the Pack objects
+  using container = std::vector<PackRef>;
+    }
+    
+      Expected<int32_t, DatabaseError> getInt32(const std::string& domain,
+                                            const std::string& key) override;
+  Expected<std::string, DatabaseError> getString(
+      const std::string& domain, const std::string& key) override;
+    
+    
+    {}
+    
+      Status GetChildrenFileAttributes(
+      const std::string& dir, std::vector<FileAttributes>* result) override {
+    PERF_TIMER_GUARD(env_get_children_file_attributes_nanos);
+    return EnvWrapper::GetChildrenFileAttributes(dir, result);
+  }
+    
+    // Returns an Env that translates paths such that the root directory appears to
+// be chroot_dir. chroot_dir should refer to an existing directory.
+Env* NewChrootEnv(Env* base_env, const std::string& chroot_dir);
+    
+    int main() {
+  // open DB
+  Options options;
+  options.create_if_missing = true;
+  DB* db;
+  Status s = DB::Open(options, kDBPath, &db);
+  assert(s.ok());
+    }
+    
+    int main() {
+  DBOptions db_opt;
+  db_opt.create_if_missing = true;
+    }
+    
+      virtual ~PersistentCache() {}
+    
+      static Executor::KeepAlive<ExecutorWithPriority> create(
+      KeepAlive<Executor> executor,
+      int8_t priority);
+    
+    /**
+ * Compute the 96-bit Rabin fingerprint of a string.
+ * Return the 64 most significant bits in *msb, and the 32 least significant
+ * bits in *lsb.
+ */
+inline void fingerprint96(StringPiece str, uint64_t* msb, uint32_t* lsb) {
+  uint64_t fp[2];
+  Fingerprint<96>().update(str).write(fp);
+  *msb = fp[0];
+  *lsb = (uint32_t)(fp[1] >> 32);
+}
+    
+      /** cleanup_batch_tag */
+  void cleanup_batch_tag(const hazptr_obj_batch<Atom>* batch) noexcept {
+    auto tag = reinterpret_cast<uintptr_t>(batch) + kTagBit;
+    auto obj = tagged_.pop_all(RetiredList::kAlsoLock);
+    ObjList match, nomatch;
+    list_match_tag(tag, obj, match, nomatch);
+    if (unprotected_) { // There must be ongoing do_reclamation
+      ObjList match2, nomatch2;
+      list_match_tag(tag, unprotected_, match2, nomatch2);
+      match.splice(match2);
+      unprotected_ = nomatch2.head();
+    }
+    if (children_.head()) {
+      ObjList match2, nomatch2;
+      list_match_tag(tag, children_.head(), match2, nomatch2);
+      match.splice(match2);
+      children_ = std::move(nomatch2);
+    }
+    auto count = nomatch.count();
+    nomatch.set_count(0);
+    tagged_.push_unlock(nomatch);
+    obj = match.head();
+    reclaim_list_transitive(obj);
+    if (count >= threshold()) {
+      check_threshold_and_reclaim(
+          tagged_, RetiredList::kAlsoLock, tagged_sync_time_);
     }
   }
-  lazy_top_[index] = nullptr;
-}
     
+      /**
+   * Construct an AsyncFileWriter that writes to the specified File object.
+   */
+  explicit AsyncFileWriter(folly::File&& file);
     
-    {  int NextLimit(int min = 0);
-};
+    // access is protected by futexLock
+static std::unordered_map<
+    const detail::Futex<DeterministicAtomic>*,
+    std::list<std::pair<uint32_t, bool*>>>
+    futexQueues;
     
-    #ifndef V8_HEAP_SWEEPER_H_
-#define V8_HEAP_SWEEPER_H_
+    #if __has_include(<memory_resource>)
     
-    class JavaScriptFrameConstants : public AllStatic {
- public:
-  // FP-relative.
-  static constexpr int kLocal0Offset =
-      StandardFrameConstants::kExpressionsOffset;
-  static constexpr int kLastParameterOffset = +2 * kSystemPointerSize;
-  static constexpr int kFunctionOffset =
-      StandardFrameConstants::kFunctionOffset;
-    }
-    
-    #define DOUBLE_REGISTERS(V) \
-  V(xmm0)                   \
-  V(xmm1)                   \
-  V(xmm2)                   \
-  V(xmm3)                   \
-  V(xmm4)                   \
-  V(xmm5)                   \
-  V(xmm6)                   \
-  V(xmm7)
-    
-    class AccessorAssembler : public CodeStubAssembler {
- public:
-  using Node = compiler::Node;
-  template <class T>
-  using TNode = compiler::TNode<T>;
-  template <class T>
-  using SloppyTNode = compiler::SloppyTNode<T>;
-    }
-    
-      BIND(&if_lhsisnotsmi);
-  {
-    Comment('lhs is not Smi');
-    // Check if the {lhs} is a HeapNumber.
-    GotoIfNot(IsHeapNumber(lhs), &if_lhsisnotnumber);
+    // not default-constructible, thereby preventing Expected<T, Err> from being
+// default-constructible, forcing our implementation to handle such cases
+class Err {
+ private:
+  enum class Type { Bad, Badder, Baddest };
     }
