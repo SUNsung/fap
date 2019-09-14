@@ -1,137 +1,188 @@
 
         
-        end
-
-    
-        it 'does not output links to other agents outside of the incoming set' do
-      Link.create!(:source_id => agents(:jane_weather_agent).id, :receiver_id => agents(:jane_website_agent).id)
-      Link.create!(:source_id => agents(:jane_website_agent).id, :receiver_id => agents(:jane_rain_notifier_agent).id)
-    
-        it 'should raise error when invalid response arrives' do
-      stub(HTTParty).post { {'blah' => 'blah'} }
-      expect { @checker.send_notification({}) }.to raise_error(StandardError, /Invalid response from Boxcar:/)
-    end
-    
-        json
-  end
-    
-    
-  #
-  # Payload types were copied from xCAT-server source code (IPMI.pm)
-  #
-  RMCP_ERRORS = {
-    1 => 'Insufficient resources to create new session (wait for existing sessions to timeout)',
-    2 => 'Invalid Session ID', #this shouldn't occur...
-    3 => 'Invalid payload type',#shouldn't occur..
-    4 => 'Invalid authentication algorithm', #if this happens, we need to enhance our mechanism for detecting supported auth algorithms
-    5 => 'Invalid integrity algorithm', #same as above
-    6 => 'No matching authentication payload',
-    7 => 'No matching integrity payload',
-    8 => 'Inactive Session ID', #this suggests the session was timed out while trying to negotiate, shouldn't happen
-    9 => 'Invalid role',
-    0xa => 'Unauthorised role or privilege level requested',
-    0xb => 'Insufficient resources to create a session at the requested role',
-    0xc => 'Invalid username length',
-    0xd => 'Unauthorized name',
-    0xe => 'Unauthorized GUID',
-    0xf => 'Invalid integrity check value',
-    0x10 => 'Invalid confidentiality algorithm',
-    0x11 => 'No cipher suite match with proposed security algorithms',
-    0x12 => 'Illegal or unrecognized parameter', #have never observed this, would most likely mean a bug in xCAT or IPMI device
-  }
-    
-            # Receives a Kerberos Response over a tcp connection
-        #
-        # @return [<Rex::Proto::Kerberos::Model::KrbError, Rex::Proto::Kerberos::Model::KdcResponse>] the kerberos message response
-        # @raise [RuntimeError] if the response can't be processed
-        # @raise [EOFError] if expected data can't be read
-        def recv_response_tcp
-          length_raw = connection.get_once(4, timeout)
-          unless length_raw && length_raw.length == 4
-            raise ::RuntimeError, 'Kerberos Client: failed to read response'
-          end
-          length = length_raw.unpack('N')[0]
-    
-              # Decodes the auth_time field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Time]
-          def decode_auth_time(input)
-            input.value[0].value
-          end
-    
-              # Encodes the msg_type field
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_msg_type
-            bn = OpenSSL::BN.new(msg_type.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
-    
-      before_action { @server = organization.servers.present.find_by_permalink!(params[:server_id]) }
-  before_action { params[:id] && @credential = @server.credentials.find_by_key!(params[:id]) }
-    
-      before_action do
-    if params[:server_id]
-      @server = organization.servers.present.find_by_permalink!(params[:server_id])
-      params[:id] && @ip_pool_rule = @server.ip_pool_rules.find_by_uuid!(params[:id])
-    else
-      params[:id] && @ip_pool_rule = organization.ip_pool_rules.find_by_uuid!(params[:id])
-    end
-  end
-    
-      def check
-    if @track_domain.check_dns
-      redirect_to_with_json [organization, @server, :track_domains], :notice => 'Your CNAME for #{@track_domain.full_name} looks good!'
-    else
-      redirect_to_with_json [organization, @server, :track_domains], :alert => 'There seems to be something wrong with your DNS record. Check documentation for information.'
-    end
-  end
-    
-      def style_width(width, options = {})
-    width = 100 if width > 100.0
-    width = 0 if width < 0.0
-    style = 'width:#{width}%;'
-    if options[:color]
-      if width >= 100
-        style += ' background-color:#e2383a;'
-      elsif width >= 90
-        style += ' background-color:#e8581f;'
+            def fetch_app_platform(required: true)
+      result = config[:app_platform]
+      result ||= FastlaneCore::IpaFileAnalyser.fetch_app_platform(config[:ipa]) if config[:ipa]
+      if required
+        result ||= UI.input('Please enter the app's platform (appletvos, ios, osx): ')
+        UI.user_error!('App Platform must be ios, appletvos, or osx') unless ['ios', 'appletvos', 'osx'].include?(result)
+        UI.verbose('App Platform (#{result})')
       end
-    end
-    style
-  end
-    
-        def each(&block)
-      @cookies.each(&block)
-    end
-    
-              if args.include?(:all)
-            namespace_inheritable(:rescue_all, true)
-            namespace_inheritable :all_rescue_handler, handler
-          elsif args.include?(:grape_exceptions)
-            namespace_inheritable(:rescue_all, true)
-            namespace_inheritable(:rescue_grape_exceptions, true)
-          else
-            handler_type =
-              case options[:rescue_subclasses]
-              when nil, true
-                :rescue_handlers
-              else
-                :base_only_rescue_handlers
-              end
-    
-            presenter = env[Grape::Env::API_ENDPOINT].entity_class_for_obj(presented_message, present_options)
-    
-          expect('.border-width-explicit').to have_rule(rule)
-    end
-  end
-    
-          expect('.all-buttons-hover').to have_ruleset(ruleset)
+      return result
     end
   end
 end
 
     
-      context 'called with two sizes' do
-    it 'applies to height and width' do
-      rule = 'height: 2em; width: 1em;'
+          rows = []
+    
+          def self.all(filter: {}, includes: nil, limit: nil, sort: nil)
+        resps = Spaceship::ConnectAPI.get_devices(filter: filter, includes: includes).all_pages
+        return resps.map(&:to_models).flatten
+      end
+    end
+  end
+end
+
+    
+          def get_type
+        return if root_page?
+    
+            doc
+      end
+    end
+  end
+end
+
+    
+          # Some providers have a lot (> 100) entries, which makes browsing them unwieldy.
+      # Any present in the list below will have an extra set of types added, breaking the pages out into the different
+      # products they offer.
+      LARGE_PROVIDERS = {
+        'aws'     => true,
+        'azurerm' => true,
+        'google'  => true,
+      }
+    
+            css('a[name]').each do |node|
+          node['id'] = node['name']
+          node.remove_attribute('name')
+        end
+    
+        return true unless resource&.otp_required_for_login?
+    
+          def handle_prompt(prompt, auth)
+        if prompt.include? 'select_account'
+          handle_params_error('account_selection_required',
+                              'There is no support for choosing among multiple accounts')
+        elsif prompt.include? 'consent'
+          request_authorization_consent_form
+        else
+          handle_authorization_form(auth)
+        end
+      end
+    
+      def contacts_by_aspect(aspect_id)
+    contacts = current_user.contacts.arel_table
+    aspect_memberships = AspectMembership.arel_table
+    current_user.contacts.joins(
+      contacts.outer_join(aspect_memberships).on(
+        aspect_memberships[:aspect_id].eq(aspect_id).and(
+          aspect_memberships[:contact_id].eq(contacts[:id])
+        )
+      ).join_sources
+    )
+  end
+    
+    #   Copyright (c) 2010-2012, Diaspora Inc.  This file is
+#   licensed under the Affero General Public License version 3 or later.  See
+#   the COPYRIGHT file.
+    
+          it 'sets the description' do
+        post '/users/api_secrets', params: { api_secret: valid_params }
+        expect(user.api_secrets.last.description).to eq valid_params[:description]
+      end
+    
+        if BufferUpdate.where(body_text: body_text, article_id: article_id, tag_id: tag_id, social_service_name: social_service_name).
+        where('created_at > ?', 2.minutes.ago).any?
+      errors.add(:body_text, '\'#{body_text}\' has already been submitted very recently')
+    end
+  end
+end
+
+    
+      # Never trust parameters from the scary internet, only allow a subset to go through.
+  def user_params
+    accessible = %i[
+      email
+      shipping_name
+      shipping_company
+      shipping_address
+      shipping_address_line_2
+      shipping_city
+      shipping_state
+      shipping_country
+      shipping_postal_code
+      shipping_validated
+      top_languages
+      experience_level
+      specialty
+      tabs_or_spaces
+      onboarding_package_requested
+      onboarding_package_form_submmitted_at
+      personal_data_updated_at
+      shirt_size
+      shirt_gender
+    ]
+    params.require(:user).permit(accessible)
+  end
+    
+        def URIEncodeSingle(cc, result, index)
+      x = (cc >> 12) & 0xF;
+      y = (cc >> 6) & 63;
+      z = cc & 63;
+      octets = Array.new(3);
+      if (cc <= 0x007F)
+        octets[0] = cc;
+      elsif (cc <= 0x07FF)
+        octets[0] = y + 192;
+        octets[1] = z + 128;
+      else
+        octets[0] = x + 224;
+        octets[1] = y + 128;
+        octets[2] = z + 128;
+      end
+      return URIEncodeOctets(octets, result, index);
+    end
+    
+        end
+  end
+end
+
+    
+    # Disable the metadata feature
+$METADATA = false
+    
+        # Test page_header_from_content(@content)
+    actual = @view.title
+    assert_equal '1 & 2', actual
+  end
+    
+            expect(project.startup_pane).to eq('sample:0.1')
+      end
+    end
+    
+        # This method was defined as something of a workaround...  Previously
+    # the conditional contained within was in the executable (i.e.
+    # bin/tmuxinator).  It has been moved here so as to be testable. A couple
+    # of notes:
+    # - ::start (defined in Thor::Base) expects the first argument to be an
+    # array or ARGV, not a varargs.  Perhaps ::bootstrap should as well?
+    # - ::start has a different purpose from #start and hence a different
+    # signature
+    def self.bootstrap(args = [])
+      name = args[0] || nil
+      if args.empty? && Tmuxinator::Config.local?
+        Tmuxinator::Cli.new.local
+      elsif name && !Tmuxinator::Cli::RESERVED_COMMANDS.include?(name) &&
+            Tmuxinator::Config.exists?(name: name)
+        Tmuxinator::Cli.new.start(name, *args.drop(1))
+      else
+        Tmuxinator::Cli.start(args)
+      end
+    end
+  end
+end
+
+    
+        context '$TMUXINATOR_CONFIG specified' do
+      it 'only deletes projects in that directory' do
+        allow(ENV).to receive(:[]).and_call_original
+        allow(ENV).to receive(:[]).with('TMUXINATOR_CONFIG').and_return 'dir'
+        allow(File).to receive(:directory?).with('dir').and_return true
+        expect(FileUtils).to receive(:remove_dir).once.with('dir')
+        expect(FileUtils).to receive(:remove_dir).never
+        capture_io { cli.start }
+      end
+    end
+  end
