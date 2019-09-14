@@ -1,212 +1,255 @@
 
         
-        TEST(JavaDocCommentTest, Escaping) {
-  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
-  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
-  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
-  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
-  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
-  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
-}
+          // Accessor for read-only access to the underlying NSSCertDatabase.
+  const net::NSSCertDatabase* cert_db() const { return cert_db_; }
     
-    TEST(TemplateUtilTest, TestIdentity) {
-  EXPECT_TRUE(
-      (type_equals_<GOOGLE_NAMESPACE::identity_<int>::type, int>::value));
-  EXPECT_TRUE(
-      (type_equals_<GOOGLE_NAMESPACE::identity_<void>::type, void>::value));
-}
-    
-    using namespace std;
-    
-    // Generate constructors.
-#include 'ipc/struct_constructor_macros.h'
-#include 'content/nw/src/common/common_message_generator.h'
-    
-    namespace nwapi {
+    namespace mate {
     }
     
-    Menu::Menu(int id,
-           const base::WeakPtr<ObjectManager>& object_manager,
-           const base::DictionaryValue& option,
-           const std::string& extension_id)
-  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
-  Create(option);
-}
-    
-    class ObjectManager;
-    
-    #include 'base/run_loop.h'
-#include 'base/values.h'
-#include 'base/strings/utf_string_conversions.h'
-#include 'base/message_loop/message_loop_current.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/public/browser/render_frame_host.h'
-#include 'content/public/browser/render_view_host.h'
-#include 'content/public/browser/render_widget_host_view.h'
-#include 'content/public/browser/web_contents.h'
-#include 'extensions/browser/app_window/app_window.h'
-#include 'skia/ext/image_operations.h'
-#include 'ui/aura/client/screen_position_client.h'
-#include 'ui/aura/window.h'
-#include 'ui/aura/window_tree_host.h'
-#include 'ui/events/platform/platform_event_source.h'
-#include 'ui/views/controls/menu/menu_runner.h'
-#include 'ui/views/widget/widget.h'
-#include 'ui/views/focus/focus_manager.h'
-#include 'vector'
-    
-    bool NwClipboardClearSyncFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  clipboard->Clear(ui::CLIPBOARD_TYPE_COPY_PASTE);
-  return true;
-}
-    
-    
-    {
-} // namespace extensions
-#endif
-
-    
-      // Return a new numeric id.  May be used by multiple clients who are
-  // sharing the same cache to partition the key space.  Typically the
-  // client will allocate a new id at startup and prepend the id to
-  // its cache keys.
-  virtual uint64_t NewId() = 0;
-    
-      // Create an object supporting random-access reads from the file with the
-  // specified name.  On success, stores a pointer to the new file in
-  // *result and returns OK.  On failure stores nullptr in *result and
-  // returns non-OK.  If the file does not exist, returns a non-OK
-  // status.  Implementations should return a NotFound status when the file does
-  // not exist.
-  //
-  // The returned file may be concurrently accessed by multiple threads.
-  virtual Status NewRandomAccessFile(const std::string& fname,
-                                     RandomAccessFile** result) = 0;
-    
-      WriteOptions write_options;
-  ASSERT_OK(db->Put(write_options, '1', 'b'));
-  ASSERT_OK(db->Put(write_options, '2', 'c'));
-  ASSERT_OK(db->Put(write_options, '3', 'd'));
-  ASSERT_OK(db->Put(write_options, '4', 'e'));
-  ASSERT_OK(db->Put(write_options, '5', 'f'));
-    
-      // Read the block contents as well as the type/crc footer.
-  // See table_builder.cc for the code that built this structure.
-  size_t n = static_cast<size_t>(handle.size());
-  char* buf = new char[n + kBlockTrailerSize];
-  Slice contents;
-  Status s = file->Read(handle.offset(), n + kBlockTrailerSize, &contents, buf);
-  if (!s.ok()) {
-    delete[] buf;
-    return s;
-  }
-  if (contents.size() != n + kBlockTrailerSize) {
-    delete[] buf;
-    return Status::Corruption('truncated block read');
-  }
-    
-    
-    {}  // namespace leveldb
-
-    
-    #ifndef STORAGE_LEVELDB_TABLE_ITERATOR_WRAPPER_H_
-#define STORAGE_LEVELDB_TABLE_ITERATOR_WRAPPER_H_
-    
-        task_pack(&buf, data);
-    
-    #if __linux__
-#include <sys/mman.h>
+    #if defined(OS_MACOSX)
+    pid_dict.Set('sandboxed', process_metric.second->IsSandboxed());
+#elif defined(OS_WIN)
+    auto integrity_level = process_metric.second->GetIntegrityLevel();
+    auto sandboxed = ProcessMetric::IsSandboxed(integrity_level);
+    pid_dict.Set('integrityLevel', integrity_level);
+    pid_dict.Set('sandboxed', sandboxed);
 #endif
     
     
-    {    //1
-    ret = p.read(&p, buf, sizeof(buf));
-    if (ret < 0)
-    {
-        swSysWarn('read() failed.');
-    }
-    ASSERT_GT(ret, 0);
-    ASSERT_EQ(strcmp('hello world1', buf), 0);
-    //2
-    ret = p.read(&p, buf, sizeof(buf));
-    ASSERT_GT(ret, 0);
-    ASSERT_EQ(strcmp('hello world2', buf), 0);
-    //3
-    ret = p.read(&p, buf, sizeof(buf));
-    ASSERT_GT(ret, 0);
-    ASSERT_EQ(strcmp('hello world3', buf), 0);
+    {  managed_web_contents()->CloseDevTools();
 }
     
-    TEST(coroutine_gethostbyname, resolve_cache_inet4_and_inet6)
-{
-    coro_test([](void *arg)
-    {
-        System::set_dns_cache_capacity(10);
+      std::vector<std::string> buttons = {'OK'};
+  if (dialog_type == JavaScriptDialogType::JAVASCRIPT_DIALOG_TYPE_CONFIRM) {
+    buttons.emplace_back('Cancel');
+    // First button is default, second button is cancel
+    default_id = 0;
+    cancel_id = 1;
+  }
+    
+    bool SetDefaultWebClient(const std::string& protocol) {
+  std::unique_ptr<base::Environment> env(base::Environment::Create());
     }
+    
+    void ResolveProxyHelper::OnProxyLookupComplete(
+    int32_t net_error,
+    const base::Optional<net::ProxyInfo>& proxy_info) {
+  DCHECK_CURRENTLY_ON(BrowserThread::UI);
+  DCHECK(!pending_requests_.empty());
     }
     
-        virtual void onStart() = 0;
-    virtual void onShutdown() = 0;
-    virtual void onWorkerStart(int worker_id) = 0;
-    virtual void onWorkerStop(int worker_id) = 0;
-    virtual void onReceive(int fd, const DataBuffer &data) = 0;
-    virtual void onConnect(int fd) = 0;
-    virtual void onClose(int fd) = 0;
-    virtual void onPacket(const DataBuffer &, ClientInfo &) = 0;
-    virtual void onPipeMessage(int src_worker_id, const DataBuffer &) = 0;
-    virtual void onTask(int, int, const DataBuffer &) = 0;
-    virtual void onFinish(int, const DataBuffer &) = 0;
+      // set up a signum handler
+  struct sigaction action;
+  memset(&action, 0, sizeof(action));
+  action.sa_handler = [](int /*signum*/) { parentWaiter.Signal(); };
+  if (sigaction(signum, &action, nullptr) != 0) {
+    PLOG(ERROR) << 'sigaction';
+    return;
+  }
     
-            //保存长度值
-        memcpy(ptr, &size, sizeof(size));
-        //在指针末尾保存一个串号
-        memcpy((char*) ptr + size - 4, &(send_pkg.serial_num), sizeof(send_pkg.serial_num));
-    
-        un1.sun_family = AF_UNIX;
-    un2.sun_family = AF_UNIX;
-    
-    static int thread_onTask(swThreadPool *pool, void *task, int task_len)
-{
-    sw_atomic_long_t *n = (sw_atomic_long_t *) task;
-    sw_atomic_fetch_add(n, 1);
-    if (*n == N - 1)
-    {
-        write(_pipe, (void*) n, sizeof(long));
-    }
-    return SW_OK;
+    void AutofillAgent::AcceptDataListSuggestion(const base::string16& suggestion) {
+  auto element = render_frame()->GetWebFrame()->GetDocument().FocusedElement();
+  if (element.IsFormControlElement()) {
+    ToWebInputElement(&element)->SetAutofillValue(
+        blink::WebString::FromUTF16(suggestion));
+  }
 }
     
-    class RedisQtAdapter : public QObject {
+    #include <stdint.h>
+#include <stdlib.h>
+    
+        // Start threads
+    MTThread thread[kNumThreads];
+    for (int id = 0; id < kNumThreads; id++) {
+      thread[id].state = &mt;
+      thread[id].id = id;
+      env_->StartThread(MTThreadBody, &thread[id]);
     }
     
-    void swoole_mime_type_set(const char *suffix, const char *mime_type)
-{
-    mime_map[string(suffix)] = string(mime_type);
-}
+    #include <stdio.h>
+#include 'leveldb/dumpfile.h'
+#include 'leveldb/env.h'
+#include 'leveldb/status.h'
     
-            /**
-         * Less or equal comparison operator.
-         * @param point Point<T> to be compared.
-         * @result Whether the instance satisfies the condition with respect to point.
-         */
-        inline bool operator<=(const Point<T>& point) const
-        {
-            return area() <= point.area();
+      void pollAndSchedule(int task_id);
+  void schedule(int task_id, bool run_inline = false) noexcept;
+  void reset() override;
+  virtual void finishRun();
+  void parentCallback(int parent_id);
+  bool isInlineTask(int parent_id, int child_id) const;
+    
+    
+    {
+    {} // namespace nn
+} // namespace torch
+
+    
+    ```
+    
+    scoped_ptr_t<sindex_superblock_t> acquire_sindex_for_read(
+    store_t *store,
+    real_superblock_t *superblock,
+    release_superblock_t release_superblock,
+    const std::string &table_name,
+    const std::string &sindex_id,
+    sindex_disk_info_t *sindex_info_out,
+    uuid_u *sindex_uuid_out) {
+    rassert(sindex_info_out != NULL);
+    rassert(sindex_uuid_out != NULL);
+    }
+    
+    
+    {
+    {                index_id = store.add_sindex_internal(
+                    name, std::vector<char>(), &sindex_block);
+                guarantee(index_id);
+            }
+            txn->commit();
         }
     
-    /**
- * Blocking copy operation between iterators and a buffer.
- * Host to Device.
- * Uses specified queue.
- */
-template< typename IteratorType >
-inline cl_int copy( const CommandQueue &queue, IteratorType startIterator, IteratorType endIterator, cl::Buffer &buffer )
-{
-    typedef typename std::iterator_traits<IteratorType>::value_type DataType;
-    cl_int error;
+    # if GTEST_HAS_COMBINE
+// Combine() allows the user to combine two or more sequences to produce
+// values of a Cartesian product of those sequences' elements.
+//
+// Synopsis:
+// Combine(gen1, gen2, ..., genN)
+//   - returns a generator producing sequences with elements coming from
+//     the Cartesian product of elements from the sequences generated by
+//     gen1, gen2, ..., genN. The sequence elements will have a type of
+//     tuple<T1, T2, ..., TN> where T1, T2, ..., TN are the types
+//     of elements from sequences produces by gen1, gen2, ..., genN.
+//
+// Combine can have up to $maxtuple arguments. This number is currently limited
+// by the maximum number of elements in the tuple implementation used by Google
+// Test.
+//
+// Example:
+//
+// This will instantiate tests in test case AnimalTest each one with
+// the parameter values tuple('cat', BLACK), tuple('cat', WHITE),
+// tuple('dog', BLACK), and tuple('dog', WHITE):
+//
+// enum Color { BLACK, GRAY, WHITE };
+// class AnimalTest
+//     : public testing::TestWithParam<tuple<const char*, Color> > {...};
+//
+// TEST_P(AnimalTest, AnimalLooksNice) {...}
+//
+// INSTANTIATE_TEST_CASE_P(AnimalVariations, AnimalTest,
+//                         Combine(Values('cat', 'dog'),
+//                                 Values(BLACK, WHITE)));
+//
+// This will instantiate tests in FlagDependentTest with all variations of two
+// Boolean flags:
+//
+// class FlagDependentTest
+//     : public testing::TestWithParam<tuple<bool, bool> > {
+//   virtual void SetUp() {
+//     // Assigns external_flag_1 and external_flag_2 values from the tuple.
+//     tie(external_flag_1, external_flag_2) = GetParam();
+//   }
+// };
+//
+// TEST_P(FlagDependentTest, TestFeature1) {
+//   // Test your code using external_flag_1 and external_flag_2 here.
+// }
+// INSTANTIATE_TEST_CASE_P(TwoBoolSequence, FlagDependentTest,
+//                         Combine(Bool(), Bool()));
+//
+$range i 2..maxtuple
+$for i [[
+$range j 1..i
     
-    size_type length = endIterator-startIterator;
-    size_type byteLength = length*sizeof(DataType);
+    
+    {  // The name of the source file where the test part took place, or
+  // '' if the source file is unknown.
+  std::string file_name_;
+  // The line in the source file where the test part took place, or -1
+  // if the line number is unknown.
+  int line_number_;
+  std::string summary_;  // The test failure summary.
+  std::string message_;  // The test failure message.
+};
+    
+    // Note that we call GetTestTypeId() instead of GetTypeId<
+// ::testing::Test>() here to get the type ID of testing::Test.  This
+// is to work around a suspected linker bug when using Google Test as
+// a framework on Mac OS X.  The bug causes GetTypeId<
+// ::testing::Test>() to return different values depending on whether
+// the call is from the Google Test framework itself or from user test
+// code.  GetTestTypeId() is guaranteed to always return the same
+// value, as it always calls GetTypeId<>() from the Google Test
+// framework.
+#define GTEST_TEST(test_case_name, test_name)\
+  GTEST_TEST_(test_case_name, test_name, \
+              ::testing::Test, ::testing::internal::GetTestTypeId())
+    
+    namespace testing {
+namespace internal {
     }
+    }
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31>
+struct Types31 {
+  typedef T1 Head;
+  typedef Types30<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
+      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
+      T30, T31> Tail;
+};
+    
+    #include <iterator>
+    
+        if (lessnum(a, b))
+    {
+        DUPNUM(larger, b);
+        DUPNUM(smaller, a);
+    }
+    else
+    {
+        DUPNUM(larger, a);
+        DUPNUM(smaller, b);
+    }
+    
+    #include <cassert>
+#include 'CalculatorHistory.h'
+    
+    
+    {  std::unique_ptr<TransactionLogIterator> OpenTransactionLogIter(
+      const SequenceNumber seq) {
+    std::unique_ptr<TransactionLogIterator> iter;
+    Status status = dbfull()->GetUpdatesSince(seq, &iter);
+    EXPECT_OK(status);
+    EXPECT_TRUE(iter->Valid());
+    return iter;
+  }
+};
+    
+    class PutOperatorV2 : public PutOperator {
+  bool FullMerge(const Slice& /*key*/, const Slice* /*existing_value*/,
+                 const std::deque<std::string>& /*operand_sequence*/,
+                 std::string* /*new_value*/,
+                 Logger* /*logger*/) const override {
+    assert(false);
+    return false;
+  }
+    }
+    
+      // Need to refill more than one interval. Need to sleep longer. Check
+  // whether expiration will hit
+    
+      ////////////////////////////////////////////////////////
+  //
+  // Simple Transaction Example ('Read Committed')
+  //
+  ////////////////////////////////////////////////////////
+    
+      // Is cache storing uncompressed data ?
+  //
+  // True if the cache is configured to store uncompressed data else false
+  virtual bool IsCompressed() = 0;
