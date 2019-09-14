@@ -1,80 +1,79 @@
 
         
-        
-def get_installation_info():
-    import pkg_resources
+        import pytest
     
-        enabled_by_default = utils.which('pkgfile')
+        def prepare_hooks(self, hooks):
+        '''Prepares the given hooks.'''
+        # hooks can be passed as None to the prepare method and to this
+        # method. To prevent iterating over None, simply use an empty list
+        # if hooks is False-y
+        hooks = hooks or []
+        for event in hooks:
+            self.register_hook(event, hooks[event])
     
-        @pytest.fixture(autouse=True)
-    def shell_aliases(self):
-        os.environ['TF_SHELL_ALIASES'] = (
-            'fuck=\'eval $(thefuck $(fc -ln -1 | tail -n 1))\'\n'
-            'l=\'ls -CF\'\n'
-            'la=\'ls -A\'\n'
-            'll=\'ls -alF\'')
+        # By using the 'with' statement we are sure the session is closed, thus we
+    # avoid leaving sockets open which can trigger a ResourceWarning in some
+    # cases, and look like a memory leak in others.
+    with sessions.Session() as session:
+        return session.request(method=method, url=url, **kwargs)
     
+      # You shouldn't have a space before a semicolon at the end of the line.
+  # There's a special case for 'for' since the style guide allows space before
+  # the semicolon there.
+  if Search(r':\s*;\s*$', line):
+    error(filename, linenum, 'whitespace/semicolon', 5,
+          'Semicolon defining empty statement. Use {} instead.')
+  elif Search(r'^\s*;\s*$', line):
+    error(filename, linenum, 'whitespace/semicolon', 5,
+          'Line contains only semicolon. If this should be an empty statement, '
+          'use {} instead.')
+  elif (Search(r'\s+;\s*$', line) and
+        not Search(r'\bfor\b', line)):
+    error(filename, linenum, 'whitespace/semicolon', 5,
+          'Extra space before last semicolon. If this should be an empty '
+          'statement, use {} instead.')
     
-@pytest.mark.usefixtures('no_memoize')
-@pytest.mark.parametrize('script, output, which', [
-    ('qweqwe', 'qweqwe: not found', None),
-    ('vom file.py', 'some text', None),
-    ('vim file.py', 'vim: not found', 'vim')])
-def test_not_match(mocker, script, output, which):
-    mocker.patch('thefuck.rules.no_command.which', return_value=which)
+        What it should do it take a markdown file, and split it into more files. A targetfile should have the same
+    number of lines as the original, with source code snippets and markdown non-words removed, for spell-checking.
     
+            data2 = (b'--------------------------3c48c744237517ac\r\nContent-Disposition: form-data; name='key'\r\n\r\n'
+                 b'uploads/20170826T181315.679087009Z/upload/pixel.png\r\n--------------------------3c48c744237517ac'
+                 b'--\r\n')
     
-class Fixed(jose.Field):
-    '''Fixed field.'''
+        dynamodb = aws_stack.connect_to_resource('dynamodb')
+    # create table with stream forwarding config
+    aws_stack.create_dynamodb_table(TEST_TABLE_NAME, partition_key=PARTITION_KEY)
+    table = dynamodb.Table(TEST_TABLE_NAME)
     
-    # Language to be used for generating the HTML full-text search index.
-# Sphinx supports the following languages:
-#   'da', 'de', 'en', 'es', 'fi', 'fr', 'hu', 'it', 'ja'
-#   'nl', 'no', 'pt', 'ro', 'ru', 'sv', 'tr'
-#html_search_language = 'en'
+            params = apigateway_listener.extract_path_params('/foo/bar1/bar2', '/foo/{param1}/{param2}')
+        self.assertEqual(params, {'param1': 'bar1', 'param2': 'bar2'})
     
-    from certbot import errors
-    
-            # Test for no auth_handler
-        self.client.auth_handler = None
-        self.assertRaises(
-            errors.Error,
-            self.client.obtain_certificate_from_csr,
-            test_csr)
-        mock_logger.warning.assert_called_once_with(mock.ANY)
-    
-        >>> requests = [2, 5, 14, 22, 18, 3, 35, 27, 20]
-    >>> for request in requests:
-    ...     h0.handle(request)
-    request 2 handled in handler 0
-    request 5 handled in handler 0
-    request 14 handled in handler 1
-    request 22 handled in handler 2
-    request 18 handled in handler 1
-    request 3 handled in handler 0
-    end of chain, no handler for 35
-    request 27 handled in handler 2
-    request 20 handled in handler 2
-    '''
-    
-        def check_range(self, request):
-        if self.start <= request < self.end:
-            print('request {} handled in handler 1'.format(request))
-            return True
-    
-        def is_satisfied_by(self, candidate):
-        return bool(self._one.is_satisfied_by(candidate) or self._other.is_satisfied_by(candidate))
+        def test_create_run_state_machine(self):
+        state_machines_before = self.sfn_client.list_state_machines()['stateMachines']
     
     
-def convert_to_text(data):
-    print('[CONVERT]')
-    return '{} as text'.format(data)
+def should_record(api, method, path, data, headers):
+    ''' Decide whether or not a given API call should be recorded (persisted to disk) '''
+    if api == 's3':
+        if method not in ['PUT', 'POST', 'DELETE']:
+            return False
+        return True
+    return False
     
-        if not sample_queue.empty():
-        print(sample_queue.get())
+            # Create a large amount of items
+        num_items = 20
+        for i in range(0, num_items):
+            item = {PARTITION_KEY: 'id%s' % i, 'data1': 'foobar123 ' * 1000}
+            table.put_item(Item=item)
     
-    The example has classes that represent entities (Dog, Cat, Human, Car)
-that make different noises. The Adapter class provides a different
-interface to the original methods that make such noises. So the
-original interfaces (e.g., bark and meow) are available under a
-different name: make_noise.
+    Example:
+Input:
+words = ['What','must','be','acknowledgment','shall','be']
+maxWidth = 16
+Output:
+[
+  'What   must   be',
+  'acknowledgment  ',
+  'shall be        '
+]
+'''
