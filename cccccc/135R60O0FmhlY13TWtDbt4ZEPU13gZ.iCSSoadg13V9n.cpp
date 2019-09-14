@@ -1,102 +1,208 @@
 
         
-            mpi->Bcast(&ncclId, NCCL_UNIQUE_ID_BYTES, MPI_CHAR, 0);
+        IPC_MESSAGE_ROUTED3(ShellViewHostMsg_Call_Static_Method,
+                    std::string /* type name */,
+                    std::string /* method name */,
+                    base::ListValue /* arguments */)
     
-    template <class ElemType>
-shared_ptr<ComputationNode<ElemType>> ComputationNetworkBuilder<ElemType>::Logistic(const ComputationNodePtr a, const ComputationNodePtr b, const ComputationNodePtr c, const std::wstring nodeName)
-{
-    return net.AddNodeToNetAndAttachInputs(New<LogisticNode<ElemType>>(net.GetDeviceId(), nodeName), { a, b, c });
+    
+    {protected:
+  BaseEvent(){}
+  virtual ~BaseEvent(){}
+};
+    
+    #include 'base/values.h'
+#include 'components/zoom/zoom_controller.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/public/browser/web_contents.h'
+#include 'content/public/common/page_zoom.h'
+#include 'ui/views/controls/menu/menu_runner.h'
+    
+     protected:
+  ~NwObjDestroyFunction() override;
+    
+      private:
+    int GetPrimaryMonitorIndex();
+    // DesktopMediaListObserver implementation.
+    void OnSourceAdded(DesktopMediaList* list, int index) override;
+    void OnSourceRemoved(DesktopMediaList* list, int index) override;
+    void OnSourceMoved(DesktopMediaList* list, int old_index, int new_index) override;
+    void OnSourceNameChanged(DesktopMediaList* list, int index) override;
+    void OnSourceThumbnailChanged(DesktopMediaList* list, int index) override;
+    
+     protected:
+  bool RunAsync() override;
+    
+    
+    {  std::vector<OperatorDef> GetGradientDefs() override {
+    return SingleGradientDef(
+        'SubGradient',
+        '',
+        std::vector<std::string>{GO(0), I(0), I(1)},
+        std::vector<std::string>{GI(0), GI(1)});
+  }
+};
+    
+    #include 'caffe2/operators/glu_op.h'
+    
+    template <typename T> class GenericVector;
+    
+    #ifndef NORMALIS_H
+#define NORMALIS_H
+    
+    bool ParagraphModel::ValidFirstLine(int lmargin, int lindent,
+                                    int rindent, int rmargin) const {
+  switch (justification_) {
+    case JUSTIFICATION_LEFT:
+      return NearlyEqual(lmargin + lindent, margin_ + first_indent_,
+                         tolerance_);
+    case JUSTIFICATION_RIGHT:
+      return NearlyEqual(rmargin + rindent, margin_ + first_indent_,
+                         tolerance_);
+    case JUSTIFICATION_CENTER:
+      return NearlyEqual(lindent, rindent, tolerance_ * 2);
+    default:
+      // shouldn't happen
+      return false;
+  }
 }
     
-                    fstream.GetMarker(FileMarker::fileMarkerBeginSection, L'BSyncPeriodInSamples');
-                fstream >> m_syncPeriodPerWorker;
-                fstream.GetMarker(FileMarker::fileMarkerEndSection, L'ESyncPeriodInSamples');
+        int16_t accept_count();  //How many accepted?
     
     
-    {            if (cnNodeType == OperationNameOf(PastValueNode))
-                nodePtr = builder.PastValue(NULL, defaultHiddenActivity, rows, timeStep, name);
-            else
-                nodePtr = builder.FutureValue(NULL, defaultHiddenActivity, rows, timeStep, name);
-        }
+    {}  // namespace tesseract.
+    
+                wchar_t GetNumberGroupSeparator() const
+            {
+                return m_numberGroupSeparator;
+            }
+    
+    /// <summary>
+/// Invoked when the application is launched normally by the end user. Other entry points
+/// will be used such as when the application is launched to open a specific file.
+/// </summary>
+/// <param name='e'>Details about the launch request and process.</param>
+void App::OnLaunched(Windows::ApplicationModel::Activation::LaunchActivatedEventArgs ^ e)
+{
+#if _DEBUG
+    // Show graphics profiling information while debugging.
+    if (IsDebuggerPresent())
+    {
+        // Display the current frame rate counters
+        DebugSettings->EnableFrameRateCounter = true;
     }
-    else if (cnNodeType == OperationNameOf(ConvolutionNode) ||
-             cnNodeType == OperationNameOf(PoolingNode) ||
-             cnNodeType == OperationNameOf(MaxUnpoolingNode))
-    {
-        if (parameter.size() != 2 && parameter.size() != 3 && parameter.size() != 7)
+#endif
+    }
+    
+            try
         {
-            if (cnNodeType == OperationNameOf(ConvolutionNode))
-            {
-                RuntimeError('%ls: unexpected parameter count. %ls supports 2 modes: \n'
-                             '1. 2D convolution which takes 7 fixed parameters [weightNodeName, inputValueNodeName, kernelWidth, kernelHeight, outputChannels, horizontalSubsample, verticalSubsample] \n'
-                             'and two optional parameters [zeroPadding = [false|yourvalue], maxTempMemSizeInSamples = [0|yourvalue], imageLayout = \'HWC\'|\'cudnn\']. \n'
-                             '2. ND convolution which takes 3 fixed parameters [weightNodeName, inputValueNodeName, kernelShape] and \n'
-                             '10 optional parameters [mapCount = [0|yourvalue], stride = [1|yourvalue], sharing = [true|yourvalue], autoPadding = [true|yourvalue], lowerPad = [0|yourvalue], upperPad = [0|yourvalue], bool transpose = [false|yourvalue], maxTempMemSizeInSamples = [0|yourvalue], imageLayout = \'cudnn\'|\'HWC\']. \n'
-                             'For ND convolution, parameters kernelShape, mapCount, stride, sharing, autoPadding, lowerPad, upperPad can be arrays, e.g. kernelShape={5, 5, 3}',
-                             cnNodeType.c_str(), cnNodeType.c_str());
-            }
-            else if (cnNodeType == OperationNameOf(PoolingNode))
-            {
-                RuntimeError('%ls: unexpected parameter count. %ls 3 fixed parameters [inputValueNodeName, poolKind, kernelShape] and \n'
-                             '5 optional parameters stride = [1|yourvalue], autoPadding = [true|yourvalue], lowerPad = [0|yourvalue], upperPad = [0|yourvalue], imageLayout = \'cudnn\']. \n'
-                             'Parameters kernelShape, stride, autoPadding, lowerPad, upperPad can be arrays, e.g. kernelShape={5, 5, 3}',
-                             cnNodeType.c_str(), cnNodeType.c_str());
-            }
-            else if (cnNodeType == OperationNameOf(MaxUnpoolingNode))
-            {
-                RuntimeError('%ls: unexpected parameter count. %ls 3 fixed parameters [inputValueNodeName, mask, kernelShape] and \n'
-                             '5 optional parameters stride = [1|yourvalue], autoPadding = [true|yourvalue], lowerPad = [0|yourvalue], upperPad = [0|yourvalue], imageLayout = \'cudnn\']. \n'
-                             'Parameters kernelShape, stride, autoPadding, lowerPad, upperPad can be arrays, e.g. kernelShape={5, 5, 3}',
-                             cnNodeType.c_str(), cnNodeType.c_str());
-            }
+            result = RatToString(rat, fmt, radix, precision);
+        }
+        catch (uint32_t error)
+        {
+            destroyrat(rat);
+            throw(error);
         }
     
-            // load and then execute
-        if (sections.Exists('run'))
-        {
-            auto config = ConfigArray(sections('run'));
-            for (int i = 0; i < config.size(); ++i)
-            {
-                Parse(sections(config[i]));
-            }
-            loadOrRunFound = true;
-        }
+    // Arithmetic expression evaluator error strings
+inline constexpr auto IDS_ERR_UNK_CH = CSTRINGSENGMAX + 1;
+inline constexpr auto IDS_ERR_UNK_FN = CSTRINGSENGMAX + 2;
+inline constexpr auto IDS_ERR_UNEX_NUM = CSTRINGSENGMAX + 3;
+inline constexpr auto IDS_ERR_UNEX_CH = CSTRINGSENGMAX + 4;
+inline constexpr auto IDS_ERR_UNEX_SZ = CSTRINGSENGMAX + 5;
+inline constexpr auto IDS_ERR_MISMATCH_CLOSE = CSTRINGSENGMAX + 6;
+inline constexpr auto IDS_ERR_UNEX_END = CSTRINGSENGMAX + 7;
+inline constexpr auto IDS_ERR_SG_INV_ERROR = CSTRINGSENGMAX + 8;
+inline constexpr auto IDS_ERR_INPUT_OVERFLOW = CSTRINGSENGMAX + 9;
+inline constexpr auto IDS_ERR_OUTPUT_OVERFLOW = CSTRINGSENGMAX + 10;
     
-    function<ComputationNetworkPtr(DEVICEID_TYPE)> GetCreateNetworkFn(const ScriptableObjects::IConfigRecord& config)
-{
-    // createNetwork() is a BrainScript lambda that creates the model
-    // We create a C++ wrapper around it, which we then pass to Train().
-    auto createNetworkConfigLambda = config[L'createNetwork'].AsPtr<ScriptableObjects::ConfigLambda>();
-    return [createNetworkConfigLambda](DEVICEID_TYPE /*deviceId*/)
+        auto operandCommand = std::make_shared<COpndCommand>(commands, fNegative, fDecimal, fSciFmt);
+    operandCommand->Initialize(rat);
+    int iCommandEnd = AddCommand(operandCommand);
+    m_lastOpStartIndex = IchAddSzToEquationSz(numStr, iCommandEnd);
+    
+            void Clear();
+        bool TryToggleSign(bool isIntegerMode, std::wstring_view maxNumStr);
+        bool TryAddDigit(unsigned int value, uint32_t radix, bool isIntegerMode, std::wstring_view maxNumStr, int32_t wordBitWidth, int maxDigits);
+        bool TryAddDecimalPt();
+        bool HasDecimalPt();
+        bool TryBeginExponent();
+        void Backspace();
+        void SetDecimalSymbol(wchar_t decSymbol);
+        std::wstring ToString(uint32_t radix);
+        Rational ToRational(uint32_t radix, int32_t precision);
+    
+    
+    {    AutomationProperties::SetName(m_host, announcement->Announcement);
+    AutomationPeer ^ peer = FrameworkElementAutomationPeer::FromElement(m_host);
+    if (peer != nullptr)
     {
-        // execute the lambda
-        vector<ScriptableObjects::ConfigValuePtr> args; // this lambda has no arguments
-        ScriptableObjects::ConfigLambda::NamedParams namedArgs;
-        let netValue = createNetworkConfigLambda->Apply(move(args), move(namedArgs), L'BuildNetworkFromDescription');
-        // typecast the result to the desired type
-        return netValue.AsPtr<ComputationNetwork>();
-    };
+        peer->RaiseAutomationEvent(AutomationEvents::LiveRegionChanged);
+    }
 }
+
     
-            ValueContainer<ElemType>& vec = outputs[i2].m_buffer;
     
-        public:
-        MASGDPerfStats(size_t myRank, size_t numWorkers):
-            m_numWorkers(numWorkers), m_myRank(myRank), m_numSyncPerformedInCurrentEpoch(0), m_reportFrequency(1), 
-            m_totalSamplesProcessedSinceLastReport(0), m_localSamplesProcessedSinceLastReport(0)
-        {
-            m_Timer.Start();
+    {    // By default ImGuiFreeType will use IM_ALLOC()/IM_FREE().
+    // However, as FreeType does lots of allocations we provide a way for the user to redirect it to a separate memory heap if desired:
+    IMGUI_API void SetAllocatorFunctions(void* (*alloc_func)(size_t sz, void* user_data), void (*free_func)(void* ptr, void* user_data), void* user_data = NULL);
+}
+
+    
+        // Setup window
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+    SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
+    SDL_Window* window = SDL_CreateWindow('Dear ImGui SDL2+OpenGL example', SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
+    SDL_GLContext gl_context = SDL_GL_CreateContext(window);
+    SDL_GL_MakeCurrent(window, gl_context);
+    SDL_GL_SetSwapInterval(1); // Enable vsync
+    
+    #pragma once
+    
+    
+    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+            ImGui::End();
         }
     
-        // change element with key 'the bad'
-    object.at('the bad') = 'il cattivo';
+    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
+// **Prefer using the code in imgui_impl_opengl3.cpp**
+// This code is mostly provided as a reference to learn how ImGui integration works, because it is shorter to read.
+// If your code is using GL3+ context or any semi modern OpenGL calls, using this is likely to make everything more
+// complicated, will require your code to reset every single OpenGL attributes to their initial state, and might
+// confuse your GPU driver.
+// The GL2 code is unable to reset attributes or even call e.g. 'glUseProgram(0)' because they don't exist in that API.
     
-        // output changed array
-    std::cout << array << '\n';
+        {
+        D3D12_DESCRIPTOR_HEAP_DESC desc = {};
+        desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+        desc.NumDescriptors = 1;
+        desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+        if (g_pd3dDevice->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&g_pd3dSrvDescHeap)) != S_OK)
+            return false;
+    }
     
-        // create an object from std::multimap
-    std::multimap<std::string, bool> c_mmap
-    {
-        {'one', true}, {'two', true}, {'three', false}, {'three', true}
-    };
-    json j_mmap(c_mmap); // only one entry for key 'three' is used
+    // Main code
+int main(int, char**)
+{
+    // Create application window
+    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
+    ::RegisterClassEx(&wc);
+    HWND hwnd = ::CreateWindow(wc.lpszClassName, _T('Dear ImGui DirectX9 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
+    }
+    
+    struct CUSTOMVERTEX
+{
+    float    pos[3];
+    D3DCOLOR col;
+    float    uv[2];
+};
+#define D3DFVF_CUSTOMVERTEX (D3DFVF_XYZ|D3DFVF_DIFFUSE|D3DFVF_TEX1)
+    
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_IMPL_API bool     ImGui_ImplDX9_CreateDeviceObjects();
+IMGUI_IMPL_API void     ImGui_ImplDX9_InvalidateDeviceObjects();
