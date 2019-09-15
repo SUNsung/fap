@@ -1,218 +1,171 @@
 
         
-          def primary_group_lookup
-    @primary_group_lookup ||= options[:primary_group_lookup] || PrimaryGroupLookup.new(user_ids)
-  end
-end
-
-    
-      context 'when plugin registered fallback locale' do
-    before do
-      DiscoursePluginRegistry.register_locale('es_MX', fallbackLocale: 'es')
-      DiscoursePluginRegistry.register_locale('de_AT', fallbackLocale: 'de')
+            def test_migrate_revert_by_part
+      InvertibleMigration.new.migrate :up
+      received = []
+      migration = InvertibleByPartsMigration.new
+      migration.test = ->(dir) {
+        assert migration.connection.table_exists?('horses')
+        assert migration.connection.table_exists?('new_horses')
+        received << dir
+      }
+      migration.migrate :up
+      assert_equal [:both, :up], received
+      assert_not migration.connection.table_exists?('horses')
+      assert migration.connection.table_exists?('new_horses')
+      migration.migrate :down
+      assert_equal [:both, :up, :both, :down], received
+      assert migration.connection.table_exists?('horses')
+      assert_not migration.connection.table_exists?('new_horses')
     end
     
-            upload = Fabricate(:upload)
-        settings.logo = upload
-        settings.refresh!
-        setting = settings.all_settings.last
-    
-          rounded_new_value = if new_value.is_a?(Integer)
-        if new_value > 9
-          digits = new_value.digits.reverse
-          (digits[0] * 10 + digits[1]) * 10.pow(digits[2..-1].size)
-        else
-          new_value
-        end
-      else
-        new_value.round(2)
-      end
-    
-          it 'changes settings when difference is significant' do
-        expect {
-          update_settings
-        }.to change { UserHistory.count }.by(6)
-        expect(SiteSetting.topic_views_heat_high).to eq(10_000)
-        expect(SiteSetting.topic_views_heat_medium).to eq(4000)
-        expect(SiteSetting.topic_views_heat_low).to eq(2000)
-        expect(SiteSetting.topic_post_like_heat_high).to eq(2.2)
-        expect(SiteSetting.topic_post_like_heat_medium).to eq(1.07)
-        expect(SiteSetting.topic_post_like_heat_low).to eq(0.55)
-      end
-    
-        converted_text = replace_duplicate_links(text)
-    converted_text = escape_special_characters(converted_text)
-    converted_text = indent_with_non_breaking_spaces(converted_text)
-    converted_text
-  end
-    
-        describe '#provisioning_profiles_via_xcode_api' do
-      it 'makes a call to the developer portal API' do
-        profiles = subject.provisioning_profiles_via_xcode_api
-        expect(profiles).to be_instance_of(Array)
-        expect(profiles.sample.keys).to include('provisioningProfileId',
-                                                'name',
-                                                'status',
-                                                'type',
-                                                'distributionMethod',
-                                                'proProPlatform',
-                                                'version',
-                                                'dateExpire',
-                                                # 'managingApp', not all profiles have it
-                                                'deviceIds',
-                                                'appId',
-                                                'certificateIds')
-        expect(a_request(:post, /developerservices2.apple.com/)).to have_been_made
-      end
-    end
-    
-            # Stub Time.now to return current time on first call and 6 minutes later on second
-        before { allow(Time).to receive(:now).and_return(time_now, (time_now + 60 * 6)) }
-        it 'throws a UI error' do
-          allow(fake_app).to receive(:latest_version).and_return(fake_version)
-          allow(fake_version).to receive(:candidate_builds).and_return([])
-          expect do
-            review_submitter.wait_for_build(fake_app, '1.2.3')
-          end.to raise_error(FastlaneCore::Interface::FastlaneError, 'Could not find any available candidate builds on App Store Connect to submit')
-        end
-      end
-    
-          def resolve_result_bundle_path(language, locale)
-        Snapshot.cache[:result_bundle_path] = {}
-        language_key = locale || language
-    
-            return parts
-      end
-    
-        ARGS_MAP = {
-      workspace: '-w',
-      project: '-p',
-      configuration: '-c',
-      scheme: '-s',
-      clean: '--clean',
-      archive: '--archive',
-      destination: '-d',
-      embed: '-m',
-      identity: '-i',
-      sdk: '--sdk',
-      ipa: '--ipa',
-      xcconfig: '--xcconfig',
-      xcargs: '--xcargs'
-    }
-    
-      def auth_options
-    { scope: resource_name, recall: '#{controller_path}#new' }
-  end
-    
-      # Gets the actual resource stored in the instance variable
-  def resource
-    instance_variable_get(:'@#{resource_name}')
-  end
-    
-          generate_helpers!(Devise::URL_HELPERS)
-    
-          klass.devise_modules.each do |mod|
-        constant = const_get(mod.to_s.classify)
-    
-          module ClassMethods
-        Devise::Models.config(self, :timeout_in)
+        initializer 'action_mailbox.config' do
+      config.after_initialize do |app|
+        ActionMailbox.logger = app.config.action_mailbox.logger || Rails.logger
+        ActionMailbox.incinerate = app.config.action_mailbox.incinerate.nil? ? true : app.config.action_mailbox.incinerate
+        ActionMailbox.incinerate_after = app.config.action_mailbox.incinerate_after || 30.days
+        ActionMailbox.queues = app.config.action_mailbox.queues || {}
+        ActionMailbox.ingress = app.config.action_mailbox.ingress
       end
     end
   end
 end
 
     
-      def wrap_aes_socket(sock)
-    if datastore['PAYLOAD'] !~ /java\// or (datastore['AESPassword'] || '') == ''
-      return sock
+          def self.[](type)
+        type_klass[type]
+      end
+    
+        should 'should log kramdown warnings' do
+      allow_any_instance_of(Kramdown::Document).to receive(:warnings).and_return(['foo'])
+      expect(Jekyll.logger).to receive(:warn).with('Kramdown warning:', 'foo')
+      @markdown.convert('Something')
     end
     
+    $LOAD_PATH.unshift File.expand_path('lib', __dir__)
+require 'jekyll/version'
     
-    {        This will not work on circa 2009 and older Debian-based Linux
-        distributions (including Ubuntu) because they compile bash
-        without the /dev/tcp feature.
-      },
-      'Author'        => 'hdm',
-      'License'       => MSF_LICENSE,
-      'Platform'      => 'unix',
-      'Arch'          => ARCH_CMD,
-      'Handler'       => Msf::Handler::ReverseTcp,
-      'Session'       => Msf::Sessions::CommandShell,
-      'PayloadType'   => 'cmd_bash',
-      'RequiredCmd'   => 'bash-tcp',
-      'Payload'       =>
-        {
-          'Offsets' => { },
-          'Payload' => ''
+    def pr(url)
+  if url.end_with?(FORWARD_SLASH)
+    url
+  else
+    url_dir = File.dirname(url)
+    url_dir.end_with?(FORWARD_SLASH) ? url_dir : '#{url_dir}/'
+  end
+end
+    
+    require 'benchmark/ips'
+require 'pathutil'
+    
+            @io.puts
+        print_exception(exception, status, @indent)
+        @io.flush
+      end
+    
+            log_email_process_failure(@mail, e)
+        incoming_email = @receiver.try(:incoming_email)
+        rejection_message = handle_failure(@mail, e)
+        if rejection_message.present?
+          set_incoming_email_rejection_message(incoming_email, rejection_message.body.to_s)
+        end
+      end
+    end
+    
+        it 'should import branch from ssh url' do
+      Discourse::Utils.expects(:execute_command).with({
+        'GIT_SSH_COMMAND' => 'ssh -i #{@ssh_folder}/id_rsa -o StrictHostKeyChecking=no'
+      }, 'git', 'clone', '--single-branch', '-b', branch, ssh_url, @temp_folder)
+    
+      private
+    
+    require 'rails_helper'
+require 'i18n/backend/fallback_locale_list'
+    
+      def self.views_thresholds
+    results = DB.query(<<~SQL)
+      SELECT ranked.bucket * 5 as percentile, MIN(ranked.views) as views
+      FROM (
+        SELECT NTILE(20) OVER (ORDER BY t.views DESC) AS bucket, t.views
+        FROM (
+          SELECT views
+            FROM topics
+           WHERE deleted_at IS NULL
+             AND archetype <> 'private_message'
+             AND visible = TRUE
+        ) t
+      ) ranked
+      WHERE bucket <= 9
+      GROUP BY bucket
+    SQL
+    
+      # Send deprecation notices to registered listeners.
+  config.active_support.deprecation = :notify
+    
+      # Raise exceptions instead of rendering exception templates.
+  config.action_dispatch.show_exceptions = false
+    
+    class NodeMincerTest < Minitest::Test
+  DUMMY_PATH = 'test/dummy_node_mincer'
+    
+    RSpec.describe FlareTag do
+  let(:user) { create(:user) }
+  let(:article) { create(:article, user_id: user.id) }
+    
+          it 'flashes an error message' do
+        post '/users/api_secrets', params: { api_secret: invalid_params }
+        expect(flash[:error]).to be_truthy
+        expect(flash[:notice]).to be_nil
+      end
+    end
+  end
+end
+
+    
+      describe 'POST blocks' do
+    it 'creates block from input data' do
+      post '/blocks', params: {
+        block: {
+          input_css: '.blue { color: blue;}',
+          input_html: 'yo',
+          input_javascript: 'alert('hey')'
         }
-      ))
+      }
+      expect(Block.all.size).to eq(1)
+    end
   end
     
-    # Wrappers
-require 'msf/core/encoded_payload'
+      it 'renders a podcast index if there is a podcast with the slug successfully' do
+    expect(get: '/#{podcast.slug}').to route_to(
+      controller: 'stories',
+      action: 'index',
+      username: podcast.slug,
+    )
+  end
     
-      def initialize(info = {})
-    super(
-      update_info(
-        info,
-        'Name'            => 'LNK Code Execution Vulnerability',
-        'Description'     => %q{
-          This module exploits a vulnerability in the handling of Windows Shortcut files (.LNK)
-          that contain a dynamic icon, loaded from a malicious DLL.
-    }
-    
-        com_opts = {}
-    com_opts[:net_clr] = 4.0 # Min .NET runtime to load into a PS session
-    com_opts[:target] = datastore['OUTPUT_TARGET'] || session.sys.config.getenv('TEMP') + '\\#{ Rex::Text.rand_text_alpha(rand(8)+8) }.exe'
-    com_opts[:payload] = payload_script #payload.encoded
-    vprint_good com_opts[:payload].length.to_s
-    
-    desc 'copy dot files for deployment'
-task :copydot, :source, :dest do |t, args|
-  FileList['#{args.source}/**/.*'].exclude('**/.', '**/..', '**/.DS_Store', '**/._*').each do |file|
-    cp_r file, file.gsub(/#{args.source}/, '#{args.dest}') unless File.directory?(file)
+        it 'embeds the published timestamp' do
+      visit '/#{user.username}/#{article.slug}'
+      selector = 'article time[datetime='#{timestamp}']'
+      expect(page).to have_selector(selector)
+    end
   end
 end
-    
-        # Outputs a single category as an <a> link.
-    #
-    #  +category+ is a category string to format as an <a> link
-    #
-    # Returns string
-    #
-    def category_link(category)
-      dir = @context.registers[:site].config['category_dir']
-      '<a class='category' href='/#{dir}/#{category.to_url}/'>#{category}</a>'
-    end
-    
-    Liquid::Template.register_tag('img', Jekyll::ImageTag)
 
     
-      class IncludeArrayTag < Liquid::Tag
-    Syntax = /(#{Liquid::QuotedFragment}+)/
-    def initialize(tag_name, markup, tokens)
-      if markup =~ Syntax
-        @array_name = $1
-      else
-        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
+        scope :store_credits, -> { where(source_type: Spree::StoreCredit.to_s) }
+    scope :not_store_credits, -> { where(arel_table[:source_type].not_eq(Spree::StoreCredit.to_s).or(arel_table[:source_type].eq(nil))) }
+    
+            def scope
+          if params[:product_id]
+            Spree::Product.friendly.find(params[:product_id])
+          elsif params[:variant_id]
+            Spree::Variant.find(params[:variant_id])
+          end
+        end
       end
-    
-    
-    
-      class VideoTag < Liquid::Tag
-    @video = nil
-    @poster = ''
-    @height = ''
-    @width = ''
-    
-      it 'calls Hooks.commands_from' do
-    expect(Tmuxinator::Hooks).to receive(:commands_from).
-      with(kind_of(Tmuxinator::Project), hook_name).once
-    project.send('hook_#{hook_name}')
+    end
   end
+end
+
     
-        context 'when the file doesn't exist' do
-      before do
-        allow(File).to receive(:exist?).with(local_default) { false }
-        allow(File).to receive(:exist?).with(proj_default) { false }
-      end
+      orig_stdout = $stdout
+  orig_stderr = $stderr
