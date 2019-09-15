@@ -1,117 +1,155 @@
 
         
-        # Mimic how Jekyll's LiquidRenderer would process a non-static file, with
-# some dummy payload
-def always_liquid(content)
-  Liquid::Template.error_mode = :warn
-  Liquid::Template.parse(content, :line_numbers => true).render(
-    'author' => 'John Doe',
-    'title'  => 'FooBar'
-  )
-end
-    
-    require 'benchmark/ips'
-require 'pathutil'
-    
-        args = msg['args'] + [msg['error_message']]
-    
-          def filter_options(**options)
-        @filter_options.merge!(options)
-      end
-    
-          def decoded
-        secret =
-          case options.algorithm
-          when *%w[RS256 RS384 RS512]
-            OpenSSL::PKey::RSA.new(options.secret).public_key
-          when *%w[ES256 ES384 ES512]
-            OpenSSL::PKey::EC.new(options.secret).tap { |key| key.private_key = nil }
-          when *%w(HS256 HS384 HS512)
-            options.secret
-          else
-            raise NotImplementedError, 'Unsupported algorithm: #{options.algorithm}'
-          end
-    
-        def handle_disabled_by_default(config, new_default_configuration)
-      department_config = config.to_hash.reject { |cop| cop.include?('/') }
-      department_config.each do |dept, dept_params|
-        next unless dept_params['Enabled']
-    
-        def autocorrect_unneeded_disables(source, cop)
-      cop.processed_source = source
-    
-        content << '\n<!-- END_COP_LIST -->'
-    
-          it_behaves_like 'invalid'
-    end
-    
-    RSpec.describe RuboCop::Cop::Layout::DefEndAlignment, :config do
-  subject(:cop) { described_class.new(config) }
-    
-          it 'registers an offense for String.new' do
-        expect_offense(<<~RUBY)
-          test = String.new
-                 ^^^^^^^^^^ Use string literal `''` instead of `String.new`.
-        RUBY
-      end
-    
-    
-    {      # Checks whether the `block` literal is delimited by curly braces.
-      #
-      # @return [Boolean] whether the `block` literal is enclosed in braces
-      def braces?
-        loc.end&.is?('}')
-      end
-    
-          # Calls the given block for each `key` node in the `hash` literal.
-      # If no block is given, an `Enumerator` is returned.
-      #
-      # @return [self] if a block is given
-      # @return [Enumerator] if no block is given
-      def each_key
-        return pairs.map(&:key).to_enum unless block_given?
-    
-    def blog_url(user, project, source_dir)
-  cname = '#{source_dir}/CNAME'
-  url = if File.exists?(cname)
-    'http://#{IO.read(cname).strip}'
-  else
-    'http://#{user.downcase}.github.io'
-  end
-  url += '/#{project}' unless project == ''
-  url
-end
-    
-        def render(context)
-      quote = paragraphize(super)
-      author = '<strong>#{@by.strip}</strong>' if @by
-      if @source
-        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
-        parts = []
-        url.each do |part|
-          if (parts + [part]).join('/').length < 32
-            parts << part
+                    if editor.should_skip?
+              UI.message('Skipping framing of screenshot #{screenshot.path}.  No title provided in your Framefile.json or title.strings.')
+            else
+              Helper.show_loading_indicator('Framing screenshot '#{full_path}'')
+              editor.frame!
+            end
+          rescue => ex
+            UI.error(ex.to_s)
+            UI.error('Backtrace:\n\t#{ex.backtrace.join('\n\t')}') if FastlaneCore::Globals.verbose?
           end
         end
-        source = parts.join('/')
-        source << '/&hellip;' unless source == @source
-      end
-      if !@source.nil?
-        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
-      elsif !@title.nil?
-        cite = ' <cite>#{@title}</cite>'
-      end
-      blockquote = if @by.nil?
-        quote
-      elsif cite
-        '#{quote}<footer>#{author + cite}</footer>'
       else
-        '#{quote}<footer>#{author}</footer>'
+        UI.error('Could not find screenshots in current directory: '#{File.expand_path(path)}'')
       end
-      '<blockquote>#{blockquote}</blockquote>'
     end
     
-        def render(context)
-      file_dir = (context.registers[:site].source || 'source')
-      file_path = Pathname.new(file_dir).expand_path
-      file = file_path + @file
+          it 'is processed on ready to submit' do
+        mock_client_response(:get_build) do
+          {
+            'externalState' => 'testflight.build.state.submit.ready'
+          }
+        end
+        expect(build).to be_processed
+      end
+    
+        def detect_configuration_for_archive
+      extract_from_scheme = lambda do
+        if self.project.workspace?
+          available_schemes = self.project.workspace.schemes.reject { |k, v| v.include?('Pods/Pods.xcodeproj') }
+          project_path = available_schemes[Gym.config[:scheme]]
+        else
+          project_path = self.project.path
+        end
+    
+            it 'finds the one build when no app version is provided' do
+          allow(fake_app).to receive(:latest_version).and_return(fake_version)
+          allow(fake_version).to receive(:candidate_builds).and_return(fake_builds, fake_builds_with_processed_build)
+          only_build = fake_builds.first
+          allow(review_submitter).to receive(:sleep)
+          expect(review_submitter.wait_for_build(fake_app, nil)).to equal(fake_builds_with_processed_build.first)
+        end
+      end
+    
+          def destination(devices)
+        unless verify_devices_share_os(devices)
+          UI.user_error!('All devices provided to snapshot should run the same operating system')
+        end
+        # on Mac we will always run on host machine, so should specify only platform
+        return ['-destination 'platform=macOS''] if devices.first.to_s =~ /^Mac/
+    
+          def self.category
+        :project
+      end
+    end
+  end
+end
+
+    
+            # Maps nice developer param names to Shenzhen's `ipa build` arguments
+        params.collect do |k, v|
+          v ||= ''
+          if ARGS_MAP[k]
+            if k == :clean
+              v == true ? '--clean' : '--no-clean'
+            elsif k == :archive
+              v == true ? '--archive' : '--no-archive'
+            else
+              value = (v.to_s.length > 0 ? '\'#{v}\'' : '')
+              '#{ARGS_MAP[k]} #{value}'.strip
+            end
+          end
+        end.compact
+      end
+    
+          def self.output
+        [
+          ['FL_CHANGELOG', 'The changelog generated by Jenkins']
+        ]
+      end
+    
+          # @return [Xcodeproj::Project] The Pods Xcode project.
+      #
+      attr_reader :pods_project
+    
+            def attrs
+          attrs = {
+            'size' => size,
+            'mtime' => mtime,
+          }.reject { |_k, v| v.nil? }
+          return nil if attrs.empty?
+          attrs.to_s
+        end
+      end
+    
+            # @private
+        #
+        # Prepends the given scoped {PodVariant}s with another scoping label, if there
+        # was more than one group of {PodVariant}s given.
+        #
+        # @param [Array<Hash<PodVariant, String>>] scoped_variants
+        #        {PodVariant}s, which where grouped on base of a criteria, which is used
+        #        in the block argument to generate a descriptive label.
+        #
+        # @param [Block<PodVariant, String>] block
+        #        takes a {PodVariant} and returns a scope suffix which is prepended, if
+        #        necessary.
+        #
+        # @return [Hash<PodVariant, String>]
+        #
+        def scope_if_necessary(scoped_variants, &block)
+          if scoped_variants.count == 1
+            return scoped_variants.first
+          end
+          Hash[scoped_variants.flat_map do |variants|
+            variants.map do |variant, suffix|
+              prefix = block.call(variant)
+              scope = [prefix, suffix].compact.join('-')
+              [variant, !scope.empty? ? scope : nil]
+            end
+          end]
+        end
+    
+            # @return [Set<String>] the names of the pods that were unchanged.
+        #
+        attr_reader :unchanged
+    
+    if $PROGRAM_NAME == __FILE__ && !ENV['COCOAPODS_NO_BUNDLER']
+  ENV['BUNDLE_GEMFILE'] = File.expand_path('../../Gemfile', __FILE__)
+  require 'rubygems'
+  require 'bundler/setup'
+  $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+elsif ENV['COCOAPODS_NO_BUNDLER']
+  require 'rubygems'
+  gem 'cocoapods'
+end
+    
+            def create_project(path, object_version, pod_target_subproject)
+          object_version ||= Xcodeproj::Constants::DEFAULT_OBJECT_VERSION
+          Pod::Project.new(path, false, object_version, :pod_target_subproject => pod_target_subproject)
+        end
+    
+            if podspecs.size <= 1
+          result += [license, readme, podspecs, docs]
+        else
+          # Manually add non-globbing files since there are multiple podspecs in the same folder
+          result << podspec_file
+          if license_file = spec_license
+            absolute_path = root + license_file
+            result << absolute_path if File.exist?(absolute_path)
+          end
+        end
+        result.compact.flatten.sort
+      end
