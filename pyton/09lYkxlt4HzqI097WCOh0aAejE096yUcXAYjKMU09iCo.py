@@ -1,234 +1,255 @@
 
         
-        
-@login_required
-def login_protected_view(request):
-    'A simple view that is login protected.'
-    t = Template('This is a login protected test. Username is {{ user.username }}.', name='Login Template')
-    c = Context({'user': request.user})
+            class C(A):
+        pass
     
-        class Media:
-        js = ('my_awesome_admin_scripts.js',)
+        elif sys.platform.startswith('java'):
+        # Jython
+        name = 'Jython'
+        match = _sys_version_parser.match(sys_version)
+        if match is None:
+            raise ValueError(
+                'failed to parse Jython sys.version: %s' %
+                repr(sys_version))
+        version, buildno, builddate, buildtime, _ = match.groups()
+        if builddate is None:
+            builddate = ''
+        compiler = sys.platform
     
-        def test_tabular_non_field_errors(self):
-        '''
-        non_field_errors are displayed correctly, including the correct value
-        for colspan.
-        '''
-        data = {
-            'title_set-TOTAL_FORMS': 1,
-            'title_set-INITIAL_FORMS': 0,
-            'title_set-MAX_NUM_FORMS': 0,
-            '_save': 'Save',
-            'title_set-0-title1': 'a title',
-            'title_set-0-title2': 'a different title',
-        }
-        response = self.client.post(reverse('admin:admin_inlines_titlecollection_add'), data)
-        # Here colspan is '4': two fields (title1 and title2), one hidden field and the delete checkbox.
-        self.assertContains(
-            response,
-            '<tr><td colspan='4'><ul class='errorlist nonfield'>'
-            '<li>The two titles must be the same</li></ul></td></tr>'
-        )
+        return results
     
-            self.assertEqual(perm_default.content_type_id, default_objects[1].id)
-        self.assertEqual(perm_other.content_type_id, other_objects[0].id)
+                    --===
+                Content-Type: text/html
+                Content-Disposition: inline
     
-    from django.db.models.fields import DecimalField, FloatField, IntegerField
-from django.db.models.functions import Cast
-    
-        @cached_property
-    def spatial_version(self):
-        '''Determine the version of the PostGIS library.'''
-        # Trying to get the PostGIS version because the function
-        # signatures will depend on the version used.  The cost
-        # here is a database query to determine the version, which
-        # can be mitigated by setting `POSTGIS_VERSION` with a 3-tuple
-        # comprising user-supplied values for the major, minor, and
-        # subminor revision of PostGIS.
-        if hasattr(settings, 'POSTGIS_VERSION'):
-            version = settings.POSTGIS_VERSION
+        def __init__(self, max_size=0, mode='w+b', buffering=-1,
+                 encoding=None, newline=None,
+                 suffix=None, prefix=None, dir=None, *, errors=None):
+        if 'b' in mode:
+            self._file = _io.BytesIO()
         else:
-            # Run a basic query to check the status of the connection so we're
-            # sure we only raise the error below if the problem comes from
-            # PostGIS and not from PostgreSQL itself (see #24862).
-            self._get_postgis_func('version')
+            # Setting newline='\n' avoids newline translation;
+            # this is important because otherwise on Windows we'd
+            # get double newline translation upon rollover().
+            self._file = _io.StringIO(newline='\n')
+        self._max_size = max_size
+        self._rolled = False
+        self._TemporaryFileArgs = {'mode': mode, 'buffering': buffering,
+                                   'suffix': suffix, 'prefix': prefix,
+                                   'encoding': encoding, 'newline': newline,
+                                   'dir': dir, 'errors': errors}
     
-            def _decorator(view_func):
-            @wraps(view_func)
-            def _wrapped_view(request, *args, **kwargs):
-                if hasattr(middleware, 'process_request'):
-                    result = middleware.process_request(request)
-                    if result is not None:
-                        return result
-                if hasattr(middleware, 'process_view'):
-                    result = middleware.process_view(request, view_func, args, kwargs)
-                    if result is not None:
-                        return result
-                try:
-                    response = view_func(request, *args, **kwargs)
-                except Exception as e:
-                    if hasattr(middleware, 'process_exception'):
-                        result = middleware.process_exception(request, e)
-                        if result is not None:
-                            return result
-                    raise
-                if hasattr(response, 'render') and callable(response.render):
-                    if hasattr(middleware, 'process_template_response'):
-                        response = middleware.process_template_response(request, response)
-                    # Defer running of process_response until after the template
-                    # has been rendered:
-                    if hasattr(middleware, 'process_response'):
-                        def callback(response):
-                            return middleware.process_response(request, response)
-                        response.add_post_render_callback(callback)
-                else:
-                    if hasattr(middleware, 'process_response'):
-                        return middleware.process_response(request, response)
-                return response
-            return _wrapped_view
-        return _decorator
-    return _make_decorator
+        raise_opts = ['-noraise', '-raise']
+    remote_args = ['-remote', 'openURL(%s%action)']
+    remote_action = ''
+    remote_action_newwin = ',new-window'
+    remote_action_newtab = ',new-tab'
+    background = True
+    
+        user_options = [
+        ('build-base=', 'b',
+         'base directory for build library'),
+        ('build-purelib=', None,
+         'build directory for platform-neutral distributions'),
+        ('build-platlib=', None,
+         'build directory for platform-specific distributions'),
+        ('build-lib=', None,
+         'build directory for all distribution (defaults to either ' +
+         'build-purelib or build-platlib'),
+        ('build-scripts=', None,
+         'build directory for scripts'),
+        ('build-temp=', 't',
+         'temporary build directory'),
+        ('plat-name=', 'p',
+         'platform name to build for, if supported '
+         '(default: %s)' % get_platform()),
+        ('compiler=', 'c',
+         'specify the compiler type'),
+        ('parallel=', 'j',
+         'number of parallel build jobs'),
+        ('debug', 'g',
+         'compile extensions and libraries with debugging information'),
+        ('force', 'f',
+         'forcibly build everything (ignore file timestamps)'),
+        ('executable=', 'e',
+         'specify final destination interpreter path (build.py)'),
+        ]
+    
+        print('Done!')
+    if failures:
+        print('Some downloads have failed:')
+        for fail in failures:
+            print('> ' + fail)
+
+    
+    import abc
+import random
     
     
-class OFTTime(Field):
-    @property
-    def value(self):
-        'Return a Python `time` object for this OFTTime field.'
-        try:
-            yy, mm, dd, hh, mn, ss, tz = self.as_datetime()
-            return time(hh.value, mn.value, ss.value)
-        except (ValueError, GDALException):
-            return None
+class FallbackHandler(Handler):
+    @staticmethod
+    def check_range(request):
+        print('end of chain, no handler for {}'.format(request))
+        return False
     
-        def __getitem__(self, index):
-        'Get the Feature at the specified index.'
-        if isinstance(index, int):
-            # An integer index was given -- we cannot do a check based on the
-            # number of features because the beginning and ending feature IDs
-            # are not guaranteed to be 0 and len(layer)-1, respectively.
-            if index < 0:
-                raise IndexError('Negative indices are not allowed on OGR Layers.')
-            return self._make_feature(index)
-        elif isinstance(index, slice):
-            # A slice was given
-            start, stop, stride = index.indices(self.num_feat)
-            return [self._make_feature(fid) for fid in range(start, stop, stride)]
-        else:
-            raise TypeError('Integers and slices may only be used when indexing OGR Layers.')
+    *TL;DR
+Separates an algorithm from an object structure on which it operates.
     
-        # #### SpatialReference Methods ####
-    def attr_value(self, target, index=0):
+        def build_floor(self):
+        raise NotImplementedError
+    
+    *References:
+bottle
+https://github.com/bottlepy/bottle/blob/cafc15419cbb4a6cb748e6ecdccf92893bb25ce5/bottle.py#L270
+django
+https://github.com/django/django/blob/ffd18732f3ee9e6f0374aff9ccf350d85187fac2/django/utils/functional.py#L19
+pip
+https://github.com/pypa/pip/blob/cb75cca785629e15efb46c35903827b3eae13481/pip/utils/__init__.py#L821
+pyramimd
+https://github.com/Pylons/pyramid/blob/7909e9503cdfc6f6e84d2c7ace1d3c03ca1d8b73/pyramid/decorator.py#L4
+werkzeug
+https://github.com/pallets/werkzeug/blob/5a2bf35441006d832ab1ed5a31963cbc366c99ac/werkzeug/utils.py#L35
+    
+    
+class Human(object):
+    def __init__(self):
+        self.name = 'Human'
+    
+    *TL;DR
+Decouples an abstraction from its implementation.
+'''
+    
+    
+  def Start( self ):
+    self._response_future = self.PostDataToHandlerAsync( self.request_data,
+                                                         'completions' )
+    
+        # build a new DiagnosticFilter merging all filters
+    #  for the provided filetypes
+    spec = []
+    for filetype in filetypes:
+      type_specific = self._all_filters.get( filetype, [] )
+      spec.extend( type_specific )
+    
+    
+def YouCompleteMeInstance( custom_options = {} ):
+  '''Defines a decorator function for tests that passes a unique YouCompleteMe
+  instance as a parameter. This instance is initialized with the default options
+  `DEFAULT_CLIENT_OPTIONS`. Use the optional parameter |custom_options| to give
+  additional options and/or override the already existing ones.
+    
+    
+class EventNotification( BaseRequest ):
+  def __init__( self, event_name, buffer_number = None, extra_data = None ):
+    super( EventNotification, self ).__init__()
+    self._event_name = event_name
+    self._buffer_number = buffer_number
+    self._extra_data = extra_data
+    self._response_future = None
+    self._cached_response = None
+    
+      with MockVimBuffers( [ current_buffer ], [ current_buffer ] ):
+    with MockCompletionRequest( ServerResponse ):
+      ycm.SendCompletionRequest()
+      ok_( ycm.CompletionRequestReady() )
+      response = ycm.GetCompletionResponse()
+      post_vim_message.assert_has_exact_calls( [
+        call( 'Exception: message', truncate = True )
+      ] )
+      assert_that(
+        response,
+        has_entries( {
+          'completions': contains( has_entries( {
+            'word': 'insertion_text',
+            'abbr': 'menu_text',
+            'menu': 'extra_menu_info',
+            'info': 'detailed_info\ndoc_string',
+            'kind': 'k',
+            'dup': 1,
+            'empty': 1
+          } ) ),
+          'completion_start_column': 3
+        } )
+      )
+    
+    
+def MockAsyncServerResponseDone( response ):
+  '''Return a fake future object that is complete with the supplied response
+  message. Suitable for mocking a response future within a client request. For
+  example:
+    
+            Raises:
+            RuntimeError: if this method was already called or if set_result()
+                or set_exception() was called.
         '''
-        The attribute value for the given target node (e.g. 'PROJCS'). The index
-        keyword specifies an index of the child node to return.
-        '''
-        if not isinstance(target, str) or not isinstance(index, int):
-            raise TypeError
-        return capi.get_attr_value(self.ptr, force_bytes(target), index)
+        with self._condition:
+            if self._state == CANCELLED:
+                self._state = CANCELLED_AND_NOTIFIED
+                for waiter in self._waiters:
+                    waiter.add_cancelled(self)
+                # self._condition.notify_all() is not necessary because
+                # self.cancel() triggers a notification.
+                return False
+            elif self._state == PENDING:
+                self._state = RUNNING
+                return True
+            else:
+                LOGGER.critical('Future %s in unexpected state: %s',
+                                id(self.future),
+                                self.future._state)
+                raise RuntimeError('Future in unexpected state')
     
-        def test_fsize_toobig(self):
-        # Be sure that setrlimit is checking for really large values
-        too_big = 10**50
-        try:
-            (cur, max) = resource.getrlimit(resource.RLIMIT_FSIZE)
-        except AttributeError:
-            pass
-        else:
-            try:
-                resource.setrlimit(resource.RLIMIT_FSIZE, (too_big, max))
-            except (OverflowError, ValueError):
-                pass
-            try:
-                resource.setrlimit(resource.RLIMIT_FSIZE, (max, too_big))
-            except (OverflowError, ValueError):
-                pass
+        # Parse and validate the field names.  Validation serves two purposes,
+    # generating informative error messages and preventing template injection attacks.
+    if isinstance(field_names, basestring):
+        field_names = field_names.replace(',', ' ').split() # names separated by whitespace and/or commas
+    field_names = tuple(map(str, field_names))
+    for name in (typename,) + field_names:
+        if not all(c.isalnum() or c=='_' for c in name):
+            raise ValueError('Type names and field names can only contain alphanumeric characters and underscores: %r' % name)
+        if _iskeyword(name):
+            raise ValueError('Type names and field names cannot be a keyword: %r' % name)
+        if name[0].isdigit():
+            raise ValueError('Type names and field names cannot start with a number: %r' % name)
+    seen_names = set()
+    for name in field_names:
+        if name.startswith('_'):
+            raise ValueError('Field names cannot start with an underscore: %r' % name)
+        if name in seen_names:
+            raise ValueError('Encountered duplicate field name: %r' % name)
+        seen_names.add(name)
     
+            'Intended Audience :: Developers',
+        'Topic :: Software Development :: Libraries :: Python Modules',
     
-# Prioritize native coroutine check to speed-up
-# asyncio.iscoroutine.
-_COROUTINE_TYPES = (types.CoroutineType, types.GeneratorType,
-                    collections.abc.Coroutine, CoroWrapper)
-_iscoroutine_typecache = set()
+            if reseed or not hasattr(self, 'np_random'):
+            self.seed()
     
-            ev = asyncio.Event(loop=self.loop)
-        self.assertIs(ev._loop, self.loop)
+    LEFT = 0
+DOWN = 1
+RIGHT = 2
+UP = 3
     
-            # Try bytes
-        self.assertGreater(b'bug', b'ant')
-        self.assertGreaterEqual(b'bug', b'ant')
-        self.assertGreaterEqual(b'ant', b'ant')
-        self.assertLess(b'ant', b'bug')
-        self.assertLessEqual(b'ant', b'bug')
-        self.assertLessEqual(b'ant', b'ant')
-        self.assertRaises(self.failureException, self.assertGreater, b'ant', b'bug')
-        self.assertRaises(self.failureException, self.assertGreater, b'ant', b'ant')
-        self.assertRaises(self.failureException, self.assertGreaterEqual, b'ant',
-                          b'bug')
-        self.assertRaises(self.failureException, self.assertLess, b'bug', b'ant')
-        self.assertRaises(self.failureException, self.assertLess, b'ant', b'ant')
-        self.assertRaises(self.failureException, self.assertLessEqual, b'bug', b'ant')
+            reward = 0
+        if self.prev_shaping is not None:
+            reward = shaping - self.prev_shaping
+        self.prev_shaping = shaping
     
-            async def test(lock):
-            await asyncio.sleep(0.01)
-            self.assertFalse(lock.locked())
-            with self.assertWarns(DeprecationWarning):
-                with await lock as _lock:
-                    self.assertIs(_lock, None)
-                    self.assertTrue(lock.locked())
-                    await asyncio.sleep(0.01)
-                    self.assertTrue(lock.locked())
-                self.assertFalse(lock.locked())
+        Blackjack is a card game where the goal is to obtain cards that sum to as
+    near as possible to 21 without going over.  They're playing against a fixed
+    dealer.
+    Face cards (Jack, Queen, King) have point value 10.
+    Aces can either count as 11 or 1, and it's called 'usable' at 11.
+    This game is placed with an infinite deck (or with replacement).
+    The game starts with each (player and dealer) having one face up and one
+    face down card.
     
-        def test_make_datagram_transport(self):
-        tr = self.datagram_transport()
-        self.assertIsInstance(tr, _ProactorDatagramTransport)
-        close_transport(tr)
+    from gym import core, spaces
+from gym.utils import seeding
     
-                self.assertEqual(await reader.readline(), b'A\n')
-            writer.write(b'B')
-            with self.assertRaises(ssl.SSLError):
-                await reader.readline()
-    
-            self.assertFalse(callback1.called)
-        self.assertFalse(callback2.called)
-        self.assertFalse(m.WIFEXITED.called)
-        self.assertFalse(m.WIFSIGNALED.called)
-        self.assertFalse(m.WEXITSTATUS.called)
-        self.assertFalse(m.WTERMSIG.called)
-    
-            # infinities
-        self.assertAlmostEqual(phase(complex(-INF, -0.0)), -pi)
-        self.assertAlmostEqual(phase(complex(-INF, -2.3)), -pi)
-        self.assertAlmostEqual(phase(complex(-INF, -INF)), -0.75*pi)
-        self.assertAlmostEqual(phase(complex(-2.3, -INF)), -pi/2)
-        self.assertAlmostEqual(phase(complex(-0.0, -INF)), -pi/2)
-        self.assertAlmostEqual(phase(complex(0.0, -INF)), -pi/2)
-        self.assertAlmostEqual(phase(complex(2.3, -INF)), -pi/2)
-        self.assertAlmostEqual(phase(complex(INF, -INF)), -pi/4)
-        self.assertEqual(phase(complex(INF, -2.3)), -0.0)
-        self.assertEqual(phase(complex(INF, -0.0)), -0.0)
-        self.assertEqual(phase(complex(INF, 0.0)), 0.0)
-        self.assertEqual(phase(complex(INF, 2.3)), 0.0)
-        self.assertAlmostEqual(phase(complex(INF, INF)), pi/4)
-        self.assertAlmostEqual(phase(complex(2.3, INF)), pi/2)
-        self.assertAlmostEqual(phase(complex(0.0, INF)), pi/2)
-        self.assertAlmostEqual(phase(complex(-0.0, INF)), pi/2)
-        self.assertAlmostEqual(phase(complex(-2.3, INF)), pi/2)
-        self.assertAlmostEqual(phase(complex(-INF, INF)), 0.75*pi)
-        self.assertAlmostEqual(phase(complex(-INF, 2.3)), pi)
-        self.assertAlmostEqual(phase(complex(-INF, 0.0)), pi)
-    
-    
-class PosReturn:
-    # this can be used for configurable callbacks
-    
-    from test.fork_wait import ForkWait
-from test.support import reap_children, get_attribute, verbose
-    
-    
-class CacheHandler(RequestHandler):
-    def get(self, computed_etag):
-        self.write(computed_etag)
-    
-    html_favicon = 'favicon.ico'
+        def start(self):
+        self.cmdline = (self.backend,
+                     '-nostats',
+                     '-loglevel', 'error', # suppress warnings
+                     '-y',
+                     '-r', '%d' % self.frames_per_sec,
