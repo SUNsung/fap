@@ -1,239 +1,458 @@
 
         
-          if (isa<StructDecl>(NTD) || isa<ClassDecl>(NTD)) {
-    for (auto *VD : NTD->getStoredProperties()) {
-      useConformancesFromType(VD->getValueInterfaceType()
-                                ->getCanonicalType(genericSig));
-    }
-  }
+        
+    {    Lock& lock;
+    Lock templock;
+};
     
-      // If we have a value that is owned, but that we are going to use in as a
-  // guaranteed argument, we need to borrow/unborrow the argument. Otherwise, we
-  // will introduce new consuming uses. In contrast, if we have an owned value,
-  // we are ok due to the forwarding nature of upcasts.
-  SmallVector<SILValue, 8> NewArgBorrows;
     
-    template <typename Dtype>
-void hdf5_save_nd_dataset(
-    const hid_t file_id, const string& dataset_name, const Blob<Dtype>& blob,
-    bool write_diff = false);
-    
-      layer.SetUp(this->blob_bottom_vec_, this->blob_top_vec_);
-    
-    template <typename Dtype>
-void InnerProductLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& top,
-    const vector<bool>& propagate_down,
-    const vector<Blob<Dtype>*>& bottom) {
-  if (this->param_propagate_down_[0]) {
-    const Dtype* top_diff = top[0]->cpu_diff();
-    const Dtype* bottom_data = bottom[0]->cpu_data();
-    // Gradient with respect to weight
-    if (transpose_) {
-      caffe_cpu_gemm<Dtype>(CblasTrans, CblasNoTrans,
-          K_, N_, M_,
-          (Dtype)1., bottom_data, top_diff,
-          (Dtype)1., this->blobs_[0]->mutable_cpu_diff());
-    } else {
-      caffe_cpu_gemm<Dtype>(CblasTrans, CblasNoTrans,
-          N_, K_, M_,
-          (Dtype)1., top_diff, bottom_data,
-          (Dtype)1., this->blobs_[0]->mutable_cpu_diff());
-    }
-  }
-  if (bias_term_ && this->param_propagate_down_[1]) {
-    const Dtype* top_diff = top[0]->cpu_diff();
-    // Gradient with respect to bias
-    caffe_cpu_gemv<Dtype>(CblasTrans, M_, N_, (Dtype)1., top_diff,
-        bias_multiplier_.cpu_data(), (Dtype)1.,
-        this->blobs_[1]->mutable_cpu_diff());
-  }
-  if (propagate_down[0]) {
-    const Dtype* top_diff = top[0]->cpu_diff();
-    // Gradient with respect to bottom data
-    if (transpose_) {
-      caffe_cpu_gemm<Dtype>(CblasNoTrans, CblasTrans,
-          M_, K_, N_,
-          (Dtype)1., top_diff, this->blobs_[0]->cpu_data(),
-          (Dtype)0., bottom[0]->mutable_cpu_diff());
-    } else {
-      caffe_cpu_gemm<Dtype>(CblasNoTrans, CblasNoTrans,
-          M_, K_, N_,
-          (Dtype)1., top_diff, this->blobs_[0]->cpu_data(),
-          (Dtype)0., bottom[0]->mutable_cpu_diff());
-    }
-  }
+    {    /* d = (a0*2) * a3 */
+    'leaq (%%r10,%%r10,1),%%rax\n'
+    'mulq %%r13\n'
+    'movq %%rax,%%rbx\n'
+    'movq %%rdx,%%rcx\n'
+    /* d += (a1*2) * a2 */
+    'leaq (%%r11,%%r11,1),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c = a4 * a4 */
+    'movq %%r14,%%rax\n'
+    'mulq %%r14\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += (c & M) * R */
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* t3 (tmp1) = d & M */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    'movq %%rsi,%q1\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* a4 *= 2 */
+    'addq %%r14,%%r14\n'
+    /* d += a0 * a4 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d+= (a1*2) * a3 */
+    'leaq (%%r11,%%r11,1),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += a2 * a2 */
+    'movq %%r12,%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += c * R */
+    'movq %%r8,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* t4 = d & M (%%rsi) */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* tx = t4 >> 48 (tmp3) */
+    'movq %%rsi,%%rax\n'
+    'shrq $48,%%rax\n'
+    'movq %%rax,%q3\n'
+    /* t4 &= (M >> 4) (tmp2) */
+    'movq $0xffffffffffff,%%rax\n'
+    'andq %%rax,%%rsi\n'
+    'movq %%rsi,%q2\n'
+    /* c = a0 * a0 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r10\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += a1 * a4 */
+    'movq %%r11,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += (a2*2) * a3 */
+    'leaq (%%r12,%%r12,1),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* u0 = d & M (%%rsi) */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* u0 = (u0 << 4) | tx (%%rsi) */
+    'shlq $4,%%rsi\n'
+    'movq %q3,%%rax\n'
+    'orq %%rax,%%rsi\n'
+    /* c += u0 * (R >> 4) */
+    'movq $0x1000003d1,%%rax\n'
+    'mulq %%rsi\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[0] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,0(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* a0 *= 2 */
+    'addq %%r10,%%r10\n'
+    /* c += a0 * a1 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a2 * a4 */
+    'movq %%r12,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += a3 * a3 */
+    'movq %%r13,%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c += (d & M) * R */
+    'movq %%rbx,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* r[1] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,8(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a0 * a2 (last use of %%r10) */
+    'movq %%r10,%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* fetch t3 (%%r10, overwrites a0),t4 (%%rsi) */
+    'movq %q2,%%rsi\n'
+    'movq %q1,%%r10\n'
+    /* c += a1 * a1 */
+    'movq %%r11,%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a3 * a4 */
+    'movq %%r13,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c += (d & M) * R */
+    'movq %%rbx,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 (%%rbx only) */
+    'shrdq $52,%%rcx,%%rbx\n'
+    /* r[2] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,16(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += t3 */
+    'addq %%r10,%%r8\n'
+    /* c += d * R */
+    'movq %%rbx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[3] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,24(%%rdi)\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* c += t4 (%%r8 only) */
+    'addq %%rsi,%%r8\n'
+    /* r[4] = c */
+    'movq %%r8,32(%%rdi)\n'
+: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
+: 'D'(r)
+: '%rax', '%rbx', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
+);
 }
     
-      /// @brief Updates the network weights based on the diff values computed.
-  void Update();
-  /**
-   * @brief Shares weight data of owner blobs with shared blobs.
-   *
-   * Note: this is called by Net::Init, and thus should normally not be
-   * called manually.
-   */
-  void ShareWeights();
+    void AppendInternalKey(std::string* result, const ParsedInternalKey& key) {
+  result->append(key.user_key.data(), key.user_key.size());
+  PutFixed64(result, PackSequenceAndType(key.sequence, key.type));
+}
+    
+    // Maximum level to which a new compacted memtable is pushed if it
+// does not create overlap.  We try to push to level 2 to avoid the
+// relatively expensive level 0=>1 compactions and to avoid some
+// expensive manifest file operations.  We do not push all the way to
+// the largest level since that can generate a lot of wasted disk
+// space if the same key space is being repeatedly overwritten.
+static const int kMaxMemCompactLevel = 2;
+    
+    // Return the legacy file name for an sstable with the specified number
+// in the db named by 'dbname'. The result will be prefixed with
+// 'dbname'.
+extern std::string SSTTableFileName(const std::string& dbname, uint64_t number);
+    
+      fname = TableFileName('bar', 200);
+  ASSERT_EQ('bar/', std::string(fname.data(), 4));
+  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
+  ASSERT_EQ(200, number);
+  ASSERT_EQ(kTableFile, type);
+    
+    #include <stdio.h>
+#include 'leveldb/dumpfile.h'
+#include 'leveldb/env.h'
+#include 'leveldb/status.h'
+    
+    // Main entry point for Paragraph Detection Algorithm.
+//
+// Given a set of equally spaced textlines (described by row_infos),
+// Split them into paragraphs.  See http://goto/paragraphstalk
+//
+// Output:
+//   row_owners - one pointer for each row, to the paragraph it belongs to.
+//   paragraphs - this is the actual list of PARA objects.
+//   models - the list of paragraph models referenced by the PARA objects.
+//            caller is responsible for deleting the models.
+void DetectParagraphs(int debug_level,
+                      GenericVector<RowInfo> *row_infos,
+                      GenericVector<PARA *> *row_owners,
+                      PARA_LIST *paragraphs,
+                      GenericVector<ParagraphModel *> *models);
+    
+    
+    {    while (next_num_ < kMaxNaturalNumberValue) {
+      n = GetBinaryReversedInteger(next_num_++);
+      if (n < N_) break;
+    }
+    return (next_num_ > kMaxNaturalNumberValue) ? kInvalidVal : n;
+  }
+    
+    // Returns a vector representing the direction of a feature with the given
+// theta direction in an INT_FEATURE_STRUCT.
+FCOORD FeatureDirection(uint8_t theta);
+    
+     public:
+  // Returns the shape that contains unichar_id that has the best result.
+  // If result is not nullptr, it is set with the shape_id and rating.
+  // Returns -1 if ClassifySample fails to provide any result containing
+  // unichar_id. BestShapeForUnichar does not need to be overridden if
+  // ClassifySample respects the keep_this rule.
+  virtual int BestShapeForUnichar(const TrainingSample& sample, Pix* page_pix,
+                                  UNICHAR_ID unichar_id, ShapeRating* result);
     
     /**
- * @brief Applies common transformations to the input data, such as
- * scaling, mirroring, substracting the image mean...
+ * @brief Clip: @f$ y = \max(min, \min(max, x)) @f$.
  */
 template <typename Dtype>
-class DataTransformer {
+class ClipLayer : public NeuronLayer<Dtype> {
  public:
-  explicit DataTransformer(const TransformationParameter& param, Phase phase);
-  virtual ~DataTransformer() {}
-    }
-    
-    void UnregisterShellMenu(std::wstring opt, wchar_t* keyBaseName)
-{
-	HKEY root = GetRootKey(opt);
-	HKEY cmderKey;
-	FAIL_ON_ERROR(RegCreateKeyEx(root, keyBaseName, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &cmderKey, NULL));
-	FAIL_ON_ERROR(RegDeleteTree(cmderKey, NULL));
-	RegDeleteKeyEx(root, keyBaseName, KEY_ALL_ACCESS, NULL);
-	RegCloseKey(cmderKey);
-	RegCloseKey(root);
-}
-    
-    int main(int argc, char** argv) { return leveldb::test::RunAllTests(); }
-
-    
-      WriteOptions write_options;
-  ASSERT_OK(db->Put(write_options, '1', 'b'));
-  ASSERT_OK(db->Put(write_options, '2', 'c'));
-  ASSERT_OK(db->Put(write_options, '3', 'd'));
-  ASSERT_OK(db->Put(write_options, '4', 'e'));
-  ASSERT_OK(db->Put(write_options, '5', 'f'));
-    
-    #ifndef STORAGE_LEVELDB_TABLE_MERGER_H_
-#define STORAGE_LEVELDB_TABLE_MERGER_H_
-    
-    namespace leveldb {
-    }
-    
-    
-    {  Slice input(s);
-  Slice v;
-  ASSERT_TRUE(GetLengthPrefixedSlice(&input, &v));
-  ASSERT_EQ('', v.ToString());
-  ASSERT_TRUE(GetLengthPrefixedSlice(&input, &v));
-  ASSERT_EQ('foo', v.ToString());
-  ASSERT_TRUE(GetLengthPrefixedSlice(&input, &v));
-  ASSERT_EQ('bar', v.ToString());
-  ASSERT_TRUE(GetLengthPrefixedSlice(&input, &v));
-  ASSERT_EQ(std::string(200, 'x'), v.ToString());
-  ASSERT_EQ('', input.ToString());
-}
-    
-    #pragma once
-    
-    
-    {    return 0;
-}
-
-    
-    
-    {    switch (msg)
-    {
-    case WM_SIZE:
-        if (g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
-        {
-            CleanupRenderTarget();
-            g_pSwapChain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam), DXGI_FORMAT_UNKNOWN, 0);
-            CreateRenderTarget();
-        }
-        return 0;
-    case WM_SYSCOMMAND:
-        if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
-            return 0;
-        break;
-    case WM_DESTROY:
-        ::PostQuitMessage(0);
-        return 0;
-    }
-    return ::DefWindowProc(hWnd, msg, wParam, lParam);
-}
-
-    
-        g_AttribLocationTex = glGetUniformLocation(g_ShaderHandle, 'Texture');
-    g_AttribLocationProjMtx = glGetUniformLocation(g_ShaderHandle, 'ProjMtx');
-    g_AttribLocationVtxPos = glGetAttribLocation(g_ShaderHandle, 'Position');
-    g_AttribLocationVtxUV = glGetAttribLocation(g_ShaderHandle, 'UV');
-    g_AttribLocationVtxColor = glGetAttribLocation(g_ShaderHandle, 'Color');
-    
-            if (ImGui::Button('Button'))                                  // Buttons return true when clicked (most widgets return true when edited/activated)
-            counter++;
-        ImGui::SameLine();
-        ImGui::Text('counter = %d', counter);
-    
-    IMGUI_IMPL_API bool     ImGui_ImplDX10_Init(ID3D10Device* device);
-IMGUI_IMPL_API void     ImGui_ImplDX10_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplDX10_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data);
-    
-    #include <osquery/config/config.h>
-#include <osquery/database.h>
-#include <osquery/events.h>
-#include <osquery/flagalias.h>
-#include <osquery/flags.h>
-#include <osquery/hashing/hashing.h>
-#include <osquery/killswitch.h>
-#include <osquery/logger.h>
-#include <osquery/packs.h>
-#include <osquery/registry.h>
-#include <osquery/system.h>
-#include <osquery/tables.h>
-#include <osquery/utils/conversions/split.h>
-#include <osquery/utils/conversions/tryto.h>
-#include <osquery/utils/system/time.h>
-    
-     protected:
   /**
-   * @brief Call the genConfig method of the config retriever plugin.
-   *
-   * This may perform a resource load such as TCP request or filesystem read.
-   * If a non-zero value is passed to --config_refresh, this starts a thread
-   * that periodically calls genConfig to reload config state
+   * @param param provides ClipParameter clip_param,
+   *     with ClipLayer options:
+   *   - min
+   *   - max
    */
-  Status refresh();
-    
-    namespace osquery {
+  explicit ClipLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
     }
+    
+    namespace caffe {
+    }
+    
+    template <typename Dtype>
+void Solver<Dtype>::Step(int iters) {
+  const int start_iter = iter_;
+  const int stop_iter = iter_ + iters;
+  int average_loss = this->param_.average_loss();
+  losses_.clear();
+  smoothed_loss_ = 0;
+  iteration_timer_.Start();
+    }
+    
+    /**
+ * @brief Pools the input image by taking the max, average, etc. within regions.
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
+template <typename Dtype>
+class PoolingLayer : public Layer<Dtype> {
+ public:
+  explicit PoolingLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    #ifdef USE_LEVELDB
+#include 'leveldb/db.h'
+    
+    // Common functions and classes from std that caffe often uses.
+using std::fstream;
+using std::ios;
+using std::isnan;
+using std::isinf;
+using std::iterator;
+using std::make_pair;
+using std::map;
+using std::ostringstream;
+using std::pair;
+using std::set;
+using std::string;
+using std::stringstream;
+using std::vector;
     
      private:
-  struct DatabaseHandle {
-    std::unique_ptr<rocksdb::DB> db_handle;
-    rocksdb::Options options;
-    std::string path;
-    std::unordered_map<std::string,
-                       std::unique_ptr<rocksdb::ColumnFamilyHandle>>
-        handles;
+  struct CancelState {
+    std::atomic_bool callback_invoked{false};
   };
-  DatabaseHandle input_db_;
-  DatabaseHandle output_db_;
+  void EchoNonDelayed(ServerContext* context, const EchoRequest* request,
+                      EchoResponse* response,
+                      experimental::ServerCallbackRpcController* controller,
+                      CancelState* cancel_state);
     
-    #pragma once
+      void TearDown() override { GPR_ASSERT(shutdown_); }
     
-    class SQLPlugin : public Plugin {
- public:
-  /// Run a SQL query string against the SQL implementation.
-  virtual Status query(const std::string& query,
-                       QueryData& results,
-                       bool use_cache) const = 0;
+      lst_sock = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0,
+                       grpc_get_default_wsa_socket_flags());
+  GPR_ASSERT(lst_sock != INVALID_SOCKET);
+    
+    #include 'src/core/lib/iomgr/iocp_windows.h'
+#include 'src/core/lib/iomgr/iomgr.h'
+#include 'src/core/lib/iomgr/pollset_windows.h'
+#include 'src/core/lib/iomgr/resolve_address.h'
+#include 'src/core/lib/iomgr/socket_windows.h'
+#include 'src/core/lib/iomgr/tcp_client.h'
+#include 'src/core/lib/iomgr/tcp_server.h'
+#include 'src/core/lib/iomgr/timer.h'
+    
+    static void on_alarm(void* acp, grpc_error* error) {
+  async_connect* ac = (async_connect*)acp;
+  gpr_mu_lock(&ac->mu);
+  grpc_winsocket* socket = ac->socket;
+  ac->socket = NULL;
+  if (socket != NULL) {
+    grpc_winsocket_shutdown(socket);
+  }
+  async_connect_unlock_and_cleanup(ac, socket);
+}
+    
+      // Unsets `name` variable.
+  void Unset();
+    
+    // Provides serialized access to some resource.
+// Each action queued on a combiner is executed serially in a borrowed thread.
+// The actual thread executing actions may change over time (but there will only
+// ever be one at a time).
+    
+      void CompareService(const grpc::string& service) {
+    const protobuf::ServiceDescriptor* service_desc =
+        desc_pool_->FindServiceByName(service);
+    const protobuf::ServiceDescriptor* ref_service_desc =
+        ref_desc_pool_->FindServiceByName(service);
+    EXPECT_TRUE(service_desc != nullptr);
+    EXPECT_TRUE(ref_service_desc != nullptr);
+    EXPECT_EQ(service_desc->DebugString(), ref_service_desc->DebugString());
     }
     
-    GTEST_TEST(InMemoryDatabaseTest, test_destroy) {
-  auto db = std::make_unique<InMemoryDatabase>('test');
-  ASSERT_FALSE(db->open().isError());
-  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'key', 10).isError());
-  db->close();
-  // In memory db should be destroyed on close
-  // but we want to test that destroy is not failing for no reason
-  auto result = db->destroyDB();
-  EXPECT_TRUE(result);
-  ASSERT_FALSE(db->open().isError());
-  auto get_result = db->getInt32(kPersistentSettings, 'key');
-  EXPECT_FALSE(get_result);
-  EXPECT_EQ(get_result.getError(), DatabaseError::KeyNotFound);
+    
+    {
+    {
+    {}  // namespace
+}  // namespace testing
+}  // namespace grpc
+    
+      const std::vector<std::shared_ptr<DHTNode>>& getNodes() const
+  {
+    return nodes_;
+  }
+    
+    #include <algorithm>
+    
+    class DHTTaskFactory {
+public:
+  virtual ~DHTTaskFactory() = default;
+    }
+    
+    #include <memory>
+    
+    
+    {} // namespace aria2
+    
+    
+    {    cudaStreamCreateWithFlags(&m_stream, cudaStreamDefault)
+        || 'cudaStreamCreateWithFlags failed';
+    fprintf(stderr, 'NcclComm: initialized\n');
 }
+    
+                }
+            else if (parameter.size() == 7)
+            {
+                int id = 2; // skip weightNode and inputValueNode
+    
+    // EqualInsensitive - check to see if two nodes are equal
+// string1 - [in,out] string to compare, if comparision is equal insensitive but not sensitive, will replace with sensitive version
+// string2 - second string to compare
+// alternate - alternate naming of the string
+// return - true if strings are equal insensitive and modifies string1 to sensitive version if different
+bool EqualInsensitive(std::wstring& string1, const std::wstring& string2, const wchar_t* alternate /*=NULL*/)
+{
+    bool equal = EqualCI(string1, string2) ||
+                 (alternate && EqualCI(string1, alternate));
+    }
+    
+                if (m_recurrentLayers.size() > 0 && m_recurrentLayers[recur_idx] == 1)
+            {
+                w = builder.CreateLearnableParameter(L'W0', m_layerSizes[1], m_layerSizes[1]);
+                m_net->RandomInitLearnableParameters(w, m_uniformInit, randomSeed++, m_initValueScale);
+    }
+    
+            if (vec.capacity() < numElements)
+        {
+            // Bad luck - we can't reallocate memory of an external object at this point.
+            RuntimeError('Not enough space in output buffer for output '%ls'.', node->GetName().c_str());
+        }
+    
+    #include <future>
+    
+        // Prepare header.
+    const size_t c_evalNodes = 1;
+    if (gradHeader == nullptr)
+        gradHeader.reset(DistGradHeader::Create(c_evalNodes),
+                         [](DistGradHeader* ptr) { DistGradHeader::Destroy(ptr); });
+    gradHeader->numEvalNode = c_evalNodes;
+    gradHeader->numSamples = sampleCount;
+    gradHeader->numSamplesWithLabel = sampleCount;
+    gradHeader->criterion = 0.0; // (not used here)
+    for (size_t i = 0; i < c_evalNodes; i++)
+        // Not used here, but at least one is required by aggregation.
+        gradHeader->evalErrors[i] = std::make_pair<double, size_t>(0.0, 0);
