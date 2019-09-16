@@ -1,262 +1,203 @@
 
         
-        	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the 'Software'), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
+        OCL_PERF_TEST_P(DenseOpticalFlow_DIS, perf,
+                Combine(Values('PRESET_ULTRAFAST', 'PRESET_FAST', 'PRESET_MEDIUM'), Values(szVGA, sz720p, sz1080p)))
+{
+    DISParams params = GetParam();
+    }
     
-    #define MULADDC_CORE                        \
-        'movq   (%%rsi), %%rax\n'           \
-        'mulq   %%rbx\n'                    \
-        'addq   $8, %%rsi\n'                \
-        'addq   %%rcx, %%rax\n'             \
-        'movq   %%r8, %%rcx\n'              \
-        'adcq   $0, %%rdx\n'                \
-        'nop    \n'                         \
-        'addq   %%rax, (%%rdi)\n'           \
-        'adcq   %%rdx, %%rcx\n'             \
-        'addq   $8, %%rdi\n'
     
-        /**
-     * Returns 'true' if the plan is done producing results (or writing), 'false' otherwise.
-     *
-     * Tailable cursors are a possible exception to this: they may have further results even if
-     * isEOF() returns true.
-     */
-    virtual bool isEOF() = 0;
+OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_EXIT
     
-            // Set up the count stage
-        auto params = makeCountScanParams(&_opCtx, getIndex(ctx.db(), BSON('a' << 1)));
-        params.startKey = BSON('' << 3);
-        params.startKeyInclusive = false;
-        params.endKey = BSON('' << 7);
-        params.endKeyInclusive = false;
     
-    /**
- * Factory method
- */
-static Transliterator* RemoveTransliterator_create(const UnicodeString& /*ID*/,
-                                                   Transliterator::Token /*context*/) {
-    /* We don't need the ID or context. We just remove data */
-    return new RemoveTransliterator();
+inline FrameBuffer::Iterator
+FrameBuffer::Iterator::operator ++ (int)
+{
+    Iterator tmp = *this;
+    ++_i;
+    return tmp;
 }
     
-    U_NAMESPACE_BEGIN
     
+    {    return fps;
+}
     
-//
-//   matches, UText mode
-//
-UBool U_EXPORT2 RegexPattern::matches(UText                *regex,
-                    UText           *input,
-                    UParseError     &pe,
-                    UErrorCode      &status) {
-    }
-    
-    template <class ElemType>
-void NDLNodeEvaluatorImpl<ElemType>::Evaluate(NDLNode<ElemType>* node, const wstring& baseName, const NDLPass pass)
+    void GenericInputFile::readMagicNumberAndVersionField(OPENEXR_IMF_INTERNAL_NAMESPACE::IStream& is, int& version)
 {
-    ComputationNetworkBuilder<ElemType> builder(*m_net);
+    //
+    // Read the magic number and the file format version number.
+    // Then check if we can read the rest of this file.
+    //
     }
     
-        operator unsigned short() const
-    {
-        unsigned long val = toulong();
-        unsigned short ival = (unsigned short) val;
-        if (val != ival)
-        {
-            RuntimeError('ConfigValue (unsigned short): integer argument expected');
-        }
-        return ival;
+              vector<TensorShape> out(1);
+          switch (order) {
+            case StorageOrder::NCHW:
+              out[0] = CreateTensorShape(
+                  vector<int>{N, C * kernel_h * kernel_w, out_h, out_w},
+                  TensorProto::FLOAT);
+              break;
+            case StorageOrder::NHWC:
+              out[0] = CreateTensorShape(
+                  vector<int>{N, out_h, out_w, kernel_h * kernel_w * C},
+                  TensorProto::FLOAT);
+              break;
+            default:
+              CAFFE_THROW('Unknown storage order: ', order);
+          }
+    
+      Projection* GetProjection() const;
+    
+    
+# if defined(OC_CLZ32)
+/**
+ * OC_ILOGNZ_32 - Integer binary logarithm of a non-zero 32-bit value.
+ * @_v: A non-zero 32-bit value.
+ * Returns floor(log2(_v))+1.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ * If _v is zero, the return value is undefined; use OC_ILOG_32() instead.
+ */
+#  define OC_ILOGNZ_32(_v) (OC_CLZ32_OFFS-OC_CLZ32(_v))
+/**
+ * OC_ILOG_32 - Integer binary logarithm of a 32-bit value.
+ * @_v: A 32-bit value.
+ * Returns floor(log2(_v))+1, or 0 if _v==0.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ */
+#  define OC_ILOG_32(_v)   (OC_ILOGNZ_32(_v)&-!!(_v))
+# else
+#  define OC_ILOGNZ_32(_v) (oc_ilog32(_v))
+#  define OC_ILOG_32(_v)   (oc_ilog32(_v))
+# endif
+    
+    static const vorbis_residue_template _res_16u_0[]={
+  {1,0,32,  &_residue_44_low_un,
+   &_huff_book__16u0__single,&_huff_book__16u0__single,
+   &_resbook_16u_0,&_resbook_16u_0},
+};
+static const vorbis_residue_template _res_16u_1[]={
+  {1,0,32,  &_residue_44_mid_un,
+   &_huff_book__16u1__short,&_huff_book__16u1__short,
+   &_resbook_16u_1,&_resbook_16u_1},
     }
     
-        // this counts the actual number of frames in a minibatch (not counting gaps in parallel sequences)
-    // TODO: Instead of passing numAllSamples in here, we should determine it from the inputs in case of no layout. Or simply forbid this case.
-    // BUGBUG (Issue #95): With variable-length sequences, this can no longer be a network method.
-    size_t GetNumSamplesWithLabelOfNetwork(const size_t numAllSamples) const
-    {
-        if (m_pMBLayoutOfNetwork)
-            return m_pMBLayoutOfNetwork->GetActualNumSamples();
-        else
-            return numAllSamples; // TODO: Return the actual number of samples, by inquiring our own input nodes; then eliminate the numAllSamples parameter.
-    }
+    static const vorbis_residue_template _res_8u_0[]={
+  {1,0,32,  &_residue_44_low_un,
+   &_huff_book__8u0__single,&_huff_book__8u0__single,
+   &_resbook_8u_0,&_resbook_8u_0},
+};
+static const vorbis_residue_template _res_8u_1[]={
+  {1,0,32,  &_residue_44_mid_un,
+   &_huff_book__8u1__single,&_huff_book__8u1__single,
+   &_resbook_8u_1,&_resbook_8u_1},
+};
     
-        // A sub-minibatch is a part of a minibatch which helps computing large minibatches that cannot load into GPU memory in one forward-backward computation
-    // The usage would be :
-    //        SubminibatchHelpers sbhelper;
-    //        for (;;)
-    //        {
-    //            size_t nsb=sb.GetMinibatchIntoCache(...);
-    //            for (size_t i=0; i<nsb; i++)
-    //            {
-    //                sbhelper.GetSubMinibatchToNet(i);
-    //                net.Evaluate(criterionNodes[0]);
-    //                sbhelper.DoneWithCurrentSubMinibatch();
-    //            }
-    //            UpdateWeights(...);
-    //        }
+    /* The bark scale equations are approximations, since the original
+   table was somewhat hand rolled.  The below are chosen to have the
+   best possible fit to the rolled tables, thus their somewhat odd
+   appearance (these are more accurate and over a longer range than
+   the oft-quoted bark equations found in the texts I have).  The
+   approximations are valid from 0 - 30kHz (nyquist) or so.
+    
+      std::shared_ptr<DHTNode> localNode_;
+    
+      ~DHTSetup();
     
     
-    {
-    {                m_totalSamplesProcessedSinceLastReport = 0; 
-                m_localSamplesProcessedSinceLastReport = 0; 
-            }
-        }
-        void OnArriveAtSyncPoint(double secondOnSyncPoint, bool printMessage)
-        {
-            if (printMessage)
-            {
-                m_accumulatedSecondsOnSyncPointInOneEpoch += secondOnSyncPoint;
-                m_syncPointHitCounterInOneEpoch++;
-                fprintf(stderr, '\t\t(model aggregation stats): %d-th sync point was hit, introducing a %.2f-seconds latency this time; accumulated time on sync point = %.2f seconds , average latency = %.2f seconds\n',
-                        (int)m_syncPointHitCounterInOneEpoch, 
-                        secondOnSyncPoint, 
-                        m_accumulatedSecondsOnSyncPointInOneEpoch, 
-                        m_accumulatedSecondsOnSyncPointInOneEpoch / m_syncPointHitCounterInOneEpoch);
-            }
-        }
-    
-        // uses a small percentage of training data of minibatch to
-    // speculatively train with various MB sizes; then picks the best
-    size_t SearchForBestMinibatchSize(ComputationNetworkPtr net,
-                                      ComputationNetworkPtr refNet,
-                                      const ComputationNodeBasePtr& refNode,
-                                      const int epochNumber,
-                                      const size_t numFramesToUseInSearch,
-                                      IDataReader* trainSetDataReader,
-                                      const double learnRatePerSample,
-                                      const std::vector<ComputationNodeBasePtr>& featureNodes,
-                                      const std::vector<ComputationNodeBasePtr>& labelNodes,
-                                      const std::vector<ComputationNodeBasePtr>& criterionNodes,
-                                      const std::vector<ComputationNodeBasePtr>& evaluationNodes,
-                                      StreamMinibatchInputs* inputMatrices,
-                                      const std::list<ComputationNodeBasePtr>& learnableNodes,
-                                      std::list<MatrixBasePtr>& smoothedGradients, std::vector<double> smoothedCounts,
-                                      const size_t minMinibatchSize, const size_t maxMinibatchSize);
+    {} // namespace aria2
     
     
-    {        if (m_useAsyncAggregation)
-        {
-            m_bufferedGradHeader = DistGradHeader::Create(numEvalNodes);
-            m_bufferedGradHeader->Clear();
-        }
-        m_initialized = true;
-    }
-    
-      _OutputStream &operator<< (bool v) {
-    m_out << (v ? 'true' : 'false');
-    return *this;
-  }
-    
-    #endif // incl_HPHP_MYSQLSTATS_H_
+    {} // namespace aria2
 
     
-      /* Get <Body> element */
-  body = nullptr;
-  while (trav != nullptr && trav->type != XML_ELEMENT_NODE) {
-    trav = trav->next;
-  }
-  if (trav != nullptr && node_is_equal_ex(trav,'Body',envelope_ns)) {
-    body = trav;
-    trav = trav->next;
-  }
-  while (trav != nullptr && trav->type != XML_ELEMENT_NODE) {
-    trav = trav->next;
-  }
-  if (body == nullptr) {
-    add_soap_fault(obj, 'Client', 'Body must be present in a SOAP envelope');
-    xmlFreeDoc(response);
-    return false;
-  }
-  attr = body->properties;
-  while (attr != nullptr) {
-    if (attr->ns == nullptr) {
-      if (soap_version == SOAP_1_2) {
-        add_soap_fault(obj, 'Client',
-                       'A SOAP Body element cannot have non Namespace '
-                       'qualified attributes');
-        xmlFreeDoc(response);
-        return false;
-      }
-    } else if (attr_is_equal_ex(attr,'encodingStyle',SOAP_1_2_ENV_NAMESPACE)) {
-      if (soap_version == SOAP_1_2) {
-        add_soap_fault(obj, 'Client',
-                       'encodingStyle cannot be specified on the Body');
-        xmlFreeDoc(response);
-        return false;
-      }
-      if (strcmp((char*)attr->children->content, SOAP_1_1_ENC_NAMESPACE)) {
-        add_soap_fault(obj, 'Client', 'Unknown data encoding style');
-        xmlFreeDoc(response);
-        return false;
-      }
-    }
-    attr = attr->next;
-  }
-  if (trav != nullptr && soap_version == SOAP_1_2) {
-    add_soap_fault(obj, 'Client',
-                   'A SOAP 1.2 envelope can contain only Header and Body');
-    xmlFreeDoc(response);
-    return false;
-  }
+      size_t getExecutingTaskSize() const { return execTasks_.size(); }
     
-    //////////////////////////////////////////////////////////////////////
+      virtual void executeTask() CXX11_OVERRIDE;
     
-      // Creates a new transaction and sends headers, but not body
-  MockHTTPTransaction pushTxn(TransportDirection::DOWNSTREAM,
-                              HTTPCodec::StreamID(2), 1, m_egressQueue,
-                              WheelTimerInstance(m_timeouts.get()));
-  HTTPPushTransactionHandler* pushHandler = nullptr;
-  expectPushPromiseAndHeaders(pushTxn, pri, &pushHandler);
-  m_server.deliverMessages();
-  sendResponse('12345');
     
-    /*
- * This routine attempts to find the Func* that will be called for an object
- * of a given target Class (which may be an interface) and a function name,
- * when called from ctxFunc.
- *
- * If exactClass is true, the class we are targeting is assumed to be
- * exactly `cls', and the returned Func* is definitely the one called.
- *
- * If exactClass is false, the class we are targeting may be a subclass of
- * `cls` or a class implementing `cls`, and the returned Func* may be
- * overridden in a subclass.
- *
- * The returned Func* may be used in a request-insensitive way, i.e. it is
- * suitable for burning into the TC as a pointer.
- *
- * It's the caller's responsibility to ensure that the Class* is usable -
- * is AttrUnique, an instance of the ctx or guarded in some way.
- *
- * Returns (NotFound, nullptr) if we can't determine the Func*.
- */
-struct ImmutableObjMethodLookup {
-  enum class Type {
-    NotFound,   // unable to determine suitable Func*
-    Func,       // the called func is returned
-    MagicFunc,  // call redirected to the returned magic func
-    Class,      // the called func may override the returned base class func
-    Interface,  // the called func implements the returned interface func
-  };
+    {} // namespace aria2
+
+    
+    // -----------------------------------------------------------------------
+// EpochAccumulatorNode calculates mean values of all samples used in forward pass.
+// During training, mean sample value is calculated in each epoch. Value of the node will contain mean sample value of
+// its input node values since the beginning of epoch.
+// This node is useful for creating 'per class' metrics like average class recall or mean intersection over union (mean
+// IOU) which is standard metric in semantic labeling.
+// For mean IOU, we calculate ratio true_positives / (true_positives + false_negatives + false_positives) for all target
+// classes and then get mean of those values. true_positives, false_negatives, false_positives should be calculated over
+// the whole data set. Here we cannot calculate mean IOU per sample and then average the result. Instead, we use
+// EpochAccumulatorNode to store those values over the whole data set.
+// -----------------------------------------------------------------------
+template <class ElemType>
+class EpochAccumulatorNode : public ComputationNodeNonLooping<ElemType>, public NumInputs<1>
+{
+    typedef ComputationNodeNonLooping<ElemType> Base;
+    UsingComputationNodeMembersBoilerplate;
+    static const std::wstring TypeName() { return L'EpochAccumulator'; }
     }
     
     
-static void check_and_die(int interval, int grace) noexcept {
-  assert(interval > 0);
-  assert(grace > 0);
-  for (;;) {
-    // when we get reparented
-    // exit immediately
-    if (getppid() == 1) {
-      sleep(static_cast<unsigned>(grace));
-      exit(20);
+    {
+    {                node->InsertParam(runCountNode);
+            }
+        }
     }
-    sleep(static_cast<unsigned>(interval));
-  }
-}
+    else if (cnNodeType == OperationNameOf(CropNode))
+    {
+        // We expect 2 or 4 inputs.
+        if (parameter.size() != 2 && parameter.size() != 4)
+        {
+            RuntimeError('%ls accepts inputs: [input1, input2, offsetX, offsetY] or \
+                                              [input1, input2] or \
+                                              [input1, input2, eqNode1, eqNode2].', cnNodeType.c_str());
+        }
     
-    const StaticString s_Closure('Closure');
-const StaticString s_invoke('__invoke');
+            ElemType initValueScale = config('initValueScale', '1.0');
+    
+    template <typename ElemType>
+void DoDumpNodes(const ConfigParameters& config)
+{
+    wstring modelPath        = config(L'modelPath');
+    wstring nodeName         = config(L'nodeName', L'__AllNodes__');
+    wstring nodeNameRegexStr = config(L'nodeNameRegex', L'');
+    wstring defOutFilePath   = modelPath + L'.' + nodeName + L'.txt';
+    wstring outputFile       = config(L'outputFile', defOutFilePath);
+    bool printValues         = config(L'printValues', true);
+    bool printMetadata       = config(L'printMetadata', true);
+    if (!printValues && !printMetadata)
+        InvalidArgument('printValues and printMetadata: Since both are set to false, there will be nothing to dump');
+    }
+    
+            void ReportMAPerfStats( size_t totalSamplesProcessedSinceLastReport, 
+                                size_t localSamplesProcessedSinceLastReport, 
+                                float secondOnCommunication)
+        {
+            m_Timer.Stop(); 
+            double secondsSinceLastReport = m_Timer.ElapsedSeconds(); 
+            m_Timer.Restart(); 
+    }
+    
+        // out_of_range.109
+    try
+    {
+        // try to use an array index that is not a number
+        json::reference ref = j.at('/array/one'_json_pointer);
+    }
+    catch (json::parse_error& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+    
+        // create an array from std::forward_list
+    std::forward_list<int64_t> c_flist {12345678909876, 23456789098765, 34567890987654, 45678909876543};
+    json j_flist(c_flist);
+    
+    int main()
+{
+    // create JSON values
+    json object = {{'one', 1}, {'two', 2}};
+    json null;
+    }
