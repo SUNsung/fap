@@ -1,125 +1,86 @@
 
         
-            def logout(self):
-        return self._client.get('/auth/logout')
+            :param filepath: Optional filepath the the blns.txt file
+    :returns: The list of naughty strings
+    '''
     
-        with app.test_request_context():
-        assert url_for('index', args=[4, 5, 6]) == '/4,5,6'
+            # copy part of the graph below current checkpoint node, stopping at
+        # other checkpoints nodes
+        ops_to_copy = fast_backward_ops(within_ops=fwd_ops,
+                                        seed_ops=[r.op for r in ts],
+                                        stop_at_ts=checkpoints_other)
+        debug_print('Found {} ops to copy within {}, seed {}, stop_at {}'.format(
+            len(ops_to_copy), fwd_ops, [r.op for r in ts], checkpoints_other))
+        debug_print('ops_to_copy = {}'.format(ops_to_copy))
+        if not ops_to_copy:  # we're done!
+            break
+        _, info = ge.copy_with_input_replacements(ge.sgv(ops_to_copy), {})
+        for origin_op, op in info._transformed_ops.items():
+            op._set_device(origin_op.node_def.device)
+        copied_ops = info._transformed_ops.values()
+        debug_print('Copied {} to {}'.format(ops_to_copy, copied_ops))
+        ge.reroute_ts(checkpoints_disconnected_other, checkpoints_other, can_modify=copied_ops)
+        debug_print('Rewired %s in place of %s restricted to %s',
+                    checkpoints_disconnected_other, checkpoints_other, copied_ops)
     
-    # LaTeX ----------------------------------------------------------------
-    
-            # change the status,
-        # web_control /cert_import_status will return True, else return False
-        # launcher will wait ready to open browser and check update
-        # config.cert_import_ready = True
-    
-        if len(sys.argv) > 1:
-        ip = sys.argv[1]
-    else:
-        ip = '46.134.208.94'
-        ip = '2001:ee0:3203:a::12'
-        print('Usage: check_ip.py [ip] [top_domain] [wait_time=0]')
-    print('test ip:%s' % ip)
-    
-    # begin[licence]
-#
-# [The 'BSD licence']
-# Copyright (c) 2005-2008 Terence Parr
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-# end[licence]
-    
-            Python does not have any size restrictions, but the compilation of
-        such large source files seems to be pretty memory hungry. The memory
-        consumption of the python process grew to >1.5GB when importing a
-        15MB lexer, eating all my swap space and I was to impacient to see,
-        if it could finish at all. With packed initializers that are unpacked
-        at import time of the lexer module, everything works like a charm.
-        
-        '''
-        
-        ret = []
-        for i in range(len(string) / 2):
-            (n, v) = ord(string[i*2]), ord(string[i*2+1])
+        @staticmethod
+    def process(old_face, new_face, raw_mask):
+        height, width, _ = old_face.shape
+        height = height // 2
+        width = width // 2
     
     
+def get_serializer_from_ext(ext):
+    ''' Get the sertializer from filename extension '''
+    if ext == '.json':
+        return JSONSerializer
+    if ext == '.p':
+        return PickleSerializer
+    if ext in ('.yaml', '.yml') and yaml is not None:
+        return YAMLSerializer
+    if ext in ('.yaml', '.yml') and yaml is None:
+        logger.warning('You must have PyYAML installed to use YAML as the serializer.\n'
+                       'Switching to JSON as the serializer.')
+    return JSONSerializer
+
     
     
-    def setText(self, text):
-        '''
-        Override the text for this token.  getText() will return this text
-        rather than pulling from the buffer.  Note that this does not mean
-        that start/stop indexes are not valid.  It means that that input
-        was converted to a new string in the token object.
-	'''
-        self._text = text
+def _ListOf( config_entry ):
+  if isinstance( config_entry, list ):
+    return config_entry
     
-        def decode(self, value):
-        if value != self.value:
-            raise jose.DeserializationError('Expected {0!r}'.format(self.value))
-        return self.value
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
-        @nonce.decoder
-    def nonce(value):  # pylint: disable=missing-docstring,no-self-argument
-        try:
-            return jose.decode_b64jose(value)
-        except jose.DeserializationError as error:
-            # TODO: custom error
-            raise jose.DeserializationError('Invalid nonce: {0}'.format(error))
     
-        def test_kid_serialize(self):
-        from acme.jws import JWS
-        jws = JWS.sign(payload=b'foo', key=self.privkey,
-                       alg=jose.RS256, nonce=self.nonce,
-                       url=self.url, kid=self.kid)
-        self.assertEqual(jws.signature.combined.nonce, self.nonce)
-        self.assertEqual(jws.signature.combined.url, self.url)
-        self.assertEqual(jws.signature.combined.kid, self.kid)
-        self.assertEqual(jws.signature.combined.jwk, None)
-        # TODO: check that nonce is in protected header
+def FormatDebugInfoResponse_Completer_ServerNotRunningWithNoLogfiles_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'completer' ][ 'servers' ][ 0 ].update( {
+    'is_running': False,
+    'logfiles': []
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Completer name completer debug information:\n'
+      '  Server name not running\n'
+      '  Server name executable: /path/to/executable\n'
+      '  No logfiles available\n'
+      '  Server name key: value\n'
+      '  Key: value\n'
+    )
+  )
+
     
-    ALL_SSL_OPTIONS_HASHES = [
-    '2086bca02db48daf93468332543c60ac6acdb6f0b58c7bfdf578a5d47092f82a',
-    '4844d36c9a0f587172d9fa10f4f1c9518e3bcfa1947379f155e16a70a728c21a',
-    '5a922826719981c0a234b1fbcd495f3213e49d2519e845ea0748ba513044b65b',
-    '4066b90268c03c9ba0201068eaa39abbc02acf9558bb45a788b630eb85dadf27',
-    'f175e2e7c673bd88d0aff8220735f385f916142c44aa83b09f1df88dd4767a88',
-    'cfdd7c18d2025836ea3307399f509cfb1ebf2612c87dd600a65da2a8e2f2797b',
-    '80720bd171ccdc2e6b917ded340defae66919e4624962396b992b7218a561791',
-    'c0c022ea6b8a51ecc8f1003d0a04af6c3f2bc1c3ce506b3c2dfc1f11ef931082',
-]
-'''SHA256 hashes of the contents of previous versions of all versions of MOD_SSL_CONF_SRC'''
     
-        def test_repr(self):
-        self.assertEqual(repr(self.addr2), 'certbot_apache.obj.Addr(('127.0.0.1', '443'))')
-    
-    ========================================  =====================================
-``--dns-cloudxns-credentials``            CloudXNS credentials_ INI file.
-                                          (Required)
-``--dns-cloudxns-propagation-seconds``    The number of seconds to wait for DNS
-                                          to propagate before asking the ACME
-                                          server to verify the DNS record.
-                                          (Default: 30)
-========================================  =====================================
+def ExtractKeywordsFromGroup_KeywordAssignAndMiddle_test():
+  assert_that( syntax_parse._ExtractKeywordsFromGroup(
+                 syntax_parse.SyntaxGroup( '', [
+                   'nextgroup=zoo foo skipnl bar',
+                   'zoo goo',
+                 ] ) ),
+               contains_inanyorder( 'foo', 'skipnl', 'bar', 'zoo', 'goo' ) )
