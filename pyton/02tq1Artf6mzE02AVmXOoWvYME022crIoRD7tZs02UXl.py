@@ -1,275 +1,359 @@
 
         
-        encoder_input_data = np.zeros(
-    (len(input_texts), max_encoder_seq_length, num_encoder_tokens),
-    dtype='float32')
-decoder_input_data = np.zeros(
-    (len(input_texts), max_decoder_seq_length, num_decoder_tokens),
-    dtype='float32')
-decoder_target_data = np.zeros(
-    (len(input_texts), max_decoder_seq_length, num_decoder_tokens),
-    dtype='float32')
+                webpage = self._download_webpage(
+            'http://www.vlive.tv/video/%s/playlist/%s'
+            % (video_id, playlist_id), playlist_id)
     
-    model = Sequential()
-model.add(Embedding(max_features, embedding_size, input_length=maxlen))
-model.add(Dropout(0.25))
-model.add(Conv1D(filters,
-                 kernel_size,
-                 padding='valid',
-                 activation='relu',
-                 strides=1))
-model.add(MaxPooling1D(pool_size=pool_size))
-model.add(LSTM(lstm_output_size))
-model.add(Dense(1))
-model.add(Activation('sigmoid'))
+    import codecs
+import subprocess
+    
+    versions_info['signature'] = signature
+with open('update/versions.json', 'w') as versionsf:
+    json.dump(versions_info, versionsf, indent=4, sort_keys=True)
+
+    
+        with io.open(infile, encoding='utf-8') as inf:
+        issue_template_tmpl = inf.read()
     
     
-def create_pairs(x, digit_indices):
-    '''Positive and negative pair creation.
-    Alternates between positive and negative pairs.
+from youtube_dl import YoutubeDL
+    
+    
+class TestCache(unittest.TestCase):
+    def setUp(self):
+        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
+        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
+        _mkdir(TESTDATA_DIR)
+        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
+        self.tearDown()
+    
+    for i in range(max_decoder_seq_length - 1):
+    predict = model.predict([in_encoder, in_decoder])
+    predict = predict.argmax(axis=-1)
+    predict_ = predict[:, i].ravel().tolist()
+    for j, x in enumerate(predict_):
+        in_decoder[j, i + 1, x] = 1
+    
+    The dataset is actually too small for LSTM to be of any advantage
+compared to simpler, much faster methods such as TF-IDF + LogReg.
+    
+        with tempfile.NamedTemporaryFile('wb', delete=True) as f:
+        np.savez(f, x=x, y=y)
+        monkeypatch.setattr(reuters, 'get_file', lambda *args, **kwargs: f.name)
+        yield f.name
+    
+        @interfaces.legacy_embedding_support
+    def __init__(self, input_dim, output_dim,
+                 embeddings_initializer='uniform',
+                 embeddings_regularizer=None,
+                 activity_regularizer=None,
+                 embeddings_constraint=None,
+                 mask_zero=False,
+                 input_length=None,
+                 **kwargs):
+        if 'input_shape' not in kwargs:
+            if input_length:
+                kwargs['input_shape'] = (input_length,)
+            else:
+                kwargs['input_shape'] = (None,)
+        super(Embedding, self).__init__(**kwargs)
+    
+            # Arguments
+            x: A vector or a 2D array of probabilities or one-hot representations;
+                or a vector of character indices (used with `calc_argmax=False`).
+            calc_argmax: Whether to find the character index with maximum
+                probability, defaults to `True`.
+        '''
+        if calc_argmax:
+            x = x.argmax(axis=-1)
+        return ''.join(self.indices_char[x] for x in x)
+    
+    # set parameters:
+max_features = 5000
+maxlen = 400
+batch_size = 32
+embedding_dims = 50
+filters = 250
+kernel_size = 3
+hidden_dims = 250
+epochs = 2
+    
+    print('Pad sequences (samples x time)')
+x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
+x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
+print('x_train shape:', x_train.shape)
+print('x_test shape:', x_test.shape)
+y_train = np.array(y_train)
+y_test = np.array(y_test)
+    
+    
+# Artificial data generation:
+# Generate movies with 3 to 7 moving squares inside.
+# The squares are of shape 1x1 or 2x2 pixels,
+# which move linearly over time.
+# For convenience we first create movies with bigger width and height (80x80)
+# and at the end we select a 40x40 window.
+    
+    
+def test_relu():
+    layer_test(layers.ReLU,
+               kwargs={'max_value': 10,
+                       'negative_slope': 0.2,
+                       'threshold': 3.0},
+               input_shape=(2, 3, 4))
+    layer_test(layers.ReLU,
+               kwargs={'max_value': 6},
+               input_shape=(2, 3, 4))
+    layer_test(layers.ReLU,
+               kwargs={'negative_slope': 0.2},
+               input_shape=(2, 3, 4))
+    
+        def deletion_field(self):
+        from django.forms.formsets import DELETION_FIELD_NAME
+        return AdminField(self.form, DELETION_FIELD_NAME, False)
+    
+        def test_tabular_non_field_errors(self):
+        '''
+        non_field_errors are displayed correctly, including the correct value
+        for colspan.
+        '''
+        data = {
+            'title_set-TOTAL_FORMS': 1,
+            'title_set-INITIAL_FORMS': 0,
+            'title_set-MAX_NUM_FORMS': 0,
+            '_save': 'Save',
+            'title_set-0-title1': 'a title',
+            'title_set-0-title2': 'a different title',
+        }
+        response = self.client.post(reverse('admin:admin_inlines_titlecollection_add'), data)
+        # Here colspan is '4': two fields (title1 and title2), one hidden field and the delete checkbox.
+        self.assertContains(
+            response,
+            '<tr><td colspan='4'><ul class='errorlist nonfield'>'
+            '<li>The two titles must be the same</li></ul></td></tr>'
+        )
+    
+        def as_int(self, is_64=False):
+        'Retrieve the Field's value as an integer.'
+        if is_64:
+            return capi.get_field_as_integer64(self._feat.ptr, self._index) if self.is_set else None
+        else:
+            return capi.get_field_as_integer(self._feat.ptr, self._index) if self.is_set else None
+    
+        @property
+    def hex(self):
+        '''
+        Return the WKB of this Geometry in hexadecimal form. Please note
+        that the SRID is not included in this representation because it is not
+        a part of the OGC specification (use the `hexewkb` property instead).
+        '''
+        # A possible faster, all-python, implementation:
+        #  str(self.wkb).encode('hex')
+        return wkb_w(dim=3 if self.hasz else 2).write_hex(self)
+    
+    
+def to_native_string(string, encoding='ascii'):
+    '''Given a string object, regardless of type, returns a representation of
+    that string in the native string type, encoding and decoding where
+    necessary. This assumes ASCII unless told otherwise.
     '''
-    pairs = []
-    labels = []
-    n = min([len(digit_indices[d]) for d in range(num_classes)]) - 1
-    for d in range(num_classes):
-        for i in range(n):
-            z1, z2 = digit_indices[d][i], digit_indices[d][i + 1]
-            pairs += [[x[z1], x[z2]]]
-            inc = random.randrange(1, num_classes)
-            dn = (d + inc) % num_classes
-            z1, z2 = digit_indices[d][i], digit_indices[dn][i]
-            pairs += [[x[z1], x[z2]]]
-            labels += [1, 0]
-    return np.array(pairs), np.array(labels)
-    
-    
-@pytest.mark.parametrize('tensor_shape', [FC_SHAPE, CONV_SHAPE], ids=['FC', 'CONV'])
-def test_uniform(tensor_shape):
-    _runner(initializers.RandomUniform(minval=-1, maxval=1), tensor_shape,
-            target_mean=0., target_max=1, target_min=-1)
-    
-    The paper 'Dynamic Routing Between Capsules': https://arxiv.org/abs/1710.09829
-'''
-from __future__ import print_function
-    
-    
-def serialize(metric):
-    return serialize_keras_object(metric)
-    
-        ```python
-      model = Sequential()
-      model.add(Embedding(1000, 64, input_length=10))
-      # the model will take as input an integer matrix of size (batch, input_length).
-      # the largest integer (i.e. word index) in the input should be
-      # no larger than 999 (vocabulary size).
-      # now model.output_shape == (None, 10, 64), where None is the batch dimension.
-    
-        def get_config(self):
-        config = {
-            'filters': self.filters,
-            'kernel_size': self.kernel_size,
-            'strides': self.strides,
-            'padding': self.padding,
-            'activation': activations.serialize(self.activation),
-            'use_bias': self.use_bias,
-            'kernel_initializer': initializers.serialize(self.kernel_initializer),
-            'bias_initializer': initializers.serialize(self.bias_initializer),
-            'kernel_regularizer': regularizers.serialize(self.kernel_regularizer),
-            'bias_regularizer': regularizers.serialize(self.bias_regularizer),
-            'activity_regularizer':
-                regularizers.serialize(self.activity_regularizer),
-            'kernel_constraint': constraints.serialize(self.kernel_constraint),
-            'bias_constraint': constraints.serialize(self.bias_constraint)
-        }
-        base_config = super(LocallyConnected1D, self).get_config()
-        return dict(list(base_config.items()) + list(config.items()))
-    
-                    if not speed:
-                    eta = '-:--:--'
-                else:
-                    s = int((self.status.total_size - downloaded) / speed)
-                    h, s = divmod(s, 60 * 60)
-                    m, s = divmod(s, 60)
-                    eta = '{0}:{1:0>2}:{2:0>2}'.format(h, m, s)
-    
-            if self.args.debug:
-            self.args.traceback = True
-    
-    
-def get_package_meta(package_name):
-    api_url = 'https://pypi.python.org/pypi/{}/json'.format(package_name)
-    resp = requests.get(api_url).json()
-    hasher = hashlib.sha256()
-    for release in resp['urls']:
-        download_url = release['url']
-        if download_url.endswith('.tar.gz'):
-            hasher.update(requests.get(download_url).content)
-            return {
-                'name': package_name,
-                'url': download_url,
-                'sha256': hasher.hexdigest(),
-            }
+    if isinstance(string, builtin_str):
+        out = string
     else:
-        raise RuntimeError(
-            '{}: download not found: {}'.format(package_name, resp))
+        if is_py2:
+            out = string.encode(encoding)
+        else:
+            out = string.decode(encoding)
     
-        if resp:
-        output.append(Stream(
-            msg=HTTPResponse(response),
-            with_headers=resp_h,
-            with_body=resp_b))
+        def inner(*suffix):
+        return urljoin(httpbin_url, '/'.join(suffix))
     
-        @staticmethod
-    def make_header(username, password):
-        credentials = u'%s:%s' % (username, password)
-        token = b64encode(credentials.encode('utf8')).strip().decode('latin1')
-        return 'Basic %s' % token
+        badargs = set(kwargs) - set(result)
+    if badargs:
+        err = 'create_cookie() got unexpected keyword arguments: %s'
+        raise TypeError(err % list(badargs))
     
-    
-def repr_dict_nice(d):
-    def prepare_dict(d):
-        for k, v in d.items():
-            if isinstance(v, dict):
-                v = dict(prepare_dict(v))
-            elif isinstance(v, bytes):
-                v = v.decode('utf8')
-            elif not isinstance(v, (int, str)):
-                v = repr(v)
-            yield k, v
-    return json.dumps(
-        dict(prepare_dict(d)),
-        indent=4, sort_keys=True,
-    )
+        This function works best on CPython and PyPy: in particular, it probably
+    doesn't work for Jython or IronPython. Future investigation should be done
+    to work out the correct shape of the code for those platforms.
+    '''
+    implementation = platform.python_implementation()
     
     
-def test_credentials_in_url_auth_flag_has_priority(httpbin_both):
-    '''When credentials are passed in URL and via -a at the same time,
-     then the ones from -a are used.'''
-    url = add_auth(httpbin_both.url + '/basic-auth/user/password',
-                   auth='user:wrong')
-    r = http('--auth=user:password', 'GET', url)
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
+class CaseInsensitiveDict(MutableMapping):
+    '''A case-insensitive ``dict``-like object.
     
-            def get_auth(self, username=None, password=None):
-            assert self.raw_auth == USERNAME + SEP_CREDENTIALS + PASSWORD
-            assert username == USERNAME
-            assert password == PASSWORD
-            return basic_auth()
+            This should not be called from user code, and is only exposed for use
+        when subclassing the
+        :class:`HTTPAdapter <requests.adapters.HTTPAdapter>`.
+    
+        close_server = threading.Event()
+    server = Server(digest_response_handler, wait_to_close_event=close_server)
+    
+            This function eventually generates a ``Cookie`` header from the
+        given cookies using cookielib. Due to cookielib's design, the header
+        will not be regenerated if it already exists, meaning this function
+        can only be called once for the life of the
+        :class:`PreparedRequest <PreparedRequest>` object. Any subsequent calls
+        to ``prepare_cookies`` will have no actual effect, unless the 'Cookie'
+        header is removed beforehand.
+        '''
+        if isinstance(cookies, cookielib.CookieJar):
+            self._cookies = cookies
+        else:
+            self._cookies = cookiejar_from_dict(cookies)
+    
+    from .__version__ import __title__, __description__, __url__, __version__
+from .__version__ import __build__, __author__, __author_email__, __license__
+from .__version__ import __copyright__, __cake__
+    
+            if network_ok:
+            self.last_check_time = time.time()
+            self.report_ok()
+            xlog.debug('network %s is ok, cost:%d ms', self.type, 1000 * (time.time() - time_now))
+        else:
+            xlog.warn('network %s fail', self.type)
+            self.network_stat = 'Fail'
+            self.last_check_time = time.time()
     
     
-def main():
-    '''Script main program.'''
-    import argparse
+def test_read_jsonl_unicode_chars():
+    # GH15132: non-ascii unicode characters
+    # \u201d == RIGHT DOUBLE QUOTATION MARK
     
-        def test_bytes_deprecated(self):
-        pl = {
-            'key': 42,
-            'sub': {
-                'key': 9,
-                'alt': 'value',
-                'data': b'buffer',
-            }
+            # common endpoints with NA
+        tuples = [(na_value, na_value)] + tuples + [(na_value, na_value)]
+        index = IntervalIndex.from_tuples(tuples, closed=closed)
+        result = index.is_overlapping
+        assert result is expected
+    
+                if self.index is not None:
+                self.frame.set_index(self.index, inplace=True)
+    
+                for index in [
+                tm.makeFloatIndex,
+                tm.makeStringIndex,
+                tm.makeIntIndex,
+                tm.makeDateIndex,
+            ]:
+    
+            # Now add a subject
+        action = {
+            'Message': ['msg'],
+            'Subject': ['subject'],
+            'MessageAttributes.entry.1.Name': ['attr1'],
+            'MessageAttributes.entry.1.Value.DataType': ['String'],
+            'MessageAttributes.entry.1.Value.StringValue': ['value1'],
+            'MessageAttributes.entry.1.Value.BinaryValue': ['value1'],
+            'MessageAttributes.entry.2.Name': ['attr2'],
+            'MessageAttributes.entry.2.Value.DataType': ['String'],
+            'MessageAttributes.entry.2.Value.StringValue': ['value2'],
+            'MessageAttributes.entry.2.Value.BinaryValue': ['value2'],
         }
-        with self.assertWarns(DeprecationWarning):
-            data = plistlib.writePlistToBytes(pl)
+        result_str = sns_listener.create_sns_message_body(self.subscriber, action)
+        result = json.loads(result_str)
+        del result['MessageId']
+        expected = json.dumps({'Message': 'msg',
+                               'TopicArn': 'arn',
+                               'Type': 'Notification',
+                               'Subject': 'subject',
+                               'MessageAttributes': {
+                                   'attr1': {
+                                       'Type': 'String',
+                                       'Value': 'value1',
+                                   }, 'attr2': {
+                                       'Type': 'String',
+                                       'Value': 'value2',
+                                   }
+                               }})
+        assert_equal(result, json.loads(expected))
     
-        def test_cancel_race(self):
-        # Several tasks:
-        # - A acquires the lock
-        # - B is blocked in acquire()
-        # - C is blocked in acquire()
-        #
-        # Now, concurrently:
-        # - B is cancelled
-        # - A releases the lock
-        #
-        # If B's waiter is marked cancelled but not yet removed from
-        # _waiters, A's release() call will crash when trying to set
-        # B's waiter; instead, it should move on to C's waiter.
+        test_port = 12124
+    tmp_file_pattern = '/tmp/test.%s'
     
-        def test_tofrombytes(self):
-        a = array.array(self.typecode, 2*self.example)
-        b = array.array(self.typecode)
-        self.assertRaises(TypeError, a.tobytes, 42)
-        self.assertRaises(TypeError, b.frombytes)
-        self.assertRaises(TypeError, b.frombytes, 42)
-        b.frombytes(a.tobytes())
-        c = array.array(self.typecode, bytearray(a.tobytes()))
-        self.assertEqual(a, b)
-        self.assertEqual(a, c)
-        if a.itemsize>1:
-            self.assertRaises(ValueError, b.frombytes, b'x')
+        def setUp(self):
+        firehose_api.create_stream(TEST_STREAM_NAME, tags=TEST_TAGS)
     
-    # Grouping the document tree into LaTeX files. List of tuples
-# (source start file, target name, title, author, document class [howto/manual]).
-_stdauthor = r'Guido van Rossum\\and the Python development team'
-latex_documents = [
-    ('c-api/index', 'c-api.tex',
-     'The Python/C API', _stdauthor, 'manual'),
-    ('distributing/index', 'distributing.tex',
-     'Distributing Python Modules', _stdauthor, 'manual'),
-    ('extending/index', 'extending.tex',
-     'Extending and Embedding Python', _stdauthor, 'manual'),
-    ('installing/index', 'installing.tex',
-     'Installing Python Modules', _stdauthor, 'manual'),
-    ('library/index', 'library.tex',
-     'The Python Library Reference', _stdauthor, 'manual'),
-    ('reference/index', 'reference.tex',
-     'The Python Language Reference', _stdauthor, 'manual'),
-    ('tutorial/index', 'tutorial.tex',
-     'Python Tutorial', _stdauthor, 'manual'),
-    ('using/index', 'using.tex',
-     'Python Setup and Usage', _stdauthor, 'manual'),
-    ('faq/index', 'faq.tex',
-     'Python Frequently Asked Questions', _stdauthor, 'manual'),
-    ('whatsnew/' + version, 'whatsnew.tex',
-     'What\'s New in Python', 'A. M. Kuchling', 'howto'),
-]
-# Collect all HOWTOs individually
-latex_documents.extend(('howto/' + fn[:-4], 'howto-' + fn[:-4] + '.tex',
-                        '', _stdauthor, 'howto')
-                       for fn in os.listdir('howto')
-                       if fn.endswith('.rst') and fn != 'index.rst')
+            assert 'Parameters' in response
+        assert isinstance(response['Parameters'], list)
     
-        def test_continuation(self):
-        # Balancing continuation
-        self.check_roundtrip('a = (3,4, \n'
-                             '5,6)\n'
-                             'y = [3, 4,\n'
-                             '5]\n'
-                             'z = {'a': 5,\n'
-                             ''b':15, 'c':True}\n'
-                             'x = len(y) + 5 - a[\n'
-                             '3] - a[2]\n'
-                             '+ len(z) - z[\n'
-                             ''b']\n')
+            # Describe TTL status after being enabled.
+        response = testutil.send_describe_dynamodb_ttl_request(TEST_DDB_TABLE_NAME_3)
+        assert response.status_code == 200
+        assert json.loads(response._content)['TimeToLiveDescription']['TimeToLiveStatus'] == 'ENABLED'
     
-            # write a large chunk which completes immediately,
-        # it should not pause writing
-        fut = asyncio.Future(loop=self.loop)
-        fut.set_result(None)
-        self.loop._proactor.send.return_value = fut
-        tr.write(b'very large data')
-        self.loop._run_once()
-        self.assertEqual(tr.get_write_buffer_size(), 0)
-        self.assertFalse(self.protocol.pause_writing.called)
+        return {
+        'Version': VERSION,
+        'Services': {
+            name: convert_service_to_bundle(
+                name,
+                service_dict,
+                image_digests[name],
+            )
+            for name, service_dict in config['services'].items()
+        },
+    }
     
-                with self.assertRaises(asyncio.CancelledError):
-                with self.unix_client(lambda sock: client(sock, addr)):
-                    self.loop.run_until_complete(main_task)
+        tls_attr_name = 'PROTOCOL_{}'.format(compose_tls_version)
+    if not hasattr(ssl, tls_attr_name):
+        log.warning(
+            'The '{}' protocol is unavailable. You may need to update your '
+            'version of Python or OpenSSL. Falling back to TLSv1 (default).'
+            .format(compose_tls_version)
+        )
+        return None
     
-            async def client(addr):
-            await asyncio.wait_for(
-                self.loop.create_connection(
-                    asyncio.Protocol,
-                    *addr,
-                    ssl=client_sslctx,
-                    server_hostname='',
-                    ssl_handshake_timeout=10.0),
-                0.5)
+            if parse_func is None:
+            def parse_func(m):
+                return m or {}
     
-        def test_large_PYTHONPATH(self):
-        path1 = 'ABCDE' * 100
-        path2 = 'FGHIJ' * 100
-        path = path1 + os.pathsep + path2
+        def test_tls_verify_env_falsy_value(self):
+        environment = Environment({'DOCKER_TLS_VERIFY': '0'})
+        options = {'--tls': True}
+        assert tls_config_from_options(options, environment) is True
+    
+        if 'ports' in service_dict:
+        service_dict['ports'] = [
+            p.legacy_repr() if p.external_ip or version < V3_2 else p
+            for p in service_dict['ports']
+        ]
+    if 'volumes' in service_dict and (version < V2_3 or (version > V3_0 and version < V3_2)):
+        service_dict['volumes'] = [
+            v.legacy_repr() if isinstance(v, types.MountSpec) else v for v in service_dict['volumes']
+        ]
+    
+        @classmethod
+    def from_ps(cls, client, dictionary, **kwargs):
+        '''
+        Construct a container object from the output of GET /containers/json.
+        '''
+        name = get_container_name(dictionary)
+        if name is None:
+            return None
+    
+    
+def pypi_upload(args):
+    print('Uploading to PyPi')
+    try:
+        rel = args.release.replace('-rc', 'rc')
+        twine_upload([
+            'dist/docker_compose-{}*.whl'.format(rel),
+            'dist/docker-compose-{}*.tar.gz'.format(rel)
+        ])
+    except HTTPError as e:
+        if e.response.status_code == 400 and 'File already exists' in str(e):
+            if not args.finalize_resume:
+                raise ScriptError(
+                    'Package already uploaded on PyPi.'
+                )
+            print('Skipping PyPi upload - package already uploaded')
+        else:
+            raise ScriptError('Unexpected HTTP error uploading package to PyPi: {}'.format(e))
+    
+    
+def ansi_color(code, s):
+    return '{0}{1}{2}'.format(ansi(code), s, ansi(0))
+    
+    
+def set_signal_handler_to_shutdown():
+    set_signal_handler(shutdown)
