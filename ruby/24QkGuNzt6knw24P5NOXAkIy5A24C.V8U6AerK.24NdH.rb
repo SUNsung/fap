@@ -1,215 +1,143 @@
 
         
-            def purge_tombstone(grace_period)
+              expect(a).to_not eq(b)
     end
     
-        it 'should import from ssh url' do
-      Discourse::Utils.expects(:execute_command).with({
-        'GIT_SSH_COMMAND' => 'ssh -i #{@ssh_folder}/id_rsa -o StrictHostKeyChecking=no'
-      }, 'git', 'clone', ssh_url, @temp_folder)
-    
-      describe '.overrides_by_locale' do
-    it 'should cache overrides for each locale' do
-      override_translation('en', 'got', 'summer')
-      override_translation('zh_TW', 'got', '冬季')
-    
-        unless @topic.topic_allowed_users.where(user_id: @user.id).exists?
-      unless @topic.topic_allowed_groups.where('group_id IN (
-                                              SELECT group_id FROM group_users where user_id = ?
-                                           )', @user.id).exists?
-        @topic.topic_allowed_users.create!(user_id: @user.id)
-      end
-    end
-  end
-    
-          @s3_helper.ensure_cors!([rule])
-    end
-    
-    require_dependency 'reviewable_score_type_serializer'
-    
-          # Now it's time to merge the (potentially) existing mapping
-      #   (e.g. coming from `provisioningProfiles` of the `export_options` or from previous match calls)
-      # with the secondary hash we just created (or was provided as parameter).
-      # Both might include information about what profile to use
-      # This is important as it might not be clear for the user that they have to call match for each app target
-      # before adding this code, we'd only either use whatever we get from match, or what's defined in the Xcode project
-      # With the code below, we'll make sure to take the best of it:
-      #
-      #   1) A provisioning profile is defined in the `primary_mapping`
-      #   2) A provisioning profile is defined in the `secondary_mapping`
-      #   3) On a conflict (app identifier assigned both in xcode and match)
-      #     3.1) we'll choose whatever matches what's defined as the `export_method`
-      #     3.2) If both include the right `export_method`, we'll prefer the one from `primary_mapping`
-      #     3.3) If none has the right export_method, we'll use whatever is defined in the Xcode project
-      #
-      # To get a better sense of this, check out code_signing_spec.rb for some test cases
-    
-          # Path to the project or workspace as parameter
-      # This will also include the scheme (if given)
-      # @return [Array] The array with all the components to join
-      def project_path_array
-        proj = Snapshot.project.xcodebuild_parameters
-        return proj if proj.count > 0
-        UI.user_error!('No project/workspace found')
-      end
-    
-          def self.available_options
-        [
-          FastlaneCore::ConfigItem.new(key: :fallback_changelog,
-                                       description: 'Fallback changelog if there is not one on Jenkins, or it couldn't be read',
-                                       optional: true,
-                                       default_value: ''),
-          FastlaneCore::ConfigItem.new(key: :include_commit_body,
-                                       description: 'Include the commit body along with the summary',
-                                       optional: true,
-                                       is_string: false,
-                                       default_value: true)
-        ]
-      end
-    
-          def self.category
-        :code_signing
-      end
-    end
-  end
-end
-
-    
-            desc 'Requests access for the authenticated user to a #{source_type}.' do
-          detail 'This feature was introduced in GitLab 8.11.'
-          success Entities::AccessRequester
+            it 'should not attempt to install a plugin' do
+          expect(plugin_manager).not_to receive(:install_plugin)
+          expect(instance.send(:process_configured_plugins)).to eq(local_installed_plugins)
         end
-        post ':id/access_requests' do
-          source = find_source(source_type, params[:id])
-          access_requester = source.request_access(current_user)
-    
-        # The path used after unlocking the resource
-    def after_unlock_path_for(resource)
-      new_session_path(resource)  if is_navigational_format?
-    end
-    
-              if mod.const_defined?('ClassMethods')
-            class_mod = mod.const_get('ClassMethods')
-            extend class_mod
-    
-          def test_on_event5
-        ev = WIN32OLE_EVENT.new(@db, 'ConnectionEvents')
-        ev.on_event {|*args| default_handler(*args)}
-        ev.on_event('WillConnect'){|*args| handler3(*args)}
-        @db.open
-        message_loop
-        assert_match(/ConnectComplete/, @event)
-        assert(/WillConnect/ !~ @event)
-        assert_equal(CONNSTR, @event3)
       end
     
-      it 'calls the given block for each line in the stream, passing the line as an argument' do
-    ScratchPad.record []
-    @gzreader.send(@method) { |b| ScratchPad << b }
+        context 'local box metadata file' do
+      let(:data_path) { double(:data_path) }
+      let(:meta_file) { double(:meta_file) }
+      let(:box_version) { '2.0' }
     
-    describe 'GzipWriter#write' do
-  before :each do
-    @data = '12345abcde'
-    @zip = [31, 139, 8, 0, 44, 220, 209, 71, 0, 3, 51, 52, 50, 54, 49, 77,
-            76, 74, 78, 73, 5, 0, 157, 5, 0, 36, 10, 0, 0, 0].pack('C*')
-    @io = StringIO.new ''.b
+                errors << I18n.t('vagrant.general.batch_unexpected_error',
+                             machine: thread[:machine].name,
+                             message: message)
+          else
+            errors << I18n.t('vagrant.general.batch_vagrant_error',
+                             machine: thread[:machine].name,
+                             message: thread[:error].message)
+          end
+        end
+      end
+    
+          after_triggers = triggers.after_triggers
+      expect(after_triggers.size).to eq(3)
+      subject.send(:filter_triggers, after_triggers, 'ubuntu-guest', :action)
+      expect(after_triggers.size).to eq(3)
+    end
   end
+    
+          # Invalid entry because that specific machine doesn't exist anymore.
+      entryB_env = isolated_environment
+      entryB_env.vagrantfile('')
+      entryB = new_entry('B')
+      entryB.vagrantfile_path = entryB_env.workdir
+      locked = iso_env.machine_index.set(entryB)
+      iso_env.machine_index.release(locked)
     
       before do
-    @zeros    = Zlib::Deflate.deflate('0' * 100_000)
-    @inflator = Zlib::Inflate.new
-    @chunks   = []
+    allow(machine).to receive(:communicate).and_return(communicator)
+    allow(machine).to receive(:guest).and_return(guest)
+    allow(machine.guest).to receive(:ready?).and_return(true)
+    allow(machine).to receive(:config).and_return(config)
+    allow(config).to receive(:vm).and_return(vm)
+    allow(ui).to receive(:info)
+  end
     
-          it 'returns scopes by built types, versioned platform names and subspec names' do
-        variants = PodVariantSet.new([
-          PodVariant.new([@root_spec, @default_subspec], [], [], Platform.new(:ios, '7.0')),
-          PodVariant.new([@root_spec, @default_subspec], [], [], Platform.ios),
-          PodVariant.new([@root_spec, @default_subspec], [], [], Platform.osx, Target::BuildType.dynamic_framework),
-          PodVariant.new([@root_spec, @default_subspec, @foo_subspec], [], [], Platform.osx, Target::BuildType.dynamic_framework),
-        ])
-        variants.scope_suffixes.values.should == %w(
-          library-iOS7.0
-          library-iOS
-          framework
-          .default-Foo
-        )
+    Struct.new('Blog', :name, :web_url, :rss_url)
+blogs = []
+    
+        if params[:user][:otp_attempt].present? && session[:otp_user_id]
+      authenticate_with_two_factor_via_otp(resource)
+    else
+      strategy = Warden::Strategies[:database_authenticatable].new(warden.env, :user)
+      prompt_for_two_factor(strategy.user) if strategy.valid? && strategy._run!.successful?
+    end
+  end
+    
+    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
+#   licensed under the Affero General Public License version 3 or later.  See
+#   the COPYRIGHT file.
+    
+        session[:valid_email_invites] = valid_emails
+    session[:invalid_email_invites] = invalid_emails
+    
+      def read_all
+    current_type = types[params[:type]]
+    notifications = Notification.where(recipient_id: current_user.id, unread: true)
+    notifications = notifications.where(type: current_type) if params[:type]
+    notifications.update_all(unread: false)
+    respond_to do |format|
+      if current_user.unread_notifications.count > 0
+        format.html { redirect_to notifications_path }
+        format.mobile { redirect_to notifications_path }
+      else
+        format.html { redirect_to stream_path }
+        format.mobile { redirect_to stream_path }
+      end
+      format.xml { render :xml => {}.to_xml }
+      format.json { render :json => {}.to_json }
+    end
+  end
+    
+        (stdout + stderr).each_line { |line| puts '[vagrant] #{line}' }
+    
+          def fetch_for(key, default, &block)
+        block ? values.fetch(key, &block) : values.fetch(key, default)
       end
     
-    - (BOOL)application:(UIApplication *)__unused application didFinishLaunchingWithOptions:(NSDictionary *)__unused launchOptions
-{
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.rootViewController = [UIViewController new];
-    }
+          def all_gem_names
+        core_gem_names + plugin_gem_names
+      end
     
-            # Cleans up projects before writing.
-        #
-        def cleanup_projects(projects)
-          projects.each do |project|
-            [project.pods, project.support_files_group,
-             project.development_pods, project.dependencies_group].each { |group| group.remove_from_project if group.empty? }
-            project.sort(:groups_position => :below)
+          def footer
+        if @footer.nil?
+          if page = @page.footer
+            @footer = page.text_data
+          else
+            @footer = false
+          end
+        end
+        @footer
+      end
+    
+    module Gollum
+  VERSION = '4.1.4'
+    
+        # Outputs the post.date as formatted html, with hooks for CSS styling.
+    #
+    #  +date+ is the date object to format as HTML.
+    #
+    # Returns string
+    def date_to_html_string(date)
+      result = '<span class='month'>' + date.strftime('%b').upcase + '</span> '
+      result << date.strftime('<span class='day'>%d</span> ')
+      result << date.strftime('<span class='year'>%Y</span> ')
+      result
+    end
+    
+    end
+    
+          Dir.chdir(file_path) do
+        contents = file.read
+        if contents =~ /\A-{3}.+[^\A]-{3}\n(.+)/m
+          contents = $1.lstrip
+        end
+        contents = pre_filter(contents)
+        if @raw
+          contents
+        else
+          partial = Liquid::Template.parse(contents)
+          context.stack do
+            partial.render(context)
           end
         end
       end
     end
   end
 end
-
-    
-    @@ login
-<form action='/'>
-  <label for='user'>User Name:</label>
-  <input name='user' value='' />
-  <input type='submit' value='GO!' />
-</form>
-    
-          def unmasked_token?(token)
-        token.length == TOKEN_LENGTH
-      end
-    
-          def call(env)
-        status, headers, body = @app.call(env)
-        header = options[:report_only] ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'
-        headers[header] ||= csp_policy if html? headers
-        [status, headers, body]
-      end
-    end
-  end
-end
-
-    
-      it 'accepts post form requests with correct authenticity_token field' do
-    post('/', {'authenticity_token' => token}, 'rack.session' => session)
-    expect(last_response).to be_ok
-  end
-    
-    end
-
-    
-      it 'allows middleware to abruptly stop processing rest of chain' do
-    recorder = []
-    chain = Sidekiq::Middleware::Chain.new
-    chain.add NonYieldingMiddleware
-    chain.add CustomMiddleware, 1, recorder
-    
-          assert SomeScheduledWorker.perform_in(1.month, 'mike')
-      assert_equal 2, ss.size
-    
-        assert_raises InlineError do
-      Sidekiq::Client.enqueue(InlineWorker, false)
-    end
-  end
-    
-        ## Write the results to a file
-    ## Requires railsexpress patched MRI build
-    # brew install qcachegrind
-    #File.open('callgrind.profile', 'w') do |f|
-      #RubyProf::CallTreePrinter.new(result).print(f, :min_percent => 1)
-    #end
-  end
-end
-    
-        msg = 'Actual pane does not match expected'
-    msg << '\n  Expected #{@commands} but has #{actual.commands}' if @commands
-    msg << '\n  Expected pane to have #{@expected_attrs}' if @expected_attrs
-  end
