@@ -1,105 +1,147 @@
 
         
-            context 'running workers' do
-      before do
-        AgentRunner.class_variable_set(:@@agents, [HuginnScheduler, DelayedJobWorker])
-        stub.instance_of(HuginnScheduler).setup
-        stub.instance_of(DelayedJobWorker).setup
+            initializer 'action_mailbox.config' do
+      config.after_initialize do |app|
+        ActionMailbox.logger = app.config.action_mailbox.logger || Rails.logger
+        ActionMailbox.incinerate = app.config.action_mailbox.incinerate.nil? ? true : app.config.action_mailbox.incinerate
+        ActionMailbox.incinerate_after = app.config.action_mailbox.incinerate_after || 30.days
+        ActionMailbox.queues = app.config.action_mailbox.queues || {}
+        ActionMailbox.ingress = app.config.action_mailbox.ingress
       end
-    
-          it 'works with OSX line endings' do
-        event = event_with_contents('one,two\r1,2\r2,3')
-        expect { @checker.receive([event]) }.to change(Event, :count).by(2)
-        expect(Event.last.payload).to eq(@checker.options['data_key'] => {'one' => '2', 'two' => '3'})
-      end
-    
-      class FrozenData < LoadData
-    def marshal_load(data)
-      super
-      data.instance_variables.each do |iv|
-        instance_variable_set(iv, data.instance_variable_get(iv))
-      end
-      freeze
     end
   end
+end
+
     
+      # Send deprecation notices to registered listeners.
+  config.active_support.deprecation = :notify
     
-if ARGV.delete '--print' then
-  $raccs_print_type = true
-  printonly = true
-else
-  printonly = false
+              if @config['syntax_highlighter']
+            return @highlighter = @config[
+              'syntax_highlighter'
+            ]
+          end
+    
+    def graceful_require
+  Jekyll::External.require_with_graceful_fail('json')
+  JSON.pretty_generate(DATA)
 end
     
-      def test_sqrt
-    assert_equal 1, CMath.sqrt(1)
-    assert_equal CMath.sqrt(1i), CMath.sqrt(1.0i), '[ruby-core:31672]'
-    assert_equal Complex(0,2), CMath.sqrt(-4.0)
-    assert_equal Complex(0,2), CMath.sqrt(-4)
-    assert_equal Complex(0,2), CMath.sqrt(Rational(-4))
-    assert_equal Complex(0,3), CMath.sqrt(-9.0)
-    assert_equal Complex(0,3), CMath.sqrt(-9)
-    assert_equal Complex(0,3), CMath.sqrt(Rational(-9))
-    assert_in_delta (1.272019649514069+0.7861513777574233i), CMath.sqrt(1+2i)
-    assert_in_delta 3.0i, CMath.sqrt(-9)
-    assert_raise_with_message(TypeError, 'Numeric Number required') { CMath.sqrt('1') }
-  end
-    
-        @inflator.finish do |chunk|
-      @chunks << chunk
+            expect(FileStore::BaseStore.new.get_path_for_upload(upload))
+          .to eq('original/1X/4170ac2a2782a1516fe9e13d7322ae482c1bd594.png')
+      end
     end
   end
     
-      def send_sinatra_file(path, &missing_file_block)
-    file_path = File.join(File.dirname(__FILE__), 'public',  path)
-    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
-    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
-  end
+        @s3_client.stub_responses(:get_object, -> (context) do
+      check_context(context)
     
-        # Outputs a single category as an <a> link.
-    #
-    #  +category+ is a category string to format as an <a> link
-    #
-    # Returns string
-    #
-    def category_link(category)
-      dir = @context.registers[:site].config['category_dir']
-      '<a class='category' href='/#{dir}/#{category.to_url}/'>#{category}</a>'
+          text.gsub!(/`[a-z_]+`/) do |m|
+        if scope.is_staff?
+          setting = m[1..-2]
+          '<a href=\'#{settings_url}#{setting}\'>#{setting.gsub('_', ' ')}</a>'
+        else
+          m.gsub('_', ' ')
+        end
+      end
     end
     
-    class ConfigTag < Liquid::Tag
-  def initialize(tag_name, options, tokens)
-    super
-    options = options.split(' ').map {|i| i.strip }
-    @key = options.slice!(0)
-    @tag = nil
-    @classname = nil
-    options.each do |option|
-      @tag = $1 if option =~ /tag:(\S+)/ 
-      @classname = $1 if option =~ /classname:(\S+)/
+    describe 'S3Helper' do
+  let(:client) { Aws::S3::Client.new(stub_responses: true) }
+    
+      def diff_hash(new_hash, old)
+    changes = []
+    deletions = []
+    
     end
+
+    
+      # DELETE /resource/sign_out
+  def destroy
+    signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
+    set_flash_message! :notice, :signed_out if signed_out
+    yield if block_given?
+    respond_to_on_destroy
   end
     
-      class IncludeArrayTag < Liquid::Tag
-    Syntax = /(#{Liquid::QuotedFragment}+)/
-    def initialize(tag_name, markup, tokens)
-      if markup =~ Syntax
-        @array_name = $1
+      end
+end
+    
+            if uri 
+          path = remove_domain_from_uri(uri)
+          path = add_fragment_back_to_path(uri, path)
+    
+          def mailer_from(mapping)
+        mailer_sender(mapping, :from)
+      end
+    
+    module Devise
+  module Models
+    # Rememberable manages generating and clearing token for remembering the user
+    # from a saved cookie. Rememberable also has utility methods for dealing
+    # with serializing the user into the cookie and back from the cookie, trying
+    # to lookup the record based on the saved information.
+    # You probably wouldn't use rememberable methods directly, they are used
+    # mostly internally for handling the remember token.
+    #
+    # == Options
+    #
+    # Rememberable adds the following options in devise_for:
+    #
+    #   * +remember_for+: the time you want the user will be remembered without
+    #     asking for credentials. After this time the user will be blocked and
+    #     will have to enter their credentials again. This configuration is also
+    #     used to calculate the expires time for the cookie created to remember
+    #     the user. By default remember_for is 2.weeks.
+    #
+    #   * +extend_remember_period+: if true, extends the user's remember period
+    #     when remembered via cookie. False by default.
+    #
+    #   * +rememberable_options+: configuration options passed to the created cookie.
+    #
+    # == Examples
+    #
+    #   User.find(1).remember_me!  # regenerating the token
+    #   User.find(1).forget_me!    # clearing the token
+    #
+    #   # generating info to put into cookies
+    #   User.serialize_into_cookie(user)
+    #
+    #   # lookup the user based on the incoming cookie information
+    #   User.serialize_from_cookie(cookie_string)
+    module Rememberable
+      extend ActiveSupport::Concern
+    
+      not_found do
+    send_file(File.join(File.dirname(__FILE__), 'public', '404.html'), {:status => 404})
+  end
+    
+          # Throw an exception if the layout couldn't be found.
       else
-        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
-      end
+        raise <<-ERR
     
-      class IncludeCodeTag < Liquid::Tag
-    def initialize(tag_name, markup, tokens)
-      @title = nil
-      @file = nil
-      if markup.strip =~ /\s*lang:(\S+)/i
-        @filetype = $1
-        markup = markup.strip.sub(/lang:\S+/i,'')
-      end
-      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
-        @title = $1 || nil
-        @file = $3
-      end
-      super
+    module Jekyll
+    
+        def post_render(page)
+      OctopressFilters::post_filter(page)
     end
+  end
+    
+          !(sessions !~ /^#{unescaped_name}:/)
+    end
+    
+        def initialize(index, project, tab, *commands)
+      @commands = commands
+      @index = index
+      @project = project
+      @tab = tab
+    end
+    
+        context 'and there is a local project config' do
+      include_context :local_project_setup
+    
+      describe '.editor?' do
+    context '$EDITOR is set' do
+      before do
+        allow(ENV).to receive(:[]).with('EDITOR') { 'vim' }
+      end
