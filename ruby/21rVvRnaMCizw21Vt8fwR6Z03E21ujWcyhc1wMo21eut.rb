@@ -1,77 +1,58 @@
 
         
-                    c.action do |args, opts|
-              Jekyll::Commands::NewTheme.process(args, opts)
+                    if method_called_ever?(method, :exist?) && !method_called_ever?(method, :!)
+              problem 'Use `assert_predicate <path_to_file>, :exist?` instead of `#{method.source}`'
             end
-          end
+    
+        expect do
+      described_class.run('local-transmission', 'local-caffeine')
+    end.to output('#{transmission_location}\n#{caffeine_location}\n').to_stdout
+  end
+    
+          # Config option `ruby` for a trigger which reads in a ruby block and sets
+      # it to be evaluated when the configured trigger fires. This method is only
+      # invoked when the regular 'block' syntax is used. Otherwise the proc is
+      # set through the attr_accessor if the hash syntax is used.
+      #
+      # @param [Proc] block
+      def ruby(&block)
+        @ruby_block = block
+      end
+    
+          # If we're forcing the default, just short-circuit and return
+      # that (the default behavior)
+      if default && opts[:force_default]
+        @logger.debug('Using forced default provider: `#{default}`')
+        return default
+      end
+    
+        it 'raises an error if the machine is not found' do
+      expect { subject.machine_config(:foo, :foo, boxes) }.
+        to raise_error(Vagrant::Errors::MachineNotFound)
+    end
+    
+              # If we forked during the process run, we need to do a hard
+          # exit here. Ruby's fork only copies the running process (which
+          # would be us), so if we return from this thread, it results
+          # in a zombie Ruby process.
+          if Process.pid != start_pid
+            # We forked.
+    
+    describe VagrantPlugins::CommandGlobalStatus::Command do
+  include_context 'unit'
+    
+              # This re-establishes our symbolic links if they were
+          # created between now and a reboot
+          machine.communicate.execute('net use', error_check: false, shell: :powershell)
         end
-    
-        def arg_is_present?(args, deprecated_argument, message)
-      deprecation_message(message) if args.include?(deprecated_argument)
-    end
-    
-      def verify_payload?
-    payload.present? && VerifySalmonService.new.call(payload)
-  end
-    
-      private
-    
-      def set_locale
-    I18n.locale = default_locale
-    I18n.locale = current_user.locale if user_signed_in?
-  rescue I18n::InvalidLocale
-    I18n.locale = default_locale
-  end
-    
-      # if rss_url already in existing opml file, use that; otherwise, do a lookup
-  rss_url = nil
-  if File.exist?(OUTPUT_FILENAME)
-    xml = Nokogiri::XML(File.open(OUTPUT_FILENAME))
-    existing_blog = xml.xpath('//outline[@htmlUrl='#{web_url}']').first
-    if existing_blog
-      rss_url = existing_blog.attr('xmlUrl')
-      puts '#{name}: ALREADY HAVE'
-    end
-  end
-    
-      def test_image_helper
-    assert_match %r(url\(['']?/assets/apple-touch-icon-144-precomposed.*png['']?\)), @css
-  end
-    
-        it 'generates a jasmine fixture', :fixture => true do
-      get :bookmarklet
-      save_fixture(html_for('body'), 'bookmarklet')
-    end
-    
-          it_behaves_like 'on a visible post'
-    end
-    
-        context 'on a post you can't see' do
-      before do
-        sign_in(eve, scope: :user)
-      end
-    
-        streams = {
-      liked:         Stream::Likes,
-      mentioned:     Stream::Mention,
-      followed_tags: Stream::FollowedTag,
-      activity:      Stream::Activity
-    }
-    
-      desc 'Install all spree gems'
-  task install: :build do
-    for_each_gem do |gem_path|
-      Bundler.with_clean_env do
-        sh 'gem install #{gem_path}'
       end
     end
   end
+end
+
     
-          @@order_attributes = [
-        :id, :number, :item_total, :total, :ship_total, :state, :adjustment_total,
-        :user_id, :created_at, :updated_at, :completed_at, :payment_total,
-        :shipment_state, :payment_state, :email, :special_instructions, :channel,
-        :included_tax_total, :additional_tax_total, :display_included_tax_total,
-        :display_additional_tax_total, :tax_total, :currency, :considered_risky,
-        :canceler_id
-      ]
+      before { sign_in user }
+    
+      def edit
+    @page = Page.find(params[:id])
+  end
