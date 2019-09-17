@@ -1,298 +1,264 @@
 
         
-              # @return (String) The version number of this version
-      attr_accessor :version
-    
-        def get_build_info_for_review(app_id: nil, train: nil, build_number: nil, platform: 'ios')
-      url = 'ra/apps/#{app_id}/platforms/#{platform}/trains/#{train}/builds/#{build_number}/testInformation'
-      r = request(:get) do |req|
-        req.url(url)
-        req.headers['Content-Type'] = 'application/json'
-      end
-      handle_itc_response(r.body)
-    
-        #   it 'can add a new trailer given a valid externally provided preview screenshot' do
-    #     # remove existing
-    #     version.upload_trailer!(nil, 'English', 'ipad')
-    
-          # delete iap
-      stub_request(:delete, 'https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/apps/898536088/iaps/1194457865').
-        to_return(status: 200, body: '', headers: {})
-      # create consumable iap
-      stub_request(:post, 'https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/apps/898536088/iaps').
-        with(body: itc_read_fixture_file('iap_create.json')).
-        to_return(status: 200, body: itc_read_fixture_file('iap_detail.json'),
-                 headers: { 'Content-Type' => 'application/json' })
-      # create recurring iap
-      stub_request(:post, 'https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/apps/898536088/iaps').
-        with(body: itc_read_fixture_file('iap_create_recurring.json')).
-        to_return(status: 200, body: itc_read_fixture_file('iap_detail_recurring.json'),
-                  headers: { 'Content-Type' => 'application/json' })
-      # create recurring iap witout pricing
-      stub_request(:post, 'https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/apps/898536088/iaps').
-        with(body: itc_read_fixture_file('iap_create_recurring_without_pricing.json')).
-        to_return(status: 200, body: itc_read_fixture_file('iap_detail_recurring.json'),
-                  headers: { 'Content-Type' => 'application/json' })
-      # iap consumable template
-      stub_request(:get, 'https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/apps/898536088/iaps/consumable/template').
-        to_return(status: 200, body: itc_read_fixture_file('iap_consumable_template.json'),
-                 headers: { 'Content-Type' => 'application/json' })
-      # iap recurring template
-      stub_request(:get, 'https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/apps/898536088/iaps/recurring/template').
-        to_return(status: 200, body: itc_read_fixture_file('iap_recurring_template.json'),
-                  headers: { 'Content-Type' => 'application/json' })
-      # iap edit family
-      stub_request(:put, 'https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/apps/898536088/iaps/family/20373395/').
-        with(body: itc_read_fixture_file('iap_family_edit_versions.json')).
-        to_return(status: 200, body: itc_read_fixture_file('iap_family_detail.json'),
-                    headers: { 'Content-Type' => 'application/json' })
-    
-          def initialize(path = nil, require_variable_prefix = true)
-        version_var_name = 'version'
-        variable_prefix = require_variable_prefix ? /\w\./ : //
-        @version_regex = /^(?<begin>[^#]*#{variable_prefix}#{version_var_name}\s*=\s*[''])(?<value>(?<major>[0-9]+)(\.(?<minor>[0-9]+))?(\.(?<patch>[0-9]+))?(?<appendix>(\.[0-9]+)*)?(-(?<prerelease>(.+)))?)(?<end>[''])/i
-    
-        context 'when semantic version' do
-      it 'returns the current version once parsed' do
-        test_content = 'spec.version = '1.3.2''
-        result = @version_podspec_file.parse(test_content)
-        expect(result).to eq('1.3.2')
-        expect(@version_podspec_file.version_value).to eq('1.3.2')
-        expect(@version_podspec_file.version_match[:major]).to eq('1')
-        expect(@version_podspec_file.version_match[:minor]).to eq('3')
-        expect(@version_podspec_file.version_match[:patch]).to eq('2')
-      end
-    
-          def pipe(device_type, language, locale)
-        log_path = xcodebuild_log_path(device_type: device_type, language: language, locale: locale)
-        return ['| tee #{log_path.shellescape} | xcpretty #{Snapshot.config[:xcpretty_args]}']
-      end
-    
-            begin
-          Actions.sh(command)
-    
-          def self.description
-        'Generate a changelog using the Changes section from the current Jenkins build'
-      end
-    
-        it 'doesn't adds the dependency without OS version requirements' do
-      spec.uses_from_macos('foo')
-      spec.uses_from_macos('bar' => :head)
-    
-        attr_reader :force
-    attr_accessor :downloaded_path
-    
-        def metadata_timestamped_path(version: self.version, timestamp: :latest, create: false)
-      raise CaskError, 'Cannot create metadata path when timestamp is :latest.' if create && timestamp == :latest
-    
-          external_ruby_cmd = tap_cmd_directories.map { |d| d/'brewcask-#{command}.rb' }
-                                             .find(&:file?)
-      external_ruby_cmd ||= which('brewcask-#{command}.rb', path)
-    
-    describe Cask::Cmd::Cache, :cask do
-  let(:local_transmission) {
-    Cask::CaskLoader.load(cask_path('local-transmission'))
-  }
-    
-          downloader.fetch
-    
-      def mirror(val)
-    mirrors << val
+          def two
+    render xml: Model.new
   end
-    
-    if rails_env != 'development'
-  config('path vendor/bundle')
-  config('frozen true')
-  config('disable_shared_gems true')
 end
     
-              render 'admins/pods'
-        end
-        format.mobile { render 'admins/pods' }
-        format.json { render json: pods_json }
-      end
+      def test_adding_csv_rendering_via_renderers_add
+    ActionController::Renderers.add :csv do |value, options|
+      send_data value.to_csv, type: Mime[:csv]
     end
-    
-        unless user
-      EmailInviter.new(email, inviter).send!
-      flash[:notice] = 'invitation sent to #{email}'
-    else
-      flash[:notice]= 'error sending invite to #{email}'
-    end
-    redirect_to user_search_path, :notice => flash[:notice]
+    @request.accept = 'text/csv'
+    get :respond_to_mime, format: 'csv'
+    assert_equal Mime[:csv], @response.media_type
+    assert_equal 'c,s,v', @response.body
+  ensure
+    ActionController::Renderers.remove :csv
   end
-    
-          def save_request_parameters
-        session[:client_id] = @o_auth_application.client_id
-        session[:response_type] = @response_type
-        session[:redirect_uri] = @redirect_uri
-        session[:scopes] = scopes_as_space_seperated_values
-        session[:state] = params[:state]
-        session[:nonce] = params[:nonce]
-      end
-    
-          def fetch_public_key(o_auth_app, jwt)
-        public_key = fetch_public_key_from_json(o_auth_app.jwks, jwt)
-        if public_key.empty? && o_auth_app.jwks_uri
-          response = Faraday.get(o_auth_app.jwks_uri)
-          public_key = fetch_public_key_from_json(response.body, jwt)
-        end
-        raise Rack::OAuth2::Server::Authorize::BadRequest(:unauthorized_client) if public_key.empty?
-        public_key
-      end
-    
-        if @aspect.update_attributes!(aspect_params)
-      flash[:notice] = I18n.t 'aspects.update.success', :name => @aspect.name
-    else
-      flash[:error] = I18n.t 'aspects.update.failure', :name => @aspect.name
-    end
-    render :json => { :id => @aspect.id, :name => @aspect.name }
-  end
-    
-    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
-    
-          @contact_ids = if params[:contact_id]
-                       current_user.contacts.find(params[:contact_id]).id
-                     elsif params[:aspect_id]
-                       current_user.aspects.find(params[:aspect_id]).contacts.pluck(:id).join(',')
-                     end
-    
-      def types
-    {
-      'also_commented'       => 'Notifications::AlsoCommented',
-      'comment_on_post'      => 'Notifications::CommentOnPost',
-      'liked'                => 'Notifications::Liked',
-      'mentioned'            => 'Notifications::MentionedInPost',
-      'mentioned_in_comment' => 'Notifications::MentionedInComment',
-      'reshared'             => 'Notifications::Reshared',
-      'started_sharing'      => 'Notifications::StartedSharing',
-      'contacts_birthday'    => 'Notifications::ContactsBirthday'
-    }
-  end
-  helper_method :types
 end
 
     
-      gem.files         = `git ls-files -z`.split('\x0').reject { |f| f =~ /^docs/ }
-  gem.executables   = %w(cap capify)
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.require_paths = ['lib']
-    
-    Then(/^it will not recreate the file$/) do
-  #
+        self.notifier = Fanout.new
+  end
 end
+
     
-            if built_in_scm_name?
-          load_built_in_scm
-        else
-          # Compatibility with existing 3.x third-party SCMs
-          register_legacy_scm_hooks
-          load_legacy_scm_by_name
+            def ref
+          @symbol
         end
+        alias to_sym ref
+    
+          def with_block
+        render inline: 'Hello <%= helpery_test %>'
       end
     
-          def initialize(variables)
-        super(variables)
-        @validators = {}
+    module Spaceship
+  module Tunes
+    # Represents an image hosted on App Store Connect. Used for app store review attachment file.
+    class AppReviewAttachment < TunesBase
+      HOST_URL = 'https://iosapps-ssl.itunes.apple.com/itunes-assets'
+    
+            return build_settings
       end
     
-        def autocorrect_unneeded_disables(source, cop)
-      cop.processed_source = source
+      describe '#disable' do
+    it 'finds a device by its ID and disables it' do
+      device = Spaceship::Device.find('AAAAAAAAAA')
+      expect(device.status).to eq('c')
+      expect(device.enabled?).to eq(true)
+      device.disable!
+      expect(device.status).to eq('r')
+      expect(device.enabled?).to eq(false)
+    end
+    it 'finds a device by its ID and enables it' do
+      device = Spaceship::Device.find('DISABLED_B', include_disabled: true)
+      expect(device.status).to eq('r')
+      expect(device.enabled?).to eq(false)
+      device.enable!
+      expect(device.status).to eq('c')
+      expect(device.enabled?).to eq(true)
+    end
+  end
+end
+
     
-    module RuboCop
-  module Cop
-    module Layout
-      # This cop checks for the placement of the closing parenthesis
-      # in a method call that passes a HEREDOC string as an argument.
-      # It should be placed at the end of the line containing the
-      # opening HEREDOC tag.
-      #
-      # @example
-      #   # bad
-      #
-      #      foo(<<-SQL
-      #        bar
-      #      SQL
-      #      )
-      #
-      #      foo(<<-SQL, 123, <<-NOSQL,
-      #        bar
-      #      SQL
-      #        baz
-      #      NOSQL
-      #      )
-      #
-      #      foo(
-      #        bar(<<-SQL
-      #          baz
-      #        SQL
-      #        ),
-      #        123,
-      #      )
-      #
-      #   # good
-      #
-      #      foo(<<-SQL)
-      #        bar
-      #      SQL
-      #
-      #      foo(<<-SQL, 123, <<-NOSQL)
-      #        bar
-      #      SQL
-      #        baz
-      #      NOSQL
-      #
-      #      foo(
-      #        bar(<<-SQL),
-      #          baz
-      #        SQL
-      #        123,
-      #      )
-      #
-      class HeredocArgumentClosingParenthesis < Cop
-        include RangeHelp
-    
-            expect(cop.messages).to eq(['Empty line missing at block body '\
-                                    'beginning.',
-                                    'Empty line missing at block body end.'])
+          def self.output
       end
     
-            expect_offense(<<~RUBY)
-          def self.some_method(foo)
-                               ^^^ #{message}
+          def_node_matcher :find_output_method, <<-PATTERN
+        (defs (self) :output ...)
+      PATTERN
+    
+          describe 'without options' do
+        it 'could not find file' do
+          expect(UI).to receive(:important).with('To not be asked about this value, you can specify it using 'json_key'')
+          expect(UI).to receive(:input).with(anything).and_return('not_a_file')
+          expect(UI).to receive(:user_error!).with(/Could not find service account json file at path*/).and_raise('boom')
+    
+    class DeviseCreateUsers < ActiveRecord::Migration
+  def change
+    create_table(:users) do |t|
+      t.string :email,              null: false
+      t.string :encrypted_password, null: true
+      t.timestamps null: false
+    end
+    
+          # Forgets the given resource by deleting a cookie
+      def forget_me(resource)
+        scope = Devise::Mapping.find_scope!(resource)
+        resource.forget_me!
+        cookies.delete(remember_key(resource, scope), forget_cookie_values(resource))
+      end
+    
+            if options[:bypass]
+          ActiveSupport::Deprecation.warn(<<-DEPRECATION.strip_heredoc, caller)
+          [Devise] bypass option is deprecated and it will be removed in future version of Devise.
+          Please use bypass_sign_in method instead.
+          Example:
+    
+                  define_method method do |resource_or_scope, *args|
+                scope = Devise::Mapping.find_scope!(resource_or_scope)
+                router_name = Devise.mappings[scope].router_name
+                context = router_name ? send(router_name) : _devise_route_context
+                context.send('#{action}#{scope}_#{module_name}_#{path_or_url}', *args)
+              end
+            end
           end
-        RUBY
+        end
+      end
+    
+      # Get the title for the page.
+  #
+  # @param [Middleman::Page] page
+  #
+  # @return [String]
+  def title_for(page)
+    if page && page.data.page_title
+      return '#{page.data.page_title} - Vagrant by HashiCorp'
+    end
+    
+        it 'returns matching entries if they exist' do
+      matching = new_entry(name, provider.to_s, version)
+      index << new_entry('foo', 'bar', '1.0')
+      index << matching
+      index << new_entry('foo', 'baz', '1.2')
+    
+          # Sort the usable providers by priority. Higher numbers are higher
+      # priority, otherwise alpha sort.
+      usable = usable.sort {|a, b| a[0] == b[0] ? a[1] <=> b[1] : b[0] <=> a[0]}
+                      .map {|prio, key| key}
+      @logger.debug('Priority sorted usable provider list: #{usable}')
+    
+      describe 'current working directory' do
+    it 'is the cwd by default' do
+      Dir.mktmpdir('vagrant-test-env-cwd-default') do |temp_dir|
+        Dir.chdir(temp_dir) do
+          with_temp_env('VAGRANT_CWD' => nil) do
+            expect(described_class.new.cwd).to eq(Pathname.new(Dir.pwd))
+          end
+        end
       end
     end
     
-      [jekyllPid, compassPid].each { |pid| Process.wait(pid) }
-end
-    
-      get(/.+/) do
-    send_sinatra_file(request.path) {404}
-  end
-    
-          rtn = ''
-      (context.environments.first['site'][@array_name] || []).each do |file|
-        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
-          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
+                if on_error == :halt
+              @logger.debug('Trigger run encountered an error. Halting on error...')
+              raise e
+            else
+              @logger.debug('Trigger run encountered an error. Continuing on anyway...')
+              @machine.ui.error(e.message)
+            end
+          end
         end
     
-        def _send_keys(t, e)
-      '#{project.tmux} send-keys -t #{t} #{e} C-m'
+          it 'executes SSH in a subprocess with options and returns an exit code Fixnum' do
+        # mock out ChildProcess
+        process = double()
+        allow(ChildProcess).to receive(:build).and_return(process)
+        allow(process).to receive(:io).and_return(true)
+        allow(process.io).to receive(:inherit!).and_return(true)
+        allow(process).to receive(:start).and_return(true)
+        allow(process).to receive(:wait).and_return(true)
+    
+        it 'generates a jasmine fixture', fixture: true do
+      session[:mobile_view] = true
+      get :new, format: :mobile
+      save_fixture(html_for('body'), 'conversations_new_mobile')
     end
   end
 end
 
     
-        def initialize(window_yaml, index, project)
-      first_key = window_yaml.keys.first
+        describe '#public' do
+      it 'succeeds' do
+        get :public
+        expect(response).to be_success
+      end
+    end
     
-    # Copied from minitest.
-def capture_io
-  require 'stringio'
+    # test/spec/mini 3
+# http://gist.github.com/25455
+# chris@ozmm.org
+# file:lib/test/spec/mini.rb
+def context(*args, &block)
+  return super unless (name = args.first) && block
+  require 'test/unit'
+  klass = Class.new(defined?(ActiveSupport::TestCase) ? ActiveSupport::TestCase : Test::Unit::TestCase) do
+    def self.test(name, &block)
+      define_method('test_#{name.gsub(/\W/, '_')}', &block) if block
+    end
     
-        desc 'version', COMMANDS[:version]
-    map '-v' => :version
+        assert_match /Edit Page/,             last_response.body, ''Edit Page' link is blocked in compare template'
+    assert_match /Revert Changes/,        last_response.body, ''Revert Changes' link is blocked in compare template'
+  end
+    
+        @wiki.clear_cache
+    
+    context 'Precious::Helpers' do
+  include Precious::Helpers
+    
+    #############################################################################
+#
+# Custom tasks (add your own tasks here)
+#
+#############################################################################
+    
+    # external
+require 'github/markup'
+require 'sanitize'
+    
+        # Outputs the post.date as formatted html, with hooks for CSS styling.
+    #
+    #  +date+ is the date object to format as HTML.
+    #
+    # Returns string
+    def date_to_html_string(date)
+      result = '<span class='month'>' + date.strftime('%b').upcase + '</span> '
+      result << date.strftime('<span class='day'>%d</span> ')
+      result << date.strftime('<span class='year'>%Y</span> ')
+      result
+    end
+    
+    class ConfigTag < Liquid::Tag
+  def initialize(tag_name, options, tokens)
+    super
+    options = options.split(' ').map {|i| i.strip }
+    @key = options.slice!(0)
+    @tag = nil
+    @classname = nil
+    options.each do |option|
+      @tag = $1 if option =~ /tag:(\S+)/ 
+      @classname = $1 if option =~ /classname:(\S+)/
+    end
+  end
+    
+      class IncludeArrayTag < Liquid::Tag
+    Syntax = /(#{Liquid::QuotedFragment}+)/
+    def initialize(tag_name, markup, tokens)
+      if markup =~ Syntax
+        @array_name = $1
+      else
+        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
+      end
+    
+      class IncludeCodeTag < Liquid::Tag
+    def initialize(tag_name, markup, tokens)
+      @title = nil
+      @file = nil
+      if markup.strip =~ /\s*lang:(\S+)/i
+        @filetype = $1
+        markup = markup.strip.sub(/lang:\S+/i,'')
+      end
+      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
+        @title = $1 || nil
+        @file = $3
+      end
+      super
+    end
+    
+        def initialize(tag_name, markup, tokens)
+      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
+      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
+      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
+      super
+    end
