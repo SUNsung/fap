@@ -1,246 +1,170 @@
 
         
-            '''
-    def cache_decorator(fn):
-        @memoize
-        @wraps(fn)
-        def wrapper(*args, **kwargs):
-            if cache.disabled:
-                return fn(*args, **kwargs)
-            else:
-                return _cache.get_value(fn, depends_on, args, kwargs)
-    
-        def test_app_alias(self, shell):
-        assert 'setenv TF_SHELL tcsh' in shell.app_alias('fuck')
-        assert 'alias fuck' in shell.app_alias('fuck')
-        assert 'alias FUCK' in shell.app_alias('FUCK')
-        assert 'thefuck' in shell.app_alias('fuck')
-    
-        def _parse_alias(self, alias):
-        name, value = alias.split('\t', 1)
-        return name, value
-    
-        def _parse_alias(self, alias):
-        name, value = alias.split('=', 1)
-        if value[0] == value[-1] == ''' or value[0] == value[-1] == ''':
-            value = value[1:-1]
-        return name, value
-    
-    
-@pytest.mark.usefixtures('no_memoize')
-@pytest.mark.parametrize('script, output, which', [
-    ('qweqwe', 'qweqwe: not found', None),
-    ('vom file.py', 'some text', None),
-    ('vim file.py', 'vim: not found', 'vim')])
-def test_not_match(mocker, script, output, which):
-    mocker.patch('thefuck.rules.no_command.which', return_value=which)
-    
-                yield line.split()[0]
-        elif line.startswith('Commands:'):
-            is_commands_list = True
-    
-        Catching this error will catch both
-    :exc:`~requests.exceptions.ConnectTimeout` and
-    :exc:`~requests.exceptions.ReadTimeout` errors.
+        
+def attach_enctype_error_multidict(request):
+    '''Since Flask 0.8 we're monkeypatching the files object in case a
+    request is detected that does not use multipart form data but the files
+    object is accessed.
     '''
+    oldcls = request.files.__class__
     
+        __slots__ = ()
+    key = ' m'
     
-        return Server(text_response_handler, **kwargs)
-    
-        styles = {
-        # No corresponding class for the following:
-        #Text:                     '', # class:  ''
-        Whitespace:                'underline #f8f8f8',      # class: 'w'
-        Error:                     '#a40000 border:#ef2929', # class: 'err'
-        Other:                     '#000000',                # class 'x'
-    }
-    
-        def getheaders(self, name):
-        self._headers.getheaders(name)
-    
-    import idna
-import urllib3
-import chardet
-    
-    ``response``:
-    The response generated from a Request.
-'''
-HOOKS = ['response']
-    
-    from requests.help import info
-    
-            except (_SSLError, _HTTPError) as e:
-            if isinstance(e, _SSLError):
-                # This branch is for urllib3 versions earlier than v1.22
-                raise SSLError(e, request=request)
-            elif isinstance(e, ReadTimeoutError):
-                raise ReadTimeout(e, request=request)
-            else:
-                raise
-    
-            Will successfully encode parameters when passed as a dict or a list of
-        2-tuples. Order is retained if data is a list of 2-tuples but arbitrary
-        if parameters are supplied as a dict.
-        '''
-    
-    # Set default logging handler to avoid 'No handler found' warnings.
-import logging
-from logging import NullHandler
-    
-    :copyright: (c) 2012 by Kenneth Reitz.
-:license: Apache2, see LICENSE for more details.
-'''
-    
-    import time
-    
-    for i, n in enumerate(n_samples):
-    for j, p in enumerate(n_features):
-        X = np.random.normal(size=(n, p))
-        t0 = time.time()
-        ward.fit(X)
-        scikits_time[j, i] = time.time() - t0
-        t0 = time.time()
-        hierarchy.ward(X)
-        scipy_time[j, i] = time.time() - t0
-    
-        # TASK: Build a vectorizer / classifier pipeline that filters out tokens
-    # that are too rare or too frequent
-    pipeline = Pipeline([
-        ('vect', TfidfVectorizer(min_df=3, max_df=0.95)),
-        ('clf', LinearSVC(C=1000)),
-    ])
-    
-        for line in input_file:
-        linestrip = line.strip()
-        if len(linestrip) == 0:
-            in_exercise_region = False
-        elif linestrip.startswith('# TASK:'):
-            in_exercise_region = True
-    
-    # histogram
-plt.figure(4, figsize=(3, 2.2))
-plt.clf()
-plt.axes([.01, .01, .98, .98])
-plt.hist(X, bins=256, color='.5', edgecolor='.5')
-plt.yticks(())
-plt.xticks(regular_values)
-values = np.sort(values)
-for center_1, center_2 in zip(values[:-1], values[1:]):
-    plt.axvline(.5 * (center_1 + center_2), color='b')
-    
-        #Required strings to create intermediate HTML files
-    header = '<html><head><link rel=stylesheet type=text/css href=' + colorscheme + '.css></head><body>\n'
-    footer = '</body></html>'
-    title_content = '<h1 class=titlemain>tldr pages</h1><h4 class=titlesub>Simplified and community driven man pages</h4></body></html>'
-    
-        def forward(self, inputs, outputs):
-        '''See modeling.detector.GenerateProposals for inputs/outputs
-        documentation.
-        '''
-        # 1. for each location i in a (H, W) grid:
-        #      generate A anchor boxes centered on cell i
-        #      apply predicted bbox deltas to each of the A anchors at cell i
-        # 2. clip predicted boxes to image
-        # 3. remove predicted boxes with either height or width < threshold
-        # 4. sort all (proposal, score) pairs by score from highest to lowest
-        # 5. take the top pre_nms_topN proposals before NMS
-        # 6. apply NMS with a loose threshold (0.7) to the remaining proposals
-        # 7. take after_nms_topN proposals after NMS
-        # 8. return the top proposals
-    
-    
-def generate_rpn_on_dataset(
-    weights_file,
-    dataset_name,
-    _proposal_file_ignored,
-    output_dir,
-    multi_gpu=False,
-    gpu_id=0
-):
-    '''Run inference on a dataset.'''
-    dataset = JsonDataset(dataset_name)
-    test_timer = Timer()
-    test_timer.tic()
-    if multi_gpu:
-        num_images = len(dataset.get_roidb())
-        _boxes, _scores, _ids, rpn_file = multi_gpu_generate_rpn_on_dataset(
-            weights_file, dataset_name, _proposal_file_ignored, num_images,
-            output_dir
-        )
-    else:
-        # Processes entire dataset range by default
-        _boxes, _scores, _ids, rpn_file = generate_rpn_on_range(
-            weights_file,
-            dataset_name,
-            _proposal_file_ignored,
-            output_dir,
-            gpu_id=gpu_id
-        )
-    test_timer.toc()
-    logger.info('Total inference time: {:.3f}s'.format(test_timer.average_time))
-    return evaluate_proposal_file(dataset, rpn_file, output_dir)
-    
-                return all_results
-        else:
-            # Subprocess child case:
-            # In this case test_net was called via subprocess.Popen to execute on a
-            # range of inputs on a single dataset
-            dataset_name, proposal_file = get_inference_dataset(0, is_parent=False)
-            output_dir = get_output_dir(dataset_name, training=False)
-            return child_func(
-                weights_file,
-                dataset_name,
-                proposal_file,
-                output_dir,
-                ind_range=ind_range,
-                gpu_id=gpu_id
+            def _fail(self, *args, **kwargs):
+            raise RuntimeError(
+                'Signalling support is unavailable because the blinker'
+                ' library is not installed.'
             )
     
-        def test_renamed_key_from_list(self):
-        # You should see logger messages like:
-        #  'Key EXAMPLE.RENAMED.KEY was renamed to EXAMPLE.KEY;
-        #  please update your config'
-        opts = ['EXAMPLE.RENAMED.KEY', 'foobar']
-        with self.assertRaises(AttributeError):
-            _ = cfg.EXAMPLE.RENAMED.KEY  # noqa
-        with self.assertRaises(KeyError):
-            core_config.merge_cfg_from_list(opts)
+                resp = app.response_class()
+            if not session_interface.is_null_session(sess):
+                session_interface.save_session(app, sess, resp)
+            headers = resp.get_wsgi_headers(c.request.environ)
+            self.cookie_jar.extract_wsgi(c.request.environ, headers)
     
-        assert dim_per_gp == -1 or num_groups == -1, \
-        'GroupNorm: can only specify G or C/G.'
+        @cli.command()
+    def test():
+        click.echo(current_app.name)
     
-        Returns:
-        blob (ndarray): a data blob holding an image pyramid
-        im_scale (float): image scale (target size) / (original size)
-        im_info (ndarray)
+    
+def test_config_from_json():
+    app = flask.Flask(__name__)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    app.config.from_json(os.path.join(current_dir, 'static', 'config.json'))
+    common_object_test(app)
+    
+    
+if __name__ == '__main__':
     '''
-    processed_im, im_scale = prep_im_for_blob(
-        im, cfg.PIXEL_MEANS, target_scale, target_max_size
-    )
-    blob = im_list_to_blob(processed_im)
-    # NOTE: this height and width may be larger than actual scaled input image
-    # due to the FPN.COARSEST_STRIDE related padding in im_list_to_blob. We are
-    # maintaining this behavior for now to make existing results exactly
-    # reproducible (in practice using the true input image height and width
-    # yields nearly the same results, but they are sometimes slightly different
-    # because predictions near the edge of the image will be pruned more
-    # aggressively).
-    height, width = blob.shape[2], blob.shape[3]
-    im_info = np.hstack((height, width, im_scale))[np.newaxis, :]
-    return blob, im_scale, im_info.astype(np.float32)
+    Desc:
+        主函数，调用上面返回的训练好的感知器进行预测
+    Args:
+        None
+    Returns:
+        None
+    '''
+    # 训练 and 感知器
+    and_perceptron = train_and_perceptron()
+    # 打印训练获得的权重
+    print(and_perceptron)
+    # 测试
+    print('1 and 1 = %d' % and_perceptron.predict([1, 1]))
+    print('0 and 0 = %d' % and_perceptron.predict([0, 0]))
+    print('1 and 0 = %d' % and_perceptron.predict([1, 0]))
+    print('0 and 1 = %d' % and_perceptron.predict([0, 1]))
     
-    import argparse
-import json
-import os
-import sys
+        # 计算forward值
+    x, d = data_set()
+    rl.forward(x[0])
+    rl.forward(x[1])
     
-    from detectron.core.config import cfg
-from detectron.datasets import task_evaluation
-from detectron.datasets.json_dataset import JsonDataset
-from detectron.utils.io import load_object
-from detectron.utils.logging import setup_logging
-import detectron.core.config as core_config
+    # 求取sensitivity map
+    sensitivity_array = np.ones(rl.state_list[-1].shape,
+                                dtype=np.float64)
+    # 计算梯度
+    rl.backward(sensitivity_array, IdentityActivator())
     
-    # OpenCL may be enabled by default in OpenCV3; disable it because it's not
-# thread safe and causes unwanted GPU memory allocations.
-cv2.ocl.setUseOpenCL(False)
+    # 检查梯度
+    epsilon = 10e-4
+    for i in range(rl.W.shape[0]):
+        for j in range(rl.W.shape[1]):
+            rl.W[i,j] += epsilon
+            rl.reset_state()
+            rl.forward(x[0])
+            rl.forward(x[1])
+            err1 = error_function(rl.state_list[-1])
+            rl.W[i,j] -= 2*epsilon
+            rl.reset_state()
+            rl.forward(x[0])
+            rl.forward(x[1])
+            err2 = error_function(rl.state_list[-1])
+            expect_grad = (err1 - err2) / (2 * epsilon)
+            rl.W[i,j] += epsilon
+            print('weights(%d,%d): expected - actural %f - %f' % (
+                i, j, expect_grad, rl.gradient[i,j]))
+    
+    
+# 计算两个向量的欧式距离（可根据场景选择）
+def distEclud(vecA, vecB):
+    return sqrt(sum(power(vecA - vecB, 2)))  # la.norm(vecA-vecB)
+    
+            通常保留矩阵 80% ～ 90% 的能量，就可以得到重要的特征并取出噪声。
+        '''
+        print('主成分：%s, 方差占比：%s%%' % (format(i+1, '2.0f'), format(SigmaI/SigmaSum*100, '4.2f')))
+    
+        def reduce(self, key, packedValues):
+        cumN, cumVal, cumSumSq = 0.0, 0.0, 0.0
+        for valArr in packedValues:  # 从输入流中获取值
+            nj = float(valArr[0])
+            cumN += nj
+            cumVal += nj*float(valArr[1])
+            cumSumSq += nj*float(valArr[2])
+        mean = cumVal/cumN
+        var = (cumSumSq - 2*mean*cumVal + cumN*mean*mean)/cumN
+        yield (mean, var)  # 发出平均值和方差
+    
+        def map(self, mapperId, inVals):  # 需要 2 个参数
+        # input: nodeId, ('w', w-vector) OR nodeId, ('x', int)
+        if False:
+            yield
+        if inVals[0] == 'w':                  # 积累 w向量
+            self.w = inVals[1]
+        elif inVals[0] == 'x':
+            self.dataList.append(inVals[1])   # 累积数据点计算
+        elif inVals[0] == 't':                # 迭代次数
+            self.t = inVals[1]
+        else:
+            self.eta = inVals                 # 这用于 debug， eta未在map中使用
+    
+    
+# Subclass of boto's TypeDeserializer for DynamoDB
+# to adjust for DynamoDB Stream format.
+class TypeDeserializer(boto3.dynamodb.types.TypeDeserializer):
+    def _deserialize_n(self, value):
+        return float(value)
+    
+        proxy = GenericProxy(port=test_port, update_listener=DownloadListener())
+    proxy.start()
+    
+            data3 = (b'--------------------------3c48c744237517ac\r\nContent-Disposition: form-data; name='success_action_'
+                 b'redirect'\r\n\r\nhttp://127.0.0.1:5000/?id=20170826T181315.679087009Z\r\n--------------------------'
+                 b'3c48c744237517ac--\r\n')
+    
+        # reset probability to zero
+    config.KINESIS_ERROR_PROBABILITY = 0.0
+    
+    # file paths by API
+API_FILE_PATHS = {}
+    
+            if response.content:
+            # fix hardcoded account ID in ARNs returned from this API
+            self._fix_account_id(response)
+            # fix dates returned from this API (fixes an issue with Terraform)
+            self._fix_date_format(response)
+            # fix content-length header
+            response.headers['content-length'] = len(response._content)
+    
+        def test_attach_iam_role_to_new_iam_user(self):
+        test_policy_document = {
+            'Version': '2012-10-17',
+            'Statement': {
+                'Effect': 'Allow',
+                'Action': 's3:ListBucket',
+                'Resource': 'arn:aws:s3:::example_bucket'
+            }
+        }
+        test_user_name = 'test-user'
+    
+    
+def publish_lambda_result(time_before, result, kwargs):
+    if isinstance(result, Response) and result.status_code >= 400:
+        return publish_lambda_error(time_before, kwargs)
+    publish_lambda_metric('Invocations', 1, kwargs)
+    
+        def test_put_events(self):
+        self.events_client.put_events(Entries=[{
+            'Time': datetime(2019, 7, 29),
+            'DetailType': TEST_DETAIL_TYPE,
+            'Detail': 'some detail'
+        }])
