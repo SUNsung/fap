@@ -1,181 +1,275 @@
 
         
-          void GenerateFieldValueExpression(io::Printer* printer,
-                                    const char* obj_reference,
-                                    const FieldDescriptor* field,
-                                    bool use_default) const;
-    
-    Subprocess::Subprocess()
-    : child_pid_(-1), child_stdin_(-1), child_stdout_(-1) {}
-    
-    
-    {  // Template specialization will convert the if() condition to a constant,
-  // which will cause the compiler to generate code for either the 'if' part
-  // or the 'then' part.  In this way we avoid a compiler warning
-  // about a potential integer overflow in crosstool v12 (gcc 4.3.1).
-  if (MathLimits<T>::kIsInteger) {
-    return x == y;
-  } else {
-    if (!MathLimits<T>::IsFinite(x) || !MathLimits<T>::IsFinite(y)) {
-      return false;
+        class OpenURIDialog : public QDialog
+{
+    Q_OBJECT
     }
-    T relative_margin = static_cast<T>(fraction * Max(Abs(x), Abs(y)));
-    return AbsDiff(x, y) <= Max(margin, relative_margin);
-  }
+    
+        explicit reverse_lock(Lock& _lock) : lock(_lock) {
+        _lock.unlock();
+        _lock.swap(templock);
+    }
+    
+    #include <stdint.h>
+#include <stdlib.h>
+    
+        switch (record_type) {
+      case kFullType:
+        if (in_fragmented_record) {
+          // Handle bug in earlier versions of log::Writer where
+          // it could emit an empty kFirstType record at the tail end
+          // of a block followed by a kFullType or kFirstType record
+          // at the beginning of the next block.
+          if (scratch->empty()) {
+            in_fragmented_record = false;
+          } else {
+            ReportCorruption(scratch->size(), 'partial record without end(1)');
+          }
+        }
+        prospective_record_offset = physical_record_offset;
+        scratch->clear();
+        *record = fragment;
+        last_record_offset_ = prospective_record_offset;
+        return true;
+    }
+    
+      void pollAndSchedule(int task_id);
+  void schedule(int task_id, bool run_inline = false) noexcept;
+  void reset() override;
+  virtual void finishRun();
+  void parentCallback(int parent_id);
+  bool isInlineTask(int parent_id, int child_id) const;
+    
+    namespace {
+    }
+    
+    store_t::sindex_context_map_t *store_t::get_sindex_context_map() {
+    return &sindex_context;
 }
     
-    // Copyright 2008 Google Inc. All Rights Reserved.
-// Author: xpeng@google.com (Peter Peng)
     
-    class GoGoProtoGenerator : public CodeGenerator {
+    {        btree_slice_t *btree;
+        sindex_name_t name;
+        secondary_index_t sindex;
+        scoped_ptr_t<sindex_superblock_t> superblock;
+    };
+    
+    // To distinguish different instances of the pattern, (yes, you
+// can instantiate it more then once) the first argument to the
+// INSTANTIATE_TEST_CASE_P macro is a prefix that will be added to the
+// actual test case name. Remember to pick unique prefixes for different
+// instantiations. The tests from the instantiation above will have
+// these names:
+//
+//    * InstantiationName/FooTest.DoesBlah/0 for 'meeny'
+//    * InstantiationName/FooTest.DoesBlah/1 for 'miny'
+//    * InstantiationName/FooTest.DoesBlah/2 for 'moe'
+//    * InstantiationName/FooTest.HasBlahBlah/0 for 'meeny'
+//    * InstantiationName/FooTest.HasBlahBlah/1 for 'miny'
+//    * InstantiationName/FooTest.HasBlahBlah/2 for 'moe'
+//
+// You can use these names in --gtest_filter.
+//
+// This statement will instantiate all tests from FooTest again, each
+// with parameter values 'cat' and 'dog':
+    
+    // A macro for testing Google Test assertions or code that's expected to
+// generate Google Test non-fatal failures.  It asserts that the given
+// statement will cause exactly one non-fatal Google Test failure with 'substr'
+// being part of the failure message.
+//
+// There are two different versions of this macro. EXPECT_NONFATAL_FAILURE only
+// affects and considers failures generated in the current thread and
+// EXPECT_NONFATAL_FAILURE_ON_ALL_THREADS does the same but for all threads.
+//
+// 'statement' is allowed to reference local variables and members of
+// the current object.
+//
+// The verification of the assertion is done correctly even when the statement
+// throws an exception or aborts the current function.
+//
+// Known restrictions:
+//   - You cannot stream a failure message to this macro.
+//
+// Note that even though the implementations of the following two
+// macros are much alike, we cannot refactor them to use a common
+// helper macro, due to some peculiarity in how the preprocessor
+// works.  If we do that, the code won't compile when the user gives
+// EXPECT_NONFATAL_FAILURE() a statement that contains a macro that
+// expands to code containing an unprotected comma.  The
+// AcceptsMacroThatExpandsToUnprotectedComma test in gtest_unittest.cc
+// catches that.
+//
+// For the same reason, we have to write
+//   if (::testing::internal::AlwaysTrue()) { statement; }
+// instead of
+//   GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement)
+// to avoid an MSVC warning on unreachable code.
+#define EXPECT_NONFATAL_FAILURE(statement, substr) \
+  do {\
+    ::testing::TestPartResultArray gtest_failures;\
+    ::testing::internal::SingleFailureChecker gtest_checker(\
+        &gtest_failures, ::testing::TestPartResult::kNonFatalFailure, \
+        (substr));\
+    {\
+      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
+          ::testing::ScopedFakeTestPartResultReporter:: \
+          INTERCEPT_ONLY_CURRENT_THREAD, &gtest_failures);\
+      if (::testing::internal::AlwaysTrue()) { statement; }\
+    }\
+  } while (::testing::internal::AlwaysFalse())
+    
+    // Prints a TestPartResult object.
+std::ostream& operator<<(std::ostream& os, const TestPartResult& result);
+    
+    // Now the tricky part: you need to register all test patterns before
+// you can instantiate them.  The first argument of the macro is the
+// test case name; the rest are the names of the tests in this test
+// case.
+REGISTER_TYPED_TEST_CASE_P(FooTest,
+                           DoesBlah, HasPropertyA);
+    
+    // A concrete DeathTestFactory implementation for normal use.
+class DefaultDeathTestFactory : public DeathTestFactory {
  public:
-  virtual bool GenerateAll(const std::vector<const FileDescriptor*>& files,
-                           const string& parameter,
-                           GeneratorContext* context,
-                           string* error) const {
-    for (int i = 0; i < files.size(); i++) {
-      for (auto file : files) {
-        bool can_generate =
-            (new_pool_.FindFileByName(file->name()) == nullptr);
-        for (int j = 0; j < file->dependency_count(); j++) {
-          can_generate &= (new_pool_.FindFileByName(
-              file->dependency(j)->name()) != nullptr);
-        }
-        for (int j = 0; j < file->public_dependency_count(); j++) {
-          can_generate &= (new_pool_.FindFileByName(
-              file->public_dependency(j)->name()) != nullptr);
-        }
-        for (int j = 0; j < file->weak_dependency_count(); j++) {
-          can_generate &= (new_pool_.FindFileByName(
-              file->weak_dependency(j)->name()) != nullptr);
-        }
-        if (can_generate) {
-          Generate(file, parameter, context, error);
-          break;
-        }
-      }
-    }
-    }
-    }
-    
-    /* NurbsSampling */
-#define GLU_OBJECT_PARAMETRIC_ERROR        100208
-#define GLU_OBJECT_PARAMETRIC_ERROR_EXT    100208
-#define GLU_OBJECT_PATH_LENGTH             100209
-#define GLU_OBJECT_PATH_LENGTH_EXT         100209
-#define GLU_PATH_LENGTH                    100215
-#define GLU_PARAMETRIC_ERROR               100216
-#define GLU_DOMAIN_DISTANCE                100217
-    
-    
-    {  return gTrue;
-}
-    
-    //------------------------------------------------------------------------
-// ProfileData
-//------------------------------------------------------------------------
-    
-      //
-  // parse Media Play Parameters
-  if (obj->dictLookup('P', &tmp2)->isDict()) { // media play parameters
-    Object params;
-    if (tmp2.dictLookup('MH', &params)->isDict()) {
-      MH.parseMediaPlayParameters(&params);
-    }
-    params.free();
-    if (tmp2.dictLookup('BE', &params)->isDict()) {
-      BE.parseMediaPlayParameters(&params);
-    }
-    params.free();
-  } else if (hasClip) {
-    error (-1, 'Invalid Media Rendition');
-    ok = gFalse;
-  }
-  tmp2.free();
-    
-      // defined in media play parameters, p 770
-  // correspond to 'fit' SMIL's attribute
-  MediaFittingPolicy fittingPolicy;        // fittingUndefined
-    
-      if (!(*xsh->newDoc)(xsh->handlerData, (XpdfDoc)docA,
-		      (XpdfObject)encryptDictA, &docData)) {
-    return;
-  }
-    
-      int permFlags;
-  GBool ownerPasswordOk;
-  Guchar fileKey[16];
-  int fileKeyLength;
-  int encVersion;
-  int encRevision;
-  GBool encryptMetadata;
-  CryptAlgorithm encAlgorithm;
-    
-    #if SPLASH_CMYK
-    
-    /**
- * This structure contains per-service-context state related to the oplog.
- */
-class LocalOplogInfo {
-public:
-    static LocalOplogInfo* get(ServiceContext& service);
-    static LocalOplogInfo* get(ServiceContext* service);
-    static LocalOplogInfo* get(OperationContext* opCtx);
-    }
-    
-    namespace mongo {
-namespace {
-    }
-    }
-    
-    #include 'mongo/db/stats/top.h'
-#include 'mongo/unittest/unittest.h'
-    
-    
-    {
-    {        BSONElement a = fixed['a'];
-        ASSERT(o['a'].type() == bsonTimestamp);
-        ASSERT(o['a'].timestampValue() == 0);
-        ASSERT(a.type() == bsonTimestamp);
-        ASSERT(a.timestampValue() > 0);
-    }
+  virtual bool Create(const char* statement, const RE* regex,
+                      const char* file, int line, DeathTest** test);
 };
     
-    //
-// Check that cursor recovers its position properly if its current location
-// is deleted during a yield
-//
-class QueryStageCountScanDeleteDuringYield : public CountBase {
-public:
-    void run() {
-        dbtests::WriteContextForTests ctx(&_opCtx, ns());
-    }
-    }
+    #define GTEST_MESSAGE_(message, result_type) \
+  GTEST_MESSAGE_AT_(__FILE__, __LINE__, message, result_type)
     
-    #include 'remtrans.h'
-#include 'unicode/unifilt.h'
+      tuple& operator=(const tuple& t) { return CopyFrom(t); }
     
-        case URX_STRING:
-    case URX_STRING_I:
-        {
-            int32_t lengthOp       = fCompiledPat->elementAti(index+1);
-            U_ASSERT(URX_TYPE(lengthOp) == URX_STRING_LEN);
-            int32_t length = URX_VAL(lengthOp);
-            UnicodeString str(fLiteralText, val, length);
-            printf('%s', CStr(str)());
-        }
-        break;
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23>
+struct Types23 {
+  typedef T1 Head;
+  typedef Types22<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
+      T16, T17, T18, T19, T20, T21, T22, T23> Tail;
+};
     
-    // SharedBreakIterator encapsulates a shared BreakIterator. Because
-// BreakIterator has mutable semantics, clients must ensure that all uses
-// of a particular shared BreakIterator is protected by the same mutex
-// ensuring that only one thread at a time gets access to that shared
-// BreakIterator. Clients can accomplish this by creating a mutex for all
-// uses of break iterator within a particular class. Then objects of that
-// class may then freely share break iterators among themselves. However,
-// these shared break iterators must never be exposed outside of that class.
-class U_I18N_API SharedBreakIterator : public SharedObject {
-public:
-    SharedBreakIterator(BreakIterator *biToAdopt);
-    virtual ~SharedBreakIterator();
-    }
+      if (forceRasterize) return;
+    
+      void makeBox(double hDPI, double vDPI, int rotate,
+	       GBool useMediaBox, GBool upsideDown,
+	       double sliceX, double sliceY, double sliceW, double sliceH,
+	       PDFRectangle *box, GBool *crop);
+    
+    private:
+  struct Interval {
+    Interval(Object *dict, int baseA);
+    ~Interval();
+    GooString *prefix;
+    enum NumberStyle {
+      None,
+      Arabic,
+      LowercaseRoman,
+      UppercaseRoman,
+      UppercaseLatin,
+      LowercaseLatin
+    } style;
+    int first, base, length;
+  };
+    
+    
+    {  return &item->item;
+}
+    
+      //----- image drawing
+  virtual void drawImageMask(GfxState *state, Object *ref, Stream *str,
+			     int width, int height, GBool invert,
+			     GBool interpolate, GBool inlineImg);
+  virtual void drawImage(GfxState *state, Object *ref, Stream *str,
+			 int width, int height, GfxImageColorMap *colorMap,
+			 GBool interpolate, int *maskColors, GBool inlineImg);
+  virtual void drawMaskedImage(GfxState *state, Object *ref, Stream *str,
+			       int width, int height,
+			       GfxImageColorMap *colorMap,
+			       GBool interpolate,
+			       Stream *maskStr, int maskWidth, int maskHeight,
+			       GBool maskInvert, GBool maskInterpolate);
+  virtual void drawSoftMaskedImage(GfxState *state, Object *ref, Stream *str,
+				   int width, int height,
+				   GfxImageColorMap *colorMap,
+				   GBool interpolate,
+				   Stream *maskStr,
+				   int maskWidth, int maskHeight,
+				   GfxImageColorMap *maskColorMap,
+				   GBool maskInterpolate);
+    
+      MediaRendition* copy();
+    
+      //----- image drawing
+  virtual void drawImageMask(GfxState *state, Object *ref, Stream *str,
+			     int width, int height, GBool invert,
+			     GBool interpolate, GBool inlineImg);
+  virtual void drawImage(GfxState *state, Object *ref, Stream *str,
+			 int width, int height, GfxImageColorMap *colorMap,
+			 GBool interpolate, int *maskColors, GBool inlineImg);
+  virtual void drawMaskedImage(GfxState *state, Object *ref, Stream *str,
+			       int width, int height,
+			       GfxImageColorMap *colorMap,
+			       GBool interpolate,
+			       Stream *maskStr, int maskWidth, int maskHeight,
+			       GBool maskInvert, GBool maskInterpolate);
+  virtual void drawSoftMaskedImage(GfxState *state, Object *ref, Stream *str,
+				   int width, int height,
+				   GfxImageColorMap *colorMap,
+				   GBool interpolate,
+				   Stream *maskStr,
+				   int maskWidth, int maskHeight,
+				   GfxImageColorMap *maskColorMap,
+				   GBool maskInterpolate);
+  // If current colorspace ist pattern,
+  // need this device special handling for masks in pattern colorspace?
+  // Default is false
+  virtual GBool fillMaskCSPattern(GfxState * state)
+  	{ return state->getFillColorSpace()->getMode() == csPattern; }
+  virtual void endMaskClip(GfxState * /*state*/);
+    
+    
+    {///////////////////////////////////////////////////////////////////////////////
+}
+    
+    #ifndef incl_HPHP_MYSQLSTATS_H_
+#define incl_HPHP_MYSQLSTATS_H_
+    
+    #ifndef incl_HPHP_FIXED_STRING_MAP_H_
+#define incl_HPHP_FIXED_STRING_MAP_H_
+    
+    #define CHECK_ACCESSOR(accesor, opstr, classname, propname)                    \
+  if (!accesor) {                                                              \
+    raise_error('Cannot directly %s the property %s::$%s',                     \
+                 opstr, classname->data(), propname.data());                   \
+  }
+    
+    
+RangeState::RangeState(uintptr_t lowAddr, uintptr_t highAddr, Reserved)
+  : low_use(lowAddr)
+  , low_map(lowAddr)
+  , high_use(highAddr)
+  , high_map(highAddr)
+  , low_internal(reinterpret_cast<char*>(lowAddr))
+  , high_internal(reinterpret_cast<char*>(highAddr)) {
+  constexpr size_t size2m = 2u << 20;
+  always_assert((lowAddr <= highAddr) &&
+                !(lowAddr % size2m) && !(highAddr % size2m));
+}
+    
+    
+    { protected:
+  Direction direction() const override { return Direction::LowToHigh; }
+  bool addMappingImpl() override;
+};
+    
+    void HostHealthMonitor::waitForEnd() {
+  if (!m_stopped) stop();
+  if (m_monitor_thread) {
+    m_monitor_thread->join();
+    m_monitor_thread.reset();
+  }
+}
