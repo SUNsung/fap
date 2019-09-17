@@ -1,246 +1,161 @@
 
         
-            :param img_path: path to image to be recognized
-    :param predictions: results of the predict function
-    :return:
+        
+def check_format(filename):
     '''
-    pil_image = Image.open(img_path).convert('RGB')
-    draw = ImageDraw.Draw(pil_image)
-    
-    # Find all the faces in the image using a pre-trained convolutional neural network.
-# This method is more accurate than the default HOG model, but it's slower
-# unless you have an nvidia GPU and dlib compiled with CUDA extensions. But if you do,
-# this will use GPU acceleration and perform well.
-# See also: find_faces_in_picture.py
-face_locations = face_recognition.face_locations(image, number_of_times_to_upsample=0, model='cnn')
-    
-        # Load the uploaded image file
-    img = face_recognition.load_image_file(file_stream)
-    # Get face encodings for any faces in the uploaded image
-    unknown_face_encodings = face_recognition.face_encodings(img)
-    
-    # Create a PIL imagedraw object so we can draw on the picture
-pil_image = Image.fromarray(image)
-d = ImageDraw.Draw(pil_image)
-    
-    requirements = [
-    'face_recognition_models>=0.3.0',
-    'Click>=6.0',
-    'dlib>=19.7',
-    'numpy',
-    'Pillow'
-]
-    
-        # 获得所有人脸的位置以及它们的编码
-    face_locations = face_recognition.face_locations(output)
-    print('Found {} faces in image.'.format(len(face_locations)))
-    face_encodings = face_recognition.face_encodings(output, face_locations)
-    
-        :param known_face_encodings: A list of known face encodings
-    :param face_encoding_to_check: A single face encoding to compare against the list
-    :param tolerance: How much distance between faces to consider it a match. Lower is more strict. 0.6 is typical best performance.
-    :return: A list of True/False values indicating which known_face_encodings match the face encoding to check
+    validates that each line is formatted correctly,
+    appending to error list as needed
     '''
-    return list(face_distance(known_face_encodings, face_encoding_to_check) <= tolerance)
+    with open(filename) as fp:
+        lines = list(line.rstrip() for line in fp)
+    check_alphabetical(lines)
+    # START Check Entries
+    num_in_category = min_entries_per_section + 1
+    category = ''
+    category_line = 0
+    for line_num, line in enumerate(lines):
+        if section_title_re.match(line):
+            title_links.append(section_title_re.match(line).group(1))
+        # check each section for the minimum number of entries
+        if line.startswith(anchor):
+            match = anchor_re.match(line)
+            if match:
+                if match.group(1) not in title_links:
+                    add_error(line_num, 'section header ({}) not added as a title link'.format(match.group(1)))
+            else:
+                add_error(line_num, 'section header is not formatted correctly')
+            if num_in_category < min_entries_per_section:
+                add_error(category_line, '{} section does not have the minimum {} entries (only has {})'.format(
+                    category, min_entries_per_section, num_in_category))
+            category = line.split(' ')[1]
+            category_line = line_num
+            num_in_category = 0
+            continue
+        # skips lines that we do not care about
+        if not line.startswith('|') or line.startswith('|---'):
+            continue
+        num_in_category += 1
+        segments = line.split('|')[1:-1]
+        if len(segments) < num_segments:
+            add_error(line_num, 'entry does not have all the required sections (have {}, need {})'.format(
+                len(segments), num_segments))
+            continue
+        # START Global
+        for segment in segments:
+            # every line segment should start and end with exactly 1 space
+            if len(segment) - len(segment.lstrip()) != 1 or len(segment) - len(segment.rstrip()) != 1:
+                add_error(line_num, 'each segment must start and end with exactly 1 space')
+        # END Global
+        segments = [seg.strip() for seg in segments]
+        check_entry(line_num, segments)
+    # END Check Entries
+    
+        for name, (top, right, bottom, left) in predictions:
+        # Draw a box around the face using the Pillow module
+        draw.rectangle(((left, top), (right, bottom)), outline=(0, 0, 255))
+    
+        # Print the location of each face in this image
+    top, right, bottom, left = face_location
+    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
+    
+        if len(unknown_face_encodings) > 0:
+        face_found = True
+        # See if the first face in the uploaded image matches the known face of Obama
+        match_results = face_recognition.compare_faces([known_face_encoding], unknown_face_encodings[0])
+        if match_results[0]:
+            is_obama = True
+    
+    # All done!
+input_movie.release()
+cv2.destroyAllWindows()
 
     
-        # Hit 'q' on the keyboard to quit!
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-    
-    # Training directory
-train_dir = os.listdir('/train_dir/')
-    
-            limits = resource.getrlimit(resource.RLIMIT_AS)
-        self.assertEqual(resource.prlimit(0, resource.RLIMIT_AS, BadSeq()),
-                         limits)
-    
-                    b = BytesIO()
-                self.assertRaises(TypeError, plistlib.dump, pl, b, fmt=fmt)
-    
-        if inspect.isgeneratorfunction(func):
-        coro = func
+        if os.path.isdir(image_to_check):
+        if cpus == 1:
+            [test_image(image_file, known_names, known_face_encodings, tolerance, show_distance) for image_file in image_files_in_folder(image_to_check)]
+        else:
+            process_images_in_process_pool(image_files_in_folder(image_to_check), known_names, known_face_encodings, cpus, tolerance, show_distance)
     else:
-        @functools.wraps(func)
-        def coro(*args, **kw):
-            res = func(*args, **kw)
-            if (base_futures.isfuture(res) or inspect.isgenerator(res) or
-                    isinstance(res, CoroWrapper)):
-                res = yield from res
-            else:
-                # If 'res' is an awaitable, run it.
-                try:
-                    await_meth = res.__await__
-                except AttributeError:
-                    pass
-                else:
-                    if isinstance(res, collections.abc.Awaitable):
-                        res = yield from await_meth()
-            return res
+        test_image(image_to_check, known_names, known_face_encodings, tolerance, show_distance)
     
-        # disable this test for now. When the version where the fail* methods will
-    # be removed is decided, re-enable it and update the version
-    def _testDeprecatedFailMethods(self):
-        '''Test that the deprecated fail* methods get removed in 3.x'''
-        if sys.version_info[:2] < (3, 3):
-            return
-        deprecated_names = [
-            'failIfEqual', 'failUnlessEqual', 'failUnlessAlmostEqual',
-            'failIfAlmostEqual', 'failUnless', 'failUnlessRaises', 'failIf',
-            'assertDictContainsSubset',
-        ]
-        for deprecated_name in deprecated_names:
-            with self.assertRaises(AttributeError):
-                getattr(self, deprecated_name)  # remove these in 3.x
+    # Load a second sample picture and learn how to recognize it.
+biden_image = face_recognition.load_image_file('biden.jpg')
+biden_face_encoding = face_recognition.face_encodings(biden_image)[0]
     
-    # This is a copy of lib2to3.fixes.fix_imports.MAPPING.  We cannot import
-# lib2to3 and use the mapping defined there, because lib2to3 uses pickle.
-# Thus, this could cause the module to be imported recursively.
-IMPORT_MAPPING = {
-    '__builtin__' : 'builtins',
-    'copy_reg': 'copyreg',
-    'Queue': 'queue',
-    'SocketServer': 'socketserver',
-    'ConfigParser': 'configparser',
-    'repr': 'reprlib',
-    'tkFileDialog': 'tkinter.filedialog',
-    'tkSimpleDialog': 'tkinter.simpledialog',
-    'tkColorChooser': 'tkinter.colorchooser',
-    'tkCommonDialog': 'tkinter.commondialog',
-    'Dialog': 'tkinter.dialog',
-    'Tkdnd': 'tkinter.dnd',
-    'tkFont': 'tkinter.font',
-    'tkMessageBox': 'tkinter.messagebox',
-    'ScrolledText': 'tkinter.scrolledtext',
-    'Tkconstants': 'tkinter.constants',
-    'Tix': 'tkinter.tix',
-    'ttk': 'tkinter.ttk',
-    'Tkinter': 'tkinter',
-    'markupbase': '_markupbase',
-    '_winreg': 'winreg',
-    'thread': '_thread',
-    'dummy_thread': '_dummy_thread',
-    'dbhash': 'dbm.bsd',
-    'dumbdbm': 'dbm.dumb',
-    'dbm': 'dbm.ndbm',
-    'gdbm': 'dbm.gnu',
-    'xmlrpclib': 'xmlrpc.client',
-    'SimpleXMLRPCServer': 'xmlrpc.server',
-    'httplib': 'http.client',
-    'htmlentitydefs' : 'html.entities',
-    'HTMLParser' : 'html.parser',
-    'Cookie': 'http.cookies',
-    'cookielib': 'http.cookiejar',
-    'BaseHTTPServer': 'http.server',
-    'test.test_support': 'test.support',
-    'commands': 'subprocess',
-    'urlparse' : 'urllib.parse',
-    'robotparser' : 'urllib.robotparser',
-    'urllib2': 'urllib.request',
-    'anydbm': 'dbm',
-    '_abcoll' : 'collections.abc',
-}
-    
-        def _iter_post_close_action_sets(self):
-        for interp in ('same', 'extra', 'other'):
-            yield [
-                ChannelAction('use', 'recv', interp),
-                ]
-            yield [
-                ChannelAction('use', 'send', interp),
-                ]
-    
-            async def test(lock):
-            await asyncio.sleep(0.01)
-            self.assertFalse(lock.locked())
-            with self.assertWarns(DeprecationWarning):
-                with await lock as _lock:
-                    self.assertIs(_lock, None)
-                    self.assertTrue(lock.locked())
-                    await asyncio.sleep(0.01)
-                    self.assertTrue(lock.locked())
-                self.assertFalse(lock.locked())
-    
-            firstId = events[0][2]
-        self.assertSequenceEqual(
-            [
-                ('Created', ' ', firstId),
-                ('cpython._PySys_ClearAuditHooks', ' ', firstId),
-            ],
-            events,
-        )
-    
-        def do_test_trashcan_python_class(self, base):
-        # Check that the trashcan mechanism works properly for a Python
-        # subclass of a class using the trashcan (this specific test assumes
-        # that the base class 'base' behaves like list)
-        class PyList(base):
-            # Count the number of PyList instances to verify that there is
-            # no memory leak
-            num = 0
-            def __init__(self, *args):
-                __class__.num += 1
-                super().__init__(*args)
-            def __del__(self):
-                __class__.num -= 1
-    
-    import tensorflow as tf
-    
-        公式
-        `o = H(x, W)T(x, W) + x(1 - T(x, W))`
-    其中
-        H, T = dense
-    '''
-    n_input = int(x.get_shape()[-1])
-    with tf.variable_scope(name or 'highway_dense'):
-        W, b = get_wb([n_input, n_input])
+        # Apply some eyeliner
+    d.line(face_landmarks['left_eye'] + [face_landmarks['left_eye'][0]], fill=(0, 0, 0, 110), width=6)
+    d.line(face_landmarks['right_eye'] + [face_landmarks['right_eye'][0]], fill=(0, 0, 0, 110), width=6)
     
     
-class L1L2Regularizer(object):
-    '''L1 L2 正则化
+@app.route('/', methods=['GET', 'POST'])
+def upload_image():
+    # 检测图片是否上传成功
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return redirect(request.url)
     
-    import numpy as np
-import tensorflow as tf
+    import face_recognition
+from sklearn import svm
+import os
     
-        >>> os.unlink('foo.txt')
-    '''
+        models = {
+        'tagstore.eventtag': {
+            'Meta': {'unique_together': '(('project_id', 'event_id', 'key', 'value'),)', 'object_name': 'EventTag', 'index_together': '(('project_id', 'key', 'value'), ('group_id', 'key', 'value'))'},
+            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'db_index': 'True'}),
+            'event_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {}),
+            'group_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {}),
+            'value': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagValue']', 'db_column': ''value_id''})
+        },
+        'tagstore.grouptagkey': {
+            'Meta': {'unique_together': '(('project_id', 'group_id', '_key'),)', 'object_name': 'GroupTagKey'},
+            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            'group_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'db_index': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'db_index': 'True'}),
+            'values_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
+        },
+        'tagstore.grouptagvalue': {
+            'Meta': {'unique_together': '(('project_id', 'group_id', '_key', '_value'),)', 'object_name': 'GroupTagValue', 'index_together': '(('project_id', '_key', '_value', 'last_seen'),)'},
+            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            '_value': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagValue']', 'db_column': ''value_id''}),
+            'first_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'group_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'db_index': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'last_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'db_index': 'True'}),
+            'times_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
+        },
+        'tagstore.tagkey': {
+            'Meta': {'unique_together': '(('project_id', 'environment_id', 'key'),)', 'object_name': 'TagKey'},
+            'environment_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'null': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'key': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'db_index': 'True'}),
+            'status': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'}),
+            'values_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
+        },
+        'tagstore.tagvalue': {
+            'Meta': {'unique_together': '(('project_id', '_key', 'value'),)', 'object_name': 'TagValue', 'index_together': '(('project_id', '_key', 'last_seen'),)'},
+            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            'data': ('sentry.db.models.fields.gzippeddict.GzippedDictField', [], {'null': 'True', 'blank': 'True'}),
+            'first_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'last_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'db_index': 'True'}),
+            'times_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'}),
+            'value': ('django.db.models.fields.CharField', [], {'max_length': '200'})
+        }
+    }
     
-    '''
-https://www.djangospin.com/design-patterns-python/mediator/
+            # Changing field 'GroupTagValue.group_id'
+        db.alter_column(u'tagstore_grouptagvalue', 'group_id', self.gf(
+            'sentry.db.models.fields.bounded.BoundedBigIntegerField')())
     
-    from abc import abstractmethod
+            # Changing field 'TagKey.environment_id'
+        db.alter_column(u'tagstore_tagkey', 'environment_id', self.gf(
+            'sentry.db.models.fields.bounded.BoundedBigIntegerField')(null=True))
     
-    
-if __name__ == '__main__':
-    simple_hello = TextTag('hello, world!')
-    special_hello = ItalicWrapper(BoldWrapper(simple_hello))
-    print('before:', simple_hello.render())
-    print('after:', special_hello.render())
-    
-            for y in obs_states:
-            prob, state = max((V[t - 1][y0] + trans_p[y0].get(y, MIN_INF) +
-                               emit_p[y].get(obs[t], MIN_FLOAT), y0) for y0 in prev_states)
-            V[t][y] = prob
-            mem_path[t][y] = state
-    
-    USAGE = 'usage:    python extract_tags_stop_words.py [file name] -k [top k]'
-    
-        def test_multiple_strong_etag_match(self):
-        computed_etag = ''xyzzy1''
-        etags = ''xyzzy1', 'xyzzy2''
-        self.check_url(
-            '/cache/' + computed_etag, method='GET',
-            headers=[('If-None-Match', etags)],
-            expected_status=304)
-    
-        def filter(self, record):
-        if record.levelno >= logging.ERROR:
-            self.error_count += 1
-        elif record.levelno >= logging.WARNING:
-            self.warning_count += 1
-        elif record.levelno >= logging.INFO:
-            self.info_count += 1
-        return True
-    
-    if typing.TYPE_CHECKING:
-    from typing import Generator, Any, List, Tuple, Dict  # noqa: F401
+        complete_apps = ['social_auth']
