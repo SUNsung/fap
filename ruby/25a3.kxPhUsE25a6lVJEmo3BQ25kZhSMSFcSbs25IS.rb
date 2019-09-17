@@ -1,291 +1,162 @@
 
         
-                    next if skip_up_to_date?(screenshot)
+        module Gitlab
+  module CryptoHelper
+    extend self
     
-              enabled_services_object = self.service_object
-          enabled_services.each do |k, v|
-            enabled_services_object.__hash__[k] = true
-            enabled_services_object.send('#{k}=', v)
-          end
-          Produce::Service.enable(enabled_services_object, nil) unless enabled_services.empty?
-    
-        # After loading, contains all the found options
-    attr_accessor :options
-    
-          def self.is_supported?(platform)
-        [:ios, :mac].include?(platform)
+        def find_by_filename(query)
+      search_filenames(query).map do |filename|
+        Gitlab::Search::FoundBlob.new(blob_filename: filename, project: project, ref: ref, repository: repository)
       end
     end
-  end
-end
-
     
-        private
+          it { expect(presenter.can_remove?).to eq(true) }
+    end
     
-              # Alias
-          key_reader = key.to_sym
-          key_writer = '#{key}='.to_sym
+          diff_file = subject.diff_files.find { |file| file.new_path == stub_path }
     
+            desc 'Adds a badge to a #{source_type}.' do
+          detail 'This feature was introduced in GitLab 10.6.'
+          success Entities::Badge
+        end
+        params do
+          requires :link_url, type: String, desc: 'URL of the badge link'
+          requires :image_url, type: String, desc: 'URL of the badge image'
+        end
+        post ':id/badges' do
+          source = find_source_if_admin(source_type)
     
-    {        'apps' => 'apps',
-        'betaGroups' => 'beta_groups',
-        'betaTesterMetrics' => 'beta_tester_metrics'
-      })
-    
-          def self.type
-        return 'users'
+          def remember_location(key)
+        location = caller.find do |line|
+          IGNORED_LOCATIONS.none? { |i| line.include?(i) }
+        end
+        (locations[key] ||= []) << location
       end
     
-    end
-end
-
+    module Capistrano
+  module Doctor
+    # Prints table of all Capistrano-related gems and their version numbers. If
+    # there is a newer version of a gem available, call attention to it.
+    class GemsDoctor
+      include Capistrano::Doctor::OutputHelpers
     
-      # @return [Bool] system version is 10.4 or lower
-  def lte_tiger?
-    ver_num =~ /10\.(\d+)/ and $1.to_i <= 4
-  end
+          # Prints a table for a given array of records. For each record, the block
+      # is yielded two arguments: the record and a Row object. To print values
+      # for that record, add values using `row << 'some value'`. A row can
+      # optionally be highlighted in yellow using `row.yellow`.
+      def table(records, &block)
+        return if records.empty?
+        rows = collect_rows(records, &block)
+        col_widths = calculate_column_widths(rows)
     
-        case res.code
-    when 201
-      print_good('Playing https://www.youtube.com/watch?v=#{vid}')
-    when 200
-      print_status('Stopping video')
-    when 404
-      print_error('Target no longer supports casting via the DIAL protocol. ' \
-                  'CASTV2 is not supported by this module at this time.')
-    end
-  end
-    
-      # List of known values and models
-  def devices_list
-    known_devices = {
-        :'AZ-D140W'=>
-            {:name=>'Azmoon', :model=>'AZ-D140W', :values=>[
-                [107367693, 13]
-            ]},
-        :'BiPAC 5102S'=>
-            {:name=>'Billion', :model=>'BiPAC 5102S', :values=>[
-                [107369694, 13]
-            ]},
-        :'BiPAC 5200'=>
-            {:name=>'Billion', :model=>'BiPAC 5200', :values=>[
-                [107369545, 9],
-                [107371218, 21]
-            ]},
-        :'BiPAC 5200A'=>
-            {:name=>'Billion', :model=>'BiPAC 5200A', :values=>[
-                [107366366, 25],
-                [107371453, 9]
-            ]},
-        :'BiPAC 5200GR4'=>
-            {:name=>'Billion', :model=>'BiPAC 5200GR4', :values=>[
-                [107367690, 21]
-            ]},
-        :'BiPAC 5200SRD'=>
-            {:name=>'Billion', :model=>'BiPAC 5200SRD', :values=>[
-                [107368270, 1],
-                [107371378, 3],
-                [107371218, 13]
-            ]},
-        :'DSL-2520U'=>
-            {:name=>'D-Link', :model=>'DSL-2520U', :values=>[
-                [107368902, 25]
-            ]},
-        :'DSL-2600U'=>
-            {:name=>'D-Link', :model=>'DSL-2600U', :values=>[
-                [107366496, 13],
-                [107360133, 20]
-            ]},
-        :'TD-8616'=>
-            {:name=> 'TP-Link', :model=>'TD-8616', :values=>[
-                [107371483, 21],
-                [107369790, 17],
-                [107371161, 1],
-                [107371426, 17],
-                [107370211, 5],
-            ]},
-        :'TD-8817'=>
-            {:name=> 'TP-Link', :model=>'TD-8817', :values=>[
-                [107369790, 17],
-                [107369788, 1],
-                [107369522, 25],
-                [107369316, 21],
-                [107369321, 9],
-                [107351277, 20]
-            ]},
-        :'TD-8820'=>
-            {:name=>'TP-Link', :model=>'TD-8820', :values=>[
-                [107369768, 17]
-            ]},
-        :'TD-8840T'=>
-            {:name=>'TP-Link', :model=>'TD-8840T', :values=>[
-                [107369845, 5],
-                [107369790, 17],
-                [107369570, 1],
-                [107369766, 1],
-                [107369764, 5],
-                [107369688, 17]
-            ]},
-        :'TD-W8101G'=>
-            {:name=>'TP-Link', :model=>'TD-W8101G', :values=>[
-                [107367772, 37],
-                [107367808, 21],
-                [107367751, 21],
-                [107367749, 13],
-                [107367765, 25],
-                [107367052, 25],
-                [107365835, 1]
-            ]},
-        :'TD-W8151N'=>
-            {:name=>'TP-Link', :model=>'TD-W8151N', :values=>[
-                [107353867, 24]
-            ]},
-        :'TD-W8901G'=>
-            {:name=> 'TP-Link', :model=>'TD-W8901G', :values=>[
-                [107367787, 21],
-                [107368013, 5],
-                [107367854, 9],
-                [107367751, 21],
-                [107367749, 13],
-                [107367765, 25],
-                [107367682, 21],
-                [107365835, 1],
-                [107367052, 25]
-            ]},
-        :'TD-W8901GB'=>
-            {:name=>'TP-Link', :model=>'TD-W8901GB', :values=>[
-                [107367756, 13],
-                [107369393, 21]
-            ]},
-        :'TD-W8901N'=>
-            {:name=>'TP-Link', :model=>'TD-W8901N', :values=>[
-                [107353880, 0]
-            ]},
-        :'TD-W8951ND'=>
-            {:name=>'TP-Link', :model=>'TD-W8951ND', :values=>[
-                [107369839, 25],
-                [107369876, 13],
-                [107366743, 21],
-                [107364759, 25],
-                [107364759, 13],
-                [107364760, 21]
-            ]},
-        :'TD-W8961NB'=>
-            {:name=>'TP-Link', :model=>'TD-W8961NB', :values=>[
-                [107369844, 17],
-                [107367629, 21],
-                [107366421, 13]
-            ]},
-        :'TD-W8961ND'=>
-            {:name=>'TP-Link', :model=>'TD-W8961ND', :values=>[
-                [107369839, 25],
-                [107369876, 13],
-                [107364732, 25],
-                [107364771, 37],
-                [107364762, 29],
-                [107353880, 0],
-                [107353414, 36]
-            ]},
-        :'P-660R-T3 v3'=> #This value works on devices with model P-660R-T3 v3 not P-660R-T3 v3s
-            {:name=>'ZyXEL', :model=>'P-660R-T3', :values=>[
-                [107369567, 21]
-            ]},
-        :'P-660RU-T3 v2'=> #Couldn't verify this
-            {:name=>'ZyXEL', :model=>'P-660R-T3', :values=>[
-                [107369567, 21]
-            ]},
-        :'ALL'=> # Used when `ForceAttempt` === true
-            {:name=>'Unknown', :model=>'Forced', :values=>[]
-            },
-    }
-    # collect all known cookies for a brute force option
-    all_cookies = []
-    known_devices.collect { |_, v| v[:values] }.each do |list|
-      all_cookies += list
-    end
-    known_devices[:'ALL'][:values] = all_cookies.uniq
-    known_devices
-  end
-    
-    unless $LOAD_PATH.include? lib_path
-  $LOAD_PATH.unshift lib_path
-end
-
-    
-      def data_service_exist?(data_service)
-    @data_services.each_value{|value|
-      if (value.name == data_service.name)
-        return true
+          it 'flashes a message containing the token' do
+        post '/users/api_secrets', params: { api_secret: valid_params }
+        expect(flash[:notice]).to include(ApiSecret.last.secret)
+        expect(flash[:error]).to be_nil
       end
-    }
+    end
     
-        host, _port = session.tunnel_peer.split(':')
-    @clean_up_rc = ''
+      describe '.new' do
+    let(:source) do
+      'alias foo bar'
+    end
     
-        # Create the log directory
-    ::FileUtils.mkdir_p(logs)
+          it 'returns true' do
+        expect(node.pure?).to be(true)
+      end
+    end
     
-      bins.each do |from, to|
-    next if (from != 'metsvc.exe' and remove)
-    to ||= from
-    print_status(' >> Uploading #{from}...')
-    fd = client.fs.file.new(tempdir + '\\' + to, 'wb')
-    path = (from == 'metsrv.x86.dll') ? MetasploitPayloads.meterpreter_path('metsrv','x86.dll') : File.join(based, from)
-    fd.write(::File.read(path, ::File.size(path)))
-    fd.close
-  end
-    
-          def role_properties_for(rolenames)
-        roles = rolenames.to_set
-        rps = Set.new unless block_given?
-        roles_for(rolenames).each do |host|
-          host.roles.intersection(roles).each do |role|
-            [host.properties.fetch(role)].flatten(1).each do |props|
-              if block_given?
-                yield host, role, props
-              else
-                rps << (props || {}).merge(role: role, hostname: host.hostname)
-              end
+              expect_offense(<<~RUBY)
+            def some_method(foo, bar)
+                                 ^^^ #{bar_message}
+                            ^^^ #{foo_message}
             end
-          end
+          RUBY
         end
-        block_given? ? nil : rps
+      end
+    end
+    
+    module RuboCop
+  module Cop
+    # Common functionality for checking assignment nodes.
+    module CheckAssignment
+      def on_lvasgn(node)
+        check_assignment(node, extract_rhs(node))
+      end
+      alias on_ivasgn   on_lvasgn
+      alias on_cvasgn   on_lvasgn
+      alias on_gvasgn   on_lvasgn
+      alias on_casgn    on_lvasgn
+      alias on_masgn    on_lvasgn
+      alias on_op_asgn  on_lvasgn
+      alias on_or_asgn  on_lvasgn
+      alias on_and_asgn on_lvasgn
+    
+    module RuboCop
+  module AST
+    # A node extension for `for` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `for` nodes within RuboCop.
+    class ForNode < Node
+      # Returns the keyword of the `for` statement as a string.
+      #
+      # @return [String] the keyword of the `until` statement
+      def keyword
+        'for'
       end
     
-          # Given a callable that provides a value, wrap the callable with another
-      # object that responds to `call`. This new object will perform validation
-      # and then return the original callable's value.
-      #
-      # If the callable is a `Question`, the object returned by this method will
-      # also be a `Question` (a `ValidatedQuestion`, to be precise). This
-      # ensures that `is_a?(Question)` remains true even after the validation
-      # wrapper is applied. This is needed so that `Configuration#is_question?`
-      # works as expected.
-      #
-      def assert_valid_later(key, callable)
-        validation_callback = lambda do
-          value = callable.call
-          assert_valid_now(key, value)
-          value
-        end
-    
-      it 'creates N processor instances' do
-    mgr = new_manager(options)
-    assert_equal options[:concurrency], mgr.workers.size
+        # Disable testing because we don't really need to run the cpan tests. The
+    # goal is to see the parsed result (name, module description, etc)
+    # Additionally, it fails on my workstation when cpan_test? is enabled due
+    # to not finding `Test.pm`, and it seems like a flakey test if we keep this
+    # enabled.
+    subject.attributes[:cpan_test?] = false
+    subject.input('Digest::MD5')
+    insist { subject.name } == 'perl-Digest-MD5'
+    insist { subject.description } == 'Perl interface to the MD-5 algorithm'
+    insist { subject.vendor } == 'Gisle Aas <gisle@activestate.com>'
+    # TODO(sissel): Check dependencies
   end
     
-        it 'calculates an average poll interval based on the number of known Sidekiq processes' do
-      with_sidekiq_option(:average_scheduled_poll_interval, 10) do
-        3.times do |i|
-          Sidekiq.redis do |conn|
-            conn.sadd('processes', 'process-#{i}')
-            conn.hset('process-#{i}', 'info', nil)
-          end
+          # Scan to find the location of the two contiguous null records
+      open(target_path, 'rb') do |file|
+    
+        self.description = info['description']
+    # Supposedly you can upload a package for npm with no author/author email
+    # so I'm being safer with this. Author can also be a hash or a string
+    self.vendor = 'Unknown <unknown@unknown.unknown>'
+    if info.include?('author')
+      author_info = info['author']
+      # If a hash, assemble into a string
+      if author_info.respond_to? :fetch
+        self.vendor = sprintf('%s <%s>', author_info.fetch('name', 'unknown'),
+                              author_info.fetch('email', 'unknown@unknown.unknown'))
+      else
+        # Probably will need a better check for validity here
+        self.vendor = author_info unless author_info == ''
+      end
+    end
+    
+        # Remove the stuff we don't want
+    delete_these = ['.depdb', '.depdblock', '.filemap', '.lock', '.channel', 'cache', 'temp', 'download', '.channels', '.registry']
+    Find.find(staging_path) do |path|
+      if File.file?(path)
+        logger.info('replacing staging_path in file', :replace_in => path, :staging_path => staging_path)
+        begin
+          content = File.read(path).gsub(/#{Regexp.escape(staging_path)}/, '')
+          File.write(path, content)
+        rescue ArgumentError => e
+          logger.warn('error replacing staging_path in file', :replace_in => path, :error => e)
         end
+      end
+      FileUtils.rm_r(path) if delete_these.include?(File.basename(path))
+    end
     
-        it 'enables fake testing in a block' do
-      Sidekiq::Testing.disable!
-      assert Sidekiq::Testing.disabled?
-      refute Sidekiq::Testing.fake?
+        attributes[:pleaserun_name] ||= File.basename(command.first)
+    attributes[:prefix] ||= '/usr/share/pleaserun/#{attributes[:pleaserun_name]}'
     
-        ThirdWorker.perform_async
+        # Generate the package 'Prototype' file
+    File.open('#{build_path}/Prototype', 'w') do |prototype|
+      prototype.puts('i pkginfo')
+      prototype.puts('i preinstall') if self.scripts['pre-install']
+      prototype.puts('i postinstall') if self.scripts['post-install']
