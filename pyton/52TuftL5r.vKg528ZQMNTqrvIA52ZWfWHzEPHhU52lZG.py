@@ -1,186 +1,147 @@
 
         
-        print('Train...')
-model.fit(x_train, y_train,
-          batch_size=batch_size,
-          epochs=15,
-          validation_data=(x_test, y_test))
-score, acc = model.evaluate(x_test, y_test,
-                            batch_size=batch_size)
-print('Test score:', score)
-print('Test accuracy:', acc)
-
+            Args:
+      output_dir: directory where to output, e.g. log files.
+      root_data_dir: directory under which to look for dataset.
+      **kwargs: arbitrary named arguments. This is needed to make the
+                constructor forward compatible in case PerfZero provides more
+                named arguments before updating the constructor.
+    '''
+    flag_methods = [transformer_main.define_transformer_flags]
     
-    from keras.datasets import boston_housing
-from keras.datasets import imdb
-from keras.datasets import reuters
+      num_image = semantic_predictions.shape[0]
+  for i in range(num_image):
+    image_height = np.squeeze(image_heights[i])
+    image_width = np.squeeze(image_widths[i])
+    original_image = np.squeeze(original_images[i])
+    semantic_prediction = np.squeeze(semantic_predictions[i])
+    crop_semantic_prediction = semantic_prediction[:image_height, :image_width]
     
-        def get_config(self):
-        config = {
-            'filters': self.filters,
-            'kernel_size': self.kernel_size,
-            'strides': self.strides,
-            'padding': self.padding,
-            'activation': activations.serialize(self.activation),
-            'use_bias': self.use_bias,
-            'kernel_initializer': initializers.serialize(self.kernel_initializer),
-            'bias_initializer': initializers.serialize(self.bias_initializer),
-            'kernel_regularizer': regularizers.serialize(self.kernel_regularizer),
-            'bias_regularizer': regularizers.serialize(self.bias_regularizer),
-            'activity_regularizer':
-                regularizers.serialize(self.activity_regularizer),
-            'kernel_constraint': constraints.serialize(self.kernel_constraint),
-            'bias_constraint': constraints.serialize(self.bias_constraint)
-        }
-        base_config = super(LocallyConnected1D, self).get_config()
-        return dict(list(base_config.items()) + list(config.items()))
+        if not subtokens:
+      return ''
     
-    Input may optionally be reversed, shown to increase performance in many tasks in:
-'Learning to Execute'
-http://arxiv.org/abs/1410.4615
-and
-'Sequence to Sequence Learning with Neural Networks'
-http://papers.nips.cc/paper/5346-sequence-to-sequence-learning-with-neural-networks.pdf
-Theoretically it introduces shorter term dependencies between source and target.
+      with tf.Graph().as_default():
+    with tf.Session() as sess:
+      # Initialize variables, construct DELF extractor.
+      init_op = tf.global_variables_initializer()
+      sess.run(init_op)
+      extractor_fn = extractor.MakeExtractor(sess, config)
+    
+      tf.logging.set_verbosity(tf.logging.INFO)
+    
+      # Read features.
+  locations_1, _, descriptors_1, _, _ = feature_io.ReadFromFile(
+      cmd_args.features_1_path)
+  num_features_1 = locations_1.shape[0]
+  tf.logging.info('Loaded image 1's %d features' % num_features_1)
+  locations_2, _, descriptors_2, _, _ = feature_io.ReadFromFile(
+      cmd_args.features_2_path)
+  num_features_2 = locations_2.shape[0]
+  tf.logging.info('Loaded image 2's %d features' % num_features_2)
+    
+        @method_decorator(permission_required('permission_not_granted'))
+    def permission_protected_view(self, request):
+        t = Template('This is a permission protected test using a method. '
+                     'Username is {{ user.username }}. '
+                     'Permissions are {{ user.get_all_permissions }}.',
+                     name='Permissions Template')
+        c = Context({'user': request.user})
+        return HttpResponse(t.render(c))
     
     
-def gae_application(environ, start_response):
-    cookie = environ.get('HTTP_COOKIE', '')
-    options = environ.get('HTTP_X_GOA_OPTIONS', '')
-    if environ['REQUEST_METHOD'] == 'GET' and not cookie:
-        if '204' in environ['QUERY_STRING']:
-            start_response('204 No Content', [])
-            yield ''
-        else:
-            timestamp = long(os.environ['CURRENT_VERSION_ID'].split('.')[1])/2**28
-            ctime = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(timestamp+8*3600))
-            html = u'GoAgent Python Server %s \u5df2\u7ecf\u5728\u5de5\u4f5c\u4e86\uff0c\u90e8\u7f72\u65f6\u95f4 %s\n' % (__version__, ctime)
-            start_response('200 OK', [('Content-Type', 'text/plain; charset=utf-8')])
-            yield html.encode('utf8')
-        raise StopIteration
+class WeaknessForm(forms.ModelForm):
+    extra_field = forms.CharField()
     
-    - CommonTokenStream: A basic and most commonly used TokenStream
-  implementation.
-- TokenRewriteStream: A modification of CommonTokenStream that allows the
-  stream to be altered (by the Parser). See the 'tweak' example for a usecase.
+        # #### Field Methods ####
+    def as_double(self):
+        'Retrieve the Field's value as a double (float).'
+        return capi.get_field_as_double(self._feat.ptr, self._index) if self.is_set else None
     
-            Python does not have any size restrictions, but the compilation of
-        such large source files seems to be pretty memory hungry. The memory
-        consumption of the python process grew to >1.5GB when importing a
-        15MB lexer, eating all my swap space and I was to impacient to see,
-        if it could finish at all. With packed initializers that are unpacked
-        at import time of the lexer module, everything works like a charm.
-        
+        def get_geoms(self, geos=False):
         '''
-        
-        ret = []
-        for i in range(len(string) / 2):
-            (n, v) = ord(string[i*2]), ord(string[i*2+1])
+        Return a list containing the OGRGeometry for every Feature in
+        the Layer.
+        '''
+        if geos:
+            from django.contrib.gis.geos import GEOSGeometry
+            return [GEOSGeometry(feat.geom.wkb) for feat in self]
+        else:
+            return [feat.geom for feat in self]
     
-            Using setter/getter methods is deprecated. Use o.charPositionInLine instead.'''
+    # The model was trained in a way that faces with a distance of 0.6 or less should be a match. But if you want to
+# be more strict, you can look for a smaller face distance. For example, using a 0.55 cutoff would reduce false
+# positive matches at the risk of more false negatives.
     
-        def forwards(self, orm):
+    # Load the jpg file into a numpy array
+image = face_recognition.load_image_file('biden.jpg')
     
-    from django.conf import settings
-from social_auth.utils import custom_user_frozen_models
+            face_names.append(name)
     
-        complete_apps = ['social_auth']
+        # Number of workers (subprocess use to process frames)
+    if cpu_count() > 2:
+        worker_num = cpu_count() - 1  # 1 for capturing frames
+    else:
+        worker_num = 2
+    
+    
+def main():
+    parse_command_line()
+    if options.ioloop:
+        IOLoop.configure(options.ioloop)
+    for i in xrange(options.num_runs):
+        run()
+    
+        Running a script with this wrapper is similar to calling
+    `tornado.autoreload.wait` at the end of the script, but this wrapper
+    can catch import-time problems like syntax errors that would otherwise
+    prevent the script from reaching its call to `wait`.
+    '''
+    # Remember that we were launched with autoreload as main.
+    # The main module can be tricky; set the variables both in our globals
+    # (which may be __main__) and the real importable version.
+    import tornado.autoreload
+    
+        def viewer_setup(self):
+        self.viewer.cam.trackbodyid = 1
+        self.viewer.cam.distance = self.model.stat.extent * 1.0
+        self.viewer.cam.lookat[2] = 0.8925
+        self.viewer.cam.elevation = -20
 
     
+        def sample(self):
+        return (self.np_random.random_sample(self.nvec.shape)*self.nvec).astype(self.dtype)
     
-def get_logger():
-    'Attach a file handler to the logger if there isn't one already.'
-    debug_on = getattr(settings, 'SOUTH_LOGGING_ON', False)
-    logging_file = getattr(settings, 'SOUTH_LOGGING_FILE', False)
+            contact0 = s[8]
+        contact1 = s[13]
+        moving_s_base = 4 + 5*moving_leg
+        supporting_s_base = 4 + 5*supporting_leg
     
+            self.number = 0
+        self.guess_count = 0
+        self.guess_max = 200
+        self.observation = 0
     
-def test_iloc():
-    s = Series(np.random.randn(10), index=list(range(0, 20, 2)))
+            if action < self.number:
+            self.observation = 1
     
-        @pytest.mark.parametrize('str_dtype', [object])  # TODO
-    def test_as_json_table_type_string_dtypes(self, str_dtype):
-        assert as_json_table_type(str_dtype) == 'string'
+        def _get_obs(self, pos=None):
+        if pos is None:
+            pos = self.read_head_position
+        if pos < 0:
+            return self.base
+        if isinstance(pos, np.ndarray):
+            pos = pos.item()
+        try:
+            return self.input_data[pos]
+        except IndexError:
+            return self.base
     
+    class AcrobotEnv(core.Env):
     
-    
-            # check that target_as_index IntervalIndex is compatible
-        if isinstance(target_as_index, IntervalIndex):
-            common_subtype = find_common_type(
-                [self.dtype.subtype, target_as_index.dtype.subtype]
-            )
-            if self.closed != target_as_index.closed or is_object_dtype(common_subtype):
-                # different closed or incompatible subtype -> no matches
-                return (
-                    np.repeat(-1, len(target_as_index)),
-                    np.arange(len(target_as_index)),
-                )
-    
-        # Calling directly the omnifunc may move the cursor position. This is the
-    # case with the default Vim omnifunc for C-family languages
-    # (ccomplete#Complete) which calls searchdecl to find a declaration. This
-    # function is supposed to move the cursor to the found declaration but it
-    # doesn't when called through the omni completion mapping (CTRL-X CTRL-O).
-    # So, we restore the cursor position after the omnifunc calls.
-    line, column = vimsupport.CurrentLineAndColumn()
-    
-        # If not a dictionary or a list, the response is necessarily a
-    # scalar: boolean, number, string, etc. In this case, we print
-    # it to the user.
-    if not isinstance( self._response, ( dict, list ) ):
-      return self._HandleBasicResponse()
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    
-def FormatDebugInfoResponse_ExtraConfFoundAndLoaded_test():
-  response = deepcopy( GENERIC_RESPONSE )
-  response[ 'extra_conf' ].update( {
-    'is_loaded': True,
-    'path': '/path/to/extra/conf'
-  } )
-  assert_that(
-    FormatDebugInfoResponse( response ),
-    contains_string(
-      'Extra configuration file found and loaded\n'
-      'Extra configuration path: /path/to/extra/conf\n'
-    )
-  )
-    
-    
-def KeywordsFromSyntaxListOutput_Basic_test():
-  assert_that( syntax_parse._KeywordsFromSyntaxListOutput( '''
-foogroup xxx foo bar
-             zoo goo
-             links to Statement''' ),
-              contains_inanyorder( 'foo', 'bar', 'zoo', 'goo' ) )
-    
-        Returns:
-        An iterator that yields the given Futures as they complete (finished or
-        cancelled).
-    
-        >>> Point = namedtuple('Point', 'x y')
-    >>> Point.__doc__                   # docstring for the new class
-    'Point(x, y)'
-    >>> p = Point(11, y=22)             # instantiate with positional args or keywords
-    >>> p[0] + p[1]                     # indexable like a plain tuple
-    33
-    >>> x, y = p                        # unpack like a regular tuple
-    >>> x, y
-    (11, 22)
-    >>> p.x + p.y                       # fields also accessable by name
-    33
-    >>> d = p._asdict()                 # convert to a dictionary
-    >>> d['x']
-    11
-    >>> Point(**d)                      # convert from a dictionary
-    Point(x=11, y=22)
-    >>> p._replace(x=100)               # _replace() is like str.replace() but targets named fields
-    Point(x=100, y=22)
-    
-    def _process_worker(call_queue, result_queue):
-    '''Evaluates calls from call_queue and places the results in result_queue.
+    class MemorizeDigits(gym.Env):
+    metadata = {
+        'render.modes': ['human', 'rgb_array'],
+        'video.frames_per_second' : 60,
+        'video.res_w' : FIELD_W,
+        'video.res_h' : FIELD_H,
+    }
