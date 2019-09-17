@@ -1,109 +1,112 @@
 
         
-            def __init__(self, deep, *targets):
-        self.deep = deep
-        self.targets = targets
-        self.commit()
+            @unittest.skipUnless(hasattr(posix, 'setresuid'),
+                         'test needs posix.setresuid()')
+    def test_setresuid_exception(self):
+        # Don't do this test if someone is silly enough to run us as root.
+        current_user_ids = posix.getresuid()
+        if 0 not in current_user_ids:
+            new_user_ids = (current_user_ids[0]+1, -1, -1)
+            self.assertRaises(OSError, posix.setresuid, *new_user_ids)
     
-    *TL;DR
-Defines the skeleton of a base algorithm, deferring definition of exact
-steps to subclasses.
+        def run(self):
+        # The sleep isn't necessary, but is intended to give the blocking
+        # function in the main thread a chance at actually blocking before
+        # we unclog it.  But if the sleep is longer than the timeout-based
+        # tests wait in their blocking functions, those tests will fail.
+        # So we give them much longer timeout values compared to the
+        # sleep here (I aimed at 10 seconds for blocking functions --
+        # they should never actually wait that long - they should make
+        # progress as soon as we call self.fn()).
+        time.sleep(0.1)
+        self.startedEvent.set()
+        self.fn(*self.args)
     
-    ### OUTPUT ###
-# We have a lovely Cat
-# It says meow
-#
-# We have a lovely Dog
-# It says woof
-# ====================
-# We have a lovely Cat
-# It says meow
-# ====================
-# We have a lovely Cat
-# It says meow
-# ====================
-
+        def items(self):
+        '''Get all the message's header fields and values.
     
-        rm1.state = 'Idle'
-    rm2.state = 'Running'
+        def test_policy_on_part_made_by_make_comes_from_message(self):
+        for method in ('make_related', 'make_alternative', 'make_mixed'):
+            m = self.message(policy=self.policy.clone(content_manager='foo'))
+            m['Content-Type'] = 'text/plain'
+            getattr(m, method)()
+            self.assertEqual(m.get_payload(0).policy.content_manager, 'foo')
     
-        print('Unexpected action '{}''.format(args.action), file=sys.stderr)
-    return 1
+    def glob0(dirname, pattern):
+    return _glob0(dirname, pattern, False)
     
-        def create_release_branch(self, version, base=None):
-        print('Creating release branch {} based on {}...'.format(version, base or 'master'))
-        remote = self.find_remote(self.gh_repo.full_name)
-        br_name = branch_name(version)
-        remote.fetch()
-        if self.branch_exists(br_name):
-            raise ScriptError(
-                'Branch {} already exists locally. Please remove it before '
-                'running the release script, or use `resume` instead.'.format(
-                    br_name
-                )
-            )
-        if base is not None:
-            base = self.git_repo.tag('refs/tags/{}'.format(base))
+        def rollover(self):
+        if self._rolled: return
+        file = self._file
+        newfile = self._file = TemporaryFile(**self._TemporaryFileArgs)
+        del self._TemporaryFileArgs
+    
+        def finalize_options(self):
+        if self.plat_name is None:
+            self.plat_name = get_platform()
         else:
-            base = 'refs/remotes/{}/master'.format(remote.name)
-        release_branch = self.git_repo.create_head(br_name, commit=base)
-        release_branch.checkout()
-        self.git_repo.git.merge('--strategy=ours', '--no-edit', '{}/release'.format(remote.name))
-        with release_branch.config_writer() as cfg:
-            cfg.set_value('release', version)
-        return release_branch
+            # plat-name only supported for windows (other platforms are
+            # supported via ./configure flags, if at all).  Avoid misleading
+            # other platforms.
+            if os.name != 'nt':
+                raise DistutilsOptionError(
+                            '--plat-name only supported on Windows (try '
+                            'using './configure --help' on your platform)')
     
-        if 'healthcheck' in service_dict:
-        if 'interval' in service_dict['healthcheck']:
-            service_dict['healthcheck']['interval'] = serialize_ns_time_value(
-                service_dict['healthcheck']['interval']
-            )
-        if 'timeout' in service_dict['healthcheck']:
-            service_dict['healthcheck']['timeout'] = serialize_ns_time_value(
-                service_dict['healthcheck']['timeout']
-            )
+        Raise DistutilsExecError if running the program fails in any way; just
+    return on success.
+    '''
+    # cmd is documented as a list, but just in case some code passes a tuple
+    # in, protect our %-formatting code against horrible death
+    cmd = list(cmd)
+    if os.name == 'posix':
+        _spawn_posix(cmd, search_path, dry_run=dry_run)
+    elif os.name == 'nt':
+        _spawn_nt(cmd, search_path, dry_run=dry_run)
+    else:
+        raise DistutilsPlatformError(
+              'don't know how to spawn programs on platform '%s'' % os.name)
     
-                # Environment has priority over .env file
-            os.environ['COMPOSE_PROJECT_NAME'] = 'namefromenv'
-            assert get_project_name(base_dir) == os.environ['COMPOSE_PROJECT_NAME']
-        finally:
-            shutil.rmtree(base_dir)
-    
-    
-class DependencyError(ConfigurationError):
-    pass
-    
-        tls_attr_name = 'PROTOCOL_{}'.format(compose_tls_version)
-    if not hasattr(ssl, tls_attr_name):
-        log.warning(
-            'The '{}' protocol is unavailable. You may need to update your '
-            'version of Python or OpenSSL. Falling back to TLSv1 (default).'
-            .format(compose_tls_version)
-        )
-        return None
+        while True:
+        line = fp.readline()
+        if line is None: # eof
+            break
+        m = _variable_rx.match(line)
+        if m:
+            n, v = m.group(1, 2)
+            v = v.strip()
+            # `$$' is a literal `$' in make
+            tmpv = v.replace('$$', '')
     
     
-def rewrite_logging(service):
-    if 'log_driver' in service:
-        service['logging'] = {'driver': service.pop('log_driver')}
-        if 'log_opt' in service:
-            service['logging']['options'] = service.pop('log_opt')
+class Get_argspecTest(unittest.TestCase):
+    # The get_spec function must return a string, even if blank.
+    # Test a variety of objects to be sure that none cause it to raise
+    # (quite aside from getting as correct an answer as possible).
+    # The tests of builtins may break if inspect or the docstrings change,
+    # but a red buildbot is better than a user crash (as has happened).
+    # For a simple mismatch, change the expected output to the actual.
     
+        # list of integers
+    result = s.iloc[[0, 2, 3, 4, 5]]
+    expected = s.reindex(s.index[[0, 2, 3, 4, 5]])
+    assert_series_equal(result, expected)
     
-def test_to_bundle():
-    image_digests = {'a': 'aaaa', 'b': 'bbbb'}
-    services = [
-        {'name': 'a', 'build': '.', },
-        {'name': 'b', 'build': './b'},
-    ]
-    config = Config(
-        version=V2_0,
-        services=services,
-        volumes={'special': {}},
-        networks={'extra': {}},
-        secrets={},
-        configs={}
-    )
+        # simulate file handle
+    json = '{'a': 'foo”', 'b': 'bar'}\n{'a': 'foo', 'b': 'bar'}\n'
+    json = StringIO(json)
+    result = read_json(json, lines=True)
+    expected = DataFrame([['foo\u201d', 'bar'], ['foo', 'bar']], columns=['a', 'b'])
+    assert_frame_equal(result, expected)
     
-            assert fake_log.error.call_count == 1
-        assert '123' in fake_log.error.call_args[0][0]
+            return out
+    
+        def _execute_create(self):
+        # Inserting table into database, add to MetaData object
+        self.table = self.table.tometadata(self.pd_sql.meta)
+        self.table.create()
+    
+                result = read_hdf(hh, 'df', where='l1=list(selection.index)')
+            assert_frame_equal(result, expected)
+    
+            self.obj = Foo()
