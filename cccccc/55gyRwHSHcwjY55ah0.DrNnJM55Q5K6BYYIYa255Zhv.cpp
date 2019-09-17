@@ -1,319 +1,227 @@
 
         
-        struct Pix;
-struct TBLOB;
-struct TPOINT;
-    
-    bool ParagraphModel::ValidBodyLine(int lmargin, int lindent,
-                                   int rindent, int rmargin) const {
-  switch (justification_) {
-    case JUSTIFICATION_LEFT:
-      return NearlyEqual(lmargin + lindent, margin_ + body_indent_,
-                         tolerance_);
-    case JUSTIFICATION_RIGHT:
-      return NearlyEqual(rmargin + rindent, margin_ + body_indent_,
-                         tolerance_);
-    case JUSTIFICATION_CENTER:
-      return NearlyEqual(lindent, rindent, tolerance_ * 2);
-    default:
-      // shouldn't happen
-      return false;
+          void visitInitExistentialValueInst(InitExistentialValueInst *IEVI) {
+    SGM.useConformancesFromType(IEVI->getFormalConcreteType());
+    SGM.useConformancesFromObjectiveCType(IEVI->getFormalConcreteType());
+    for (auto conformance : IEVI->getConformances())
+      SGM.useConformance(conformance);
   }
+    
+      // Add any generic substitutions for the base class.
+  Type baseSelfType = baseCalleeType->getSelfParameter().getType();
+  if (auto metatypeType = baseSelfType->getAs<MetatypeType>())
+    baseSelfType = metatypeType->getInstanceType();
+    
+    
+    {  EXPECT_EQ(31u, vec.size());
+  EXPECT_EQ(true, vec[0]);
+  EXPECT_EQ(false, vec[1]);
+  EXPECT_EQ(true, vec[30]);
 }
     
-    // Computes the Otsu threshold(s) for the given histogram.
-// Also returns H = total count in histogram, and
-// omega0 = count of histogram below threshold.
-int OtsuStats(const int* histogram, int* H_out, int* omega0_out);
     
-    // A smart pointer class that implements a double-ended pointer. Each end
-// points to the other end. The copy constructor and operator= have MOVE
-// semantics, meaning that the relationship with the other end moves to the
-// destination of the copy, leaving the source unattached.
-// For this reason both the copy constructor and the operator= take a non-const
-// reference argument, and the const reference versions cannot be used.
-// DoublePtr is useful to incorporate into structures that are part of a
-// collection such as GenericVector or STL containers, where reallocs can
-// relocate the members. DoublePtr is also useful in a GenericHeap, where it
-// can correctly maintain the pointer to an element of the heap despite it
-// getting moved around on the heap.
-class DoublePtr {
- public:
-  DoublePtr() : other_end_(nullptr) {}
-  // Copy constructor steals the partner off src and is therefore a non
-  // const reference arg.
-  // Copying a const DoublePtr generates a compiler error.
-  DoublePtr(DoublePtr& src) {
-    other_end_ = src.other_end_;
-    if (other_end_ != nullptr) {
-      other_end_->other_end_ = this;
-      src.other_end_ = nullptr;
-    }
-  }
-  // Operator= steals the partner off src, and therefore needs src to be a non-
-  // const reference.
-  // Assigning from a const DoublePtr generates a compiler error.
-  void operator=(DoublePtr& src) {
-    Disconnect();
-    other_end_ = src.other_end_;
-    if (other_end_ != nullptr) {
-      other_end_->other_end_ = this;
-      src.other_end_ = nullptr;
-    }
-  }
-    }
-    
-      // Simple accessors.
-  bool empty() const {
-    return heap_.empty();
-  }
-  int size() const {
-    return heap_.size();
-  }
-  int size_reserved() const {
-    return heap_.size_reserved();
-  }
-  void clear() {
-    // Clear truncates to 0 to keep the number reserved in tact.
-    heap_.truncate(0);
-  }
-  // Provides access to the underlying vector.
-  // Caution! any changes that modify the keys will invalidate the heap!
-  GenericVector<Pair>* heap() {
-    return &heap_;
-  }
-  // Provides read-only access to an element of the underlying vector.
-  const Pair& get(int index) const {
-    return heap_[index];
-  }
-    
-      // Main worker method that retrieves the next number in the sequence.
-  // Returns kInvalidVal if called more than N times after object initialization
-  int GetVal() {
-    const int kInvalidVal = -1;
-    const int kMaxNaturalNumberValue = 1 << num_bits_;
-    if (next_num_ >= kMaxNaturalNumberValue)
-      return kInvalidVal;
-    int n = next_num_;
-    }
-    
-      // Free up any currently unused dawgs.
-  void DeleteUnusedDawgs() {
-    dawgs_.DeleteUnusedObjects();
-  }
-    
-     private:
-  struct CancelState {
-    std::atomic_bool callback_invoked{false};
-  };
-  void EchoNonDelayed(ServerContext* context, const EchoRequest* request,
-                      EchoResponse* response,
-                      experimental::ServerCallbackRpcController* controller,
-                      CancelState* cancel_state);
-    
-    #endif  // GRPC_TEST_CPP_INTEROP_CLIENT_HELPER_H
-
-    
-    
-    {}  // namespace grpc_impl
-
-    
-    typedef struct {
-  grpc_closure* on_done;
-  gpr_mu mu;
-  grpc_winsocket* socket;
-  grpc_timer alarm;
-  grpc_closure on_alarm;
-  char* addr_name;
-  int refs;
-  grpc_closure on_connect;
-  grpc_endpoint** endpoint;
-  grpc_channel_args* channel_args;
-} async_connect;
-    
-    
-    {  gpr_setenv(name, value);
-  retrieved_value = gpr_getenv(name);
-  GPR_ASSERT(retrieved_value != nullptr);
-  GPR_ASSERT(strcmp(value, retrieved_value) == 0);
-  gpr_free(retrieved_value);
+// Crash due to a retain count overflow.
+// FIXME: can't pass the object's address from InlineRefCounts without hacks
+void swift::swift_abortRetainOverflow() {
+  swift::fatalError(FatalErrorFlags::ReportBacktrace,
+                    'Fatal error: Object was retained too many times');
 }
     
-    static void test_strdup(void) {
-  static const char* src1 = 'hello world';
-  char* dst1;
+      ASTContext &getASTContext() { return M.getASTContext(); }
+    
+    class MetadataSourceBuilder {
+  std::vector<std::unique_ptr<const MetadataSource>> MetadataSourcePool;
+public:
+  using Source = const MetadataSource *;
     }
     
-    TEST(GlobalConfigTest, StringTest) {
-  grpc_core::UniquePtr<char> value;
+    class FieldDescriptorIterator
+  : public std::iterator<std::forward_iterator_tag, FieldDescriptor> {
+public:
+  const void *Cur;
+  const void * const End;
+  FieldDescriptorIterator(const void *Cur, const void * const End)
+    : Cur(Cur), End(End) {}
     }
     
-    namespace grpc_impl {
-    }
-    
-    int main(int argc, char** argv) {
-  grpc::testing::TestEnvironment env(argc, argv);
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
+    template <typename T> static T unwrap(llvm::Expected<T> value) {
+  if (value)
+    return std::move(value.get());
+  llvm::errs() << 'swift-reflection-test error: ' << toString(value.takeError())
+               << '\n';
+  exit(EXIT_FAILURE);
 }
-
     
-      void DoEcho() {
-    ClientContext context;
-    EchoRequest request;
-    EchoResponse response;
-    request.set_message('hello world');
-    Status s = stub_->Echo(&context, request, &response);
-    EXPECT_EQ(request.message(), response.message());
-    EXPECT_TRUE(s.ok());
+      constexpr static KeyPathComponentHeader
+  forStructComponentWithUnresolvedFieldOffset(bool isLet) {
+    return KeyPathComponentHeader(
+      (_SwiftKeyPathComponentHeader_StructTag
+       << _SwiftKeyPathComponentHeader_DiscriminatorShift)
+      | _SwiftKeyPathComponentHeader_UnresolvedFieldOffsetPayload
+      | isLetBit(isLet));
+  }
+  
+  constexpr static KeyPathComponentHeader
+  forClassComponentWithInlineOffset(bool isLet,
+                                    unsigned offset) {
+    return KeyPathComponentHeader(
+      (_SwiftKeyPathComponentHeader_ClassTag
+       << _SwiftKeyPathComponentHeader_DiscriminatorShift)
+      | validateInlineOffset(offset)
+      | isLetBit(isLet));
   }
     
+    /// Flags for protocol context descriptors. These values are used as the
+/// kindSpecificFlags of the ContextDescriptorFlags for the protocol.
+class ProtocolContextDescriptorFlags : public FlagSet<uint16_t> {
+  enum {
+    /// Whether this protocol is class-constrained.
+    HasClassConstraint = 0,
+    HasClassConstraint_width = 1,
+    }
+    }
     
-    { protected:
-  std::unique_ptr<Server> server_;
-  std::unique_ptr<grpc::testing::EchoTestService::Stub> stub_;
-  std::unique_ptr<ProtoReflectionDescriptorDatabase> desc_db_;
-  std::unique_ptr<protobuf::DescriptorPool> desc_pool_;
-  std::unordered_set<string> known_files_;
-  std::unordered_set<string> known_types_;
-  const protobuf::DescriptorPool* ref_desc_pool_;
-  int port_;
-  reflection::ProtoServerReflectionPlugin plugin_;
+    		const int maxSamples = getBufferSamples();
+		int samplesCount, count = 0;
+		float **pcm;
+		while ((samplesCount = vorbis_synthesis_pcmout(&m_vorbis->dspState, &pcm)))
+		{
+			const int toConvert = samplesCount <= maxSamples ? samplesCount : maxSamples;
+			for (int c = 0; c < m_channels; ++c)
+			{
+				float *samples = pcm[c];
+				for (int i = 0, j = c; i < toConvert; ++i, j += m_channels)
+				{
+					int sample = samples[i] * 32767.0f;
+					if (sample > 32767)
+						sample = 32767;
+					else if (sample < -32768)
+						sample = -32768;
+					buffer[count + j] = sample;
+				}
+			}
+			vorbis_synthesis_read(&m_vorbis->dspState, toConvert);
+			count += toConvert;
+		}
+    
+    	VorbisDecoder *m_vorbis;
+	OpusDecoder *m_opus;
+	int m_numSamples;
+	int m_channels;
+    
+    class VideoTrack : public Track {
+  VideoTrack(const VideoTrack&);
+  VideoTrack& operator=(const VideoTrack&);
+    }
+    
+      &_huff_book_line_1024x27_0sub0,
+  &_huff_book_line_1024x27_1sub0,
+  &_huff_book_line_1024x27_1sub1,
+  &_huff_book_line_1024x27_2sub0,
+  &_huff_book_line_1024x27_2sub1,
+  &_huff_book_line_1024x27_3sub1,
+  &_huff_book_line_1024x27_3sub2,
+  &_huff_book_line_1024x27_3sub3,
+  &_huff_book_line_1024x27_4sub1,
+  &_huff_book_line_1024x27_4sub2,
+  &_huff_book_line_1024x27_4sub3,
+};
+static const static_codebook*const _floor_2048x27_books[]={
+  &_huff_book_line_2048x27_class1,
+  &_huff_book_line_2048x27_class2,
+  &_huff_book_line_2048x27_class3,
+  &_huff_book_line_2048x27_class4,
+    
+    static const vorbis_mapping_template _mapres_template_16_stereo[3]={
+  { _map_nominal, _res_16s_0 }, /* 0 */
+  { _map_nominal, _res_16s_1 }, /* 1 */
+  { _map_nominal, _res_16s_2 }, /* 2 */
 };
     
-    int main(int argc, char** argv) {
-  // Change the backup poll interval from 5s to 100ms to speed up the
-  // ReconnectChannel test
-  grpc::testing::TestEnvironment env(argc, argv);
-  ::testing::InitGoogleTest(&argc, argv);
-  int ret = RUN_ALL_TESTS();
-  return ret;
+    
+/* MSVC inline assembly. 32 bit only; inline ASM isn't implemented in the
+ * 64 bit compiler and doesn't work on arm. */
+#if defined(_MSC_VER) && !defined(_WIN64) && \
+      !defined(_WIN32_WCE) && !defined(_M_ARM)
+#  define VORBIS_FPU_CONTROL
+    
+            friend Rational operator&(Rational lhs, Rational const& rhs);
+        friend Rational operator|(Rational lhs, Rational const& rhs);
+        friend Rational operator^(Rational lhs, Rational const& rhs);
+    
+        // Do not repeat app initialization when the Window already has content,
+    // just ensure that the window is active
+    if (rootFrame == nullptr)
+    {
+        // Create a Frame to act as the navigation context and associate it with
+        // a SuspensionManager key
+        rootFrame = ref new Frame();
+    }
+    
+    //-----------------------------------------------------------------------------
+//
+//  FUNCTION: i32factnum
+//
+//  ARGUMENTS:
+//              int32_t integer to factorialize.
+//              int32_t integer representing base   of answer.
+//              uint32_t integer for radix
+//
+//  RETURN: Factorial of input in radix PNUMBER form.
+//
+//  NOTE:  Not currently used.
+//
+//-----------------------------------------------------------------------------
+    
+        bool numChanged = false;
+    
+        spHistoryItem->historyItemVector.spTokens = tokens;
+    spHistoryItem->historyItemVector.spCommands = commands;
+    
+    
+    {
+    {    private:
+        std::vector<std::shared_ptr<HISTORYITEM>> m_historyItems;
+        const size_t m_maxHistorySize;
+    };
 }
 
     
-    TEST(CorruptionTest, CompactionInputError) {
-  Build(10);
-  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
-  dbi->TEST_CompactMemTable();
-  const int last = config::kMaxMemCompactLevel;
-  ASSERT_EQ(1, Property('leveldb.num-files-at-level' + NumberToString(last)));
+                // IObservableVector<Object^>
+            event Windows::Foundation::Collections::VectorChangedEventHandler<Platform::Object^>^ VectorChanged
+        {
+            virtual WF::EventRegistrationToken add(Windows::Foundation::Collections::VectorChangedEventHandler<Platform::Object^>^ handler) = Windows::Foundation::Collections::IObservableVector<Platform::Object^>::VectorChanged::add
+            {
+                return m_vectorChanged += handler;
+            }
+            virtual void remove(WF::EventRegistrationToken token) = Windows::Foundation::Collections::IObservableVector<Platform::Object^>::VectorChanged::remove
+            {
+                m_vectorChanged -= token;
+            }
+        }
+    
+    NarratorAnnouncement ^ CalculatorAnnouncement::GetDisplayCopiedAnnouncement(String ^ announcement)
+{
+    return ref new NarratorAnnouncement(
+        announcement, CalculatorActivityIds::DisplayCopied, AutomationNotificationKind::ActionCompleted, AutomationNotificationProcessing::ImportantMostRecent);
+}
+    
+    #if __linux__
+#include <sys/mman.h>
+#endif
+    
+    
+    {    return retval;
+}
+#endif
+    
+    TEST(coroutine_base, create)
+{
+    long _cid;
+    long cid = Coroutine::create([](void *arg)
+    {
+        *(long *) arg = Coroutine::get_current_cid();
+    }, &_cid);
     }
     
-      WritableFile* dest_;
-  int block_offset_;  // Current offset in block
-    
-      // Position at the first key in the source.  The iterator is Valid()
-  // after this call iff the source is not empty.
-  virtual void SeekToFirst() = 0;
-    
-    #include 'leveldb/export.h'
-#include 'leveldb/slice.h'
-    
-    // A Table is a sorted map from strings to strings.  Tables are
-// immutable and persistent.  A Table may be safely accessed from
-// multiple threads without external synchronization.
-class LEVELDB_EXPORT Table {
- public:
-  // Attempt to open the table that is stored in bytes [0..file_size)
-  // of 'file', and read the metadata entries necessary to allow
-  // retrieving data from the table.
-  //
-  // If successful, returns ok and sets '*table' to the newly opened
-  // table.  The client should delete '*table' when no longer needed.
-  // If there was an error while initializing the table, sets '*table'
-  // to nullptr and returns a non-ok status.  Does not take ownership of
-  // '*source', but the client must ensure that 'source' remains live
-  // for the duration of the returned table's lifetime.
-  //
-  // *file must remain live while this Table is in use.
-  static Status Open(const Options& options, RandomAccessFile* file,
-                     uint64_t file_size, Table** table);
-    }
-    
-    #include <stdint.h>
-    
-    
-    {}  // namespace leveldb
-    
-    TEST(CacheTest, HeavyEntries) {
-  // Add a bunch of light and heavy entries and then count the combined
-  // size of items still in the cache, which must be approximately the
-  // same as the total capacity.
-  const int kLight = 1;
-  const int kHeavy = 10;
-  int added = 0;
-  int index = 0;
-  while (added < 2 * kCacheSize) {
-    const int weight = (index & 1) ? kLight : kHeavy;
-    Insert(index, 1000 + index, weight);
-    added += weight;
-    index++;
-  }
-    }
-    
-    TEST(EnvTest, ReopenWritableFile) {
-  std::string test_dir;
-  ASSERT_OK(env_->GetTestDirectory(&test_dir));
-  std::string test_file_name = test_dir + '/reopen_writable_file.txt';
-  env_->DeleteFile(test_file_name);
-    }
-    
-    void BlockBuilder::Add(const Slice& key, const Slice& value) {
-  Slice last_key_piece(last_key_);
-  assert(!finished_);
-  assert(counter_ <= options_->block_restart_interval);
-  assert(buffer_.empty()  // No values yet?
-         || options_->comparator->Compare(key, last_key_piece) > 0);
-  size_t shared = 0;
-  if (counter_ < options_->block_restart_interval) {
-    // See how much sharing to do with previous string
-    const size_t min_length = std::min(last_key_piece.size(), key.size());
-    while ((shared < min_length) && (last_key_piece[shared] == key[shared])) {
-      shared++;
-    }
-  } else {
-    // Restart compression
-    restarts_.push_back(buffer_.size());
-    counter_ = 0;
-  }
-  const size_t non_shared = key.size() - shared;
-    }
-    
-    // -----------------------------------------------------------------------
-// MaskMissingColumnsTo() -- function to set gaps to zero or NaN
-// -----------------------------------------------------------------------
-    
-                    fstream.GetMarker(FileMarker::fileMarkerBeginSection, L'BMomentumAsTimeConstant');
-                fstream >> m_blockMomentumAsTimeConstantPerWorker;
-                fstream.GetMarker(FileMarker::fileMarkerEndSection, L'EMomentumAsTimeConstant');
-    
-    template <>
-int NDLNode<half>::s_nameCounter = 0;
-template <>
-int NDLNode<float>::s_nameCounter = 0;
-template <>
-int NDLNode<double>::s_nameCounter = 0;
-    
-                w = builder.Mean(input, L'MeanOfFeatures');
-            static_pointer_cast<PreComputedNodeBase<ElemType>>(w)->SideLoadFromMatrix(contextMean);
-            w->SetLearningRateMultiplier(0);
-    
-        bool m_needAveMultiplier;
-    double m_L2RegWeight;
-    double m_L1RegWeight;
-    
-    #include 'Basics.h'
-#include 'MPIWrapper.h'
-#include 'Matrix.h'
-#include 'SimpleDistGradAggregatorHelper.h'
-#include 'DistGradHeader.h'
-#include 'IDistGradAggregator.h'
-#include 'SimpleDistGradAggregator.h'
-#include 'V2SimpleDistGradAggregator.h'
-    
-    
-    {    // Only used for controlling frequency of measuring/showing gradient aggregation perf stats
-    int m_syncStatsTrace;
-    size_t m_iterationCount;
-    bool m_initialized;
-};
+            descriptors[ndesc].index = (int) nindex;
