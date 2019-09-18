@@ -1,86 +1,205 @@
 
         
         
-    {}  // namespace caffe
+    { private:
+  App();
+  DISALLOW_COPY_AND_ASSIGN(App);
+};
     
-    template <typename Dtype>
-void Solver<Dtype>::InitTrainNet() {
-  const int num_train_nets = param_.has_net() + param_.has_net_param() +
-      param_.has_train_net() + param_.has_train_net_param();
-  const string field_names = 'net, net_param, train_net, train_net_param';
-  CHECK_GE(num_train_nets, 1) << 'SolverParameter must specify a train net '
-      << 'using one of these fields: ' << field_names;
-  CHECK_LE(num_train_nets, 1) << 'SolverParameter must not contain more than '
-      << 'one of these fields specifying a train_net: ' << field_names;
-  NetParameter net_param;
-  if (param_.has_train_net_param()) {
-    LOG_IF(INFO, Caffe::root_solver())
-        << 'Creating training net specified in train_net_param.';
-    net_param.CopyFrom(param_.train_net_param());
-  } else if (param_.has_train_net()) {
-    LOG_IF(INFO, Caffe::root_solver())
-        << 'Creating training net from train_net file: ' << param_.train_net();
-    ReadNetParamsFromTextFileOrDie(param_.train_net(), &net_param);
-  }
-  if (param_.has_net_param()) {
-    LOG_IF(INFO, Caffe::root_solver())
-        << 'Creating training net specified in net_param.';
-    net_param.CopyFrom(param_.net_param());
-  }
-  if (param_.has_net()) {
-    LOG_IF(INFO, Caffe::root_solver())
-        << 'Creating training net from net file: ' << param_.net();
-    ReadNetParamsFromTextFileOrDie(param_.net(), &net_param);
-  }
-  // Set the correct NetState.  We start with the solver defaults (lowest
-  // precedence); then, merge in any NetState specified by the net_param itself;
-  // finally, merge in any NetState specified by the train_state (highest
-  // precedence).
-  NetState net_state;
-  net_state.set_phase(TRAIN);
-  net_state.MergeFrom(net_param.state());
-  net_state.MergeFrom(param_.train_state());
-  net_param.mutable_state()->CopyFrom(net_state);
-  net_.reset(new Net<Dtype>(net_param));
-  for (int w_idx = 0; w_idx < param_.weights_size(); ++w_idx) {
-    LoadNetWeights(net_, param_.weights(w_idx));
-  }
-}
     
-    int main(int argc, char** argv) {
-#ifndef GFLAGS_GFLAGS_H_
-  namespace gflags = google;
-#endif
+    {}  // namespace remote
+    
+    class BaseEvent {
+  friend class EventListener;
+  DISALLOW_COPY_AND_ASSIGN(BaseEvent);
     }
     
-    int VPXDecoder::Image::getWidth(int plane) const
-{
-	if (!plane)
-		return w;
-	return ceilRshift(w, chromaShiftW);
+    bool MenuDelegate::GetIconForCommandId(int command_id,
+                                       gfx::Image* icon) const {
+  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return false;
+  if (item->icon_.IsEmpty())
+    return false;
+    }
+    
+    
+    {  gtk_widget_show(menu_item_);
+  g_object_ref_sink(G_OBJECT(menu_item_));
+} 
+    
+    
+    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.setListSync', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwClipboardSetListSyncFunction);
+};
+    
+    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
+ public:
+  NwMenuGetNSStringFWithFixupFunction() {}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    
+ protected:
+  ~NwMenuGetNSStringFWithFixupFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
+};
+    
+    namespace leveldb {
+    }
+    
+      // Return the earliest node that comes at or after key.
+  // Return nullptr if there is no such node.
+  //
+  // If prev is non-null, fills prev[level] with pointer to previous
+  // node at 'level' for every level in [0..max_height_-1].
+  Node* FindGreaterOrEqual(const Key& key, Node** prev) const;
+    
+    #ifndef STORAGE_LEVELDB_INCLUDE_OPTIONS_H_
+#define STORAGE_LEVELDB_INCLUDE_OPTIONS_H_
+    
+      // Returns a new iterator over the table contents.
+  // The result of NewIterator() is initially invalid (caller must
+  // call one of the Seek methods on the iterator before using it).
+  Iterator* NewIterator(const ReadOptions&) const;
+    
+      // Add key,value to the table being constructed.
+  // REQUIRES: key is after any previously added key according to comparator.
+  // REQUIRES: Finish(), Abandon() have not been called
+  void Add(const Slice& key, const Slice& value);
+    
+      // Reset the contents as if the BlockBuilder was just constructed.
+  void Reset();
+    
+    
+    {  char* result = alloc_ptr_;
+  alloc_ptr_ += bytes;
+  alloc_bytes_remaining_ -= bytes;
+  return result;
 }
-int VPXDecoder::Image::getHeight(int plane) const
-{
-	if (!plane)
-		return h;
-	return ceilRshift(h, chromaShiftH);
+    
+      ~Arena();
+    
+    // Build a Table file from the contents of *iter.  The generated file
+// will be named according to meta->number.  On success, the rest of
+// *meta will be filled with metadata about the generated table.
+// If no data is present in *iter, meta->file_size will be set to
+// zero, and no Table file will be produced.
+Status BuildTable(const std::string& dbname, Env* env, const Options& options,
+                  TableCache* table_cache, Iterator* iter, FileMetaData* meta);
+    
+    #include <emscripten.h>
+#include <stdio.h>
+#include <setjmp.h>
+    
+      // Start a page.
+  virtual void startPage(int pageNum, GfxState *state);
+    
+    private:
+  struct Interval {
+    Interval(Object *dict, int baseA);
+    ~Interval();
+    GooString *prefix;
+    enum NumberStyle {
+      None,
+      Arabic,
+      LowercaseRoman,
+      UppercaseRoman,
+      UppercaseLatin,
+      LowercaseLatin
+    } style;
+    int first, base, length;
+  };
+    
+    void Parser::shift(int objNum) {
+  if (inlineImg > 0) {
+    if (inlineImg < 2) {
+      ++inlineImg;
+    } else {
+      // in a damaged content stream, if 'ID' shows up in the middle
+      // of a dictionary, we need to reset
+      inlineImg = 0;
+    }
+  } else if (buf2.isCmd('ID')) {
+    lexer->skipChar();		// skip char after 'ID' command
+    inlineImg = 1;
+  }
+  buf1.free();
+  buf2.shallowCopy(&buf1);
+  if (inlineImg > 0)		// don't buffer inline image data
+    buf2.initNull();
+  else
+    lexer->getObj(&buf2, objNum);
+}
+
+    
+      //----- text drawing
+  virtual void beginStringOp(GfxState *state);
+  virtual void endStringOp(GfxState *state);
+  virtual GBool beginType3Char(GfxState *state, double x, double y,
+			       double dx, double dy,
+			       CharCode code, Unicode *u, int uLen);
+  virtual void endType3Char(GfxState *state);
+    
+    ExternalSecurityHandler::~ExternalSecurityHandler() {
+  (*xsh->freeDoc)(xsh->handlerData, docData);
+  encryptDict.free();
 }
     
-    #define todB_nn(x) todB(x)
+    IMGUI_IMPL_API bool     ImGui_ImplDX10_Init(ID3D10Device* device);
+IMGUI_IMPL_API void     ImGui_ImplDX10_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplDX10_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data);
+    
+            if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+            counter++;
+        ImGui::SameLine();
+        ImGui::Text('counter = %d', counter);
+    
+    #include <s3eKeyboard.h>
+#include <s3ePointer.h>
+#include <IwGx.h>
+    
+        // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    
+        // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsClassic();
+    
+    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
+// You can also handle inputs yourself and use those as a reference.
+IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
+
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+            // 3. Show another simple window.
+        if (show_another_window)
+        {
+            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
+        }
     
     
-#else
-/* No-op version that performs no synchronization. *_rtcd() is idempotent,
- * so as long as your platform provides atomic loads/stores of pointers
- * no synchronization is strictly necessary.
- */
-    
-    
-    {    // out_of_range.404
+    {    // exception out_of_range.401
     try
     {
-        // try to use a JSON pointer that cannot be resolved
-        json::const_reference ref = j.at('/number/foo'_json_pointer);
+        // try to write beyond the array limit
+        array.at(5) = 'sixth';
     }
     catch (json::out_of_range& e)
     {
@@ -89,124 +208,28 @@ int VPXDecoder::Image::getHeight(int plane) const
 }
 
     
-    int main()
-{
-    // create JSON values
-    json object = {{'one', 1}, {'two', 2}};
-    json null;
-    }
-    
-    TEST_F(CarverTests, test_compression_decompression) {
-  auto const test_data_file = getWorkingDir() / 'test.data';
-  writeTextFile(test_data_file, R'raw_text(
-2TItVMSvAY8OFlbYnx1O1NSsuehfNhNiV4Qw4IPP6exA47HVzAlEXZI3blanlAd2
-JSxCUr+3boxWMwsgW2jJPzypSKvfXB9EDbFKiDjVueniBfiAepwta57pZ9tQDnJA
-uRioApcqYSWL14OJrnPQFHel5FpXylmVdIkiz()cT82JsOPZmh56vDn62Kk/mU7V
-RltGAYEpKmi8e71fuB8d/S6Lau{}AmL1153X7E+4d1G1UfiQa7Q02uVjxLLE5FEj
-JTDjVqIQNhi50Pt4J4RVopYzy1AZGwPHLhwFVIPH0s/LmzVW+xbT8/V2UMSzK4XB
-oqADd9Ckcdtplx3k7bcLU[U04j8WWUtUccmB+4e2KS]i3x7WDKviPY/sWy9xFapv
-)raw_text');
-  {
-    auto s = osquery::compress(test_data_file,
-                               getWorkingDir() / fs::path('test.zst'));
-    ASSERT_TRUE(s.ok()) << s.what();
-  }
-  {
-    auto s =
-        osquery::decompress(getWorkingDir() / fs::path('test.zst'),
-                            getWorkingDir() / fs::path('test.data.extract'));
-    ASSERT_TRUE(s.ok()) << s.what();
-  }
-    }
-    
-    TEST_F(PacksTests, test_schedule) {
-  Pack fpack('discovery_pack', getPackWithDiscovery().doc());
-  // Expect a single query in the schedule since one query has an explicit
-  // invalid/fake platform requirement.
-  EXPECT_EQ(fpack.getSchedule().size(), 1U);
-}
-    
-    void Plugin::setName(const std::string& name) {
-  if (!name_.empty() && name != name_) {
-    std::string error = 'Cannot rename plugin ' + name_ + ' to ' + name;
-    throw std::runtime_error(error);
-  }
-    }
-    
-      /// Use the SQL implementation to parse a query string and return details
-  /// (name, type) about the columns.
-  virtual Status getQueryColumns(const std::string& query,
-                                 TableColumns& columns) const = 0;
-    
-        ret = swSocket_unix_sendto(fd1,sock2_path,test_data,strlen(test_data));
-    ASSERT_GT(ret, 0);
-    
-    
-    {    redisAsyncCommand(m_ctx, NULL, NULL, 'SET key %s', m_value);
-    redisAsyncCommand(m_ctx, getCallback, this, 'GET key');
-}
-    
-    bool swoole_mime_type_delete(const char *suffix, const char *mime_type)
-{
-    if (mime_map.find(suffix) == mime_map.end())
-    {
-        return false;
-    }
-    else
-    {
-        mime_map.erase(string(suffix));
-        return true;
-    }
-}
-    
-    
-    {    if (p < data + header.length)
-    {
-        // 1              character set
-        charset = *p;
-        p += 1;
-        // 2              status flags
-        memcpy(&status_flags, p, 2);
-        p += 2;
-        // 2              capability flags (upper 2 bytes)
-        memcpy(((char *) (&capability_flags) + 2), p, 2);
-        p += 2;
-        // 1              auth plugin data length
-        auth_plugin_data_length = (uint8_t) *p;
-        p += 1;
-        // x              reserved
-        memcpy(&reserved, p, sizeof(reserved));
-        p += sizeof(reserved);
-        if (capability_flags & SW_MYSQL_CLIENT_SECURE_CONNECTION)
+        coro_test({
+        make_pair([](void *arg)
         {
-            uint8_t len = SW_MAX(13, auth_plugin_data_length - 8);
-            memcpy(auth_plugin_data + 8, p, len);
-            p += len;
-        }
-        if (capability_flags & SW_MYSQL_CLIENT_PLUGIN_AUTH)
-        {
-            auth_plugin_name = std::string(p, strlen(p));
-            swTraceLog(SW_TRACE_MYSQL_CLIENT, 'use %s auth plugin', auth_plugin_name.c_str());
-        }
+            auto chan = (Channel *) arg;
     }
-    swTraceLog(
-        SW_TRACE_MYSQL_CLIENT, 'Server protocol=%d, version=%s, connection_id=%d, capabilites=0x%08x, status=%u, auth_plugin_name=%s, auth_plugin_data=L%u[%s]',
-        protocol_version, server_version.c_str(), connection_id, capability_flags, status_flags, auth_plugin_name.c_str(), auth_plugin_data_length, auth_plugin_data
-    );
+    }
+    
+    
+    {    private:
+        redisAsyncContext * m_ctx;
+        QSocketNotifier * m_read;
+        QSocketNotifier * m_write;
 };
     
-    	err->has_error = 1;
-	err->level = E_WARNING;
-	spprintf(&err->msg, 0, 'error converting %s data (path: %s): %.*s',
-			what_conv,
-			path.s && *ZSTR_VAL(path.s) != '\0' ? ZSTR_VAL(path.s) : 'unavailable',
-			user_msg_size, user_msg);
-	err->should_free = 1;
+        if (m_ctx->err) {
+        cerr << 'Error: ' << m_ctx->errstr << endl;
+        redisAsyncFree(m_ctx);
+        emit finished();
+    }
     
-                type = (zend_uchar *)&l;
-            if (0 > trace_get_long(traced_pid, function + offsetof(zend_function, type), &l))
-            {
-                return -1;
-            }
-    
-            goto exit_fail;
+        for (i = 1; i < 20000; i++)
+    {
+        uint32_t key = i * 37;
+        swRbtree_insert(tree, key, (void *) (long) (i * 8));
+    }
