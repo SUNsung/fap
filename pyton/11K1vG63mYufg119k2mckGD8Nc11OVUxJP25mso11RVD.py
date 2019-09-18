@@ -1,61 +1,98 @@
 
         
-            OPERATOR = 0
-    SUPERVISOR = 1
-    DIRECTOR = 2
+            def _escalate_call(self):
+        self.call.state = CallState.READY
+        call = self.call
+        self.call = None
+        self.call_center.notify_call_escalated(call)
     
-    
-class PrivateChat(Chat):
-    
-            (2016-01, url0), 2
-        (2016-01, url1), 1
+            Accessing a node updates its position to the front of the LRU list.
         '''
-        yield key, sum(values)
+        node = self.lookup.get(query)
+        if node is None:
+            return None
+        self.linked_list.move_to_front(node)
+        return node.results
     
-            The shuffle/sort step of MapReduce will then do a
-        distributed sort on the keys, resulting in:
+        def bfs(self, source, dest):
+        if source is None:
+            return False
+        queue = deque()
+        queue.append(source)
+        source.visit_state = State.visited
+        while queue:
+            node = queue.popleft()
+            print(node)
+            if dest is node:
+                return True
+            for adjacent_node in node.adj_nodes.values():
+                if adjacent_node.visit_state == State.unvisited:
+                    queue.append(adjacent_node)
+                    adjacent_node.visit_state = State.visited
+        return False
     
-        def get(self, key):
-        hash_index = self._hash_function(key)
-        for item in self.table[hash_index]:
-            if item.key == key:
-                return item.value
-        raise KeyError('Key not found')
-    
-        long_description = pypandoc.convert('README.md', 'rst')
-else:
-    long_description = ''
-    
-    
-@pytest.mark.usefixtures('isfile', 'no_memoize', 'no_cache')
-class TestBash(object):
-    @pytest.fixture
-    def shell(self):
-        return Bash()
-    
-        @pytest.mark.parametrize('side_effect, exception', [
-        ([b'\n'], IndexError),
-        (OSError('file not found'), OSError),
-    ])
-    def test_get_version_error(self, side_effect, exception, shell, Popen):
-        Popen.return_value.stdout.read.side_effect = side_effect
-        with pytest.raises(exception):
-            shell._get_version()
-        assert Popen.call_args[0][0] == ['fish', '--version']
-
+    from .compat import is_py2, builtin_str, str
     
     
-@pytest.mark.usefixtures('isfile', 'no_memoize', 'no_cache')
-class TestTcsh(object):
-    @pytest.fixture
-    def shell(self):
-        return Tcsh()
+class InvalidProxyURL(InvalidURL):
+    '''The proxy URL provided is invalid.'''
     
-        # One from history:
-    already_used = get_closest(
-        old_command, _get_used_executables(command),
-        fallback_to_first=False)
-    if already_used:
-        new_cmds = [already_used]
-    else:
-        new_cmds = []
+    
+@pytest.fixture
+def httpbin(httpbin):
+    return prepare_url(httpbin)
+    
+        def keys(self):
+        '''Dict-like keys() that returns a list of names of cookies from the
+        jar.
+    
+    Available hooks:
+    
+            # Verify Authorization isn't sent to the redirected host,
+        # then send another challenge.
+        request_content = consume_socket_content(sock, timeout=0.5)
+        assert b'Authorization:' not in request_content
+        sock.send(text_401)
+    
+        def test_transport_adapter_ordering(self):
+        s = requests.Session()
+        order = ['https://', 'http://']
+        assert order == list(s.adapters)
+        s.mount('http://git', HTTPAdapter())
+        s.mount('http://github', HTTPAdapter())
+        s.mount('http://github.com', HTTPAdapter())
+        s.mount('http://github.com/about/', HTTPAdapter())
+        order = [
+            'http://github.com/about/',
+            'http://github.com',
+            'http://github',
+            'http://git',
+            'https://',
+            'http://',
+        ]
+        assert order == list(s.adapters)
+        s.mount('http://gittip', HTTPAdapter())
+        s.mount('http://gittip.com', HTTPAdapter())
+        s.mount('http://gittip.com/about/', HTTPAdapter())
+        order = [
+            'http://github.com/about/',
+            'http://gittip.com/about/',
+            'http://github.com',
+            'http://gittip.com',
+            'http://github',
+            'http://gittip',
+            'http://git',
+            'https://',
+            'http://',
+        ]
+        assert order == list(s.adapters)
+        s2 = requests.Session()
+        s2.adapters = {'http://': HTTPAdapter()}
+        s2.mount('https://', HTTPAdapter())
+        assert 'http://' in s2.adapters
+        assert 'https://' in s2.adapters
+    
+    
+def prepend_scheme_if_needed(url, new_scheme):
+    '''Given a URL that may or may not have a scheme, prepend the given scheme.
+    Does not replace a present scheme with the one provided as an argument.
