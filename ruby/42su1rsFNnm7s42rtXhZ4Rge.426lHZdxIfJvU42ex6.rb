@@ -1,233 +1,138 @@
 
         
-          def test_pretty_print_with_non_primary_key_id_attribute
-    topic = topics(:first).becomes(TitlePrimaryKeyTopic)
-    actual = +''
-    PP.pp(topic, StringIO.new(actual))
-    assert_match(/id: 1/, actual)
-  end
-end
-
-    
-        initializer 'action_mailbox.config' do
-      config.after_initialize do |app|
-        ActionMailbox.logger = app.config.action_mailbox.logger || Rails.logger
-        ActionMailbox.incinerate = app.config.action_mailbox.incinerate.nil? ? true : app.config.action_mailbox.incinerate
-        ActionMailbox.incinerate_after = app.config.action_mailbox.incinerate_after || 30.days
-        ActionMailbox.queues = app.config.action_mailbox.queues || {}
-        ActionMailbox.ingress = app.config.action_mailbox.ingress
-      end
-    end
-  end
-end
-
-    
-            stderr = capture(:stderr) { run_rake_routes }
-        assert_match(/DEPRECATION WARNING: Using `bin\/rake routes` is deprecated and will be removed in Rails 6.1/, stderr)
-      end
-    
-      attr_accessor :user
-    
-    puts 'Bundler configured! Please run 'bin/bundle install' now.'
-
-    
-      def percent_change(today, yesterday)
-    sprintf( '%0.02f', ((today-yesterday) / yesterday.to_f)*100).to_f
-  end
-    
-          def process_authorization_consent(approved_string)
-        endpoint = Api::OpenidConnect::AuthorizationPoint::EndpointConfirmationPoint.new(
-          current_user, to_boolean(approved_string))
-        handle_confirmation_endpoint_response(endpoint)
-      end
-    
-          rescue_from OpenIDConnect::ValidationFailed,
-                  ActiveRecord::RecordInvalid, Api::OpenidConnect::Error::InvalidSectorIdentifierUri do |e|
-        validation_fail_as_json(e)
-      end
-    
-        opts = params.require(:conversation).permit(:subject)
-    opts[:participant_ids] = person_ids
-    opts[:message] = { text: params[:conversation][:text] }
-    @conversation = current_user.build_conversation(opts)
-    
-    World(VagrantHelpers)
-
-    
-          super
-    end
-    
-          def response
-        return @response if defined? @response
-    
-            if Rake::Task.task_defined?('deploy:check')
-          before 'deploy:check', '#{scm_name}:check'
-        end
-    
-          def add_property(key, value)
-        if respond_to?('#{key}=')
-          send('#{key}=', value)
-        else
-          set(key, value)
-        end
-      end
-    
-          class ValidatedQuestion < Question
-        def initialize(validator)
-          @validator = validator
-        end
-    
-    # We use a special :_default_git value so that SCMResolver can tell whether the
-# default has been replaced by the user via `set`.
-set_if_empty :scm, Capistrano::Configuration::SCMResolver::DEFAULT_GIT
-set_if_empty :branch, 'master'
-set_if_empty :deploy_to, -> { '/var/www/#{fetch(:application)}' }
-set_if_empty :tmp_dir, '/tmp'
-    
-    module RuboCop
-  module Cop
-    module Style
-      # This cop checks for trailing comma in argument lists.
-      #
-      # @example EnforcedStyleForMultiline: consistent_comma
-      #   # bad
-      #   method(1, 2,)
-      #
-      #   # good
-      #   method(1, 2)
-      #
-      #   # good
-      #   method(
-      #     1, 2,
-      #     3,
-      #   )
-      #
-      #   # good
-      #   method(
-      #     1,
-      #     2,
-      #   )
-      #
-      # @example EnforcedStyleForMultiline: comma
-      #   # bad
-      #   method(1, 2,)
-      #
-      #   # good
-      #   method(1, 2)
-      #
-      #   # good
-      #   method(
-      #     1,
-      #     2,
-      #   )
-      #
-      # @example EnforcedStyleForMultiline: no_comma (default)
-      #   # bad
-      #   method(1, 2,)
-      #
-      #   # good
-      #   method(1, 2)
-      #
-      #   # good
-      #   method(
-      #     1,
-      #     2
-      #   )
-      class TrailingCommaInArguments < Cop
-        include TrailingComma
-    
-          it_behaves_like 'invalid'
-    end
-  end
-    
-      # Test blocks using both {} and do..end
-  [%w[{ }], %w[do end]].each do |open, close|
-    context 'when EnforcedStyle is no_empty_lines for #{open} #{close} block' do
-      let(:cop_config) { { 'EnforcedStyle' => 'no_empty_lines' } }
-    
-      context 'when using ActiveSupport's `concerning` method' do
-    let(:config) do
-      RuboCop::Config.new(
-        'Lint/UselessAccessModifier' => {
-          'ContextCreatingMethods' => ['concerning']
-        }
+              m1 = NumericData.find_by(
+        bank_balance: BigDecimal('NaN'),
+        big_bank_balance: BigDecimal('NaN')
       )
-    end
     
-      context 'when a unreferenced variable is reassigned ' \
-          'on the right side of && and referenced after the &&' do
-    it 'accepts' do
-      expect_no_offenses(<<~RUBY)
-        def some_method
-          foo = 1
-          do_something_returns_object_or_nil && foo = 2
-          foo
-        end
-      RUBY
+        if authenticated && resource = warden.user(resource_name)
+      flash[:alert] = I18n.t('devise.failure.already_authenticated')
+      redirect_to after_sign_in_path_for(resource)
     end
   end
     
-          # Checks whether the `hash` node contains any `pair`- or `kwsplat` nodes.
+            if options[:bypass]
+          ActiveSupport::Deprecation.warn(<<-DEPRECATION.strip_heredoc, caller)
+          [Devise] bypass option is deprecated and it will be removed in future version of Devise.
+          Please use bypass_sign_in method instead.
+          Example:
+    
+        # Create magic predicates for verifying what module is activated by this map.
+    # Example:
+    #
+    #   def confirmable?
+    #     self.modules.include?(:confirmable)
+    #   end
+    #
+    def self.add_module(m)
+      class_eval <<-METHOD, __FILE__, __LINE__ + 1
+        def #{m}?
+          self.modules.include?(:#{m})
+        end
+      METHOD
+    end
+    
+          # Pure data class which describes an umbrella target.
       #
-      # @return[Boolean] whether the `hash` is empty
-      def empty?
-        children.empty?
+      class UmbrellaTargetDescription
+        # @return [Xcodeproj::Project] The user project into which this target
+        #         is integrated.
+        #
+        attr_reader :user_project
+    
+          # Creates a default app host 'main.m' file.
+      #
+      # @param  [Project] project
+      #         the Xcodeproj to generate the target into.
+      #
+      # @param  [Symbol] platform
+      #         the platform of the target. Can be `:ios` or `:osx`.
+      #
+      # @param  [String] name
+      #         The name of the folder to use and save the generated main file.
+      #
+      # @return [Pathname] the new source file that was generated.
+      #
+      def self.create_app_host_main_file(project, platform, name = 'App')
+        source_file = project.path.dirname.+('#{name}/main.m')
+        source_file.parent.mkpath
+        source_file.open('w') do |f|
+          case platform
+          when :ios, :tvos
+            f << IOS_APP_HOST_MAIN_CONTENTS
+          when :osx
+            f << MACOS_APP_HOST_MAIN_CONTENTS
+          end
+        end
+        source_file
       end
     
-          # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
-      def left_shift(int, shift)
-        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
-        # 1>>31, 2**32
-        (r & 2147483648) == 0 ? r : r - 4294967296
+            # Cleans up projects before writing.
+        #
+        def cleanup_projects(projects)
+          projects.each do |project|
+            [project.pods, project.support_files_group,
+             project.development_pods, project.dependencies_group].each { |group| group.remove_from_project if group.empty? }
+            project.sort(:groups_position => :below)
+          end
+        end
       end
-    
-        assert_equal 'http://example.org/foo/Home', last_response.headers['Location']
-    
-      test 'clean path with double leading slash' do
-    assert_equal '/Mordor', clean_path('//Mordor')
+    end
   end
 end
+
     
-        get '/search' do
-      @query   = params[:q] || ''
-      wiki     = wiki_new
-      # Sort wiki search results by count (desc) and then by name (asc)
-      @results = wiki.search(@query).sort { |a, b| (a[:count] <=> b[:count]).nonzero? || b[:name] <=> a[:name] }.reverse
-      @name    = @query
-      mustache :search
+      require 'cocoapods/gem_version'
+  require 'cocoapods/version_metadata'
+  require 'cocoapods-core'
+  require 'cocoapods/config'
+  require 'cocoapods/downloader'
+    
+            case a
+        when 0 then 'just now'
+        when 1 then 'a second ago'
+        when 2..59 then a.to_s + ' seconds ago'
+        when 60..119 then 'a minute ago' # 120 = 2 minutes
+        when 120..3540 then (a / 60).to_i.to_s + ' minutes ago'
+        when 3541..7100 then 'an hour ago' # 3600 = 1 hour
+        when 7101..82_800 then ((a + 99) / 3600).to_i.to_s + ' hours ago'
+        when 82_801..172_000 then 'a day ago' # 86400 = 1 day
+        when 172_001..518_400 then ((a + 800) / (60 * 60 * 24)).to_i.to_s + ' days ago'
+        when 518_400..1_036_800 then 'a week ago'
+        when 1_036_801..4_147_204 then ((a + 180_000) / (60 * 60 * 24 * 7)).to_i.to_s + ' weeks ago'
+        else date.strftime('%d %b %Y')
+        end
+      end
+    end
+  end
+end
+
+    
+        it 'should create a new dir for the newly created pod' do
+      @sut.any_instance.stubs(:configure_template)
+      url = @sut::TEMPLATE_REPO
+      @sut.any_instance.expects(:git!).with(['clone', url, 'TestPod']).once
+      run_command('lib', 'create', 'TestPod')
     end
     
-            fields = object.preferences.keys.map do |key|
-          if object.has_preference?(key)
-            form.label('preferred_#{key}', Spree.t(key) + ': ') +
-              preference_field_for(form, 'preferred_#{key}', type: object.preference_type(key))
-          end
-        end
-        safe_join(fields, '<br />'.html_safe)
-      end
+      config.vm.define 'centos7' do |centos7|
+    centos7.vm.box = 'puppetlabs/centos-7.0-64-puppet'
+  end
     
-          # Takes the amount in cents to capture.
-      # Can be used to capture partial amounts of a payment, and will create
-      # a new pending payment record for the remaining amount to capture later.
-      def capture!(amount = nil)
-        return true if completed?
+        # If the package output (-p flag) is a directory, write to the default file name
+    # but inside that directory.
+    if ! package.nil? && File.directory?(package)
+      package_file = File.join(package, output.to_s)
+    else
+      package_file = output.to_s(package)
+    end
     
-        private
+        self.name = [attributes[:npm_package_name_prefix], name].join('-')
+    self.version = info.fetch('version', '0.0.0')
     
-          before do
-        allow(return_item).to receive(:eligible_for_return?).and_return(true)
-        subject
-      end
+      # scripts_path and write_scripts cribbed from deb.rb
+  def scripts_path(path=nil)
+    @scripts_path ||= build_path('Scripts')
+    FileUtils.mkdir(@scripts_path) if !File.directory?(@scripts_path)
     
-            def create
-          authorize! :create, Image
-          @image = scope.images.new(image_params)
-          if @image.save
-            respond_with(@image, status: 201, default_template: :show)
-          else
-            invalid_resource!(@image)
-          end
-        end
-    
-            def index
-          @properties = Spree::Property.accessible_by(current_ability)
+        File.write(build_path('packlist'), files.sort.join('\n'))
