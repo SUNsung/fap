@@ -1,121 +1,124 @@
 
         
-            # The path used after resending confirmation instructions.
-    def after_resending_confirmation_instructions_path_for(resource_name)
-      is_navigational_format? ? new_session_path(resource_name) : '/'
-    end
+                # @return [String] The deployment target.
+        #
+        attr_reader :platform_deployment_target
     
-      def serialize_options(resource)
-    methods = resource_class.authentication_keys.dup
-    methods = methods.keys if methods.is_a?(Hash)
-    methods << :password if resource.respond_to?(:password)
-    { methods: methods, only: [:password] }
-  end
+          # Creates and links an import file for the given pod target and into the given native target.
+      #
+      # @param  [Project] project
+      #         the Xcodeproj to generate the target into.
+      #
+      # @param  [PBXNativeTarget] target
+      #         the native target to link the generated import file into.
+      #
+      # @param  [PodTarget] pod_target
+      #         the pod target to use for when generating the contents of the import file.
+      #
+      # @param  [Symbol] platform
+      #         the platform of the target. Can be `:ios` or `:osx`, etc.
+      #
+      # @param  [String] name
+      #         The name to use for the target, defaults to 'App'.
+      #
+      # @return [Array<PBXBuildFile>] the created build file references.
+      #
+      def self.add_app_project_import(project, target, pod_target, platform, name = 'App')
+        source_file = AppTargetHelper.create_app_import_source_file(project, pod_target, platform, name)
+        group = project[name] || project.new_group(name, name)
+        source_file_ref = group.new_file(source_file)
+        target.add_file_references([source_file_ref])
+      end
     
-        if resource.errors.empty?
-      set_flash_message! :notice, :unlocked
-      respond_with_navigational(resource){ redirect_to after_unlock_path_for(resource) }
-    else
-      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
-    end
-  end
-    
-        def email_changed(record, opts={})
-      devise_mail(record, :email_changed, opts)
-    end
-    
-    class TestController < ApplicationController
-  include Rails.application.routes.url_helpers
-    
-                bypass_sign_in(user)
-          DEPRECATION
-          warden.session_serializer.store(resource, scope)
-        elsif warden.user(scope) == resource && !options.delete(:force)
-          # Do nothing. User already signed in and we are not forcing it.
-          true
-        else
-          warden.set_user(resource, options.merge!(scope: scope))
+            # Cleans up projects before writing.
+        #
+        def cleanup_projects(projects)
+          projects.each do |project|
+            [project.pods, project.support_files_group,
+             project.development_pods, project.dependencies_group].each { |group| group.remove_from_project if group.empty? }
+            project.sort(:groups_position => :below)
+          end
         end
       end
-    
-            routes.each do |module_name, actions|
-          [:path, :url].each do |path_or_url|
-            actions.each do |action|
-              action = action ? '#{action}_' : ''
-              method = :'#{action}#{module_name}_#{path_or_url}'
-    
-          def initialize_from_record(record)
-        @scope_name = Devise::Mapping.find_scope!(record)
-        @resource   = instance_variable_set('@#{devise_mapping.name}', record)
-      end
-    
-          module ClassMethods
-        # Create the cookie key using the record id and remember_token
-        def serialize_into_cookie(record)
-          [record.to_key, record.rememberable_value, Time.now.utc.to_f.to_s]
-        end
-    
-              # Parse the options and return if we don't have any target.
-          argv = parse_options(opts)
-          return if !argv
-    
-    describe VagrantPlugins::SyncedFolderRSync::DefaultUnixCap do
-  include_context 'unit'
-    
-        it 'should not error destroying a non-existent box' do
-      # Get the subject so that it is instantiated
-      box = subject
-    
-      subject { described_class }
-    
-          provider_cls
     end
-    
-          it 'should not expand the relative host directory' do
-        expect(docker_yml).to receive(:write).with(%r{my_volume_key})
-      end
-    end
-    
-        # Start a new handling thread
-    self.listener_threads << framework.threads.spawn('BindTcpHandlerListener-#{lport}', false) {
-      client = nil
-    }
-    
-      def initialize(info = {})
-    super(merge_info(info,
-      'Name'          => 'Unix Command Shell, Reverse TCP (/dev/tcp)',
-      'Description'   => %q{
-        Creates an interactive shell via bash's builtin /dev/tcp.
-    }
-    
-                  # accept
-              0xe1a00006, # mov     r0, r6
-              0xe0411001, # sub     r1, r1, r1
-              0xe0422002, # sub     r2, r2, r2
-              0xe3a07001, # mov     r7, #1
-              0xe1a07407, # lsl     r7, r7, #8
-              0xe287701d, # add     r7, r7, #29
-              0xef000000, # svc     0x00000000
-    
-      def webcam_list
-    response = client.send_request(Packet.create_request('webcam_list'))
-    names = []
-    response.get_tlvs(TLV_TYPE_WEBCAM_NAME).each do |tlv|
-      names << tlv.value
-    end
-    names
   end
-    
-      end
-    
-        # Havent figured this one out yet, but we need a PID owned by a user, can't steal tokens either
-    if client.sys.config.is_system?
-      print_error 'Cannot run as system'
-      return 0
-    end
-    
-    def BigDecimal.new(*args, **kwargs)
-  return BigDecimal(*args) if kwargs.empty?
-  BigDecimal(*args, **kwargs)
 end
-# Remove bigdecimal warning - end
+
+    
+      task :index do
+    doc = File.read('README.md')
+    file = 'doc/rack-protection-readme.md'
+    Dir.mkdir 'doc' unless File.directory? 'doc'
+    puts 'writing #{file}'
+    File.open(file, 'w') { |f| f << doc }
+  end
+    
+          def xor_byte_strings(s1, s2)
+        s1.bytes.zip(s2.bytes).map { |(c1,c2)| c1 ^ c2 }.pack('c*')
+      end
+    end
+  end
+end
+
+    
+          def instrument(env)
+        return unless i = options[:instrumenter]
+        env['rack.protection.attack'] = self.class.name.split('::').last.downcase
+        i.instrument('rack.protection', env)
+      end
+    
+          def is_edit_page
+        true
+      end
+    
+          def previous_link
+        label = '&laquo; Previous'
+        if @page_num == 1
+          %(<span class='disabled'>#{label}</span>)
+        else
+          link = url('/history/#{@page.name}?page=#{@page_num-1}')
+          %(<a href='#{link}' hotkey='h'>#{label}</a>)
+        end
+      end
+    
+          def has_sidebar
+        if @sidebar
+          @sidebar.formatted_data.strip.empty? ? false : true
+        else
+          @sidebar = (@page.sidebar || false)
+          !!@sidebar
+        end
+      end
+    
+        def self.teardown(&block)
+      define_method(:teardown, &block)
+    end
+  end
+  (
+  class << klass;
+    self
+  end).send(:define_method, :name) { name.gsub(/\W/, '_') }
+  $contexts << klass
+  klass.class_eval &block
+end
+    
+        # TODO: Remove to_url once write_page changes are merged.
+    @wiki.write_page('ééééé'.to_url, :markdown, '한글 text', commit_details)
+    page = @wiki.page('eeeee')
+    assert_equal '한글 text', utf8(page.raw_data)
+  end
+    
+      if cfg = options[:config]
+    # If the path begins with a '/' it will be considered an absolute path,
+    # otherwise it will be relative to the CWD
+    cfg = File.join(Dir.getwd, cfg) unless cfg.slice(0) == File::SEPARATOR
+    require cfg
+  end
+    
+        get '/emoji/:name' do
+      begin
+        [200, {'Content-Type' => 'image/png'}, emoji(params['name'])]
+      rescue ArgumentError
+        not_found
+      end
+    end
