@@ -1,237 +1,58 @@
 
         
-              select2('SF Weather', from: 'Control targets')
-    
-        it 'can not be turned off' do
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'true' }
-      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
-    end
-  end
+        class User < ActiveRecord::Base
+  devise :database_authenticatable
 end
-
     
-        it 'should provide the since attribute after the first run' do
-      time = (Time.now-1.minute).iso8601
-      @checker.memory[:last_event] = time
-      @checker.save
-      expect(@checker.reload.send(:query_parameters)).to eq({:query => {:since => time}})
-    end
-  end
-    
-      let(:valid_params) {
-    {
-      name: 'Example',
-      schedule: 'every_1h',
-      options: {
-        'action' => 'run',
-      },
-      user: users(:bob),
-      control_targets: [target]
+            def_node_search :conditional_dependencies, <<~EOS
+          {$(if (send (send nil? :build) ${:include? :with? :without?} $(str _))
+              (send nil? :depends_on $({str sym} _)) nil?)
     }
-  }
     
-        def as_json
-      { entries: entries_as_json, types: types_as_json }
-    end
-    
-        def parse_html(html)
-      warn '#{self.class.name} is re-parsing the document' unless ENV['RACK_ENV'] == 'test'
-      super
-    end
-    
-        def initialize(filters = nil)
-      @filters = filters ? filters.dup : []
-    end
-    
-        def add(path, content)
-      @pages[path] = content
-    end
-    
-        def effective_url
-      @effective_url ||= URL.parse super
-    end
-    
-            self.base_url.scheme = effective_base_url.scheme
-        self.base_url.host = effective_base_url.host
-        self.base_url.path = effective_base_url.path
-        super
-      ensure
-        self.base_url.scheme = original_scheme
-        self.base_url.host = original_host
-        self.base_url.path = original_path
-      end
-    end
-    
-        private
-    
-            title = at_css('h1').content.strip
-        if root_page?
-          at_css('h1').content = 'Angular 2 Documentation'
-        elsif title == 'Index'
-          at_css('h1').content = result[:entries].first.name
-        elsif title == 'Angular'
-          at_css('h1').content = slug.split('/').last.gsub('-', ' ')
-        elsif at_css('.breadcrumbs') && title != result[:entries].first.name
-          at_css('h1').content = result[:entries].first.name
-        end
-    
-    blogs.sort_by { |b| b.name.capitalize }
-unavailable.sort_by { |b| b.name.capitalize }
-    
-        context 'on a post from a stranger' do
-      before do
-        @target = eve.post :status_message, text: 'AWESOME', to: eve.aspects.first.id
-      end
-    
-          def all_paths
-        [source_path, dsym_path, bcsymbolmap_paths].flatten.compact
-      end
-    end
-  end
-end
-
-    
-              projects.each do |project|
-            UI.message '- Writing Xcode project file to #{UI.path project.path}' do
-              library_product_types = [:framework, :dynamic_library, :static_library]
-              results_by_native_target = Hash[pod_target_installation_results.map do |_, result|
-                [result.native_target, result]
-              end]
-              project.recreate_user_schemes(false) do |scheme, target|
-                next unless target.respond_to?(:symbol_type)
-                next unless library_product_types.include? target.symbol_type
-                installation_result = results_by_native_target[target]
-                next unless installation_result
-                installation_result.test_native_targets.each do |test_native_target|
-                  scheme.add_test_target(test_native_target)
-                end
-              end
-              project.save
+              unless method_called_ever?(body_node, :go_resource)
+            # processed_source.ast is passed instead of body_node because `require` would be outside body_node
+            find_method_with_args(processed_source.ast, :require, 'language/go') do
+              problem 'require \'language/go\' is unnecessary unless using `go_resource`s'
             end
           end
-        end
     
-          def updates
-        @updates ||= begin
-          ensure_external_podspecs_present!
-          spec_sets.map do |set|
-            spec = set.specification
-            source_version = set.versions.first
-            pod_name = spec.root.name
-            lockfile_version = lockfile.version(pod_name)
-            if source_version > lockfile_version
-              matching_spec = unlocked_pods.find { |s| s.name == pod_name }
-              matching_version =
-                matching_spec ? matching_spec.version : '(unused)'
-              [pod_name, lockfile_version, matching_version, source_version]
-            end
-          end.compact.uniq
-        end
-      end
+        depends_on(deps) if add_mac_dependency?(args)
+  end
     
-    if $PROGRAM_NAME == __FILE__ && !ENV['COCOAPODS_NO_BUNDLER']
-  ENV['BUNDLE_GEMFILE'] = File.expand_path('../../Gemfile', __FILE__)
-  require 'rubygems'
-  require 'bundler/setup'
-  $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-elsif ENV['COCOAPODS_NO_BUNDLER']
-  require 'rubygems'
-  gem 'cocoapods'
-end
+    require 'software_spec'
     
-              # Creates a file reference to the xcconfig generated by
-          # CocoaPods (if needed) and sets it as the base configuration of
-          # build configuration of the user target.
-          #
-          # @param  [Target::AggregateTarget] pod_bundle
-          #         The Pods bundle.
-          #
-          # @param  [PBXNativeTarget] target
-          #         The native target.
-          #
-          # @param  [Xcodeproj::XCBuildConfiguration] config
-          #         The build configuration.
-          #
-          def self.set_target_xcconfig(pod_bundle, target, config)
-            file_ref = create_xcconfig_ref(pod_bundle, config)
-            path = file_ref.path
-    
-        it 'includes boolean values' do
-      generator = Generator::InfoPlistFile.new('1.0.0', Platform.new(:ios, '6.0'))
-      generator.send(:to_plist, 'MyDictionary' => { 'MyTrue' => true, 'MyFalse' => false
-                                                  }).should == <<-PLIST
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE plist PUBLIC '-//Apple//DTD PLIST 1.0//EN' 'http://www.apple.com/DTDs/PropertyList-1.0.dtd'>
-<plist version='1.0'>
-<dict>
-  <key>MyDictionary</key>
-  <dict>
-    <key>MyFalse</key>
-    <false/>
-    <key>MyTrue</key>
-    <true/>
-  </dict>
-</dict>
-</plist>
-      PLIST
+        checksums.each_pair do |cat, digest|
+      checksum, = subject.checksum_for(cat)
+      expect(Checksum.new(:sha256, digest)).to eq(checksum)
     end
+  end
     
-          # prints a message followed by a new line unless config is silent.
-      #
-      # @param [String] message
-      #        The message to print.
-      #
-      def print(message)
-        return if config.silent?
-        begin
-          (output_io || STDOUT).print(message)
-        rescue Errno::EPIPE
-          exit 0
-        end
+        let(:url) { Object.new }
+    let(:strategy) { nil }
+    
+      it_behaves_like 'a command that requires a Cask token'
+  it_behaves_like 'a command that handles invalid options'
+    
+      // writing
+  $('form').on('submit',function(e) {
+    $.post('/', {msg: '<%= user %>: ' + $('#msg').val()});
+    $('#msg').val(''); $('#msg').focus();
+    e.preventDefault();
+  });
+</script>
+    
+          def encode_token(token)
+        Base64.strict_encode64(token)
       end
     
-          def print_issue_full(issue)
-        safe_url = URI.escape issue.html_url
-        UI.puts ' - #{issue.title}'
-        UI.puts '   #{safe_url} [#{issue.state}] [#{issue.comments} comment#{issue.comments == 1 ? '' : 's'}]'
-        UI.puts '   #{pretty_date(issue.updated_at)}'
-        UI.puts ''
-      end
+          def initialize(*)
+        super
     
-            it 'other_ld_flags should include -ObjC when linking static frameworks' do
-          target_definition = fixture_target_definition(:contents => { 'inheritance' => 'complete' })
-          spec = stub('spec', :library_specification? => true, :spec_type => :library)
-          consumer = stub('consumer',
-                          :libraries => ['xml2'],
-                          :frameworks => ['XCTest'],
-                          :weak_frameworks => [],
-                          :spec => spec,
-                         )
-          file_accessor = stub('file_accessor',
-                               :spec => spec,
-                               :spec_consumer => consumer,
-                               :vendored_static_artifacts => [],
-                               :vendored_static_libraries => [],
-                               :vendored_dynamic_libraries => [],
-                               :vendored_static_frameworks => [],
-                               :vendored_dynamic_frameworks => [],
-                              )
-          pod_target = stub('pod_target',
-                            :file_accessors => [file_accessor],
-                            :requires_frameworks? => true,
-                            :dependent_targets => [],
-                            :recursive_dependent_targets => [],
-                            :sandbox => config.sandbox,
-                            :include_in_build_config? => true,
-                            :should_build? => false,
-                            :spec_consumers => [consumer],
-                            :build_as_static? => true,
-                            :product_basename => 'PodTarget',
-                            :target_definitions => [target_definition],
-                           )
-          pod_target.stubs(:build_settings => pod(pod_target))
-          aggregate_target = fixture_aggregate_target([pod_target], true)
-          aggregate(aggregate_target).other_ldflags.should.include '-ObjC'
-        end
+            post '/', :file => Rack::Test::UploadedFile.new(temp_file.path), :other => '<bar>'
+        expect(body).to eq('_escaped_params_tmp_file\nhello world\n&lt;bar&gt;')
+      ensure
+        File.unlink(temp_file.path)
       end
+    end
+  end
+end
