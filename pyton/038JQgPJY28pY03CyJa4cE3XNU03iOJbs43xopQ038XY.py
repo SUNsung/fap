@@ -1,294 +1,206 @@
 
         
-        encoder_input_data = np.zeros(
-    (len(input_texts), max_encoder_seq_length, num_encoder_tokens),
-    dtype='float32')
-decoder_input_data = np.zeros(
-    (len(input_texts), max_decoder_seq_length, num_decoder_tokens),
-    dtype='float32')
-decoder_target_data = np.zeros(
-    (len(input_texts), max_decoder_seq_length, num_decoder_tokens),
-    dtype='float32')
+        
+def redirect_view(request):
+    'A view that redirects all requests to the GET view'
+    if request.GET:
+        query = '?' + urlencode(request.GET, True)
+    else:
+        query = ''
+    return HttpResponseRedirect('/get_view/' + query)
     
-    - Load the original image.
-- Define a number of processing scales (i.e. image shapes),
-    from smallest to largest.
-- Resize the original image to the smallest scale.
-- For every scale, starting with the smallest (i.e. current one):
-    - Run gradient ascent
-    - Upscale image to the next scale
-    - Reinject the detail that was lost at upscaling time
-- Stop when we are back to the original size.
+        def validate(self, value):
+        '''Validate that the input is in self.choices.'''
+        super().validate(value)
+        if value and not self.valid_value(value):
+            raise ValidationError(
+                self.error_messages['invalid_choice'],
+                code='invalid_choice',
+                params={'value': value},
+            )
     
-    print('Loading data...')
-(x_train, y_train), (x_test, y_test) = imdb.load_data(num_words=max_features)
-print(len(x_train), 'train sequences')
-print(len(x_test), 'test sequences')
+        def to_url(self, value):
+        return str(value)
     
-        # check that output changes after states are reset
-    # (even though the model itself didn't change)
-    layer.reset_states()
-    out3 = model.predict(np.ones_like(inputs))
-    assert(out2.max() != out3.max())
+    from django.conf import settings
+from django.contrib.gis.db.backends.base.operations import (
+    BaseSpatialOperations,
+)
+from django.contrib.gis.db.backends.utils import SpatialOperator
+from django.contrib.gis.db.models import GeometryField, RasterField
+from django.contrib.gis.gdal import GDALRaster
+from django.contrib.gis.geos.geometry import GEOSGeometryBase
+from django.contrib.gis.geos.prototypes.io import wkb_r
+from django.contrib.gis.measure import Distance
+from django.core.exceptions import ImproperlyConfigured
+from django.db.backends.postgresql.operations import DatabaseOperations
+from django.db.models import Func, Value
+from django.db.utils import NotSupportedError, ProgrammingError
+from django.utils.functional import cached_property
+from django.utils.version import get_version_tuple
     
-        # Arguments
-        y_true: tensor of true targets.
-        y_pred: tensor of predicted targets.
+        def _rmrf(self, dname):
+        if os.path.commonprefix([self.test_dir, os.path.abspath(dname)]) != self.test_dir:
+            return
+        shutil.rmtree(dname)
+
     
-        with pytest.raises(AssertionError):
-        conv_utils.conv_output_length(32, 5, 'diagonal', 2)
-    
-    
-def set_image_data_format(data_format):
-    '''Sets the value of the data format convention.
-    
-            self.recurrent_kernel_i = self.recurrent_kernel[:, :self.units]
-        self.recurrent_kernel_f = (
-            self.recurrent_kernel[:, self.units: self.units * 2])
-        self.recurrent_kernel_c = (
-            self.recurrent_kernel[:, self.units * 2: self.units * 3])
-        self.recurrent_kernel_o = self.recurrent_kernel[:, self.units * 3:]
-    
-        def to_python(self, value):
+        # #### Layer Methods ####
+    def get_fields(self, field_name):
         '''
-        Explicitly check for the string 'True' and 'False', which is what a
-        hidden field will submit for True and False, for 'true' and 'false',
-        which are likely to be returned by JavaScript serializations of forms,
-        and for '1' and '0', which is what a RadioField will submit. Unlike
-        the Booleanfield, this field must check for True because it doesn't
-        use the bool() function.
+        Return a list containing the given field name for every Feature
+        in the Layer.
         '''
-        if value in (True, 'True', 'true', '1'):
-            return True
-        elif value in (False, 'False', 'false', '0'):
-            return False
+        if field_name not in self.fields:
+            raise GDALException('invalid field name: %s' % field_name)
+        return [feat.get(field_name) for feat in self]
+    
+        def _flush(self):
+        '''
+        Call the flush method on the Band's parent raster and force a refresh
+        of the statistics attribute when requested the next time.
+        '''
+        self.source._flush()
+        self._stats_refresh = True
+    
+        def test_mark_safe_decorator_does_not_affect_dunder_html(self):
+        '''
+        mark_safe doesn't affect a callable that has an __html__() method.
+        '''
+        class SafeStringContainer:
+            def __html__(self):
+                return '<html></html>'
+    
+    
+def test_unicode_url(httpbin):
+    r = http(httpbin.url + u'/get?test=' + UNICODE)
+    assert HTTP_OK in r
+    assert r.json['args'] == {'test': UNICODE}
+    
+    
+def test_compress_skip_negative_ratio(httpbin_both):
+    r = http(
+        '--compress',
+        httpbin_both + '/post',
+        'foo=bar',
+    )
+    assert HTTP_OK in r
+    assert 'Content-Encoding' not in r.json['headers']
+    assert r.json['json'] == {'foo': 'bar'}
+    
+    # Output options
+OUT_REQ_HEAD = 'H'
+OUT_REQ_BODY = 'B'
+OUT_RESP_HEAD = 'h'
+OUT_RESP_BODY = 'b'
+    
+            if now - self._prev_time >= self._update_interval:
+            downloaded = self.status.downloaded
+            try:
+                speed = ((downloaded - self._prev_bytes)
+                         / (now - self._prev_time))
+            except ZeroDivisionError:
+                speed = 0
+    
+        res = check_ip.check_ip(ip, host=top_domain, wait_time=wait_time)
+    if not res:
+        print('connect fail')
+    elif res.ok:
+        print('success, domain:%s handshake:%d' % (res.host, res.handshake_time))
+    else:
+        print('not support')
+    
+    
+def gae_application(environ, start_response):
+    cookie = environ.get('HTTP_COOKIE', '')
+    options = environ.get('HTTP_X_GOA_OPTIONS', '')
+    if environ['REQUEST_METHOD'] == 'GET' and not cookie:
+        if '204' in environ['QUERY_STRING']:
+            start_response('204 No Content', [])
+            yield ''
         else:
-            return None
+            timestamp = long(os.environ['CURRENT_VERSION_ID'].split('.')[1])/2**28
+            ctime = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(timestamp+8*3600))
+            html = u'GoAgent Python Server %s \u5df2\u7ecf\u5728\u5de5\u4f5c\u4e86\uff0c\u90e8\u7f72\u65f6\u95f4 %s\n' % (__version__, ctime)
+            start_response('200 OK', [('Content-Type', 'text/plain; charset=utf-8')])
+            yield html.encode('utf8')
+        raise StopIteration
     
     
-class TeacherAdmin(admin.ModelAdmin):
-    inlines = [StudentInline]
+    def error(self, nvae):
+        '''A hook for debugging interface'''
+        pass
     
-        def test_many_to_many_inlines(self):
-        'Autogenerated many-to-many inlines are displayed correctly (#13407)'
-        response = self.client.get(reverse('admin:admin_inlines_author_add'))
-        # The heading for the m2m inline block uses the right text
-        self.assertContains(response, '<h2>Author-book relationships</h2>')
-        # The 'add another' label is correct
-        self.assertContains(response, 'Add another Author-book relationship')
-        # The '+' is dropped from the autogenerated form prefix (Author_books+)
-        self.assertContains(response, 'id='id_Author_books-TOTAL_FORMS'')
+                    return self._state.token
     
-    
-def get_converter(raw_converter):
-    return get_converters()[raw_converter]
+    for i, face_distance in enumerate(face_distances):
+    print('The test image has a distance of {:.2} from known image #{}'.format(face_distance, i))
+    print('- With a normal cutoff of 0.6, would the test image match the known image? {}'.format(face_distance < 0.6))
+    print('- With a very strict cutoff of 0.5, would the test image match the known image? {}'.format(face_distance < 0.5))
+    print()
 
     
     
-def make_middleware_decorator(middleware_class):
-    def _make_decorator(*m_args, **m_kwargs):
-        middleware = middleware_class(*m_args, **m_kwargs)
+@click.command()
+@click.argument('image_to_check')
+@click.option('--cpus', default=1, help='number of CPU cores to use in parallel. -1 means 'use all in system'')
+@click.option('--model', default='hog', help='Which face detection model to use. Options are 'hog' or 'cnn'.')
+def main(image_to_check, cpus, model):
+    # Multi-core processing only supported on Python 3.4 or greater
+    if (sys.version_info < (3, 4)) and cpus != 1:
+        click.echo('WARNING: Multi-processing support requires Python 3.4 or greater. Falling back to single-threaded processing!')
+        cpus = 1
     
-      Example:
-  >>> from django.contrib.gis.gdal import SpatialReference
-  >>> srs = SpatialReference('WGS84')
-  >>> print(srs)
-  GEOGCS['WGS 84',
-      DATUM['WGS_1984',
-          SPHEROID['WGS 84',6378137,298.257223563,
-              AUTHORITY['EPSG','7030']],
-          TOWGS84[0,0,0,0,0,0,0],
-          AUTHORITY['EPSG','6326']],
-      PRIMEM['Greenwich',0,
-          AUTHORITY['EPSG','8901']],
-      UNIT['degree',0.01745329251994328,
-          AUTHORITY['EPSG','9122']],
-      AUTHORITY['EPSG','4326']]
-  >>> print(srs.proj)
-  +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs
-  >>> print(srs.ellipsoid)
-  (6378137.0, 6356752.3142451793, 298.25722356300003)
-  >>> print(srs.projected, srs.geographic)
-  False True
-  >>> srs.import_epsg(32140)
-  >>> print(srs.name)
-  NAD83 / Texas South Central
-'''
-from ctypes import byref, c_char_p, c_int
+            # Draw a label with a name below the face
+        cv2.rectangle(frame, (left, bottom - 25), (right, bottom), (0, 0, 255), cv2.FILLED)
+        font = cv2.FONT_HERSHEY_DUPLEX
+        cv2.putText(frame, name, (left + 6, bottom - 6), font, 0.5, (255, 255, 255), 1)
     
-            # Creating an OGR Geometry, which is then transformed.
-        g = gdal.OGRGeometry(self._ogr_ptr(), srid)
-        g.transform(ct)
-        # Getting a new GEOS pointer
-        ptr = g._geos_ptr()
-        if clone:
-            # User wants a cloned transformed geometry returned.
-            return GEOSGeometry(ptr, srid=g.srid)
-        if ptr:
-            # Reassigning pointer, and performing post-initialization setup
-            # again due to the reassignment.
-            capi.destroy_geom(self.ptr)
-            self.ptr = ptr
-            self._post_init()
-            self.srid = g.srid
-        else:
-            raise GEOSException('Transformed WKB was invalid.')
+        # macOS will crash due to a bug in libdispatch if you don't use 'forkserver'
+    context = multiprocessing
+    if 'forkserver' in multiprocessing.get_all_start_methods():
+        context = multiprocessing.get_context('forkserver')
     
-        Code is a simple port of what is already in the /scripts directory
+    # Show the picture
+pil_image.show()
+
     
-    class GenerateTokensTest(TokenizeTest):
-    def check_tokenize(self, s, expected):
-        # Format the tokens in s in a table format.
-        # The ENDMARKER and final NEWLINE are omitted.
-        f = StringIO(s)
-        result = stringify_tokens_from_source(generate_tokens(f.readline), s)
-        self.assertEqual(result, expected.rstrip().splitlines())
+    # Convert the image to a PIL-format image so that we can draw on top of it with the Pillow library
+# See http://pillow.readthedocs.io/ for more about PIL/Pillow
+pil_image = Image.fromarray(unknown_image)
+# Create a Pillow ImageDraw Draw instance to draw with
+draw = ImageDraw.Draw(pil_image)
     
-        def _pprint_simplenamespace(self, object, stream, indent, allowance, context, level):
-        if type(object) is _types.SimpleNamespace:
-            # The SimpleNamespace repr is 'namespace' instead of the class
-            # name, so we do the same here. For subclasses; use the class name.
-            cls_name = 'namespace'
-        else:
-            cls_name = object.__class__.__name__
-        indent += len(cls_name) + 1
-        delimnl = ',\n' + ' ' * indent
-        items = object.__dict__.items()
-        last_index = len(items) - 1
+            self.vhost2 = VirtualHost(
+            'fp', 'vhp', set([self.addr2]), False, False, 'localhost')
     
-        def test_setpgroup(self):
-        pid = self.spawn_func(
-            sys.executable,
-            [sys.executable, '-c', 'pass'],
-            os.environ,
-            setpgroup=os.getpgrp()
-        )
-        self.assertEqual(os.waitpid(pid, 0), (pid, 0))
+        def _test_with_all_supported(self):
+        if self.client.installer is None:
+            self.client.installer = mock.MagicMock()
+        self.client.installer.supported_enhancements.return_value = [
+            'ensure-http-header', 'redirect', 'staple-ocsp']
+        self.client.enhance_config([self.domain], None)
+        self.assertEqual(self.client.installer.save.call_count, 1)
+        self.assertEqual(self.client.installer.restart.call_count, 1)
     
-        EGENIX.COM SOFTWARE GMBH DISCLAIMS ALL WARRANTIES WITH REGARD TO
-    THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
-    FITNESS, IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL,
-    INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING
-    FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
-    NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION
-    WITH THE USE OR PERFORMANCE OF THIS SOFTWARE !
+       certbot certonly \\
+     --dns-rfc2136 \\
+     --dns-rfc2136-credentials ~/.secrets/certbot/rfc2136.ini \\
+     -d example.com \\
+     -d www.example.com
     
-                # If we were given an handle_list or need to create one
-            if have_handle_list or (use_std_handles and close_fds):
-                if attribute_list is None:
-                    attribute_list = startupinfo.lpAttributeList = {}
-                handle_list = attribute_list['handle_list'] = \
-                    list(attribute_list.get('handle_list', []))
-    
-    Provides the 'spawn()' function, a front-end to various platform-
-specific functions for launching another program in a sub-process.
-Also provides the 'find_executable()' to search the path for a given
-executable name.
-'''
+        @mock.patch('dns.query.tcp')
+    def test_del_txt_record_server_error(self, query_mock):
+        query_mock.return_value.rcode.return_value = dns.rcode.NXDOMAIN
+        # _find_domain | pylint: disable=protected-access
+        self.rfc2136_client._find_domain = mock.MagicMock(return_value='example.com')
     
     
-def rand_(left, right):
-    return operator.and_(right, left)
-    
-        Parameters
-    ----------
-    start : numeric or datetime-like, default None
-        Left bound for generating intervals
-    end : numeric or datetime-like, default None
-        Right bound for generating intervals
-    periods : integer, default None
-        Number of periods to generate
-    freq : numeric, string, or DateOffset, default None
-        The length of each interval. Must be consistent with the type of start
-        and end, e.g. 2 for numeric, or '5H' for datetime-like.  Default is 1
-        for numeric and 'D' for datetime-like.
-    name : string, default None
-        Name of the resulting IntervalIndex
-    closed : {'left', 'right', 'both', 'neither'}, default 'right'
-        Whether the intervals are closed on the left-side, right-side, both
-        or neither.
-    
-    
-  def ComputeCandidates( self, request_data ):
-    if self.ShouldUseCache():
-      return super( OmniCompleter, self ).ComputeCandidates( request_data )
-    if self.ShouldUseNowInner( request_data ):
-      return self.ComputeCandidatesInner( request_data )
-    return []
-    
-    
-def _FormatYcmdDebugInfo( ycmd ):
-  python = ycmd[ 'python' ]
-  clang = ycmd[ 'clang' ]
-  message = ( 'Server Python interpreter: {0}\n'
-              'Server Python version: {1}\n'
-              'Server has Clang support compiled in: {2}\n'
-              'Clang version: {3}\n'.format( python[ 'executable' ],
-                                             python[ 'version' ],
-                                             clang[ 'has_support' ],
-                                             clang[ 'version' ] ) )
-  extra_conf = ycmd[ 'extra_conf' ]
-  extra_conf_path = extra_conf[ 'path' ]
-  if not extra_conf_path:
-    message += 'No extra configuration file found\n'
-  elif not extra_conf[ 'is_loaded' ]:
-    message += ( 'Extra configuration file found but not loaded\n'
-                 'Extra configuration path: {0}\n'.format( extra_conf_path ) )
-  else:
-    message += ( 'Extra configuration file found and loaded\n'
-                 'Extra configuration path: {0}\n'.format( extra_conf_path ) )
-  return message
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    
-from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-        def test_unsubscribe_should_remove_listener(self):
-        sub_arn = 'arn:aws:sns:us-east-1:123456789012:test-topic:45e61c7f-dca5-4fcd-be2b-4e1b0d6eef72'
-        topic_arn = 'arn:aws:sns:us-east-1:123456789012:test-topic'
-    
-        messages = [json.loads(to_str(m['Body'])) for m in response['Messages']]
-    testutil.assert_objects(assertions, messages)
-    for message in response['Messages']:
-        sqs_client.delete_message(QueueUrl=queue_url, ReceiptHandle=message['ReceiptHandle'])
-    
-    
-def expand_multipart_filename(data, headers):
-    ''' Replace instance of '${filename}' in key with given file name.
-    
-    
-def replay(api):
-    file_path = get_file_path(api)
-    if not file_path:
-        return
-    CURRENTLY_REPLAYING.append(True)
-    count = 0
+@pytest.fixture()
+def context(request):
+    # Fixture request is a built-in pytest fixture describing current test request.
+    integration_test_context = nginx_context.IntegrationTestsContext(request)
     try:
-        with open(file_path, 'r') as reader:
-            for line in reader:
-                if line.strip():
-                    count += 1
-                    command = json.loads(line)
-                    replay_command(command)
+        yield integration_test_context
     finally:
-        CURRENTLY_REPLAYING.pop(0)
-    if count:
-        LOGGER.info('Restored %s API calls from persistent file: %s' % (count, file_path))
-    
-        def _reset_account_id(self, data):
-        ''' Fix account ID in request payload. All external-facing responses contain our
-            predefined account ID (defaults to 000000000000), whereas the backend endpoint
-            from moto expects a different hardcoded account ID (123456789012). '''
-        return aws_stack.fix_account_id_in_arns(
-            data, colon_delimiter='%3A', existing=TEST_AWS_ACCOUNT_ID, replace=MOTO_ACCOUNT_ID)
+        integration_test_context.cleanup()
