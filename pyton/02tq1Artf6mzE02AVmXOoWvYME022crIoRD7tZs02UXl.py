@@ -1,359 +1,229 @@
 
         
-                webpage = self._download_webpage(
-            'http://www.vlive.tv/video/%s/playlist/%s'
-            % (video_id, playlist_id), playlist_id)
-    
-    import codecs
-import subprocess
-    
-    versions_info['signature'] = signature
-with open('update/versions.json', 'w') as versionsf:
-    json.dump(versions_info, versionsf, indent=4, sort_keys=True)
-
-    
-        with io.open(infile, encoding='utf-8') as inf:
-        issue_template_tmpl = inf.read()
-    
-    
-from youtube_dl import YoutubeDL
-    
-    
-class TestCache(unittest.TestCase):
-    def setUp(self):
-        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
-        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
-        _mkdir(TESTDATA_DIR)
-        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
-        self.tearDown()
-    
-    for i in range(max_decoder_seq_length - 1):
-    predict = model.predict([in_encoder, in_decoder])
-    predict = predict.argmax(axis=-1)
-    predict_ = predict[:, i].ravel().tolist()
-    for j, x in enumerate(predict_):
-        in_decoder[j, i + 1, x] = 1
-    
-    The dataset is actually too small for LSTM to be of any advantage
-compared to simpler, much faster methods such as TF-IDF + LogReg.
-    
-        with tempfile.NamedTemporaryFile('wb', delete=True) as f:
-        np.savez(f, x=x, y=y)
-        monkeypatch.setattr(reuters, 'get_file', lambda *args, **kwargs: f.name)
-        yield f.name
-    
-        @interfaces.legacy_embedding_support
-    def __init__(self, input_dim, output_dim,
-                 embeddings_initializer='uniform',
-                 embeddings_regularizer=None,
-                 activity_regularizer=None,
-                 embeddings_constraint=None,
-                 mask_zero=False,
-                 input_length=None,
-                 **kwargs):
-        if 'input_shape' not in kwargs:
-            if input_length:
-                kwargs['input_shape'] = (input_length,)
-            else:
-                kwargs['input_shape'] = (None,)
-        super(Embedding, self).__init__(**kwargs)
-    
-            # Arguments
-            x: A vector or a 2D array of probabilities or one-hot representations;
-                or a vector of character indices (used with `calc_argmax=False`).
-            calc_argmax: Whether to find the character index with maximum
-                probability, defaults to `True`.
-        '''
-        if calc_argmax:
-            x = x.argmax(axis=-1)
-        return ''.join(self.indices_char[x] for x in x)
-    
-    # set parameters:
-max_features = 5000
-maxlen = 400
-batch_size = 32
-embedding_dims = 50
-filters = 250
-kernel_size = 3
-hidden_dims = 250
-epochs = 2
-    
-    print('Pad sequences (samples x time)')
-x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
-x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
-print('x_train shape:', x_train.shape)
-print('x_test shape:', x_test.shape)
-y_train = np.array(y_train)
-y_test = np.array(y_test)
-    
-    
-# Artificial data generation:
-# Generate movies with 3 to 7 moving squares inside.
-# The squares are of shape 1x1 or 2x2 pixels,
-# which move linearly over time.
-# For convenience we first create movies with bigger width and height (80x80)
-# and at the end we select a 40x40 window.
-    
-    
-def test_relu():
-    layer_test(layers.ReLU,
-               kwargs={'max_value': 10,
-                       'negative_slope': 0.2,
-                       'threshold': 3.0},
-               input_shape=(2, 3, 4))
-    layer_test(layers.ReLU,
-               kwargs={'max_value': 6},
-               input_shape=(2, 3, 4))
-    layer_test(layers.ReLU,
-               kwargs={'negative_slope': 0.2},
-               input_shape=(2, 3, 4))
-    
-        def deletion_field(self):
-        from django.forms.formsets import DELETION_FIELD_NAME
-        return AdminField(self.form, DELETION_FIELD_NAME, False)
-    
-        def test_tabular_non_field_errors(self):
-        '''
-        non_field_errors are displayed correctly, including the correct value
-        for colspan.
-        '''
-        data = {
-            'title_set-TOTAL_FORMS': 1,
-            'title_set-INITIAL_FORMS': 0,
-            'title_set-MAX_NUM_FORMS': 0,
-            '_save': 'Save',
-            'title_set-0-title1': 'a title',
-            'title_set-0-title2': 'a different title',
+                return {
+            'id': video_id,
+            'title': title,
+            'description': video.get('long_description') or video.get(
+                'short_description'),
+            'duration': float_or_none(video.get('duration'), scale=1000),
+            'formats': formats,
+            'subtitles': subtitles,
         }
-        response = self.client.post(reverse('admin:admin_inlines_titlecollection_add'), data)
-        # Here colspan is '4': two fields (title1 and title2), one hidden field and the delete checkbox.
-        self.assertContains(
-            response,
-            '<tr><td colspan='4'><ul class='errorlist nonfield'>'
-            '<li>The two titles must be the same</li></ul></td></tr>'
-        )
-    
-        def as_int(self, is_64=False):
-        'Retrieve the Field's value as an integer.'
-        if is_64:
-            return capi.get_field_as_integer64(self._feat.ptr, self._index) if self.is_set else None
-        else:
-            return capi.get_field_as_integer(self._feat.ptr, self._index) if self.is_set else None
-    
-        @property
-    def hex(self):
-        '''
-        Return the WKB of this Geometry in hexadecimal form. Please note
-        that the SRID is not included in this representation because it is not
-        a part of the OGC specification (use the `hexewkb` property instead).
-        '''
-        # A possible faster, all-python, implementation:
-        #  str(self.wkb).encode('hex')
-        return wkb_w(dim=3 if self.hasz else 2).write_hex(self)
     
     
-def to_native_string(string, encoding='ascii'):
-    '''Given a string object, regardless of type, returns a representation of
-    that string in the native string type, encoding and decoding where
-    necessary. This assumes ASCII unless told otherwise.
-    '''
-    if isinstance(string, builtin_str):
-        out = string
-    else:
-        if is_py2:
-            out = string.encode(encoding)
-        else:
-            out = string.decode(encoding)
-    
-        def inner(*suffix):
-        return urljoin(httpbin_url, '/'.join(suffix))
-    
-        badargs = set(kwargs) - set(result)
-    if badargs:
-        err = 'create_cookie() got unexpected keyword arguments: %s'
-        raise TypeError(err % list(badargs))
-    
-        This function works best on CPython and PyPy: in particular, it probably
-    doesn't work for Jython or IronPython. Future investigation should be done
-    to work out the correct shape of the code for those platforms.
-    '''
-    implementation = platform.python_implementation()
+class TVNowIE(TVNowBaseIE):
+    _VALID_URL = r'''(?x)
+                    https?://
+                        (?:www\.)?tvnow\.(?:de|at|ch)/(?P<station>[^/]+)/
+                        (?P<show_id>[^/]+)/
+                        (?!(?:list|jahr)(?:/|$))(?P<id>[^/?\#&]+)
+                    '''
     
     
-class CaseInsensitiveDict(MutableMapping):
-    '''A case-insensitive ``dict``-like object.
+    {    # Options that need a file parameter
+    'download-archive': ['--require-parameter'],
+    'cookies': ['--require-parameter'],
+    'load-info': ['--require-parameter'],
+    'batch-file': ['--require-parameter'],
+}
     
-            This should not be called from user code, and is only exposed for use
-        when subclassing the
-        :class:`HTTPAdapter <requests.adapters.HTTPAdapter>`.
-    
-        close_server = threading.Event()
-    server = Server(digest_response_handler, wait_to_close_event=close_server)
-    
-            This function eventually generates a ``Cookie`` header from the
-        given cookies using cookielib. Due to cookielib's design, the header
-        will not be regenerated if it already exists, meaning this function
-        can only be called once for the life of the
-        :class:`PreparedRequest <PreparedRequest>` object. Any subsequent calls
-        to ``prepare_cookies`` will have no actual effect, unless the 'Cookie'
-        header is removed beforehand.
-        '''
-        if isinstance(cookies, cookielib.CookieJar):
-            self._cookies = cookies
-        else:
-            self._cookies = cookiejar_from_dict(cookies)
-    
-    from .__version__ import __title__, __description__, __url__, __version__
-from .__version__ import __build__, __author__, __author_email__, __license__
-from .__version__ import __copyright__, __cake__
-    
-            if network_ok:
-            self.last_check_time = time.time()
-            self.report_ok()
-            xlog.debug('network %s is ok, cost:%d ms', self.type, 1000 * (time.time() - time_now))
-        else:
-            xlog.warn('network %s fail', self.type)
-            self.network_stat = 'Fail'
-            self.last_check_time = time.time()
-    
-    
-def test_read_jsonl_unicode_chars():
-    # GH15132: non-ascii unicode characters
-    # \u201d == RIGHT DOUBLE QUOTATION MARK
-    
-            # common endpoints with NA
-        tuples = [(na_value, na_value)] + tuples + [(na_value, na_value)]
-        index = IntervalIndex.from_tuples(tuples, closed=closed)
-        result = index.is_overlapping
-        assert result is expected
-    
-                if self.index is not None:
-                self.frame.set_index(self.index, inplace=True)
-    
-                for index in [
-                tm.makeFloatIndex,
-                tm.makeStringIndex,
-                tm.makeIntIndex,
-                tm.makeDateIndex,
-            ]:
-    
-            # Now add a subject
-        action = {
-            'Message': ['msg'],
-            'Subject': ['subject'],
-            'MessageAttributes.entry.1.Name': ['attr1'],
-            'MessageAttributes.entry.1.Value.DataType': ['String'],
-            'MessageAttributes.entry.1.Value.StringValue': ['value1'],
-            'MessageAttributes.entry.1.Value.BinaryValue': ['value1'],
-            'MessageAttributes.entry.2.Name': ['attr2'],
-            'MessageAttributes.entry.2.Value.DataType': ['String'],
-            'MessageAttributes.entry.2.Value.StringValue': ['value2'],
-            'MessageAttributes.entry.2.Value.BinaryValue': ['value2'],
-        }
-        result_str = sns_listener.create_sns_message_body(self.subscriber, action)
-        result = json.loads(result_str)
-        del result['MessageId']
-        expected = json.dumps({'Message': 'msg',
-                               'TopicArn': 'arn',
-                               'Type': 'Notification',
-                               'Subject': 'subject',
-                               'MessageAttributes': {
-                                   'attr1': {
-                                       'Type': 'String',
-                                       'Value': 'value1',
-                                   }, 'attr2': {
-                                       'Type': 'String',
-                                       'Value': 'value2',
-                                   }
-                               }})
-        assert_equal(result, json.loads(expected))
-    
-        test_port = 12124
-    tmp_file_pattern = '/tmp/test.%s'
-    
-        def setUp(self):
-        firehose_api.create_stream(TEST_STREAM_NAME, tags=TEST_TAGS)
-    
-            assert 'Parameters' in response
-        assert isinstance(response['Parameters'], list)
-    
-            # Describe TTL status after being enabled.
-        response = testutil.send_describe_dynamodb_ttl_request(TEST_DDB_TABLE_NAME_3)
-        assert response.status_code == 200
-        assert json.loads(response._content)['TimeToLiveDescription']['TimeToLiveStatus'] == 'ENABLED'
-    
-        return {
-        'Version': VERSION,
-        'Services': {
-            name: convert_service_to_bundle(
-                name,
-                service_dict,
-                image_digests[name],
-            )
-            for name, service_dict in config['services'].items()
-        },
-    }
-    
-        tls_attr_name = 'PROTOCOL_{}'.format(compose_tls_version)
-    if not hasattr(ssl, tls_attr_name):
-        log.warning(
-            'The '{}' protocol is unavailable. You may need to update your '
-            'version of Python or OpenSSL. Falling back to TLSv1 (default).'
-            .format(compose_tls_version)
-        )
-        return None
-    
-            if parse_func is None:
-            def parse_func(m):
-                return m or {}
-    
-        def test_tls_verify_env_falsy_value(self):
-        environment = Environment({'DOCKER_TLS_VERIFY': '0'})
-        options = {'--tls': True}
-        assert tls_config_from_options(options, environment) is True
-    
-        if 'ports' in service_dict:
-        service_dict['ports'] = [
-            p.legacy_repr() if p.external_ip or version < V3_2 else p
-            for p in service_dict['ports']
-        ]
-    if 'volumes' in service_dict and (version < V2_3 or (version > V3_0 and version < V3_2)):
-        service_dict['volumes'] = [
-            v.legacy_repr() if isinstance(v, types.MountSpec) else v for v in service_dict['volumes']
-        ]
-    
-        @classmethod
-    def from_ps(cls, client, dictionary, **kwargs):
-        '''
-        Construct a container object from the output of GET /containers/json.
-        '''
-        name = get_container_name(dictionary)
-        if name is None:
-            return None
-    
-    
-def pypi_upload(args):
-    print('Uploading to PyPi')
     try:
-        rel = args.release.replace('-rc', 'rc')
-        twine_upload([
-            'dist/docker_compose-{}*.whl'.format(rel),
-            'dist/docker-compose-{}*.tar.gz'.format(rel)
-        ])
-    except HTTPError as e:
-        if e.response.status_code == 400 and 'File already exists' in str(e):
-            if not args.finalize_resume:
-                raise ScriptError(
-                    'Package already uploaded on PyPi.'
-                )
-            print('Skipping PyPi upload - package already uploaded')
+    input = raw_input
+except NameError:
+    pass
+    
+        outfile, = args
+    
+        def _create_alert_policy(self):
+        '''
+        Create an alert Policy using the CLC API.
+        :return: response dictionary from the CLC API.
+        '''
+        p = self.module.params
+        alias = p['alias']
+        email_list = p['alert_recipients']
+        metric = p['metric']
+        duration = p['duration']
+        threshold = p['threshold']
+        policy_name = p['name']
+        arguments = json.dumps(
+            {
+                'name': policy_name,
+                'actions': [{
+                    'action': 'email',
+                    'settings': {
+                        'recipients': email_list
+                    }
+                }],
+                'triggers': [{
+                    'metric': metric,
+                    'duration': duration,
+                    'threshold': threshold
+                }]
+            }
+        )
+        try:
+            result = self.clc.v2.API.Call(
+                'POST',
+                '/v2/alertPolicies/%s' % alias,
+                arguments)
+        except APIFailedResponse as e:
+            return self.module.fail_json(
+                msg='Unable to create alert policy '{0}'. {1}'.format(
+                    policy_name, str(e.response_text)))
+        return result
+    
+        def _get_loadbalancer_list(self, alias, location):
+        '''
+        Retrieve a list of loadbalancers
+        :param alias: Alias for account
+        :param location: Datacenter
+        :return: JSON data for all loadbalancers at datacenter
+        '''
+        result = None
+        try:
+            result = self.clc.v2.API.Call(
+                'GET', '/v2/sharedLoadBalancers/%s/%s' % (alias, location))
+        except APIFailedResponse as e:
+            self.module.fail_json(
+                msg='Unable to fetch load balancers for account: {0}. {1}'.format(
+                    alias, str(e.response_text)))
+        return result
+    
+    # Gracefully disable a member from a loadbalancer node:
+- apache2_mod_proxy:
+    balancer_vhost: '{{ vhost_host }}'
+    member_host: '{{ member.host }}'
+    state: drained
+  delegate_to: myloadbalancernode
+- wait_for:
+    host: '{{ member.host }}'
+    port: '{{ member.port }}'
+    state: drained
+  delegate_to: myloadbalancernode
+- apache2_mod_proxy:
+    balancer_vhost: '{{ vhost_host }}'
+    member_host: '{{ member.host }}'
+    state: absent
+  delegate_to: myloadbalancernode
+'''
+    
+            # Remove the params
+        module.params.pop('params', None)
+    
+        module.exit_json(changed=ldap.passwd_set())
+    
+        api_key = module.params.get('api_key')
+    api_password = module.params.get('api_password')
+    customer_id = module.params.get('customer_id')
+    domain = module.params.get('domain')
+    record_type = module.params.get('type')
+    record = module.params.get('record')
+    value = module.params.get('value')
+    priority = module.params.get('priority')
+    solo = module.params.get('solo')
+    state = module.params.get('state')
+    
+        # If in check mode, exit saying that we succeeded
+    if module.check_mode:
+        module.exit_json(changed=False, msg='OK')
+    
+    ANSIBLE_METADATA = {
+    'metadata_version': '1.1',
+    'status': ['preview'],
+    'supported_by': 'community'
+}
+    
+    # setup configuration :
+# ufw reset
+# ufw enable
+# ufw allow proto udp to any port 5353 from 224.0.0.251
+# ufw allow proto udp to any port 5353 from ff02::fb
+dry_mode_cmd_with_ipv6 = {
+    'ufw status verbose': ufw_status_verbose_with_ipv6,
+    'ufw --version': ufw_version_35,
+    # CONTENT of the command sudo ufw --dry-run delete allow in from ff02::fb port 5353 proto udp | grep -E '^### tupple'
+    'ufw --dry-run delete allow from ff02::fb to any port 5353 proto udp': '### tuple ### allow udp any ::/0 5353 ff02::fb in',
+    grep_config_cli: user_rules_with_ipv6,
+    'ufw --dry-run allow from ff02::fb to any port 5353 proto udp': skippg_adding_existing_rules,
+    'ufw --dry-run allow from 224.0.0.252 to any port 5353 proto udp': '''### tuple ### allow udp 5353 0.0.0.0/0 any 224.0.0.251 in
+### tuple ### allow udp 5353 0.0.0.0/0 any 224.0.0.252 in
+''',
+    'ufw --dry-run allow from 10.0.0.0/24 to any port 1577 proto udp': '### tuple ### allow udp 1577 0.0.0.0/0 any 10.0.0.0/24 in'
+}
+    
+        def __enter__(self):
+        if not hasattr(Context._default_ctx, 'value'):
+            Context._default_ctx.value = Context('cpu', 0)
+        self._old_ctx = Context._default_ctx.value
+        Context._default_ctx.value = self
+        return self
+    
+            str_list = []
+        for index in range(self.num_images):
+            progress_bar(index, self.num_images)
+            label = self.label_from_index(index)
+            if label.size < 1:
+                continue
+            path = self.image_path_from_index(index)
+            if root:
+                path = osp.relpath(path, root)
+            str_list.append('\t'.join([str(index), str(2), str(label.shape[1])] \
+              + ['{0:.4f}'.format(x) for x in label.ravel()] + [path,]) + '\n')
+        if str_list:
+            if shuffle:
+                import random
+                random.shuffle(str_list)
+            if not fname:
+                fname = self.name + '.lst'
+            with open(fname, 'w') as f:
+                for line in str_list:
+                    f.write(line)
         else:
-            raise ScriptError('Unexpected HTTP error uploading package to PyPi: {}'.format(e))
+            raise RuntimeError('No image in imdb')
     
+        network = None if args.deploy_net else args.network
+    class_names = parse_class_names(args.class_names)
+    data_shape = parse_data_shape(args.data_shape)
+    if args.prefix.endswith('_'):
+        prefix = args.prefix + args.network + '_' + str(data_shape[0])
+    else:
+        prefix = args.prefix
+    detector = get_detector(network, prefix, args.epoch,
+                            data_shape,
+                            (args.mean_r, args.mean_g, args.mean_b),
+                            ctx, len(class_names), args.nms_thresh, args.force_nms)
+    # run detection
+    detector.detect_and_visualize(image_list, args.dir, args.extension,
+                                  class_names, args.thresh, args.show_timer)
     
-def ansi_color(code, s):
-    return '{0}{1}{2}'.format(ansi(code), s, ansi(0))
+    def Conv(data, num_filter, kernel=(1, 1), stride=(1, 1), pad=(0, 0), name=None, suffix=''):
+    conv = mx.sym.Convolution(data=data, num_filter=num_filter, kernel=kernel, stride=stride, pad=pad, no_bias=True, name='%s%s_conv2d' %(name, suffix))
+    bn = mx.sym.BatchNorm(data=conv, name='%s%s_batchnorm' %(name, suffix), fix_gamma=True)
+    act = mx.sym.Activation(data=bn, act_type='relu', name='%s%s_relu' %(name, suffix))
+    return act
     
+    def read_caffemodel(prototxt_fname, caffemodel_fname):
+    '''Return a caffe_pb2.NetParameter object that defined in a binary
+    caffemodel file
+    '''
+    if use_caffe:
+        caffe.set_mode_cpu()
+        net = caffe.Net(prototxt_fname, caffemodel_fname, caffe.TEST)
+        layer_names = net._layer_names
+        layers = net.layers
+        return (layers, layer_names)
+    else:
+        proto = caffe_pb2.NetParameter()
+        with open(caffemodel_fname, 'rb') as f:
+            proto.ParseFromString(f.read())
+        return (get_layers(proto), None)
     
-def set_signal_handler_to_shutdown():
-    set_signal_handler(shutdown)
+                layer_name_to_record[layer_def.name] = LayerRecord(layer_def)
+    
+    def main():
+    parser = argparse.ArgumentParser(description='Convert caffe mean')
+    parser.add_argument('binaryproto_fname', help='Filename of the mean')
+    parser.add_argument('output', help='The name of the output file')
+    args = parser.parse_args()
+    convert_mean(args.binaryproto_fname, args.output)
