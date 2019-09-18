@@ -1,160 +1,197 @@
 
         
-                # vvvvid embed_info decryption algorithm is reverse engineered from function $ds(h) at vvvvid.js
-        def ds(h):
-            g = 'MNOPIJKL89+/4567UVWXQRSTEFGHABCDcdefYZabstuvopqr0123wxyzklmnghij'
+        install_requires = ['psutil', 'colorama', 'six', 'decorator', 'pyte']
+extras_require = {':python_version<'3.4'': ['pathlib2'],
+                  ':python_version<'3.3'': ['backports.shutil_get_terminal_size'],
+                  ':sys_platform=='win32'': ['win_unicode_console']}
     
-            title = self._html_search_regex(
-            (r'<[^>]+\bid=['\']video-title[^>]+>([^<]+)', r'<title>([^<]+)'),
-            webpage, 'title', default=None) or self._html_search_meta(
-            'description', webpage, 'title',
-            default=None) or self._og_search_description(webpage)
+        def test_how_to_configure_when_config_not_found(self, shell,
+                                                    config_exists):
+        config_exists.return_value = False
+        assert not shell.how_to_configure().can_configure_automatically
     
-        def _extract_video_info(self, content_id, site='cbs', mpx_acc=2198311517):
-        items_data = self._download_xml(
-            'http://can.cbs.com/thunder/player/videoPlayerService.php',
-            content_id, query={'partner': site, 'contentId': content_id})
-        video_data = xpath_element(items_data, './/item')
-        title = xpath_text(video_data, 'videoTitle', 'title', True)
-        tp_path = 'dJ5BDC/media/guid/%d/%s' % (mpx_acc, content_id)
-        tp_release_url = 'http://link.theplatform.com/s/' + tp_path
+        def test_and_(self, shell):
+        assert shell.and_('ls', 'cd') == '(ls) -and (cd)'
     
-    
-class Go90IE(InfoExtractor):
-    _VALID_URL = r'https?://(?:www\.)?go90\.com/(?:videos|embed)/(?P<id>[0-9a-zA-Z]+)'
-    _TESTS = [{
-        'url': 'https://www.go90.com/videos/84BUqjLpf9D',
-        'md5': 'efa7670dbbbf21a7b07b360652b24a32',
-        'info_dict': {
-            'id': '84BUqjLpf9D',
-            'ext': 'mp4',
-            'title': 'Daily VICE - Inside The Utah Coalition Against Pornography Convention',
-            'description': 'VICE\'s Karley Sciortino meets with activists who discuss the state\'s strong anti-porn stance. Then, VICE Sports explains NFL contracts.',
-            'timestamp': 1491868800,
-            'upload_date': '20170411',
-            'age_limit': 14,
-        }
-    }, {
-        'url': 'https://www.go90.com/embed/261MflWkD3N',
-        'only_matching': True,
-    }]
-    _GEO_BYPASS = False
-    
-    filenames = {
-    'bin': 'youtube-dl',
-    'exe': 'youtube-dl.exe',
-    'tar': 'youtube-dl-%s.tar.gz' % version}
-build_dir = os.path.join('..', '..', 'build', version)
-for key, filename in filenames.items():
-    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
-    fn = os.path.join(build_dir, filename)
-    with open(fn, 'rb') as f:
-        data = f.read()
-    if not data:
-        raise ValueError('File %s is empty!' % fn)
-    sha256sum = hashlib.sha256(data).hexdigest()
-    new_version[key] = (url, sha256sum)
-    
-    
-parser = youtube_dl.parseOpts()[0]
-build_completion(parser)
+        @pytest.mark.parametrize('side_effect, exception', [
+        ([b'\n'], IndexError), (OSError, OSError)])
+    def test_get_version_error(self, side_effect, exception, shell, Popen):
+        Popen.return_value.stdout.read.side_effect = side_effect
+        with pytest.raises(exception):
+            shell._get_version()
+        assert Popen.call_args[0][0] == ['tcsh', '--version']
 
     
+        @memoize
+    def get_aliases(self):
+        raw_aliases = os.environ.get('TF_SHELL_ALIASES', '').split('\n')
+        return dict(self._parse_alias(alias)
+                    for alias in raw_aliases if alias and '=' in alias)
     
-def _mkdir(d):
-    if not os.path.exists(d):
-        os.mkdir(d)
+            In most of shells we change history on shell-level, but not
+        all shells support it (Fish).
     
-    # Add any paths that contain custom static files (such as style sheets)
-# here, relative to this directory. They are copied after the builtin
-# static files, so a file named 'default.css' will overwrite the builtin
-# 'default.css'.
-html_static_path = ['_static']
     
-        :param X_img_path: path to image to be recognized
-    :param knn_clf: (optional) a knn classifier object. if not specified, model_save_path must be specified.
-    :param model_path: (optional) path to a pickled knn classifier. if not specified, model_save_path must be knn_clf.
-    :param distance_threshold: (optional) distance threshold for face classification. the larger it is, the more chance
-           of mis-classifying an unknown person as a known one.
-    :return: a list of names and face locations for the recognized faces in the image: [(name, bounding box), ...].
-        For faces of unrecognized persons, the name 'unknown' will be returned.
+@for_app('pyenv')
+def match(command):
+    return 'pyenv: no such command' in command.output
+    
+        def validate(self, value):
+        '''Validate that the input is a list or tuple.'''
+        if self.required and not value:
+            raise ValidationError(self.error_messages['required'], code='required')
+        # Validate that each value in the value list is in self.choices.
+        for val in value:
+            if not self.valid_value(val):
+                raise ValidationError(
+                    self.error_messages['invalid_choice'],
+                    code='invalid_choice',
+                    params={'value': val},
+                )
+    
+            self.selenium.find_element_by_xpath('//input[@value='Save']').click()
+        self.wait_page_loaded()
+    
+        def test_related_aggregates_m2m_and_fk(self):
+        q = Q(friends__book__publisher__name='Apress') & ~Q(friends__name='test3')
+        agg = Sum('friends__book__pages', filter=q)
+        self.assertEqual(Author.objects.filter(name='test').aggregate(pages=agg)['pages'], 528)
+    
+    
+def copytree(src, dst):
+    shutil.copytree(src, dst, ignore=shutil.ignore_patterns('__pycache__'))
+    
+    
+class Driver(GDALBase):
     '''
-    if not os.path.isfile(X_img_path) or os.path.splitext(X_img_path)[1][1:] not in ALLOWED_EXTENSIONS:
-        raise Exception('Invalid image path: {}'.format(X_img_path))
+    Wrap a GDAL/OGR Data Source Driver.
+    For more information, see the C API source code:
+    https://www.gdal.org/gdal_8h.html - https://www.gdal.org/ogr__api_8h.html
+    '''
     
-        # Print the location of each face in this image
-    top, right, bottom, left = face_location
-    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
+        @property
+    def num_fields(self):
+        'Return the number of fields in the Feature.'
+        return capi.get_feat_field_count(self.ptr)
     
-    # You can change this to any folder on your system
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+            # Preprocess json inputs. This converts json strings to dictionaries,
+        # which are parsed below the same way as direct dictionary inputs.
+        if isinstance(ds_input, str) and json_regex.match(ds_input):
+            ds_input = json.loads(ds_input)
     
-        pool.starmap(test_image, function_parameters)
+        # #### Binary predicates. ####
+    def contains(self, other):
+        'Return true if other.within(this) returns true.'
+        return capi.geos_contains(self.ptr, other.ptr)
     
-        # Find all the faces and face encodings in the current frame of video
+        def test_mark_safe_lazy(self):
+        s = lazystr('a&b')
+    
+        plot_feature_times(all_times, batch_size, all_features, data)
+    plot_feature_errors(all_errors, batch_size, all_features, data)
+    
+    
+def rbf_kernels(X, n_jobs):
+    return pairwise_kernels(X, metric='rbf', n_jobs=n_jobs, gamma=0.1)
+    
+    from time import time
+    
+    
+if __name__ == '__main__':
+    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
+    # block to be able to use a multi-core grid search that also works under
+    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
+    # The multiprocessing module is used as the backend of joblib.Parallel
+    # that is used when n_jobs != 1 in GridSearchCV
+    
+    import numpy as np
+from sklearn.covariance import EllipticEnvelope
+from sklearn.svm import OneClassSVM
+import matplotlib.pyplot as plt
+import matplotlib.font_manager
+from sklearn.datasets import load_boston
+    
+    estimators = [('k_means_iris_8', KMeans(n_clusters=8)),
+              ('k_means_iris_3', KMeans(n_clusters=3)),
+              ('k_means_iris_bad_init', KMeans(n_clusters=3, n_init=1,
+                                               init='random'))]
+    
+    plt.show()
+
+    
+    TEST_IMAGES = [
+    'obama-240p.jpg',
+    'obama-480p.jpg',
+    'obama-720p.jpg',
+    'obama-1080p.jpg'
+]
+    
+    # Load a test image and get encondings for it
+image_to_test = face_recognition.load_image_file('obama2.jpg')
+image_to_test_encoding = face_recognition.face_encodings(image_to_test)[0]
+    
+    for face_landmarks in face_landmarks_list:
+    
+        # Find all the faces and face enqcodings in the frame of video
     face_locations = face_recognition.face_locations(rgb_frame)
     face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
     
+        # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
+    rgb_small_frame = small_frame[:, :, ::-1]
     
-def detect_faces_in_image(file_stream):
-    # 用face_recognition.face_encodings(img)接口提前把奥巴马人脸的编码录入
-    known_face_encoding = [-0.09634063,  0.12095481, -0.00436332, -0.07643753,  0.0080383,
-                            0.01902981, -0.07184699, -0.09383309,  0.18518871, -0.09588896,
-                            0.23951106,  0.0986533 , -0.22114635, -0.1363683 ,  0.04405268,
-                            0.11574756, -0.19899382, -0.09597053, -0.11969153, -0.12277931,
-                            0.03416885, -0.00267565,  0.09203379,  0.04713435, -0.12731361,
-                           -0.35371891, -0.0503444 , -0.17841317, -0.00310897, -0.09844551,
-                           -0.06910533, -0.00503746, -0.18466514, -0.09851682,  0.02903969,
-                           -0.02174894,  0.02261871,  0.0032102 ,  0.20312519,  0.02999607,
-                           -0.11646006,  0.09432904,  0.02774341,  0.22102901,  0.26725179,
-                            0.06896867, -0.00490024, -0.09441824,  0.11115381, -0.22592428,
-                            0.06230862,  0.16559327,  0.06232892,  0.03458837,  0.09459756,
-                           -0.18777156,  0.00654241,  0.08582542, -0.13578284,  0.0150229 ,
-                            0.00670836, -0.08195844, -0.04346499,  0.03347827,  0.20310158,
-                            0.09987706, -0.12370517, -0.06683611,  0.12704916, -0.02160804,
-                            0.00984683,  0.00766284, -0.18980607, -0.19641446, -0.22800779,
-                            0.09010898,  0.39178532,  0.18818057, -0.20875394,  0.03097027,
-                           -0.21300618,  0.02532415,  0.07938635,  0.01000703, -0.07719778,
-                           -0.12651891, -0.04318593,  0.06219772,  0.09163868,  0.05039065,
-                           -0.04922386,  0.21839413, -0.02394437,  0.06173781,  0.0292527 ,
-                            0.06160797, -0.15553983, -0.02440624, -0.17509389, -0.0630486 ,
-                            0.01428208, -0.03637431,  0.03971229,  0.13983178, -0.23006812,
-                            0.04999552,  0.0108454 , -0.03970895,  0.02501768,  0.08157793,
-                           -0.03224047, -0.04502571,  0.0556995 , -0.24374914,  0.25514284,
-                            0.24795187,  0.04060191,  0.17597422,  0.07966681,  0.01920104,
-                           -0.01194376, -0.02300822, -0.17204897, -0.0596558 ,  0.05307484,
-                            0.07417042,  0.07126575,  0.00209804]
-    
-    import getopt
-import os
-import platform
-import sys
-from .version import script_name, __version__
-from .util import git, log
-    
-        if '_text' in dictified['video'][0]['file'][0]:  #link exist
-        video_dict['links'] = [i['file'][0]['_text'].strip() for i in dictified['video']]
-    
-        def extract(self, **kwargs):
-        if 'stream_id' in kwargs and kwargs['stream_id']:
-            i = kwargs['stream_id']
-            if 'size' not in self.streams[i]:
-                self.streams[i]['size'] = urls_size(self.streams[i]['src'])
-    
-        Args:
-      clean_lines: A CleansedLines instance containing the file.
-      linenum: The number of the line to check.
-      pos: position just after the suspected template argument.
-    Returns:
-      True if (linenum, pos) is inside template arguments.
+        # 图片上传失败，输出以下html代码
+    return '''
+    <!doctype html>
+    <title>Is this a picture of Obama?</title>
+    <h1>Upload a picture and see if it's a picture of Obama!</h1>
+    <form method='POST' enctype='multipart/form-data'>
+      <input type='file' name='file'>
+      <input type='submit' value='Upload'>
+    </form>
     '''
-    while linenum < clean_lines.NumLines():
-      # Find the earliest character that might indicate a template argument
-      line = clean_lines.elided[linenum]
-      match = Match(r'^[^{};=\[\]\.<>]*(.)', line[pos:])
-      if not match:
-        linenum += 1
-        pos = 0
-        continue
-      token = match.group(1)
-      pos += len(match.group(0))
+    
+    setup(
+    name='face_recognition',
+    version='1.2.3',
+    description='Recognize faces from Python or from the command line',
+    long_description=readme + '\n\n' + history,
+    author='Adam Geitgey',
+    author_email='ageitgey@gmail.com',
+    url='https://github.com/ageitgey/face_recognition',
+    packages=[
+        'face_recognition',
+    ],
+    package_dir={'face_recognition': 'face_recognition'},
+    package_data={
+        'face_recognition': ['models/*.dat']
+    },
+    entry_points={
+        'console_scripts': [
+            'face_recognition=face_recognition.face_recognition_cli:main',
+            'face_detection=face_recognition.face_detection_cli:main'
+        ]
+    },
+    install_requires=requirements,
+    license='MIT license',
+    zip_safe=False,
+    keywords='face_recognition',
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+    ],
+    test_suite='tests',
+    tests_require=test_requirements
+)
+
+    
+        #Unless specified otherwise by the user, this is the default colorscheme
+    colorscheme = 'basic'
