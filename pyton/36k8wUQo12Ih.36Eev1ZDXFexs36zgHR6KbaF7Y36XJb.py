@@ -1,146 +1,217 @@
 
         
-        from ._compat import collections_abc
-from .helpers import is_ip
-from .helpers import total_seconds
-from .json.tag import TaggedJSONSerializer
+            def __init__(self, *args, **kwargs):
+        '''Initialize RequestException with `request` and `response` objects.'''
+        response = kwargs.pop('response', None)
+        self.response = response
+        self.request = kwargs.pop('request', None)
+        if (response is not None and not self.request and
+                hasattr(response, 'request')):
+            self.request = self.response.request
+        super(RequestException, self).__init__(*args, **kwargs)
     
-        import site_package
+    import pytest
+from requests.compat import urljoin
     
-    '''
-Note:
-batch_size is highly sensitive.
-Only 2 epochs are needed as the dataset is very small.
-'''
+        def test_repr(self):
+        assert repr(self.lookup_dict) == '<lookup 'test'>'
     
-        @threadsafe_generator
-    def custom_generator():
-        '''Raises an exception after a few good batches'''
-        batch_size = 10
-        n_samples = 50
+        def __iter__(self):
+        return (casedkey for casedkey, mappedvalue in self._store.values())
     
-    from .. import backend as K
-from .. import activations
-from .. import initializers
-from .. import regularizers
-from .. import constraints
-from ..engine.base_layer import Layer
-from ..engine.base_layer import InputSpec
-from ..utils import conv_utils
-from ..legacy import interfaces
+        def test_proxy_error_on_bad_url(self, httpbin, httpbin_secure):
+        with pytest.raises(InvalidProxyURL):
+            requests.get(httpbin_secure(), proxies={'https': 'http:/badproxyurl:3128'})
     
-                return K.in_train_phase(dropped_inputs, inputs, training=training)
-        return inputs
+        def __setstate__(self, state):
+        # Can't handle by adding 'proxy_manager' to self.__attrs__ because
+        # self.poolmanager uses a lambda function, which isn't pickleable.
+        self.proxy_manager = {}
+        self.config = {}
     
-        # Informational.
-    100: ('continue',),
-    101: ('switching_protocols',),
-    102: ('processing',),
-    103: ('checkpoint',),
-    122: ('uri_too_long', 'request_uri_too_long'),
-    200: ('ok', 'okay', 'all_ok', 'all_okay', 'all_good', '\\o/', '✓'),
-    201: ('created',),
-    202: ('accepted',),
-    203: ('non_authoritative_info', 'non_authoritative_information'),
-    204: ('no_content',),
-    205: ('reset_content', 'reset'),
-    206: ('partial_content', 'partial'),
-    207: ('multi_status', 'multiple_status', 'multi_stati', 'multiple_stati'),
-    208: ('already_reported',),
-    226: ('im_used',),
+            if isinstance(hook, Callable):
+            self.hooks[event].append(hook)
+        elif hasattr(hook, '__iter__'):
+            self.hooks[event].extend(h for h in hook if isinstance(h, Callable))
     
-            if self._thread_local.pos is not None:
-            # Rewind the file position indicator of the body to where
-            # it was to resend the request.
-            r.request.body.seek(self._thread_local.pos)
-        s_auth = r.headers.get('www-authenticate', '')
+            with server as address:
+            sock1 = socket.socket()
+            sock2 = socket.socket()
     
-    '''
-requests._internal_utils
-~~~~~~~~~~~~~~
+        def test_zipped_paths_extracted(self, tmpdir):
+        zipped_py = tmpdir.join('test.zip')
+        with zipfile.ZipFile(zipped_py.strpath, 'w') as f:
+            f.write(__file__)
+    
+    When starting from the default values (alpha_init = 1.90, lambda_init = 1.),
+the bias of the resulting curve is large, and the variance is small.
+So, lambda_init should be relatively small (1.e-3) so as to reduce the bias.
+    
+    # Define datasets
+blobs_params = dict(random_state=0, n_samples=n_inliers, n_features=2)
+datasets = [
+    make_blobs(centers=[[0, 0], [0, 0]], cluster_std=0.5,
+               **blobs_params)[0],
+    make_blobs(centers=[[2, 2], [-2, -2]], cluster_std=[0.5, 0.5],
+               **blobs_params)[0],
+    make_blobs(centers=[[2, 2], [-2, -2]], cluster_std=[1.5, .3],
+               **blobs_params)[0],
+    4. * (make_moons(n_samples=n_samples, noise=.05, random_state=0)[0] -
+          np.array([0.5, 0.25])),
+    14. * (np.random.RandomState(42).rand(n_samples, 2) - 0.5)]
+    
+        # The following swapping makes life easier since m is assumed to be the
+    # smaller integer below.
+    if m > n:
+        m, n = n, m
+    
+        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
+    plt.plot(sample_sizes, one_core, label='one core')
+    plt.plot(sample_sizes, multi_core, label='multi core')
+    plt.xlabel('n_samples')
+    plt.ylabel('Time (s)')
+    plt.title('Parallel %s' % func.__name__)
+    plt.legend()
+    
+    We generate data from three groups of waveforms. Two of the waveforms
+(waveform 1 and waveform 2) are proportional one to the other. The cosine
+distance is invariant to a scaling of the data, as a result, it cannot
+distinguish these two waveforms. Thus even with no noise, clustering
+using this distance will not separate out waveform 1 and 2.
     
     
-def consume_socket_content(sock, timeout=0.5):
-    chunks = 65536
-    content = b''
-    
-        styles = {
-        # No corresponding class for the following:
-        #Text:                     '', # class:  ''
-        Whitespace:                'underline #f8f8f8',      # class: 'w'
-        Error:                     '#a40000 border:#ef2929', # class: 'err'
-        Other:                     '#000000',                # class 'x'
-    }
-    
-    from requests.help import info
+class Handler(object):
+    __metaclass__ = abc.ABCMeta
     
         @staticmethod
-    def _compare_get_request_with_dict(response, firewall_dict):
-        '''
-        Helper method to compare the json response for getting the firewall policy with the request parameters
-        :param response: response from the get method
-        :param firewall_dict: dictionary of request parameters for firewall policy
-        :return: changed: Boolean that returns true if there are differences between
-                          the response parameters and the playbook parameters
-        '''
-    
-            if state == 'absent':
-            changed, group, requests = self._ensure_group_is_absent(
-                group_name=group_name, parent_name=parent_name)
-            if requests:
-                self._wait_for_requests_to_complete(requests)
-        else:
-            changed, group = self._ensure_group_is_present(
-                group_name=group_name, parent_name=parent_name, group_description=group_description)
-        try:
-            group = group.data
-        except AttributeError:
-            group = group_name
-        self.module.exit_json(changed=changed, group=group)
+    def check_range(request):
+        if 0 <= request < 10:
+            print('request {} handled in handler 0'.format(request))
+            return True
     
     
-if __name__ == '__main__':
-    main()
+def count_to(count):
+    '''Counts by word numbers, up to a maximum of five'''
+    numbers = ['one', 'two', 'three', 'four', 'five']
+    for number in numbers[:count]:
+        yield number
+    
+    *References:
+https://sourcemaking.com/design_patterns/facade
+https://fkromer.github.io/python-pattern-references/design/#facade
+http://python-3-patterns-idioms-test.readthedocs.io/en/latest/ChangeInterface.html#facade
+    
+    
+class DiscreteEnv(Env):
+    
+        def _viewer_setup(self):
+        body_id = self.sim.model.body_name2id('robot0:palm')
+        lookat = self.sim.data.body_xpos[body_id]
+        for idx, value in enumerate(lookat):
+            self.viewer.cam.lookat[idx] = value
+        self.viewer.cam.distance = 0.5
+        self.viewer.cam.azimuth = 55.
+        self.viewer.cam.elevation = -25.
+    
+        def viewer_setup(self):
+        self.viewer.cam.trackbodyid = 1
+        self.viewer.cam.distance = self.model.stat.extent * 1.0
+        self.viewer.cam.lookat[2] = 0.8925
+        self.viewer.cam.elevation = -20
 
     
-    TAIGA_IMP_ERR = None
-try:
-    from taiga import TaigaAPI
-    from taiga.exceptions import TaigaException
-    TAIGA_MODULE_IMPORTED = True
-except ImportError:
-    TAIGA_IMP_ERR = traceback.format_exc()
-    TAIGA_MODULE_IMPORTED = False
+            1) Arrow Keys: Discrete 5  - NOOP[0], UP[1], RIGHT[2], DOWN[3], LEFT[4]  - params: min: 0, max: 4
+        2) Button A:   Discrete 2  - NOOP[0], Pressed[1] - params: min: 0, max: 1
+        3) Button B:   Discrete 2  - NOOP[0], Pressed[1] - params: min: 0, max: 1
     
+            class LidarCallback(Box2D.b2.rayCastCallback):
+            def ReportFixture(self, fixture, point, normal, fraction):
+                if (fixture.filterData.categoryBits & 1) == 0:
+                    return 1
+                self.p2 = point
+                self.fraction = fraction
+                return 0
+        self.lidar = [LidarCallback() for _ in range(10)]
     
-if __name__ == '__main__':
-    main()
+        def reset(self):
+        self.number = self.np_random.uniform(-self.range, self.range)
+        self.guess_count = 0
+        self.observation = 0
+        return self.observation
 
     
-            message = sendgrid.Mail()
-        message.set_subject(subject)
+        def _encode_ansi_frame(self, frame):
+        if not self.encoder:
+            self.encoder = TextEncoder(self.path, self.frames_per_sec)
+            self.metadata['encoder_version'] = self.encoder.version_info
+        self.encoder.capture_frame(frame)
+        self.empty = False
+    
+            if self.cube_x-1 < 0 or self.cube_x+1 >= FIELD_W:
+            done = True
+            reward = -1
+        elif self.cube_y+1 >= FIELD_H-5:
+            if dist >= HOLE_WIDTH//2:
+                done = True
+                reward = -1
+            elif self.cube_y == FIELD_H:
+                done = True
+                reward = +1
+        self.last_obs = obs
+        return obs, reward, done, {}
+    
+            self._tag(COMPOSE_TESTS_IMAGE_BASE_NAME, self.version, 'latest')
+    
+            return TLSConfig(
+            client_cert=client_cert, verify=verify, ca_cert=ca_cert,
+            assert_hostname=False if skip_hostname_check else None,
+            ssl_version=tls_version
+        )
+    
+        @pytest.mark.skipif(not hasattr(ssl, 'PROTOCOL_TLSv1_2'), reason='TLS v1.2 unsupported')
+    def test_get_tls_version_upgrade(self):
+        environment = {'COMPOSE_TLS_VERSION': 'TLSv1_2'}
+        assert get_tls_version(environment) == ssl.PROTOCOL_TLSv1_2
+    
+    API_VERSION_TO_ENGINE_VERSION = {
+    API_VERSIONS[COMPOSEFILE_V1]: '1.9.0',
+    API_VERSIONS[COMPOSEFILE_V2_0]: '1.10.0',
+    API_VERSIONS[COMPOSEFILE_V2_1]: '1.12.0',
+    API_VERSIONS[COMPOSEFILE_V2_2]: '1.13.0',
+    API_VERSIONS[COMPOSEFILE_V2_3]: '17.06.0',
+    API_VERSIONS[COMPOSEFILE_V2_4]: '17.12.0',
+    API_VERSIONS[COMPOSEFILE_V3_0]: '1.13.0',
+    API_VERSIONS[COMPOSEFILE_V3_1]: '1.13.0',
+    API_VERSIONS[COMPOSEFILE_V3_2]: '1.13.0',
+    API_VERSIONS[COMPOSEFILE_V3_3]: '17.06.0',
+    API_VERSIONS[COMPOSEFILE_V3_4]: '17.06.0',
+    API_VERSIONS[COMPOSEFILE_V3_5]: '17.06.0',
+    API_VERSIONS[COMPOSEFILE_V3_6]: '18.02.0',
+    API_VERSIONS[COMPOSEFILE_V3_7]: '18.06.0',
+}
+
     
     
-def main():
-    # define module
-    module = AnsibleModule(
-        argument_spec=dict(
-            name=dict(required=True),
-            list_url=dict(aliases=['url']),
-            state=dict(default='present', choices=['present', 'absent', 'updated']),
-            validate_certs=dict(required=False, default=True, type='bool'),
-        ),
-        supports_check_mode=True
-    )
+class ComposeFileNotFound(ConfigurationError):
+    def __init__(self, supported_filenames):
+        super(ComposeFileNotFound, self).__init__('''
+        Can't find a suitable configuration file in this directory or any
+        parent. Are you in the right directory?
     
-            if not props_match:
-            if not module.check_mode:
-                try:
-                    ucs.login_handle.add_mo(mo, modify_present=True)
-                    ucs.login_handle.commit()
-                except Exception as e:
-                    ucs.result['err'] = True
-                    ucs.result['msg'] = 'setup error: %s ' % str(e)
+        if not (config['pypi'].get('username') and config['pypi'].get('password')):
+        raise ScriptError('Missing login/password pair for pypi repo')
+
     
-        print(link)
-    return link
+    NAMES = [
+    'grey',
+    'red',
+    'green',
+    'yellow',
+    'blue',
+    'magenta',
+    'cyan',
+    'white'
+]
+    
+            if command is None:
+            raise SystemExit(command_help)
