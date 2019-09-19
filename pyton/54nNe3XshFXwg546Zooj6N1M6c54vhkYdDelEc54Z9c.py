@@ -1,107 +1,198 @@
 
         
-        try:
-	xrange		#Python 2
-except NameError:
-	xrange = range	#Python 3
+            def send_friend_request(self, friend_id):
+        pass
     
+        def __init__(self, level, row, spot_number, spot_size, vehicle_size):
+        self.level = level
+        self.row = row
+        self.spot_number = spot_number
+        self.spot_size = spot_size
+        self.vehicle_size = vehicle_size
+        self.vehicle = None
+    
+        def categorize(self, transaction):
+        if transaction.seller in self.seller_category_map:
+            return self.seller_category_map[transaction.seller]
+        if transaction.seller in self.seller_category_overrides_map:
+            seller_category_map[transaction.seller] = \
+                self.manual_overrides[transaction.seller].peek_min()
+            return self.seller_category_map[transaction.seller]
+        return None
+    
+            Transform key and value to the form:
+    
+            # put all lines in the file into a Python list
+        strings = f.readlines()
+        
+        # above line leaves trailing newline characters; strip them out
+        strings = [x.strip(u'\n') for x in strings]
+        
+        # remove empty-lines and comments
+        strings = [x for x in strings if x and not x.startswith(u'#')]
+        
+        # insert empty string since all are being removed
+        strings.insert(0, u'')
+    
+    class Iqiyi(VideoExtractor):
+    name = '爱奇艺 (Iqiyi)'
+    
+    def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html(url)
+    title = r1(r'<title>(.*)</title>', html)
+    assert title
+    id = r1(r'flvid\s*=\s*(\d+)', html)
+    assert id
+    baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
+    
+        stream_types = [  # we do now know for now, as we have to check the
+                      # output from the API
+    ]
+    
+    from xml.etree import cElementTree as ET
+from copy import copy
+from ..common import *
+#----------------------------------------------------------------------
+def ckplayer_get_info_by_xml(ckinfo):
+    '''str->dict
+    Information for CKPlayer API content.'''
+    e = ET.XML(ckinfo)
+    video_dict = {'title': '',
+                  #'duration': 0,
+                  'links': [],
+                  'size': 0,
+                  'flashvars': '',}
+    dictified = dictify(e)['ckplayer']
+    if 'info' in dictified:
+        if '_text' in dictified['info'][0]['title'][0]:  #title
+            video_dict['title'] = dictified['info'][0]['title'][0]['_text'].strip()
+    
+        @classmethod
+    def checksum(cls, sha1_str):
+        if len(sha1_str) != 41:
+            return False
+        if not re.match(r'[0-9A-Za-z]{41}', sha1_str):
+            return False
+        sha1 = sha1_str[:-1]
+        if (15 & sum([int(char, 16) for char in sha1])) == int(sha1_str[-1], 16):
+            return True
+        return False
+    
+        返回聚类中心及聚类结果
     '''
-* Wondering how this method works !
-* It's pretty simple.
-* Let's say you need to calculate a ^ b
-* RULE 1 : a ^ b = (a*a) ^ (b/2) ---- example : 4 ^ 4 = (4*4) ^ (4/2) = 16 ^ 2
-* RULE 2 : IF b is ODD, then ---- a ^ b = a * (a ^ (b - 1)) :: where (b - 1) is even.
-* Once b is even, repeat the process to get a ^ b
-* Repeat the process till b = 1 OR b = 0, because a^1 = a AND a^0 = 1
-*
-* As far as the modulo is concerned,
-* the fact : (a*b) % c = ((a%c) * (b%c)) % c
-* Now apply RULE 1 OR 2 whichever is required.
-'''
-
+    # 样本数
+    n = len(data)
     
-        default_settings = {
-        'LOG_LEVEL': 'INFO',
-        'LOGSTATS_INTERVAL': 1,
-        'CLOSESPIDER_TIMEOUT': 10,
-    }
-    
-            sfile = sys.modules[spidercls.__module__].__file__
-        sfile = sfile.replace('.pyc', '.py')
-        self.exitcode = os.system('%s '%s'' % (editor, sfile))
-
-    
-            spidercls = DefaultSpider
-        spider_loader = self.crawler_process.spider_loader
-        if opts.spider:
-            spidercls = spider_loader.load(opts.spider)
-        else:
-            spidercls = spidercls_for_request(spider_loader, request, spidercls)
-        self.crawler_process.crawl(spidercls, start_requests=lambda: [request])
-        self.crawler_process.start()
-
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
-                          help='set spider argument (may be repeated)')
-        parser.add_option('-o', '--output', metavar='FILE',
-                          help='dump scraped items into FILE (use - for stdout)')
-        parser.add_option('-t', '--output-format', metavar='FORMAT',
-                          help='format to use for dumping items with -o')
+    from nltk.tokenize import RegexpTokenizer
+from nltk import PorterStemmer
     
     
-# XXX: move it to w3lib?
-_ajax_crawlable_re = re.compile(six.u(r'<meta\s+name=['\']fragment['\']\s+content=['\']!['\']/?>'))
-def _has_ajaxcrawlable_meta(text):
-    '''
-    >>> _has_ajaxcrawlable_meta('<html><head><meta name='fragment'  content='!'/></head><body></body></html>')
-    True
-    >>> _has_ajaxcrawlable_meta('<html><head><meta name='fragment' content='!'></head></html>')
-    True
-    >>> _has_ajaxcrawlable_meta('<html><head><!--<meta name='fragment'  content='!'/>--></head><body></body></html>')
-    False
-    >>> _has_ajaxcrawlable_meta('<html></html>')
-    False
-    '''
-    
-        if temperature_unit != ha_unit:
-        temperature = convert_temperature(
-            temperature, temperature_unit, ha_unit)
-    
-    
-def rand_center(data, k):
-    '''随机采样 k 个样本作为聚类中心'''
-    centers = np.array(random.sample(list(data), k))
-    return centers
-    
-    
-def multi_dense(x, n_unit_ls, act_fn=relu, name=None):
-    '''多层全连接
+def linear_dense(x, n_unit, name=None, reuse=None):
+    '''线性全连接层
     Input shape:  [batch_size, n_input]
-    Output shape: [batch_size, n_unit_list[-1]]
+    Output shape: [batch_size, n_unit]
     
     
+def multi_highway_conv2d(x, kernel_size, n_layer,
+                         act_fn=relu,
+                         strides=1,
+                         padding='SAME',
+                         carry_bias=-1.0,
+                         name=None):
+    '''多层 highway_conv2d'''
+    if isinstance(kernel_size, int):
+        kernel_size = [kernel_size] * n_layer
+    
+            # The format of the exponent is inherited from the platform C library.
+        # Known cases are 'e-007' (Windows) and 'e-07' (not Windows).  Since
+        # we're only showing 11 digits, and the 12th isn't close to 5, the
+        # rest of the output should be platform-independent.
+        self.assertRegex(repr(eval(s)), '-3.2171603427[0-9]*e-0+7')
+    
+        def loads(self, buf, **kwds):
+        class PersUnpickler(self.unpickler):
+            def persistent_load(subself, obj):
+                return self.persistent_load(obj)
+        f = io.BytesIO(buf)
+        u = PersUnpickler(f, **kwds)
+        return u.load()
+    
+        This handler is not appropriate for use under Windows, because
+    under Windows open files cannot be moved or renamed - logging
+    opens the files with exclusive locks - and so there is no need
+    for such a handler. Furthermore, ST_INO is not supported under
+    Windows; stat always returns zero for this value.
+    
+        _dispatch[_collections.UserList.__repr__] = _pprint_user_list
+    
+        if args:
+        vals = []
+        for name in args:
+            vals.append(_config_vars.get(name))
+        return vals
+    else:
+        return _config_vars
+    
+    def __dict_replace(s, d):
+    '''Replace substrings of a string using a dictionary.'''
+    for key, value in d.items():
+        s = s.replace(key, value)
+    return s
+    
+        def test_mro_entry_none(self):
+        tested = []
+        class A: ...
+        class B: ...
+        class C:
+            def __mro_entries__(self, bases):
+                tested.append(bases)
+                return ()
+        c = C()
+        self.assertEqual(tested, [])
+        class D(A, c, B): ...
+        self.assertEqual(tested[-1], (A, c, B))
+        self.assertEqual(D.__bases__, (A, B))
+        self.assertEqual(D.__orig_bases__, (A, c, B))
+        self.assertEqual(D.__mro__, (D, A, B, object))
+        class E(c): ...
+        self.assertEqual(tested[-1], (c,))
+        self.assertEqual(E.__bases__, (object,))
+        self.assertEqual(E.__orig_bases__, (c,))
+        self.assertEqual(E.__mro__, (E, object))
+    
+    
+def test_iloc_nonunique():
+    s = Series([0, 1, 2], index=[0, 1, 0])
+    assert s.iloc[2] == 2
 
     
     
-class L1L2Regularizer(object):
-    '''L1 L2 正则化
+def test_get_indexer_nearest():
+    midx = MultiIndex.from_tuples([('a', 1), ('b', 2)])
+    msg = 'method='nearest' not implemented yet for MultiIndex; see GitHub issue 9365'
+    with pytest.raises(NotImplementedError, match=msg):
+        midx.get_indexer(['a'], method='nearest')
+    msg = 'tolerance not implemented yet for MultiIndex'
+    with pytest.raises(NotImplementedError, match=msg):
+        midx.get_indexer(['a'], method='pad', tolerance=2)
+    
+            with tm.assert_produces_warning(FutureWarning, check_stacklevel=False):
+            # GH#22535
+            result = other - rng
+            tm.assert_index_equal(result, -expected)
+    
+    STOP_WORDS = frozenset(('a', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'can',
+                        'for', 'from', 'have', 'if', 'in', 'is', 'it', 'may',
+                        'not', 'of', 'on', 'or', 'tbd', 'that', 'the', 'this',
+                        'to', 'us', 'we', 'when', 'will', 'with', 'yet',
+                        'you', 'your', '的', '了', '和'))
     
     
-def permute(x, perm):
-    '''
-    Examples:
-        x.shape == [128, 32, 1]
-        x = permute(x, [0, 2, 1])
-        x.shape == [128, 1, 32]
+def get_top_states(t_state_v, K=4):
+    return sorted(t_state_v, key=t_state_v.__getitem__, reverse=True)[:K]
     
-    word_unk = 'aam'
-ngrams = compute_ngrams(word_unk, min_ngrams, max_ngrams)  # min_ngrams, max_ngrams = 2, 4
-word_vec = np.zeros(model.vector_size, dtype=np.float32)
-ngrams_found = 0
-for ngram in ngrams:
-    ngram_hash = ft_hash(ngram) % model.bucket
-    if ngram_hash in model.wv.hash2index:
-        word_vec += model.wv.vectors_ngrams[model.wv.hash2index[ngram_hash]]
-        ngrams_found += 1
+    print('='*40)
+print('4. 词性标注')
+print('-'*40)
+    
+    default_encoding='utf-8'
