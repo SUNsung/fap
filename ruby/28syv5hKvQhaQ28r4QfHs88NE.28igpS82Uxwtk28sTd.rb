@@ -1,165 +1,149 @@
 
         
-        def custom_release_header_anchors(markdown)
-  header_regexp = %r!^(\d{1,2})\.(\d{1,2})\.(\d{1,2}) \/ \d{4}-\d{2}-\d{2}!
-  section_regexp = %r!^### \w+ \w+$!
-  markdown.split(%r!^##\s!).map do |release_notes|
-    _, major, minor, patch = *release_notes.match(header_regexp)
-    release_notes
-      .gsub(header_regexp, '\\0\n{: #v\\1-\\2-\\3}')
-      .gsub(section_regexp) { |section| '#{section}\n{: ##{slugify(section)}-v#{major}-#{minor}-#{patch}}' }
-  end.join('\n## ')
-end
-    
-    Benchmark.ips do |x|
-  x.report('local-require') { local_require }
-  x.report('global-require') { global_require }
-  x.report('graceful-require') { graceful_require }
-  x.compare!
-end
-
-    
-            def running?
-          EM.reactor_running?
-        end
-    
-        GLOBAL_TEMPLATE_TYPES.each do |template_type, properties|
-      gitlab_version = properties[:gitlab_version]
-    
-    module Gitlab
-  module CryptoHelper
-    extend self
-    
-    module OmniAuth
-  module Strategies
-    class Jwt
-      ClaimInvalid = Class.new(StandardError)
-    
-          subject.diff_files
+          def test_saving_a_new_record_belonging_to_invalid_parent_with_touch_should_not_raise_exception
+    klass = Class.new(Owner) do
+      def self.name; 'Owner'; end
+      validate { errors.add(:base, :invalid) }
     end
     
-            if @type
-          @type = @type.to_sym
-        end
+      # Most of the tests mess with the validations of Topic, so lets repair it all the time.
+  # Other classes we mess with will be dealt with in the specific tests
+  repair_validations(Topic)
+    
+      # Send deprecation notices to registered listeners.
+  config.active_support.deprecation = :notify
+    
+    require 'isolation/abstract_unit'
+    
+          def self.[](type)
+        type_klass[type]
       end
     
-    # Load in helpers
-require 'unit/support/dummy_communicator'
-require 'unit/support/dummy_provider'
-require 'unit/support/shared/base_context'
-require 'unit/support/shared/action_synced_folders_context'
-require 'unit/support/shared/capability_helpers_context'
-require 'unit/support/shared/plugin_command_context'
-require 'unit/support/shared/virtualbox_context'
+    describe JobsHelper do
+  let(:job) { Delayed::Job.new }
     
-          environment = isolated_environment do |env|
-        env.vagrantfile(<<-VF)
-Vagrant.configure('2') do |config|
-  config.vm.box = 'base'
-end
-VF
+        it 'does not output links to other agents outside of the incoming set' do
+      Link.create!(:source_id => agents(:jane_weather_agent).id, :receiver_id => agents(:jane_website_agent).id)
+      Link.create!(:source_id => agents(:jane_website_agent).id, :receiver_id => agents(:jane_rain_notifier_agent).id)
     
-            # Load provider overrides
-        provider_overrides = config.vm.get_provider_overrides(provider)
-        if !provider_overrides.empty?
-          config_key =
-            '#{object_id}_vm_#{name}_#{config.vm.box}_#{provider}'.to_sym
-          @loader.set(config_key, provider_overrides)
-          local_keys << config_key
-          config, config_warnings, config_errors = @loader.load(local_keys)
-        end
+        it 'should convert the 'escape' method correctly' do
+      expect(LiquidMigrator.convert_string('Escaped: <escape $.content.name>\nNot escaped: <$.content.name>')).to eq(
+                                    'Escaped: {{content.name | uri_escape}}\nNot escaped: {{content.name}}'
+      )
+    end
     
-    describe Vagrant::Vagrantfile do
-  include_context 'unit'
-    
-        change.down do
-      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
-      Mention.where(mentions_container_type: 'Comment').destroy_all
-      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
+        it 'should revert extract and template options for an updated WebsiteAgent' do
+      expect(agent.options).to include('extract' => new_extract,
+                                       'template' => new_template)
+      ConvertWebsiteAgentTemplateForMerge.new.down
+      agent.reload
+      expect(agent.options).to include('extract' => reverted_extract,
+                                       'template' => reverted_template)
     end
   end
 end
 
     
-        it 'lets a user destroy their like' do
-      current_user = controller.send(:current_user)
-      expect(current_user).to receive(:retract).with(@like)
+      it 'truncates message to a reasonable length' do
+    log = AgentLog.new(:agent => agents(:jane_website_agent), :level => 3)
+    log.message = 'a' * 11_000
+    log.save!
+    expect(log.message.length).to eq(10_000)
+  end
     
-        streams.each do |stream_path, stream_class|
-      describe 'a GET to #{stream_path}' do
-        it 'assigns a stream of the proper class' do
-          get stream_path
-          expect(response).to be_success
-          expect(assigns[:stream]).to be_a stream_class
+          let(:valid_params) {
+        {
+          name: 'Example',
+          schedule: 'never',
+          options: {
+            'action' => '{% if target.id == agent_id %}configure{% endif %}',
+            'configure_options' => {
+              'rules' => [
+                {
+                  'type' => 'field<value',
+                  'value' => '{{price}}',
+                  'path' => 'price',
+                }
+              ]
+            }
+          },
+          user: users(:bob),
+          control_targets: [target, real_target]
+        }
+      }
+    
+          it 'only serialize the keys specified in use_fields' do
+        @checker.options['use_fields'] = 'key2, key3'
+        event = Event.new(payload: { 'data' => {'key' => 'value', 'key2' => 'value2', 'key3' => 'value3'} })
+        expect { @checker.receive([event])}.to change(Event, :count).by(1)
+        expect(Event.last.payload).to eq('data' => '\'key2\',\'key3\'\n\'value2\',\'value3\'\n')
+      end
+    
+            # The 'os' tag will be set to \x01 if the package 'target'
+        # was set incorrectly.
+        reject { @rpmtags[:os] } == '\x01'
+    
+      option '--user', 'USER',
+    'Set the user to USER in the prototype files.',
+    :default => 'root'
+    
+      # Output this package to the given path.
+  def output(output_path)
+    output_check(output_path)
+    
+        platforms.each do |platform|
+      logger.info('Generating service manifest.', :platform => platform.class.name)
+      platform.program = command.first
+      platform.name = attributes[:pleaserun_name]
+      platform.args = command[1..-1]
+      platform.description = if attributes[:description_given?]
+        attributes[:description]
+      else
+        platform.name
+      end
+      pleaserun_attributes.each do |attribute_name|
+        attribute = 'pleaserun_#{attribute_name}'.to_sym
+        if attributes.has_key?(attribute) and not attributes[attribute].nil?
+          platform.send('#{attribute_name}=', attributes[attribute])
         end
+      end
+    
+      # Where we keep metadata and post install scripts and such
+  def fpm_meta_path
+    @fpm_meta_path ||= begin
+                         path = File.join(staging_path, '.fpm')
+                         FileUtils.mkdir_p(path)
+                         path
+                       end
+  end
+end
+
+    
+    Given /^I comment out lines that contain '([^']+)' in '([^']+)'$/ do |contains, glob|
+  cd('.') do
+    Dir.glob(glob).each do |file|
+      transform_file(file) do |content|
+        content.gsub(/^(.*?#{contains}.*?)$/) { |line| '# #{line}' }
       end
     end
   end
+end
     
-        it 'shows the name in the error message when the command was not found' do
-      e = lambda do
-        Executable.execute_command('___notfound___', [], true)
-      end.should.raise Informative
-      e.message.should.match /___notfound___/
-    end
-    
-          Header = Struct.new(:path, :umbrella, :private, :textual, :exclude, :size, :mtime) do
-        alias_method :private?, :private
-        def to_s
-          [
-            (:private if private?),
-            (:textual if textual),
-            (:umbrella if umbrella),
-            (:exclude if exclude),
-            'header',
-            %('#{path.to_s.gsub(''', '\'')}'),
-            attrs,
-          ].compact.join(' ')
-        end
-    
-            # @private
-        # @return [Hash<PodVariant, String>]
-        #
-        def scope_by_build_type
-          scope_if_necessary(group_by { |v| v.build_type.packaging }.map(&:scope_by_linkage)) do |variant|
-            variant.build_type.packaging
-          end
-        end
-    
-          it 'returns scopes by platform names if they qualify' do
-        variants = PodVariantSet.new([
-          PodVariant.new([@root_spec], [], [], Platform.ios),
-          PodVariant.new([@root_spec], [], [], Platform.osx),
-        ])
-        variants.scope_suffixes.values.should == %w(iOS macOS)
-      end
-    
-          MACOS_APP_HOST_MAIN_CONTENTS = <<EOS.freeze
-#import <Cocoa/Cocoa.h>
-    
-        # returns the formatted full price for the variant, if at least one variant price differs from product price
-    def variant_full_price(variant)
-      product = variant.product
-      unless product.variants.active(current_currency).all? { |v| v.price == product.price }
-        Spree::Money.new(variant.price, currency: current_currency).to_html
+        def geometry_string
+      begin
+        orientation = Paperclip.options[:use_exif_orientation] ?
+          '%[exif:orientation]' : '1'
+        Paperclip.run(
+          Paperclip.options[:is_windows] ? 'magick identify' : 'identify',
+          '-format '%wx%h,#{orientation}' :file', {
+            :file => '#{path}[0]'
+          }, {
+            :swallow_stderr => true
+          }
+        )
+      rescue Terrapin::ExitStatusError
+        ''
+      rescue Terrapin::CommandNotFoundError => e
+        raise_because_imagemagick_missing
       end
     end
-    
-        def eligible_for_return?
-      validators.all?(&:eligible_for_return?)
-    end
-    
-              shipments_attrs = params.delete(:shipments_attributes)
-    
-        # Determine that a return item has already been deemed unreturned and therefore charged
-    # by the fact that its exchange inventory unit has popped off to a different order
-    unreturned_return_items.select! { |ri| ri.exchange_inventory_units.exists?(order_id: ri.inventory_unit.order_id) }
-    
-            context 'when the currency is an empty string' do
-          let(:currency) { '' }
-    
-            def find_property
-          @property = Spree::Property.accessible_by(current_ability, :show).find(params[:id])
-        rescue ActiveRecord::RecordNotFound
-          @property = Spree::Property.accessible_by(current_ability, :show).find_by!(name: params[:id])
-        end
