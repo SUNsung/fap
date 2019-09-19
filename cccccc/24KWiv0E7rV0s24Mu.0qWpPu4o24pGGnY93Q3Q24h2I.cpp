@@ -1,181 +1,171 @@
 
         
-        
-    {        g_pSwapChain->Present(1, 0); // Present with vsync
-        //g_pSwapChain->Present(0, 0); // Present without vsync
-    }
+          // TODO(amauryfa): Understand why the Python implementation differs from
+  // this one, ask users to use another API and deprecate these functions.
+  { 'AddFileDescriptor', AddFileDescriptor, METH_O,
+    'No-op. Add() must have been called before.' },
+  { 'AddDescriptor', AddDescriptor, METH_O,
+    'No-op. Add() must have been called before.' },
+  { 'AddEnumDescriptor', AddEnumDescriptor, METH_O,
+    'No-op. Add() must have been called before.' },
+  { 'AddExtensionDescriptor', AddExtensionDescriptor, METH_O,
+    'No-op. Add() must have been called before.' },
+  { 'AddServiceDescriptor', AddServiceDescriptor, METH_O,
+    'No-op. Add() must have been called before.' },
     
     
-    {
-    {
-    {
-    {                    // Bind texture, Draw
-                    glBindTexture(GL_TEXTURE_2D, (GLuint)(intptr_t)pcmd->TextureId);
-#if IMGUI_IMPL_OPENGL_HAS_DRAW_WITH_BASE_VERTEX
-                    glDrawElementsBaseVertex(GL_TRIANGLES, (GLsizei)pcmd->ElemCount, sizeof(ImDrawIdx) == 2 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT, (void*)(intptr_t)(pcmd->IdxOffset * sizeof(ImDrawIdx)), (GLint)pcmd->VtxOffset);
-#else
-                    glDrawElements(GL_TRIANGLES, (GLsizei)pcmd->ElemCount, sizeof(ImDrawIdx) == 2 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT, (void*)(intptr_t)(pcmd->IdxOffset * sizeof(ImDrawIdx)));
-#endif
-                }
-            }
-        }
-    }
-    
-    // Implemented features:
-//  [X] Platform: Clipboard support.
-//  [X] Platform: Gamepad support. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
-//  [x] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'. FIXME: 3 cursors types are missing from GLFW.
-//  [X] Platform: Keyboard arrays indexed using GLFW_KEY_* codes, e.g. ImGui::IsKeyPressed(GLFW_KEY_SPACE).
-    
-        // Show the window
-    ::ShowWindow(hwnd, SW_SHOWDEFAULT);
-    ::UpdateWindow(hwnd);
-    
-    
-    {    g_fence->SetEventOnCompletion(fenceValue, g_fenceEvent);
-    WaitForSingleObject(g_fenceEvent, INFINITE);
+    {  // Check if the optional_nested_message was actually moved (and not just
+  // copied).
+  EXPECT_EQ(nested, &message2.optional_nested_message());
+  EXPECT_NE(nested, &message1.optional_nested_message());
 }
     
-        // Restore the DX9 transform
-    g_pd3dDevice->SetTransform(D3DTS_WORLD, &last_world);
-    g_pd3dDevice->SetTransform(D3DTS_VIEW, &last_view);
-    g_pd3dDevice->SetTransform(D3DTS_PROJECTION, &last_projection);
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
     
-    #include 'imgui.h'
-#include 'imgui_impl_opengl2.h'
-#if defined(_MSC_VER) && _MSC_VER <= 1500 // MSVC 2008 or earlier
-#include <stddef.h>     // intptr_t
-#else
-#include <stdint.h>     // intptr_t
-#endif
-    
-    
-    {    printf('DestroyContext()\n');
-    ImGui::DestroyContext();
-    return 0;
-}
-
-    
-    Rect Rect::unionWithRect(const Rect & rect) const
-{
-    float thisLeftX = origin.x;
-    float thisRightX = origin.x + size.width;
-    float thisTopY = origin.y + size.height;
-    float thisBottomY = origin.y;
-    
-    if (thisRightX < thisLeftX)
-    {
-        std::swap(thisRightX, thisLeftX);   // This rect has negative width
-    }
-    
-    if (thisTopY < thisBottomY)
-    {
-        std::swap(thisTopY, thisBottomY);   // This rect has negative height
-    }
-    
-    float otherLeftX = rect.origin.x;
-    float otherRightX = rect.origin.x + rect.size.width;
-    float otherTopY = rect.origin.y + rect.size.height;
-    float otherBottomY = rect.origin.y;
-    
-    if (otherRightX < otherLeftX)
-    {
-        std::swap(otherRightX, otherLeftX);   // Other rect has negative width
-    }
-    
-    if (otherTopY < otherBottomY)
-    {
-        std::swap(otherTopY, otherBottomY);   // Other rect has negative height
-    }
-    
-    float combinedLeftX = std::min(thisLeftX, otherLeftX);
-    float combinedRightX = std::max(thisRightX, otherRightX);
-    float combinedTopY = std::max(thisTopY, otherTopY);
-    float combinedBottomY = std::min(thisBottomY, otherBottomY);
-    
-    return Rect(combinedLeftX, combinedBottomY, combinedRightX - combinedLeftX, combinedTopY - combinedBottomY);
-}
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-    
-    void ActionManager::removeActionByTag(int tag, Node *target)
-{
-    CCASSERT(tag != Action::INVALID_TAG, 'Invalid tag value!');
-    CCASSERT(target != nullptr, 'target can't be nullptr!');
-    if (target == nullptr)
-    {
-        return;
-    }
-    }
-    
-        /** Resumes the target. All queued actions will be resumed.
-     *
-     * @param target    A certain target.
-     */
-    virtual void resumeTarget(Node *target);
-    
-    /** Pauses all running actions, returning a list of targets whose actions were paused.
-     *
-     * @return  A list of targets whose actions were paused.
-     */
-    virtual Vector<Node*> pauseAllRunningActions();
-    
-    /** Resume a set of targets (convenience function to reverse a pauseAllRunningActions call).
-     *
-     * @param targetsToResume   A set of targets need to be resumed.
-     */
-    virtual void resumeTargets(const Vector<Node*>& targetsToResume);
-    
-    /** Main loop of ActionManager.
-     * @param dt    In seconds.
-     */
-    virtual void update(float dt);
-    
-protected:
-    // declared in ActionManager.m
-    
-        /**
-     * get vertex count
-     * @return number of vertices
-     */
-    unsigned int getVertCount() const;
-    
-    /**
-     * get triangles count
-     * @return number of triangles
-     */
-    unsigned int getTrianglesCount() const;
-    
-    #endif // __MISCNODE_CCCLIPPING_NODE_H__
-
-    
-     protected:
-  bool loadDatabases(std::function<void(RedisClient::DatabaseList)> callback);
-    
-      virtual bool multiConnectionOperation() const = 0;
-    
-    unsigned qcompress::guessFormat(const QByteArray &val) {
-  if (val.size() > 2 && val.startsWith(QByteArray::fromHex('x1fx8b'))) {
-    return qcompress::GZIP;
-  }
-    }
-    
-    QString ValueEditor::ExternalFormattersManager::formattersPath() {
-  if (m_formattersPath.isEmpty()) {
-    return QDir::toNativeSeparators(
-        QString('%1/%2').arg(ConfigManager::getConfigPath()).arg('formatters'));
+    string Status::ToString() const {
+  if (error_code_ == error::OK) {
+    return 'OK';
   } else {
-    return m_formattersPath;
+    if (error_message_.empty()) {
+      return error::CodeEnumToString(error_code_);
+    } else {
+      return error::CodeEnumToString(error_code_) + ':' +
+          error_message_;
+    }
   }
 }
     
+    class CopyNoAssign {
+ public:
+  explicit CopyNoAssign(int value) : foo(value) {}
+  CopyNoAssign(const CopyNoAssign& other) : foo(other.foo) {}
+  int foo;
+ private:
+  const CopyNoAssign& operator=(const CopyNoAssign&);
+};
     
-    {  return m_selfPtr;
+    TEST(TemplateUtilTest, TestSize) {
+  EXPECT_GT(sizeof(GOOGLE_NAMESPACE::big_), sizeof(GOOGLE_NAMESPACE::small_));
 }
+    
+    int main(int argc, char *argv[]) {
+  if (argc % 2 == 0 || argc == 1) {
+    std::cerr << 'Usage: [input_files] [output_file_names] where ' <<
+        'input_files are one to one mapping to output_file_names.' <<
+        std::endl;
+    return 1;
+  }
+    }
+    
+    class GoGoProtoGenerator : public CodeGenerator {
+ public:
+  virtual bool GenerateAll(const std::vector<const FileDescriptor*>& files,
+                           const string& parameter,
+                           GeneratorContext* context,
+                           string* error) const {
+    for (int i = 0; i < files.size(); i++) {
+      for (auto file : files) {
+        bool can_generate =
+            (new_pool_.FindFileByName(file->name()) == nullptr);
+        for (int j = 0; j < file->dependency_count(); j++) {
+          can_generate &= (new_pool_.FindFileByName(
+              file->dependency(j)->name()) != nullptr);
+        }
+        for (int j = 0; j < file->public_dependency_count(); j++) {
+          can_generate &= (new_pool_.FindFileByName(
+              file->public_dependency(j)->name()) != nullptr);
+        }
+        for (int j = 0; j < file->weak_dependency_count(); j++) {
+          can_generate &= (new_pool_.FindFileByName(
+              file->weak_dependency(j)->name()) != nullptr);
+        }
+        if (can_generate) {
+          Generate(file, parameter, context, error);
+          break;
+        }
+      }
+    }
+    }
+    }
+    
+    
+    {}  // namespace
+    
+      bool delay_destruction() { return delay_destruction_; }
+  void set_delay_destruction(bool val) { delay_destruction_ = val; }
+  bool pending_destruction() { return pending_destruction_; }
+  void set_pending_destruction (bool val) { pending_destruction_ = val; }
+ protected:
+  int id_;
+  bool delay_destruction_;
+  bool pending_destruction_;
+  base::WeakPtr<ObjectManager> object_manager_;
+    
+      WebView* view = frame->view();
+  if (!view)
+    return NULL;  // can happen during closing.
+    
+    std::string Clipboard::GetText() {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  base::string16 text;
+  clipboard->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
+  return base::UTF16ToUTF8(text);
+}
+    
+    #include 'base/logging.h'
+#include 'base/values.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/nw/src/nw_shell.h'
+#include 'content/public/browser/web_contents.h'
+#include 'content/public/browser/render_widget_host_view.h'
+#include 'ui/gfx/point.h'
+#include 'vector'
+#include 'gtk/gtk.h'
+    
+      // Map point from document to screen.
+  gfx::Point screen_point(x, y);
+    
+    
+    {  base::ListValue args;
+  dispatcher_host()->SendEvent(this, 'click', args);
+}
+    
+    bool MenuItem::CanHandleAccelerators() const {
+  return enable_shortcut_ && is_enabled_;
+}
+    
+    
+    {
+  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.getListSync', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwClipboardGetListSyncFunction);
+};
+    
+    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
+ public:
+  NwMenuGetNSStringFWithFixupFunction() {}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    
+ protected:
+  ~NwMenuGetNSStringFWithFixupFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
+};
+    
+      // implement nw.Screen.isMonitorStarted()
+  class NwScreenIsMonitorStartedFunction : public NWSyncExtensionFunction {
+  public:
+    NwScreenIsMonitorStartedFunction();
+    bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
