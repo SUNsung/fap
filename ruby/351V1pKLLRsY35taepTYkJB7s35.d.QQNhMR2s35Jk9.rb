@@ -1,237 +1,210 @@
 
         
-            before_action :ensure_configured
+                new_appendix = new_appendix.sub('.', '') if new_appendix.start_with?('.')
+        major = version_match[:major].to_i
+        minor = version_match[:minor].to_i || 0
+        patch = version_match[:patch].to_i || 0
     
-      # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
+          begin
+        # rubocop:disable Security/Eval
+        eval(content) # this is okay in this case
+        # rubocop:enable Security/Eval
     
-    require 'active_support/core_ext/module/attribute_accessors'
+              disabled_services_object = self.service_object
+          disabled_services.each do |k, v|
+            disabled_services_object.__hash__[k] = true
+            disabled_services_object.send('#{k}=', v)
+          end
+          Produce::Service.disable(disabled_services_object, nil) unless disabled_services.empty?
+        end
+      end
     
-            css('.entry-detail[id$='instance-method']').each do |node|
-          name = node.at_css('.signature > strong').content.strip
-          name.prepend '#{self.name}#' unless slug.end_with?('toplevel')
-          id = node['id'] = node['id'].remove(/<.+?>/)
-          entries << [name, id] unless entries.last && entries.last[0] == name
+      # Create a fake app with number_of_builds candidate builds
+  # the builds will be in date ascending order
+  def make_fake_builds(number_of_builds)
+    (0...number_of_builds).map do |num|
+      OpenStruct.new({ upload_date: Time.now.utc + 60 * num, processing: false }) # minutes_from_now
+    end
+  end
+    
+          def actions
+        actions = []
+        if Snapshot.config[:test_without_building]
+          actions << 'test-without-building'
+        else
+          actions << :clean if Snapshot.config[:clean]
+          actions << :build # https://github.com/fastlane/fastlane/issues/2581
+          actions << :test
+        end
+        return actions
+      end
+    
+            return ['-destination '#{value}'']
+      end
+    
+          def self.is_supported?(platform)
+        [:ios, :mac].include?(platform)
+      end
+    
+            expect(values[:changelog]).to eq('custom changelog')
+      end
+    
+        describe 'when asked to invite a new tester to a specific existing custom group' do
+      it 'creates a new tester and adds it to the default group' do
+        allow(tester_manager).to receive(:find_app_tester).and_return(fake_tester)
+        allow(fake_app).to receive(:get_beta_groups).and_return([custom_tester_group])
+    
+            def select_directory(file_name)
+          return [] unless @commit
+    
+        def aes256_gcm_decrypt(value)
+      return unless value
+    
+          files = query.filter_results(files) if query.filters.any?
+    
+        context 'when project_member did not request an invite' do
+      before do
+        expect(project_member).to receive(:request?).and_return(false)
+      end
+    
+      class_methods do
+    def chronic_duration_attr_reader(virtual_attribute, source_attribute)
+      define_method(virtual_attribute) do
+        chronic_duration_attributes[virtual_attribute] || output_chronic_duration_attribute(source_attribute)
+      end
+    end
+    
+        def as_json
+      { entries: entries_as_json, types: types_as_json }
+    end
+    
+        private
+    
+            css('.filetree .children').each do |node|
+          node.css('.file').each do |n|
+            n.content = '  #{n.content}'
+          end
         end
     
-            # remove 'This reference reflects Leaflet 1.2.0.'
-        css('h1 ~ p').each do |node|
-          node.remove
-          break
+          def get_type
+        if slug.start_with?('guide/')
+          'Guide'
+        elsif slug.start_with?('cookbook/')
+          'Cookbook'
+        elsif slug == 'glossary'
+          'Guide'
+        else
+          type = at_css('.nav-title.is-selected').content.strip
+          type.remove! ' Reference'
+          type << ': #{mod}' if mod
+          type
+        end
+      end
+    
+            css('.nav-index-section').each do |node|
+          node.content = node.content
         end
     
-          TYPE_BY_SUBPATH_STARTS_WITH = {
-        'c3ref' => 'C Interface',
-        'capi' => 'C Interface',
-        'session' => 'C Interface: Session Module',
-        'optoverview' => 'Query Planner',
-        'queryplanner' => 'Query Planner',
-        'syntax' => 'Syntax Diagrams',
-        'lang' => 'Language',
-        'pragma' => 'PRAGMA Statements',
-        'cli' => 'CLI',
-        'json' => 'JSON',
-        'fileformat' => 'Database File Format',
-        'tcl' => 'Tcl Interface',
-        'malloc' => 'Dynamic Memory Allocation',
-        'vtab' => 'Virtual Table Mechanism',
-        'datatype' => 'Datatypes',
-        'locking' => 'Locking and Concurrency',
-        'foreignkey' => 'Foreign Key Constraints',
-        'wal' => 'Write-Ahead Logging',
-        'fts' => 'Full-Text Search',
-        'rtree' => 'R*Tree Module',
-        'rbu' => 'RBU Extension',
-        'limits' => 'Limits',
-        'howtocorrupt' => 'How To Corrupt',
-        'geopoly' => 'Geopoly'
-      }
+              if pods_by_state
+            {
+              :added => :added,
+              :changed => :changed,
+              :removed => :deleted,
+              :unchanged => :unchanged,
+            }.each do |state, spec_state|
+              Array(pods_by_state[state]).each do |name|
+                add_name(name, spec_state)
+              end
+            end
+          end
+        end
     
-        it 'ignores HOMEBREW_SKIP_OR_LATER_BOTTLES on release versions', :needs_macos do
-      allow(ARGV).to receive(:skip_or_later_bottles?).and_return(true)
-      allow(OS::Mac).to receive(:prerelease?).and_return(false)
-      subject[:mavericks] = 'foo'
-      expect(subject.send(:find_matching_tag, :mavericks)).to eq(:mavericks)
-      expect(subject.send(:find_matching_tag, :yosemite)).to eq(:mavericks)
+      Xcodeproj::PlainInformative.send(:include, CLAide::InformativeError)
+    
+        it 'generates a valid Info.plist file' do
+      generator = Generator::InfoPlistFile.new('1.0.0', Platform.new(:ios, '6.0'))
+      file = temporary_directory + 'Info.plist'
+      generator.save_as(file)
+      `plutil -lint #{file}`
+      $?.should.be.success
+    end if Executable.which('plutil')
+    
+        # Runs the given command, capturing the desired output.
+    #
+    # @param  [String] executable
+    #         The binary to use.
+    #
+    # @param  [Array<#to_s>] command
+    #         The command to send to the binary.
+    #
+    # @param  [Symbol] capture
+    #         Whether it should raise if the command fails.
+    #
+    # @param  [Hash] env
+    #         Environment variables to be set for the command.
+    #
+    # @raise  If the executable could not be located.
+    #
+    # @return [(String, Process::Status)]
+    #         The desired captured output from the command, and the status from
+    #         running the command.
+    #
+    def self.capture_command(executable, command, capture: :merge, env: {}, **kwargs)
+      bin = which!(executable)
+    
+                  # We add the directory for an asset catalog, but not the items in it.
+              next if path_str =~ /.*\.xcassets\/.+/i
+    
+          def header_hash
+        {
+          :Type => 'PSGroupSpecifier',
+          :Title => sanitize_encoding(header_title),
+          :FooterText => sanitize_encoding(header_text),
+        }
+      end
+    
+              it 'does not create an objective-c import when no umbrella header is found' do
+            pod_target = stub('PodTarget', :uses_swift? => false, :should_build? => true,
+                                           :product_module_name => 'ModuleName', :name => 'ModuleName',
+                                           :sandbox => @sandbox, :defines_module? => false,
+                                           :recursive_dependent_targets => [])
+            project = stub('Project', :path => Pathname(Dir.mktmpdir(['CocoaPods-Lint-', '-#{pod_target.name}'])) + 'App.xcodeproj')
+    
+        alias get get_preference
+    
+          Spree.check_unused_translations
+      if false && Spree.unused_translation_messages.any?
+        puts '\nThere are unused translations within Spree:'
+        puts Spree.unused_translation_messages.sort
+        exit(1)
+      end
     end
   end
 end
 
     
-              # Check for long inreplace block vars
-          find_all_blocks(body_node, :inreplace) do |node|
-            block_arg = node.arguments.children.first
-            next unless block_arg.source.size > 1
+        context 'stock should not restock' do
+      context 'return_item is not resellable' do
+        before { return_item.resellable = false }
     
-          # Look in the standard locations, because even if port or fink are
-      # not in the path they can still break builds if the build scripts
-      # have these paths baked in.
-      %w[/sw/bin/fink /opt/local/bin/port].each do |ponk|
-        path = Pathname.new(ponk)
-        paths << path if path.exist?
-      end
+            context 'includes tax adjustments if applicable' do
+          let!(:tax_rate) { create(:tax_rate, zone: order.tax_zone) }
     
-        def quarantine
-      return if @quarantine.nil?
-      return unless Quarantine.available?
+            def prepare_event
+          return unless @event = params[:fire]
     
-      before do
-    @commit_id = 1
-    FileUtils.mkpath cached_location
-  end
+            def update
+          authorize! params[:action], @payment
+          if !@payment.editable?
+            render 'update_forbidden', status: 403
+          elsif @payment.update(payment_params)
+            respond_with(@payment, default_template: :show)
+          else
+            invalid_resource!(@payment)
+          end
+        end
     
-    # Resource is the fundamental representation of an external resource. The
-# primary formula download, along with other declared resources, are instances
-# of this class.
-class Resource
-  include FileUtils
-    
-        def quote_field(field)
-      field = String(field)
-      encoded_quote_character = @quote_character.encode(field.encoding)
-      encoded_quote_character +
-        field.gsub(encoded_quote_character,
-                   encoded_quote_character * 2) +
-        encoded_quote_character
-    end
-    
-    testdata( File.dirname($0) + '/scandata', ARGV ).each do |file|
-  $stderr.print File.basename(file) + ': '
-  begin
-    ok = File.read(file)
-    s = Racc::GrammarFileScanner.new( ok )
-    sym, (val, _lineno) = s.scan
-    if printonly then
-      $stderr.puts
-      $stderr.puts val
-      next
-    end
-    
-      before :each do
-    @data = '12345abcde'
-    @zip = [31, 139, 8, 0, 44, 220, 209, 71, 0, 3, 51, 52, 50, 54, 49, 77,
-            76, 74, 78, 73, 5, 0, 157, 5, 0, 36, 10, 0, 0, 0].pack('C*')
-    @io = StringIO.new @zip
-  end
-    
-          # create several required methods for this temporal file
-      Tempfile.send(:define_method, 'content_type') { return att_content_type }
-      Tempfile.send(:define_method, 'original_filename') { return file_name }
-      file
-    end
-  end
-    
-    rails_env = BundlerHelper.rails_env
-database = BundlerHelper.database
-    
-            expect(federation_entity.photos.size).to eq(1)
-        expect(federation_photo.author).to eq(diaspora_entity.author.diaspora_handle)
-        expect(federation_photo.guid).to eq(diaspora_photo.guid)
-        expect(federation_photo.public).to eq(diaspora_photo.public)
-        expect(federation_photo.created_at).to eq(diaspora_photo.created_at)
-        expect(federation_photo.remote_photo_path).to eq(diaspora_photo.remote_photo_path)
-        expect(federation_photo.remote_photo_name).to eq(diaspora_photo.remote_photo_name)
-        expect(federation_photo.text).to eq(diaspora_photo.text)
-        expect(federation_photo.height).to eq(diaspora_photo.height)
-        expect(federation_photo.width).to eq(diaspora_photo.width)
-      end
-    
-          def save_params_and_render_consent_form(endpoint)
-        @o_auth_application = endpoint.o_auth_application
-        @response_type = endpoint.response_type
-        @redirect_uri = endpoint.redirect_uri
-        @scopes = endpoint.scopes
-        save_request_parameters
-        @app = UserApplicationPresenter.new @o_auth_application, @scopes
-        render :new
-      end
-    
-          raise(UnknownPlugin) unless klass
-      klass
-    end
-    
-    module LogStash
-  module PluginManager
-  end
-end
-    
-      it 'returns the sorted config parts' do
-    expect(subject.config_parts).to eq(ordered_config_parts)
-  end
-    
-        it 'returns a flare tag if there are 2 flare tags in the list' do
-      valid_article = create(:article, tags: %w[ama explainlikeimfive])
-      expect(described_class.new(valid_article).tag.name).to eq('explainlikeimfive')
-    end
-  end
-    
-      def user_is_author?
-    if record.instance_of?(Article)
-      record.user_id == user.id
-    else
-      record.pluck(:user_id).uniq == [user.id]
-    end
-  end
-    
-          now = Time.current
-      @user.onboarding_package_requested_again = true if @user.onboarding_package_requested
-      @user.onboarding_package_requested = true
-      @user.onboarding_package_form_submmitted_at = now
-      @user.personal_data_updated_at = now
-      @user.shipping_validated_at = now if user_params[:shipping_validated] == '1'
-      if @user.save!
-        format.html { redirect_to '/freestickers/edit' }
-        format.json { render :show, status: :ok, location: @user }
-      else
-        format.html { render :edit }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-    
-    # define charCodeAt on String
-class String
-  def charCodeAt(k)
-    # use scan, nil check, and unpack instead of ord for 1.8
-    # 1.9 can simply use self[k].ord
-    # http://stackoverflow.com/questions/7793177/split-utf8-string-regardless-of-ruby-version
-    c = self.scan(/./mu)[k]
-    return nil if c.nil?
-    c.unpack('U')[0]
-  end
-end
-    
-          def css # custom css
-        @css
-      end
-    
-        assert_match /Edit/, last_response.body, ''Edit' link is blocked in history template'
-    
-    def date
-  Date.today.to_s
-end
-    
-        post '/compare/*' do
-      @file     = encodeURIComponent(params[:splat].first)
-      @versions = params[:versions] || []
-      if @versions.size < 2
-        redirect to('/history/#{@file}')
-      else
-        redirect to('/compare/%s/%s...%s' % [
-            @file,
-            @versions.last,
-            @versions.first]
-                 )
-      end
-    end
-    
-    shared_examples_for 'a project hook' do
-  let(:project) { FactoryBot.build(:project) }
-    
-        context 'when first window is nameless' do
-      let(:project) { nameless_window_project }
-      let(:command) { '#{project.tmux} new-session -d -s #{project.name} ' }
-    
-          def stop_template
-        asset_path 'template-stop.erb'
-      end
+              Spree::Dependencies.cart_add_item_service.constantize.call(order: @shipment.order,
+                                                                     variant: variant,
+                                                                     quantity: quantity,
+                                                                     options: { shipment: @shipment })
