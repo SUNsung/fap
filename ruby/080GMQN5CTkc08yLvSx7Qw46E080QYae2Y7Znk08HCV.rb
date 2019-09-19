@@ -1,145 +1,13 @@
 
         
-          enum status: [:proposed, :written, :published]
-  enum read_status: { unread: 0, reading: 2, read: 3, forgotten: nil }
-  enum nullable_status: [:single, :married]
-  enum language: [:english, :spanish, :french], _prefix: :in
-  enum author_visibility: [:visible, :invisible], _prefix: true
-  enum illustrator_visibility: [:visible, :invisible], _prefix: true
-  enum font_size: [:small, :medium, :large], _prefix: :with, _suffix: true
-  enum difficulty: [:easy, :medium, :hard], _suffix: :to_read
-  enum cover: { hard: 'hard', soft: 'soft' }
-    
-          def test_missing_helper_error_has_the_right_path
-        e = assert_raise(AbstractController::Helpers::MissingHelperError) { AbstractInvalidHelpers.helper(:missing) }
-        assert_equal 'helpers/missing_helper.rb', e.path
-      end
-    end
-  end
-end
-
-    
-          assert_equal %w(main.scss symlinked-file).length, site.pages.length
-      refute_equal [], site.static_files
-    end
-    
-    if pathutil_relative == native_relative
-  Benchmark.ips do |x|
-    x.report('pathutil') { pathutil_relative }
-    x.report('native')   { native_relative }
-    x.compare!
-  end
-else
-  print 'PATHUTIL: '
-  puts pathutil_relative
-  print 'NATIVE:   '
-  puts native_relative
-end
-
-    
-          def cell_prefix(status)
-        @prefixes[status]
-      end
-    
-        it 'returns a label 'Disabled' if a given agent is disabled' do
-      stub(@agent).disabled? { true }
-      label = working(@agent)
-      expect(label).to be_html_safe
-      expect(Nokogiri(label).text).to eq 'Disabled'
-    end
-    
-    describe DotHelper do
-  describe 'with example Agents' do
-    class Agents::DotFoo < Agent
-      default_schedule '2pm'
-    
-        context '#run' do
-      before do
-        mock(@agent_runner).run_workers
-      end
-    
-      describe '#log_for_agent' do
-    it 'creates AgentLogs' do
-      log = AgentLog.log_for_agent(agents(:jane_website_agent), 'some message', :level => 4, :outbound_event => events(:jane_website_agent_event))
-      expect(log).not_to be_new_record
-      expect(log.agent).to eq(agents(:jane_website_agent))
-      expect(log.outbound_event).to eq(events(:jane_website_agent_event))
-      expect(log.message).to eq('some message')
-      expect(log.level).to eq(4)
-    end
-    
-    # This class finds files in a repository by name and content
-# the result is joined and sorted by file name
-module Gitlab
-  class FileFinder
-    attr_reader :project, :ref
-    
-    shared_examples 'diff statistics' do |test_include_stats_flag: true|
-  def stub_stats_find_by_path(path, stats_mock)
-    expect_next_instance_of(Gitlab::Git::DiffStatsCollection) do |collection|
-      allow(collection).to receive(:find_by_path).and_call_original
-      expect(collection).to receive(:find_by_path).with(path).and_return(stats_mock)
-    end
-  end
-    
-          validates virtual_attribute, allow_nil: true, duration: { message: parameters[:error_message] }
-    end
-    
-        %w[group project].each do |source_type|
-      params do
-        requires :id, type: String, desc: 'The ID of a #{source_type}'
-      end
-      resource source_type.pluralize, requirements: API::NAMESPACE_OR_PROJECT_REQUIREMENTS do
-        desc 'Gets a list of #{source_type} badges viewable by the authenticated user.' do
-          detail 'This feature was introduced in GitLab 10.6.'
-          success Entities::Badge
-        end
-        params do
-          use :pagination
-        end
-        get ':id/badges' do
-          source = find_source(source_type, params[:id])
-    
-      def deprecated_option(hash)
-    raise ArgumentError, 'deprecated_option hash must not be empty' if hash.empty?
-    
-          # Returns a Pathname object corresponding to Xcode.app's Developer
-      # directory or nil if Xcode.app is not installed
-      def prefix
-        @prefix ||=
-          begin
-            dir = MacOS.active_developer_dir
-    
-          it 'adds the appropriate curl args and does not URL-encode the cookies' do
-        expect(subject).to receive(:system_command!) { |*, args:, **|
-          expect(args.each_cons(2)).to include(['-b', 'coo=k/e;mon=ster'])
-        }
-    
-      let(:payload) do
-    {
-      '@context': 'https://www.w3.org/ns/activitystreams',
-      id: 'foo',
-      type: 'Create',
-      actor: ActivityPub::TagManager.instance.uri_for(actor),
-      object: {
-        id: 'bar',
-        type: 'Note',
-        content: 'Lorem ipsum',
-      },
-    }
-  end
-    
-        puts 'Downloading emojos from source... (#{source})'
-    
-    RSpec.describe FollowLimitValidator, type: :validator do
-  describe '#validate' do
-    before do
-      allow_any_instance_of(described_class).to receive(:limit_reached?).with(account) do
-        limit_reached
-      end
-    
-      FREQUENCY      = 7.days.freeze
-  SIGN_IN_OFFSET = 1.day.freeze
+        module Pod
+  class Installer
+    class Analyzer
+      # Collects all {PodVariant}.
+      class PodVariantSet
+        # @return [Array<PodVariant>] the different variants within this set.
+        #
+        attr_reader :variants
     
           def ==(other)
         if other.class == self.class
@@ -149,17 +17,122 @@ module Gitlab
         end
       end
     
-          # @return [Array<Pathname>] The paths of the files which should be
-      #         included in resources bundles by the Pod.
-      #
-      def resource_bundle_files
-        resource_bundles.values.flatten
-      end
-    
-            index = UI.gets.chomp.to_i - 1
-        if index < 0 || index > array.count - 1
-          raise Informative, '#{index + 1} is invalid [1-#{array.count}]'
-        else
-          index
+            if deprecated_pods.any?
+          UI.section 'The following pods are deprecated:' do
+            deprecated_pods.each do |spec|
+              if spec.deprecated_in_favor_of
+                UI.puts '- #{spec.name}' \
+                  ' (in favor of #{spec.deprecated_in_favor_of})'
+              else
+                UI.puts '- #{spec.name}'
+              end
+            end
+          end
         end
       end
+    
+            def prepare(sandbox, project, pod_targets, build_configurations, platforms, podfile_path)
+          UI.message '- Creating #{project.project_name} project' do
+            build_configurations.each do |name, type|
+              project.add_build_configuration(name, type)
+            end
+            # Reset symroot just in case the user has added a new build configuration other than 'Debug' or 'Release'.
+            project.symroot = Pod::Project::LEGACY_BUILD_ROOT
+            pod_names = pod_targets.map(&:pod_name).uniq
+            pod_names.each do |pod_name|
+              local = sandbox.local?(pod_name)
+              path = sandbox.pod_dir(pod_name)
+              was_absolute = sandbox.local_path_was_absolute?(pod_name)
+              project.add_pod_group(pod_name, path, local, was_absolute)
+            end
+            if podfile_path
+              project.add_podfile(podfile_path)
+            end
+            osx_deployment_target = platforms.select { |p| p.name == :osx }.map(&:deployment_target).min
+            ios_deployment_target = platforms.select { |p| p.name == :ios }.map(&:deployment_target).min
+            watchos_deployment_target = platforms.select { |p| p.name == :watchos }.map(&:deployment_target).min
+            tvos_deployment_target = platforms.select { |p| p.name == :tvos }.map(&:deployment_target).min
+            project.build_configurations.each do |build_configuration|
+              build_configuration.build_settings['MACOSX_DEPLOYMENT_TARGET'] = osx_deployment_target.to_s if osx_deployment_target
+              build_configuration.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = ios_deployment_target.to_s if ios_deployment_target
+              build_configuration.build_settings['WATCHOS_DEPLOYMENT_TARGET'] = watchos_deployment_target.to_s if watchos_deployment_target
+              build_configuration.build_settings['TVOS_DEPLOYMENT_TARGET'] = tvos_deployment_target.to_s if tvos_deployment_target
+              build_configuration.build_settings['STRIP_INSTALLED_PRODUCT'] = 'NO'
+              build_configuration.build_settings['CLANG_ENABLE_OBJC_ARC'] = 'YES'
+            end
+          end
+        end
+      end
+    end
+  end
+end
+
+    
+          # @return [Array<Pathname>] The paths of the dynamic binary artifacts
+      #         that come shipped with the Pod.
+      #
+      def vendored_dynamic_artifacts
+        vendored_dynamic_libraries + vendored_dynamic_frameworks
+      end
+    
+          # In verbose mode it shows the sections and the contents.
+      # In normal mode it just prints the title.
+      #
+      # @return [void]
+      #
+      def titled_section(title, options = {})
+        relative_indentation = options[:relative_indentation] || 0
+        verbose_prefix = options[:verbose_prefix] || ''
+        if config.verbose?
+          title(title, verbose_prefix, relative_indentation)
+        else
+          puts title
+        end
+    
+        def filter(list)
+      setup_filters if @filters.nil?
+      @filters.reduce(list) { |l, f| f.filter l }
+    end
+    
+          # rubocop:disable Security/MarshalLoad
+      def add_role(role, hosts, options={})
+        options_deepcopy = Marshal.dump(options.merge(roles: role))
+        Array(hosts).each { |host| add_host(host, Marshal.load(options_deepcopy)) }
+      end
+      # rubocop:enable Security/MarshalLoad
+    
+          def installed_gem_version(gem_name)
+        Gem.loaded_specs[gem_name].version
+      end
+    
+        it 'logs the exception to Sidekiq.logger' do
+      Component.new.invoke_exception(:a => 1)
+      @str_logger.rewind
+      log = @str_logger.readlines
+      assert_match(/'a':1/, log[0], 'didn't include the context')
+      assert_match(/Something didn't work!/, log[1], 'didn't include the exception message')
+      assert_match(/test\/test_exception_handler.rb/, log[2], 'didn't include the backtrace')
+    end
+    
+    end
+
+    
+      class CustomMiddleware
+    def initialize(name, recorder)
+      @name = name
+      @recorder = recorder
+    end
+    
+        it 'calculates an average poll interval based on the number of known Sidekiq processes' do
+      with_sidekiq_option(:average_scheduled_poll_interval, 10) do
+        3.times do |i|
+          Sidekiq.redis do |conn|
+            conn.sadd('processes', 'process-#{i}')
+            conn.hset('process-#{i}', 'info', nil)
+          end
+        end
+    
+          def perform
+        self.class.count += 1 if foo == :bar
+      end
+    end
