@@ -1,412 +1,389 @@
 
         
         
-    {    /* d += a3 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'movq %%rax,%%rcx\n'
-    'movq %%rdx,%%r15\n'
-    /* d += a2 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a1 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d = a0 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c = a4 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += (c & M) * R */
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* t3 (tmp1) = d & M */
-    'movq %%rcx,%%rsi\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rsi\n'
-    'movq %%rsi,%q1\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* d += a4 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a2 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a1 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a0 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += c * R */
-    'movq %%r8,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* t4 = d & M (%%rsi) */
-    'movq %%rcx,%%rsi\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* tx = t4 >> 48 (tmp3) */
-    'movq %%rsi,%%rax\n'
-    'shrq $48,%%rax\n'
-    'movq %%rax,%q3\n'
-    /* t4 &= (M >> 4) (tmp2) */
-    'movq $0xffffffffffff,%%rax\n'
-    'andq %%rax,%%rsi\n'
-    'movq %%rsi,%q2\n'
-    /* c = a0 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += a4 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a2 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a1 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* u0 = d & M (%%rsi) */
-    'movq %%rcx,%%rsi\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* u0 = (u0 << 4) | tx (%%rsi) */
-    'shlq $4,%%rsi\n'
-    'movq %q3,%%rax\n'
-    'orq %%rax,%%rsi\n'
-    /* c += u0 * (R >> 4) */
-    'movq $0x1000003d1,%%rax\n'
-    'mulq %%rsi\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[0] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,0(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += a1 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* c += a0 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d += a4 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a2 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c += (d & M) * R */
-    'movq %%rcx,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* r[1] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,8(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += a2 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* c += a1 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* c += a0 * b2 (last use of %%r10 = a0) */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* fetch t3 (%%r10, overwrites a0), t4 (%%rsi) */
-    'movq %q2,%%rsi\n'
-    'movq %q1,%%r10\n'
-    /* d += a4 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c += (d & M) * R */
-    'movq %%rcx,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 (%%rcx only) */
-    'shrdq $52,%%r15,%%rcx\n'
-    /* r[2] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,16(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += t3 */
-    'addq %%r10,%%r8\n'
-    /* c += d * R */
-    'movq %%rcx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[3] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,24(%%rdi)\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* c += t4 (%%r8 only) */
-    'addq %%rsi,%%r8\n'
-    /* r[4] = c */
-    'movq %%r8,32(%%rdi)\n'
-: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
-: 'b'(b), 'D'(r)
-: '%rax', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
-);
+    { private:
+  const int kNumTensorsPerInput = 4;
+};
+    
+    void hdf5_save_string(hid_t loc_id, const string& dataset_name,
+                      const string& s) {
+  herr_t status = \
+    H5LTmake_dataset_string(loc_id, dataset_name.c_str(), s.c_str());
+  CHECK_GE(status, 0)
+    << 'Failed to save string dataset with name ' << dataset_name;
 }
     
-    /** A hasher class for RIPEMD-160. */
-class CRIPEMD160
-{
-private:
-    uint32_t s[5];
-    unsigned char buf[64];
-    uint64_t bytes;
+      // Timing information, handy to tune e.g. nbr of GPUs
+  Timer iteration_timer_;
+  float iterations_last_;
+    
+    template <typename Dtype>
+void PoolingLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
+  if (!propagate_down[0]) {
+    return;
+  }
+  const Dtype* top_diff = top[0]->cpu_diff();
+  Dtype* bottom_diff = bottom[0]->mutable_cpu_diff();
+  // Different pooling methods. We explicitly do the switch outside the for
+  // loop to save time, although this results in more codes.
+  caffe_set(bottom[0]->count(), Dtype(0), bottom_diff);
+  // We'll output the mask to top[1] if it's of size >1.
+  const bool use_top_mask = top.size() > 1;
+  const int* mask = NULL;  // suppress warnings about uninitialized variables
+  const Dtype* top_mask = NULL;
+  switch (this->layer_param_.pooling_param().pool()) {
+  case PoolingParameter_PoolMethod_MAX:
+    // The main loop
+    if (use_top_mask) {
+      top_mask = top[1]->cpu_data();
+    } else {
+      mask = max_idx_.cpu_data();
+    }
+    for (int n = 0; n < top[0]->num(); ++n) {
+      for (int c = 0; c < channels_; ++c) {
+        for (int ph = 0; ph < pooled_height_; ++ph) {
+          for (int pw = 0; pw < pooled_width_; ++pw) {
+            const int index = ph * pooled_width_ + pw;
+            const int bottom_index =
+                use_top_mask ? top_mask[index] : mask[index];
+            bottom_diff[bottom_index] += top_diff[index];
+          }
+        }
+        bottom_diff += bottom[0]->offset(0, 1);
+        top_diff += top[0]->offset(0, 1);
+        if (use_top_mask) {
+          top_mask += top[0]->offset(0, 1);
+        } else {
+          mask += top[0]->offset(0, 1);
+        }
+      }
+    }
+    break;
+  case PoolingParameter_PoolMethod_AVE:
+    // The main loop
+    for (int n = 0; n < top[0]->num(); ++n) {
+      for (int c = 0; c < channels_; ++c) {
+        for (int ph = 0; ph < pooled_height_; ++ph) {
+          for (int pw = 0; pw < pooled_width_; ++pw) {
+            int hstart = ph * stride_h_ - pad_h_;
+            int wstart = pw * stride_w_ - pad_w_;
+            int hend = min(hstart + kernel_h_, height_ + pad_h_);
+            int wend = min(wstart + kernel_w_, width_ + pad_w_);
+            int pool_size = (hend - hstart) * (wend - wstart);
+            hstart = max(hstart, 0);
+            wstart = max(wstart, 0);
+            hend = min(hend, height_);
+            wend = min(wend, width_);
+            for (int h = hstart; h < hend; ++h) {
+              for (int w = wstart; w < wend; ++w) {
+                bottom_diff[h * width_ + w] +=
+                  top_diff[ph * pooled_width_ + pw] / pool_size;
+              }
+            }
+          }
+        }
+        // offset
+        bottom_diff += bottom[0]->offset(0, 1);
+        top_diff += top[0]->offset(0, 1);
+      }
+    }
+    break;
+  case PoolingParameter_PoolMethod_STOCHASTIC:
+    NOT_IMPLEMENTED;
+    break;
+  default:
+    LOG(FATAL) << 'Unknown pooling method.';
+  }
+}
+    
+    void convert_dataset(const string& input_folder, const string& output_folder,
+    const string& db_type) {
+  scoped_ptr<db::DB> train_db(db::GetDB(db_type));
+  train_db->Open(output_folder + '/cifar10_train_' + db_type, db::NEW);
+  scoped_ptr<db::Transaction> txn(train_db->NewTransaction());
+  // Data buffer
+  int label;
+  char str_buffer[kCIFARImageNBytes];
+  Datum datum;
+  datum.set_channels(3);
+  datum.set_height(kCIFARSize);
+  datum.set_width(kCIFARSize);
     }
     
-    // Level-0 compaction is started when we hit this many files.
-static const int kL0_CompactionTrigger = 4;
+     protected:
+   /**
+   * @brief Generates a random integer from Uniform({0, 1, ..., n-1}).
+   *
+   * @param n
+   *    The upperbound (exclusive) value of the random number.
+   * @return
+   *    A uniformly random integer value from ({0, 1, ..., n-1}).
+   */
+  virtual int Rand(int n);
     
-          PartialCompactTestPreFault(num_pre_sync, num_post_sync);
-      // No new files created so we expect all values since no files will be
-      // dropped.
-      PartialCompactTestReopenWithFault(RESET_DELETE_UNSYNCED_FILES,
-                                        num_pre_sync + num_post_sync,
-                                        0);
+      ~Reader();
     
+    namespace leveldb {
+    }
     
-    {  std::vector<OperatorDef> GetGradientDefs() override {
-    return SingleGradientDef(
-        'SubGradient',
-        '',
-        std::vector<std::string>{GO(0), I(0), I(1)},
-        std::vector<std::string>{GI(0), GI(1)});
+      // Set the last sequence number to s.
+  void SetLastSequence(uint64_t s) {
+    assert(s >= last_sequence_);
+    last_sequence_ = s;
   }
-};
     
-    REGISTER_CPU_OPERATOR(
-    MergeSingleListFeatureTensorsGradient,
-    MergeSingleListOrMapFeatureTensorsGradientOp<CPUContext>);
-OPERATOR_SCHEMA(MergeSingleListFeatureTensorsGradient)
-    .SetDoc(
-        'Explode multi-feature tensors with list features into '
-        'single-feature tensors.' +
-        doc)
-    .NumInputs([](int n) { return n >= 3 && n % 2 == 1; })
-    .NumOutputs([](int n) { return n >= 1; })
-    .Input(0, 'in1_lengths', '.lengths')
-    .Input(1, 'in1_presence', '.presence')
-    .Input(2, 'out_values_values', '.values.values_grad')
-    .Output(0, 'out1_values', '.values_grad');
-REGISTER_GRADIENT(
-    MergeSingleListFeatureTensors,
-    GetMergeSingleListFeatureTensorsGradient);
+      const char kWrite2Data[] = 'Write #2 data';
+  ASSERT_OK(WriteStringToFile(env_, kWrite2Data, kTestFileName));
     
-    Each feature has fixed lengths which are passed as lengths argument and a
-separate tensor will be produced for each feature.
-i.e. DATA.dim(1) = len(lengths) = NumOuptuts.
+      // -------------------
+  // Parameters that affect performance
     
-    template <typename T, class Context>
-class BernoulliJSDOp final : public Operator<Context> {
- public:
-  USE_SIMPLE_CTOR_DTOR(BernoulliJSDOp);
-  USE_OPERATOR_CONTEXT_FUNCTIONS;
-  bool RunOnDevice() override;
-};
+      Code code() const {
+    return (state_ == nullptr) ? kOk : static_cast<Code>(state_[4]);
+  }
     
-    REGISTER_CUDA_OPERATOR(LC3D, LocallyConnectedOp<float, CUDAContext>);
-REGISTER_CUDA_OPERATOR(
-    LC3DGradient,
-    LocallyConnectedGradientOp<float, CUDAContext>);
+      // Add string delta to buffer_ followed by value
+  buffer_.append(key.data() + shared, non_shared);
+  buffer_.append(value.data(), value.size());
     
-    #endif  // GTEST_INCLUDE_GTEST_GTEST_PRINTERS_H_
+    //------------------------------------------------------------------------
+// DeviceNRecoder
+//------------------------------------------------------------------------
+    
+    #include 'goo/gtypes.h'
+#include 'goo/GooList.h'
+#include 'goo/GooString.h'
+#include 'Object.h'
+    
+    
+    {  if (inlineImg) {
+    str->reset();
+    j = height * ((width * colorMap->getNumPixelComps() *
+		   colorMap->getBits() + 7) / 8);
+    for (i = 0; i < j; ++i)
+      str->getChar();
+    str->close();
+  }
+}
+    
+      // Check the document's encryption.  If the document is encrypted,
+  // this will first try <ownerPassword> and <userPassword> (in
+  // 'batch' mode), and if those fail, it will attempt to request a
+  // password from the user.  This is the high-level function that
+  // calls the lower level functions for the specific security handler
+  // (requesting a password three times, etc.).  Returns true if the
+  // document can be opened (if it's unencrypted, or if a correct
+  // password is obtained); false otherwise (encrypted and no correct
+  // password).
+  GBool checkEncryption(GooString *ownerPassword,
+			GooString *userPassword);
+    
+      if (unlikely(t3GlyphStack->origSplash != NULL)) {
+    error(-1, 't3GlyphStack origSplash was not null in SplashOutputDev::type3D1');
+    return;
+  }
+    
+    const std::string& DHTResponseMessage::getType() const { return R; }
+    
+    
+    {} // namespace aria2
 
     
-    // Boolean assertions. Condition can be either a Boolean expression or an
-// AssertionResult. For more information on how to use AssertionResult with
-// these macros see comments on that class.
-#define EXPECT_TRUE(condition) \
-  GTEST_TEST_BOOLEAN_(condition, #condition, false, true, \
-                      GTEST_NONFATAL_FAILURE_)
-#define EXPECT_FALSE(condition) \
-  GTEST_TEST_BOOLEAN_(!(condition), #condition, true, false, \
-                      GTEST_NONFATAL_FAILURE_)
-#define ASSERT_TRUE(condition) \
-  GTEST_TEST_BOOLEAN_(condition, #condition, false, true, \
-                      GTEST_FATAL_FAILURE_)
-#define ASSERT_FALSE(condition) \
-  GTEST_TEST_BOOLEAN_(!(condition), #condition, true, false, \
-                      GTEST_FATAL_FAILURE_)
+      void moveBucketHead(const std::shared_ptr<DHTNode>& node);
+    
+    #include <vector>
+#include <string>
+#include <memory>
     
     
-    {  return AssertionFailure() << pred_text << '('
-                            << e1 << ', '
-                            << e2 << ') evaluates to false, where'
-                            << '\n' << e1 << ' evaluates to ' << v1
-                            << '\n' << e2 << ' evaluates to ' << v2;
-}
+    {} // namespace aria2
+
     
-      // Creates directories so that path exists. Returns true if successful or if
-  // the directories already exist; returns false if unable to create
-  // directories for any reason. Will also return false if the FilePath does
-  // not represent a directory (that is, it doesn't end with a path separator).
-  bool CreateDirectoriesRecursively() const;
+    #include <vector>
+#include <memory>
     
-      const char* const name = typeid(T).name();
-#  if GTEST_HAS_CXXABI_H_ || defined(__HP_aCC)
-  int status = 0;
-  // gcc's implementation of typeid(T).name() mangles the type name,
-  // so we have to demangle it.
-#   if GTEST_HAS_CXXABI_H_
-  using abi::__cxa_demangle;
-#   endif  // GTEST_HAS_CXXABI_H_
-  char* const readable_name = __cxa_demangle(name, 0, 0, &status);
-  const std::string name_str(status == 0 ? readable_name : name);
-  free(readable_name);
-  return name_str;
-#  else
-  return name;
-#  endif  // GTEST_HAS_CXXABI_H_ || __HP_aCC
+    #include 'common.h'
     
-    #include 'sample1.h'
+    #endif // D_DHT_TASK_EXECUTOR_H
+
     
+      virtual std::shared_ptr<DHTTask>
+  createPeerLookupTask(const std::shared_ptr<DownloadContext>& ctx,
+                       uint16_t tcpPort,
+                       const std::shared_ptr<PeerStorage>& peerStorage) = 0;
     
-// Tests Factorial().
+      DHTMessageDispatcher* dispatcher_;
     
-      // Gets the number of elements.
-  size_t Size() const { return size_; }
+    public:
+  DHTTaskQueueImpl();
     
-    SEXP XGBoosterModelToRaw_R(SEXP handle) {
-  SEXP ret;
-  R_API_BEGIN();
-  bst_ulong olen;
-  const char *raw;
-  CHECK_CALL(XGBoosterGetModelRaw(R_ExternalPtrAddr(handle), &olen, &raw));
-  ret = PROTECT(allocVector(RAWSXP, olen));
-  if (olen != 0) {
-    memcpy(RAW(ret), raw, olen);
-  }
-  R_API_END();
-  UNPROTECT(1);
-  return ret;
-}
+      static const std::string E;
     
-    template<typename DType>
-inline void CompressArray<DType>::Write(dmlc::Stream* fo) {
-  encoded_chunks_.clear();
-  encoded_chunks_.push_back(0);
-  for (size_t i = 0; i < out_buffer_.size(); ++i) {
-    encoded_chunks_.push_back(encoded_chunks_.back() + out_buffer_[i].length());
-  }
-  fo->Write(raw_chunks_);
-  fo->Write(encoded_chunks_);
-  for (const std::string& buf : out_buffer_) {
-    fo->Write(dmlc::BeginPtr(buf), buf.length());
-  }
-}
+      /**
+   * @brief Check if a config plugin is registered and load configs.
+   *
+   * Calls refresh after confirming a config plugin is registered
+   */
+  Status load();
     
-    // objective for lambda rank
-class LambdaRankObj : public ObjFunction {
- public:
-  void Configure(const std::vector<std::pair<std::string, std::string> >& args) override {
-    param_.InitAllowUnknown(args);
+    bool Pack::checkDiscovery() {
+  stats_.total++;
+  size_t current = osquery::getUnixTime();
+  if ((current - discovery_cache_.first) < FLAGS_pack_refresh_interval) {
+    stats_.hits++;
+    return discovery_cache_.second;
   }
     }
+    
+    TEST_F(PacksTests, test_schedule) {
+  Pack fpack('discovery_pack', getPackWithDiscovery().doc());
+  // Expect a single query in the schedule since one query has an explicit
+  // invalid/fake platform requirement.
+  EXPECT_EQ(fpack.getSchedule().size(), 1U);
+}
+    
+    ExpectedSuccess<DatabaseError> InMemoryDatabase::open() {
+  debug_only::verifyTrue(!is_open_, 'database is already open');
+  for (const auto& domain : kDomains) {
+    storage_[domain] = std::make_unique<InMemoryStorage<DataType>>();
+  }
+  is_open_ = true;
+  return Success();
+}
+    
+    
+    {  name_ = name;
+}
+    
+      // check writeWithPriority will wait for at least timeout if the queue is
+  // full.
+  auto time_before = std::chrono::steady_clock::now();
+  EXPECT_FALSE(queue.writeWithPriority(5, 0, timeout));
+  auto time_after = std::chrono::steady_clock::now();
+  EXPECT_GE(time_after - time_before, timeout);
+    
+    
+    {
+    {  std::atomic<ssize_t> keepAliveCounter_{1};
+  KeepAlive<Executor> executor_;
+  int8_t priority_;
+};
+} // namespace folly
+
+    
+    namespace folly {
+/**
+ * An implementation of `folly::AsyncLogWriter` that writes log messages into a
+ * file.
+ *
+ * See `folly::AsyncLogWriter` for details on asynchronous IO.
+ */
+class AsyncFileWriter : public AsyncLogWriter {
+ public:
+  /**
+   * Construct an AsyncFileWriter that appends to the file at the specified
+   * path.
+   */
+  explicit AsyncFileWriter(folly::StringPiece path);
+    }
+    }
+    
+    void AsyncLogWriter::writeMessage(std::string&& buffer, uint32_t flags) {
+  auto data = data_.lock();
+  if ((data->currentBufferSize >= data->maxBufferBytes) &&
+      !(flags & NEVER_DISCARD)) {
+    ++data->numDiscarded;
+    return;
+  }
+    }
+    
+      bool preFork();
+  void postForkParent();
+  void postForkChild();
+  void stopIoThread(
+      folly::Synchronized<Data, std::mutex>::LockedPtr& data,
+      uint32_t extraFlags);
+  void restartThread();
+    
+    namespace {
+static bool* expectedMessage;
+void handleLoggingError(
+    StringPiece /* file */,
+    int /* lineNumber */,
+    std::string&& msg) {
+  if (folly::kIsDebug) {
+    std::cerr << msg << std::endl;
+  } else {
+    *expectedMessage = (msg == 'cleanup() is not called before destroying');
+  }
+}
+    }
+    
+    template <class Alloc>
+void Arena<Alloc>::merge(Arena<Alloc>&& other) {
+  blocks_.splice_after(blocks_.before_begin(), other.blocks_);
+  other.blocks_.clear();
+  other.ptr_ = other.end_ = nullptr;
+  totalAllocatedSize_ += other.totalAllocatedSize_;
+  other.totalAllocatedSize_ = 0;
+}
+    
+    
+    {  atomic_thread_fence(std::memory_order_seq_cst);
+  beforeSharedAccess();
+  auto parent = joins_.find(std::this_thread::get_id());
+  if (parent != joins_.end()) {
+    reschedule(parent->second);
+    joins_.erase(parent);
+  }
+  sems_.erase(std::find(sems_.begin(), sems_.end(), tls.sem));
+  active_.erase(std::this_thread::get_id());
+  if (sems_.size() > 0) {
+    FOLLY_TEST_DSCHED_VLOG('exiting');
+    /* Wait here so that parent thread can control when the thread
+     * enters the thread local destructors. */
+    exitingSems_[std::this_thread::get_id()] = tls.sem;
+    afterSharedAccess();
+    tls.sem->wait();
+  }
+  tls.sched = nullptr;
+  tls.aux_act = nullptr;
+  tls.exiting = true;
+  delete tls.sem;
+  tls.sem = nullptr;
+}
+    
+      /** Sets up a function to be called after every subsequent shared
+   *  access (until clearAuxChk() is called) for checking global
+   *  invariants and logging. The function takes a uint64_t parameter
+   *  that indicates the number of shared accesses so far. */
+  static void setAuxChk(AuxChk& aux);
+    
+    TEST(IndexedMemPool, unique_ptr) {
+  typedef IndexedMemPool<size_t> Pool;
+  Pool pool(100);
+    }
+    
+    #define FOLLY_HAS_MEMORY_RESOURCE 1
+#include <memory_resource> // @manual
+namespace folly {
+namespace detail {
+namespace std_pmr = ::std::pmr;
+} // namespace detail
+} // namespace folly
+    
+      /**
+   * Try to combine a task as a combined critical section untill the given time
+   *
+   * Other than the difference in the meaning of the second argument, the
+   * semantics of this function are identical to try_lock_combine_for()
+   */
+  template <
+      typename Clock,
+      typename Duration,
+      typename Task,
+      typename ReturnType = decltype(std::declval<Task&>()())>
+  folly::Optional<ReturnType> try_lock_combine_until(
+      const std::chrono::time_point<Clock, Duration>& deadline,
+      Task task);
