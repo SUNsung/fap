@@ -1,140 +1,211 @@
 
         
-            Examples
-    --------
-    >>> X = [[-2, 1, -4,   -1],
-    ...      [-1, 2, -3, -0.5],
-    ...      [ 0, 3, -2,  0.5],
-    ...      [ 1, 4, -1,    2]]
-    >>> est = KBinsDiscretizer(n_bins=3, encode='ordinal', strategy='uniform')
-    >>> est.fit(X)
-    KBinsDiscretizer(...)
-    >>> Xt = est.transform(X)
-    >>> Xt  # doctest: +SKIP
-    array([[ 0., 0., 0., 0.],
-           [ 1., 1., 1., 0.],
-           [ 2., 2., 2., 1.],
-           [ 2., 2., 2., 2.]])
+            def test_inline_change_fk_change_perm(self):
+        permission = Permission.objects.get(codename='change_inner2', content_type=self.inner_ct)
+        self.user.user_permissions.add(permission)
+        response = self.client.get(self.holder_change_url)
+        # Change permission on inner2s, so we can change existing but not add new
+        self.assertContains(response, '<h2>Inner2s</h2>', count=2)
+        # Just the one form for existing instances
+        self.assertContains(
+            response, '<input type='hidden' id='id_inner2_set-TOTAL_FORMS' value='1' name='inner2_set-TOTAL_FORMS'>',
+            html=True
+        )
+        self.assertContains(
+            response,
+            '<input type='hidden' id='id_inner2_set-0-id' value='%i' name='inner2_set-0-id'>' % self.inner2.id,
+            html=True
+        )
+        # max-num 0 means we can't add new ones
+        self.assertContains(
+            response,
+            '<input type='hidden' id='id_inner2_set-MAX_NUM_FORMS' value='0' name='inner2_set-MAX_NUM_FORMS'>',
+            html=True
+        )
+        # TabularInline
+        self.assertContains(response, '<th class='column-dummy required'>Dummy</th>', html=True)
+        self.assertContains(
+            response,
+            '<input type='number' name='inner2_set-2-0-dummy' value='%s' '
+            'class='vIntegerField' id='id_inner2_set-2-0-dummy'>' % self.inner2.dummy,
+            html=True,
+        )
     
-        Parameters
-    ----------
-    func : callable, optional default=None
-        The callable to use for the transformation. This will be passed
-        the same arguments as transform, with args and kwargs forwarded.
-        If func is None, then func will be the identity function.
-    
-            plot_batch_times(all_times, n_components, batch_sizes, data)
-        plot_batch_errors(all_errors, n_components, batch_sizes, data)
-    
-    Does two benchmarks
+            response = RedirectView.as_view(url='/bar/', query_string=True)(self.rf.get('/foo/?pork=spam'))
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/bar/?pork=spam')
     
     
-def benchmark_influence(conf):
-    '''
-    Benchmark influence of :changing_param: on both MSE and latency.
-    '''
-    prediction_times = []
-    prediction_powers = []
-    complexities = []
-    for param_value in conf['changing_param_values']:
-        conf['tuned_params'][conf['changing_param']] = param_value
-        estimator = conf['estimator'](**conf['tuned_params'])
-        print('Benchmarking %s' % estimator)
-        estimator.fit(conf['data']['X_train'], conf['data']['y_train'])
-        conf['postfit_hook'](estimator)
-        complexity = conf['complexity_computer'](estimator)
-        complexities.append(complexity)
-        start_time = time.time()
-        for _ in range(conf['n_samples']):
-            y_pred = estimator.predict(conf['data']['X_test'])
-        elapsed_time = (time.time() - start_time) / float(conf['n_samples'])
-        prediction_times.append(elapsed_time)
-        pred_score = conf['prediction_performance_computer'](
-            conf['data']['y_test'], y_pred)
-        prediction_powers.append(pred_score)
-        print('Complexity: %d | %s: %.4f | Pred. Time: %fs\n' % (
-            complexity, conf['prediction_performance_label'], pred_score,
-            elapsed_time))
-    return prediction_powers, prediction_times, complexities
+# For more information, see the OGR C API source code:
+#  https://www.gdal.org/ogr__api_8h.html
+#
+# The OGR_DS_* routines are relevant here.
+class DataSource(GDALBase):
+    'Wraps an OGR Data Source object.'
+    destructor = capi.destroy_ds
     
-    model = SpectralBiclustering(n_clusters=n_clusters, method='log',
-                             random_state=0)
-model.fit(data)
-score = consensus_score(model.biclusters_,
-                        (rows[:, row_idx], columns[:, col_idx]))
+                # For out of memory drivers, check filename argument
+            if driver.name != 'MEM' and 'name' not in ds_input:
+                raise GDALException('Specify name for creation of raster with driver '{}'.'.format(driver.name))
     
-    When we apply clustering to the data, we find that the clustering
-reflects what was in the distance matrices. Indeed, for the Euclidean
-distance, the classes are ill-separated because of the noise, and thus
-the clustering does not separate the waveforms. For the cityblock
-distance, the separation is good and the waveform classes are recovered.
-Finally, the cosine distance does not separate at all waveform 1 and 2,
-thus the clustering puts them in the same cluster.
-'''
-# Author: Gael Varoquaux
-# License: BSD 3-Clause or CC-0
+        def import_user_input(self, user_input):
+        'Import the Spatial Reference from the given user input string.'
+        capi.from_user_input(self.ptr, force_bytes(user_input))
     
-        # disconnect dependencies between checkpointed tensors
-    checkpoints_disconnected = {}
-    for x in checkpoints:
-        if x.op and x.op.name is not None:
-            grad_node = tf.stop_gradient(x, name=x.op.name+'_sg')
-        else:
-            grad_node = tf.stop_gradient(x)
-        checkpoints_disconnected[x] = grad_node
+    def shorten_title(title):
+    m1 = re.search('[[0-9]*]', title)
+    m2 = re.search(''.*'', title)
+    if m1:
+        title = m1.group(0)
+    if m2:
+        title = ' '.join((title, m2.group(0)))   
+    return title[:50] + ' [...]'    
     
-            # Leaves only the label and removes the app window
-        self.topwidget.wm_overrideredirect(True)
+            self.assertFalse(sns_listener.get_topic_by_arn(topic_arn))
+        sns_listener.do_create_topic(topic_arn)
+        self.assertTrue(sns_listener.get_topic_by_arn(topic_arn) is not None)
+        sns_listener.do_subscribe(
+            topic_arn,
+            'http://localhost:1234/listen',
+            'http',
+            sub_arn,
+            {}
+        )
+        self.assertTrue(sns_listener.get_subscription_by_arn(sub_arn))
+        sns_listener.do_unsubscribe(sub_arn)
+        self.assertFalse(sns_listener.get_subscription_by_arn(sub_arn))
     
-        def run(self, old_face, new_face, raw_mask):
-        ''' Perform selected adjustment on face '''
-        logger.trace('Performing color adjustment')
-        # Remove Mask for processing
-        reinsert_mask = False
-        if new_face.shape[2] == 4:
-            reinsert_mask = True
-            final_mask = new_face[:, :, -1]
-            new_face = new_face[:, :, :3]
-        new_face = self.process(old_face, new_face, raw_mask)
-        new_face = np.clip(new_face, 0.0, 1.0)
-        if reinsert_mask and new_face.shape[2] != 4:
-            # Reinsert Mask
-            new_face = np.concatenate((new_face, np.expand_dims(final_mask, axis=-1)), -1)
-        logger.trace('Performed color adjustment')
-        return new_face
+        dynamodb = aws_stack.connect_to_resource('dynamodb')
+    # create table with stream forwarding config
+    aws_stack.create_dynamodb_table(TEST_TABLE_NAME, partition_key=PARTITION_KEY)
+    table = dynamodb.Table(TEST_TABLE_NAME)
+    
+        def test_delivery_stream_tags(self):
+        result = firehose_api.get_delivery_stream_tags(TEST_STREAM_NAME)
+        self.assertEquals(TEST_TAGS, result['Tags'])
+        result = firehose_api.get_delivery_stream_tags(TEST_STREAM_NAME, exclusive_start_tag_key='MyTag')
+        self.assertEquals([TEST_TAG_2], result['Tags'])
+        result = firehose_api.get_delivery_stream_tags(TEST_STREAM_NAME, limit=1)
+        self.assertEquals([TEST_TAG_1], result['Tags'])
+        self.assertEquals(True, result['HasMore'])
 
     
-        Defaults files should be named <plugin_name>_defaults.py
-    Any items placed into this file will automatically get added to the relevant config .ini files
-    within the faceswap/config folder.
+            assert 'Parameters' in response
+        assert len(response['Parameters']) > 0
+        assert response['Parameters'][0]['Name'] == 'test_put'
+        assert response['Parameters'][0]['Value'] == '1'
+
     
-        The following variables should be defined:
-        _HELPTEXT: A string describing what this plugin does
-        _DEFAULTS: A dictionary containing the options, defaults and meta information. The
-                   dictionary should be defined as:
-                       {<option_name>: {<metadata>}}
+        def _replace(self, response, pattern, replacement):
+        content = to_str(response.content)
+        response._content = re.sub(pattern, replacement, content)
     
-        The following keys are expected for the _DEFAULTS <metadata> dict:
-        datatype:  [required] A python type class. This limits the type of data that can be
-                   provided in the .ini file and ensures that the value is returned in the
-                   correct type to faceswap. Valid datatypes are: <class 'int'>, <class 'float'>,
-                   <class 'str'>, <class 'bool'>.
-        default:   [required] The default value for this option.
-        info:      [required] A string describing what this option does.
-        choices:   [optional] If this option's datatype is of <class 'str'> then valid
-                   selections can be defined here. This validates the option and also enables
-                   a combobox / radio option in the GUI.
-        gui_radio: [optional] If <choices> are defined, this indicates that the GUI should use
-                   radio buttons rather than a combobox to display this option.
-        min_max:   [partial] For <class 'int'> and <class 'float'> datatypes this is required
-                   otherwise it is ignored. Should be a tuple of min and max accepted values.
-                   This is used for controlling the GUI slider range. Values are not enforced.
-        rounding:  [partial] For <class 'int'> and <class 'float'> datatypes this is
-                   required otherwise it is ignored. Used for the GUI slider. For floats, this
-                   is the number of decimal places to display. For ints this is the step size.
-        fixed:     [optional] [train only]. Training configurations are fixed when the model is
-                   created, and then reloaded from the state file. Marking an item as fixed=False
-                   indicates that this value can be changed for existing models, and will override
-                   the value saved in the state file with the updated value in config. If not
-                   provided this will default to True.
-'''
+    
+def publish_event(time_before, result, kwargs):
+    event_publisher.fire_event(
+        event_publisher.EVENT_LAMBDA_INVOKE_FUNC,
+        payload={'f': _func_name(kwargs), 'd': now_utc() - time_before, 'r': result[0]})
+    
+        def test_put_rule(self):
+        self.events_client.put_rule(Name='test_rule', EventPattern=json.dumps(TEST_EVENT_PATTERN))
+        rules = self.events_client.list_rules(NamePrefix='test_rule')['Rules']
+    
+            super(HandEnv, self).__init__(
+            model_path=model_path, n_substeps=n_substeps, n_actions=20,
+            initial_qpos=initial_qpos)
+    
+        def step(self, a):
+        posbefore = self.sim.data.qpos[0]
+        self.do_simulation(a, self.frame_skip)
+        posafter, height, ang = self.sim.data.qpos[0:3]
+        alive_bonus = 1.0
+        reward = ((posafter - posbefore) / self.dt)
+        reward += alive_bonus
+        reward -= 1e-3 * np.square(a).sum()
+        done = not (height > 0.8 and height < 2.0 and
+                    ang > -1.0 and ang < 1.0)
+        ob = self._get_obs()
+        return ob, reward, done, {}
+    
+            self.fd_polygon = fixtureDef(
+                        shape = polygonShape(vertices=
+                        [(0, 0),
+                         (1, 0),
+                         (1, -1),
+                         (0, -1)]),
+                        friction = FRICTION)
+    
+    from gym.utils import colorize
+    
+    bogus_mnist = \
+[[
+' **** ',
+'*    *',
+'*    *',
+'*    *',
+'*    *',
+' **** '
+], [
+'  **  ',
+' * *  ',
+'   *  ',
+'   *  ',
+'   *  ',
+'  *** '
+], [
+' **** ',
+'*    *',
+'     *',
+'  *** ',
+'**    ',
+'******'
+], [
+' **** ',
+'*    *',
+'   ** ',
+'     *',
+'*    *',
+' **** '
+], [
+' *  * ',
+' *  * ',
+' *  * ',
+' **** ',
+'    * ',
+'    * '
+], [
+' **** ',
+' *    ',
+' **** ',
+'    * ',
+'    * ',
+' **** '
+], [
+'  *** ',
+' *    ',
+' **** ',
+' *  * ',
+' *  * ',
+' **** '
+], [
+' **** ',
+'    * ',
+'   *  ',
+'   *  ',
+'  *   ',
+'  *   '
+], [
+' **** ',
+'*    *',
+' **** ',
+'*    *',
+'*    *',
+' **** '
+], [
+' **** ',
+'*    *',
+'*    *',
+' *****',
+'     *',
+' **** '
+]]
