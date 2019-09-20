@@ -1,126 +1,82 @@
 
         
-                desc 'Requests access for the authenticated user to a #{source_type}.' do
-          detail 'This feature was introduced in GitLab 8.11.'
-          success Entities::AccessRequester
-        end
-        post ':id/access_requests' do
-          source = find_source(source_type, params[:id])
-          access_requester = source.request_access(current_user)
-    
-              if badge.is_a?(GroupBadge) && source.is_a?(Project)
-            error!('To delete a Group badge please use the Group endpoint', 403)
-          end
-    
-          desc 'Get a specific project's deploy keys' do
-        success Entities::DeployKeysProject
-      end
-      params do
-        use :pagination
-      end
-      # rubocop: disable CodeReuse/ActiveRecord
-      get ':id/deploy_keys' do
-        keys = user_project.deploy_keys_projects.preload(:deploy_key)
-    
-              if !@run.key?(:privileged)
-            @run[:privileged] = false
-          end
-    
-        it 'should raise an exception' do
-      expect { subject }.
-        to raise_error(Vagrant::Errors::BoxMetadataFileNotFound)
+            if successfully_sent?(resource)
+      respond_with({}, location: after_resending_confirmation_instructions_path_for(resource_name))
+    else
+      respond_with(resource)
     end
   end
     
-            vf_path           = @machine.provider_config.vagrant_vagrantfile
-        host_machine_name = @machine.provider_config.vagrant_machine || :default
-        if !vf_path
-          # We don't have a Vagrantfile path set, so we're going to use
-          # the default but we need to copy it into the data dir so that
-          # we don't write into our installation dir (we can't).
-          default_path = File.expand_path('../hostmachine/Vagrantfile', __FILE__)
-          vf_path      = @machine.env.data_dir.join('docker-host', 'Vagrantfile')
-          begin
-            @machine.env.lock('docker-provider-hostvm') do
-              vf_path.dirname.mkpath
-              FileUtils.cp(default_path, vf_path)
-            end
-          rescue Vagrant::Errors::EnvironmentLockedError
-            # Lock contention, just retry
-            retry
-          end
+      # POST /resource/sign_in
+  def create
+    self.resource = warden.authenticate!(auth_options)
+    set_flash_message!(:notice, :signed_in)
+    sign_in(resource_name, resource)
+    yield resource if block_given?
+    respond_with resource, location: after_sign_in_path_for(resource)
+  end
     
-    describe Vagrant::BatchAction do
-  let(:called_actions) { [] }
-  let!(:lock) { Mutex.new }
-  let(:provider_name) { 'test' }
-  let(:provider_options) { {} }
+      def unknown_action!(msg)
+    logger.debug '[Devise] #{msg}' if logger
+    raise AbstractController::ActionNotFound, msg
+  end
     
-          # Resolve the request set to ensure proper activation order
-      solution = request_set.resolve(current_set)
-      solution_specs = solution.map(&:full_spec)
-      solution_full_names = solution_specs.map(&:full_name)
+            users.any?
+      end
     
-          def add_host(host, properties={})
-        new_host = Server[host]
-        new_host.port = properties[:port] if properties.key?(:port)
-        # This matching logic must stay in sync with `Server#matches?`.
-        key = ServerKey.new(new_host.hostname, new_host.port)
-        existing = servers_by_key[key]
-        if existing
-          existing.user = new_host.user if new_host.user
-          existing.with(properties)
+        # The hook which is called inside devise.
+    # So your ORM can include devise compatibility stuff.
+    def devise_modules_hook!
+      yield
+    end
+  end
+end
+    
+        def unescapePredicate(cc)
+      if (isAlphaNumeric(cc));
+        return true
+      end
+      # !
+      if (cc == 33);
+        return true
+      end
+      # '()*
+      if (39 <= cc && cc <= 42);
+        return true
+      end
+      # -.
+      if (45 <= cc && cc <= 46);
+        return true
+      end
+      # _
+      if (cc == 95);
+        return true
+      end
+      # ~
+      if (cc == 126);
+        return true
+      end
+    
+          def string_to_code(string)
+        # sha bytes
+        b = [Digest::SHA1.hexdigest(string)[0, 20]].pack('H*').bytes.to_a
+        # Thanks donpark's IdenticonUtil.java for this.
+        # Match the following Java code
+        # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
+        #	 ((b[2] & 0xFF) << 8) | (b[3] & 0xFF)
+    
+          def has_sidebar
+        if @sidebar
+          @sidebar.formatted_data.strip.empty? ? false : true
         else
-          servers_by_key[key] = new_host.with(properties)
+          @sidebar = (@page.sidebar || false)
+          !!@sidebar
         end
       end
     
-          def fetch(key, default=nil, &block)
-        fetched_keys << key unless fetched_keys.include?(key)
-        peek(key, default, &block)
-      end
-    
-    # We use a special :_default_git value so that SCMResolver can tell whether the
-# default has been replaced by the user via `set`.
-set_if_empty :scm, Capistrano::Configuration::SCMResolver::DEFAULT_GIT
-set_if_empty :branch, 'master'
-set_if_empty :deploy_to, -> { '/var/www/#{fetch(:application)}' }
-set_if_empty :tmp_dir, '/tmp'
-    
-        def reset
-      preferences.each do |name, _value|
-        set_preference name, preference_default(name)
-      end
-    end
-    
-        def errors
-      validators.map(&:errors).reduce({}, :merge)
-    end
-    
-                  inventory_unit.save!
-            end
-    
-          def variants_associations
-        [{ option_values: :option_type }, :default_price, :images]
-      end
-    
-            def create
-          authorize! :create, Spree::OptionValue
-          @option_value = scope.new(option_value_params)
-          if @option_value.save
-            render :show, status: 201
-          else
-            invalid_resource!(@option_value)
-          end
-        end
-    
-            def index
-          @properties = Spree::Property.accessible_by(current_ability)
-    
-            def index
-          authorize! :admin, ReturnAuthorization
-          @return_authorizations = order.return_authorizations.accessible_by(current_ability).
-                                   ransack(params[:q]).result.
-                                   page(params[:page]).per(params[:per_page])
-          respond_with(@return_authorizations)
-        end
+      test 'remove page extentions' do
+    view = Precious::Views::LatestChanges.new
+    assert_equal 'page', view.remove_page_extentions('page.wiki')
+    assert_equal 'page-wiki', view.remove_page_extentions('page-wiki.md')
+    assert_equal 'file.any_extention', view.remove_page_extentions('file.any_extention')
+  end
