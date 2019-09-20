@@ -1,240 +1,214 @@
 
         
-        Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+        private Q_SLOTS:
+    void on_selectFileButton_clicked();
     
-    int16_t word_blob_quality(WERD_RES *word, ROW *row);
-void reject_whole_page(PAGE_RES_IT &page_res_it);
-    
-    class TBOX;
-    
-    // Update the other members if the cost is lower.
-void DPPoint::UpdateIfBetter(int64_t cost, int32_t steps, const DPPoint* prev,
-                             int32_t n, int32_t sig_x, int64_t sig_xsq) {
-  if (cost < total_cost_) {
-    total_cost_ = cost;
-    total_steps_ = steps;
-    best_prev_ = prev;
-    n_ = n;
-    sig_x_ = sig_x;
-    sig_xsq_ = sig_xsq;
-  }
+    const std::vector<std::string>& UniValue::getKeys() const
+{
+    if (typ != VOBJ)
+        throw std::runtime_error('JSON value is not an object as expected');
+    return keys;
 }
     
-    bool ParagraphModel::ValidBodyLine(int lmargin, int lindent,
-                                   int rindent, int rmargin) const {
-  switch (justification_) {
-    case JUSTIFICATION_LEFT:
-      return NearlyEqual(lmargin + lindent, margin_ + body_indent_,
-                         tolerance_);
-    case JUSTIFICATION_RIGHT:
-      return NearlyEqual(rmargin + rindent, margin_ + body_indent_,
-                         tolerance_);
-    case JUSTIFICATION_CENTER:
-      return NearlyEqual(lindent, rindent, tolerance_ * 2);
-    default:
-      // shouldn't happen
-      return false;
-  }
-}
+    ROTATE_ARGS
+	movdqa	XTMP3, XTMP2	; XTMP3 = W[-2] {DDCC}
+    mov	y0, e		; y0 = e
+    ror	y0, (25-11)	; y0 = e >> (25-11)
+    mov	y1, a		; y1 = a
+	movdqa	X0,    XTMP2	; X0    = W[-2] {DDCC}
+    ror	y1, (22-13)	; y1 = a >> (22-13)
+    xor	y0, e		; y0 = e ^ (e >> (25-11))
+    mov	y2, f		; y2 = f
+    ror	y0, (11-6)	; y0 = (e >> (11-6)) ^ (e >> (25-6))
+	psrlq	XTMP2, 17	; XTMP2 = W[-2] ror 17 {xDxC}
+    xor	y1, a		; y1 = a ^ (a >> (22-13)
+    xor	y2, g		; y2 = f^g
+	psrlq	XTMP3, 19	; XTMP3 = W[-2] ror 19 {xDxC}
+    xor	y0, e		; y0 = e ^ (e >> (11-6)) ^ (e >> (25-6))
+    and	y2, e		; y2 = (f^g)&e
+    ror	y1, (13-2)	; y1 = (a >> (13-2)) ^ (a >> (22-2))
+	psrld	X0,    10	; X0 = W[-2] >> 10 {DDCC}
+    xor	y1, a		; y1 = a ^ (a >> (13-2)) ^ (a >> (22-2))
+    ror	y0, 6		; y0 = S1 = (e>>6) & (e>>11) ^ (e>>25)
+    xor	y2, g		; y2 = CH = ((f^g)&e)^g
+	pxor	XTMP2, XTMP3
+    ror	y1, 2		; y1 = S0 = (a>>2) ^ (a>>13) ^ (a>>22)
+    add	y2, y0		; y2 = S1 + CH
+    add	y2, [rsp + _XFER + 3*4]	; y2 = k + w + S1 + CH
+	pxor	X0, XTMP2	; X0 = s1 {xDxC}
+    mov	y0, a		; y0 = a
+    add	h, y2		; h = h + S1 + CH + k + w
+    mov	y2, a		; y2 = a
+	pshufb	X0, SHUF_DC00	; X0 = s1 {DC00}
+    or	y0, c		; y0 = a|c
+    add	d, h		; d = d + h + S1 + CH + k + w
+    and	y2, c		; y2 = a&c
+	paddd	X0, XTMP0	; X0 = {W[3], W[2], W[1], W[0]}
+    and	y0, b		; y0 = (a|c)&b
+    add	h, y1		; h = h + S1 + CH + k + w + S0
+    or	y0, y2		; y0 = MAJ = (a|c)&b)|(a&c)
+    add	h, y0		; h = h + S1 + CH + k + w + S0 + MAJ
     
-    class UnicharAmbigs {
- public:
-  UnicharAmbigs() = default;
-  ~UnicharAmbigs() {
-    replace_ambigs_.delete_data_pointers();
-    dang_ambigs_.delete_data_pointers();
-    one_to_one_definite_ambigs_.delete_data_pointers();
-  }
-    }
-    
-      if (!trans || !trans->isDict ()) {
-    ok = gFalse;
-    return;
-  }
-    
-    #endif
-
-    
-      //----- special access
-    
-    
-    {  if (readAttrs)
-  {
-    Object tmp;
-    Dict *dict = streamObj->getStream()->getDict();
-    dict->lookup('F', &tmp);
-    if (!tmp.isNull()) {
-      Object obj1;
-      // valid 'F' key -> external file
-      kind = soundExternal;
-      if (getFileSpecNameForPlatform (&tmp, &obj1)) {
-        fileName = obj1.getString()->copy();
-        obj1.free();
-      }
+      std::string AllEntriesFor(const Slice& user_key) {
+    Iterator* iter = dbfull()->TEST_NewInternalIterator();
+    InternalKey target(user_key, kMaxSequenceNumber, kTypeValue);
+    iter->Seek(target.Encode());
+    std::string result;
+    if (!iter->status().ok()) {
+      result = iter->status().ToString();
     } else {
-      // no file specification, then the sound data have to be
-      // extracted from the stream
-      kind = soundEmbedded;
-    }
-    tmp.free();
-    // sampling rate
-    dict->lookup('R', &tmp);
-    if (tmp.isNum()) {
-      samplingRate = tmp.getNum();
-    }
-    tmp.free();
-    // sound channels
-    dict->lookup('C', &tmp);
-    if (tmp.isInt()) {
-      channels = tmp.getInt();
-    }
-    tmp.free();
-    // bits per sample
-    dict->lookup('B', &tmp);
-    if (tmp.isInt()) {
-      bitsPerSample = tmp.getInt();
-    }
-    tmp.free();
-    // encoding format
-    dict->lookup('E', &tmp);
-    if (tmp.isName())
-    {
-      const char *enc = tmp.getName();
-      if (strcmp('Raw', enc) == 0) {
-        encoding = soundRaw;
-      } else if (strcmp('Signed', enc) == 0) {
-        encoding = soundSigned;
-      } else if (strcmp('muLaw', enc) == 0) {
-        encoding = soundMuLaw;
-      } else if (strcmp('ALaw', enc) == 0) {
-        encoding = soundALaw;
+      result = '[ ';
+      bool first = true;
+      while (iter->Valid()) {
+        ParsedInternalKey ikey;
+        if (!ParseInternalKey(iter->key(), &ikey)) {
+          result += 'CORRUPTED';
+        } else {
+          if (last_options_.comparator->Compare(ikey.user_key, user_key) != 0) {
+            break;
+          }
+          if (!first) {
+            result += ', ';
+          }
+          first = false;
+          switch (ikey.type) {
+            case kTypeValue:
+              result += iter->value().ToString();
+              break;
+            case kTypeDeletion:
+              result += 'DEL';
+              break;
+          }
+        }
+        iter->Next();
       }
+      if (!first) {
+        result += ' ';
+      }
+      result += ']';
     }
-    tmp.free();
-  }
-}
-    
-    
-    {  glyph.x = -t3Font->glyphX;
-  glyph.y = -t3Font->glyphY;
-  glyph.w = t3Font->glyphW;
-  glyph.h = t3Font->glyphH;
-  glyph.aa = colorMode != splashModeMono1;
-  glyph.data = data;
-  glyph.freeData = gFalse;
-  splash->fillGlyph(0, 0, &glyph);
-}
-    
-    public:
-    
-      fs::path uploadPath;
-  if (FLAGS_carver_compression) {
-    uploadPath = compressPath_;
-    s = compress(archivePath_, compressPath_);
-    if (!s.ok()) {
-      VLOG(1) << 'Failed to compress carve archive: ' << s.getMessage();
-      updateCarveValue(carveGuid_, 'status', 'COMPRESS FAILED');
-      return;
-    }
-  } else {
-    uploadPath = archivePath_;
+    delete iter;
+    return result;
   }
     
-      schedule_ = std::make_unique<Schedule>();
-  std::map<std::string, QueryPerformance>().swap(performance_);
-  std::map<std::string, FileCategories>().swap(files_);
-  std::map<std::string, std::string>().swap(hash_);
-  valid_ = false;
-  loaded_ = false;
-  is_first_time_refresh = true;
+    TestWritableFile::TestWritableFile(const FileState& state,
+                                   WritableFile* f,
+                                   FaultInjectionTestEnv* env)
+    : state_(state),
+      target_(f),
+      writable_file_opened_(true),
+      env_(env) {
+  assert(f != NULL);
+}
     
-      /**
-   * @brief Get the performance stats for a specific query, by name
-   *
-   * @param name is the name of the query which you'd like to retrieve
-   * @param predicate is a function which accepts a const reference to a
-   * QueryPerformance struct. predicate will be called on name's related
-   * QueryPerformance struct, if it exists.
-   *
-   * @code{.cpp}
-   *   Config::get().getPerformanceStats(
-   *     'my_awesome_query',
-   *     [](const QueryPerformance& query) {
-   *       // use 'query' here
-   *     });
-   * @endcode
-   */
-  void getPerformanceStats(
-      const std::string& name,
-      std::function<void(const QueryPerformance& query)> predicate) const;
+      scratch->clear();
+  record->clear();
+  bool in_fragmented_record = false;
+  // Record offset of the logical record that we're reading
+  // 0 is a dummy value to make compilers happy
+  uint64_t prospective_record_offset = 0;
     
-    #include <cstdlib>
+      void pollAndSchedule(int task_id);
+  void schedule(int task_id, bool run_inline = false) noexcept;
+  void reset() override;
+  virtual void finishRun();
+  void parentCallback(int parent_id);
+  bool isInlineTask(int parent_id, int child_id) const;
     
-    namespace osquery {
-    }
+    REGISTER_CPU_OPERATOR(
+    MergeSingleListFeatureTensors,
+    MergeSingleListFeatureTensorsOp<CPUContext>);
+OPERATOR_SCHEMA(MergeSingleListFeatureTensors)
+    .SetDoc(
+        'Merge given single-feature tensors with list features into one '
+        'multi-feature tensor.' +
+        doc)
+    .NumInputs([](int n) { return n >= 3 && n % 3 == 0; })
+    .NumOutputs(4)
+    .Input(0, 'in1_lengths', '.lengths')
+    .Input(1, 'in1_values', '.values')
+    .Input(2, 'in1_presence', '.presence')
+    .Output(0, 'out_lengths', '.lengths')
+    .Output(1, 'out_keys', '.keys')
+    .Output(2, 'out_values_lengths', '.values.lengths')
+    .Output(3, 'out_values_values', '.values.values')
+    .Arg('feature_ids', 'feature ids');
     
-    enum class DatabaseError {
-  // Unknown error, currently unused
-  Unknown = 1,
-  DbIsNotOpen = 2,
-  InvalidPath = 3,
-  FailToDestroyDB = 4,
-  FailToOpenDatabase = 5,
-  FailToReadData = 6,
-  FailToWriteData = 7,
-  KeyNotFound = 8,
-  DomainNotFound = 9,
-  // Corruption or other unrecoverable error after DB can't be longer used
-  // Database should be closed, destroyed and opened again
-  // If this error was received during data access, then application
-  // is likely to die soon
-  // See message and/or underlying error for details
-  Panic = 10,
+    Example 1:
+  DATA  = [1, 2, 3, 4, 5, 6, 7, 8]
+  RANGES = [
+    [
+      [2, 4],
+      [0, 2],
+    ],
+    [
+      [0, 0],
+      [6, 2],
+    ]
+  ]
+  lengths = [4, 2]
+  OUTPUT[0] = [[3, 4, 5, 6], [0, 0, 0, 0]]
+  OUTPUT[1] = [[1, 2], [7, 8]]
+    
+    template <typename T, class Context>
+class BernoulliJSDOp final : public Operator<Context> {
+ public:
+  USE_SIMPLE_CTOR_DTOR(BernoulliJSDOp);
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
+  bool RunOnDevice() override;
 };
     
-    enum class RocksdbMigrationError {
-  InvalidArgument = 1,
-  FailToOpen = 2,
-  FailToGetVersion = 3,
-  NoMigrationFromCurrentVersion = 5,
-  MigrationLogicError = 6,
-  FailToOpenSrcDatabase = 7,
-  FailMoveDatabase = 8,
-};
+        // Overrides
+    virtual Shaky3D* clone() const override;
+    virtual void update(float time) override;
     
+CC_CONSTRUCTOR_ACCESS:
+    Shaky3D() {}
+    virtual ~Shaky3D() {}
     
-    {
-    {#ifdef __linux__
-    // Using: ioprio_set(IOPRIO_WHO_PGRP, 0, IOPRIO_CLASS_IDLE);
-    syscall(SYS_ioprio_set, IOPRIO_WHO_PGRP, 0, IOPRIO_CLASS_IDLE);
-#elif defined(__APPLE__)
-    setiopolicy_np(IOPOL_TYPE_DISK, IOPOL_SCOPE_PROCESS, IOPOL_THROTTLE);
-#endif
-  }
-}
+    /** 
+    @brief Initializes the action with a range, shake Z vertices, grid size and duration.
+    @param duration Specify the duration of the Shaky3D action. It's a value in seconds.
+    @param gridSize Specify the size of the grid.
+    @param range Specify the range of the shaky effect.
+    @param shakeZ Specify whether shake on the z axis.
+    @return If the Initialization success, return true; otherwise, return false.
+    */
+    bool initWithDuration(float duration, const Size& gridSize, int range, bool shakeZ);
     
+        /** 
+    @brief Initializes the action with a range, shake Z vertices, grid size and duration.
+    @param duration Specify the duration of the ShakyTiles3D action. It's a value in seconds.
+    @param gridSize Specify the size of the grid.
+    @param range Specify the range of the shaky effect.
+    @param shakeZ Specify whether shake on the z axis.
+    @return If the Initialization success, return true; otherwise, return false.
+    */
+    bool initWithDuration(float duration, const Size& gridSize, int range, bool shakeZ);
     
-    {} // namespace osquery
-
+    The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
     
     /**
- * @brief The request part of a plugin (registry item's) call.
- *
- * To use a plugin use Registry::call with a request and response.
- * The request portion is usually simple and normally includes an 'action'
- * key where the value is the action you want to perform on the plugin.
- * Refer to the registry's documentation for the actions supported by
- * each of its plugins.
+ * @addtogroup actions
+ * @{
  */
-using PluginRequest = std::map<std::string, std::string>;
+    }
     
-    GTEST_TEST(InMemoryDatabaseTest, test_unknown_key) {
-  auto db = std::make_unique<InMemoryDatabase>('test');
-  ASSERT_FALSE(db->open().isError());
-  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'key', 12).isError());
-  auto result = db->getInt32(kPersistentSettings, 'key_');
-  EXPECT_FALSE(result);
-  EXPECT_EQ(result.takeError(), DatabaseError::KeyNotFound);
-}
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
