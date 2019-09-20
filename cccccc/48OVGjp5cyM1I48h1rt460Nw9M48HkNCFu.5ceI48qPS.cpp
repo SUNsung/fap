@@ -1,271 +1,263 @@
 
         
-            if (isa<ProtocolDecl>(decl))
-      return;
-    
-    // Crash due to a weak retain count overflow.
-// FIXME: can't pass the object's address from InlineRefCounts without hacks
-void swift::swift_abortWeakRetainOverflow() {
-  swift::fatalError(FatalErrorFlags::ReportBacktrace,
-                    'Fatal error: Object's weak reference was retained too many times');
-}
-    
-    v8::Handle<v8::Value> AllocateId(int routing_id);
-    
-       void Call(const std::string& method,
-                    const base::ListValue& arguments) override;
-   void CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) override;
-    
-    
-    {
-    {    if (zoom_controller) {
-      double zoom_factor = content::ZoomLevelToZoomFactor(zoom_controller->GetZoomLevel());
-      if (zoom_factor > content::kMaximumZoomFactor) {
-        zoom_factor = content::kMaximumZoomFactor;
-      }
-      if (zoom_factor < content::kMinimumZoomFactor) {
-        zoom_factor = content::kMinimumZoomFactor;
-      }
-      x *= zoom_factor;
-      y *= zoom_factor;
-    }
-    
-    Popup(x, y, rvh);
-  } else if (method == 'EnableShowEvent') {
-    arguments.GetBoolean(0, &enable_show_event_);
-  } else {
-    NOTREACHED() << 'Invalid call to Menu method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
-    
-       bool IsCommandIdChecked(int command_id) const override;
-   bool IsCommandIdEnabled(int command_id) const override;
+        CholeskyThunk::CholeskyThunk(const CholeskyOptions& options,
+                             BufferAllocation::Slice a_buffer,
+                             BufferAllocation::Slice workspace_buffer,
+                             BufferAllocation::Slice info_buffer,
+                             PrimitiveType type, int64 batch_size, int64 n,
+                             const HloInstruction* hlo)
+    : Thunk(Kind::kCholesky, hlo),
+      uplo_(options.lower() ? se::blas::UpperLower::kLower
+                            : se::blas::UpperLower::kUpper),
+      a_buffer_(a_buffer),
+      workspace_buffer_(workspace_buffer),
+      info_buffer_(info_buffer),
+      type_(type),
+      batch_size_(batch_size),
+      a_batch_stride_(n * n *
+                      ShapeUtil::ByteSizeOfPrimitiveType(
+                          hlo->operand(0)->shape().element_type())),
+      n_(n) {}
     
     
-    {}  // namespace
-    
-    static const int kIconWidth = 16;
-static const int kIconHeight = 16;
-    
-    bool NwAppGetArgvSyncFunction::RunNWSync(base::ListValue* response, std::string* error) {
-    }
-    
-    NwClipboardSetListSyncFunction::NwClipboardSetListSyncFunction() {
-}
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.readAvailableTypes', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwClipboardReadAvailableTypesFunction);
+    {  const int64 replica_count_;
+  const int64 element_count_;
+  const BufferAllocation::Slice source_buffer_;
+  const BufferAllocation::Slice destination_buffer_;
+  std::unique_ptr<AuxData> aux_data_;
 };
     
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    {  CHECK_EQ(data.shape_[1], wmat.shape_[1])
-    << 'Incomplete weight tensor detected: weight.data().shape[1] != prod(data.data().shape[1:]).'
-       ' This is not supported by FCForward. If weight is in row_sparse format,'
-       ' please make sure all row ids are present.';
-  // Legacy approach shown here for comparison:
-  //   out = dot(data, wmat.T());
-  linalg_gemm(data, wmat, out, false, true, s);
-  if (!param.no_bias) {
-    Tensor<xpu, 1, DType> bias = in_data[fullc::kBias].get_with_shape<xpu, 1, DType>(
-      Shape1(wmat.shape_[0]), s);
-    CHECK_EQ(bias.shape_[0], wmat.shape_[0])
-      << 'Incomplete bias tensor detected: bias.data().shape[1] != weight.data().shape[0].'
-         ' This is not supported by FCForward. If bias is in row_sparse format, please'
-         ' make sure all row ids are present.';
-    out += repmat(bias, data.size(0));
-  }
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    #include 'tensorflow/compiler/xla/service/gpu/buffer_allocations.h'
+#include 'tensorflow/compiler/xla/service/gpu/hlo_execution_profiler.h'
+#include 'tensorflow/compiler/xla/service/gpu/sequential_thunk.h'
+#include 'tensorflow/compiler/xla/service/gpu/thunk.h'
+#include 'tensorflow/compiler/xla/service/hlo_instruction.h'
+#include 'tensorflow/core/platform/stream_executor_no_cuda.h'
+    
+    
+    {  EXPECT_EQ(5, computation->instruction_count());
+  EXPECT_FALSE(HasInstruction(*computation, dead_negate));
+  EXPECT_FALSE(HasInstruction(*computation, dead_add));
+  EXPECT_TRUE(HasInstruction(*computation, dead_negate_with_control_dep));
+  EXPECT_TRUE(HasInstruction(*computation, dead_add_with_control_dep));
 }
     
-                const char *type = getenv('MXNET_GPU_MEM_POOL_TYPE');
-            const bool default_pool = (type == nullptr);
-            if (default_pool) type = 'Naive';
-            std::string strategy = type;
+        // If any of the indices are out of range, we must populate the labels with
+    // NaNs to obey the interface contract of
+    // tf.nn.sparse_softmax_cross_entropy_with_logits.
+    // Builds a vector of {batch_size} that is 0 if the index is in range, or
+    // NaN otherwise; then add that vector to the labels to force out-of-range
+    // values to NaNs.
+    xla::XlaOp nan_or_zero = xla::Select(
+        xla::And(xla::Le(XlaHelpers::Zero(builder, indices_type), indices),
+                 xla::Lt(indices, XlaHelpers::IntegerLiteral(
+                                      builder, indices_type, depth))),
+        xla::Broadcast(XlaHelpers::Zero(builder, logits_type), {batch_size}),
+        xla::Broadcast(XlaHelpers::FloatLiteral(builder, logits_type, NAN),
+                       {batch_size}));
+    labels = xla::Add(labels, nan_or_zero, {0});
     
-    then we have::
-    
-    template <typename DType>
-void VanillaRNNBackwardSingleLayer(DType* ws,
-                                   DType* tmp_buf,
-                                   const int D,
-                                   const int T,
-                                   const int N,
-                                   const int I,
-                                   const int H,
-                                   const Tensor<cpu, 2, DType> &x,
-                                   const Tensor<cpu, 2, DType> &hx,
-                                   DType* wx_ptr,
-                                   DType* wh_ptr,
-                                   DType* y_ptr,
-                                   DType* dy_ptr,
-                                   DType* dhy_ptr,
-                                   DType* gateN,
-                                   DType* dx,
-                                   DType* dhx,
-                                   DType* dwx,
-                                   DType* dwh,
-                                   DType* dbx,
-                                   DType* dbh,
-                                   int req_data,
-                                   int req_params,
-                                   int req_state,
-                                   int mode) {
-  DType* dyt;
-  DType* ht1;  // [N, D, H]
-  DType* dart;
-  DType* nt;
-  DType* dar = ws;  // [T, N, H]
-  DType* dht1 = dar + T * N * H;  // [D, N, H]
-  DType* hx_ = dht1 + D * N * H;  // [N, D, H]
+    /**
+ * Helper class for tracking certain errors from batch operations
+ */
+class TrackedErrors {
+public:
+    TrackedErrors() = default;
     }
     
-        Tensor<xpu, 4, DType> grad_out = out_grad[deformablepsroipool::kOut].get<xpu, 4, DType>(s);
-    Tensor<xpu, 4, DType> data = in_data[deformablepsroipool::kData].get<xpu, 4, DType>(s);
-    Tensor<xpu, 2, DType> bbox = in_data[deformablepsroipool::kBox].get<xpu, 2, DType>(s);
-    Tensor<xpu, 4, DType> top_count = out_data[deformablepsroipool::kTopCount]
-                                        .get<xpu, 4, DType>(s);
-    Tensor<xpu, 4, DType> grad_in = in_grad[deformablepsroipool::kData].get<xpu, 4, DType>(s);
-    Tensor<xpu, 2, DType> grad_roi = in_grad[deformablepsroipool::kBox].get<xpu, 2, DType>(s);
-    Tensor<xpu, 4, DType> grad_trans;
-    Tensor<xpu, 4, DType> trans;
-    if (!param_.no_trans) {
-      CHECK_EQ(in_grad.size(), 3);
-      trans = in_data[deformablepsroipool::kTrans].get<xpu, 4, DType>(s);
-      grad_trans = in_grad[deformablepsroipool::kTrans].get<xpu, 4, DType>(s);
-    }
     
-    namespace index_array_enum {
-enum IndexArrayOpInputs {kIn};
-enum IndexArrayOpOutputs {kOut};
-enum IndexArrayOpResource {kTempSpace};
-}  // namespace index_array_enum
+    {    auto status = _kvEngine->dropIdent(opCtx, _rs->getIdent());
+    fassert(
+        51032,
+        status.withContext(str::stream() << 'failed to drop temporary ident: ' << _rs->getIdent()));
+    _recordStoreHasBeenDeleted = true;
+}
     
-    /*! \brief Cuda runtime compile module. */
-class CudaModule {
- private:
-  /*! \brief Structure for holding internal info. */
-  struct Chunk {
-    /*!
-     * \brief Constructs cuda module.
-     * \param source cuda source code.
-     * \param exports export symbols before mangling.
+        /**
+     * Appends the global latency statistics.
      */
-    Chunk(const char* source,
-          const std::vector<std::string>& options,
-          const std::vector<std::string>& exports);
-    /*! \brief deconstrutor */
-    ~Chunk();
-    /*!
-     * \brief Get handle to cuda kernel from loaded module
-     * \param mangled_name mangled kernel name
-     * \param ctx context to run kernel on
-     * \return loaded function handle
-     */
-    CUfunction GetFunction(const std::string& mangled_name, const Context& ctx);
-    /*! \brief nvrtc program handle. */
-    nvrtcProgram prog_;
-    /*! \brief compiled cuda PTX */
-    char* ptx_;
-    /*! \brief lazily loaded cuda module */
-    std::unordered_map<int, CUmodule> mod_;
-    /*! \brief exported names */
-    std::unordered_set<std::string> exports_;
-  };
-  /*! \brief pointer to Chunk */
-  std::shared_ptr<Chunk> ptr_;
+    void appendGlobalLatencyStats(bool includeHistograms, BSONObjBuilder* builder);
+    
+    TEST_F(ExtensionsCallbackRealTest, TextLanguageError) {
+    ASSERT_OK(dbtests::createIndex(&_opCtx,
+                                   _nss.ns(),
+                                   BSON('a'
+                                        << 'text'),
+                                   false));  // isUnique
     }
     
-        if (loc_ + batch_size_ <= param_.num_examples) {
-      batch_data_.dptr_ = top_[DATA]->mutable_cpu_data();
-      batch_label_.dptr_ = top_[LABEL]->mutable_cpu_data();
+    protected:
+    static NamespaceString nss() {
+        return NamespaceString('unittests.pdfiletests.Insert');
+    }
+    Collection* collection() {
+        return _context.db()->getCollection(&_opCtx, nss());
     }
     
-      for (uint32_t nid = 0; nid < idx.num_nodes(); ++nid) {
-    const auto& inode = idx[nid];
-    if (inode.source->op() != ewise_plus_op) continue;
-    int sid = storage_id[idx.entry_id(inode.inputs[0])];
-    if (sid != storage_id[idx.entry_id(nid, 0)]) continue;
-    if (idx[inode.inputs[0].node_id].source->is_variable()) continue;
-    if (idx[inode.inputs[1].node_id].source->is_variable()) continue;
-    uint32_t eid_rhs  = idx.entry_id(inode.inputs[1]);
-    if (ref_count[eid_rhs] != 1) continue;
-    if (inode.inputs[0].node_id >= inode.inputs[1].node_id) continue;
-    // TODO(haibin) support inplace addto for Dynamic Storage
-    if (storage_id[eid_rhs] == kDynamicStorageID) continue;
-    CHECK_NE(storage_id[eid_rhs], sid);
-    storage_id[eid_rhs] = sid;
-    addto_entry[eid_rhs] = 1;
-    storage_inplace_index[eid_rhs] = -1;
-    skip_plus_node[nid] = 1;
+    UCollationResult
+RuleBasedCollator::compare(const UnicodeString &left, const UnicodeString &right,
+                           int32_t length, UErrorCode &errorCode) const {
+    if(U_FAILURE(errorCode) || length == 0) { return UCOL_EQUAL; }
+    if(length < 0) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return UCOL_EQUAL;
+    }
+    int32_t leftLength = left.length();
+    int32_t rightLength = right.length();
+    if(leftLength > length) { leftLength = length; }
+    if(rightLength > length) { rightLength = length; }
+    return doCompare(left.getBuffer(), leftLength,
+                     right.getBuffer(), rightLength, errorCode);
+}
+    
+    U_CAPI int8_t U_EXPORT2
+uhash_compareScriptSet(UElement key0, UElement key1) {
+    icu::ScriptSet *s0 = static_cast<icu::ScriptSet *>(key0.pointer);
+    icu::ScriptSet *s1 = static_cast<icu::ScriptSet *>(key1.pointer);
+    int32_t diff = s0->countMembers() - s1->countMembers();
+    if (diff != 0) return diff;
+    int32_t i0 = s0->nextSetBit(0);
+    int32_t i1 = s1->nextSetBit(0);
+    while ((diff = i0-i1) == 0 && i0 > 0) {
+        i0 = s0->nextSetBit(i0+1);
+        i1 = s1->nextSetBit(i1+1);
+    }
+    return (int8_t)diff;
+}
+    
+    UnicodeString&
+SelectFormat::toPattern(UnicodeString& appendTo) {
+    if (0 == msgPattern.countParts()) {
+        appendTo.setToBogus();
+    } else {
+        appendTo.append(msgPattern.getPatternString());
+    }
+    return appendTo;
+}
+    
+    U_NAMESPACE_BEGIN
+    
+    U_NAMESPACE_BEGIN
+    
+        virtual void /*ComputationNode::*/ ForwardProp(const FrameRange& fr) override
+    {
+        auto result = ValueFor(fr);
+        auto input = static_cast<ComputationNode<InputType>&>(*m_inputs[0].get()).ValueFor(fr);
+        result.CastAssignValuesOf(input);
+    }
+    
+            if (pass == ndlPassInitial)
+        {
+            int id = 1; // skip inputValueNode
+    }
+    
+        for (size_t i = 0; i < m_directConnect.size(); i++)
+    {
+        if (m_directConnect[i] == iLayer)
+        {
+            ComputationNodePtr directWIO = builder.CreateLearnableParameter(msra::strfun::wstrprintf(L'D%d', i), outputDim, inputDim);
+            m_net->RandomInitLearnableParameters(directWIO, m_uniformInit, randomSeed++, m_initValueScale);
+            directOutput = ApplyNonlinearFunction(builder.Times(directWIO, input), i);
+    }
+    }
+    
+    #pragma warning(disable : 4996) // Caused by the TODO below (line ~1280)
+    
+            int i = 0; // indicate the index of learnable nodes
+        if (m_useAsyncBuffer)
+        {
+            m_reportTimer.Restart();
+            for (auto nodeIter = learnableNodes.begin(); nodeIter != learnableNodes.end(); nodeIter++, i++)
+            {
+                ComputationNodePtr node = dynamic_pointer_cast<ComputationNode<ElemType>>(*nodeIter);
+                Microsoft::MSR::CNTK::Matrix<ElemType> &mat = node->Value();
+#ifndef CPUONLY
+                // CNTK model -> GPU buffer
+                CUDA_CALL(cudaMemcpy(m_gpuAsyncBuffer[m_bufferIndexInUse][i].Data(),
+                    mat.Data(),
+                    mat.GetNumElements() * sizeof(ElemType),
+                    cudaMemcpyDeviceToDevice));
+    }
+    }
+    
+                m_pendingAsyncAggregation = std::async(std::launch::async, [=] {
+                // We are starting on a new thread. Make sure the new thread is
+                // setup to use the right device
+                Matrix<ElemType>::SetDevice(deviceId);
+    }
+    
+    // helper class for passing accumulated epoch-level criteria around while retaining their sample counts
+// Criteria are represented as a tuple (aggregate criterion, sample count). The average criterion value is their ratio.
+struct EpochCriterion : public std::pair<double, size_t>
+{
+    // construction
+    explicit EpochCriterion(double aggregateCriterionValue = 0.0, size_t aggregateSampleCount = 0) : std::pair<double, size_t>(aggregateCriterionValue, aggregateSampleCount) { }
+    EpochCriterion(const std::pair<double, size_t>& other) : std::pair<double, size_t>(other) { }
+    }
+    
+    class DBTestXactLogIterator : public DBTestBase {
+ public:
+  DBTestXactLogIterator() : DBTestBase('/db_log_iter_test') {}
+    }
+    
+    
+    {  bool FullMergeV2(const MergeOperationInput& merge_in,
+                   MergeOperationOutput* merge_out) const override {
+    // Put basically only looks at the current/latest value
+    assert(!merge_in.operand_list.empty());
+    merge_out->existing_operand = merge_in.operand_list.back();
+    return true;
   }
+};
     
-    namespace mxnet {
-namespace io {
-/*! \return the parameter of default augmenter */
-std::vector<dmlc::ParamFieldInfo> ListDefaultAugParams();
-std::vector<dmlc::ParamFieldInfo> ListDefaultDetAugParams();
-}  // namespace io
-}  // namespace mxnet
-#endif  // MXNET_IO_IMAGE_AUGMENTER_H_
+    namespace rocksdb {
+    }
+    
+      // Will be called while on the write thread before the write executes.  If
+  // this function returns a non-OK status, the write will be aborted and this
+  // status will be returned to the caller of DB::Write().
+  virtual Status Callback(DB* db) = 0;
+    
+    namespace rocksdb {
+    }
+    
+      // Set a snapshot at start of transaction
+  txn_options.set_snapshot = true;
+  txn = txn_db->BeginTransaction(write_options, txn_options);
+    
+    
+    {  // close DB
+  for (auto* handle : handles) {
+    delete handle;
+  }
+  delete db;
+}
 
     
-    extern size_t getMachineShard(const std::string& hostname = '',
-                              bool force = false);
-    
-      rj::Document doc;
-  if (doc.Parse(request.at('log').c_str()).HasParseError()) {
-    return;
-  }
-    
-      /** @brief Virtual method which should implement custom logging.
-   *
-   *  LoggerPlugin::logString should be implemented by a subclass of
-   *  LoggerPlugin which needs to log a string in a custom way.
-   *
-   *  @return an instance of osquery::Status which indicates the success or
-   *  failure of the operation.
-   */
-  virtual Status logString(const std::string& s) = 0;
-    
-    void Plugin::setName(const std::string& name) {
-  if (!name_.empty() && name != name_) {
-    std::string error = 'Cannot rename plugin ' + name_ + ' to ' + name;
-    throw std::runtime_error(error);
-  }
-    }
-    
-      /// The plugin may publish route info (other than registry type and name).
-  virtual PluginResponse routeInfo() const {
-    return PluginResponse();
-  }
-    
-      /// Given a query, return the list of scanned tables.
-  virtual Status getQueryTables(const std::string& query,
-                                std::vector<std::string>& tables) const = 0;
-    
-    GTEST_TEST(InMemoryDatabaseTest, test_keys_search) {
-  auto db = std::make_unique<InMemoryDatabase>('test');
-  ASSERT_FALSE(db->open().isError());
-  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'key_1', 1).isError());
-  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'key_2', 2).isError());
-  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'key_3', 3).isError());
-  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'kEy_1', 4).isError());
-  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'kEy_2', 5).isError());
-  auto result_all = db->getKeys(kPersistentSettings);
-  EXPECT_TRUE(result_all);
-  EXPECT_EQ((*result_all).size(), 5);
-  auto result_some = db->getKeys(kPersistentSettings, 'key');
-  EXPECT_TRUE(result_some);
-  EXPECT_EQ((*result_some).size(), 3);
-}
-    
-    
-    {    update_db = (!dr.added.empty() || !dr.removed.empty());
-  } else {
-    dr.added = std::move(current_qd);
-    target_gd = &dr.added;
-  }
+      // Starts a new Transaction.
+  //
+  // Caller is responsible for deleting the returned transaction when no
+  // longer needed.
+  //
+  // If old_txn is not null, BeginTransaction will reuse this Transaction
+  // handle instead of allocating a new one.  This is an optimization to avoid
+  // extra allocations when repeatedly creating transactions.
+  virtual Transaction* BeginTransaction(
+      const WriteOptions& write_options,
+      const OptimisticTransactionOptions& txn_options =
+          OptimisticTransactionOptions(),
+      Transaction* old_txn = nullptr) = 0;
