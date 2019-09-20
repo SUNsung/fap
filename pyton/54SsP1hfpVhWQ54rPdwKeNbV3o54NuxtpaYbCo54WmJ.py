@@ -1,134 +1,224 @@
 
         
         
-def main():
-    argument_spec = HerokuHelper.heroku_argument_spec()
-    argument_spec.update(
-        user=dict(required=True, type='str'),
-        apps=dict(required=True, type='list'),
-        suppress_invitation=dict(default=False, type='bool'),
-        state=dict(default='present', type='str', choices=['present', 'absent']),
-    )
-    module = AnsibleModule(
-        argument_spec=argument_spec,
-        supports_check_mode=True
-    )
+class DateField(BaseTemporalField):
+    widget = DateInput
+    input_formats = formats.get_format_lazy('DATE_INPUT_FORMATS')
+    default_error_messages = {
+        'invalid': _('Enter a valid date.'),
+    }
     
-            if module.check_mode:
-            mp_id = get_monitoring_policy(oneandone_conn, monitoring_policy_id)
-            if (monitoring_policy_processes and mp_id):
-                return True
-            return False
+        def as_postgresql(self, compiler, connection, **extra_context):
+        # Cast FloatField to DecimalField as PostgreSQL doesn't support the
+        # following function signatures:
+        # - LOG(double, double)
+        # - MOD(double, double)
+        output_field = DecimalField(decimal_places=sys.float_info.dig, max_digits=1000)
+        clone = self.copy()
+        clone.set_source_expressions([
+            Cast(expression, output_field) if isinstance(expression.output_field, FloatField)
+            else expression for expression in self.get_source_expressions()
+        ])
+        return clone.as_sql(compiler, connection, **extra_context)
     
-        # Max concurrency is limited by global CONCURRENT_REQUESTS setting
-    max_concurrent_requests = 8
-    # Requests per second goal
-    qps = None # same as: 1 / download_delay
-    download_delay = None
-    # time in seconds to delay server responses
-    latency = None
-    # number of slots to create
-    slots = 1
+            if ds:
+            self.ptr = ds
+            self.driver = Driver(ds_driver)
+        else:
+            # Raise an exception if the returned pointer is NULL
+            raise GDALException('Invalid data source file '%s'' % ds_input)
     
-        def _list_templates(self):
-        print('Available templates:')
-        for filename in sorted(os.listdir(self.templates_dir)):
-            if filename.endswith('.tmpl'):
-                print('  %s' % splitext(filename)[0])
+        def __init__(self, feat, index):
+        '''
+        Initialize on the feature object and the integer index of
+        the field within the feature.
+        '''
+        # Setting the feature pointer and index.
+        self._feat = feat
+        self._index = index
     
-    if twisted_version >= (14, 0, 0):
-    # ClientTLSOptions requires a recent-enough version of Twisted.
-    # Not having ScrapyClientTLSOptions should not matter for older
-    # Twisted versions because it is not used in the fallback
-    # ScrapyClientContextFactory.
+            # Construct the target warp dictionary from the virtual raster
+        data = {
+            'srid': srid,
+            'width': target.width,
+            'height': target.height,
+            'origin': [target.origin.x, target.origin.y],
+            'scale': [target.scale.x, target.scale.y],
+            'skew': [target.skew.x, target.skew.y],
+        }
     
-        def process(self, new_face):
-        ''' Sharpen using the requested technique '''
-        amount = self.config['amount'] / 100.0
-        kernel_center = self.get_kernel_size(new_face, self.config['radius'])
-        new_face = getattr(self, self.config['method'])(new_face, kernel_center, amount)
-        return new_face
+        @property
+    def local(self):
+        'Return True if this SpatialReference is local (root node is LOCAL_CS).'
+        return bool(capi.islocal(self.ptr))
     
-            self.status()
-        self.pbar = self.progress_bar()
     
-        def draw_landmarks(self, color_id=3, radius=1):
-        ''' Draw the facial landmarks '''
-        color = self.colors[color_id]
-        for alignment in self.alignments:
-            landmarks = alignment['landmarksXY']
-            logger.trace('Drawing Landmarks: (landmarks: %s, color: %s, radius: %s)',
-                         landmarks, color, radius)
-            for (pos_x, pos_y) in landmarks:
-                cv2.circle(self.image,  # pylint: disable=no-member
-                           (pos_x, pos_y),
-                           radius,
-                           color,
-                           -1)
+@pytest.fixture
+def httpbin(httpbin):
+    return prepare_url(httpbin)
     
-        def decoder(self):
-        ''' Decoder Network '''
-        input_ = Input(shape=(4, 4, self.encoder_dim))
-        var_x = input_
-        var_x = self.blocks.upscale(var_x, 512)
-        var_x = self.blocks.upscale(var_x, 256)
-        var_x = self.blocks.upscale(var_x, 128)
-        var_x = self.blocks.upscale(var_x, 64)
-        var_x = Conv2D(3, kernel_size=5, padding='same', activation='sigmoid')(var_x)
-        outputs = [var_x]
+    Available hooks:
     
-        def gen_cli_arguments(self, command):
-        ''' Return the generated cli arguments for
-            the selected command '''
-        for option in self.gen_command_options(command):
-            optval = str(option.get('value', '').get())
-            opt = option['opts'][0]
-            if command in ('extract', 'convert') and opt == '-o':
-                get_images().pathoutput = optval
-            if optval in ('False', ''):
-                continue
-            elif optval == 'True':
-                yield (opt, )
-            else:
-                if option.get('nargs', None):
-                    if '\'' in optval:
-                        optval = [arg[1:-1] for arg in re.findall(r'\'.+?\'', optval)]
-                    else:
-                        optval = optval.split(' ')
-                    opt = [opt] + optval
-                else:
-                    opt = (opt, optval)
-                yield opt
+    
+class VersionedPackage(object):
+    def __init__(self, version):
+        self.__version__ = version
+    
+    if is_py2:
+    from urllib import (
+        quote, unquote, quote_plus, unquote_plus, urlencode, getproxies,
+        proxy_bypass, proxy_bypass_environment, getproxies_environment)
+    from urlparse import urlparse, urlunparse, urljoin, urlsplit, urldefrag
+    from urllib2 import parse_http_list
+    import cookielib
+    from Cookie import Morsel
+    from StringIO import StringIO
+    # Keep OrderedDict for backwards compatibility.
+    from collections import Callable, Mapping, MutableMapping, OrderedDict
+    
+            with open('Pipfile') as f:
+            post2 = requests.post(url, files={'some': f})
+        assert post2.status_code == 200
+    
+            Currently, this closes the PoolManager and any active ProxyManager,
+        which closes any pooled connections.
+        '''
+        self.poolmanager.clear()
+        for proxy in self.proxy_manager.values():
+            proxy.clear()
+    
+        data = 'Some random stuff to read from remove server.\n'
+    
+    
+def check_all():
+    check = CheckAllIp()
+    check.run()
+    exit(0)
+    
+            txt = self.text
+        if txt is not None:
+            txt = txt.replace('\n','\\\\n')
+            txt = txt.replace('\r','\\\\r')
+            txt = txt.replace('\t','\\\\t')
+        else:
+            txt = '<no text>'
+    
+    
+def gradient_check():
+    '''
+    梯度检查
+    '''
+    # 设计一个误差函数，取所有节点输出项之和
+    error_function = lambda o: o.sum()
+    
+    rnn = RecursiveLayer(2, 2, IdentityActivator(), 1e-3)
+    
+        # 如果要进行矩阵运算，就必须要用这些奇异值构建出一个对角矩阵
+    Sig4 = mat(eye(4) * Sigma[: 4])
+    
+    
+class MRmean(MRJob):
+    def __init__(self, *args, **kwargs):  # 对数据初始化
+        super(MRmean, self).__init__(*args, **kwargs)
+        self.inCount = 0
+        self.inSum = 0
+        self.inSqSum = 0
+    
+       # input value = feature vector for one training example, e.g. '3.0, 7.0, 2.0'
+   featurematrix = [float(item) for item in value.split(',')]
+   A = numpy.matrix(featurematrix)
+    
+    # Increasing --n without --keepalive will eventually run into problems
+# due to TIME_WAIT sockets
+define('n', type=int, default=15000)
+define('c', type=int, default=25)
+define('keepalive', type=bool, default=False)
+define('quiet', type=bool, default=False)
+    
+        def finish_tree(self, tree, filename):
+        if self.found_future_import:
+            return
+        if not isinstance(tree, pytree.Node):
+            # Empty files (usually __init__.py) show up as a single Leaf
+            # instead of a Node, so leave them alone
+            return
+        first_stmt = tree.children[0]
+        if is_docstring(first_stmt):
+            # Skip a line and add the import after the docstring
+            tree.insert_child(1, Newline())
+            pos = 2
+        elif first_stmt.prefix:
+            # No docstring, but an initial comment (perhaps a #! line).
+            # Transfer the initial comment to a new blank line.
+            newline = Newline()
+            newline.prefix = first_stmt.prefix
+            first_stmt.prefix = ''
+            tree.insert_child(0, newline)
+            pos = 1
+        else:
+            # No comments or docstring, just insert at the start
+            pos = 0
+        tree.insert_child(pos, self.new_future_import(None))
+        tree.insert_child(pos + 1, Newline())  # terminates the import stmt
 
     
-        def compute_output_shape(self, input_shape):
-        ''' If you are using 'channels_last' configuration'''
-        input_shape = self.input_spec[0].shape
-        in_width, in_height = input_shape[2], input_shape[1]
-        kernel_width, kernel_height  = self.kernel_size, self.kernel_size
+        url = options.url + '/updateReports?agent=%s' % options.name
+    update_ws = yield websocket_connect(url, None)
+    msg = yield update_ws.read_message()
+    assert msg is None
+    IOLoop.instance().stop()
     
-        def __call__(self, text, **kargs):
-        words = jieba.tokenize(text, mode='search')
-        token = Token()
-        for (w, start_pos, stop_pos) in words:
-            if not accepted_chars.match(w) and len(w) <= 1:
-                continue
-            token.original = token.text = w
-            token.pos = start_pos
-            token.startchar = start_pos
-            token.endchar = stop_pos
-            yield token
+    This module integrates Tornado with the ``asyncio`` module introduced
+in Python 3.4. This makes it possible to combine the two libraries on
+the same event loop.
     
-    PROB_START_P = 'prob_start.p'
-PROB_TRANS_P = 'prob_trans.p'
-PROB_EMIT_P = 'prob_emit.p'
-CHAR_STATE_TAB_P = 'char_state_tab.p'
+        @gen.coroutine
+    def resolve(
+        self, host: str, port: int, family: int = 0
+    ) -> 'Generator[Any, Any, List[Tuple[int, Any]]]':
+        if is_valid_ip(host):
+            addresses = [host]
+        else:
+            # gethostbyname doesn't take callback as a kwarg
+            fut = Future()  # type: Future[Tuple[Any, Any]]
+            self.channel.gethostbyname(
+                host, family, lambda result, error: fut.set_result((result, error))
+            )
+            result, error = yield fut
+            if error:
+                raise IOError(
+                    'C-Ares returned error %s: %s while resolving %s'
+                    % (error, pycares.errno.strerror(error), host)
+                )
+            addresses = result.addresses
+        addrinfo = []
+        for address in addresses:
+            if '.' in address:
+                address_family = socket.AF_INET
+            elif ':' in address:
+                address_family = socket.AF_INET6
+            else:
+                address_family = socket.AF_UNSPEC
+            if family != socket.AF_UNSPEC and family != address_family:
+                raise IOError(
+                    'Requested socket family %d but got %d' % (family, address_family)
+                )
+            addrinfo.append((typing.cast(int, address_family), (address, port)))
+        return addrinfo
+
     
-            prev_states_expect_next = set(
-            (y for x in prev_states for y in trans_p[x].keys()))
-        obs_states = set(
-            states.get(obs[t], all_states)) & prev_states_expect_next
-    
-    print('speed %s bytes/second' % (len(content)/tm_cost))
-    
-    print('speed' , len(content)/tm_cost, ' bytes/second')
+    from tornado.auth import (
+    OpenIdMixin,
+    OAuthMixin,
+    OAuth2Mixin,
+    GoogleOAuth2Mixin,
+    FacebookGraphMixin,
+    TwitterMixin,
+)
+from tornado.escape import json_decode
+from tornado import gen
+from tornado.httpclient import HTTPClientError
+from tornado.httputil import url_concat
+from tornado.log import app_log
+from tornado.testing import AsyncHTTPTestCase, ExpectLog
+from tornado.web import RequestHandler, Application, HTTPError
