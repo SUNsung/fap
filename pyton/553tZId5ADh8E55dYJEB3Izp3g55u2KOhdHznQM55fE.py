@@ -1,65 +1,35 @@
 
         
-            def _assert_allows(self, response, *expected_methods):
-        'Assert allowed HTTP methods reported in the Allow response header'
-        response_allows = set(response['Allow'].split(', '))
-        self.assertEqual(set(expected_methods + ('OPTIONS',)), response_allows)
+          # We *usually* want to fill up the entire sequence since we are padding
+  # to `max_seq_length` anyways, so short sequences are generally wasted
+  # computation. However, we *sometimes*
+  # (i.e., short_seq_prob == 0.1 == 10% of the time) want to use shorter
+  # sequences to minimize the mismatch between pre-training and fine-tuning.
+  # The `target_seq_length` is just a rough target however, whereas
+  # `max_seq_length` is a hard limit.
+  target_seq_length = max_num_tokens
+  if rng.random() < short_seq_prob:
+    target_seq_length = rng.randint(2, max_num_tokens)
     
-        def test_plain_annotate(self):
-        agg = Sum('book__pages', filter=Q(book__rating__gt=3))
-        qs = Author.objects.annotate(pages=agg).order_by('pk')
-        self.assertSequenceEqual([a.pages for a in qs], [447, None, 1047])
+          def metric_fn(masked_lm_example_loss, masked_lm_log_probs, masked_lm_ids,
+                    masked_lm_weights, next_sentence_example_loss,
+                    next_sentence_log_probs, next_sentence_labels):
+        '''Computes the loss and accuracy of the model.'''
+        masked_lm_log_probs = tf.reshape(masked_lm_log_probs,
+                                         [-1, masked_lm_log_probs.shape[-1]])
+        masked_lm_predictions = tf.argmax(
+            masked_lm_log_probs, axis=-1, output_type=tf.int32)
+        masked_lm_example_loss = tf.reshape(masked_lm_example_loss, [-1])
+        masked_lm_ids = tf.reshape(masked_lm_ids, [-1])
+        masked_lm_weights = tf.reshape(masked_lm_weights, [-1])
+        masked_lm_accuracy = tf.metrics.accuracy(
+            labels=masked_lm_ids,
+            predictions=masked_lm_predictions,
+            weights=masked_lm_weights)
+        masked_lm_mean_loss = tf.metrics.mean(
+            values=masked_lm_example_loss, weights=masked_lm_weights)
     
-        def test_no_version_number(self):
-        ops = FakePostGISOperations()
-        with self.assertRaises(ImproperlyConfigured):
-            ops.spatial_version
-
-    
-        def __init__(self, feat, layer):
-        '''
-        Initialize Feature from a pointer and its Layer object.
-        '''
-        if not feat:
-            raise GDALException('Cannot create OGR Feature, invalid pointer given.')
-        self.ptr = feat
-        self._layer = layer
-    
-        @property
-    def value(self):
-        'Return an integer contained in this field.'
-        return self.as_int(self._bit64)
-    
-    
-class GEOSGeometryBase(GEOSBase):
-    
-            set_available_apps() must be balanced with unset_available_apps().
-    
-            video_id = match1(html, r'data-brightcove-id='(\d+)'')
-        
-        assert account_number, video_id
-    
-    
-def cntv_download_by_id(rid, **kwargs):
-    CNTV().download_by_vid(rid, **kwargs)
-    
-    from ..common import *
-from ..extractor import VideoExtractor
-from .universal import *
-    
-    import mock
-    
-    # Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named 'default.css' will overwrite the builtin 'default.css'.
-html_static_path = ['_static']
-    
-    Certbot will emit a warning if it detects that the credentials file can be
-accessed by other users on your system. The warning reads 'Unsafe permissions
-on credentials configuration file', followed by the path to the credentials
-file. This warning will be emitted each time Certbot uses the credentials file,
-including for renewal, and cannot be silenced except by addressing the issue
-(e.g., by using a command like ``chmod 600`` to restrict access to the file).
-    
-            path = os.path.join(self.tempdir, 'file.ini')
-        dns_test_common.write(VALID_CONFIG, path)
+        vocab = {}
+    for (i, token) in enumerate(vocab_tokens):
+      vocab[token] = i
+    tokenizer = tokenization.WordpieceTokenizer(vocab=vocab)
