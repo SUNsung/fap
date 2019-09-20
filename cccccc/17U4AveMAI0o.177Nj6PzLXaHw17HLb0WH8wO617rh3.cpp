@@ -1,306 +1,383 @@
 
         
-            IMF_EXPORT
-    FastHufDecoder (const char*& table,
-                    int numBytes,
-                    int minSymbol,
-                    int maxSymbol,
-                    int rleSymbol);
+        
+    {        // Note: We can close the handles to the PTY-end of the pipes here
+        // because the handles are dup'ed into the ConHost and will be released
+        // when the ConPTY is destroyed.
+        if (INVALID_HANDLE_VALUE != hPipePTYOut) CloseHandle(hPipePTYOut);
+        if (INVALID_HANDLE_VALUE != hPipePTYIn) CloseHandle(hPipePTYIn);
+    }
     
-    template <>
-IMF_EXPORT
-const char *FloatVectorAttribute::staticTypeName ();
+        base::win::ShortcutProperties props;
+    base::string16 appID;
+    if (content::Shell::GetPackage()->root()->GetString('app-id', &appID) == false)
+      content::Shell::GetPackage()->root()->GetString(switches::kmName, &appID);
+    const std::wstring appName = base::UTF8ToWide(content::Shell::GetPackage()->GetName());
+    props.set_app_id(appID);
     
+    #include <string.h>
     
-Slice &
-FrameBuffer::operator [] (const string &name)
-{
-    return this->operator[] (name.c_str());
+    void NwAppQuitFunction::DoJob(ExtensionService* service, std::string extension_id) {
+  if (base::FeatureList::IsEnabled(::features::kNWNewWin)) {
+    chrome::CloseAllBrowsersAndQuit(true);
+    return;
+  }
+  base::ThreadTaskRunnerHandle::Get().get()->PostTask(
+                                                      FROM_HERE,
+                                                      base::Bind(&ExtensionService::TerminateExtension,
+                                                                   service->AsWeakPtr(),
+                                                                   extension_id));
 }
     
-    	    if (strncmp (i->second->typeName(), typeName, sizeof (typeName)))
-		THROW (IEX_NAMESPACE::InputExc, 'Unexpected type for image attribute '
-				      '\'' << name << '\'.');
+    #include <vector>
     
-        virtual void	seekp (Int64 pos) = 0;
-    
-    #include 'ImfInputFile.h'
-#include 'ImfOutputPart.h'
-#include 'ImfForward.h'
-#include 'ImfNamespace.h'
-#include 'ImfExport.h'
-    
-    TEST(StatusOr, TestPointerCopyCtorStatusOk) {
-  const int kI = 0;
-  StatusOr<const int*> original(&kI);
-  StatusOr<const int*> copy(original);
-  EXPECT_EQ(original.status(), copy.status());
-  EXPECT_EQ(original.ValueOrDie(), copy.ValueOrDie());
-}
-    
-    #include <google/protobuf/stubs/template_util.h>
-    
-    class GoGoProtoGenerator : public CodeGenerator {
+    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
  public:
-  virtual bool GenerateAll(const std::vector<const FileDescriptor*>& files,
-                           const string& parameter,
-                           GeneratorContext* context,
-                           string* error) const {
-    for (int i = 0; i < files.size(); i++) {
-      for (auto file : files) {
-        bool can_generate =
-            (new_pool_.FindFileByName(file->name()) == nullptr);
-        for (int j = 0; j < file->dependency_count(); j++) {
-          can_generate &= (new_pool_.FindFileByName(
-              file->dependency(j)->name()) != nullptr);
-        }
-        for (int j = 0; j < file->public_dependency_count(); j++) {
-          can_generate &= (new_pool_.FindFileByName(
-              file->public_dependency(j)->name()) != nullptr);
-        }
-        for (int j = 0; j < file->weak_dependency_count(); j++) {
-          can_generate &= (new_pool_.FindFileByName(
-              file->weak_dependency(j)->name()) != nullptr);
-        }
-        if (can_generate) {
-          Generate(file, parameter, context, error);
-          break;
-        }
-      }
-    }
-    }
-    }
+  NwMenuGetNSStringFWithFixupFunction() {}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
     
-        std::unique_ptr<google::protobuf::io::ZeroCopyOutputStream> output(
-        context->Open(basename + '.proto'));
-    string content = GetPool()->BuildFile(new_file)->DebugString();
-    Printer printer(output.get(), '$');
-    printer.WriteRaw(content.c_str(), content.size());
+ protected:
+  ~NwMenuGetNSStringFWithFixupFunction() override {}
     
-      bool has_leaders;   // does the line contain leader dots (.....)?
-  bool has_drop_cap;  // does the line have a drop cap?
-  int pix_ldistance;  // distance to the left pblock boundary in pixels
-  int pix_rdistance;  // distance to the right pblock boundary in pixels
-  float pix_xheight;  // guessed xheight for the line
-  int average_interword_space; // average space between words in pixels.
-    
-    
-    {}  // namespace tesseract.
-    
-    bool ParagraphModel::ValidFirstLine(int lmargin, int lindent,
-                                    int rindent, int rmargin) const {
-  switch (justification_) {
-    case JUSTIFICATION_LEFT:
-      return NearlyEqual(lmargin + lindent, margin_ + first_indent_,
-                         tolerance_);
-    case JUSTIFICATION_RIGHT:
-      return NearlyEqual(rmargin + rindent, margin_ + first_indent_,
-                         tolerance_);
-    case JUSTIFICATION_CENTER:
-      return NearlyEqual(lindent, rindent, tolerance_ * 2);
-    default:
-      // shouldn't happen
-      return false;
-  }
-}
-    
-    This module may look unnecessarily verbose, but here's the philosophy...
-    
-        void operator()(const intersecting_geo_read_t &geo_read) {
-        ql::env_t ql_env(
-            ctx,
-            ql::return_empty_normal_batches_t::NO,
-            interruptor,
-            geo_read.serializable_env,
-            trace);
-    }
-    
-    TPTEST(RDBBtree, SindexPostConstruct) {
-    recreate_temporary_directory(base_path_t('.'));
-    temp_file_t temp_file;
-    }
-    
-    // The 'Types' template argument below must have spaces around it
-// since some compilers may choke on '>>' when passing a template
-// instance (e.g. Types<int>)
-# define INSTANTIATE_TYPED_TEST_CASE_P(Prefix, CaseName, Types) \
-  bool gtest_##Prefix##_##CaseName GTEST_ATTRIBUTE_UNUSED_ = \
-      ::testing::internal::TypeParameterizedTestCase<CaseName, \
-          GTEST_CASE_NAMESPACE_(CaseName)::gtest_AllTests_, \
-          ::testing::internal::TypeList< Types >::type>::Register(\
-              #Prefix, #CaseName, GTEST_REGISTERED_TEST_NAMES_(CaseName))
-    
-    
-    {  return AssertionFailure() << pred_text << '('
-                            << e1 << ', '
-                            << e2 << ', '
-                            << e3 << ', '
-                            << e4 << ') evaluates to false, where'
-                            << '\n' << e1 << ' evaluates to ' << v1
-                            << '\n' << e2 << ' evaluates to ' << v2
-                            << '\n' << e3 << ' evaluates to ' << v3
-                            << '\n' << e4 << ' evaluates to ' << v4;
-}
-    
-      // Converts a wide C string to a String using the UTF-8 encoding.
-  // NULL will be converted to '(null)'.  If an error occurred during
-  // the conversion, '(failed to convert from wide string)' is
-  // returned.
-  static std::string ShowWideCString(const wchar_t* wide_c_str);
-    
-    DHTResponseMessage::DHTResponseMessage(
-    const std::shared_ptr<DHTNode>& localNode,
-    const std::shared_ptr<DHTNode>& remoteNode,
-    const std::string& transactionID)
-    : DHTAbstractMessage(localNode, remoteNode, transactionID)
-{
-}
-    
-      virtual std::string toString() const CXX11_OVERRIDE;
-    
-    #include <string>
-#include <vector>
-#include <memory>
-    
-    #define READ_CHECK(fp, ptr, count)                                             \
-  if (fp.read((ptr), (count)) != (count)) {                                    \
-    throw DL_ABORT_EX('Failed to load DHT routing table.');                    \
-  }
-    
-    #endif // D_DHT_ROUTING_TABLE_DESERIALIZER_H
-
-    
-      virtual std::shared_ptr<DHTTask>
-  createPeerLookupTask(const std::shared_ptr<DownloadContext>& ctx,
-                       uint16_t tcpPort,
-                       const std::shared_ptr<PeerStorage>& peerStorage) = 0;
-    
-    DHTTaskFactoryImpl::~DHTTaskFactoryImpl() = default;
-    
-    DHTTaskQueueImpl::~DHTTaskQueueImpl() = default;
-    
-      virtual void
-  addPeriodicTask1(const std::shared_ptr<DHTTask>& task) CXX11_OVERRIDE;
-    
-    namespace aria2 {
-    }
-    
-    DNSCache::CacheEntry::~CacheEntry() = default;
-    
-    bool zend::include(std::string file)
-{
-    zend_file_handle file_handle;
-    int ret = php_stream_open_for_zend_ex(file.c_str(), &file_handle, USE_PATH | STREAM_OPEN_FOR_INCLUDE);
-    if (ret != SUCCESS)
-    {
-        return false;
-    }
-    }
-    
-        fd2 = socket(AF_UNIX,SOCK_DGRAM,0);
-    strncpy(un2.sun_path, sock2_path, sizeof(un2.sun_path) - 1); 
-    bind(fd2,(struct sockaddr *)&un2,sizeof(un2));
-    
-    TEST(thread_pool, dispatch)
-{
-    ASSERT_EQ(swThreadPool_create(&pool, 4), SW_OK);
-    pool.onTask = thread_onTask;
-    ASSERT_EQ(swThreadPool_run(&pool), SW_OK);
-    sw_atomic_long_t result = 0;
-    }
-    
-    namespace swoole
-{
-    }
-    
-        private:
-        const char * m_value;
-        redisAsyncContext * m_ctx;
-        RedisQtAdapter m_adapter;
-    
-            if (expire <= 0)
-        {
-            expire_time = 0;
-        }
-        else
-        {
-            expire_time = time(nullptr) + expire;
-        }
-    
-        for (i = 1; i < 1024; i++)
-    {
-        uint32_t key = (rand() % (20000 * 37));
-        if (key % 37 == 0)
-        {
-            continue;
-        }
-        int ret = (int) (long) swRbtree_find(tree, key);
-        ASSERT_EQ(ret, 0);
-    }
-    
-    eof_packet::eof_packet(const char *data) : server_packet(data)
-{
-    swMysqlPacketDump(header.length, header.number, data, 'EOF_Packet');
-    // EOF_Packet = Packet header (4 bytes) + 0xFE + warning(2byte) + status(2byte)
-    data += SW_MYSQL_PACKET_HEADER_SIZE;
-    // int<1>   header  [fe] EOF header
-    data += 1;
-    // int<2>   warnings    number of warnings
-    warning_count = sw_mysql_uint2korr2korr(data);
-    data += 2;
-    // int<2>   status_flags    Status Flags
-    server_status = sw_mysql_uint2korr2korr(data);
-    swTraceLog(SW_TRACE_MYSQL_CLIENT, 'EOF_Packet, warnings=%u, status_code=%u', warning_count, server_status);
-}
-    
-    struct _ser_context
-{
-    HashTable params; /* stores pointers; has to be first */
-    struct err_s err;
-    zend_llist keys,
-    /* common part to res_context ends here */
-    allocations;
-    Socket *sock;
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
 };
     
-    	assert(level == IPPROTO_IPV6);
-    
-      // Connections
-  void createNewConnection(RedisClient::ConnectionConfig config);
-    
-    
-    {  if (m_affectedKeys.size() > 0) {
-    performOperation(targetConnection, targetDbIndex);
-  } else {
-    getAffectedKeys([this, targetConnection, targetDbIndex](QVariant, QString) {
-      performOperation(targetConnection, targetDbIndex);
-    });
-  }
-}
-    
-        auto future = m_connection->cmd(
-        {'DUMP', k.toUtf8()}, this, m_dbIndex,
-        [=](const RedisClient::Response& r) {
-          QList<QByteArray> cmd = {'RESTORE', k.toUtf8(), ttl,
-                                   r.value().toByteArray()};
+    bool NwObjCallObjectMethodSyncFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  base::ListValue* arguments = nullptr;
+  int id = 0;
+  std::string type, method;
+  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(2, &method));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetList(3, &arguments));
     }
     
-      QString getTypeName() const override { return QString('copy_keys'); }
+    void NwDesktopCaptureMonitor::OnSourceRemoved(DesktopMediaList* list, int index) {
+    std::unique_ptr<base::ListValue> args = nwapi::nw__screen::OnSourceRemoved::Create(index);
+    DispatchEvent(
+      events::HistogramValue::UNKNOWN, 
+      nwapi::nw__screen::OnSourceRemoved::kEventName,
+      std::move(args));
+  }
+    
+      // implement nw.Screen.startMonitor()
+  class NwScreenStartMonitorFunction : public NWSyncExtensionFunction {
+  public:
+    NwScreenStartMonitorFunction();
+    bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    	THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+	SOFTWARE.
+*/
+    
+    	if (videoFrame)
+		videoFrame->bufferSize = 0;
+	if (audioFrame)
+		audioFrame->bufferSize = 0;
+    
+    /***** residue backends *********************************************/
+    
+    /**
+ * Fill in a mbed TLS certificate, based on the given PKCS11 helper certificate.
+ *
+ * \param cert          X.509 certificate to fill
+ * \param pkcs11h_cert  PKCS #11 helper certificate
+ *
+ * \return              0 on success.
+ */
+int mbedtls_pkcs11_x509_cert_bind( mbedtls_x509_crt *cert, pkcs11h_certificate_t pkcs11h_cert );
+    
+    /**
+ * \brief          Compute RSA private exponent from
+ *                 prime moduli and public key.
+ *
+ * \note           This is a 'static' helper function not operating on
+ *                 an RSA context. Alternative implementations need not
+ *                 overwrite it.
+ *
+ * \param P        First prime factor of RSA modulus
+ * \param Q        Second prime factor of RSA modulus
+ * \param E        RSA public exponent
+ * \param D        Pointer to MPI holding the private exponent on success.
+ *
+ * \return
+ *                 - 0 if successful. In this case, D is set to a simultaneous
+ *                   modular inverse of E modulo both P-1 and Q-1.
+ *                 - A non-zero error code otherwise.
+ *
+ * \note           This function does not check whether P and Q are primes.
+ *
+ */
+int mbedtls_rsa_deduce_private_exponent( mbedtls_mpi const *P,
+                                         mbedtls_mpi const *Q,
+                                         mbedtls_mpi const *E,
+                                         mbedtls_mpi *D );
     
     
+    {  TestServiceImpl echo_test_service_;
+  HealthCheckServiceImpl health_check_service_impl_;
+  std::unique_ptr<Health::Stub> hc_stub_;
+  std::unique_ptr<ServerCompletionQueue> cq_;
+  std::unique_ptr<Server> server_;
+  std::ostringstream server_address_;
+  std::thread cq_thread_;
+};
+    
+      void ResetStub() {
+    string target = 'dns:localhost:' + to_string(port_);
+    channel_ = grpc::CreateChannel(target, InsecureChannelCredentials());
+    stub_ = grpc::testing::EchoTestService::NewStub(channel_);
+  }
+    
+    
+    {
+    {        ::set_secondary_index(sindex_block, name, sindex);
+        return make_optional(sindex.id);
+    }
+}
+    
+    class datum_replacer_t : public btree_batched_replacer_t {
+public:
+    explicit datum_replacer_t(ql::env_t *_env,
+                              const batched_insert_t &bi)
+        : env(_env),
+          datums(&bi.inserts),
+          conflict_behavior(bi.conflict_behavior),
+          pkey(bi.pkey),
+          return_changes(bi.return_changes) {
+        if (bi.conflict_func.has_value()) {
+            conflict_func.set(bi.conflict_func->compile_wire_func());
+        }
+        if (bi.write_hook.has_value()) {
+            write_hook = bi.write_hook->compile_wire_func();
+        }
+    }
+    ql::datum_t replace(const ql::datum_t &d,
+                        size_t index) const {
+        guarantee(index < datums->size());
+        ql::datum_t newd = (*datums)[index];
+        ql::datum_t res = resolve_insert_conflict(env,
+                                             pkey,
+                                             d,
+                                             newd,
+                                             conflict_behavior,
+                                             conflict_func);
+        const ql::datum_t &write_timestamp = env->get_deterministic_time();
+        r_sanity_check(write_timestamp.has());
+        res = apply_write_hook(datum_string_t(pkey), d, res, write_timestamp,
+                               write_hook);
+        return res;
+    }
+    return_changes_t should_return_changes() const { return return_changes; }
+private:
+    ql::env_t *env;
+    }
+    
+    
+    {
+    {
+    {
+    {                ASSERT_TRUE(it->first == jt->first);
+                ASSERT_TRUE(it->second.superblock == jt->second.superblock &&
+                    it->second.opaque_definition == jt->second.opaque_definition);
+                ++it;
+                ++jt;
+            }
+        }
+        txn->commit();
+    }
+}
+    
+    # if !GTEST_OS_WINDOWS
+// Tests that an exit code describes an exit due to termination by a
+// given signal.
+class GTEST_API_ KilledBySignal {
+ public:
+  explicit KilledBySignal(int signum);
+  bool operator()(int exit_status) const;
+ private:
+  const int signum_;
+};
+# endif  // !GTEST_OS_WINDOWS
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29>
+internal::ValueArray29<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
+    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
+    T29> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
+    T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17,
+    T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23, T24 v24, T25 v25,
+    T26 v26, T27 v27, T28 v28, T29 v29) {
+  return internal::ValueArray29<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
+      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
+      T26, T27, T28, T29>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12,
+      v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23, v24, v25, v26,
+      v27, v28, v29);
+}
+    
+    // First, define a fixture class template.  It should be parameterized
+// by a type.  Remember to derive it from testing::Test.
+template <typename T>
+class FooTest : public testing::Test {
+ public:
+  ...
+  typedef std::list<T> List;
+  static T shared_;
+  T value_;
+};
+    
+      // Compares two wide C strings.  Returns true iff they have the same
+  // content.
+  //
+  // Unlike wcscmp(), this function can handle NULL argument(s).  A
+  // NULL C string is considered different to any non-NULL C string,
+  // including the empty string.
+  static bool WideCStringEquals(const wchar_t* lhs, const wchar_t* rhs);
+    
+    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
+    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
+    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
+    GTEST_TEMPLATE_ T10>
+struct Templates10 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates9<T2, T3, T4, T5, T6, T7, T8, T9, T10> Tail;
+};
+    
+      for (QAbstractAxis *axis : axes) {
+    if (axis->type() == QAbstractAxis::AxisTypeDateTime) {
+      ax = qobject_cast<QDateTimeAxis *>(axis);
+      return ax;
+    }
+  }
+    
+      if (m_operation->isRunning()) {
+    return false;
+  }
+    
+    
+    {
     { private:
-  QSharedPointer<RedisClient::Connection> m_connection;
-  QSharedPointer<Events> m_events;
-  uint m_dbCount;
+  QSharedPointer<AbstractOperation> m_operation;
+  QSharedPointer<ConnectionsModel> m_model;
+  QSharedPointer<QPython> m_python;
 };
+}  // namespace BulkOperations
 
     
-    class RDBImportOperation : public AbstractOperation {
-  Q_OBJECT
- public:
-  RDBImportOperation(QSharedPointer<RedisClient::Connection> connection,
-                     int dbIndex, OperationCallback callback,
-                     QSharedPointer<QPython> p,
-                     QRegExp keyPattern = QRegExp('*', Qt::CaseSensitive,
-                                                  QRegExp::Wildcard));
+          switch (ret) {
+        case Z_NEED_DICT:
+          ret = Z_DATA_ERROR;
+        case Z_DATA_ERROR:
+        case Z_MEM_ERROR:
+        case Z_STREAM_ERROR:
+          inflateEnd(&strm);
+          return QByteArray();
+      }
+    
+    void ValueEditor::EmbeddedFormattersManager::decode(
+    const QString &formatterName, const QByteArray &data, QJSValue jsCallback) {
+  m_python->call('formatters.decode', QVariantList{formatterName, data},
+                 jsCallback);
+}
+    
+      QJsonObject readJsonFromExternalProcess(const QStringList& cmd,
+                                          const QByteArray& processInput,
+                                          const QString& wd);
+    
+    void ConnectionsTree::TreeItem::handleEvent(QString event) {
+  if (!eventHandlers().contains(event)) return;
     }
+    
+     private:
+  // There are two store buffers. If one store buffer fills up, the main thread
+  // publishes the top pointer of the store buffer that needs processing in its
+  // global lazy_top_ field. After that it start the concurrent processing
+  // thread. The concurrent processing thread uses the pointer in lazy_top_.
+  // It will grab the given mutex and transfer its entries to the remembered
+  // set. If the concurrent thread does not make progress, the main thread will
+  // perform the work.
+  // Important: there is an ordering constrained. The store buffer with the
+  // older entries has to be processed first.
+  class Task : public CancelableTask {
+   public:
+    Task(Isolate* isolate, StoreBuffer* store_buffer)
+        : CancelableTask(isolate),
+          store_buffer_(store_buffer),
+          tracer_(isolate->heap()->tracer()) {}
+    ~Task() override = default;
+    }
+    
+    
+    {  return min + heap_.isolate()->fuzzer_rng()->NextInt(max - min + 1);
+}
+    
+    #endif  // V8_HEAP_STRESS_SCAVENGE_OBSERVER_H_
+
+    
+      if (FLAG_concurrent_sweeping && iterability_task_started_) {
+    if (heap_->isolate()->cancelable_task_manager()->TryAbort(
+            iterability_task_id_) != TryAbortResult::kTaskAborted) {
+      iterability_task_semaphore_.Wait();
+    }
+    iterability_task_started_ = false;
+  }
+    
+      // Temporary filters old space sweeping lists. Requires the concurrent
+  // sweeper to be paused. Allows for pages to be added to the sweeper while
+  // in this scope. Note that the original list of sweeping pages is restored
+  // after exiting this scope.
+  class FilterSweepingPagesScope final {
+   public:
+    explicit FilterSweepingPagesScope(
+        Sweeper* sweeper, const PauseOrCompleteScope& pause_or_complete_scope);
+    ~FilterSweepingPagesScope();
+    }
+    
+     protected:
+  void emit_sse_operand(XMMRegister reg, Operand adr);
+  void emit_sse_operand(XMMRegister dst, XMMRegister src);
+  void emit_sse_operand(Register dst, XMMRegister src);
+  void emit_sse_operand(XMMRegister dst, Register src);
+    
+      // EntryFrame is used by JSEntry, JSConstructEntry and JSRunMicrotasksEntry.
+  // All of them take |root_register_value| as the first parameter.
+  static constexpr int kRootRegisterValueOffset = +2 * kSystemPointerSize;
+    
+    // -----------------------------------------------------------------------------
+// Static helper functions.
+    
+    #define GENERAL_REGISTERS(V) \
+  V(eax)                     \
+  V(ecx)                     \
+  V(edx)                     \
+  V(ebx)                     \
+  V(esp)                     \
+  V(ebp)                     \
+  V(esi)                     \
+  V(edi)
+    
+    #define SSSE3_INSTRUCTION_LIST(V) \
+  V(phaddd, 66, 0F, 38, 02)       \
+  V(phaddw, 66, 0F, 38, 01)       \
+  V(pshufb, 66, 0F, 38, 00)       \
+  V(psignb, 66, 0F, 38, 08)       \
+  V(psignw, 66, 0F, 38, 09)       \
+  V(psignd, 66, 0F, 38, 0A)
+    
+          BIND(&lhs_is_bigint);
+      {
+        GotoIf(TaggedIsSmi(rhs), &call_with_any_feedback);
+        Branch(IsBigInt(rhs), &bigint, &call_with_any_feedback);
+      }
