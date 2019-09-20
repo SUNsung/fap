@@ -1,229 +1,230 @@
 
         
-                return {
-            'id': video_id,
-            'title': title,
-            'description': video.get('long_description') or video.get(
-                'short_description'),
-            'duration': float_or_none(video.get('duration'), scale=1000),
-            'formats': formats,
-            'subtitles': subtitles,
-        }
+        # Create an instance of Logistic Regression Classifier and fit the data.
+logreg.fit(X, Y)
+    
+    # Load data from https://www.openml.org/d/554
+X, y = fetch_openml('mnist_784', version=1, return_X_y=True)
+    
+        scale : float array with shape (n_features,)
+        Array of precomputed sample-wise values to use for scaling.
+    '''
+    if isinstance(X, sp.csc_matrix):
+        inplace_csr_column_scale(X.T, scale)
+    elif isinstance(X, sp.csr_matrix):
+        inplace_csr_row_scale(X, scale)
+    else:
+        _raise_typeerror(X)
+    
+    from sklearn.datasets import make_biclusters
+from sklearn.datasets import samples_generator as sg
+from sklearn.cluster.bicluster import SpectralCoclustering
+from sklearn.metrics import consensus_score
+    
+    ax.w_xaxis.set_ticklabels([])
+ax.w_yaxis.set_ticklabels([])
+ax.w_zaxis.set_ticklabels([])
+ax.set_xlabel('Petal width')
+ax.set_ylabel('Sepal length')
+ax.set_zlabel('Petal length')
+ax.set_title('Ground Truth')
+ax.dist = 12
+    
+    This example is meant to illustrate situations where k-means will produce
+unintuitive and possibly unexpected clusters. In the first three plots, the
+input data does not conform to some implicit assumption that k-means makes and
+undesirable clusters are produced as a result. In the last plot, k-means
+returns intuitive clusters despite unevenly sized blobs.
+'''
+print(__doc__)
+    
+        def test_default_encoder_naive_fails(self):
+        from acme.fields import RFC3339Field
+        self.assertRaises(
+            ValueError, RFC3339Field.default_encoder, datetime.datetime.now())
+    
+    from acme import test_util
+    
+    # The reST default role (used for this markup: `text`) to use for all
+# documents.
+default_role = 'py:obj'
+    
+            self.assertFalse(self.client.obtain_and_enroll_certificate(domains, None))
+    
+            # _query_soa | pylint: disable=protected-access
+        result = self.rfc2136_client._query_soa(DOMAIN)
+    
+        def prepare(self):
+        '''Memoized plugin preparation.'''
+        assert self.initialized
+        if self._prepared is None:
+            try:
+                self._initialized.prepare()
+            except errors.MisconfigurationError as error:
+                logger.debug('Misconfigured %r: %s', self, error, exc_info=True)
+                self._prepared = error
+            except errors.NoInstallationError as error:
+                logger.debug(
+                    'No installation (%r): %s', self, error, exc_info=True)
+                self._prepared = error
+            except errors.PluginError as error:
+                logger.debug('Other error:(%r): %s', self, error, exc_info=True)
+                self._prepared = error
+            else:
+                self._prepared = True
+        return self._prepared
+    
+    jieba.analyse.set_idf_path('../extra_dict/idf.txt.big');
+    
+    USAGE = 'usage:    python extract_tags_with_weight.py [file name] -k [top k] -w [with weight=1 or 0]'
+    
+    if len(sys.argv)<2:
+    print('usage: extract_topic.py directory [n_topic] [n_top_words]')
+    sys.exit(0)
     
     
-class TVNowIE(TVNowBaseIE):
-    _VALID_URL = r'''(?x)
-                    https?://
-                        (?:www\.)?tvnow\.(?:de|at|ch)/(?P<station>[^/]+)/
-                        (?P<show_id>[^/]+)/
-                        (?!(?:list|jahr)(?:/|$))(?P<id>[^/?\#&]+)
-                    '''
+if len(args) <1:
+    print(USAGE)
+    sys.exit(1)
+    
+    log_f = open('1.log','w')
+log_f.write(' / '.join(map(str, words)))
     
     
-    {    # Options that need a file parameter
-    'download-archive': ['--require-parameter'],
-    'cookies': ['--require-parameter'],
-    'load-info': ['--require-parameter'],
-    'batch-file': ['--require-parameter'],
-}
+# Create child splits for a node or make terminal  # 创建子分割器，递归分类，直到分类结束
+def split(node, max_depth, min_size, n_features, depth):  # max_depth = 10, min_size = 1, n_features=int(sqrt((len(dataset[0])-1)
+    left, right = node['groups']
+    del(node['groups'])
+# check for a no split
+    if not left or not right:
+        node['left'] = node['right'] = to_terminal(left + right)
+        return
+# check for max depth
+    if depth >= max_depth:   # max_depth=10 表示递归十次，若分类还未结束，则选取数据中分类标签较多的作为结果，使分类提前结束，防止过拟合
+        node['left'], node['right'] = to_terminal(left), to_terminal(right)
+        return
+# process left child
+    if len(left) <= min_size:
+        node['left'] = to_terminal(left)
+    else:
+        node['left'] = get_split(left, n_features)  # node['left']是一个字典，形式为{'index':b_index, 'value':b_value, 'groups':b_groups}，所以node是一个多层字典
+        split(node['left'], max_depth, min_size, n_features, depth+1)  # 递归，depth+1计算递归层数
+# process right child
+    if len(right) <= min_size:
+        node['right'] = to_terminal(right)
+    else:
+        node['right'] = get_split(right, n_features)
+        split(node['right'], max_depth, min_size, n_features, depth+1)
+    
+        def backward(self, output):
+        return 1 if output > 0 else 0
     
     try:
-    input = raw_input
-except NameError:
-    pass
+    reduce         # Python 2
+except NameError:  # Python 3
+    from functools import reduce
     
-        outfile, = args
     
-        def _create_alert_policy(self):
+    def backward(self, x, delta_h, activator):
         '''
-        Create an alert Policy using the CLC API.
-        :return: response dictionary from the CLC API.
+        实现LSTM训练算法
         '''
-        p = self.module.params
-        alias = p['alias']
-        email_list = p['alert_recipients']
-        metric = p['metric']
-        duration = p['duration']
-        threshold = p['threshold']
-        policy_name = p['name']
-        arguments = json.dumps(
-            {
-                'name': policy_name,
-                'actions': [{
-                    'action': 'email',
-                    'settings': {
-                        'recipients': email_list
-                    }
-                }],
-                'triggers': [{
-                    'metric': metric,
-                    'duration': duration,
-                    'threshold': threshold
-                }]
-            }
-        )
-        try:
-            result = self.clc.v2.API.Call(
-                'POST',
-                '/v2/alertPolicies/%s' % alias,
-                arguments)
-        except APIFailedResponse as e:
-            return self.module.fail_json(
-                msg='Unable to create alert policy '{0}'. {1}'.format(
-                    policy_name, str(e.response_text)))
-        return result
+        self.calc_delta(delta_h, activator)
+        self.calc_gradient(x)
     
-        def _get_loadbalancer_list(self, alias, location):
+        def to_int(self, byte):
         '''
-        Retrieve a list of loadbalancers
-        :param alias: Alias for account
-        :param location: Datacenter
-        :return: JSON data for all loadbalancers at datacenter
+        将unsigned byte字符转换为整数
         '''
-        result = None
-        try:
-            result = self.clc.v2.API.Call(
-                'GET', '/v2/sharedLoadBalancers/%s/%s' % (alias, location))
-        except APIFailedResponse as e:
-            self.module.fail_json(
-                msg='Unable to fetch load balancers for account: {0}. {1}'.format(
-                    alias, str(e.response_text)))
-        return result
+        return struct.unpack('B', byte)[0]
     
-    # Gracefully disable a member from a loadbalancer node:
-- apache2_mod_proxy:
-    balancer_vhost: '{{ vhost_host }}'
-    member_host: '{{ member.host }}'
-    state: drained
-  delegate_to: myloadbalancernode
-- wait_for:
-    host: '{{ member.host }}'
-    port: '{{ member.port }}'
-    state: drained
-  delegate_to: myloadbalancernode
-- apache2_mod_proxy:
-    balancer_vhost: '{{ vhost_host }}'
-    member_host: '{{ member.host }}'
-    state: absent
-  delegate_to: myloadbalancernode
+        # 计算forward值
+    x, d = data_set()
+    rl.forward(x[0])
+    rl.forward(x[1])
+    
+    # 求取sensitivity map
+    sensitivity_array = np.ones(rl.state_list[-1].shape,
+                                dtype=np.float64)
+    # 计算梯度
+    rl.backward(sensitivity_array, IdentityActivator())
+    
+    # 检查梯度
+    epsilon = 10e-4
+    for i in range(rl.W.shape[0]):
+        for j in range(rl.W.shape[1]):
+            rl.W[i,j] += epsilon
+            rl.reset_state()
+            rl.forward(x[0])
+            rl.forward(x[1])
+            err1 = error_function(rl.state_list[-1])
+            rl.W[i,j] -= 2*epsilon
+            rl.reset_state()
+            rl.forward(x[0])
+            rl.forward(x[1])
+            err2 = error_function(rl.state_list[-1])
+            expect_grad = (err1 - err2) / (2 * epsilon)
+            rl.W[i,j] += epsilon
+            print('weights(%d,%d): expected - actural %f - %f' % (
+                i, j, expect_grad, rl.gradient[i,j]))
+    
+    '''
+# NumPy 矩阵和数组的区别
+NumPy存在2中不同的数据类型:
+    1. 矩阵 matrix
+    2. 数组 array
+相似点：
+    都可以处理行列表示的数字元素
+不同点：
+    1. 2个数据类型上执行相同的数据运算可能得到不同的结果。
+    2. NumPy函数库中的 matrix 与 MATLAB中 matrices 等价。
 '''
     
-            # Remove the params
-        module.params.pop('params', None)
+        # 利用PCA对半导体制造数据降维
+    dataMat = replaceNanWithMean()
+    print(shape(dataMat))
+    # 分析数据
+    analyse_data(dataMat)
+    # lowDmat, reconMat = pca(dataMat, 20)
+    # print shape(lowDmat)
+    # show_picture(dataMat, reconMat)
+
     
-        module.exit_json(changed=ldap.passwd_set())
+        # 利用U矩阵将物品转换到低维空间中，构建转换后的物品(物品+4个主要的特征)
+    xformedItems = dataMat.T * U[:, :4] * Sig4.I
+    print('dataMat', shape(dataMat))
+    print('U[:, :4]', shape(U[:, :4]))
+    print('Sig4.I', shape(Sig4.I))
+    print('VT[:4, :]', shape(VT[:4, :]))
+    print('xformedItems', shape(xformedItems))
     
-        api_key = module.params.get('api_key')
-    api_password = module.params.get('api_password')
-    customer_id = module.params.get('customer_id')
-    domain = module.params.get('domain')
-    record_type = module.params.get('type')
-    record = module.params.get('record')
-    value = module.params.get('value')
-    priority = module.params.get('priority')
-    solo = module.params.get('solo')
-    state = module.params.get('state')
+        def __init__(self, *args, **kwargs):
+        super(MRsvm, self).__init__(*args, **kwargs)
+        self.data = pickle.load(open('/opt/git/MachineLearnidata/15.BigData_MapReduce/svmDat27'))
+        self.w = 0
+        self.eta = 0.69
+        self.dataList = []
+        self.k = self.options.batchsize
+        self.numMappers = 1
+        self.t = 1  # iteration number
     
-        # If in check mode, exit saying that we succeeded
-    if module.check_mode:
-        module.exit_json(changed=False, msg='OK')
+        ignore_strings = [
+        '^.*/assert_less_equal/.*$',
+        '^.*/dilation_rate$',
+        '^.*/Tensordot/concat$',
+        '^.*/Tensordot/concat/axis$',
+        '^testing/.*$',
+    ]
     
-    ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
+      total_written = 0
+  for (inst_index, instance) in enumerate(instances):
+    input_ids = tokenizer.convert_tokens_to_ids(instance.tokens)
+    input_mask = [1] * len(input_ids)
+    segment_ids = list(instance.segment_ids)
+    assert len(input_ids) <= max_seq_length
     
-    # setup configuration :
-# ufw reset
-# ufw enable
-# ufw allow proto udp to any port 5353 from 224.0.0.251
-# ufw allow proto udp to any port 5353 from ff02::fb
-dry_mode_cmd_with_ipv6 = {
-    'ufw status verbose': ufw_status_verbose_with_ipv6,
-    'ufw --version': ufw_version_35,
-    # CONTENT of the command sudo ufw --dry-run delete allow in from ff02::fb port 5353 proto udp | grep -E '^### tupple'
-    'ufw --dry-run delete allow from ff02::fb to any port 5353 proto udp': '### tuple ### allow udp any ::/0 5353 ff02::fb in',
-    grep_config_cli: user_rules_with_ipv6,
-    'ufw --dry-run allow from ff02::fb to any port 5353 proto udp': skippg_adding_existing_rules,
-    'ufw --dry-run allow from 224.0.0.252 to any port 5353 proto udp': '''### tuple ### allow udp 5353 0.0.0.0/0 any 224.0.0.251 in
-### tuple ### allow udp 5353 0.0.0.0/0 any 224.0.0.252 in
-''',
-    'ufw --dry-run allow from 10.0.0.0/24 to any port 1577 proto udp': '### tuple ### allow udp 1577 0.0.0.0/0 any 10.0.0.0/24 in'
-}
     
-        def __enter__(self):
-        if not hasattr(Context._default_ctx, 'value'):
-            Context._default_ctx.value = Context('cpu', 0)
-        self._old_ctx = Context._default_ctx.value
-        Context._default_ctx.value = self
-        return self
-    
-            str_list = []
-        for index in range(self.num_images):
-            progress_bar(index, self.num_images)
-            label = self.label_from_index(index)
-            if label.size < 1:
-                continue
-            path = self.image_path_from_index(index)
-            if root:
-                path = osp.relpath(path, root)
-            str_list.append('\t'.join([str(index), str(2), str(label.shape[1])] \
-              + ['{0:.4f}'.format(x) for x in label.ravel()] + [path,]) + '\n')
-        if str_list:
-            if shuffle:
-                import random
-                random.shuffle(str_list)
-            if not fname:
-                fname = self.name + '.lst'
-            with open(fname, 'w') as f:
-                for line in str_list:
-                    f.write(line)
-        else:
-            raise RuntimeError('No image in imdb')
-    
-        network = None if args.deploy_net else args.network
-    class_names = parse_class_names(args.class_names)
-    data_shape = parse_data_shape(args.data_shape)
-    if args.prefix.endswith('_'):
-        prefix = args.prefix + args.network + '_' + str(data_shape[0])
-    else:
-        prefix = args.prefix
-    detector = get_detector(network, prefix, args.epoch,
-                            data_shape,
-                            (args.mean_r, args.mean_g, args.mean_b),
-                            ctx, len(class_names), args.nms_thresh, args.force_nms)
-    # run detection
-    detector.detect_and_visualize(image_list, args.dir, args.extension,
-                                  class_names, args.thresh, args.show_timer)
-    
-    def Conv(data, num_filter, kernel=(1, 1), stride=(1, 1), pad=(0, 0), name=None, suffix=''):
-    conv = mx.sym.Convolution(data=data, num_filter=num_filter, kernel=kernel, stride=stride, pad=pad, no_bias=True, name='%s%s_conv2d' %(name, suffix))
-    bn = mx.sym.BatchNorm(data=conv, name='%s%s_batchnorm' %(name, suffix), fix_gamma=True)
-    act = mx.sym.Activation(data=bn, act_type='relu', name='%s%s_relu' %(name, suffix))
-    return act
-    
-    def read_caffemodel(prototxt_fname, caffemodel_fname):
-    '''Return a caffe_pb2.NetParameter object that defined in a binary
-    caffemodel file
-    '''
-    if use_caffe:
-        caffe.set_mode_cpu()
-        net = caffe.Net(prototxt_fname, caffemodel_fname, caffe.TEST)
-        layer_names = net._layer_names
-        layers = net.layers
-        return (layers, layer_names)
-    else:
-        proto = caffe_pb2.NetParameter()
-        with open(caffemodel_fname, 'rb') as f:
-            proto.ParseFromString(f.read())
-        return (get_layers(proto), None)
-    
-                layer_name_to_record[layer_def.name] = LayerRecord(layer_def)
-    
-    def main():
-    parser = argparse.ArgumentParser(description='Convert caffe mean')
-    parser.add_argument('binaryproto_fname', help='Filename of the mean')
-    parser.add_argument('output', help='The name of the output file')
-    args = parser.parse_args()
-    convert_mean(args.binaryproto_fname, args.output)
+def model_fn_builder(bert_config, init_checkpoint, learning_rate,
+                     num_train_steps, num_warmup_steps, use_tpu,
+                     use_one_hot_embeddings):
+  '''Returns `model_fn` closure for TPUEstimator.'''
