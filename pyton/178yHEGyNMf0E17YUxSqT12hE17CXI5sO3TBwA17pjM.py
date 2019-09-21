@@ -1,156 +1,142 @@
 
         
-        :class:`sklearn.covariance.EllipticEnvelope` assumes the data is Gaussian and
-learns an ellipse. It thus degrades when the data is not unimodal. Notice
-however that this estimator is robust to outliers.
+        
+def check_entry(line_num, segments):
+    # START Title
+    raw_title = segments[index_title]
+    title_re_match = link_re.match(raw_title)
+    # url should be wrapped in '[TITLE](LINK)' Markdown syntax
+    if not title_re_match:
+        add_error(line_num, 'Title syntax should be '[TITLE](LINK)'')
+    else:
+        # do not allow '... API' in the entry title
+        title = title_re_match.group(1)
+        if title.upper().endswith(' API'):
+            add_error(line_num, 'Title should not end with '... API'. Every entry is an API here!')
+        # do not allow duplicate links
+        link = title_re_match.group(2)
+        if link in previous_links:
+            add_error(line_num, 'Duplicate link - entries should only be included in one section')
+        else:
+            previous_links.append(link)
+    # END Title
+    # START Description
+    # first character should be capitalized
+    char = segments[index_desc][0]
+    if char.upper() != char:
+        add_error(line_num, 'first character of description is not capitalized')
+    # last character should not punctuation
+    char = segments[index_desc][-1]
+    if char in punctuation:
+        add_error(line_num, 'description should not end with {}'.format(char))
+    desc_length = len(segments[index_desc])
+    if desc_length > 100:
+        add_error(line_num, 'description should not exceed 100 characters (currently {})'.format(desc_length))
+    # END Description
+    # START Auth
+    # values should conform to valid options only
+    auth = segments[index_auth]
+    if auth != 'No' and (not auth.startswith('`') or not auth.endswith('`')):
+        add_error(line_num, 'auth value is not enclosed with `backticks`')
+    if auth.replace('`', '') not in auth_keys:
+        add_error(line_num, '{} is not a valid Auth option'.format(auth))
+    # END Auth
+    # START HTTPS
+    # values should conform to valid options only
+    https = segments[index_https]
+    if https not in https_keys:
+        add_error(line_num, '{} is not a valid HTTPS option'.format(https))
+    # END HTTPS
+    # START CORS
+    # values should conform to valid options only
+    cors = segments[index_cors]
+    if cors not in cors_keys:
+        add_error(line_num, '{} is not a valid CORS option'.format(cors))
+    # END CORS
     
-    Show below is a logistic-regression classifiers decision boundaries on the
-first two dimensions (sepal length and width) of the `iris
-<https://en.wikipedia.org/wiki/Iris_flower_data_set>`_ dataset. The datapoints
-are colored according to their labels.
-    
-    from sklearn.cluster import AgglomerativeClustering
-    
-    import gc
-    
-    
-def _linkcode_resolve(domain, info, package, url_fmt, revision):
-    '''Determine a link to online source for a class/method/function
-    
-    import sys
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.svm import LinearSVC
-from sklearn.pipeline import Pipeline
-from sklearn.model_selection import GridSearchCV
-from sklearn.datasets import load_files
-from sklearn.model_selection import train_test_split
-from sklearn import metrics
-    
-    # Get data
-X1 = load_boston()['data'][:, [8, 10]]  # two clusters
-X2 = load_boston()['data'][:, [5, 12]]  # 'banana'-shaped
-    
-    This example demonstrates how to generate a dataset and bicluster it
-using the Spectral Co-Clustering algorithm.
-    
-    # compressed face
-plt.figure(2, figsize=(3, 2.2))
-plt.imshow(face_compressed, cmap=plt.cm.gray, vmin=vmin, vmax=vmax)
-    
-    def shorten_title(title):
-    m1 = re.search('[[0-9]*]', title)
-    m2 = re.search(''.*'', title)
-    if m1:
-        title = m1.group(0)
-    if m2:
-        title = ' '.join((title, m2.group(0)))   
-    return title[:50] + ' [...]'    
-    
-      with MockVimBuffers( [ current_buffer ], [ current_buffer ], ( 1, 2 ) ):
-    ycm.SendCompletionRequest( force_semantic = True )
-    assert_that(
-      ycm.GetCompletionResponse(),
-      has_entries( {
-        'completions': ToBytesOnPY2( ycm_completions ),
-        'completion_start_column': ycm_start_column
-      } )
-    )
-    
-        return _MasterDiagnosticFilter( compiled_by_type )
-    
-    
-  def GetErrorCount( self ):
-    return self._DiagnosticsCount( _DiagnosticIsError )
-    
-    
-def SendShutdownRequest():
-  request = ShutdownRequest()
-  # This is a blocking call.
-  request.Start()
+        def load_module(self, filename, module_path, plugin_type):
+        ''' Load the defaults module and add defaults '''
+        logger.debug('Adding defaults: (filename: %s, module_path: %s, plugin_type: %s',
+                     filename, module_path, plugin_type)
+        module = os.path.splitext(filename)[0]
+        section = '.'.join((plugin_type, module.replace('_defaults', '')))
+        logger.debug('Importing defaults module: %s.%s', module_path, module)
+        mod = import_module('{}.{}'.format(module_path, module))
+        self.add_section(title=section, info=mod._HELPTEXT)  # pylint:disable=protected-access
+        for key, val in mod._DEFAULTS.items():  # pylint:disable=protected-access
+            self.add_item(section=section, title=key, **val)
+        logger.debug('Added defaults: %s', section)
 
     
-    
-GENERIC_RESPONSE = {
-  'clang': {
-    'has_support': True,
-    'version': 'Clang version'
-  },
-  'completer': {
-    'items': [
-      {
-        'key': 'key',
-        'value': 'value'
-      }
-    ],
-    'name': 'Completer name',
-    'servers': [
-      {
-        'address': '127.0.0.1',
-        'executable': '/path/to/executable',
-        'extras': [
-          {
-            'key': 'key',
-            'value': 'value'
-          }
-        ],
-        'is_running': True,
-        'logfiles': [
-          '/path/to/stdout/logfile',
-          '/path/to/stderr/logfile'
-        ],
-        'name': 'Server name',
-        'pid': 12345,
-        'port': 1234
-      }
-    ]
-  },
-  'extra_conf': {
-    'is_loaded': False,
-    'path': '/path/to/extra/conf'
-  },
-  'python': {
-    'executable': '/path/to/python/interpreter',
-    'version': 'Python version'
-  }
-}
-    
-      opts = { 'filter_diagnostics' : {
-    'java' : { 'regex' : '.*taco.*' },
-    'xml'  : { 'regex' : '.*burrito.*' } } }
-    
-    
-def KeywordsFromSyntaxListOutput_PhpSyntax_ContainsPreProc_test():
-  assert_that( syntax_parse._KeywordsFromSyntaxListOutput(
-                   ContentsOfTestFile( 'php_syntax' ) ),
-               has_items( 'skip', 'function' ) )
-    
-      def shutdown( self, wait=True ):
-    with self._shutdown_lock:
-      self._shutdown = True
-      self._work_queue.put( None )
-    if wait:
-      for t in self._threads:
-        t.join()
-  shutdown.__doc__ = _base.Executor.shutdown.__doc__
+        def load_module(self, filename, module_path, plugin_type):
+        ''' Load the defaults module and add defaults '''
+        logger.debug('Adding defaults: (filename: %s, module_path: %s, plugin_type: %s',
+                     filename, module_path, plugin_type)
+        module = os.path.splitext(filename)[0]
+        section = '.'.join((plugin_type, module.replace('_defaults', '')))
+        logger.debug('Importing defaults module: %s.%s', module_path, module)
+        mod = import_module('{}.{}'.format(module_path, module))
+        self.add_section(title=section, info=mod._HELPTEXT)  # pylint:disable=protected-access
+        for key, val in mod._DEFAULTS.items():  # pylint:disable=protected-access
+            self.add_item(section=section, title=key, **val)
+        logger.debug('Added defaults: %s', section)
 
     
+        inputs_to_do_before = [y.op for y in ys]
+    if grad_ys is not None:
+        inputs_to_do_before += grad_ys
+    wait_to_do_ops = list(copied_ops) + [g.op for g in dv if g is not None]
+    my_add_control_inputs(wait_to_do_ops, inputs_to_do_before)
     
-class TwitterServerShowUserHandler(RequestHandler):
-    def get(self, screen_name):
-        if screen_name == 'error':
-            raise HTTPError(500)
-        assert 'oauth_nonce' in self.request.arguments
-        assert 'oauth_timestamp' in self.request.arguments
-        assert 'oauth_signature' in self.request.arguments
-        assert self.get_argument('oauth_consumer_key') == 'test_twitter_consumer_key'
-        assert self.get_argument('oauth_signature_method') == 'HMAC-SHA1'
-        assert self.get_argument('oauth_version') == '1.0'
-        assert self.get_argument('oauth_token') == 'hjkl'
-        self.write(dict(screen_name=screen_name, name=screen_name.capitalize()))
+        - Modified
+        - to correct extreme right and extreme bottom behavior,
+        - to stay inside the screen whenever the tooltip might go out on
+          the top but still the screen is higher than the tooltip,
+        - to use the more flexible mouse positioning,
+        - to add customizable background color, padding, waittime and
+          wraplength on creation
+      by Alberto Vassena on 2016.11.05.
+    
+                    var_x = K.reshape(inputs, (batch_size,
+                                           height,
+                                           width,
+                                           self.group,
+                                           channels // self.group))
+                mean = K.mean(var_x, axis=[1, 2, 4], keepdims=True)
+                std = K.sqrt(K.var(var_x, axis=[1, 2, 4], keepdims=True) + self.epsilon)
+                var_x = (var_x - mean) / std
+    
+        def sorted_similarity(self, predictions, method='ward'):
+        ''' Sort a matrix of predictions by similarity Adapted from:
+            https://gmarti.gitlab.io/ml/2017/09/07/how-to-sort-distance-matrix.html
+        input:
+            - predictions is a stacked matrix of vgg_face predictions shape: (x, 4096)
+            - method = ['ward','single','average','complete']
+        output:
+            - result_order is a list of indices with the order implied by the hierarhical tree
+    
+        def __init__(self, eps_std=0.05, seed=None, init=False):
+        # Convolutional Aware Initialization takes a long time.
+        # Keras model loading loads a model, performs initialization and then
+        # loads weights, which is an unnecessary waste of time.
+        # init defaults to False so that this is bypassed when loading a saved model
+        # passing zeros
+        self._init = init
+        self.eps_std = eps_std
+        self.seed = seed
+        self.orthogonal = initializers.Orthogonal()
+        self.he_uniform = initializers.he_uniform()
+    
+        def progress_set_mode(self, mode):
+        ''' Set the progress bar mode '''
+        self.pbar.config(mode=mode)
+        if mode == 'indeterminate':
+            self.pbar.config(maximum=100)
+            self.pbar.start()
+        else:
+            self.pbar.stop()
+            self.pbar.config(maximum=100)
     
     
-class EscapeTestCase(unittest.TestCase):
-    def test_linkify(self):
-        for text, kwargs, html in linkify_tests:
-            linked = tornado.escape.linkify(text, **kwargs)
-            self.assertEqual(linked, html)
+class Scaling(Adjustment):
+    ''' Sharpening Adjustments for the face applied after warp to final frame '''
