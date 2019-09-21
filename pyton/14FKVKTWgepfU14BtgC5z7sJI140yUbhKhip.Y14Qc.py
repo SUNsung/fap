@@ -1,72 +1,93 @@
 
         
-        site_info = 'CNTV.com'
-download = cntv_download
-download_playlist = playlist_not_supported('cntv')
+        
+class FormatterPlugin(BasePlugin):
+    group_name = 'format'
+    
+        def unregister(self, plugin: Type[BasePlugin]):
+        self.remove(plugin)
+    
+    
+PACKAGES = [
+    'httpie',
+    'Pygments',
+    'requests',
+    'certifi',
+    'urllib3',
+    'idna',
+    'chardet',
+    'PySocks',
+]
+    
+    from setuptools import setup, find_packages
+from setuptools.command.test import test as TestCommand
+    
+    
+@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
+@pytest.mark.parametrize('filename', filenames)
+def test_rst_file_syntax(filename):
+    p = subprocess.Popen(
+        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE
+    )
+    err = p.communicate()[1]
+    assert p.returncode == 0, err.decode('utf8')
 
     
-    	xml = get_html('http://www.ehow.com/services/video/series.xml?demand_ehow_videoid=%s' % vid)
+        file_path = './data.txt'
+    data = load_data(file_path)
     
-	from xml.dom.minidom import parseString
-	doc = parseString(xml)
-	tab = doc.getElementsByTagName('related')[0].firstChild
+            o = tf.nn.conv2d(x, W, strides=strides, padding=padding) + b
+        o = act_fn(o)
+    
+    
+# TODO(huay): char_cnn_embedding
+def char_cnn_embedding(x, c_embed_size=8, share_cnn_weights=True, name='char_cnn_embedding', reuse=None):
+    '''
+    In:  [N, max_n_word, max_n_char]
+    Out: [N, max_n_word, c_embed_size]
+    
+    
+def classify0(inX, dataSet, labels, k):
+    '''
+    inx[1,2,3]
+    DS=[[1,2,3],[1,2,0]]
+    inX: 用于分类的输入向量
+    dataSet: 输入的训练样本集
+    labels: 标签向量
+    k: 选择最近邻居的数目
+    注意：labels元素数目和dataSet行数相同；程序使用欧式距离公式.
+    
+    
+class ReluActivator(object):
+    def forward(self, weighted_input):
+        #return weighted_input
+        return max(0, weighted_input)
+    
+            # 计算对本次输入x的权重梯度
+        xt = x.transpose()
+        self.Wfx_grad = np.dot(self.delta_f_list[-1], xt)
+        self.Wix_grad = np.dot(self.delta_i_list[-1], xt)
+        self.Wox_grad = np.dot(self.delta_o_list[-1], xt)
+        self.Wcx_grad = np.dot(self.delta_ct_list[-1], xt)
     
         Args:
-        trees           决策树的集合
-        row             测试数据集的每一行数据
-    Returns:
-        返回随机森林中，决策树结果出现次数做大的
+        numSV       Sigma长度   
+        thresh      判断的阈值
     '''
+    # 构建一个列表
+    myMat = imgLoadData('data/14.SVD/0_5.txt')
     
-        def bp_sensitivity_map(self, sensitivity_array,
-                           activator):
-        '''
-        计算传递到上一层的sensitivity map
-        sensitivity_array: 本层的sensitivity map
-        activator: 上一层的激活函数
-        '''
-        # 处理卷积步长，对原始sensitivity map进行扩展
-        expanded_array = self.expand_sensitivity_map(
-            sensitivity_array)
-        # full卷积，对sensitivitiy map进行zero padding
-        # 虽然原始输入的zero padding单元也会获得残差
-        # 但这个残差不需要继续向上传递，因此就不计算了
-        expanded_width = expanded_array.shape[2]
-        zp = (self.input_width +  
-              self.filter_width - 1 - expanded_width) / 2
-        padded_array = padding(expanded_array, zp)
-        # 初始化delta_array，用于保存传递到上一层的
-        # sensitivity map
-        self.delta_array = self.create_delta_array()
-        # 对于具有多个filter的卷积层来说，最终传递到上一层的
-        # sensitivity map相当于所有的filter的
-        # sensitivity map之和
-        for f in range(self.filter_number):
-            filter = self.filters[f]
-            # 将filter权重翻转180度
-            flipped_weights = np.array(map(
-                lambda i: np.rot90(i, 2), 
-                filter.get_weights()))
-            # 计算与一个filter对应的delta_array
-            delta_array = self.create_delta_array()
-            for d in range(delta_array.shape[0]):
-                conv(padded_array[f], flipped_weights[d],
-                    delta_array[d], 1, 0)
-            self.delta_array += delta_array
-        # 将计算结果与激活函数的偏导数做element-wise乘法操作
-        derivative_array = np.array(self.input_array)
-        element_wise_op(derivative_array, 
-                        activator.backward)
-        self.delta_array *= derivative_array
+        # 接受输入数据流
+    def map(self, key, val):  # 需要 2 个参数，求数据的和与平方和
+        if False:
+            yield
+        inVal = float(val)
+        self.inCount += 1
+        self.inSum += inVal
+        self.inSqSum += inVal*inVal
     
     
-# 数据加载器基类
-class Loader(object):
-    def __init__(self, path, count):
-        '''
-        初始化加载器
-        path: 数据文件路径
-        count: 文件中的样本个数
-        '''
-        self.path = path
-        self.count = count
+def batchPegasos(dataSet, labels, lam, T, k):
+    '''batchPegasos()
