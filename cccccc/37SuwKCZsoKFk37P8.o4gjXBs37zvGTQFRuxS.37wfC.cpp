@@ -1,337 +1,235 @@
 
         
-          // Copy the file out into a temporary file and returns the new path.
-  v8::Local<v8::Value> CopyFileOut(v8::Isolate* isolate,
-                                   const base::FilePath& path) {
-    base::FilePath new_path;
-    if (!archive_ || !archive_->CopyFileOut(path, &new_path))
-      return v8::False(isolate);
-    return mate::ConvertToV8(isolate, new_path);
-  }
+        namespace winrt::Microsoft::Terminal::Settings::implementation
+{
+    KeyChord::KeyChord(bool ctrl, bool alt, bool shift, int32_t vkey) :
+        _modifiers{ (ctrl ? Settings::KeyModifiers::Ctrl : Settings::KeyModifiers::None) |
+                    (alt ? Settings::KeyModifiers::Alt : Settings::KeyModifiers::None) |
+                    (shift ? Settings::KeyModifiers::Shift : Settings::KeyModifiers::None) },
+        _vkey{ vkey }
+    {
+    }
+    }
     
-    #include 'base/callback.h'
-#include 'base/values.h'
-#include 'native_mate/handle.h'
-#include 'shell/browser/api/event_emitter.h'
-#include 'shell/common/error_util.h'
-#include 'shell/common/promise_util.h'
+    void SILGenModule::useConformancesFromType(CanType type) {
+  if (!usedConformancesFromTypes.insert(type.getPointer()).second)
+    return;
+    }
     
-    #endif  // SHELL_COMMON_ERROR_UTIL_H_
-
     
-    #endif  // NATIVE_MATE_NATIVE_MATE_PERSISTENT_DICTIONARY_H_
-
-    
-    void Initialize(v8::Local<v8::Object> exports,
-                v8::Local<v8::Value> unused,
-                v8::Local<v8::Context> context,
-                void* priv) {
-  v8::Isolate* isolate = context->GetIsolate();
-  mate::Dictionary dict(isolate, exports);
-  dict.Set('autoUpdater', AutoUpdater::Create(isolate));
-  dict.Set('AutoUpdater', AutoUpdater::GetConstructor(isolate)
-                              ->GetFunction(context)
-                              .ToLocalChecked());
+    {  EXPECT_EQ(31u, vec.size());
+  EXPECT_EQ(true, vec[0]);
+  EXPECT_EQ(false, vec[1]);
+  EXPECT_EQ(true, vec[30]);
 }
     
-    
-    {}  // namespace
-    
-    // Parses the given box file string into a page_number, utf8_str, and
-// bounding_box. Returns true on a successful parse.
-bool ParseBoxFileStr(const char* boxfile_str, int* page_number,
-                     STRING* utf8_str, TBOX* bounding_box);
-    
-      // Fills in the x-height range accepted by the given unichar_id in blob
-  // coordinates, given its bounding box in the usual baseline-normalized
-  // coordinates, with some initial crude x-height estimate (such as word
-  // size) and this denoting the transformation that was used.
-  // Also returns the amount the character must have shifted up or down.
-  void XHeightRange(int unichar_id, const UNICHARSET& unicharset,
-                    const TBOX& bbox,
-                    float* min_xht,
-                    float* max_xht,
-                    float* yshift) const;
-    
-    #endif  // TESSERACT_CCSTRUCT_OCRPARA_H_
-
-    
-    
-    {  /* Accept modes which occur between the above rejection groups */
-  R_NN_ACCEPT,          // NN acceptance
-  R_HYPHEN_ACCEPT,      // Hyphen acceptance
-  R_MM_ACCEPT,          // Matrix match acceptance
-  R_QUALITY_ACCEPT,     // Accept word in good quality doc
-  R_MINIMAL_REJ_ACCEPT  // Accept EVERYTHING except tess failures
-};
-    
-      // Connects this and other, discarding any existing connections.
-  void Connect(DoublePtr* other) {
-    other->Disconnect();
-    Disconnect();
-    other->other_end_ = this;
-    other_end_ = other;
-  }
-  // Disconnects this and other, making OtherEnd() return nullptr for both.
-  void Disconnect() {
-    if (other_end_ != nullptr) {
-      other_end_->other_end_ = nullptr;
-      other_end_ = nullptr;
-    }
-  }
-  // Returns the pointer to the other end of the double pointer.
-  DoublePtr* OtherEnd() const {
-    return other_end_;
-  }
-    
-      // A hole in the heap exists at hole_index, and we want to fill it with the
-  // given pair. SiftDown sifts the hole downward to the correct position and
-  // returns the destination index without actually putting pair there.
-  int SiftDown(int hole_index, const Pair& pair) {
-    int heap_size = heap_.size();
-    int child;
-    while ((child = LeftChild(hole_index)) < heap_size) {
-      if (child + 1 < heap_size && heap_[child + 1] < heap_[child])
-        ++child;
-      if (heap_[child] < pair) {
-        heap_[hole_index] = heap_[child];
-        hole_index = child;
-      } else {
-        break;
+        // Next step: delete dead witness tables.
+    SILModule::WitnessTableListType &WTables = Module->getWitnessTableList();
+    for (auto Iter = WTables.begin(), End = WTables.end(); Iter != End;) {
+      SILWitnessTable *Wt = &*Iter;
+      Iter++;
+      if (!isAlive(Wt)) {
+        LLVM_DEBUG(llvm::dbgs() << '  erase dead witness table '
+                                << Wt->getName() << '\n');
+        Module->deleteWitnessTable(Wt);
       }
     }
-    return hole_index;
+    
+    #if defined(__CYGWIN__) || defined(_WIN32) || defined(__HAIKU__)
+// Cygwin does not support uselocale(), but we can use the locale feature 
+// in stringstream object.
+template <typename T>
+static const char *_swift_stdlib_strtoX_clocale_impl(
+    const char *nptr, T *outResult) {
+  if (swift_stringIsSignalingNaN(nptr)) {
+    *outResult = std::numeric_limits<T>::signaling_NaN();
+    return nptr + std::strlen(nptr);
   }
-    
-    /**----------------------------------------------------------------------------
-          Public Function Prototypes
-----------------------------------------------------------------------------**/
-void InitIntegerFX();
-    
-    namespace tesseract {
+  
+  std::istringstream ValueStream(nptr);
+  ValueStream.imbue(std::locale::classic());
+  T ParsedValue;
+  ValueStream >> ParsedValue;
+  *outResult = ParsedValue;
     }
     
-        /**
-     * Allocates optimes for new entries in the oplog. Returns the new optimes in a vector along
-     * with their terms.
-     */
-    std::vector<OplogSlot> getNextOpTimes(OperationContext* opCtx, std::size_t count);
+    #ifndef SWIFT_SIL_DEBUGSCOPE_H
+#define SWIFT_SIL_DEBUGSCOPE_H
     
-    #include 'mongo/base/status.h'
-#include 'mongo/util/functional.h'
-    
-    /**
- * tracks usage by collection
- */
-class Top {
-public:
-    static Top& get(ServiceContext* service);
-    }
-    
-    
-ScriptSet &ScriptSet::set(UScriptCode script, UErrorCode &status) {
-    if (U_FAILURE(status)) {
-        return *this;
-    }
-    if (script < 0 || script >= (int32_t)sizeof(bits) * 8) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return *this;
-    }
-    uint32_t index = script / 32;
-    uint32_t bit   = 1 << (script & 31);
-    bits[index] |= bit;
+      AssociatedTypeIterator &operator++() {
+    const auto &ATR = this->operator*();
+    size_t Size = sizeof(AssociatedTypeDescriptor) +
+      ATR.NumAssociatedTypes * ATR.AssociatedTypeRecordSize;
+    const void *Next = reinterpret_cast<const char *>(Cur) + Size;
+    Cur = Next;
     return *this;
-}
-    
-    #define LOW_A             ((UChar)0x0061)
-#define LOW_B             ((UChar)0x0062)
-#define LOW_C             ((UChar)0x0063)
-#define LOW_D             ((UChar)0x0064)
-#define LOW_E             ((UChar)0x0065)
-#define LOW_F             ((UChar)0x0066)
-#define LOW_G             ((UChar)0x0067)
-#define LOW_H             ((UChar)0x0068)
-#define LOW_I             ((UChar)0x0069)
-#define LOW_J             ((UChar)0x006a)
-#define LOW_K             ((UChar)0x006B)
-#define LOW_L             ((UChar)0x006C)
-#define LOW_M             ((UChar)0x006D)
-#define LOW_N             ((UChar)0x006E)
-#define LOW_O             ((UChar)0x006F)
-#define LOW_P             ((UChar)0x0070)
-#define LOW_Q             ((UChar)0x0071)
-#define LOW_R             ((UChar)0x0072)
-#define LOW_S             ((UChar)0x0073)
-#define LOW_T             ((UChar)0x0074)
-#define LOW_U             ((UChar)0x0075)
-#define LOW_V             ((UChar)0x0076)
-#define LOW_W             ((UChar)0x0077)
-#define LOW_X             ((UChar)0x0078)
-#define LOW_Y             ((UChar)0x0079)
-#define LOW_Z             ((UChar)0x007A)
-    
-    
-    {    BreakIterator *get() const { return ptr; }
-    BreakIterator *operator->() const { return ptr; }
-    BreakIterator &operator*() const { return *ptr; }
-private:
-    BreakIterator *ptr;
-    SharedBreakIterator(const SharedBreakIterator &);
-    SharedBreakIterator &operator=(const SharedBreakIterator &);
-};
-    
-    #include 'unicode/utypes.h'
-#include 'sharedobject.h'
-    
-                    fstream.PutMarker(FileMarker::fileMarkerBeginSection, L'BSyncPeriodInSamples'); 
-                fstream << m_syncPeriodPerWorker; 
-                fstream.PutMarker(FileMarker::fileMarkerEndSection, L'ESyncPeriodInSamples');
-    
-                    std::size_t firstDotPos = name.find_first_of('.');
-                if (firstDotPos == std::string::npos)
-                {
-                    LogicError('nodeParam of type \'ndlTypeDotParameter\' doesn't have a dot in its name: %s', name.c_str());
-                }
-    
-        // SetMacroDefinitionsAllowed - allow macro definitions
-    // macroAllowed - can macros be defined in this script?
-    void SetMacroDefinitionsAllowed(bool macroAllowed)
-    {
-        m_noDefinitions = !macroAllowed;
-    }
-    
-        // ReplaceAppend - replace an existing value with another value, or append if it appears to be a 'set' type
-    ConfigValue& ReplaceAppend(const std::string& configValue)
-    {
-        static const std::string openBraces = '[';
-    }
-    
-        // dump all nodes in the network to file
-    void DumpAllNodesToFile(const bool printValues,
-                            const bool printMetadata,
-                            const std::wstring outputFile)
-    {
-        File fstream(outputFile,
-                     FileOptions::fileOptionsText | FileOptions::fileOptionsWrite);
-    }
-    
-    void DHTReplaceNodeTask::onReceived(const DHTPingReplyMessage* message)
-{
-  A2_LOG_INFO(fmt('ReplaceNode: Ping reply received from %s.',
-                  message->getRemoteNode()->toString().c_str()));
-  setFinished(true);
-}
-    
-    
-    {  void setTimeout(std::chrono::seconds timeout)
-  {
-    timeout_ = std::move(timeout);
-  }
-};
-    
-    DHTResponseMessage::~DHTResponseMessage() = default;
-    
-    void DHTRoutingTable::getClosestKNodes(
-    std::vector<std::shared_ptr<DHTNode>>& nodes,
-    const unsigned char* key) const
-{
-  dht::findClosestKNodes(nodes, root_.get(), key);
-}
-    
-      Time serializedTime_;
-    
-    namespace aria2 {
-    }
-    
-    
-    {  // Returns two vector of Commands.  First one contains regular
-  // commands.  Secod one contains so called routine commands, which
-  // executed once per event poll returns.
-  std::pair<std::vector<std::unique_ptr<Command>>,
-            std::vector<std::unique_ptr<Command>>>
-  setup(DownloadEngine* e, int family);
-};
-    
-    std::shared_ptr<DHTTask> DHTTaskFactoryImpl::createPeerLookupTask(
-    const std::shared_ptr<DownloadContext>& ctx, uint16_t tcpPort,
-    const std::shared_ptr<PeerStorage>& peerStorage)
-{
-  auto task = std::make_shared<DHTPeerLookupTask>(ctx, tcpPort);
-  // TODO this may be not freed by RequestGroup::releaseRuntimeResource()
-  task->setPeerStorage(peerStorage);
-  setCommonProperty(task);
-  return task;
-}
-    
-    
-    {  virtual void addImmediateTask(const std::shared_ptr<DHTTask>& task) = 0;
-};
-    
-    DHTTokenTracker::DHTTokenTracker(const unsigned char* initialSecret)
-{
-  memcpy(secret_[0], initialSecret, SECRET_SIZE);
-  memcpy(secret_[1], initialSecret, SECRET_SIZE);
-}
-    
-    
-    {} // namespace aria2
-
-    
-    class DHTTokenUpdateCommand : public TimeBasedCommand {
-private:
-  DHTTokenTracker* tokenTracker_;
-    }
-    
-      template <typename OutputIterator>
-  void findAll(OutputIterator out, const std::string& hostname,
-               uint16_t port) const
-  {
-    auto target = std::make_shared<CacheEntry>(hostname, port);
-    auto i = entries_.find(target);
-    if (i != entries_.end()) {
-      (*i)->getAllGoodAddrs(out);
-    }
   }
     
+      constexpr static KeyPathComponentHeader
+  forStructComponentWithUnresolvedFieldOffset(bool isLet) {
+    return KeyPathComponentHeader(
+      (_SwiftKeyPathComponentHeader_StructTag
+       << _SwiftKeyPathComponentHeader_DiscriminatorShift)
+      | _SwiftKeyPathComponentHeader_UnresolvedFieldOffsetPayload
+      | isLetBit(isLet));
+  }
+  
+  constexpr static KeyPathComponentHeader
+  forClassComponentWithInlineOffset(bool isLet,
+                                    unsigned offset) {
+    return KeyPathComponentHeader(
+      (_SwiftKeyPathComponentHeader_ClassTag
+       << _SwiftKeyPathComponentHeader_DiscriminatorShift)
+      | validateInlineOffset(offset)
+      | isLetBit(isLet));
+  }
     
-    {
-    {
-    {            p.z = (r * ( 1 - cosBeta ) * cosTheta);// '100' didn't work for
-            p.x = p.z * sinf(rotateByYAxis) + p.x * cosf(rotateByYAxis);
-            p.z = p.z * cosf(rotateByYAxis) - p.x * sinf(rotateByYAxis);
-            p.z/=7;
-            //    Stop z coord from dropping beneath underlying page in a transition
-            // issue #751
-            if( p.z < 0.5f )
+    enum class GenericRequirementLayoutKind : uint32_t {
+  // A class constraint.
+  Class = 0,
+};
+    
+    // Halt due to enabling an already enabled dynamic replacement().
+SWIFT_RUNTIME_ATTRIBUTE_NORETURN SWIFT_RUNTIME_ATTRIBUTE_NOINLINE
+void swift_abortDynamicReplacementEnabling();
+    
+    	Copyright (c) 2016 Błażej Szczygieł
+    
+    	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the 'Software'), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+    
+        int GetDisplayCount() const;
+    const Display* GetDisplay(int index) const;
+    
+    /**
+ * oc_ilog32 - Integer binary logarithm of a 32-bit value.
+ * @_v: A 32-bit value.
+ * Returns floor(log2(_v))+1, or 0 if _v==0.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ * The OC_ILOG_32() or OC_ILOGNZ_32() macros may be able to use a builtin
+ *  function instead, which should be faster.
+ */
+int oc_ilog32(ogg_uint32_t _v);
+/**
+ * oc_ilog64 - Integer binary logarithm of a 64-bit value.
+ * @_v: A 64-bit value.
+ * Returns floor(log2(_v))+1, or 0 if _v==0.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ * The OC_ILOG_64() or OC_ILOGNZ_64() macros may be able to use a builtin
+ *  function instead, which should be faster.
+ */
+int oc_ilog64(ogg_int64_t _v);
+    
+    /**
+ * \brief          Do an RSA private key decrypt, then remove the message
+ *                 padding
+ *
+ * \param ctx      PKCS #11 context
+ * \param mode     must be MBEDTLS_RSA_PRIVATE, for compatibility with rsa.c's signature
+ * \param input    buffer holding the encrypted data
+ * \param output   buffer that will hold the plaintext
+ * \param olen     will contain the plaintext length
+ * \param output_max_len    maximum length of the output buffer
+ *
+ * \return         0 if successful, or an MBEDTLS_ERR_RSA_XXX error code
+ *
+ * \note           The output buffer must be as large as the size
+ *                 of ctx->N (eg. 128 bytes if RSA-1024 is used) otherwise
+ *                 an error is thrown.
+ */
+int mbedtls_pkcs11_decrypt( mbedtls_pkcs11_context *ctx,
+                       int mode, size_t *olen,
+                       const unsigned char *input,
+                       unsigned char *output,
+                       size_t output_max_len );
+    
+    //-----------------------------------------------------------------------------
+//  Package Title  ratpak
+//  File           ratpak.h
+//  Copyright      (C) 1995-99 Microsoft
+//  Date           01-16-95
+//
+//
+//  Description
+//
+//     Infinite precision math package header file, if you use ratpak.lib you
+//  need to include this header.
+//
+//-----------------------------------------------------------------------------
+    
+    
+    {    SetRadixTypeAndNumWidth(DEC_RADIX, m_numwidth);
+    SettingsChanged();
+    DisplayNum();
+}
+    
+                // Implemented methods
+            virtual bool MoveCurrentTo(Platform::Object ^ item) = Windows::UI::Xaml::Data::ICollectionView::MoveCurrentTo
             {
-                p.z = 0.5f;
-            }
-            
-            // Set new coords
-            p.x += getGridRect().origin.x;
-            setVertex(Vec2(i, j), p);
-            
-        }
+                if (item)
+                {
+                    unsigned int newCurrentPosition = 0;
+                    bool result = m_source->IndexOf(item, &newCurrentPosition);
+                    if (result)
+                    {
+                        m_currentPosition = newCurrentPosition;
+                        m_currentChanged(this, nullptr);
+                        return true;
+                    }
+                }
     }
+    
+    INarratorAnnouncementHost ^ LiveRegionHost::MakeHost()
+{
+    return ref new LiveRegionHost();
 }
     
-    /**
-@brief The delegate class for ActionTween.
-@details If you want to use ActionTween on a node.
-        You should implement the node follow these steps:
-        1. The node should be inherit from ActionTweenDelegate.
-        2. Override the virtual method updateTweenAction in the node.
+    template<typename StorageIndex>
+class SparsePageLZ4Format : public SparsePageFormat {
+ public:
+  explicit SparsePageLZ4Format(bool use_lz4_hc)
+      : use_lz4_hc_(use_lz4_hc) {
+    raw_bytes_ = raw_bytes_value_ = raw_bytes_index_ = 0;
+    encoded_bytes_value_ = encoded_bytes_index_ = 0;
+    nthread_ = dmlc::GetEnv('XGBOOST_LZ4_DECODE_NTHREAD', 4);
+    nthread_write_ = dmlc::GetEnv('XGBOOST_LZ4_COMPRESS_NTHREAD', 12);
+  }
+  virtual ~SparsePageLZ4Format() {
+    size_t encoded_bytes = raw_bytes_ +  encoded_bytes_value_ + encoded_bytes_index_;
+    raw_bytes_ += raw_bytes_value_ + raw_bytes_index_;
+    if (raw_bytes_ != 0) {
+      LOG(CONSOLE) << 'raw_bytes=' << raw_bytes_
+                   << ', encoded_bytes=' << encoded_bytes
+                   << ', ratio=' << double(encoded_bytes) / raw_bytes_
+                   << ', ratio-index=' << double(encoded_bytes_index_) /raw_bytes_index_
+                   << ', ratio-value=' << double(encoded_bytes_value_) /raw_bytes_value_;
+    }
+  }
+    }
     
-        /**
-     * get vertex count
-     * @return number of vertices
-     */
-    unsigned int getVertCount() const;
+    struct MyParam : dmlc::Parameter<MyParam> {
+  Foo foo;
+  int bar;
+  DMLC_DECLARE_PARAMETER(MyParam) {
+    DMLC_DECLARE_FIELD(foo)
+      .set_default(Foo::kBar)
+      .add_enum('bar', Foo::kBar)
+      .add_enum('frog', Foo::kFrog)
+      .add_enum('cat', Foo::kCat)
+      .add_enum('dog', Foo::kDog);
+    DMLC_DECLARE_FIELD(bar)
+      .set_default(-1);
+  }
+};
     
-    /**
-     * get triangles count
-     * @return number of triangles
-     */
-    unsigned int getTrianglesCount() const;
-    
-    /// @cond DO_NOT_SHOW
+    int main()
+{
+    // create JSON array
+    json array = {'first', '2nd', 'third', 'fourth'};
+    }
