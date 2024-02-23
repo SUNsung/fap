@@ -1,3 +1,1 @@
-# fap
-Fap-code
-lol nope
+Trying to write an AI bot that generated the visibility of activity on Github
